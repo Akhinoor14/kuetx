@@ -8,7 +8,8 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { confirmDialog, alertDialog } from '../lib/dialog';
 import { auth } from '../lib/firebase';
-import { checkIsAdmin } from '../lib/adminAuth';
+import { subscribeIsAdmin } from '../lib/adminAuth';
+import { perfStart, perfEnd } from '../lib/perfLog';
 import {
   listAllGroups, subscribeCRRequests, subscribeLeaveRequests,
   clApproveCRRequest, clRejectCRRequest, clApproveLeaveCR, clRejectLeaveCR,
@@ -3205,15 +3206,43 @@ export default function AdminDashboard() {
   const [crCountMap, setCrCountMap] = useState({});
   const [leaveCountMap, setLeaveCountMap] = useState({});
 
+  // PERF FIX ("Checking authorization…" hanging on /team?tab=founder):
+  // this used to call checkIsAdmin(uid), a one-shot getDoc() that always
+  // waits on a real network round-trip — EVEN THOUGH AdminEntryPoint (the
+  // parent component, which is the only thing that ever mounts
+  // AdminDashboard) had already verified the exact same admins/{uid} doc
+  // a moment earlier via the fast, cached subscribeIsAdmin listener. So
+  // every visit to the Founder tab paid for the slow check twice: once
+  // (fast) in AdminEntryPoint to decide whether to render this component
+  // at all, then again (slow) in here, redundantly, before this
+  // component would show anything but "Checking authorization…". Since
+  // subscribeIsAdmin is a ref-counted shared listener (see adminAuth.js),
+  // switching this to it too means this second check reuses the SAME
+  // already-resolved listener AdminEntryPoint opened, instead of firing
+  // its own independent slow one — so it resolves instantly the second
+  // time around, same as AdminEntryPoint's own check now does.
   useEffect(() => {
-    const unsub = auth.onAuthStateChanged(async (user) => {
-      if (!user) { setChecking(false); navigate('/'); return; }
-      const ok = await checkIsAdmin(user.uid);
-      setAuthorized(ok);
-      setChecking(false);
-      if (!ok) navigate('/');
+    perfStart('AdminDashboard:check');
+    let unsubAdmin = () => {};
+    const unsubAuth = auth.onAuthStateChanged((user) => {
+      unsubAdmin();
+      if (!user) {
+        setChecking(false);
+        perfEnd('AdminDashboard:check', 'no user');
+        navigate('/');
+        return;
+      }
+      unsubAdmin = subscribeIsAdmin(user.uid, (ok) => {
+        setAuthorized(ok);
+        setChecking(false);
+        perfEnd('AdminDashboard:check', ok ? 'authorized' : 'not admin');
+        if (!ok) navigate('/');
+      });
     });
-    return () => unsub();
+    return () => {
+      unsubAuth();
+      unsubAdmin();
+    };
   }, [navigate]);
 
   // Previously these three effects (groups, CL applications, roll-unlock

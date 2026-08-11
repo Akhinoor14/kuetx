@@ -180,21 +180,68 @@ function Layout({ authState, onboardingActive }) {
     document.querySelector('.main-content')?.scrollTo(0, 0);
   }, [location.pathname]);
 
-  // PERF LOGGING: measures the full time from "URL changed" to "this
-  // page's route element has actually painted" — this is the number
-  // that includes the lazy-chunk fetch, the <Suspense> fallback (if
-  // shown), and whatever the page's own guard component (RequireStaff,
-  // RequireFaculty, etc.) took to resolve. Filter devtools console for
-  // "kuetx:perf" to see it end-to-end per route. Starts on every
-  // pathname change; ends on the very next paint after that, which is
-  // when the new route's element (or its guard's "Checking access…"
-  // fallback, then the real content once THAT resolves) is on screen.
+  // PERF LOGGING (v2 — corrected): the original version of this timer
+  // used a single requestAnimationFrame and always reported <1ms, even
+  // on pages that visibly took seconds to show real content (confirmed
+  // against Services.jsx, which held its whole list behind a 6s-timeout
+  // fetch while this timer still said "0.6ms"). The bug: a single rAF
+  // fires as soon as the NEXT frame is scheduled, which happens the
+  // instant React commits an empty/loading shell — it does not mean the
+  // browser has actually painted real content, and it says nothing about
+  // async data that arrives after that first commit.
+  //
+  // Two fixes, both active now:
+  //  1. Double-rAF instead of single-rAF for "shell painted" — two nested
+  //     rAF calls guarantee the browser has completed an actual paint
+  //     (not just scheduled one), which single-rAF does not guarantee.
+  //  2. A MutationObserver watches .main-content for DOM changes and
+  //     logs "content settled" once mutations stop for 400ms — this
+  //     catches pages where real content (Firestore data, computed
+  //     lists, images) streams in well after the initial shell, which
+  //     the old timer had no way to see at all. A page with no async
+  //     gate (shell === final content) will show "content settled"
+  //     within a few ms of "shell painted". A page like Services, which
+  //     waits on a slow fetch, will show a real, honest gap between the
+  //     two — that gap is the actual visible lag a person experiences,
+  //     the thing the old single-rAF number was silently hiding.
   useEffect(() => {
-    perfStart(`route:${location.pathname}`);
-    const raf = requestAnimationFrame(() => {
-      perfEnd(`route:${location.pathname}`, 'first paint after nav');
+    const path = location.pathname;
+    perfStart(`route:${path}`);
+    let settledTimer = null;
+    let observer = null;
+
+    const raf1 = requestAnimationFrame(() => {
+      const raf2 = requestAnimationFrame(() => {
+        perfEnd(`route:${path}`, 'shell painted');
+
+        const target = document.querySelector('.main-content') || document.body;
+        let lastMutation = performance.now();
+        observer = new MutationObserver(() => {
+          lastMutation = performance.now();
+          if (settledTimer) clearTimeout(settledTimer);
+          settledTimer = setTimeout(checkSettled, 400);
+        });
+        observer.observe(target, { childList: true, subtree: true, attributes: true });
+
+        function checkSettled() {
+          const elapsed = (performance.now() - lastMutation).toFixed(0);
+          console.log(`[kuetx:perf] ✓ route:${path} — content settled (~${(performance.now()).toFixed(0)}ms since page start, ${elapsed}ms of quiet DOM)`);
+          observer?.disconnect();
+        }
+        // If nothing mutates at all after the shell (fully static page),
+        // still log a settle point so silence isn't mistaken for "still
+        // measuring" — same 400ms quiet-window rule as the observer path.
+        settledTimer = setTimeout(checkSettled, 400);
+      });
+      // no separate cleanup needed for raf2 — cancelling raf1 below is
+      // enough since raf2 is only scheduled from inside raf1's callback
     });
-    return () => cancelAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(raf1);
+      if (settledTimer) clearTimeout(settledTimer);
+      observer?.disconnect();
+    };
   }, [location.pathname]);
 
   // Expose upgrade modal trigger globally so Settings page can call it

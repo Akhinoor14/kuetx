@@ -148,20 +148,32 @@ function usePendingCounts(serviceIds) {
 // filters out deactivated-provider services, and normalizes each doc
 // through withServiceDefaults() (Phase 1 migration note: older docs
 // without interactionMode/status still resolve correctly).
+// PERF FIX (Services page stuck on skeleton for up to 6s): this used to
+// hold the ENTIRE services list to `null` (→ skeleton loaders) until
+// BOTH allServices (fast, live onSnapshot) AND deactivatedUids (slow,
+// one-shot getDocs — up to 6s per its own timeout above) had resolved.
+// That meant a normal, fast subscribeAllServices response was held
+// hostage behind the slow deactivated-provider check every single time,
+// even though deactivation is rare and the filter only ever REMOVES a
+// handful of services, never changes what's already showing. Now the
+// list paints as soon as allServices arrives (deactivatedUids treated
+// as empty — nothing filtered yet), then re-filters in place the moment
+// deactivatedUids actually resolves. A visitor sees real services almost
+// immediately instead of a multi-second skeleton wait, and a
+// deactivated provider's listing simply disappears a beat later instead
+// of blocking everyone else's view of the page.
 function useVisibleServices() {
   const [allServices, setAllServices] = useState(null);
   const deactivatedUids = useDeactivatedProviderUids();
 
   useEffect(() => subscribeAllServices(setAllServices), []);
 
-  const stillResolving = allServices === null || deactivatedUids === null;
-  const services = stillResolving
-    ? null
-    : allServices
-      .filter((s) => !deactivatedUids.has(s.providerUid))
-      .map(withServiceDefaults);
+  if (allServices === null) return null;
 
-  return services;
+  const effectiveDeactivated = deactivatedUids || new Set();
+  return allServices
+    .filter((s) => !effectiveDeactivated.has(s.providerUid))
+    .map(withServiceDefaults);
 }
 
 // ---------------------------------------------------------------------
