@@ -227,12 +227,13 @@ function Layout({ authState, onboardingActive }) {
     return () => { stop = true; };
   }, []);
 
-
+  useEffect(() => {
+    const path = location.pathname;
     let settledTimer = null;
     let observer = null;
 
     const raf1 = requestAnimationFrame(() => {
-      const raf2 = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
         perfEnd(`route:${path}`, 'shell painted');
 
         const target = document.querySelector('.main-content') || document.body;
@@ -279,8 +280,6 @@ function Layout({ authState, onboardingActive }) {
         // measuring" — same 400ms quiet-window rule as the observer path.
         settledTimer = setTimeout(checkSettled, 400);
       });
-      // no separate cleanup needed for raf2 — cancelling raf1 below is
-      // enough since raf2 is only scheduled from inside raf1's callback
     });
 
     return () => {
