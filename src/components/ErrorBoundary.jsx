@@ -17,7 +17,7 @@ function isChunkLoadError(error) {
 export class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false, error: null };
+    this.state = { hasError: false, error: null, offlineChunkError: false };
   }
 
   static getDerivedStateFromError(error) {
@@ -28,6 +28,15 @@ export class ErrorBoundary extends React.Component {
     console.error('[KUETx ErrorBoundary] Component error:', error, errorInfo);
 
     if (isChunkLoadError(error)) {
+      // Offline: a reload can't fetch the missing chunk either, so
+      // reloading would just repeat this same failure (or loop once,
+      // then land on the generic error UI) with no clue why. Skip the
+      // reload and explain what actually happened instead.
+      if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+        this.setState({ offlineChunkError: true });
+        return;
+      }
+
       let alreadyAttempted = false;
       try {
         alreadyAttempted = sessionStorage.getItem(CHUNK_RELOAD_FLAG) === '1';
@@ -50,6 +59,47 @@ export class ErrorBoundary extends React.Component {
   }
 
   render() {
+    if (this.state.offlineChunkError) {
+      return (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '100vh',
+          padding: 20,
+          background: 'var(--surface)',
+          color: 'var(--text)',
+          flexDirection: 'column',
+          gap: 16
+        }}>
+          <AlertTriangle size={48} color='var(--accent)' />
+          <div style={{ textAlign: 'center' }}>
+            <h1 style={{ fontSize: 20, fontWeight: 700, margin: '0 0 8px 0' }}>
+              You're offline
+            </h1>
+            <p style={{ fontSize: 14, color: 'var(--muted)', margin: 0, marginBottom: 12, maxWidth: 320 }}>
+              This page needs an internet connection the first time you open it. Reconnect and try again.
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              style={{
+                padding: '10px 20px',
+                borderRadius: 8,
+                border: 'none',
+                background: 'var(--accent)',
+                color: 'white',
+                fontSize: 14,
+                fontWeight: 600,
+                cursor: 'pointer',
+              }}
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      );
+    }
+
     if (this.state.hasError) {
       return (
         <div style={{

@@ -19,6 +19,7 @@ import {
 import { db } from './firebase';
 import { getGroupId } from './groupUtils';
 import { isSlotOverlap } from './timeModels';
+import { withPromiseTimeout } from './safeSnapshot';
 
 function assignmentsCollection(groupId) {
   return collection(db, 'groups', groupId, 'facultyAssignments');
@@ -167,7 +168,7 @@ export async function findConflictingAssignment(groupId, { courseCode, term, day
       where('term', '==', term),
       where('status', '==', 'active'),
     );
-    const snap = await getDocs(q);
+    const snap = await withPromiseTimeout(getDocs(q), '[facultyClassSync] findConflictingAssignment');
     for (const d of snap.docs) {
       if (d.id === excludeAssignmentId) continue;
       const data = d.data();
@@ -211,7 +212,7 @@ export async function updateAssignmentDayTimeSlots(groupId, assignmentId, dayTim
  * this fan-out collection existing at all).
  */
 export async function getMyClassIndex(uid) {
-  const snap = await getDocs(classIndexCollection(uid));
+  const snap = await withPromiseTimeout(getDocs(classIndexCollection(uid)), '[facultyClassSync] getMyClassIndex');
   return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 }
 
@@ -263,7 +264,7 @@ export async function findJoinableAssignment(groupId, courseCode, term) {
     where('term', '==', term),
     where('status', '==', 'active'),
   );
-  const snap = await getDocs(q);
+  const snap = await withPromiseTimeout(getDocs(q), '[facultyClassSync] findJoinableAssignment');
   const openSlot = snap.docs.find((d) => (d.data().teacherUids || []).length < 2);
   return openSlot ? { id: openSlot.id, groupId, ...openSlot.data() } : null;
 }
@@ -287,7 +288,7 @@ export async function listAllActiveFacultyAssignments() {
     where('status', '==', 'active'),
     orderBy('createdAt', 'desc'),
   );
-  const snap = await getDocs(q);
+  const snap = await withPromiseTimeout(getDocs(q), '[facultyClassSync] listAllActiveFacultyAssignments');
   return snap.docs.map((d) => {
     // Each doc's own path is groups/{groupId}/facultyAssignments/{id} —
     // groupId isn't a stored field on the doc itself, so it's parsed back

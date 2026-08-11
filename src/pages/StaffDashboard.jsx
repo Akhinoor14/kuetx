@@ -119,7 +119,12 @@ function AdminAllGroupsSection() {
   const [groupIds, setGroupIds] = useState(null);
 
   useEffect(() => {
-    listAllGroups().then((groups) => setGroupIds(groups.map((g) => g.id)));
+    listAllGroups()
+      .then((groups) => setGroupIds(groups.map((g) => g.id)))
+      .catch((err) => {
+        console.warn('[StaffDashboard] listAllGroups failed:', err);
+        setGroupIds([]);
+      });
   }, []);
 
   if (groupIds === null) return null;
@@ -157,7 +162,15 @@ function EmailAuditBlock({ groupId, dept }) {
 
   useEffect(() => {
     let cancelled = false;
-    getGroupMembersOnce(groupId).then((m) => { if (!cancelled) setMembers(m); });
+    getGroupMembersOnce(groupId)
+      .then((m) => { if (!cancelled) setMembers(m); })
+      .catch((e) => {
+        if (!cancelled) {
+          console.warn('[StaffDashboard] getGroupMembersOnce failed:', e);
+          setMembers([]);
+          setErr(e?.message || 'Failed to load members.');
+        }
+      });
     return () => { cancelled = true; };
   }, [groupId]);
 
@@ -448,7 +461,14 @@ function HeadOfOpsSection() {
   const [newSclDept, setNewSclDept] = useState('');
   const [allApplications, setAllApplications] = useState([]);
 
-  useEffect(() => { listStaffByRole('senior_campus_lead').then(setScls); }, []);
+  useEffect(() => {
+    listStaffByRole('senior_campus_lead')
+      .then(setScls)
+      .catch((err) => {
+        console.warn('[HeadOfOps] listStaffByRole (senior_campus_lead) failed:', err);
+        setScls([]);
+      });
+  }, []);
   useEffect(() => withTimeout((cb) => subscribeAllCLApplications(cb), setAllApplications, { fallbackValue: [] }), []);
 
   const [appointError, setAppointError] = useState('');
@@ -490,7 +510,9 @@ function HeadOfOpsSection() {
       }
       await assignRole(newSclUid.trim(), 'senior_campus_lead', { type: 'dept', dept });
       setNewSclUid(''); setNewSclDept('');
-      listStaffByRole('senior_campus_lead').then(setScls);
+      listStaffByRole('senior_campus_lead').then(setScls).catch((err) => {
+        console.warn('[HeadOfOps] listStaffByRole refresh after appoint failed:', err);
+      });
     } catch (err) {
       console.error('[HeadOfOps] appoint SCL failed:', err);
       setAppointError(err?.message || 'Failed to appoint SCL.');
@@ -577,10 +599,18 @@ function GrowthSection() {
     listAllGroups().then(async (gs) => {
       setGroups(gs);
       const entries = await Promise.all(gs.map(async (g) => {
-        const members = await getGroupMembersOnce(g.id);
-        return [g.id, members.length];
+        try {
+          const members = await getGroupMembersOnce(g.id);
+          return [g.id, members.length];
+        } catch (e) {
+          console.warn('[StaffDashboard] getGroupMembersOnce failed for', g.id, e);
+          return [g.id, 0];
+        }
       }));
       setCounts(Object.fromEntries(entries));
+    }).catch((err) => {
+      console.warn('[StaffDashboard] listAllGroups failed:', err);
+      setGroups([]);
     });
   }, []);
 

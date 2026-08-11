@@ -54,6 +54,7 @@
 
 import { getDocs, collection } from 'firebase/firestore';
 import { db } from './firebase';
+import { withPromiseTimeout } from './safeSnapshot';
 
 function normalizeForMatch(name) {
   return String(name || '')
@@ -77,7 +78,10 @@ export async function findMatchingFacultyForTeacherName(groupId, teacherName) {
   const target = normalizeForMatch(teacherName);
   if (!target) return null;
 
-  const snap = await getDocs(collection(db, 'groups', groupId, 'facultyAssignments'));
+  const snap = await withPromiseTimeout(
+    getDocs(collection(db, 'groups', groupId, 'facultyAssignments')),
+    '[facultyDisambiguation] findMatchingFacultyForTeacherName',
+  );
   for (const docSnap of snap.docs) {
     const a = docSnap.data();
     if (a.status !== 'active' || !a.teacherUids?.length) continue;
@@ -102,7 +106,10 @@ export async function findMatchingFacultyForTeacherName(groupId, teacherName) {
  */
 export async function findMatchingFacultyForSchedule(groupId, routineEntries) {
   if (!groupId || !routineEntries?.length) return new Map();
-  const snap = await getDocs(collection(db, 'groups', groupId, 'facultyAssignments'));
+  const snap = await withPromiseTimeout(
+    getDocs(collection(db, 'groups', groupId, 'facultyAssignments')),
+    '[facultyDisambiguation] findMatchingFacultyForSchedule',
+  );
   const activeAssignments = snap.docs
     .map((d) => ({ assignmentId: d.id, groupId, ...d.data() }))
     .filter((a) => a.status === 'active' && a.teacherUids?.length);

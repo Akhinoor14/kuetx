@@ -48,6 +48,7 @@ export default function AdminHub() {
     title: roleLabel,
     icon: 'Shield',
     items: [
+      { id: 'class-setup',      label: 'Class Setup',        icon: 'CalendarClock', accent: 'blue',   path: '/class-setup' },
       { id: 'class-routine',    label: 'Routine',            icon: 'CalendarDays',  accent: 'green',  path: '/class-routine' },
       { id: 'class-planner',    label: 'Class Planner',      icon: 'CalendarCheck', accent: 'amber',  path: '/class-planner' },
       { id: 'ct-quiz-planning', label: 'CT & Quiz Planner',  icon: 'CalendarCheck', accent: 'red',    path: '/ct-quiz-planning' },

@@ -24,6 +24,7 @@
 import { doc, setDoc, getDoc, getDocFromServer, getDocs, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from './firebase';
 import { store, tagProfileOwner } from '../store/store';
+import { withPromiseTimeout } from './safeSnapshot';
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
@@ -145,7 +146,7 @@ export const pullAllFromFirestore = async (uid) => {
   try {
     emit('syncing');
     const colRef   = collection(db, 'users', targetUid, 'data');
-    const snapshot = await getDocs(colRef);  // N reads where N = number of docs
+    const snapshot = await withPromiseTimeout(getDocs(colRef), '[firebaseSync] pullAllFromFirestore');  // N reads where N = number of docs
     const remote   = {};
     snapshot.forEach(d => {
       const { value } = d.data();
@@ -420,7 +421,7 @@ export const pullProfile = async (uid, knownDeptBatch = null) => {
     // trace — this MUST be a server read, not the SDK's persistent local
     // cache, or a just-signed-in session can read a not-yet-warmed empty
     // cache and wrongly conclude the profile doesn't exist.
-    const snap = await getDocFromServer(docRef);
+    const snap = await withPromiseTimeout(getDocFromServer(docRef), '[firebaseSync] pullProfile');
     return snap.exists() ? snap.data() : null;
   } catch (err) {
     // Genuinely offline (or some other network-level failure) — fall back

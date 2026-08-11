@@ -18,7 +18,7 @@ import {
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
 import { getIdentityStamp, getGroupId } from './groupUtils';
-import { retryableOnSnapshot } from './safeSnapshot';
+import { retryableOnSnapshot, withPromiseTimeout } from './safeSnapshot';
 
 // ---------------------------------------------------------------------
 // My own roles (drives which Staff Panel sections render)
@@ -299,7 +299,7 @@ export async function removeRole(targetUid, role, scope) {
 
 /** One-shot: everyone currently holding a given role (e.g. all Senior Campus Leads, for Head of Ops's view). */
 export async function listStaffByRole(role) {
-  const snap = await getDocs(query(collectionGroup(db, 'roles'), where('role', '==', role)));
+  const snap = await withPromiseTimeout(getDocs(query(collectionGroup(db, 'roles'), where('role', '==', role))), '[staffSync] listStaffByRole');
   return snap.docs.map((d) => ({ id: d.id, uid: d.ref.parent.parent.id, ...d.data() }));
 }
 
@@ -323,7 +323,7 @@ export async function listStaffByRole(role) {
 export async function getStaffDisplayInfo(uid) {
   if (!uid) return { name: '', roll: '', dept: '', groupId: '', memberRole: '' };
   try {
-    const snap = await getDocs(query(collectionGroup(db, 'members'), where('uid', '==', uid)));
+    const snap = await withPromiseTimeout(getDocs(query(collectionGroup(db, 'members'), where('uid', '==', uid))), '[staffSync] getStaffDisplayInfo members lookup');
     if (!snap.empty) {
       const memberDoc = snap.docs[0];
       const data = memberDoc.data();
@@ -401,7 +401,7 @@ export async function getStaffDisplayInfoBatch(uids) {
 
 /** One-shot: Campus Lead holders for a single department, scoped through groups. */
 export async function listCampusLeadsForDept(dept) {
-  const groupsSnap = await getDocs(query(collection(db, 'groups'), where('dept', '==', String(dept || '').trim().toUpperCase())));
+  const groupsSnap = await withPromiseTimeout(getDocs(query(collection(db, 'groups'), where('dept', '==', String(dept || '').trim().toUpperCase()))), '[staffSync] listCampusLeadsForDept groups lookup');
   const rows = await Promise.all(groupsSnap.docs.map(async (groupDoc) => {
     const clStatusSnap = await getDoc(doc(db, 'groups', groupDoc.id, 'meta', 'clStatus'));
     if (!clStatusSnap.exists()) return null;
@@ -515,11 +515,16 @@ export async function approveCLApplication(applicationId) {
     // crRequests (audit trail), so mark them 'revoked' instead.
     const freshReqRef = doc(db, 'groups', app.groupId, 'crRequests', app.uid);
     const leaveReqRef = doc(db, 'groups', app.groupId, 'crRequests', `leave_${app.uid}`);
-    const freshSnap = await getDocFromServer(freshReqRef);
+    // PERF FIX: getDocFromServer() calls (like the codebase-wide pattern
+    // found in groupSync.js/providerSync.js) can hang indefinitely under
+    // a stuck Firestore cache lock — wrapped with the shared 8s ceiling
+    // so a stale CR-request cleanup here can never block this whole
+    // Founder approval action forever.
+    const freshSnap = await withPromiseTimeout(getDocFromServer(freshReqRef), '[staffSync] fresh crRequest check');
     if (freshSnap.exists()) {
       batch.update(freshReqRef, { status: 'revoked' });
     }
-    const leaveSnap = await getDocFromServer(leaveReqRef);
+    const leaveSnap = await withPromiseTimeout(getDocFromServer(leaveReqRef), '[staffSync] leave crRequest check');
     if (leaveSnap.exists()) {
       batch.update(leaveReqRef, { status: 'revoked' });
     }

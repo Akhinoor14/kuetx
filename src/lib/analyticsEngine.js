@@ -29,6 +29,7 @@
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
 import { MODULES, MODULE_LABELS } from './moduleMap';
+import { withPromiseTimeout } from './safeSnapshot';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -61,7 +62,7 @@ export async function fetchActivityDocs({ dept = null, sinceDays = 30 } = {}) {
   // date) is simplest and avoids two separate composite-index shapes. The
   // `since` cutoff above is applied client-side for firstSeenAt-based
   // cohorting; lastActiveAt is checked in-memory per metric below anyway.
-  const snap = await getDocs(query(col, ...constraints));
+  const snap = await withPromiseTimeout(getDocs(query(col, ...constraints)), '[analyticsEngine] fetchActivityDocs');
   return snap.docs
     .map((d) => {
       const data = d.data();
@@ -196,7 +197,7 @@ export async function computeModuleAdoption(docs) {
   await Promise.all(
     active.map(async (u) => {
       try {
-        const snap = await getDocs(collection(db, 'activity', u.uid, 'moduleUsage'));
+        const snap = await withPromiseTimeout(getDocs(collection(db, 'activity', u.uid, 'moduleUsage')), '[analyticsEngine] computeModuleAdoption');
         const seenThisUser = new Set();
         snap.forEach((d) => {
           const data = d.data();

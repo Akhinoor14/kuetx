@@ -28,6 +28,7 @@ import {
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
 import { queueBookingAlertWrite } from './bookingAlerts';
+import { withPromiseTimeout } from './safeSnapshot';
 
 const serviceDocRef = (serviceId) => doc(db, 'services', serviceId);
 const servicesCollectionRef = () => collection(db, 'services');
@@ -244,8 +245,9 @@ export async function setServiceOpen(serviceId, isOpen) {
 }
 
 async function expirePendingBookingsForClosedShop(serviceId) {
-  const snap = await getDocs(
-    query(bookingsCollectionRef(serviceId), where('status', '==', 'pending')),
+  const snap = await withPromiseTimeout(
+    getDocs(query(bookingsCollectionRef(serviceId), where('status', '==', 'pending'))),
+    '[serviceSync] expirePendingBookingsForClosedShop',
   );
   if (snap.empty) return;
   // Service name is read once up front (not per-booking) purely for the
@@ -287,8 +289,9 @@ async function expirePendingBookingsForClosedShop(serviceId) {
  * setServiceOpen — the owner already committed to those.
  */
 export async function forceCloseProviderServices(providerUid) {
-  const snap = await getDocs(
-    query(servicesCollectionRef(), where('providerUid', '==', providerUid)),
+  const snap = await withPromiseTimeout(
+    getDocs(query(servicesCollectionRef(), where('providerUid', '==', providerUid))),
+    '[serviceSync] forceCloseProviderServices',
   );
   await Promise.all(snap.docs.map(async (d) => {
     if (d.data().isOpen) {
@@ -460,8 +463,9 @@ export function withServiceDefaults(service) {
  */
 export async function hasConflictingConfirmedSlot(serviceId, confirmedSlot, excludeBookingId = null) {
   if (!confirmedSlot || !confirmedSlot.date || !confirmedSlot.time) return false;
-  const snap = await getDocs(
-    query(bookingsCollectionRef(serviceId), where('status', '==', 'confirmed')),
+  const snap = await withPromiseTimeout(
+    getDocs(query(bookingsCollectionRef(serviceId), where('status', '==', 'confirmed'))),
+    '[serviceSync] hasConflictingConfirmedSlot',
   );
   return snap.docs.some((d) => {
     if (d.id === excludeBookingId) return false;
@@ -490,13 +494,16 @@ export async function hasConflictingConfirmedSlot(serviceId, confirmedSlot, excl
  * here — this just returns the raw count.
  */
 export async function countStudentNoShowsOnService(serviceId, studentUid) {
-  const snap = await getDocs(
-    query(
-      bookingsCollectionRef(serviceId),
-      where('studentUid', '==', studentUid),
-      where('status', '==', 'cancelled'),
-      where('cancelledBy', '==', 'owner'),
+  const snap = await withPromiseTimeout(
+    getDocs(
+      query(
+        bookingsCollectionRef(serviceId),
+        where('studentUid', '==', studentUid),
+        where('status', '==', 'cancelled'),
+        where('cancelledBy', '==', 'owner'),
+      ),
     ),
+    '[serviceSync] countStudentNoShowsOnService',
   );
   return snap.size;
 }
@@ -562,12 +569,15 @@ export async function createBooking(serviceId, {
   // reject/close; this isn't a correctness-critical invariant the way
   // Gap 8's double-confirm is (that one directly risks double-serving
   // the same slot with two different students).
-  const activeSnap = await getDocs(
-    query(
-      bookingsCollectionRef(serviceId),
-      where('studentUid', '==', studentUid),
-      where('status', 'in', isInquiry ? ['open', 'answered'] : ['pending', 'confirmed']),
+  const activeSnap = await withPromiseTimeout(
+    getDocs(
+      query(
+        bookingsCollectionRef(serviceId),
+        where('studentUid', '==', studentUid),
+        where('status', 'in', isInquiry ? ['open', 'answered'] : ['pending', 'confirmed']),
+      ),
     ),
+    '[serviceSync] createBooking active-marker check',
   );
   if (!activeSnap.empty) {
     const err = new Error(isInquiry
@@ -805,7 +815,7 @@ export function subscribeAllMyBookings(uid, callback) {
 
   const refreshServiceMeta = async () => {
     try {
-      const snap = await getDocs(servicesCollectionRef());
+      const snap = await withPromiseTimeout(getDocs(servicesCollectionRef()), '[serviceSync] subscribeAllMyBookings service-meta refresh');
       serviceMetaById = new Map(snap.docs.map((d) => [d.id, d.data()]));
     } catch (err) {
       console.error('[serviceSync] subscribeAllMyBookings service-meta refresh error:', err);
@@ -1018,12 +1028,15 @@ export async function cancelBooking(serviceId, bookingId, cancelledBy) {
   // missed grant would be, so this never blocks the cancel itself.
   if (wasConfirmed) {
     try {
-      const stillHasStanding = await getDocs(
-        query(
-          bookingsCollectionRef(serviceId),
-          where('studentUid', '==', booking.studentUid),
-          where('status', 'in', ['confirmed', 'done']),
+      const stillHasStanding = await withPromiseTimeout(
+        getDocs(
+          query(
+            bookingsCollectionRef(serviceId),
+            where('studentUid', '==', booking.studentUid),
+            where('status', 'in', ['confirmed', 'done']),
+          ),
         ),
+        '[serviceSync] cancel-booking standing check',
       );
       if (stillHasStanding.empty) {
         await deleteDoc(doc(db, 'services', serviceId, 'confirmedStudents', booking.studentUid));
@@ -1172,12 +1185,15 @@ export async function createErrandRequest(serviceId, {
   // Same "one active interaction per service" marker used by booking/
   // inquiry mode (Gap 7's shared convention) — a requester can't have two
   // simultaneously-active errand requests with the same Runner service.
-  const activeSnap = await getDocs(
-    query(
-      bookingsCollectionRef(serviceId),
-      where('requesterUid', '==', requesterUid),
-      where('status', 'in', ['open', 'runner_accepted', 'confirmed']),
+  const activeSnap = await withPromiseTimeout(
+    getDocs(
+      query(
+        bookingsCollectionRef(serviceId),
+        where('requesterUid', '==', requesterUid),
+        where('status', 'in', ['open', 'runner_accepted', 'confirmed']),
+      ),
     ),
+    '[serviceSync] createErrandRequest active-marker check',
   );
   if (!activeSnap.empty) {
     const err = new Error('এই Runner-এর সাথে আপনার আগে থেকেই একটা সক্রিয় রিকোয়েস্ট আছে।');

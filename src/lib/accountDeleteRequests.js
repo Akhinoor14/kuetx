@@ -36,7 +36,7 @@ import {
   query, where, orderBy, serverTimestamp,
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
-import { retryableOnSnapshot } from './safeSnapshot';
+import { retryableOnSnapshot, withPromiseTimeout } from './safeSnapshot';
 import { adminDeleteFaculty } from './facultySync';
 import { adminDeleteProvider } from './providerSync';
 import { removeRole } from './staffSync';
@@ -114,7 +114,7 @@ export async function resolveAccountDeleteRequest(requestId) {
   try {
     const activitySnap = await getDoc(doc(db, 'activity', uid));
     if (activitySnap.exists()) {
-      const moduleUsageSnap = await getDocs(collection(db, 'activity', uid, 'moduleUsage'));
+      const moduleUsageSnap = await withPromiseTimeout(getDocs(collection(db, 'activity', uid, 'moduleUsage')), '[accountDeleteRequests] moduleUsage cleanup');
       await Promise.all(moduleUsageSnap.docs.map((d) => deleteDoc(d.ref).catch(() => null)));
       await deleteDoc(doc(db, 'activity', uid));
     }
@@ -133,7 +133,7 @@ export async function resolveAccountDeleteRequest(requestId) {
   // groups/{gid}/meta/clStatus mirror docs get cleared too instead of
   // pointing at a uid that no longer exists.
   try {
-    const rolesSnap = await getDocs(collection(db, 'staff', uid, 'roles'));
+    const rolesSnap = await withPromiseTimeout(getDocs(collection(db, 'staff', uid, 'roles')), '[accountDeleteRequests] staff roles cleanup');
     for (const roleDoc of rolesSnap.docs) {
       const data = roleDoc.data();
       if (data?.role) {

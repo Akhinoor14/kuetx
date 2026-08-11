@@ -305,6 +305,8 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
     setRoleActionBusy(true);
     try {
       await action.run();
+    } catch (e) {
+      alert(e?.message || 'Something went wrong — please try again.');
     } finally {
       setRoleActionBusy(false);
     }

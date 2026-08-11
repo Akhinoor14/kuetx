@@ -105,3 +105,43 @@ export function withTimeout(subscribeFn, setState, opts = {}) {
     unsub?.();
   };
 }
+
+/**
+ * PERF FIX (multi-minute hangs — one production capture showed a single
+ * route stuck "settling" for ~383s / 6.4 minutes; another showed
+ * Services.jsx eating a hardcoded 6s on nearly every visit): one-shot
+ * reads (getDocs, getDocFromServer) can hang indefinitely under
+ * Firestore's persistentMultipleTabManager cache / a stuck IndexedDB
+ * lock, and unlike onSnapshot() listeners, a hung Promise here has no
+ * retry mechanism and no error callback to fall back on — the awaiting
+ * caller just never resumes. Before this fix, exactly ONE call site
+ * (Services.jsx's listAllProviderAccounts) had a hand-rolled 6s
+ * setTimeout race guarding against this; every other getDocs/
+ * getDocFromServer call across the codebase (groupSync.js, staffSync.js,
+ * facultySync.js, serviceSync.js, bloodDonorSync.js, and others) had
+ * none at all.
+ *
+ * withPromiseTimeout() is the one-shot-read sibling of withTimeout()
+ * above (which does the same job for live onSnapshot listeners): wrap
+ * any Firestore promise with it and the wrapped promise rejects on its
+ * own if the real one hasn't resolved within timeoutMs, so a caller's
+ * existing try/catch or .catch() runs instead of hanging forever. It
+ * does NOT cancel the underlying Firestore request (the SDK has no
+ * cancellation for getDocs/getDocFromServer) — it only stops THIS
+ * specific await from blocking its caller past that point.
+ *
+ * @param {Promise<any>} promise - the Firestore getDocs()/getDocFromServer() call
+ * @param {string} label - short description used in the timeout's error message, for logs
+ * @param {number} [timeoutMs] - defaults to 8000ms
+ * @returns {Promise<any>}
+ */
+export function withPromiseTimeout(promise, label, timeoutMs = 8000) {
+  let timeoutId;
+  const timeout = new Promise((_, reject) => {
+    timeoutId = setTimeout(() => {
+      reject(new Error(`[withPromiseTimeout] ${label} timed out after ${timeoutMs}ms — Firestore read did not resolve`));
+    }, timeoutMs);
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timeoutId));
+}
+

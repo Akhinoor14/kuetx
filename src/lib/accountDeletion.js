@@ -24,6 +24,7 @@ import {
 import { db, auth } from './firebase';
 import { clearLocalDataOnLogout } from './accountLifecycle';
 import { leaveGroup } from './groupSync';
+import { withPromiseTimeout } from './safeSnapshot';
 
 const REQUEST_COLLECTION = 'accountDeleteRequests';
 
@@ -52,7 +53,7 @@ const ADMIN_ONLY_COLLECTIONS = [
 ];
 
 async function deleteSubcollectionDocs(colRef) {
-  const snap = await getDocs(colRef);
+  const snap = await withPromiseTimeout(getDocs(colRef), '[accountDeletion] deleteSubcollectionDocs');
   await Promise.all(snap.docs.map((d) => deleteDoc(d.ref).catch(() => null)));
   return snap.size;
 }

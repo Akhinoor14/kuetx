@@ -130,23 +130,29 @@ export default function FacultyNoticeBroadcast() {
     let cancelled = false;
     setRosterLoading(true);
     (async () => {
-      const entries = await Promise.all(
-        [...selectedGroupIds].map(async (groupId) => {
-          const cls = groupOptions.find((c) => c.groupId === groupId);
-          const members = await getGroupMembersOnce(groupId);
-          const crs = members.filter((m) => m.role === 'cr' || m.role === 'acr');
-          return [groupId, crs.map((m) => ({
-            uid: m.id,
-            name: m.name || m.roll || 'Unknown',
-            role: m.role,
-            groupId,
-            label: `${m.name || m.roll || 'Unknown'} — ${(cls?.batch || '').toUpperCase()} ${cls?.dept || ''} (${m.role.toUpperCase()})`,
-          }))];
-        }),
-      );
-      if (cancelled) return;
-      setCrRoster(Object.fromEntries(entries));
-      setRosterLoading(false);
+      try {
+        const entries = await Promise.all(
+          [...selectedGroupIds].map(async (groupId) => {
+            const cls = groupOptions.find((c) => c.groupId === groupId);
+            const members = await getGroupMembersOnce(groupId);
+            const crs = members.filter((m) => m.role === 'cr' || m.role === 'acr');
+            return [groupId, crs.map((m) => ({
+              uid: m.id,
+              name: m.name || m.roll || 'Unknown',
+              role: m.role,
+              groupId,
+              label: `${m.name || m.roll || 'Unknown'} — ${(cls?.batch || '').toUpperCase()} ${cls?.dept || ''} (${m.role.toUpperCase()})`,
+            }))];
+          }),
+        );
+        if (cancelled) return;
+        setCrRoster(Object.fromEntries(entries));
+      } catch (err) {
+        console.warn('[FacultyNoticeBroadcast] failed to load CR/ACR roster:', err);
+        if (!cancelled) setCrRoster({});
+      } finally {
+        if (!cancelled) setRosterLoading(false);
+      }
     })();
     return () => { cancelled = true; };
   }, [recipientMode, [...selectedGroupIds].join(','), groupOptions]);

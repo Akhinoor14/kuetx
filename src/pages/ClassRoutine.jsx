@@ -195,7 +195,13 @@ export default function ClassRoutine() {
                             </div>
                             <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', textDecoration: off ? 'line-through' : 'none' }}>{entry.displayName || course?.name || course?.code || 'Unknown Course'}</div>
                             <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6 }}>
-                              {entry.teacherName || 'Teacher not set'}{entry.room ? ` · Room ${entry.room}` : ''}{entry.type ? ` · ${entry.type}` : ''}
+                              {/* Live teacher name from the course-level registry rather than
+                                  entry.teacherName — that field is a snapshot taken when this
+                                  routine slot was created, so it goes stale after a rename in
+                                  Class Setup until this slot is individually re-saved. Falling
+                                  back to entry.teacherName keeps old/local-mode entries that
+                                  predate this working the same as before. */}
+                              {(s.effectiveCourseTeacherMap?.[entry.courseId] || []).join(', ') || entry.teacherName || 'Teacher not set'}{entry.room ? ` · Room ${entry.room}` : ''}{entry.type ? ` · ${entry.type}` : ''}
                             </div>
                           </div>
                           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flexShrink: 0 }}>

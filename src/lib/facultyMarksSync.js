@@ -43,6 +43,7 @@ import {
   onSnapshot, serverTimestamp, query, orderBy,
 } from 'firebase/firestore';
 import { db } from './firebase';
+import { withPromiseTimeout } from './safeSnapshot';
 
 function sessionsCollection(groupId, assignmentId) {
   return collection(db, 'groups', groupId, 'facultyAssignments', assignmentId, 'sessions');
@@ -273,7 +274,7 @@ export function subscribeStudentRecords(groupId, assignmentId, callback) {
  * to 'sent' in one pass. Individual per-row "Send" reuses saveStudentMarks
  * directly with status='sent' instead of calling this. */
 export async function sendAllReviewed(groupId, assignmentId, studentUids) {
-  const snap = await getDocs(studentRecordsCollection(groupId, assignmentId));
+  const snap = await withPromiseTimeout(getDocs(studentRecordsCollection(groupId, assignmentId)), '[facultyMarksSync] sendAllReviewed');
   const reviewedIds = snap.docs.filter((d) => d.data().status === 'reviewed' && studentUids.includes(d.id)).map((d) => d.id);
   await Promise.all(reviewedIds.map((uid) =>
     updateDoc(doc(studentRecordsCollection(groupId, assignmentId), uid), { status: 'sent', lastSentAt: serverTimestamp() })
@@ -293,7 +294,7 @@ export async function sendAllReviewed(groupId, assignmentId, studentUids) {
  */
 export async function getMyTeacherVerifiedRecords(groupId, studentUid, currentTermKey = null) {
   if (!groupId || !studentUid) return [];
-  const assignmentsSnap = await getDocs(collection(db, 'groups', groupId, 'facultyAssignments'));
+  const assignmentsSnap = await withPromiseTimeout(getDocs(collection(db, 'groups', groupId, 'facultyAssignments')), '[facultyMarksSync] getMyTeacherVerifiedRecords');
   // Belt-and-suspenders term scoping: a teacher forgetting to "End Class"
   // when a term wraps up would otherwise leave last term's sent marks
   // permanently stuck on the student's Alerts card. Filtering on the

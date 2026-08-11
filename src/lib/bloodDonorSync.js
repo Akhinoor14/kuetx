@@ -25,6 +25,7 @@
 
 import { doc, setDoc, deleteDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from './firebase';
+import { withPromiseTimeout } from './safeSnapshot';
 
 const bloodDonorDocRef = (uid) => doc(db, 'bloodDonors', uid);
 const bloodDonorCollectionRef = () => collection(db, 'bloodDonors');
@@ -56,12 +57,12 @@ export async function searchBloodDonorsByGroup(bloodGroup) {
   const bg = String(bloodGroup || '').trim().toUpperCase();
   if (!bg) return [];
   const q = query(bloodDonorCollectionRef(), where('bloodGroup', '==', bg));
-  const snap = await getDocs(q);
+  const snap = await withPromiseTimeout(getDocs(q), '[bloodDonorSync] searchBloodDonorsByGroup');
   return snap.docs.map((d) => ({ uid: d.id, ...d.data() }));
 }
 
 /** Every donor on file, for the Founder's overview counts. */
 export async function listAllBloodDonors() {
-  const snap = await getDocs(bloodDonorCollectionRef());
+  const snap = await withPromiseTimeout(getDocs(bloodDonorCollectionRef()), '[bloodDonorSync] listAllBloodDonors');
   return snap.docs.map((d) => ({ uid: d.id, ...d.data() }));
 }

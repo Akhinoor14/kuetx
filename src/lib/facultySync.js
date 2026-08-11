@@ -18,6 +18,7 @@ import {
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
 import { isFacultyEmailVerified } from './facultyEmailVerify';
+import { withPromiseTimeout } from './safeSnapshot';
 
 const facultyDocRef = (uid) => doc(db, 'faculty', uid);
 const facultyCollectionRef = () => collection(db, 'faculty');
@@ -179,7 +180,10 @@ export async function setFacultyInstitutionalEmail(uid, institutionalEmail) {
 }
 
 export async function listAllFacultyAccounts() {
-  const snap = await getDocs(facultyCollectionRef());
+  // PERF FIX: same shape of bug as providerSync.js's listAllProviderAccounts
+  // (a one-shot getDocs() that can hang indefinitely under a stuck
+  // Firestore cache lock) — wrapped with the shared 8s ceiling.
+  const snap = await withPromiseTimeout(getDocs(facultyCollectionRef()), '[facultySync] listAllFacultyAccounts');
   return snap.docs.map((docSnap) => ({ uid: docSnap.id, ...docSnap.data() }));
 }
 

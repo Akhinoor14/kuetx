@@ -31,6 +31,7 @@ import {
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
 import { isObviouslyBadDomain } from './emailDomainCheck';
+import { withPromiseTimeout } from './safeSnapshot';
 
 // ---------------------------------------------------------------------
 // Flag a user's email as suspicious
@@ -92,7 +93,7 @@ export async function listPendingFlags({ dept, groupId } = {}) {
     // Admin/Head of Ops fallback view — everything pending, regardless of scope.
     q = query(collection(db, 'emailFlags'), where('status', '==', 'pending'), orderBy('flaggedAt', 'desc'));
   }
-  const snap = await getDocs(q);
+  const snap = await withPromiseTimeout(getDocs(q), '[emailFlags] listPendingFlags');
   return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 }
 

@@ -29,6 +29,28 @@ import {
 import { db, auth } from './firebase';
 import { getIdentityStamp, getGroupId } from './groupUtils';
 import { checkIsAdmin } from './adminAuth';
+import { withPromiseTimeout } from './safeSnapshot';
+
+// PERF FIX (multi-MINUTE hangs seen in production — one capture showed a
+// single route stuck "settling" for ~383s / 6.4 minutes): every call site
+// below used a bare `await getDocFromServer(ref)` with NO timeout at all.
+// listAllProviderAccounts() (providerSync.js) had the same shape of bug —
+// a one-shot server read that can hang indefinitely under Firestore's
+// persistentMultipleTabManager cache / a stuck IndexedDB lock — and that
+// one at least had a manual 6s setTimeout race bolted on. These three
+// getDocFromServer() calls (joinGroup's existence check, and
+// syncGroupMembership's two checks) had NONE, so when the underlying hang
+// happens here there is no ceiling at all — the returned promise can sit
+// unresolved for as long as the tab is open. syncGroupMembership in
+// particular re-runs on every single 'kuetx:store-updated' event (see
+// App.jsx's auto-join effect), so this was a MUCH hotter path than the
+// Services page fetch discovered earlier — a wedged Firestore connection
+// on this call could quietly re-fire (and re-hang) on nearly every local
+// write for the rest of the session, not just once per navigation.
+//
+// Now wrapped with the shared withPromiseTimeout() helper (safeSnapshot.js)
+// instead of a locally hand-rolled one, so every one-shot Firestore read
+// across the codebase shares the same 8s ceiling and error-message shape.
 
 /**
  * One-shot check: is the current user privileged to skip the CR/ACR
@@ -306,7 +328,7 @@ export async function joinGroup(groupId, profile) {
   // verified member or CR/ACR back to a plain unverified 'member' purely
   // because their new device's cache was empty. getDocFromServer avoids
   // both outcomes by always checking real server state first.
-  const existing = await getDocFromServer(ref_);
+  const existing = await withPromiseTimeout(getDocFromServer(ref_), '[groupSync] joinGroup existence check');
   if (existing.exists()) {
     // just refresh display fields, never touch verified/role. Also
     // backfills `isAnonymous` for pre-existing docs written before this
@@ -391,7 +413,7 @@ export async function syncGroupMembership(groupId, profile) {
   const uid = auth.currentUser?.uid;
   if (!uid || !groupId) return;
   const memberRef = doc(db, 'groups', groupId, 'members', uid);
-  const existingMember = await getDocFromServer(memberRef);
+  const existingMember = await withPromiseTimeout(getDocFromServer(memberRef), '[groupSync] syncGroupMembership member check');
   if (existingMember.exists()) {
     await joinGroup(groupId, profile);
     return;
@@ -399,7 +421,7 @@ export async function syncGroupMembership(groupId, profile) {
   const reqRef = doc(db, 'groups', groupId, 'joinRequests', uid);
   let existingReq;
   try {
-    existingReq = await getDocFromServer(reqRef);
+    existingReq = await withPromiseTimeout(getDocFromServer(reqRef), '[groupSync] syncGroupMembership joinRequest check');
   } catch (e) {
     console.warn('[syncGroupMembership] Failed to check existing joinRequests doc:', e?.code, e?.message);
     return;
@@ -429,7 +451,7 @@ export async function waitForOwnMembership(groupId, retries = 5, delayMs = 400) 
   if (!uid || !groupId) return false;
   for (let i = 0; i < retries; i++) {
     try {
-      const snap = await getDocFromServer(doc(db, 'groups', groupId, 'members', uid));
+      const snap = await withPromiseTimeout(getDocFromServer(doc(db, 'groups', groupId, 'members', uid)), '[groupSync] waitForOwnMembership check');
       if (snap.exists()) return true;
     } catch (e) {
       // permission-denied while the write is still propagating — retry
@@ -462,13 +484,13 @@ export async function updateOwnMobile(groupId, mobile) {
 
 /** Admin-only: list every group summary doc (batch/dept/lastActivityAt). */
 export async function listAllGroups() {
-  const snap = await getDocs(collection(db, 'groups'));
+  const snap = await withPromiseTimeout(getDocs(collection(db, 'groups')), '[groupSync] listAllGroups');
   return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 }
 
 /** Admin-only: member list for a specific group, one-shot (not realtime). */
 export async function getGroupMembersOnce(groupId) {
-  const snap = await getDocs(collection(db, 'groups', groupId, 'members'));
+  const snap = await withPromiseTimeout(getDocs(collection(db, 'groups', groupId, 'members')), '[groupSync] getGroupMembersOnce');
   return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 }
 
@@ -526,7 +548,7 @@ export async function getOwnMemberVerifiedOnce(groupId) {
   const uid = auth.currentUser?.uid;
   if (!uid || !groupId) return false;
   try {
-    const snap = await getDocFromServer(doc(db, 'groups', groupId, 'members', uid));
+    const snap = await withPromiseTimeout(getDocFromServer(doc(db, 'groups', groupId, 'members', uid)), '[groupSync] getOwnMemberVerifiedOnce');
     return snap.exists() && snap.data().verified === true;
   } catch {
     return false;
@@ -546,7 +568,7 @@ export async function waitForOwnVerification(groupId, retries = 10, delayMs = 40
   if (!uid || !groupId) return false;
   for (let i = 0; i < retries; i++) {
     try {
-      const snap = await getDocFromServer(doc(db, 'groups', groupId, 'members', uid));
+      const snap = await withPromiseTimeout(getDocFromServer(doc(db, 'groups', groupId, 'members', uid)), '[groupSync] waitForOwnVerification check');
       if (snap.exists() && snap.data().verified === true) return true;
     } catch (e) {
       // permission-denied while the verification write is still propagating — retry
@@ -648,7 +670,7 @@ export async function requestCR(groupId, profile, mobile) {
   
   let existing;
   try {
-    existing = await getDocFromServer(ref_);
+    existing = await withPromiseTimeout(getDocFromServer(ref_), '[groupSync] requestCR existing check');
   } catch (e) {
     // If read fails (e.g. permission-denied while doc propagating), 
     // assume doc doesn't exist yet and try fresh request
@@ -768,7 +790,7 @@ export async function diagnosticCheckCRRequestsWrite(groupId, profile) {
   const uid = auth.currentUser?.uid;
   const conditions = [];
   const requestRef = doc(db, 'groups', groupId, 'crRequests', uid);
-  const existingRequestSnap = await getDocFromServer(requestRef).catch(() => null);
+  const existingRequestSnap = await withPromiseTimeout(getDocFromServer(requestRef), '[groupSync] diagnosticCheckCRRequestsWrite request check').catch(() => null);
   const existingStatus = existingRequestSnap?.exists() ? existingRequestSnap.data()?.status : null;
   const isUpdateBranch = existingRequestSnap?.exists() && existingStatus !== 'pending';
   
@@ -781,7 +803,7 @@ export async function diagnosticCheckCRRequestsWrite(groupId, profile) {
   
   // Rule condition 2a: isGroupMember(groupId)
   const memberRef = doc(db, 'groups', groupId, 'members', uid);
-  const memberSnap = await getDocFromServer(memberRef).catch(() => null);
+  const memberSnap = await withPromiseTimeout(getDocFromServer(memberRef), '[groupSync] diagnosticCheckCRRequestsWrite member check').catch(() => null);
   const isGroupMember = memberSnap?.exists() || false;
   conditions.push({
     check: isGroupMember,
@@ -1010,7 +1032,7 @@ export async function clRevokeCR(groupId, targetUid) {
   // would skip marking a genuinely-existing request 'revoked', leaving it
   // in an ambiguous state (see the leave-request comment below for the
   // concrete corruption this class of bug causes).
-  const reqSnap = await getDocFromServer(reqRef);
+  const reqSnap = await withPromiseTimeout(getDocFromServer(reqRef), '[groupSync] clRevokeCR request check');
   if (reqSnap.exists()) {
     batch.update(reqRef, { status: 'revoked' });
   }
@@ -1024,7 +1046,7 @@ export async function clRevokeCR(groupId, targetUid) {
   // from the server (not cache): a stale cache miss on this exact check
   // is what would let that double-decrement slip through.
   const leaveReqRef = doc(db, 'groups', groupId, 'crRequests', `leave_${targetUid}`);
-  const leaveReqSnap = await getDocFromServer(leaveReqRef);
+  const leaveReqSnap = await withPromiseTimeout(getDocFromServer(leaveReqRef), '[groupSync] clRevokeCR leave request check');
   if (leaveReqSnap.exists() && leaveReqSnap.data().status === 'pending') {
     batch.update(leaveReqRef, { status: 'revoked' });
   }
@@ -1060,7 +1082,7 @@ export async function handoffCR(groupId, currentUid, successorUid, currentProfil
   // was verified moments ago and this device hasn't caught up) can report
   // verified:false or exists():false for someone who genuinely already
   // qualifies, wrongly blocking a legitimate handoff.
-  const successorSnap = await getDocFromServer(doc(db, 'groups', groupId, 'members', successorUid));
+  const successorSnap = await withPromiseTimeout(getDocFromServer(doc(db, 'groups', groupId, 'members', successorUid)), '[groupSync] handoffCR successor check');
   if (!successorSnap.exists() || !successorSnap.data().verified) {
     throw new Error('The new CR must already be a verified member of this class.');
   }
@@ -1078,7 +1100,7 @@ export async function handoffCR(groupId, currentUid, successorUid, currentProfil
   // server, not cache, or a stale "no pending request" read lets that
   // exact double-decrement through.
   const leaveReqRef = doc(db, 'groups', groupId, 'crRequests', `leave_${currentUid}`);
-  const leaveReqSnap = await getDocFromServer(leaveReqRef);
+  const leaveReqSnap = await withPromiseTimeout(getDocFromServer(leaveReqRef), '[groupSync] handoffCR leave request check');
   if (leaveReqSnap.exists() && leaveReqSnap.data().status === 'pending') {
     batch.update(leaveReqRef, { status: 'revoked' });
   }
@@ -1116,7 +1138,7 @@ export async function assignACR(groupId, targetUid, mobile) {
   if (!trimmedMobile) {
     throw new Error('A mobile number is required to appoint an ACR.');
   }
-  const membersSnap = await getDocs(collection(db, 'groups', groupId, 'members'));
+  const membersSnap = await withPromiseTimeout(getDocs(collection(db, 'groups', groupId, 'members')), '[groupSync] assignACR members check');
   const { acr: acrCount } = _countRoles(membersSnap.docs);
   if (acrCount >= MAX_ACR) {
     throw new Error(`The ACR slot for this class is already full (max ${MAX_ACR}).`);
@@ -1267,7 +1289,7 @@ export async function requestToJoinGroup(groupId, profile, contactEmail) {
 
   let existing;
   try {
-    existing = await getDocFromServer(ref_);
+    existing = await withPromiseTimeout(getDocFromServer(ref_), '[groupSync] requestToJoinGroup existing check');
   } catch (e) {
     console.warn('[JOIN REQUEST] Failed to check existing joinRequests doc, treating as fresh request:', e?.code, e?.message);
     existing = { exists: () => false };
@@ -1377,7 +1399,7 @@ export function subscribeOwnJoinRequestStatus(groupId, uid, callback) {
  */
 export async function approveJoinRequest(groupId, targetUid) {
   const reqRef = doc(db, 'groups', groupId, 'joinRequests', targetUid);
-  const reqSnap = await getDocFromServer(reqRef);
+  const reqSnap = await withPromiseTimeout(getDocFromServer(reqRef), '[groupSync] approveJoinRequest request check');
   if (!reqSnap.exists()) throw new Error('This join request no longer exists.');
   const req = reqSnap.data();
 
@@ -1447,7 +1469,7 @@ export async function backfillMissingGroupDocs() {
   // already backs subscribeAllPendingJoinRequests's collectionGroup use
   // elsewhere in this file, see /{path=**}/members/{memberUid} in
   // firestore.rules.
-  const snap = await getDocs(collectionGroup(db, 'members'));
+  const snap = await withPromiseTimeout(getDocs(collectionGroup(db, 'members')), '[groupSync] backfillMissingGroupDocs members scan');
   const groupIds = new Set();
   snap.forEach((d) => {
     // Each members doc's path is groups/{groupId}/members/{uid} — the
@@ -1669,7 +1691,7 @@ export const restoreRoutineEntry = (groupId, entryId, profile) => restoreEntry(g
 // exactly the busywork this app is trying to remove.
 export async function clearRoutineForTermChange(groupId, profile) {
   if (!groupId) return;
-  const snap = await getDocs(query(collection(db, 'groups', groupId, 'routineEntries'), where('deleted', '==', false)));
+  const snap = await withPromiseTimeout(getDocs(query(collection(db, 'groups', groupId, 'routineEntries'), where('deleted', '==', false))), '[groupSync] clearRoutineForTermChange');
   if (snap.empty) return;
   const uid = auth.currentUser?.uid;
   const stamp = getIdentityStamp(profile, uid);
@@ -2073,7 +2095,7 @@ export async function postGroupNotice(groupId, profile, { title, body, priority 
   // in AdminDashboard.jsx).
   let audienceSize = null;
   try {
-    const membersSnap = await getDocs(collection(db, 'groups', groupId, 'members'));
+    const membersSnap = await withPromiseTimeout(getDocs(collection(db, 'groups', groupId, 'members')), '[groupSync] postGroupNotice audience count');
     audienceSize = membersSnap.size;
   } catch {
     // Best-effort — a failed count here should never block sending the

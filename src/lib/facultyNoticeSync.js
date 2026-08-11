@@ -17,6 +17,7 @@
 import { addDoc, collection, getDocs, serverTimestamp } from 'firebase/firestore';
 import { db } from './firebase';
 import { getFacultyDisplayName } from './facultyTitle';
+import { withPromiseTimeout } from './safeSnapshot';
 
 // Phase 1 of the Notice upgrade: audienceSize at send time.
 // 'broadcast' -> every verified member of the group (same population
@@ -26,7 +27,10 @@ import { getFacultyDisplayName } from './facultyTitle';
 // uses elsewhere.
 async function _audienceSizeForGroup(groupId, targetType) {
   try {
-    const snap = await getDocs(collection(db, 'groups', groupId, 'members'));
+    const snap = await withPromiseTimeout(
+      getDocs(collection(db, 'groups', groupId, 'members')),
+      '[facultyNoticeSync] _audienceSizeForGroup',
+    );
     if (targetType === 'cr_only') {
       return snap.docs.filter((d) => {
         const data = d.data();

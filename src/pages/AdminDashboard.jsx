@@ -281,7 +281,14 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
     setPendingJoinRequests,
     { onTimeout: flagSlowLoad },
   ), []);
-  useEffect(() => { listAllGroups().then((gs) => setGroupIds(gs.map((g) => g.id))); }, []);
+  useEffect(() => {
+    listAllGroups()
+      .then((gs) => setGroupIds(gs.map((g) => g.id)))
+      .catch((err) => {
+        console.warn('[AdminDashboard] listAllGroups failed:', err);
+        setGroupIds([]);
+      });
+  }, []);
 
   useEffect(() => {
     if (!groupIds) return;
@@ -1689,13 +1696,25 @@ function ClassesView({ onBack, onSelectCategory, countCtx }) {
   // blocking the whole view on N parallel roster fetches.
   const [memberCounts, setMemberCounts] = useState(null);
 
-  useEffect(() => { listAllGroups().then(setGroups); }, []);
+  useEffect(() => {
+    listAllGroups().then(setGroups).catch((err) => {
+      console.warn('[AdminDashboard] listAllGroups failed:', err);
+      setGroups([]);
+    });
+  }, []);
 
   useEffect(() => {
     if (!groups) return;
     let cancelled = false;
     Promise.all(
-      groups.map(async (g) => ({ groupId: g.id, count: (await getGroupMembersOnce(g.id)).length })),
+      groups.map(async (g) => {
+        try {
+          return { groupId: g.id, count: (await getGroupMembersOnce(g.id)).length };
+        } catch (e) {
+          console.warn('[AdminDashboard] getGroupMembersOnce failed for', g.id, e);
+          return { groupId: g.id, count: 0 };
+        }
+      }),
     ).then((rows) => {
       if (cancelled) return;
       setMemberCounts(Object.fromEntries(rows.map((r) => [r.groupId, r.count])));
@@ -1825,7 +1844,9 @@ function ClassesView({ onBack, onSelectCategory, countCtx }) {
                   setBackfillResult(fixed.length > 0
                     ? `Fixed ${fixed.length} class${fixed.length > 1 ? 'es' : ''}: ${fixed.join(', ')}`
                     : 'No missing classes found — everything was already in sync.');
-                  listAllGroups().then(setGroups);
+                  listAllGroups().then(setGroups).catch((err) => {
+                    console.warn('[AdminDashboard] listAllGroups refresh after backfill failed:', err);
+                  });
                 } catch (e) {
                   setBackfillResult(`Repair failed: ${e?.message || 'try again'}`);
                 } finally {

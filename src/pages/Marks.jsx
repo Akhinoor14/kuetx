@@ -5,6 +5,9 @@ import { store, getGradeFromPct, getAttendanceMarks, computeEffectiveAttendance,
 import { getAllCourses } from '../store/curriculumStore';
 import { confirmDialog } from '../lib/dialog';
 import TeacherVerifiedCard from '../components/TeacherVerifiedCard';
+import { getGroupId } from '../lib/groupUtils';
+import { subscribePlannerSettings } from '../lib/groupSync';
+import { resolveTeacherNames } from '../lib/teacherRegistry';
 
 // ── Helper: Calculate required hall marks for a target grade ──────────────
 function calcHallNeeded(targetMinPct, continuousMarks) {
@@ -57,28 +60,50 @@ function getCourseSummary(course, marks) {
 }
 
 // ── Get teacher names from schedule ────────────────────────────────────────
-function getTeachersForCourse(courseId) {
+// BUGFIX: in group mode, settings.courseTeacherMap[courseId] holds
+// teacherIds, not name strings (see teacherRegistry.js) — reading it
+// directly (as this used to) either showed a raw ID or, worse, was
+// masked by the schedule's own stale inline teacherName/teacherNames
+// snapshot always winning via the Set-dedup below. Neither picks up a
+// rename made in Class Setup. groupCourseTeacherMap/groupTeacherRegistry
+// (live-subscribed group data, passed in from the page) are now
+// resolved first when present; local (non-group) mode is unaffected —
+// courseTeacherMap there was always name-based, and no group registry is
+// ever passed in.
+function getTeachersForCourse(courseId, groupCourseTeacherMap, groupTeacherRegistry) {
   const schedule = Array.isArray(store.get('schedule')) ? store.get('schedule') : [];
   const settings = store.get('scheduleSettings') || {};
-  const fromCourseMap = Array.isArray(settings.courseTeacherMap?.[courseId]) ? settings.courseTeacherMap[courseId] : [];
+  const rawCourseMap = groupCourseTeacherMap
+    ? (Array.isArray(groupCourseTeacherMap[courseId]) ? groupCourseTeacherMap[courseId] : [])
+    : (Array.isArray(settings.courseTeacherMap?.[courseId]) ? settings.courseTeacherMap[courseId] : []);
+  const fromCourseMap = groupCourseTeacherMap
+    ? resolveTeacherNames(groupTeacherRegistry || {}, rawCourseMap)
+    : rawCourseMap;
+
+  if (fromCourseMap.length > 0) {
+    return [...new Set(fromCourseMap.map(normalizeTeacherName).filter(Boolean))];
+  }
+
+  // Fallback only when the course-level map has nothing yet — schedule's
+  // own inline names, same as before.
   const fromSchedule = schedule
     .filter(s => s.courseId === courseId)
     .flatMap(s => Array.isArray(s.teacherNames) && s.teacherNames.length > 0 ? s.teacherNames : [s.teacherName])
     .map(normalizeTeacherName)
     .filter(Boolean);
 
-  return [...new Set([...fromCourseMap, ...fromSchedule].map(normalizeTeacherName).filter(Boolean))];
+  return [...new Set(fromSchedule)];
 }
 
 // ── Course card: Modern grid-based layout ──────────────────────────────────
-function CourseCard({ course, marks, onChange, onClearCourse, onOpenMarkingHelp, isCurrentOngoingTerm }) {
+function CourseCard({ course, marks, onChange, onClearCourse, onOpenMarkingHelp, isCurrentOngoingTerm, groupCourseTeacherMap, groupTeacherRegistry }) {
   const m = marks[course.id] || {};
   const { pct: attPct, source: attSource } = computeEffectiveAttendance(course.id);
   const inputDisabled = false;
   
   const clamp = (value, min, max) => Math.min(max, Math.max(min, Number.isFinite(+value) ? +value : 0));
 
-  const teachers = getTeachersForCourse(course.id);
+  const teachers = getTeachersForCourse(course.id, groupCourseTeacherMap, groupTeacherRegistry);
   const teacher1Name = teachers[0] || 'Teacher 1';
   const teacher2Name = teachers[1] || 'Teacher 2';
 
@@ -382,6 +407,20 @@ export default function Marks() {
   const [markingHelpOpen, setMarkingHelpOpen] = useState(false);
   const deptLabel = profile?.dept || 'your department';
 
+  // Group-live courseTeacherMap/teacherRegistry — see getTeachersForCourse's
+  // comment above for why store.get('scheduleSettings') alone isn't
+  // reliable here in group mode.
+  const groupId = getGroupId(profile);
+  const [groupCourseTeacherMap, setGroupCourseTeacherMap] = useState(null);
+  const [groupTeacherRegistry, setGroupTeacherRegistry] = useState(null);
+  useEffect(() => {
+    if (!groupId) { setGroupCourseTeacherMap(null); setGroupTeacherRegistry(null); return; }
+    return subscribePlannerSettings(groupId, (data) => {
+      setGroupCourseTeacherMap(data?.courseTeacherMap || {});
+      setGroupTeacherRegistry(data?.teacherRegistry || {});
+    });
+  }, [groupId]);
+
   const onChange = (id, field, value) => {
     const updated = { ...marks, [id]: { ...(marks[id] || {}), [field]: value } };
     setMarks(updated);
@@ -464,6 +503,8 @@ export default function Marks() {
           onClearCourse={onClearCourse}
           onOpenMarkingHelp={() => setMarkingHelpOpen(true)}
           isCurrentOngoingTerm={currentTermIsOngoing && currentTermKey === `Y${selectedCourse.year}T${selectedCourse.term}`}
+          groupCourseTeacherMap={groupCourseTeacherMap}
+          groupTeacherRegistry={groupTeacherRegistry}
         />
 
         {markingHelpOpen && (
