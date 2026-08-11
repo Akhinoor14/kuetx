@@ -37,7 +37,20 @@ const MAX_BATCH_PUSH    = 20;      // max keys to push in one tick
 // Every other personal key (Notes, Diary, Wallet, Settings, Schedule,
 // Assignments, etc.) is completely unaffected and still flows through the
 // generic mechanism below exactly as before.
-const EXCLUDED_KEYS = ['autoBackup', 'lastBackupTime', 'kuetx_guide_seen', 'profile'];
+// PERF FIX (nav lag root cause): 'kuetx_page_stats' was NOT excluded, so
+// usePageTracker.js's store.set() on every single route change (see
+// usePageTracker.js) fired a full sync cycle — emit('pending') ->
+// [PUSH_DEBOUNCE_MS later] emit('syncing') -> Firestore write ->
+// emit('synced') -> Navbar re-render each time (Navbar reads syncStatus).
+// Navbar lives inside .main-content, so App.jsx's nav-lag MutationObserver
+// (which watches .main-content for "content settled") was catching THIS
+// re-render chain on every route, not real page content — explaining why
+// EVERY route showed a near-identical ~2s "content settled" gap regardless
+// of that page's actual data needs. This is pure local visit-count
+// analytics (see getPageStats/getAllPageStats in usePageTracker.js) with
+// no cross-device UX depending on it being in Firestore, so it doesn't
+// need to sync at all.
+const EXCLUDED_KEYS = ['autoBackup', 'lastBackupTime', 'kuetx_guide_seen', 'profile', 'kuetx_page_stats'];
 
 // Same 2-digit roll-prefix -> dept-code map as ProfileSetupModal.jsx's
 // extractDeptCodeFromRoll and firestore.rules' deptCodeFromRoll — kept in
