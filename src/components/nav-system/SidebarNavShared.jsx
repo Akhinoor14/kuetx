@@ -11,6 +11,8 @@ import { Link } from 'react-router-dom';
 import { Circle } from 'lucide-react';
 import { ICONS } from '../../lib/iconRegistry';
 import { useState } from 'react';
+import { preloadRoute } from '../../lib/routePreload';
+import { perfMark } from '../../lib/perfLog';
 
 export const GROUP_ICONS = {
   'Dashboard':   'Grid',
@@ -30,9 +32,10 @@ export function NavRow({ to, label, iconName, active, onClose, unreadCount = 0 }
   return (
     <Link
       to={to}
-      onClick={onClose}
-      onMouseEnter={() => setHovered(true)}
+      onClick={() => { perfMark(`nav click -> ${to}`); onClose?.(); }}
+      onMouseEnter={() => { setHovered(true); preloadRoute(to); }}
       onMouseLeave={() => setHovered(false)}
+      onTouchStart={() => preloadRoute(to)}
       style={{
         display: 'flex',
         alignItems: 'center',

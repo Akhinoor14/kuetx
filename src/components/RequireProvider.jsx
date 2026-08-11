@@ -1,8 +1,10 @@
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Lock } from 'lucide-react';
 import { useIsProvider } from '../hooks/useIsProvider';
 import ProviderVerificationPending from '../pages/provider/ProviderVerificationPending';
 import { useProviderLang } from '../hooks/useProviderLang';
+import { perfStart, perfEnd } from '../lib/perfLog';
 
 /**
  * Blocks access to /provider/* routes with a HARD GATE — deliberately
@@ -16,12 +18,28 @@ import { useProviderLang } from '../hooks/useProviderLang';
  * 'deactivated' is treated the same as pending/rejected — locked out,
  * shown via ProviderVerificationPending's default (pending) message,
  * since Phase 1 has no deactivation-specific copy yet.
+ *
+ * PERF LOGGING: perfStart/perfEnd around the isResolved wait — filter
+ * devtools console for "kuetx:perf".
  */
 export default function RequireProvider({ children }) {
   const { t } = useProviderLang();
   const {
     isProvider, isVerifiedProvider, providerProfile, isResolved,
   } = useIsProvider();
+  const startedRef = useRef(false);
+  const endedRef = useRef(false);
+
+  if (!startedRef.current) {
+    startedRef.current = true;
+    perfStart('RequireProvider:check');
+  }
+  useEffect(() => {
+    if (isResolved && !endedRef.current) {
+      endedRef.current = true;
+      perfEnd('RequireProvider:check', !isProvider ? 'not provider' : (isVerifiedProvider ? 'verified' : 'pending/rejected'));
+    }
+  }, [isResolved, isProvider, isVerifiedProvider]);
 
   if (!isResolved) {
     return (

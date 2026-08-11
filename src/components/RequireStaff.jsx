@@ -1,6 +1,8 @@
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Lock } from 'lucide-react';
 import { useIsStaff } from '../hooks/useIsStaff';
+import { perfStart, perfEnd } from '../lib/perfLog';
 
 /**
  * Blocks access to staff-only pages/tools unless the current user's REAL,
@@ -17,9 +19,27 @@ import { useIsStaff } from '../hooks/useIsStaff';
  * useIsStaff() is itself always backed by a live Firestore check
  * (admins/{uid} or staff/{uid}/roles) — never a self-reported flag —
  * so there's nothing to spoof client-side to get past this.
+ *
+ * PERF LOGGING: wraps the isResolved wait in perfStart/perfEnd so the
+ * console shows exactly how long "Checking access…" is on screen for
+ * /team, /admin-hub, and anything else wrapped in RequireStaff. Filter
+ * devtools console for "kuetx:perf" to see it.
  */
 export default function RequireStaff({ children }) {
   const { isRealAdmin: isStaff, isResolved } = useIsStaff();
+  const startedRef = useRef(false);
+  const endedRef = useRef(false);
+
+  if (!startedRef.current) {
+    startedRef.current = true;
+    perfStart('RequireStaff:check');
+  }
+  useEffect(() => {
+    if (isResolved && !endedRef.current) {
+      endedRef.current = true;
+      perfEnd('RequireStaff:check', isStaff ? 'staff' : 'not staff');
+    }
+  }, [isResolved, isStaff]);
 
   if (!isResolved) {
     return (

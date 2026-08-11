@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Lock } from 'lucide-react';
 import { getProfile } from '../store/store';
@@ -6,6 +6,7 @@ import { getGroupId } from '../lib/groupUtils';
 import { subscribeMyRole } from '../lib/groupSync';
 import { auth } from '../lib/firebase';
 import ClassSetupModal from './ClassSetupModal';
+import { perfStart, perfEnd } from '../lib/perfLog';
 
 // Deliberately a DIFFERENT key from Sidebar.jsx's 'kuetx:lastKnownIsRealCR'
 // cache, even though both track the same underlying fact. They're fed by
@@ -29,6 +30,9 @@ const CACHE_KEY = 'kuetx:lastKnownIsRealCR:requireCR';
  * The only source of truth here is members/{uid}.role, which only ever
  * changes via a Campus Lead/Admin action (clApproveCRRequest,
  * clAppointCR, assignACR — see groupSync.js).
+ *
+ * PERF LOGGING: perfStart/perfEnd around the 'loading' -> allowed/denied
+ * transition — filter devtools console for "kuetx:perf".
  */
 export default function RequireCR({ children }) {
   const profile = getProfile();
@@ -68,6 +72,19 @@ export default function RequireCR({ children }) {
       return 'loading';
     }
   });
+  const startedRef = useRef(false);
+  const endedRef = useRef(false);
+
+  if (!startedRef.current) {
+    startedRef.current = true;
+    perfStart('RequireCR:check');
+  }
+  useEffect(() => {
+    if (status !== 'loading' && !endedRef.current) {
+      endedRef.current = true;
+      perfEnd('RequireCR:check', status);
+    }
+  }, [status]);
 
   useEffect(() => {
     if (!groupId || !auth.currentUser?.uid) {

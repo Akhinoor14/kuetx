@@ -37,29 +37,37 @@
 // Only a genuine, non-Founder faculty account (isFaculty && !isFounderBypass)
 // is blocked — mirroring RequireFaculty's isFounderBypass || isFaculty
 // check, just inverted.
+//
+// PERF LOGGING: perfStart/perfEnd around the combined isFacultyResolved +
+// isProviderResolved wait — filter devtools console for "kuetx:perf".
 
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Lock } from 'lucide-react';
 import { useIsFaculty } from '../hooks/useIsFaculty';
 import { useIsProvider } from '../hooks/useIsProvider';
+import { perfStart, perfEnd } from '../lib/perfLog';
 
-// BUGFIX: this component originally only checked isFaculty, from back
-// when 'faculty' was the only other account shape besides plain student.
-// Provider accounts (any status — pending/rejected/verified, see
-// useIsProvider.js) fell straight through the isGenuineFaculty check and
-// landed on every /courses, /attendance, /marks, /schedule, /assignments,
-// /question-bank, /results, /today, /syllabus, /diary, /alerts,
-// /classmates and CR-tool route with no gate at all — same "wrong shell"
-// problem RequireStudentMode was built to fix for faculty, just for a
-// role nobody had added a check for yet. isProvider (account exists, any
-// status) is used here rather than isVerifiedProvider, mirroring
-// isGenuineFaculty's "browsing is blocked regardless of verification
-// status" stance — the account simply isn't a student account.
 export default function RequireStudentMode({ children }) {
   const { isFaculty, isFounderBypass, isResolved: isFacultyResolved } = useIsFaculty();
   const { isProvider, isResolved: isProviderResolved } = useIsProvider();
+  const startedRef = useRef(false);
+  const endedRef = useRef(false);
+  const bothResolved = isFacultyResolved && isProviderResolved;
 
-  if (!isFacultyResolved || !isProviderResolved) {
+  if (!startedRef.current) {
+    startedRef.current = true;
+    perfStart('RequireStudentMode:check');
+  }
+  useEffect(() => {
+    if (bothResolved && !endedRef.current) {
+      endedRef.current = true;
+      const isGenuineFaculty = isFaculty && !isFounderBypass;
+      perfEnd('RequireStudentMode:check', isGenuineFaculty ? 'blocked:faculty' : (isProvider ? 'blocked:provider' : 'allowed'));
+    }
+  }, [bothResolved, isFaculty, isFounderBypass, isProvider]);
+
+  if (!bothResolved) {
     return (
       <div style={{ padding: 40, textAlign: 'center', color: 'var(--muted)' }}>
         Checking access…

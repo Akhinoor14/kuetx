@@ -133,6 +133,7 @@ import CRHub from './components/nav-system/CRHub';
 import AdminHub from './components/nav-system/AdminHub';
 import RequireFaculty from './components/RequireFaculty';
 import { NAV_FACULTY } from './nav-faculty';
+import { perfStart, perfEnd } from './lib/perfLog';
 const FacultyDashboard = lazy(() => import('./pages/faculty/FacultyDashboard'));
 const FacultyProfile = lazy(() => import('./pages/faculty/FacultyProfile'));
 const FacultyClasses = lazy(() => import('./pages/faculty/FacultyClasses'));
@@ -177,6 +178,23 @@ function Layout({ authState, onboardingActive }) {
   useEffect(() => {
     window.scrollTo(0, 0);
     document.querySelector('.main-content')?.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  // PERF LOGGING: measures the full time from "URL changed" to "this
+  // page's route element has actually painted" — this is the number
+  // that includes the lazy-chunk fetch, the <Suspense> fallback (if
+  // shown), and whatever the page's own guard component (RequireStaff,
+  // RequireFaculty, etc.) took to resolve. Filter devtools console for
+  // "kuetx:perf" to see it end-to-end per route. Starts on every
+  // pathname change; ends on the very next paint after that, which is
+  // when the new route's element (or its guard's "Checking access…"
+  // fallback, then the real content once THAT resolves) is on screen.
+  useEffect(() => {
+    perfStart(`route:${location.pathname}`);
+    const raf = requestAnimationFrame(() => {
+      perfEnd(`route:${location.pathname}`, 'first paint after nav');
+    });
+    return () => cancelAnimationFrame(raf);
   }, [location.pathname]);
 
   // Expose upgrade modal trigger globally so Settings page can call it

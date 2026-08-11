@@ -1,6 +1,8 @@
+import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Lock } from 'lucide-react';
 import { useIsFaculty } from '../hooks/useIsFaculty';
+import { perfStart, perfEnd } from '../lib/perfLog';
 
 /**
  * Blocks access to /faculty/* routes unless the current user is at least
@@ -23,9 +25,26 @@ import { useIsFaculty } from '../hooks/useIsFaculty';
  * studentRecords create/update, notices create, meetings write). So even
  * if this route-level gate were bypassed entirely, none of those four
  * writes can actually land unverified.
+ *
+ * PERF LOGGING: perfStart/perfEnd around the isResolved wait — filter
+ * devtools console for "kuetx:perf" to see how long each /faculty/*
+ * page spends on "Checking faculty access…".
  */
 export default function RequireFaculty({ children }) {
   const { isFaculty, isFounderBypass, isResolved } = useIsFaculty();
+  const startedRef = useRef(false);
+  const endedRef = useRef(false);
+
+  if (!startedRef.current) {
+    startedRef.current = true;
+    perfStart('RequireFaculty:check');
+  }
+  useEffect(() => {
+    if (isResolved && !endedRef.current) {
+      endedRef.current = true;
+      perfEnd('RequireFaculty:check', (isFounderBypass || isFaculty) ? 'allowed' : 'denied');
+    }
+  }, [isResolved, isFaculty, isFounderBypass]);
 
   if (!isResolved) {
     return (

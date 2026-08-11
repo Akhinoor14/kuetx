@@ -23,6 +23,7 @@ import { auth } from '../lib/firebase';
 import { useIsStaff } from '../hooks/useIsStaff';
 import { useViewMode } from '../hooks/useViewMode';
 import { useIsProvider } from '../hooks/useIsProvider';
+import { preloadRoute } from '../lib/routePreload';
 import * as noticeApi from '../lib/noticeUtils';
 import SidebarNavStudent, { findStudentNavItem } from './nav-system/SidebarNavStudent';
 import SidebarNavFaculty, { findFacultyNavItem } from './nav-system/SidebarNavFaculty';
@@ -220,8 +221,9 @@ export function Sidebar({ open, onClose, authState }) {
                 return (
                   <Link key={path} to={path} onClick={onClose}
                     style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '5px 7px', borderRadius: 7, textDecoration: 'none', fontSize: 12, fontWeight: active ? 700 : 500, color: active ? 'var(--accent)' : 'var(--text)', background: active ? 'color-mix(in srgb, var(--accent) 10%, var(--surface))' : 'transparent', transition: 'background 0.1s' }}
-                    onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'var(--inputBg)'; }}
+                    onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'var(--inputBg)'; preloadRoute(path); }}
                     onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent'; }}
+                    onTouchStart={() => preloadRoute(path)}
                   >
                     <Icon size={13} style={{ flexShrink: 0, color: active ? 'var(--accent)' : 'var(--muted)' }} />
                     <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{getPageLabel(path)}</span>

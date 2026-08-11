@@ -245,7 +245,7 @@ export default function ClassSetup() {
   );
 
   return (
-    <div className="page-enter page-container content-page-bg" style={{ maxWidth: 900, margin: '0 auto', padding: '16px 14px', paddingBottom: 'calc(32px + env(safe-area-inset-bottom, 0px))' }}>
+    <div className="page-enter page-container content-page-bg" style={{ width: '100%', maxWidth: '100%', margin: 0, padding: '16px 14px', paddingBottom: 'calc(32px + env(safe-area-inset-bottom, 0px))' }}>
       <div className="content-page-hero">
         <div className="content-page-hero-main">
           <div className="content-page-hero-head">
