@@ -395,7 +395,12 @@ body {
   min-width: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  transition: margin-left 0.25s cubic-bezier(0.4,0,0.2,1), width 0.25s cubic-bezier(0.4,0,0.2,1);
+  /* No transition here on purpose: margin-left/width are layout properties
+     (they trigger reflow of the whole content subtree, not just a repaint),
+     so animating them alongside the sidebar's transform-based slide was the
+     expensive half of every toggle. The sidebar overlays/slides via
+     transform (composite-only) instead of pushing this element, so
+     main-content doesn't need to animate in lockstep with it. */
 }
 /* ── Large display: slightly wider sidebar ── */
 @media (min-width: 1400px) {
@@ -7922,18 +7927,21 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
   top: 0;
   bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0px));
   z-index: 49;
-  background: rgba(0, 0, 0, 0);
-  backdrop-filter: blur(0px);
-  -webkit-backdrop-filter: blur(0px);
-  transition: background 0.3s, backdrop-filter 0.3s, opacity 0.3s;
+  /* Blur amount is fixed (not animated) — only opacity/visibility fade.
+     Animating backdrop-filter itself forces the browser to recompute the
+     blur on every frame of the transition, which is far more expensive
+     than fading a layer that's already blurred at its final value. */
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  transform: translateZ(0);
+  will-change: opacity;
+  transition: opacity 0.3s, visibility 0.3s;
   pointer-events: none;
   opacity: 0;
   visibility: hidden;
 }
 .all-pages-backdrop.open {
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
   pointer-events: auto;
   opacity: 1;
   visibility: visible;

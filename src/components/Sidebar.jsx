@@ -170,7 +170,20 @@ export function Sidebar({ open, onClose, authState }) {
   return (
     <>
       {open && (
-        <div style={{ position: 'fixed', inset: 0, zIndex: 30, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(2px)' }}
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 30,
+            // Slightly darker flat overlay instead of a live backdrop-filter blur.
+            // blur(2px) forced a full-viewport composite recalculation on every
+            // open/close and on every tap that passed through this layer on
+            // mobile; a plain rgba background is visually close enough and is
+            // effectively free to paint/composite.
+            background: 'rgba(0,0,0,0.5)',
+            transform: 'translateZ(0)',
+            willChange: 'opacity',
+          }}
           className="md:hidden" onClick={onClose} />
       )}
 

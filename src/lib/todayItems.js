@@ -162,20 +162,36 @@ export function buildTodayItems(profile, now = getBDNow()) {
   return { items, isHoliday, todayWeekday, todayKey };
 }
 
-// Splits the merged, time-sorted list into Morning / Afternoon / Evening
-// buckets for the full Today page. Untimed items (minutes === null) go
-// into whichever bucket the current clock is in, so "due today" always
-// shows near the top of the current section instead of a separate list.
+// Splits the merged, time-sorted list into Morning / Noon / Afternoon /
+// Evening / Night buckets for the full Today page.
+//
+// BUGFIX: this used to have only 3 buckets (Morning/Afternoon/Evening,
+// with Afternoon starting right at 12:00 PM) — inconsistent with
+// Dashboard.jsx's own "Good morning/noon/afternoon/evening/night"
+// greeting, which already had 5 named periods with different boundaries.
+// Two different definitions of "what part of the day is it" in the same
+// app meant the greeting could say "Good noon" while the Today page
+// right below it labelled that exact same hour "Afternoon" — confusing,
+// and wrong regardless of which one you'd call authoritative. This now
+// matches Dashboard's boundaries exactly (minus its separate very-early
+// "Welcome" greeting, which is a greeting string, not a time-of-day
+// section a class/task could actually fall into).
+//
+// Untimed items (minutes === null) go into whichever bucket the current
+// clock is in, so "due today" always shows near the top of the current
+// section instead of a separate list.
 export function groupByPartOfDay(items, now = getBDNow()) {
   const bucketFor = (mins) => {
     if (mins === null) return null;
-    if (mins < 12 * 60) return 'Morning';
-    if (mins < 17 * 60) return 'Afternoon';
-    return 'Evening';
+    if (mins < 12 * 60) return 'Morning';       // 12:00 AM – 11:59 AM
+    if (mins < 15 * 60) return 'Noon';          // 12:00 PM – 2:59 PM
+    if (mins < 18 * 60) return 'Afternoon';     // 3:00 PM – 5:59 PM
+    if (mins < 20 * 60) return 'Evening';       // 6:00 PM – 7:59 PM
+    return 'Night';                             // 8:00 PM – 11:59 PM
   };
   const currentBucket = bucketFor(now.getHours() * 60 + now.getMinutes()) || 'Morning';
 
-  const groups = { Morning: [], Afternoon: [], Evening: [] };
+  const groups = { Morning: [], Noon: [], Afternoon: [], Evening: [], Night: [] };
   items.forEach((item) => {
     const b = bucketFor(item.minutes) || currentBucket;
     groups[b].push(item);

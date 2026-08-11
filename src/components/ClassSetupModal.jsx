@@ -110,7 +110,29 @@ export default function ClassSetupModal({ groupId, profile, onDone }) {
     setDismissedToday(true);
   };
 
+  // BUGFIX (Save button vanished before it could ever be clicked — "save
+  // chapleo hocchilo na, kono error dekhini" / dates never actually
+  // reached Firestore): `datesFilled` used to gate which step's UI shows
+  // (`!datesFilled ? <date form> : <next step>`). The INSTANT the 4th and
+  // final date field was filled in, datesFilled flipped to true on that
+  // same render — which immediately swapped the whole date form (Save
+  // button included) out for the NEXT step's UI, before there was ever a
+  // chance to click "Save & continue". The typed dates were sitting fine
+  // in `form` state the whole time (never actually lost), but
+  // handleSaveDates() — the only thing that writes them to Firestore —
+  // was never called, so classSetup's date fields stayed empty/stale on
+  // the server. No error ever showed because there was never a failed
+  // save attempt — there was no save attempt at all.
+  //
+  // Fix: track whether the dates step has actually been SUBMITTED
+  // (datesSaved, set true only inside handleSaveDates after a successful
+  // write) as a separate thing from whether the fields merely look full
+  // enough to submit (datesFilled, still used below to enable/disable the
+  // Save button itself). The date form now only goes away once the save
+  // truly completed — filling in the last field just enables the button;
+  // it no longer skips the step.
   const datesFilled = form.termStartDate && form.classEndDate && form.prepLeaveEndDate && form.postExamEndDate;
+  const datesSaved = !!(classSetup?.termStartDate && classSetup?.classEndDate && classSetup?.prepLeaveEndDate && classSetup?.postExamEndDate);
   const currentTermKey = classSetup?.currentTermKey || '';
   const termDone = !!currentTermKey;
   const routineDone = routineCount > 0;
@@ -227,7 +249,24 @@ export default function ClassSetupModal({ groupId, profile, onDone }) {
   );
 
   return (
-    <Modal closeOnOverlayClick onClose={handleDismiss} contentStyle={{ width: 'min(94vw, 480px)', maxHeight: '88vh', overflowY: 'auto' }}>
+    // BUGFIX (data silently lost — "save chapleo hyni, kono error dekhini"):
+    // this used to have closeOnOverlayClick={true}. The native browser
+    // date-picker (the calendar icon on each date input below — that's
+    // browser chrome, not app-rendered UI) can render/close in a way that
+    // registers as a click landing on the semi-transparent overlay behind
+    // this modal, not on the modal content itself — even though visually
+    // the calendar looked like it was "inside" the popup. Modal.jsx's
+    // overlay onClick calls onClose (handleDismiss here) on ANY click that
+    // reaches it, with no distinction between "the person meant to dismiss
+    // the whole form" and "a native date-picker's own close click bubbled
+    // through." The result: picking a date, closing that native calendar,
+    // and the WHOLE modal silently closing — unsaved dates gone, no error
+    // shown (there was never a save attempt to fail), and the same
+    // incomplete popup reappearing the next day looking unchanged. There's
+    // already an explicit, clearly-labeled × button (handleDismiss) for
+    // "I want to leave this for later" — that's the only way out now;
+    // overlay clicks are just ignored while this form is open.
+    <Modal closeOnOverlayClick={false} onClose={handleDismiss} contentStyle={{ width: 'min(94vw, 480px)', maxHeight: '88vh', overflowY: 'auto' }}>
       <div className="card" style={{ padding: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 6 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
@@ -254,7 +293,7 @@ export default function ClassSetupModal({ groupId, profile, onDone }) {
           Not ready right now? Tap <strong>×</strong> above — you'll see this again tomorrow until it's finished.
         </p>
 
-        {!datesFilled ? (
+        {!datesSaved ? (
           <>
             <div style={{ marginBottom: 12 }}>
               <label style={labelStyle}>Term start date</label>
@@ -286,7 +325,20 @@ export default function ClassSetupModal({ groupId, profile, onDone }) {
               <input type="date" style={inputStyle} value={form.postExamEndDate} min={form.prepLeaveEndDate || undefined}
                 onChange={(e) => setForm({ ...form, postExamEndDate: e.target.value })} />
             </div>
-            {error && <div style={{ color: 'var(--danger)', fontSize: 12, marginBottom: 12 }}>{error}</div>}
+            {error && (
+              // PERF/VISIBILITY FIX: was plain small text easy to miss in a
+              // scrollable form (the CR types a date, hits Save, the error
+              // renders above the fold or blends in, and it looks like
+              // nothing happened at all — same "no error dekhini" symptom
+              // as the overlay-click bug above, just from a different
+              // cause). Now visually boxed so a real validation failure is
+              // unmistakable instead of easy to scroll past.
+              <div style={{
+                color: 'var(--danger)', fontSize: 12.5, fontWeight: 600, marginBottom: 12,
+                padding: '8px 10px', borderRadius: 8, background: 'rgba(239,68,68,0.08)',
+                border: '1px solid rgba(239,68,68,0.25)',
+              }}>{error}</div>
+            )}
             <button className="btn btn-primary" style={{ width: '100%' }} disabled={saving} onClick={handleSaveDates}>
               {saving ? 'Saving…' : 'Save & continue'}
             </button>

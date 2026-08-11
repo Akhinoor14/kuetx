@@ -3,7 +3,7 @@ import { Lightbulb, Crown, Gem } from 'lucide-react';
 import Modal from './Modal';
 import ManualVerifyFallback from './ManualVerifyFallback';
 import { isKuetEmailFormat, emailRollMatchesProfile } from '../lib/kuetEmailVerify';
-import { DEPARTMENTS, DEPT_CODES, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey, extractBatchFromRoll, normalizeProfileForSave } from '../store/store';
+import { DEPARTMENTS, DEPT_CODES, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey, extractBatchFromRoll, getDeptCodeFromRoll, normalizeProfileForSave } from '../store/store';
 import { getBatchStartDates } from '../lib/appConfigSync';
 import { claimRoll, requestRollUnlock } from '../lib/rollOwnership';
 import { ensureManualVerifyRequest } from '../lib/manualVerifyRequests';
@@ -11,25 +11,12 @@ import { subscribeGroupTermStartDate, subscribeGroupCurrentTermKey } from '../li
 import { getGroupId, isMultiSectionDept } from '../lib/groupUtils';
 
 // Map dept codes: roll middle 2 digits -> dept code
-const ROLL_DEPT_MAP = {
-  '25': 'Arch',
-  '23': 'BECM',
-  '15': 'BME',
-  '01': 'CE',
-  '29': 'ChE',
-  '07': 'CSE',
-  '09': 'ECE',
-  '03': 'EEE',
-  '13': 'ESE',
-  '11': 'IPE',
-  '19': 'LE',
-  '05': 'ME',
-  '27': 'MSE',
-  '31': 'MTE',
-  '21': 'TE',
-  '17': 'URP',
-};
-
+// BUGFIX: this used to be a second, hand-maintained copy of the
+// roll-digit → dept-code map that already lives in store.js (as
+// ROLL_DEPT_MAP, wrapped by getDeptCodeFromRoll). Two independently
+// edited copies of the same table is exactly how a future dept-code
+// addition/fix silently goes stale in only one of the two places —
+// so this now imports the single source of truth instead.
 const HALL_OPTIONS = [
   'Fazlul Haque Hall',
   'Lalan Shah Hall',
@@ -47,10 +34,15 @@ const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
 const extractDeptCodeFromRoll = (roll) => {
   const r = String(roll || '').trim();
+  // Deliberately more permissive than store.js's getDeptCodeFromRoll
+  // (which requires a full 7-digit roll): this auto-fills the dept field
+  // live as the student types, so it needs to resolve as soon as the
+  // dept digits (positions 3-4) exist, not only once all 7 digits are
+  // in. Same underlying table (via store.js), just applied to a
+  // shorter, in-progress string.
   if (r.length < 5) return '';
   if (!extractBatchFromRoll(r)) return '';
-  const deptDigits = r.slice(2, 4);
-  return ROLL_DEPT_MAP[deptDigits] || '';
+  return getDeptCodeFromRoll(r.padEnd(7, '0'));
 };
 
 const isRollValid = (roll) => {
@@ -230,7 +222,17 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
   // so this works even before the profile itself has ever been saved.
   const liveBatch = extractBatchFromRoll(form.studentId);
   const liveDept = form.dept || extractDeptCodeFromRoll(form.studentId);
-  const liveGroupId = liveBatch && liveDept ? getGroupId({ batch: liveBatch, dept: liveDept }) : null;
+  // BUGFIX: getGroupId() returns null for multi-section depts (CE/EEE/ME/
+  // CSE — see groupUtils.js) unless a `section` is passed too. This was
+  // omitted here, so any student in one of those 4 depts always got
+  // liveGroupId = null during onboarding — silently breaking the live
+  // term-start-date/current-term subscriptions below for exactly that
+  // group of students, who'd see "Your CR hasn't set a term start date
+  // yet" even after their CR had. Single-section depts (like ESE) were
+  // unaffected since isMultiSectionDept() short-circuits for them.
+  const liveGroupId = liveBatch && liveDept
+    ? getGroupId({ batch: liveBatch, dept: liveDept, section: form.section })
+    : null;
   const [groupTermStartDate, setGroupTermStartDate] = useState(null);
   useEffect(() => {
     return subscribeGroupTermStartDate(liveGroupId, setGroupTermStartDate);

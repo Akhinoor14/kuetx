@@ -411,7 +411,9 @@ export default function Schedule() {
   // this user is CR/ACR/Campus Lead/Admin, or the group temporarily has no
   // CR). Personal schedule below is completely untouched either way — it's
   // never read from or written to in group mode, just not rendered.
-  const groupId = useMemo(() => getGroupId(profile), [profile.dept, profile.batch]);
+  // BUGFIX: deps missing profile.section — see useClassManagementState.js's
+  // matching fix / ProfileSetupModal.jsx's comment for the full write-up.
+  const groupId = useMemo(() => getGroupId(profile), [profile.dept, profile.batch, profile.section]);
   const [groupHasCR, setGroupHasCR] = useState(null); // null = unknown yet
   useEffect(() => {
     if (!groupId) { setGroupHasCR(false); return; }

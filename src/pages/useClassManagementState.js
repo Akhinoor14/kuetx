@@ -55,7 +55,12 @@ export function useClassManagementState() {
     [allCourses, currentTermKey],
   );
 
-  const groupId = useMemo(() => getGroupId(profile), [profile.dept, profile.batch]);
+  // BUGFIX: deps list was missing profile.section — getGroupId() needs it
+  // for the 4 multi-section depts (CE/EEE/ME/CSE), so if a student's
+  // section was unset/changed after this hook first mounted, groupId
+  // stayed stuck at its stale (often null) first-render value until a
+  // full page reload. See ProfileSetupModal.jsx's matching fix.
+  const groupId = useMemo(() => getGroupId(profile), [profile.dept, profile.batch, profile.section]);
 
   const [groupTermStartDate, setGroupTermStartDateState] = useState(null);
   const [termDateDraft, setTermDateDraft] = useState('');
@@ -245,10 +250,22 @@ export function useClassManagementState() {
   const isSlotRecurringOff = (entry) => !!recurringOff[classOverrideSlotKey(entry.courseId, entry.day, entry.slot)];
   const isSelectedDayOff = !!classOverrides[getNextDateForWeekday(selectedRoutineDay)]?.dayOff;
 
-  // Opens the confirm panel for one class card — does NOT write anything
-  // yet. Pre-fills the date with the same "next occurrence" suggestion the
-  // old version silently committed to, but now the CR sees and can change
-  // it before anything is saved.
+  // SIMPLIFIED FLOW (per explicit request — "khub beshi kichu na... joto
+  // simple sohoj paoa jay"): the slot on/off toggle used to open a full
+  // confirm panel (date field, duration choice, reason text). Two direct
+  // actions now cover the everyday case instead:
+  //   1. quickMarkSlotOff / quickMarkSlotOn — one tap, no form, acts on
+  //      the already-known next occurrence of this slot.
+  //   2. openDatePickerDraft — "অন্য তারিখ বাছাই করুন", a small
+  //      multi-select calendar (datePickerDraft below); every date
+  //      ticked gets marked off in one batch on Confirm.
+  // Both still write through setSlotOverride (mode: 'off'/'on'/'clear')
+  // — the SAME Firestore path as before, just reached without a form.
+  // openSlotOverrideDraft/overrideDraft (kind:'slot') is no longer used
+  // by ClassRoutine.jsx's slot buttons, but is left in place below since
+  // OverrideConfirmPanel's slot-mode rendering still exists in case
+  // something else needs the fuller flow later; nothing currently calls
+  // openSlotOverrideDraft.
   function openSlotOverrideDraft(entry) {
     const slotKey = classOverrideSlotKey(entry.courseId, entry.day, entry.slot);
     const recurring = recurringOff[slotKey];
@@ -259,10 +276,112 @@ export function useClassManagementState() {
       date: getNextDateForWeekday(entry.day),
       mode: 'single',
       reason: '',
-      // if this slot already has a recurring suspension, opening the
-      // panel is for TURNING IT BACK ON, not staging a new off-draft
       turningOffRecurring: !!recurring,
     });
+  }
+
+  async function quickMarkSlotOff(entry) {
+    if (!groupId) return;
+    const slotKey = classOverrideSlotKey(entry.courseId, entry.day, entry.slot);
+    const date = getNextDateForWeekday(entry.day);
+    const course = courseMap.get(entry.courseId);
+    const label = entry.displayName || course?.code || course?.name || 'Class';
+    const dateLabel = new Date(date + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    const busyId = `slot:${slotKey}`;
+    setOverrideBusyKey(busyId);
+    try {
+      await setSlotOverride(groupId, profile, { dateKey: date, slotKey, mode: 'off' });
+      await postGroupNotice(groupId, profile, {
+        title: 'Class off', body: `⚠️ ${label} (${dateLabel}) হবে না — CR মার্ক করেছে।`, priority: 'urgent',
+      });
+    } catch (e) {
+      console.error('[ClassRoutine] quickMarkSlotOff failed:', e);
+    } finally {
+      setOverrideBusyKey(null);
+    }
+  }
+
+  // One-tap turn-back-on, mirroring quickMarkSlotOff — same per-date-vs-
+  // recurring precedence confirmOverrideDraft's old slot branch used
+  // (see the removed BUGFIX comment history in useClassManagementState.js
+  // git blame): per-date 'off' entry clears; an active recurring
+  // suspension gets lifted; otherwise an explicit per-date 'on' exception
+  // is written.
+  async function quickMarkSlotOn(entry) {
+    if (!groupId) return;
+    const slotKey = classOverrideSlotKey(entry.courseId, entry.day, entry.slot);
+    const date = getNextDateForWeekday(entry.day);
+    const course = courseMap.get(entry.courseId);
+    const label = entry.displayName || course?.code || course?.name || 'Class';
+    const dateLabel = new Date(date + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    const busyId = `slot:${slotKey}`;
+    setOverrideBusyKey(busyId);
+    try {
+      const recurring = recurringOff[slotKey];
+      if (recurring) {
+        await clearRecurringOff(groupId, profile, { slotKey });
+        await postGroupNotice(groupId, profile, {
+          title: 'Weekly suspension lifted',
+          body: `✅ ${label} আবার প্রতি সপ্তাহে চালু হবে — আগের 'প্রতি সপ্তাহে বন্ধ' অবস্থা বাতিল।`,
+          priority: 'normal',
+        });
+      } else {
+        const perDateStatus = classOverrides[date]?.slots?.[slotKey]?.status;
+        await setSlotOverride(groupId, profile, {
+          dateKey: date, slotKey, mode: perDateStatus === 'off' ? 'clear' : 'on',
+        });
+        await postGroupNotice(groupId, profile, {
+          title: 'Class back on', body: `✅ ${label} (${dateLabel}) আবার হবে — আগের 'বন্ধ' নোটিশ বাতিল।`, priority: 'normal',
+        });
+      }
+    } catch (e) {
+      console.error('[ClassRoutine] quickMarkSlotOn failed:', e);
+    } finally {
+      setOverrideBusyKey(null);
+    }
+  }
+
+  // "অন্য তারিখ বাছাই করুন" — small multi-select calendar. Separate from
+  // overrideDraft (still used only for the whole-day toggle). Nothing
+  // writes until confirmDatePickerOff.
+  const [datePickerDraft, setDatePickerDraft] = useState(null);
+  function openDatePickerDraft(entry) {
+    setDatePickerDraft({ entry, dates: [] });
+  }
+  function toggleDatePickerDate(dateStr) {
+    setDatePickerDraft((d) => {
+      if (!d) return d;
+      const has = d.dates.includes(dateStr);
+      return { ...d, dates: has ? d.dates.filter((x) => x !== dateStr) : [...d.dates, dateStr].sort() };
+    });
+  }
+  function cancelDatePickerDraft() {
+    setDatePickerDraft(null);
+  }
+  async function confirmDatePickerOff() {
+    if (!groupId || !datePickerDraft || datePickerDraft.dates.length === 0) return;
+    const { entry, dates } = datePickerDraft;
+    const slotKey = classOverrideSlotKey(entry.courseId, entry.day, entry.slot);
+    const course = courseMap.get(entry.courseId);
+    const label = entry.displayName || course?.code || course?.name || 'Class';
+    const busyId = `slot:${slotKey}`;
+    setOverrideBusyKey(busyId);
+    try {
+      // Sequential (not Promise.all) so concurrent read-modify-write
+      // calls against the same plannerSettings doc can't race each other.
+      for (const dateKey of dates) {
+        await setSlotOverride(groupId, profile, { dateKey, slotKey, mode: 'off' });
+      }
+      const dateLabels = dates.map((d) => new Date(d + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })).join(', ');
+      await postGroupNotice(groupId, profile, {
+        title: 'Class off', body: `⚠️ ${label} — ${dateLabels}-এ হবে না — CR মার্ক করেছে।`, priority: 'urgent',
+      });
+    } catch (e) {
+      console.error('[ClassRoutine] confirmDatePickerOff failed:', e);
+    } finally {
+      setOverrideBusyKey(null);
+      setDatePickerDraft(null);
+    }
   }
 
   function openDayOverrideDraft() {
@@ -874,6 +993,8 @@ export function useClassManagementState() {
     openTeacherDialog, openCourseTeacherDialog, handleCourseTeacherDialogClose, handleCourseTeacherDialogSave,
     isSlotOff, isSlotRecurringOff, isSelectedDayOff, overrideBusyKey, overrideDraft,
     openSlotOverrideDraft, openDayOverrideDraft, updateOverrideDraft, cancelOverrideDraft, confirmOverrideDraft,
+    quickMarkSlotOff, quickMarkSlotOn,
+    datePickerDraft, openDatePickerDraft, toggleDatePickerDate, cancelDatePickerDraft, confirmDatePickerOff,
     isSessionalType, hasCadenceConfigured, getCadenceEntry, getCadenceOccurrence,
     cadenceBusyKey, cadenceDraft, openCadenceDraft, updateCadenceDraft, cancelCadenceDraft, confirmCadenceDraft,
     removeCadence, toggleCadenceDate, shiftCadence,

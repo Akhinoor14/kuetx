@@ -35,6 +35,7 @@ import { getFacultyDoc, isFacultyProfileComplete } from './lib/facultySync';
 import { getProviderProfile } from './lib/providerSync';
 import { syncBloodDonorEntry } from './lib/bloodDonorSync';
 import { store, getProfile, isProfileComplete, DEFAULT_PROFILE, normalizeProfileForSave, validateProfileForSave, ensureDBReady, tagProfileOwner, isProfileStaleForUid } from './store/store';
+import { preloadDeptCurriculum } from './data/curriculum/departmentLoader';
 import { getGroupId } from './lib/groupUtils';
 import { syncGroupMembership, getOwnMemberVerifiedOnce, subscribePlannerSettings, subscribeMyRole, updatePlannerSettings } from './lib/groupSync';
 import { migrateCourseTeacherMapToIds } from './lib/teacherRegistry';
@@ -1073,6 +1074,13 @@ export default function App() {
     ensureDBReady().finally(async () => {
       if (cancelled) return;
       console.log('[KUETx DIAG] ensureDBReady() done, calling buildQueue()...');
+      // Warm the curriculum cache for this user's own department in the
+      // background as soon as we know it, rather than waiting for the
+      // first page that actually needs course data to request it. See
+      // src/data/curriculum/departmentLoader.js — departments now load
+      // lazily per-dept instead of all 16 being bundled eagerly.
+      const deptForPreload = getProfile()?.dept;
+      if (deptForPreload) preloadDeptCurriculum(deptForPreload);
       const q = await buildQueue(authState.isAnonymous, window.location.pathname);
       if (cancelled) return;
       console.log('[KUETx DIAG] buildQueue() done, queue =', q);

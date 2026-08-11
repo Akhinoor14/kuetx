@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import LazyRechartsArea from '../components/LazyRechartsArea';
 import { TrendingUp, Award, AlertTriangle, BookOpen, CalendarCheck, Clock, Wallet, Star, UserCircle, GraduationCap, ClipboardList, Medal, CheckCircle2, Store } from 'lucide-react';
 import * as Icons from 'lucide-react';
-import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAttendance, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, computeCourseGrade, deriveAcademicMetaFromCourses, syncProfileAcademicMeta, getProfile, getTermLabelFromKey, getCurrentTermKey, getTermProgress, getTermTimeline, getTermIndex, TERM_KEYS, getTimerActiveState, formatDurationMs, PRODUCTIVE_TIME_CATEGORIES } from '../store/store';
+import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAttendance, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, computeCourseGrade, deriveAcademicMetaFromCourses, syncProfileAcademicMeta, getProfile, getTermLabelFromKey, getCurrentTermKey, getTermProgress, getTermTimeline, getTermIndex, TERM_KEYS, getTimerActiveState, formatDurationMs, PRODUCTIVE_TIME_CATEGORIES, getBDNow } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import { NAV } from '../nav';
 import ticker from '../lib/ticker';
@@ -266,8 +266,17 @@ export default function Dashboard() {
   const criticalAlerts = alerts.filter(a => a.type === 'critical');
   const warningAlerts  = alerts.filter(a => a.type === 'warning');
 
+  // BUGFIX (timezone correctness — same class of bug fixed everywhere
+  // else in the app, see getBDNow's doc comment in store.js): this used
+  // to read `new Date().getHours()`, the VISITOR'S OWN DEVICE clock —
+  // not Bangladesh time. A device set to a different timezone (or just
+  // travelling) would get "Good night" at Bangladesh noon. Also aligned
+  // the exact hour boundaries with lib/todayItems.js's groupByPartOfDay,
+  // which used to disagree with this (e.g. this said "Good noon" at
+  // 1 PM while the Today page below it labelled the same hour
+  // "Afternoon") — both now read from the same 5-period definition.
   const timeGreeting = (() => {
-    const h = new Date().getHours();
+    const h = getBDNow().getHours();
     if (h < 5) return 'Welcome';
     if (h < 12) return 'Good morning';
     if (h < 15) return 'Good noon';

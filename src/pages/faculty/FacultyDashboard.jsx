@@ -18,6 +18,7 @@ import { Link } from 'react-router-dom';
 import { AlertTriangle, Bell, BellOff, BookOpen, CalendarClock, CalendarOff, CheckCircle2, ChevronRight, Circle, LayoutGrid, List, Repeat, Send } from 'lucide-react';
 import { ICONS } from '../../lib/iconRegistry';
 import { auth } from '../../lib/firebase';
+import { getBDNow } from '../../store/store';
 import { useIsFaculty } from '../../hooks/useIsFaculty';
 import { subscribeMyClassIndex, getFacultyAssignment } from '../../lib/facultyClassSync';
 import { subscribeMembers } from '../../lib/groupSync';
@@ -140,8 +141,13 @@ export default function FacultyDashboard() {
     return () => clearInterval(id);
   }, [activeCount, heldCardIndex]);
 
+  // BUGFIX (timezone correctness — same fix as Dashboard.jsx's matching
+  // comment): was `new Date()`, the device's own clock/timezone, not
+  // Bangladesh time. A faculty member accessing from a different
+  // timezone would see the wrong greeting, and — worse — the wrong
+  // date/weekday line below, which the day's class list keys off of.
   const timeGreeting = (() => {
-    const h = new Date().getHours();
+    const h = getBDNow().getHours();
     if (h < 5) return 'Welcome';
     if (h < 12) return 'Good morning';
     if (h < 15) return 'Good noon';
@@ -149,7 +155,7 @@ export default function FacultyDashboard() {
     if (h < 20) return 'Good evening';
     return 'Good night';
   })();
-  const today = new Date();
+  const today = getBDNow();
   const todayDateLine = today.toLocaleDateString('en-BD', { day: 'numeric', month: 'long', year: 'numeric' });
   const todayDayLine = today.toLocaleDateString('en-BD', { weekday: 'long' });
   const facultyDisplayName = facultyProfile?.preferredName || facultyProfile?.name || '';
@@ -238,7 +244,9 @@ export default function FacultyDashboard() {
 
   // Pending-attendance reminder — active assignment scheduled for today's
   // weekday, no session doc yet for today's date.
-  const todayName = DAYS[new Date().getDay()] || null;
+  // BUGFIX (timezone correctness): was `new Date()` — device timezone,
+  // not Bangladesh time. See getBDNow's doc comment in store.js.
+  const todayName = DAYS[getBDNow().getDay()] || null;
   const todayDate = new Date().toISOString().slice(0, 10);
   const pendingToday = activeAssignments.filter((c) => {
     const a = assignments[c.assignmentId];
@@ -258,7 +266,11 @@ export default function FacultyDashboard() {
   // and any class whose end time has already passed today is dropped from
   // the list entirely, so the next upcoming class naturally rises to the
   // top as the day goes on.
-  const nowMinutes = new Date().getHours() * 60 + new Date().getMinutes();
+  // BUGFIX (timezone correctness — same fix as timeGreeting above): was
+  // `new Date()`, which would show/hide "in progress" or "already
+  // passed" classes based on the device's own timezone instead of
+  // Bangladesh time.
+  const nowMinutes = getBDNow().getHours() * 60 + getBDNow().getMinutes();
   const todaysClasses = activeAssignments
     .flatMap((c) => {
       const a = assignments[c.assignmentId];

@@ -225,7 +225,7 @@ export default function Today() {
           <button className="btn btn-primary" onClick={() => setAddOpen(true)}><Plus size={13} /> Add</button>
         </div>
       ) : (
-        ['Morning', 'Afternoon', 'Evening'].map((part) => (
+        ['Morning', 'Noon', 'Afternoon', 'Evening', 'Night'].map((part) => (
           groups[part].length > 0 && (
             <div key={part} style={{ marginBottom: 18 }}>
               <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>{part}</div>

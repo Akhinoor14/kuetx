@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { CalendarDays, Clock3, Copy, Download, Users, PowerOff, Power } from 'lucide-react';
+import { CalendarDays, Clock3, Copy, Download, Users, PowerOff, Power, X } from 'lucide-react';
+import Modal from '../components/Modal';
+import { getBDNow } from '../store/store';
 import { useClassManagementState, ROUTINE_DAY_DEFS } from './useClassManagementState';
 
 /**
@@ -198,22 +200,24 @@ export default function ClassRoutine() {
                           </div>
                           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flexShrink: 0 }}>
                             {s.groupId && !s.isSelectedDayOff && (
-                              <button
-                                type="button"
-                                title={recurring ? 'প্রতি সপ্তাহের বন্ধ অবস্থা থেকে আবার চালু করুন' : 'এই স্লট বন্ধ/চালু করুন'}
-                                onClick={() => s.openSlotOverrideDraft(entry)}
-                                disabled={isBusy}
-                                style={{
-                                  flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                  width: 36, height: 36, borderRadius: 10, cursor: isBusy ? 'not-allowed' : 'pointer',
-                                  border: off ? '1px solid rgba(22,163,74,0.35)' : '1px solid rgba(220,38,38,0.25)',
-                                  background: off ? 'rgba(22,163,74,0.08)' : 'rgba(220,38,38,0.06)',
-                                  color: off ? '#16a34a' : '#dc2626',
-                                  opacity: isBusy ? 0.6 : 1,
-                                }}
-                              >
-                                {off ? <Power size={16} /> : <PowerOff size={16} />}
-                              </button>
+                              off ? (
+                                <button
+                                  type="button"
+                                  title="আবার চালু করুন"
+                                  onClick={() => s.quickMarkSlotOn(entry)}
+                                  disabled={isBusy}
+                                  style={{
+                                    flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    width: 36, height: 36, borderRadius: 10, cursor: isBusy ? 'not-allowed' : 'pointer',
+                                    border: '1px solid rgba(22,163,74,0.35)', background: 'rgba(22,163,74,0.08)',
+                                    color: '#16a34a', opacity: isBusy ? 0.6 : 1,
+                                  }}
+                                >
+                                  <Power size={16} />
+                                </button>
+                              ) : (
+                                <SlotOffMenu entry={entry} s={s} isBusy={isBusy} />
+                              )
                             )}
                             {s.groupId && s.isSessionalType(entry.type) && (
                               <button
@@ -253,6 +257,10 @@ export default function ClassRoutine() {
           <CadenceConfirmPanel s={s} />
         )}
 
+        {s.datePickerDraft && (
+          <DatePickerOffModal s={s} />
+        )}
+
         <div style={{ padding: 14, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--bg-secondary)' }}>
           <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>
             Need a feature? <Link to="/about#developer" style={{ color: 'var(--accent)', fontWeight: 800, textDecoration: 'none' }}>Jump to Developer Info</Link> and mention "Class Management".
@@ -263,12 +271,214 @@ export default function ClassRoutine() {
   );
 }
 
+// Small popover with the two everyday actions for turning a class off —
+// "আজকের ক্লাস বন্ধ" (one tap, acts on the next occurrence) and "অন্য
+// তারিখ বাছাই করুন" (opens the multi-select calendar below). Replaces
+// what used to be a single icon that opened a full form.
+function SlotOffMenu({ entry, s, isBusy }) {
+  const [open, setOpen] = React.useState(false);
+  const ref = React.useRef(null);
+
+  React.useEffect(() => {
+    if (!open) return;
+    const onDocClick = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    document.addEventListener('mousedown', onDocClick);
+    return () => document.removeEventListener('mousedown', onDocClick);
+  }, [open]);
+
+  return (
+    <div ref={ref} style={{ position: 'relative' }}>
+      <button
+        type="button"
+        title="ক্লাস বন্ধ করুন"
+        onClick={() => setOpen((v) => !v)}
+        disabled={isBusy}
+        style={{
+          flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: 36, height: 36, borderRadius: 10, cursor: isBusy ? 'not-allowed' : 'pointer',
+          border: '1px solid rgba(220,38,38,0.25)', background: 'rgba(220,38,38,0.06)',
+          color: '#dc2626', opacity: isBusy ? 0.6 : 1,
+        }}
+      >
+        <PowerOff size={16} />
+      </button>
+      {open && (
+        <div style={{
+          position: 'absolute', right: 0, top: 42, zIndex: 20, width: 200,
+          borderRadius: 12, border: '1px solid var(--border)', background: 'var(--surface)',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.12)', overflow: 'hidden',
+        }}>
+          <button
+            type="button"
+            onClick={() => { setOpen(false); s.quickMarkSlotOff(entry); }}
+            style={{
+              width: '100%', textAlign: 'left', padding: '11px 14px', fontSize: 13, fontWeight: 700,
+              border: 'none', background: 'transparent', cursor: 'pointer', color: 'var(--text)',
+            }}
+          >
+            আজকের ক্লাস বন্ধ
+          </button>
+          <div style={{ height: 1, background: 'var(--border)' }} />
+          <button
+            type="button"
+            onClick={() => { setOpen(false); s.openDatePickerDraft(entry); }}
+            style={{
+              width: '100%', textAlign: 'left', padding: '11px 14px', fontSize: 13, fontWeight: 700,
+              border: 'none', background: 'transparent', cursor: 'pointer', color: 'var(--text)',
+            }}
+          >
+            অন্য তারিখ বাছাই করুন
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Multi-select calendar for "অন্য তারিখ বাছাই করুন" — tap any number of
+// dates, they all get marked off together on Confirm. Deliberately just a
+// simple month grid with no other options (no reason field, no duration
+// choice) — see s.confirmDatePickerOff in useClassManagementState.js.
+function DatePickerOffModal({ s }) {
+  const d = s.datePickerDraft;
+  const isBusy = !!s.overrideBusyKey;
+  const course = s.courseMap.get(d.entry.courseId);
+  const label = d.entry.displayName || course?.code || course?.name || 'Class';
+  const [viewMonth, setViewMonth] = React.useState(() => {
+    // BUGFIX (timezone correctness — "Bangladesh time table thi ache to?"):
+    // this used to be `new Date()`, which reads the VISITOR'S OWN DEVICE
+    // clock/timezone. Every other "today" in this app (getNextDateForWeekday,
+    // getRoutinePreviewDate, the Today page, attendance logging) goes
+    // through getBDNow() specifically so "today" always means Bangladesh
+    // wall-clock time regardless of the device's own timezone (see
+    // getBDNow's doc comment in store.js — a device set to a different
+    // timezone would otherwise silently disagree with the rest of the app
+    // about which date is "today"). This calendar's month/today
+    // highlighting now reads the same getBDNow() everything else uses, so
+    // it can't drift a day off from what the routine/attendance pages
+    // consider today.
+    const today = getBDNow();
+    return new Date(today.getFullYear(), today.getMonth(), 1);
+  });
+
+  const year = viewMonth.getFullYear();
+  const month = viewMonth.getMonth();
+  const firstDow = new Date(year, month, 1).getDay(); // 0=Sun
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const toDateKey = (day) => `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  // BUGFIX (same timezone issue as viewMonth above): was plain `new
+  // Date()` — now getBDNow(), matching every other "today" cutoff in the
+  // app, so the past-date lock (isPast below) can't disagree with what
+  // the rest of KUETx considers today on a device set to a non-Bangladesh
+  // timezone.
+  const bdToday = getBDNow();
+  const todayKey = `${bdToday.getFullYear()}-${String(bdToday.getMonth() + 1).padStart(2, '0')}-${String(bdToday.getDate()).padStart(2, '0')}`;
+  const monthLabel = viewMonth.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+
+  const cells = [];
+  for (let i = 0; i < firstDow; i++) cells.push(null);
+  for (let day = 1; day <= daysInMonth; day++) cells.push(day);
+
+  return (
+    <Modal closeOnOverlayClick={!isBusy} onClose={isBusy ? () => {} : s.cancelDatePickerDraft} contentStyle={{ width: 'min(94vw, 360px)' }}>
+      <div className="card" style={{ padding: 16, display: 'grid', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+          <div style={{ fontSize: 14, fontWeight: 900 }}>{label} — তারিখ বাছাই করুন</div>
+          <button
+            type="button" onClick={s.cancelDatePickerDraft} disabled={isBusy} aria-label="বাতিল"
+            style={{
+              flexShrink: 0, width: 26, height: 26, borderRadius: 8, border: '1px solid var(--border)',
+              background: 'var(--bg)', color: 'var(--muted)', cursor: isBusy ? 'not-allowed' : 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+          >
+            <X size={14} />
+          </button>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <button type="button" onClick={() => setViewMonth(new Date(year, month - 1, 1))}
+            style={{ width: 28, height: 28, borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', cursor: 'pointer' }}>‹</button>
+          <div style={{ fontSize: 13, fontWeight: 800 }}>{monthLabel}</div>
+          <button type="button" onClick={() => setViewMonth(new Date(year, month + 1, 1))}
+            style={{ width: 28, height: 28, borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', cursor: 'pointer' }}>›</button>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4 }}>
+          {['র', 'সো', 'ম', 'বু', 'বৃ', 'শু', 'শ'].map((w) => (
+            <div key={w} style={{ textAlign: 'center', fontSize: 10.5, fontWeight: 800, color: 'var(--muted)' }}>{w}</div>
+          ))}
+          {cells.map((day, i) => {
+            if (day === null) return <div key={`empty-${i}`} />;
+            const dateKey = toDateKey(day);
+            const selected = d.dates.includes(dateKey);
+            const isPast = dateKey < todayKey;
+            return (
+              <button
+                key={dateKey}
+                type="button"
+                disabled={isPast}
+                onClick={() => s.toggleDatePickerDate(dateKey)}
+                style={{
+                  aspectRatio: '1', borderRadius: 8, fontSize: 12.5, fontWeight: 700, cursor: isPast ? 'not-allowed' : 'pointer',
+                  border: selected ? '1px solid #dc2626' : '1px solid var(--border)',
+                  background: selected ? '#dc2626' : (isPast ? 'var(--bg-secondary)' : 'var(--surface)'),
+                  color: selected ? '#fff' : (isPast ? 'var(--muted)' : 'var(--text)'),
+                  opacity: isPast ? 0.4 : 1,
+                }}
+              >
+                {day}
+              </button>
+            );
+          })}
+        </div>
+
+        <div style={{ fontSize: 12, color: 'var(--muted)' }}>
+          {d.dates.length > 0 ? `${d.dates.length} টি তারিখ বাছাই করা হয়েছে` : 'একটা বা একাধিক তারিখ ট্যাপ করো'}
+        </div>
+
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button
+            type="button"
+            onClick={s.confirmDatePickerOff}
+            disabled={isBusy || d.dates.length === 0}
+            className="accent-fill-glass"
+            style={{ flex: 1, padding: '11px 18px', borderRadius: 8, color: '#fff', fontWeight: 800, cursor: (isBusy || d.dates.length === 0) ? 'not-allowed' : 'pointer', opacity: (isBusy || d.dates.length === 0) ? 0.6 : 1 }}
+          >
+            {isBusy ? 'সেভ হচ্ছে…' : 'বন্ধ মার্ক করুন'}
+          </button>
+          <button
+            type="button"
+            onClick={s.cancelDatePickerDraft}
+            disabled={isBusy}
+            className="btn btn-ghost"
+            style={{ padding: '11px 18px', borderRadius: 8, fontWeight: 700, cursor: isBusy ? 'not-allowed' : 'pointer' }}
+          >
+            বাতিল
+          </button>
+        </div>
+      </div>
+    </Modal>
+  );
+}
+
 // Confirm panel shown when the CR opens a slot or day toggle — nothing is
-// written to Firestore until "Confirm" is pressed here. This is the fix
-// for the earlier design gap where a single click auto-guessed a date and
-// committed immediately: now the CR always sees (and can edit) the exact
-// date, and for a slot-level toggle explicitly chooses between a one-off
-// cancellation and an ongoing weekly suspension.
+// written to Firestore until "Confirm" is pressed here.
+//
+// REDESIGN (compact modal instead of a big inline block pushing the page
+// down): this used to render directly in the page flow — tapping one
+// small 36×36 toggle icon injected a tall form (date picker, duration
+// radio buttons, reason text box, explanation paragraph) right into the
+// middle of the routine list, shoving every entry below it down. On
+// mobile especially, that's a jarring, disorienting amount of motion for
+// what's usually a one-tap decision ("this class is off today"). Now
+// rendered as a focused modal overlay instead: the everyday case (single
+// date, no reason) needs one glance and one tap on Confirm — the date
+// picker still defaults to the sensible next occurrence and can be
+// changed, and "প্রতি সপ্তাহে বন্ধ" / reason stay one tap away, just not
+// forced into view for someone who doesn't need them. Nothing about
+// WHAT this collects or WHEN it writes changed — same draft state, same
+// confirmOverrideDraft() write path — only how it's presented.
 function OverrideConfirmPanel({ s }) {
   const d = s.overrideDraft;
   const isBusy = !!s.overrideBusyKey;
@@ -286,8 +496,24 @@ function OverrideConfirmPanel({ s }) {
   }
 
   return (
-    <div style={{ padding: 18, borderRadius: 16, border: '1px solid rgba(220,38,38,0.25)', background: 'rgba(220,38,38,0.03)', display: 'grid', gap: 14 }}>
-      <div style={{ fontSize: 14, fontWeight: 900 }}>{heading}</div>
+    <Modal closeOnOverlayClick={!isBusy} onClose={isBusy ? () => {} : s.cancelOverrideDraft} contentStyle={{ width: 'min(94vw, 420px)', maxHeight: '88vh', overflowY: 'auto' }}>
+      <div className="card" style={{ padding: 18, display: 'grid', gap: 14 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+          <div style={{ fontSize: 15, fontWeight: 900 }}>{heading}</div>
+          <button
+            type="button"
+            onClick={s.cancelOverrideDraft}
+            disabled={isBusy}
+            aria-label="বাতিল"
+            style={{
+              flexShrink: 0, width: 28, height: 28, borderRadius: 8, border: '1px solid var(--border)',
+              background: 'var(--bg)', color: 'var(--muted)', cursor: isBusy ? 'not-allowed' : 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+          >
+            <X size={15} />
+          </button>
+        </div>
 
       {!d.turningOffRecurring && (
         <div>
@@ -296,9 +522,8 @@ function OverrideConfirmPanel({ s }) {
             type="date"
             value={d.date}
             onChange={(e) => s.updateOverrideDraft({ date: e.target.value })}
-            style={{ padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)', fontSize: 14 }}
+            style={{ padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)', fontSize: 14, width: '100%', boxSizing: 'border-box' }}
           />
-          <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>নিজে থেকে বেছে নাও — এটা শুধু একটা সুপারিশ, তুমি বদলে দিতে পারো।</div>
         </div>
       )}
 
@@ -315,7 +540,7 @@ function OverrideConfirmPanel({ s }) {
                 background: d.mode === 'single' ? 'rgba(59,130,246,0.08)' : 'var(--surface)',
               }}
             >
-              শুধু এই তারিখে বন্ধ
+              শুধু এই তারিখে
             </button>
             <button
               type="button"
@@ -326,36 +551,36 @@ function OverrideConfirmPanel({ s }) {
                 background: d.mode === 'recurring' ? 'rgba(59,130,246,0.08)' : 'var(--surface)',
               }}
             >
-              এখন থেকে প্রতি সপ্তাহে বন্ধ (পরবর্তী নির্দেশ না দেওয়া পর্যন্ত)
+              প্রতি সপ্তাহে (পরে বন্ধ না করা পর্যন্ত)
             </button>
           </div>
         </div>
       )}
 
       {!d.turningOffRecurring && (
-        <div>
-          <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>কারণ (ঐচ্ছিক)</div>
+        <details style={{ fontSize: 13 }}>
+          <summary style={{ cursor: 'pointer', fontWeight: 700, color: 'var(--muted)', listStyle: 'none' }}>কারণ যোগ করুন (ঐচ্ছিক)</summary>
           <input
             type="text"
             value={d.reason}
             onChange={(e) => s.updateOverrideDraft({ reason: e.target.value })}
             placeholder="যেমনঃ শিক্ষক অসুস্থ, ছুটির দিন..."
-            style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)', fontSize: 14 }}
+            style={{ width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)', fontSize: 14, boxSizing: 'border-box', marginTop: 8 }}
           />
-        </div>
+        </details>
       )}
 
-      <div style={{ fontSize: 12, color: 'var(--muted)' }}>
-        {dateLabel} — এই সিদ্ধান্তের সাথে সাথে ক্লাসের গ্রুপ নোটিশ ফিডে (এবং Telegram কানেক্টেড থাকলে সেখানেও) একটা নোটিশ যাবে।
+      <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>
+        {dateLabel} — নোটিশ ফিডে জানানো হবে।
       </div>
 
-      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: 10 }}>
         <button
           type="button"
           onClick={s.confirmOverrideDraft}
           disabled={isBusy}
           className="accent-fill-glass"
-          style={{ padding: '10px 18px', borderRadius: 8, color: '#fff', fontWeight: 800, cursor: isBusy ? 'not-allowed' : 'pointer', opacity: isBusy ? 0.7 : 1 }}
+          style={{ flex: 1, padding: '11px 18px', borderRadius: 8, color: '#fff', fontWeight: 800, cursor: isBusy ? 'not-allowed' : 'pointer', opacity: isBusy ? 0.7 : 1 }}
         >
           {isBusy ? 'সেভ হচ্ছে…' : 'Confirm'}
         </button>
@@ -364,12 +589,13 @@ function OverrideConfirmPanel({ s }) {
           onClick={s.cancelOverrideDraft}
           disabled={isBusy}
           className="btn btn-ghost"
-          style={{ padding: '10px 18px', borderRadius: 8, fontWeight: 700, cursor: isBusy ? 'not-allowed' : 'pointer' }}
+          style={{ padding: '11px 18px', borderRadius: 8, fontWeight: 700, cursor: isBusy ? 'not-allowed' : 'pointer' }}
         >
           বাতিল
         </button>
       </div>
-    </div>
+      </div>
+    </Modal>
   );
 }
 
@@ -381,6 +607,14 @@ function OverrideConfirmPanel({ s }) {
 //      whatever date is currently in the date picker below
 //   3. "Shift cadence from here" — re-anchors future dates without
 //      touching past overrides (see shiftCadenceFrom's own doc comment)
+//
+// REDESIGN (modal instead of inline block): same reasoning as
+// OverrideConfirmPanel just above — this is genuinely a multi-section
+// settings panel (mode, anchor date, per-date override, cadence-shift),
+// so its content stays as-is, but it no longer gets injected directly
+// into the routine list pushing every entry below it down the page.
+// Wrapped in the same Modal component for a consistent, contained
+// experience across both panels, on both desktop and mobile.
 function CadenceConfirmPanel({ s }) {
   const d = s.cadenceDraft;
   const isBusy = s.cadenceBusyKey === d.slotKey || !!s.cadenceBusyKey;
@@ -390,8 +624,24 @@ function CadenceConfirmPanel({ s }) {
   const modeLabel = { alternating: 'এক সপ্তাহ পর পর (Alternating)', weekly: 'প্রতি সপ্তাহে', manual: 'সম্পূর্ণ ম্যানুয়াল' };
 
   return (
-    <div style={{ padding: 18, borderRadius: 16, border: '1px solid rgba(37,99,235,0.25)', background: 'rgba(37,99,235,0.03)', display: 'grid', gap: 16 }}>
-      <div style={{ fontSize: 14, fontWeight: 900 }}>{d.label} — Sessional Cadence</div>
+    <Modal closeOnOverlayClick={!isBusy} onClose={isBusy ? () => {} : s.cancelCadenceDraft} contentStyle={{ width: 'min(94vw, 480px)', maxHeight: '88vh', overflowY: 'auto' }}>
+      <div className="card" style={{ padding: 18, display: 'grid', gap: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+          <div style={{ fontSize: 15, fontWeight: 900 }}>{d.label} — Sessional Cadence</div>
+          <button
+            type="button"
+            onClick={s.cancelCadenceDraft}
+            disabled={isBusy}
+            aria-label="বাতিল"
+            style={{
+              flexShrink: 0, width: 28, height: 28, borderRadius: 8, border: '1px solid var(--border)',
+              background: 'var(--bg)', color: 'var(--muted)', cursor: isBusy ? 'not-allowed' : 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+          >
+            <X size={15} />
+          </button>
+        </div>
 
       <div>
         <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>Mode</div>
@@ -424,7 +674,7 @@ function CadenceConfirmPanel({ s }) {
           type="date"
           value={d.entry.anchorDate || ''}
           onChange={(e) => s.updateCadenceDraft({ anchorDate: e.target.value })}
-          style={{ padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)', fontSize: 14 }}
+          style={{ padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)', fontSize: 14, width: '100%', boxSizing: 'border-box' }}
         />
       </div>
 
@@ -531,6 +781,7 @@ function CadenceConfirmPanel({ s }) {
           </button>
         </div>
       </div>
-    </div>
+      </div>
+    </Modal>
   );
 }

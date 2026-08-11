@@ -237,7 +237,7 @@ function attBorder(pct, dark) {
   if (pct < SCHOLARSHIP_ATTENDANCE_PCT) return dark ? 'rgba(217,119,6,0.30)' : 'rgba(217,119,6,0.18)';
   return dark ? 'rgba(22,163,74,0.30)' : 'rgba(22,163,74,0.18)';
 }
-function getScheduleCoursesForDate(schedule, date) {
+function getScheduleCoursesForDate(schedule, date, groupOverrides = null) {
   const dayName = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' });
   const sessionalCadence = (store.get('scheduleSettings') || {}).sessionalCadence || {};
   const byCourse = new Map();
@@ -248,7 +248,13 @@ function getScheduleCoursesForDate(schedule, date) {
     // mark attendance for. This is intentionally different from a
     // holiday: it's "not scheduled this particular occurrence", not "no
     // class today at all" — see store.js's isClassOff().
-    .filter(s => !isClassOff(date, classOverrideSlotKey(s.courseId, s.day, s.slot)))
+    //
+    // BUGFIX (group-mode classOverrides were never actually read here):
+    // groupOverrides (passed in from Attendance's own
+    // subscribePlannerSettings-backed state) is threaded through so a
+    // CR's on/off toggle actually hides the class here — see isClassOff's
+    // updated doc comment in store.js for the full explanation.
+    .filter(s => !isClassOff(date, classOverrideSlotKey(s.courseId, s.day, s.slot), groupOverrides))
     // Sessional/Lab alternating-week cadence (see sessionalCadence.js) —
     // a slot with no sessionalCadence entry runs every week, unaffected.
     // A slot whose effective occurrence for this date is 'off' (an
@@ -600,14 +606,18 @@ function AttendanceHero({ courses, logs, schedule, settings, combinedMode, combi
 }
 
 // ── Daily Log ──────────────────────────────────────────────────────────────
-function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, canEditTeachers, teacherRegistry }) {
+function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, canEditTeachers, teacherRegistry, groupClassOverrides }) {
   const [date, setDate] = useState(todayStr());
   const [showGive, setShowGive] = useState(false);
   const dark = useDark();
   const dayLog = logs[date] || {};
   const isToday = date === todayStr();
   const isHoliday = isRoutineHoliday(date, settings?.holidayDates || []);
-  const scheduledCourses = getScheduleCoursesForDate(schedule, date);
+  // BUGFIX: groupClassOverrides was fetched (subscribePlannerSettings) and
+  // stored in state, but never actually threaded into this call — so a
+  // CR's class-off toggle still had zero effect here despite the fix above
+  // looking complete. Passing it through now closes the loop end-to-end.
+  const scheduledCourses = getScheduleCoursesForDate(schedule, date, groupClassOverrides);
   const schIds = scheduledCourses.map(s => s.courseId);
 
   const pastDates = useMemo(() => {
@@ -1245,7 +1255,9 @@ export default function Attendance() {
   // student's personal routine. This only affects which classes show up
   // to mark attendance for; the attendance data itself (logs above) is
   // still saved per-student and never shared.
-  const groupId = useMemo(() => getGroupId(profile), [profile.dept, profile.batch]);
+  // BUGFIX: deps missing profile.section — see useClassManagementState.js's
+  // matching fix / ProfileSetupModal.jsx's comment for the full write-up.
+  const groupId = useMemo(() => getGroupId(profile), [profile.dept, profile.batch, profile.section]);
   const [groupHasCR, setGroupHasCR] = useState(null); // null = unknown yet
   useEffect(() => {
     if (!groupId) { setGroupHasCR(false); return; }
@@ -1336,11 +1348,23 @@ export default function Attendance() {
   // localSettings is still kept around for that.
   const [groupTeacherMap, setGroupTeacherMap] = useState(null);
   const [groupTeacherRegistry, setGroupTeacherRegistry] = useState(null);
+  // BUGFIX (group-mode CR on/off toggles were invisible on Attendance —
+  // see isClassOff's doc comment in store.js): classOverrides/recurringOff
+  // are the exact same scheduleFields the Routine page's
+  // useClassManagementState.js already reads from this same subscription;
+  // Attendance was subscribed to plannerSettings already (for
+  // courseTeacherMap below) but was simply never extracting these two
+  // fields from it.
+  const [groupClassOverrides, setGroupClassOverrides] = useState(null);
   useEffect(() => {
-    if (!groupId) { setGroupTeacherMap(null); setGroupTeacherRegistry(null); return; }
+    if (!groupId) { setGroupTeacherMap(null); setGroupTeacherRegistry(null); setGroupClassOverrides(null); return; }
     return subscribePlannerSettings(groupId, (data) => {
       setGroupTeacherMap(data?.courseTeacherMap || {});
       setGroupTeacherRegistry(data?.teacherRegistry || {});
+      setGroupClassOverrides({
+        ...(data?.scheduleFields?.classOverrides || {}),
+        recurringOff: data?.scheduleFields?.recurringOff || {},
+      });
     });
   }, [groupId]);
   const settings = useMemo(
@@ -1431,6 +1455,7 @@ export default function Attendance() {
           onEditTeachers={openTeachers}
           canEditTeachers={canEditTeachers}
           teacherRegistry={teacherRegistry}
+          groupClassOverrides={groupClassOverrides}
         />
       ) : (
         <CombinedAtt

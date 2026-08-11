@@ -23,7 +23,9 @@ export default function Assignments() {
   // Same class-group takeover as Schedule.jsx — see that file's comment
   // for the full reasoning. Personal assignments below are untouched
   // either way.
-  const groupId = useMemo(() => getGroupId(profile), [profile.dept, profile.batch]);
+  // BUGFIX: deps missing profile.section — see useClassManagementState.js's
+  // matching fix / ProfileSetupModal.jsx's comment for the full write-up.
+  const groupId = useMemo(() => getGroupId(profile), [profile.dept, profile.batch, profile.section]);
   const [groupHasCR, setGroupHasCR] = useState(null);
   useEffect(() => {
     if (!groupId) { setGroupHasCR(false); return; }

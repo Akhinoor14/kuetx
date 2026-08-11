@@ -4,7 +4,25 @@
 // Storage: IndexedDB (50MB+) with automatic migration from localStorage
 
 import { initDB, getFromDB, setInDB, removeFromDB, getAllKeysFromDB, getAllFromDB, getAllEntriesFromDB, clearDB, migrateFromLocalStorage, getStorageUsage } from './indexeddb-store.js';
-import { clearAllCoursesCache } from './curriculumStore.js';
+
+// PERFORMANCE FIX: this used to be `import { clearAllCoursesCache } from
+// './curriculumStore.js'` at the top of the file. store.js is imported
+// eagerly from App.jsx (it's the core data layer, needed before any route
+// renders), and curriculumStore.js in turn statically imports CURRICULUM —
+// the full syllabus/terms/notes data for ALL 16 KUET departments (~2.6MB
+// source, the single largest contributor to the old ~1.75MB eager main
+// chunk). That meant every visitor downloaded and parsed every department's
+// full 4-year curriculum before the app could even show the login screen,
+// regardless of which one department they actually belong to.
+// The only thing store.js needs from curriculumStore.js is this tiny cache
+// invalidation call (fire-and-forget, already wrapped in try/catch below),
+// so it's loaded via a lazy dynamic import instead — this lets Rollup split
+// CURRICULUM out into its own chunk(s) that only load when a page that
+// actually needs course data (Courses, Dashboard, ClassSetup, etc.) is
+// visited, not on every single page load.
+const clearAllCoursesCache = () => {
+  import('./curriculumStore.js').then((m) => m.clearAllCoursesCache()).catch(() => {});
+};
 
 const PREFIX = 'kuetx_';
 
@@ -838,9 +856,31 @@ function weekdayFromSlotKey(slotKey) {
 //      and dateKey's weekday matches the slot's own weekday → OFF (ongoing)
 //   5. otherwise                                          → ON  (default,
 //      unchanged from today's behavior for slots with no override at all)
-export function isClassOff(dateKey, slotKey) {
-  const settings = store.get('scheduleSettings') || {};
-  const overrides = settings.classOverrides || {};
+export function isClassOff(dateKey, slotKey, groupOverrides = null) {
+  // GROUP-MODE FIX: this originally only ever read
+  // store.get('scheduleSettings') — the device's LOCAL, personal copy.
+  // That's correct for personal (non-group) mode, where a student's own
+  // local overrides are the only thing that exists. But in group mode,
+  // the CR/ACR's on/off toggles (Class Routine page) write to Firestore's
+  // groups/{groupId}/meta/plannerSettings.scheduleFields.classOverrides —
+  // a completely different place — and nothing was ever reading THAT
+  // back into local scheduleSettings. The result: a CR marks a class off
+  // for a date, the Routine page (which reads Firestore directly via
+  // useClassManagementState.js) correctly shows it as off, but
+  // Attendance.jsx and the Today page (both of which call isClassOff())
+  // kept reading stale/empty local data and still showed the class as ON
+  // for every student, including the CR, on Attendance and Today.
+  //
+  // Fix: callers in group mode now pass the live Firestore
+  // classOverrides/recurringOff object (groupOverrides) explicitly —
+  // sourced from subscribePlannerSettings, same live data
+  // useClassManagementState.js already uses correctly — and this
+  // function prefers that over the local personal copy when provided.
+  // Personal (non-group) callers are unaffected: they simply don't pass
+  // groupOverrides, so the local-storage path below runs exactly as
+  // before.
+  const overrides = groupOverrides ?? (store.get('scheduleSettings') || {}).classOverrides ?? {};
+  const recurringOffMap = groupOverrides?.recurringOff ?? (store.get('scheduleSettings') || {}).recurringOff ?? {};
   const forDate = overrides[dateKey];
 
   if (forDate?.dayOff) return true;
@@ -849,7 +889,7 @@ export function isClassOff(dateKey, slotKey) {
   if (slotOverride === 'on') return false;
   if (slotOverride === 'off') return true;
 
-  const recurring = (settings.recurringOff || {})[slotKey];
+  const recurring = recurringOffMap[slotKey];
   if (recurring?.from && dateKey >= recurring.from) {
     const slotWeekday = weekdayFromSlotKey(slotKey);
     const dateWeekday = getWeekdayName(new Date(`${dateKey}T00:00:00`));
@@ -863,9 +903,10 @@ export function isClassOff(dateKey, slotKey) {
 // used by Today page / Daily Log to show *why* a class isn't listed
 // (vs. a plain holiday, which has its own separate message). Mirrors the
 // same precedence as isClassOff() above (dayOff > per-date slot > recurring).
-export function getClassOffReason(dateKey, slotKey) {
-  const settings = store.get('scheduleSettings') || {};
-  const overrides = settings.classOverrides || {};
+export function getClassOffReason(dateKey, slotKey, groupOverrides = null) {
+  // Same group-mode fix as isClassOff() above.
+  const overrides = groupOverrides ?? (store.get('scheduleSettings') || {}).classOverrides ?? {};
+  const recurringOffMap = groupOverrides?.recurringOff ?? (store.get('scheduleSettings') || {}).recurringOff ?? {};
   const forDate = overrides[dateKey];
 
   if (forDate?.dayOff) return forDate.dayOffReason || null;
@@ -874,7 +915,7 @@ export function getClassOffReason(dateKey, slotKey) {
   if (slotEntry?.status === 'off') return slotEntry.reason || null;
   if (slotEntry?.status === 'on') return null; // explicit exception — not off
 
-  const recurring = (settings.recurringOff || {})[slotKey];
+  const recurring = recurringOffMap[slotKey];
   if (recurring?.from && dateKey >= recurring.from) {
     const slotWeekday = weekdayFromSlotKey(slotKey);
     const dateWeekday = getWeekdayName(new Date(`${dateKey}T00:00:00`));

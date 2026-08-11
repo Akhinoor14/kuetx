@@ -12,12 +12,23 @@
 //
 // Never derived from any self-reported flag — same principle as
 // useIsStaff.js's profile.isCR note.
+//
+// PERFORMANCE FIX: the onAuthStateChanged + subscribeIsAdmin +
+// subscribeFacultyProfile listeners used to live inside this hook's own
+// useEffect and were torn down/re-created on every mount — which happens
+// on EVERY navigation, since RequireStudentMode/RequireFaculty sit inside
+// individual <Route> elements rather than wrapping the route tree once
+// (see App.jsx). The subscription setup now lives in one shared
+// module-level singleton (createAuthGatedSingleton) so the Firestore
+// listeners are only ever created once per page session; every hook
+// instance just subscribes to the singleton's broadcast state.
 
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../lib/firebase';
 import { subscribeIsAdmin } from '../lib/adminAuth';
 import { subscribeFacultyProfile } from '../lib/facultySync';
+import { createAuthGatedSingleton } from './createAuthGatedSingleton';
 
 // Same rationale as useIsStaff.js's CACHE_KEY — a same-tab paint
 // optimization only, never a source of truth. Every render still
@@ -56,118 +67,83 @@ function writeCache(isFaculty, isFounderBypass) {
   }
 }
 
-export function useIsFaculty() {
-  const initial = readCache();
-  const [isFaculty, setIsFaculty] = useState(initial.isFaculty);
-  const [isFounderBypass, setIsFounderBypass] = useState(initial.isFounderBypass);
-  const [facultyProfile, setFacultyProfile] = useState(null);
-  // PERF FIX (repeated "Checking faculty access…" flash on every
-  // navigation): this used to always start false, forcing RequireFaculty
-  // to show its loading screen on every single mount — i.e. every time
-  // the user navigated onto a /faculty/* route — even though a trustworthy
-  // cached answer from THIS SAME SESSION was sitting right there in
-  // sessionStorage. On mobile, where navigation is frequent and network
-  // round-trips are slower, this showed as a "checking access" bar
-  // flashing on nearly every page.
-  //
-  // Fix: if the cache holds a value at all (readCache() successfully
-  // parsed something previously written this session), trust it as the
-  // initial isResolved state too, not just the initial isFaculty/
-  // isFounderBypass value. The live Firestore listener below still runs
-  // and still corrects this if it's ever wrong — this only removes the
-  // ARTIFICIAL "always start not-resolved" flash for a value we already
-  // know from earlier this same session. A brand-new session (nothing
-  // cached yet) still correctly shows the loading screen once, and the
-  // onAuthStateChanged handler below still synchronously flips isResolved
-  // back to false the instant a DIFFERENT uid signs in (see the BUGFIX
-  // comment on that line), so a same-tab account switch can never show
-  // the previous account's cached faculty status.
-  const [isResolved, setIsResolved] = useState(() => hasCache());
+const initial = readCache();
+const facultySingleton = createAuthGatedSingleton((onState) => {
+  let unsubProfile = () => {};
+  let unsubAdmin = () => {};
+  // Tracks the two independent checks separately so whichever resolves
+  // first can be applied immediately, and so a late-arriving founder
+  // check can't clobber an already-applied role result with a stale
+  // "not admin" write.
+  let founderResolved = false;
+  let isFounder = false;
 
-  useEffect(() => {
-    let unsubProfile = () => {};
-    let unsubAdmin = () => {};
-    // Same independent-parallel-checks rationale as useIsStaff.js: don't
-    // force every real faculty account to pay the founder-doc round-trip
-    // latency before its own verifiedAt check can resolve.
-    let founderResolved = false;
-    let isFounder = false;
+  const applyProfile = (profile) => {
+    if (founderResolved && isFounder) return; // Founder always wins.
+    const active = !!profile?.verifiedAt;
+    writeCache(active, false);
+    onState({ isFaculty: active, isFounderBypass: false, facultyProfile: profile, isResolved: true });
+  };
 
-    const applyProfile = (profile) => {
-      if (founderResolved && isFounder) return; // Founder bypass always wins.
-      // isFaculty here means "account exists" only (not verified) — this
-      // is the signal used by the onboarding queue and by places that
-      // only need to know "is this a faculty account at all" (e.g. App.jsx
-      // routing a returning faculty account back to 'teacher' role), and
-      // it's also what RequireFaculty.jsx gates /faculty/* routes on, by
-      // design: an unverified faculty account is still allowed to browse
-      // (see RequireFaculty.jsx's own "MANUAL VERIFICATION POLICY" doc
-      // comment) — the four real WRITE actions are what's blocked, both
-      // in the UI (via facultyProfile.verifiedAt) and, as the actual
-      // boundary, in Firestore rules regardless of what the client sends.
-      // The real access-control bug was never here — see accountRole.js /
-      // App.jsx's buildQueue()/handleAuthSuccess() for the fix that
-      // stops a Student-role account from ever reaching this at all.
-      const active = !!profile;
-      setIsFaculty(active);
-      setIsFounderBypass(false);
-      setFacultyProfile(profile);
-      writeCache(active, false);
-      setIsResolved(true);
-    };
+  const unsubAuth = onAuthStateChanged(auth, (user) => {
+    unsubProfile();
+    unsubProfile = () => {};
+    unsubAdmin();
+    unsubAdmin = () => {};
+    founderResolved = false;
+    isFounder = false;
 
-    const unsubAuth = onAuthStateChanged(auth, (user) => {
-      unsubProfile();
-      unsubProfile = () => {};
-      unsubAdmin();
-      unsubAdmin = () => {};
-      founderResolved = false;
-      isFounder = false;
+    if (!user) {
+      writeCache(false, false);
+      onState({ isFaculty: false, isFounderBypass: false, facultyProfile: null, isResolved: true });
+      return;
+    }
 
-      if (!user) {
-        setIsFaculty(false);
-        setIsFounderBypass(false);
-        setFacultyProfile(null);
-        writeCache(false, false);
-        setIsResolved(true);
-        return;
+    // BUGFIX (stale isResolved across account switch): isResolved must
+    // flip back to false the instant a DIFFERENT uid appears here,
+    // synchronously, before either subscribeIsAdmin's or
+    // subscribeFacultyProfile's async result lands. Otherwise a gated
+    // consumer (Sidebar.jsx, Navbar.jsx, RootRouteResolver.jsx) could
+    // briefly read a stale isResolved=true left over from the PREVIOUS
+    // account together with that account's stale values.
+    onState({ isFaculty: false, isFounderBypass: false, facultyProfile: null, isResolved: false });
+
+    unsubAdmin = subscribeIsAdmin(user.uid, (result) => {
+      founderResolved = true;
+      isFounder = result;
+      if (isFounder) {
+        writeCache(true, true);
+        onState({ isFaculty: true, isFounderBypass: true, facultyProfile: null, isResolved: true });
       }
-
-      // BUGFIX (stale isResolved across account switch): same fix as
-      // useIsProvider.js's doc comment on this exact line — isResolved
-      // must flip back to false the instant a DIFFERENT uid appears
-      // here, synchronously, before either subscribeIsAdmin's or
-      // subscribeFacultyProfile's async result lands. Otherwise a
-      // gated consumer (Sidebar.jsx, Navbar.jsx, RootRouteResolver.jsx)
-      // could briefly read a stale isResolved=true left over from the
-      // PREVIOUS account together with that account's stale
-      // isFaculty/isFounderBypass values.
-      setIsResolved(false);
-
-      unsubAdmin = subscribeIsAdmin(user.uid, (result) => {
-        founderResolved = true;
-        isFounder = result;
-        if (isFounder) {
-          setIsFaculty(true);
-          setIsFounderBypass(true);
-          writeCache(true, true);
-          setIsResolved(true);
-        }
-        // If not founder, whatever subscribeFacultyProfile already
-        // delivered (or will deliver) stands as-is.
-      });
-
-      unsubProfile = subscribeFacultyProfile(user.uid, applyProfile);
+      // If not founder, whatever subscribeFacultyProfile already
+      // delivered (or will deliver) stands as-is.
     });
 
-    return () => {
-      unsubAuth();
-      unsubProfile();
-      unsubAdmin();
-    };
-  }, []);
+    unsubProfile = subscribeFacultyProfile(user.uid, applyProfile);
+  });
 
-  return {
-    isFaculty, isFounderBypass, facultyProfile, isResolved,
+  return () => {
+    unsubAuth();
+    unsubProfile();
+    unsubAdmin();
   };
+}, {
+  isFaculty: initial.isFaculty,
+  isFounderBypass: initial.isFounderBypass,
+  facultyProfile: null,
+  // PERF FIX (repeated "Checking access…" flash on every navigation):
+  // seeding this from hasCache() (not always false) removes the
+  // artificial re-check flash on every single mount for someone whose
+  // status was already verified earlier this same session. The live
+  // Firestore subscriptions above still run once (not per-mount) and
+  // still correct this if it's ever wrong.
+  isResolved: hasCache(),
+});
+
+export function useIsFaculty() {
+  const [state, setState] = useState(facultySingleton.getState);
+
+  useEffect(() => facultySingleton.subscribe(setState), []);
+
+  return state;
 }

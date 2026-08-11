@@ -47,7 +47,9 @@ export default function ClassManagement() {
   // not a personal local copy. Without this, a CR who logs classes here
   // sees their own old solo-schedule data instead of what they (or a
   // co-CR/ACR) actually published to the class via /schedule.
-  const groupId = useMemo(() => getGroupId(profile), [profile.dept, profile.batch]);
+  // BUGFIX: deps missing profile.section — see useClassManagementState.js's
+  // matching fix / ProfileSetupModal.jsx's comment for the full write-up.
+  const groupId = useMemo(() => getGroupId(profile), [profile.dept, profile.batch, profile.section]);
 
   // BUGFIX(F): CR/ACR sets the term start date once for the whole class
   // here; every student's ProfileSetupModal/Dashboard/Schedule/Results

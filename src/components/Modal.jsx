@@ -1,6 +1,24 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
+// Single shared portal root, created lazily once and reused by every Modal
+// instance for the lifetime of the page. Previously each Modal mount created
+// a brand-new DOM node with document.createElement + appendChild and tore it
+// down with removeChild on unmount — small overhead per open/close, but it
+// adds up with how often modals get opened/closed. Reusing one root avoids
+// that DOM churn; React still fully mounts/unmounts each Modal's own subtree
+// inside it via createPortal, so there's no behavior change, just no need to
+// touch document.body itself each time.
+let sharedPortalRoot = null;
+function getPortalRoot() {
+  if (!sharedPortalRoot) {
+    sharedPortalRoot = document.createElement('div');
+    sharedPortalRoot.setAttribute('id', 'modal-portal-root');
+    document.body.appendChild(sharedPortalRoot);
+  }
+  return sharedPortalRoot;
+}
+
 export default function Modal({
   children,
   onClose,
@@ -16,16 +34,8 @@ export default function Modal({
   const portalNodeRef = useRef(null);
 
   useEffect(() => {
-    const node = document.createElement('div');
-    portalNodeRef.current = node;
-    document.body.appendChild(node);
+    portalNodeRef.current = getPortalRoot();
     setMounted(true);
-
-    return () => {
-      if (portalNodeRef.current) {
-        document.body.removeChild(portalNodeRef.current);
-      }
-    };
   }, []);
 
   if (!mounted || !portalNodeRef.current) {

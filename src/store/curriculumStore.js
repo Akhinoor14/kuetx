@@ -1,4 +1,4 @@
-import { CURRICULUM } from '../data/curriculum/index.js';
+import { getDeptCurriculumSync, onDeptCurriculumLoaded } from '../data/curriculum/departmentLoader.js';
 import { DEPARTMENTS, TERM_KEYS, getCurrentTermKey, getTermIndex, getTermKeyFromLabel, getTermLabelFromKey, store } from './store.js';
 
 // Simple in-memory memoization to avoid recomputing full course lists repeatedly
@@ -17,6 +17,14 @@ const buildCacheKey = (profile) => {
 };
 
 const clearAllCoursesCache = () => allCoursesCache.clear();
+
+// A department's curriculum loads asynchronously in the background the
+// first time it's requested (see departmentLoader.js). Until it resolves,
+// getDeptCurriculum returns an empty placeholder, and getAllCourses would
+// otherwise cache an empty result under that key forever. Clearing the
+// cache when any department finishes loading makes the next call recompute
+// with the real data once it's available.
+onDeptCurriculumLoaded(clearAllCoursesCache);
 
 const inferCourseTypeFromCode = (code, currentType) => {
   if (!code || typeof code !== 'string') return currentType || 'Theory';
@@ -42,7 +50,7 @@ const parseTermKey = (termKey) => {
 };
 
 const getDeptCurriculum = (deptCode) => {
-  const found = CURRICULUM?.departments?.[deptCode];
+  const found = getDeptCurriculumSync(deptCode);
   if (found) return found;
   const metaDef = DEPARTMENTS.find(department => department?.code === deptCode) || { code: deptCode, name: deptCode, acronym: deptCode };
   return {
