@@ -216,37 +216,43 @@ function Layout({ authState, onboardingActive }) {
 
         const target = document.querySelector('.main-content') || document.body;
         let lastMutation = performance.now();
-        // DIAG (temporary — remove once root cause is confirmed): log
-        // WHAT is mutating, not just that something mutated. Every route
-        // shows an almost-identical ~2s "content settled" gap regardless
-        // of that page's actual data needs, which means the observer is
-        // very likely catching a recurring re-render that has nothing to
-        // do with the page itself (e.g. Navbar's sync-status pulse, a
-        // singleton listener retry, etc). This logs the target node
-        // (tagName + className/id) for the first mutation in each burst
-        // so the actual source can be identified from a real console
-        // capture instead of guessed at from reading source.
-        let loggedThisBurst = false;
+        // DIAG v2 (temporary): v1 suppressed all but the first mutation
+        // per settle-burst (loggedThisBurst), which hid the real picture
+        // — most routes showed a ~1400-2000ms settle gap with ZERO logged
+        // mutations, which is impossible if the observer is what's
+        // driving that gap. This version logs a per-route mutation COUNT
+        // instead of the individual mutations (to avoid flooding), plus
+        // the target of the very first and very last mutation seen before
+        // each settle, so we can see whether it's one drawn-out animation
+        // (e.g. .page-enter) or many small repeated mutations (e.g. a
+        // re-render loop) driving the gap.
+        let mutationCount = 0;
+        let firstTarget = null;
+        let lastTarget = null;
         observer = new MutationObserver((records) => {
           lastMutation = performance.now();
-          if (!loggedThisBurst) {
-            loggedThisBurst = true;
-            records.slice(0, 3).forEach((r) => {
-              const el = r.target;
-              const desc = el?.nodeType === 1
-                ? `<${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''}${el.className ? '.' + String(el.className).split(' ').join('.') : ''}>`
-                : String(el);
-              console.log(`[kuetx:perf:diag] route:${path} mutation type=${r.type} target=${desc}`);
-            });
-          }
+          records.forEach((r) => {
+            mutationCount += 1;
+            const el = r.target;
+            const desc = el?.nodeType === 1
+              ? `<${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''}${el.className ? '.' + String(el.className).split(' ').join('.') : ''}>`
+              : String(el);
+            if (!firstTarget) firstTarget = desc;
+            lastTarget = desc;
+          });
           if (settledTimer) clearTimeout(settledTimer);
-          settledTimer = setTimeout(() => { loggedThisBurst = false; checkSettled(); }, 400);
+          settledTimer = setTimeout(checkSettled, 400);
         });
         observer.observe(target, { childList: true, subtree: true, attributes: true });
 
         function checkSettled() {
           const elapsed = (performance.now() - lastMutation).toFixed(0);
           console.log(`[kuetx:perf] ✓ route:${path} — content settled (~${(performance.now()).toFixed(0)}ms since page start, ${elapsed}ms of quiet DOM)`);
+          if (mutationCount > 0) {
+            console.log(`[kuetx:perf:diag] route:${path} — ${mutationCount} mutations. first=${firstTarget} last=${lastTarget}`);
+          } else {
+            console.log(`[kuetx:perf:diag] route:${path} — 0 mutations observed (gap is NOT from DOM changes — check animation/timer elsewhere)`);
+          }
           observer?.disconnect();
         }
         // If nothing mutates at all after the shell (fully static page),
