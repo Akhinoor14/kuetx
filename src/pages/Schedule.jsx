@@ -476,21 +476,46 @@ export default function Schedule() {
     if (purged.length !== loaded.length) store.set('schedule', purged);
     return purged;
   });
+  // PERF FIX (slow first appearance on Schedule/Attendance/ClassPlanner/CR
+  // routine pages): this effect used to depend on `isGroupMode`, which is
+  // itself derived from `groupHasCR` — and groupHasCR starts as `null`
+  // ("unknown yet") until subscribeCRStatus's OWN separate Firestore round
+  // trip resolves. That made this a fully SEQUENTIAL chain on every fresh
+  // page load with no cache: wait for subscribeCRStatus to resolve, THEN
+  // (only once isGroupMode becomes knowable) start subscribeRoutine — two
+  // network round-trips back to back instead of in parallel, even though
+  // they read two completely independent Firestore docs with no actual
+  // data dependency between them.
+  //
+  // Fix: subscribe to the group routine immediately whenever a groupId
+  // exists, in parallel with the CR-status check, not gated behind it.
+  // subscribeCRStatus and subscribeRoutine now both fire from the same
+  // render, so on a cold load both round-trips happen AT THE SAME TIME
+  // instead of one after the other — roughly halving the wait before
+  // anything real appears. The `entries` this delivers are only actually
+  // shown once isGroupMode is confirmed true (see the isGroupMode-gated
+  // render below); if groupHasCR resolves to false, this subscription's
+  // result is simply unused and the effect's own cleanup unsubscribes it
+  // the next time groupId (or currentTermKey) changes. No correctness
+  // change — group mode's routine either was never shown or already
+  // required groupId+CR to actually render — this only changes WHEN the
+  // data fetch itself starts, not what conditions gate showing it.
   useEffect(() => {
-    if (!isGroupMode) {
-      // Falling back to / staying in personal mode: load from localStorage.
+    if (!groupId) {
+      // No group at all (personal mode by definition): load from
+      // localStorage, same as before.
       const loaded = normalizeScheduleEntries(store.get('schedule') || []);
       const purged = purgeStaleTermEntries(loaded, getCurrentTermKey(profile));
       if (purged.length !== loaded.length) store.set('schedule', purged);
       setSchedule(purged);
       return;
     }
-    // Group mode: subscribe to the shared Firestore routine and map each
-    // entry to the Grid's expected shape. displayName/courseCode/courseName
-    // are saved at write-time (see add/remove/quick-save below) so the
-    // Grid still shows a real label even if a viewer's local `courses`
-    // list doesn't contain the entry's courseId (e.g. CR used a custom
-    // course only they have locally).
+    // Group mode is possible (groupId exists) — start the routine
+    // subscription immediately, in parallel with subscribeCRStatus above,
+    // rather than waiting for groupHasCR to resolve first. Whether this
+    // data actually gets rendered is still fully controlled by
+    // isGroupMode elsewhere (see groupModeLoading/isGroupMode above and
+    // the render below) — this only removes the artificial serial wait.
     return subscribeRoutine(groupId, (entries) => {
       const mapped = (entries || []).map((e) => ({
         id: e.id,
@@ -519,7 +544,7 @@ export default function Schedule() {
       // one applies (see lib/todayItems.js).
       store.set('schedule_group_cache', normalized);
     });
-  }, [isGroupMode, groupId, currentTermKey]);
+  }, [groupId, currentTermKey]);
   // BUGFIX (Settings / Holiday / course-teacher assignments looked
   // group-wide but weren't — a CR changing them did nothing for anyone
   // else): these used to live ONLY in this device's local

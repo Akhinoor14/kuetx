@@ -23,7 +23,7 @@
 
 import { doc, setDoc, getDoc, getDocFromServer, getDocs, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from './firebase';
-import { store } from '../store/store';
+import { store, tagProfileOwner } from '../store/store';
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
@@ -291,7 +291,18 @@ const hydrateProfileFromFirestore = async (uid) => {
     const remote = await pullProfile(uid, knownDeptBatch);
     // Re-check after the await — pushProfile() may have started while
     // pullProfile() (a separate network round-trip) was in flight.
-    if (remote && !_pendingLocalKeys.has('profile')) await store.importAllReport({ kuetx_profile: remote });
+    //
+    // SECURITY (owner tag): tag with the uid we just verifiably pulled
+    // FOR before writing it into local storage. This is what lets
+    // useFirebaseAuth.js's same-account gate trust this cache on a later
+    // instant-reload instead of treating every cloud-hydrated profile as
+    // "unknown provenance" forever — without this tag, the fast-path in
+    // useFirebaseAuth.js would never fire for anyone whose profile came
+    // from a pull rather than a fresh local ProfileSetupModal save,
+    // silently defeating the whole speed fix for most real users.
+    if (remote && !_pendingLocalKeys.has('profile')) {
+      await store.importAllReport({ kuetx_profile: tagProfileOwner(remote, uid) });
+    }
   } catch (err) {
     console.warn('[KUETx Sync] Profile hydrate failed:', err.message);
   }

@@ -36,6 +36,18 @@ function readCache() {
   }
 }
 
+// Whether a cached answer actually exists yet, distinct from what that
+// answer says — used to seed isResolved so a repeat visit within the same
+// session skips the loading flash entirely, while a first-ever check this
+// session still correctly waits for the real result.
+function hasCache() {
+  try {
+    return sessionStorage.getItem(CACHE_KEY) !== null;
+  } catch {
+    return false;
+  }
+}
+
 function writeCache(isFaculty, isFounderBypass) {
   try {
     sessionStorage.setItem(CACHE_KEY, JSON.stringify({ isFaculty, isFounderBypass }));
@@ -49,9 +61,28 @@ export function useIsFaculty() {
   const [isFaculty, setIsFaculty] = useState(initial.isFaculty);
   const [isFounderBypass, setIsFounderBypass] = useState(initial.isFounderBypass);
   const [facultyProfile, setFacultyProfile] = useState(null);
-  // Same role as useIsStaff.js's isResolved — RequireFaculty needs this to
-  // avoid flashing "denied" before the real check settles.
-  const [isResolved, setIsResolved] = useState(false);
+  // PERF FIX (repeated "Checking faculty access…" flash on every
+  // navigation): this used to always start false, forcing RequireFaculty
+  // to show its loading screen on every single mount — i.e. every time
+  // the user navigated onto a /faculty/* route — even though a trustworthy
+  // cached answer from THIS SAME SESSION was sitting right there in
+  // sessionStorage. On mobile, where navigation is frequent and network
+  // round-trips are slower, this showed as a "checking access" bar
+  // flashing on nearly every page.
+  //
+  // Fix: if the cache holds a value at all (readCache() successfully
+  // parsed something previously written this session), trust it as the
+  // initial isResolved state too, not just the initial isFaculty/
+  // isFounderBypass value. The live Firestore listener below still runs
+  // and still corrects this if it's ever wrong — this only removes the
+  // ARTIFICIAL "always start not-resolved" flash for a value we already
+  // know from earlier this same session. A brand-new session (nothing
+  // cached yet) still correctly shows the loading screen once, and the
+  // onAuthStateChanged handler below still synchronously flips isResolved
+  // back to false the instant a DIFFERENT uid signs in (see the BUGFIX
+  // comment on that line), so a same-tab account switch can never show
+  // the previous account's cached faculty status.
+  const [isResolved, setIsResolved] = useState(() => hasCache());
 
   useEffect(() => {
     let unsubProfile = () => {};

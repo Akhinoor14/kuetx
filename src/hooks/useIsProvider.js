@@ -45,11 +45,33 @@ function writeCache(isProvider, status) {
   }
 }
 
+// Whether a cached answer exists yet at all, distinct from what it says —
+// seeds isResolved so a repeat navigation within the same session skips
+// straight past the loading flash; a first-ever check this session still
+// correctly waits for the real result.
+function hasCache() {
+  try {
+    return sessionStorage.getItem(CACHE_KEY) !== null;
+  } catch {
+    return false;
+  }
+}
+
 export function useIsProvider() {
   const initial = readCache();
   const [isProvider, setIsProvider] = useState(initial.isProvider);
   const [providerProfile, setProviderProfile] = useState(null);
-  const [isResolved, setIsResolved] = useState(false);
+  // PERF FIX (repeated "Checking access…" flash on every navigation): see
+  // useIsFaculty.js's matching comment — this used to always start false,
+  // so RequireProvider showed its loading screen on every single mount
+  // (every navigation onto /provider/*), even when a trustworthy cached
+  // answer from earlier this same session was already sitting in
+  // sessionStorage. Seeding isResolved from hasCache() removes that
+  // artificial re-check flash; the live listener below still runs and
+  // still corrects this if it's ever wrong, and the account-switch reset
+  // just below still fires synchronously so a stale cached value from a
+  // DIFFERENT uid is never shown.
+  const [isResolved, setIsResolved] = useState(() => hasCache());
 
   useEffect(() => {
     let unsubProfile = () => {};

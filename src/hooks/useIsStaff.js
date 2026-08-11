@@ -42,16 +42,31 @@ function writeCache(isRealAdmin, adminLabel) {
   }
 }
 
+// Whether a cached answer exists yet at all, distinct from what it says —
+// seeds isResolved so a repeat navigation within the same session skips
+// straight past the loading flash; a first-ever check this session still
+// correctly waits for the real result. Same pattern as useIsFaculty.js /
+// useIsProvider.js.
+function hasCache() {
+  try {
+    return sessionStorage.getItem(CACHE_KEY) !== null;
+  } catch {
+    return false;
+  }
+}
+
 export function useIsStaff() {
   const initial = readCache();
   const [isRealAdmin, setIsRealAdmin] = useState(initial.isRealAdmin);
   const [adminLabel, setAdminLabel] = useState(initial.adminLabel);
-  // Tracks whether the live Firestore check has actually completed at
-  // least once this session — separate from isRealAdmin/adminLabel,
-  // which may already hold an optimistic cached value. Route guards
-  // (RequireStaff) need this to avoid flashing "denied" before the real
-  // check resolves; Sidebar/BottomNav don't need it and can ignore it.
-  const [isResolved, setIsResolved] = useState(false);
+  // PERF FIX (repeated "Checking access…" flash on every navigation): see
+  // useIsFaculty.js's matching comment for the full reasoning — seeding
+  // this from hasCache() (not always false) removes the artificial
+  // re-check flash on every single mount for someone whose status was
+  // already verified earlier this same session. The live Firestore
+  // subscriptions below still run every time and still correct this if
+  // it's ever wrong.
+  const [isResolved, setIsResolved] = useState(() => hasCache());
 
   useEffect(() => {
     let unsubRoles = () => {};

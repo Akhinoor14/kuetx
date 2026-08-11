@@ -6,7 +6,8 @@
 import { useState, useEffect } from 'react';
 import { onAuthChange, handleGoogleRedirectResult, loginWithGoogle } from '../lib/firebaseAuth';
 import { startFirebaseSync, stopFirebaseSync, pushAllToFirestore } from '../lib/firebaseSync';
-import { syncLocalDataOnAuth, isSafeToTrustLocalData } from '../lib/accountLifecycle';
+import { syncLocalDataOnAuth, isSafeToTrustLocalData, isBrandNewAccount } from '../lib/accountLifecycle';
+import { getProfile } from '../store/store';
 
 export default function useFirebaseAuth() {
   const [user, setUser] = useState(null);           // Firebase user object
@@ -83,49 +84,106 @@ export default function useFirebaseAuth() {
       setUser(firebaseUser);
 
       if (firebaseUser) {
-        // BUGFIX (race condition): setAuthReady(true) used to fire here,
-        // immediately after setUser() and before syncLocalDataOnAuth()
-        // below. That's exactly the bug it looks like it isn't — React
-        // treats setAuthReady(true) as a signal to re-render, and
-        // App.jsx's own authReady-gated useEffect (the one that calls
-        // buildQueue()) would fire right then, reading store.get(...) /
-        // getProfile() while a brand-new account's local-storage clear
-        // was still in progress a few lines below. Half-cleared reads —
-        // some keys already gone, others not yet reached — could leak
-        // through to the UI for one render, or worse, get picked back up
-        // by whatever reads them.
+        // PERF FIX (zero-latency reload): this used to `await
+        // syncLocalDataOnAuth()` THEN `await startFirebaseSync()` — two
+        // fully sequential network round-trips — before setAuthReady(true)
+        // ever fired. App.jsx's entire queue/routing system is gated on
+        // authReady, so every single load (including a plain refresh of an
+        // already-logged-in, already-cached account) sat through both
+        // round-trips before showing anything real. That's the "20 second
+        // freeze on every load" symptom.
         //
-        // Fix: hold off setAuthReady(true) until AFTER
-        // syncLocalDataOnAuth() (the clear-or-push decision) has fully
-        // settled. Nothing that gates on authReady can now observe the
-        // in-between state — by the time anything downstream sees
-        // authReady flip to true, local storage is already in its final,
-        // correct shape for this account.
-        await syncLocalDataOnAuth(firebaseUser);
+        // The two brand-new-account-vs-shared-device correctness concerns
+        // that originally justified awaiting these are handled differently
+        // now, WITHOUT paying for them on every load:
+        //
+        // 1. "Half-cleared local storage leaking into the UI for a
+        //    brand-new account" — only possible when isBrandNewAccount(user)
+        //    is true, which is by definition a NEW uid this device has never
+        //    seen. For that one case (and only that case) we still await
+        //    the clear before flipping authReady, since there's no local
+        //    cache worth showing early anyway — an empty/fresh account has
+        //    nothing to lose by waiting the extra beat. Every returning
+        //    account (the overwhelmingly common case, and the one this
+        //    perf fix is actually for) skips the await entirely.
+        //
+        // 2. "buildQueue() sees a stale/incomplete local profile because
+        //    the Firestore->local profile pull hasn't landed yet" — the
+        //    local IndexedDB/localStorage cache already has the last-known
+        //    profile for a returning account (that's the whole point of
+        //    persisting it). buildQueue() reading that cache immediately is
+        //    the correct fast-path; startFirebaseSync()'s pull below still
+        //    runs, and if it turns up a genuinely different profile shape,
+        //    the store-updated event it fires (see store.js) flows through
+        //    the app's existing reactive reads exactly like any other
+        //    background change — nothing needs to poll or re-check.
+        //
+        // syncLocalDataOnAuth's own returning-account push (see
+        // accountLifecycle.js) was already fire-and-forget before this
+        // change; startFirebaseSync's pull/hydrate is made fire-and-forget
+        // here for the same reason and by the same reasoning.
+        //
+        // SECURITY CHECK (same-account gate — this is the part that must
+        // never be skipped): the "show local cache instantly" fast-path
+        // below is ONLY safe if the cache on THIS device actually belongs
+        // to the uid that's signing in right now. Before doing anything
+        // else, explicitly compare the locally-stored profile's owner tag
+        // against firebaseUser.uid.
+        //
+        // Why not just reuse isProfileStaleForUid() as-is: that helper
+        // (store.js) deliberately returns false — "not stale, trust it" —
+        // for any COMPLETE profile, even one tagged for a different uid,
+        // because its one job is guarding ProfileSetupModal's prefill, not
+        // gating what gets shown post-login. That's the wrong answer here:
+        // if Person A's finished profile is sitting in local cache and
+        // Person B (a different, real account) signs in on the same
+        // device, a complete-but-wrong-owner profile is exactly the case
+        // that must NOT be fast-pathed — it's someone else's real,
+        // finished data, not harmless leftover junk.
+        //
+        // So this check is deliberately stricter and separate:
+        //   - no owner tag recorded at all -> unknown provenance, don't
+        //     trust it as this uid's data; go through the safe (awaited)
+        //     path, same as a brand-new account.
+        //   - owner tag present but for a DIFFERENT uid -> definitely not
+        //     this account; also go through the safe path.
+        //   - owner tag matches this uid -> genuinely this account's own
+        //     cached data, safe to show instantly.
+        const localProfile = getProfile();
+        const cachedOwnerUid = localProfile?.__ownerUid || null;
+        const cacheBelongsToThisUser = cachedOwnerUid === firebaseUser.uid;
 
-        // BUGFIX (profile-setup-repeats-on-refresh): setAuthReady(true) used
-        // to fire here, before startFirebaseSync() below had even started.
-        // App.jsx's authReady-gated effect calls ensureDBReady() (which only
-        // hydrates from local IndexedDB) and then buildQueue(), which reads
-        // isProfileComplete(getProfile()) off whatever is in local storage
-        // AT THAT INSTANT. But the profile's Firestore -> local copy only
-        // happens inside startFirebaseSync() -> hydrateProfileFromFirestore(),
-        // which hadn't run yet. On any session where local storage doesn't
-        // already have the full profile cached (new device, cleared cache,
-        // fast reload before an earlier write settled), buildQueue() would
-        // see an empty/incomplete local profile, queue 'profile', and
-        // reopen ProfileSetupModal — even though the real profile was
-        // already saved safely in Firestore, just not pulled down yet.
-        //
-        // Fix: don't flip authReady until the Firestore -> local profile
-        // pull has actually finished, so buildQueue() always sees the real,
-        // hydrated profile instead of a local cache that may be stale/empty.
-        await startFirebaseSync(firebaseUser.uid, {
-          onSyncStatus: (status) => {
-            console.log('[KUETx DIAG] syncStatus ->', status, 'at t=', performance.now());
-            setSyncStatus(status);
-          },
-        });
+        const isNew = isBrandNewAccount(firebaseUser);
+        const needsSafePath = isNew || !cacheBelongsToThisUser;
+
+        if (needsSafePath) {
+          // Either a brand-new uid this device has never seen, OR the
+          // local cache doesn't provably belong to the account that's
+          // signing in (untagged, or tagged for someone else). Either way:
+          // never show it. syncLocalDataOnAuth() below handles both —
+          // brand-new accounts get a full wipe, and (via
+          // isSafeToTrustLocalData's own ownership check) an untrusted
+          // cache is simply never pushed to Firestore either. Awaiting
+          // here means nothing renders off a cache we can't vouch for.
+          await syncLocalDataOnAuth(firebaseUser);
+          await startFirebaseSync(firebaseUser.uid, {
+            onSyncStatus: (status) => setSyncStatus(status),
+          });
+        } else {
+          // Returning account: don't block first paint on any network
+          // round-trip. Local cache (IndexedDB, hydrated by ensureDBReady()
+          // in main.jsx) is trusted immediately; sync work continues in the
+          // background and merges in via the normal store-updated event
+          // path whenever it lands.
+          syncLocalDataOnAuth(firebaseUser).catch((err) => {
+            console.warn('[KUETx Auth] Background syncLocalDataOnAuth failed:', err);
+          });
+          startFirebaseSync(firebaseUser.uid, {
+            onSyncStatus: (status) => setSyncStatus(status),
+          }).catch((err) => {
+            console.warn('[KUETx Auth] Background startFirebaseSync failed:', err);
+          });
+        }
 
         setAuthReady(true);
       } else {

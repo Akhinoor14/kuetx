@@ -33,13 +33,37 @@ const CACHE_KEY = 'kuetx:lastKnownIsRealCR:requireCR';
 export default function RequireCR({ children }) {
   const profile = getProfile();
   const groupId = getGroupId(profile);
+  // SECURITY (cache scoped to groupId): the cached '1'/'0' answer is only
+  // ever trusted when it was written FOR THIS SAME groupId — stored as
+  // "<groupId>:<0|1>" rather than a flat 0/1, so a device that switches
+  // to a different account (or the same account changes class/group)
+  // never shows a stale cached CR/ACR answer that belonged to a
+  // different group. useEffect below re-derives and re-caches the moment
+  // groupId changes, same as before, this only changes what's trusted for
+  // the FIRST synchronous render before that effect runs.
   const [status, setStatus] = useState(() => {
     try {
-      // Only trust the cache as a provisional "allowed" — otherwise stay
-      // in 'loading' rather than provisionally showing the denied screen,
-      // since a wrong denial (even briefly) is worse than a beat of
-      // "Checking CR access…" for someone who genuinely isn't CR/ACR.
-      return sessionStorage.getItem(CACHE_KEY) === '1' ? 'allowed' : 'loading';
+      // PERF FIX (repeated "Checking CR access…" flash on every
+      // navigation): this used to only trust the cache when it said
+      // '1' (allowed) — a cached '0' (denied) still fell through to
+      // 'loading' every time, so any non-CR student re-visiting a
+      // CR-only link (or the sidebar itself, if it ever renders one)
+      // saw the loading flash before landing on 'denied' anyway. Since
+      // this is a same-tab, same-session, groupId-scoped cache only (see
+      // above), and subscribeMyRole below still fires on every mount and
+      // corrects this if it's ever wrong, there's no correctness reason
+      // to withhold the '0' case — the original "don't provisionally show
+      // denied" caution was really about not showing a WRONG denial
+      // before the real check ran, not about hiding a cached denial we
+      // already verified this session for this exact group.
+      if (!groupId) return 'loading';
+      const cached = sessionStorage.getItem(CACHE_KEY);
+      if (!cached) return 'loading';
+      const [cachedGroupId, cachedValue] = cached.split(':');
+      if (cachedGroupId !== groupId) return 'loading'; // different group — never trust
+      if (cachedValue === '1') return 'allowed';
+      if (cachedValue === '0') return 'denied';
+      return 'loading';
     } catch {
       return 'loading';
     }
@@ -48,13 +72,12 @@ export default function RequireCR({ children }) {
   useEffect(() => {
     if (!groupId || !auth.currentUser?.uid) {
       setStatus('denied');
-      try { sessionStorage.setItem(CACHE_KEY, '0'); } catch { /* ignore */ }
       return;
     }
     const unsub = subscribeMyRole(groupId, auth.currentUser.uid, (role) => {
       const allowed = role === 'cr' || role === 'acr';
       setStatus(allowed ? 'allowed' : 'denied');
-      try { sessionStorage.setItem(CACHE_KEY, allowed ? '1' : '0'); } catch { /* ignore */ }
+      try { sessionStorage.setItem(CACHE_KEY, `${groupId}:${allowed ? '1' : '0'}`); } catch { /* ignore */ }
     });
     return unsub;
   }, [groupId]);

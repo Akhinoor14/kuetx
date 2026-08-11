@@ -68,16 +68,89 @@ async function _checkIsPrivilegedJoiner(uid, groupId, profile) {
 // ---------------------------------------------------------------------
 // Singleton listener registry
 // ---------------------------------------------------------------------
-// key -> { unsubscribe, refCount, listeners:Set<callback>, lastValue }
+// key -> { unsubscribe, refCount, listeners:Set<callback>, lastValue, teardownTimer }
 const _registry = new Map();
+
+// PERF FIX (zero-latency navigation — Schedule/Attendance/ClassPlanner/CR
+// routine all appearing slow on every visit): this singleton registry
+// already did the hard part right (one shared onSnapshot per group+
+// collection, cached lastValue delivered instantly to new subscribers —
+// see the `if (entry.lastValue !== null) callback(...)` line below). The
+// bug was TEARDOWN: the instant the last consumer unmounted (refCount hit
+// 0 — which happens on EVERY navigation away from a page using this data,
+// since the component unmounts), the listener was killed and the whole
+// registry entry deleted immediately. Navigating back re-attached a
+// brand-new onSnapshot from scratch with lastValue reset to null, paying
+// the full Firestore round-trip again — on every single visit to Schedule,
+// Attendance, ClassPlanner, or any CR routine page, even navigating back
+// and forth within the same minute.
+//
+// Fix: don't tear down immediately. Keep the listener (and its cached
+// lastValue) alive for a short grace period after the last consumer
+// unmounts. If the person navigates back within that window (the common
+// case — bottom-nav tapping between Today/Schedule/Attendance/Courses is
+// often just a few seconds apart), the SAME live listener is reused:
+// _subscribeSingleton finds the still-alive entry, delivers its cached
+// lastValue instantly (synchronously, on the next line after
+// entry.listeners.add), and the page paints with real data on the very
+// first render — zero network wait. Only after the grace period passes
+// with genuinely nobody subscribed does the listener actually get killed,
+// which still correctly frees the Firestore connection for someone who's
+// truly done with that group's data (e.g. logged out, switched groups).
+const TEARDOWN_GRACE_MS = 60_000; // 1 minute — long enough for normal in-app navigation, short enough not to leak connections for someone who's actually left
+
+// Shared helper for the doc-watching singletons below (crStatus,
+// plannerSettings, classSetup) — same grace-period reuse fix as
+// _subscribeSingleton above, factored out once instead of hand-copied at
+// each of the three call sites (they'd previously each hand-rolled their
+// own copy of the instant-teardown version of this same pattern).
+function _subscribeDocSingleton(key, buildDocRefFn, mapSnapFn, callback, errLabel) {
+  let entry = _registry.get(key);
+  if (entry?.teardownTimer) {
+    clearTimeout(entry.teardownTimer);
+    entry.teardownTimer = null;
+  }
+  if (!entry) {
+    entry = { unsubscribe: null, refCount: 0, listeners: new Set(), lastValue: null, teardownTimer: null };
+    _registry.set(key, entry);
+    entry.unsubscribe = onSnapshot(buildDocRefFn(), (snap) => {
+      entry.lastValue = mapSnapFn(snap);
+      entry.listeners.forEach((cb) => cb(entry.lastValue));
+    }, (err) => console.error(`[groupSync] ${errLabel} listener error:`, err));
+  }
+  entry.refCount += 1;
+  entry.listeners.add(callback);
+  if (entry.lastValue !== null) callback(entry.lastValue);
+  return () => {
+    entry.listeners.delete(callback);
+    entry.refCount -= 1;
+    if (entry.refCount <= 0) {
+      entry.teardownTimer = setTimeout(() => {
+        if (entry.refCount <= 0) {
+          entry.unsubscribe?.();
+          _registry.delete(key);
+        }
+      }, TEARDOWN_GRACE_MS);
+    }
+  };
+}
 
 function _subscribeSingleton(key, buildQueryFn, mapDocsFn, callback) {
   let entry = _registry.get(key);
+  if (entry?.teardownTimer) {
+    // A teardown was scheduled from a previous unmount but hasn't fired
+    // yet — a new subscriber showed up within the grace window, so cancel
+    // it. The listener and its cached lastValue stay alive and get reused
+    // below exactly like a normal already-active singleton.
+    clearTimeout(entry.teardownTimer);
+    entry.teardownTimer = null;
+  }
   if (!entry) {
-    entry = { unsubscribe: null, refCount: 0, listeners: new Set(), lastValue: null };
+    entry = { unsubscribe: null, refCount: 0, listeners: new Set(), lastValue: null, teardownTimer: null };
     _registry.set(key, entry);
     const attach = (retriesLeft, slowRetriesLeft) => {
       entry.unsubscribe = onSnapshot(buildQueryFn(), (snap) => {
+
         entry.lastValue = mapDocsFn(snap);
         entry.listeners.forEach((cb) => cb(entry.lastValue));
       }, (err) => {
@@ -138,8 +211,23 @@ function _subscribeSingleton(key, buildQueryFn, mapDocsFn, callback) {
     entry.listeners.delete(callback);
     entry.refCount -= 1;
     if (entry.refCount <= 0) {
-      entry.unsubscribe?.();
-      _registry.delete(key);
+      // GRACE PERIOD (see the fix comment above _subscribeSingleton): don't
+      // kill the listener immediately just because nobody's subscribed
+      // this instant — that's exactly the "every navigation pays full
+      // Firestore round-trip again" bug. Schedule a delayed real teardown
+      // instead; a new subscriber within TEARDOWN_GRACE_MS cancels it (see
+      // the clearTimeout branch above) and reuses the still-live listener.
+      entry.teardownTimer = setTimeout(() => {
+        // Re-check refCount at fire time, not capture time — a subscriber
+        // that arrived and left again during the grace window could have
+        // bumped refCount back up and down without ever cancelling this
+        // specific timer instance if timers overlapped; this guard is
+        // belt-and-braces so we never tear down a genuinely-in-use entry.
+        if (entry.refCount <= 0) {
+          entry.unsubscribe?.();
+          _registry.delete(key);
+        }
+      }, TEARDOWN_GRACE_MS);
     }
   };
 }
@@ -1472,24 +1560,16 @@ export function subscribeOwnMemberVerified(groupId, uid, callback) {
 export function subscribeCRStatus(groupId, callback) {
   if (!groupId) return () => {};
   const key = `crStatus:${groupId}`;
-  let entry = _registry.get(key);
-  if (!entry) {
-    entry = { unsubscribe: null, refCount: 0, listeners: new Set(), lastValue: null };
-    _registry.set(key, entry);
-    entry.unsubscribe = onSnapshot(doc(db, 'groups', groupId, 'meta', 'crStatus'), (snap) => {
+  return _subscribeDocSingleton(
+    key,
+    () => doc(db, 'groups', groupId, 'meta', 'crStatus'),
+    (snap) => {
       const count = snap.exists() ? (snap.data().count || 0) : 0;
-      entry.lastValue = { hasCR: count > 0, count, slotsFull: count >= MAX_CR };
-      entry.listeners.forEach((cb) => cb(entry.lastValue));
-    }, (err) => console.error('[groupSync] crStatus listener error:', err));
-  }
-  entry.refCount += 1;
-  entry.listeners.add(callback);
-  if (entry.lastValue !== null) callback(entry.lastValue);
-  return () => {
-    entry.listeners.delete(callback);
-    entry.refCount -= 1;
-    if (entry.refCount <= 0) { entry.unsubscribe?.(); _registry.delete(key); }
-  };
+      return { hasCR: count > 0, count, slotsFull: count >= MAX_CR };
+    },
+    callback,
+    'crStatus',
+  );
 }
 
 // ---------------------------------------------------------------------
@@ -1627,23 +1707,13 @@ export const restorePlannerLogEntry = (groupId, entryId, profile) => restoreEntr
 export function subscribePlannerSettings(groupId, callback) {
   if (!groupId) return () => {};
   const key = `plannerSettings:${groupId}`;
-  let entry = _registry.get(key);
-  if (!entry) {
-    entry = { unsubscribe: null, refCount: 0, listeners: new Set(), lastValue: null };
-    _registry.set(key, entry);
-    entry.unsubscribe = onSnapshot(doc(db, 'groups', groupId, 'meta', 'plannerSettings'), (snap) => {
-      entry.lastValue = snap.exists() ? snap.data() : {};
-      entry.listeners.forEach((cb) => cb(entry.lastValue));
-    }, (err) => console.error('[groupSync] plannerSettings listener error:', err));
-  }
-  entry.refCount += 1;
-  entry.listeners.add(callback);
-  if (entry.lastValue !== null) callback(entry.lastValue);
-  return () => {
-    entry.listeners.delete(callback);
-    entry.refCount -= 1;
-    if (entry.refCount <= 0) { entry.unsubscribe?.(); _registry.delete(key); }
-  };
+  return _subscribeDocSingleton(
+    key,
+    () => doc(db, 'groups', groupId, 'meta', 'plannerSettings'),
+    (snap) => (snap.exists() ? snap.data() : {}),
+    callback,
+    'plannerSettings',
+  );
 }
 
 export async function updatePlannerSettings(groupId, profile, data) {
@@ -1845,23 +1915,13 @@ export async function clearSessionalCadence(groupId, profile, { slotKey }) {
 export function subscribeClassSetup(groupId, callback) {
   if (!groupId) return () => {};
   const key = `classSetup:${groupId}`;
-  let entry = _registry.get(key);
-  if (!entry) {
-    entry = { unsubscribe: null, refCount: 0, listeners: new Set(), lastValue: null };
-    _registry.set(key, entry);
-    entry.unsubscribe = onSnapshot(doc(db, 'groups', groupId, 'meta', 'classSetup'), (snap) => {
-      entry.lastValue = snap.exists() ? snap.data() : {};
-      entry.listeners.forEach((cb) => cb(entry.lastValue));
-    }, (err) => console.error('[groupSync] classSetup listener error:', err));
-  }
-  entry.refCount += 1;
-  entry.listeners.add(callback);
-  if (entry.lastValue !== null) callback(entry.lastValue);
-  return () => {
-    entry.listeners.delete(callback);
-    entry.refCount -= 1;
-    if (entry.refCount <= 0) { entry.unsubscribe?.(); _registry.delete(key); }
-  };
+  return _subscribeDocSingleton(
+    key,
+    () => doc(db, 'groups', groupId, 'meta', 'classSetup'),
+    (snap) => (snap.exists() ? snap.data() : {}),
+    callback,
+    'classSetup',
+  );
 }
 
 export async function updateClassSetup(groupId, profile, data) {

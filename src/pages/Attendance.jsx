@@ -1255,11 +1255,29 @@ export default function Attendance() {
   const { canEdit: canEditTeachers } = useCanEditGroup(groupId);
 
   const [schedule, setSchedule] = useState(() => (isGroupMode ? [] : (store.get('schedule') || [])));
+  // PERF FIX (slow first appearance — same root cause as Schedule.jsx,
+  // see its matching comment for the full writeup): subscribeRoutine now
+  // starts immediately whenever a groupId exists, in parallel with the
+  // subscribeCRStatus check above, instead of waiting for groupHasCR to
+  // resolve first — so both round-trips overlap instead of running back
+  // to back on a cold load.
+  //
+  // CORRECTNESS (kept separate from the fix above on purpose): the fetched
+  // group routine is held in its OWN state (groupRoutineEntries) rather
+  // than written straight into `schedule`. Unlike Schedule.jsx, this page
+  // has no groupModeLoading full-page gate — `schedule` here is read
+  // directly by DailyLog/AttendanceHero etc. the instant it changes, with
+  // nothing blocking a render in between. If the fetched group entries
+  // were written directly into `schedule` before isGroupMode had actually
+  // resolved to true, a personal-mode student mid-resolution could
+  // briefly see group-shaped class data rendered as if it were their own
+  // personal schedule. The effect below only ever commits
+  // groupRoutineEntries into the real `schedule` state once isGroupMode
+  // is confirmed — so the fetch itself is no longer serialized behind the
+  // CR check, but what's DISPLAYED still is, exactly as before.
+  const [groupRoutineEntries, setGroupRoutineEntries] = useState(null);
   useEffect(() => {
-    if (!isGroupMode) {
-      setSchedule(store.get('schedule') || []);
-      return;
-    }
+    if (!groupId) { setGroupRoutineEntries(null); return; }
     return subscribeRoutine(groupId, (entries) => {
       const mapped = (entries || []).map((e) => ({
         id: e.id,
@@ -1272,9 +1290,24 @@ export default function Attendance() {
         note: e.note || '',
         type: e.type || 'Theory',
       }));
-      setSchedule(mapped);
+      setGroupRoutineEntries(mapped);
     });
-  }, [isGroupMode, groupId]);
+  }, [groupId]);
+  useEffect(() => {
+    if (!isGroupMode) {
+      setSchedule(store.get('schedule') || []);
+      return;
+    }
+    // isGroupMode just became true. If subscribeRoutine's parallel fetch
+    // above has already delivered a result by this point (likely, since
+    // it started at the same time as the CR check that just resolved),
+    // commit it immediately — no extra wait. If not yet delivered,
+    // schedule stays whatever it was until groupRoutineEntries itself
+    // updates (the effect right above this one still re-runs and, via
+    // this same isGroupMode-gated effect's dependency on
+    // groupRoutineEntries, will commit it the moment it lands).
+    if (groupRoutineEntries !== null) setSchedule(groupRoutineEntries);
+  }, [isGroupMode, groupRoutineEntries]);
 
   const [localSettings, setLocalSettings] = useState(() => store.get('scheduleSettings') || {});
   const [combinedMode, setCombinedMode] = useState(() => !!store.get('attCombinedMode'));
