@@ -5,6 +5,9 @@ import * as noticeApi from '../lib/noticeUtils';
 import * as alertApi from '../lib/alertUtils';
 import { computeAlerts } from '../lib/alertUtils';
 import { subscribeBookingAlerts, markBookingAlertRead } from '../lib/bookingAlerts';
+import {
+  subscribeActiveErrandBroadcasts, shouldShowErrandBroadcasts, getErrandBroadcastOptOut,
+} from '../lib/serviceSync';
 import { getProfile } from '../store/store';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeMyRole } from '../lib/groupSync';
@@ -74,8 +77,12 @@ const ALERT_TAGS = {
 };
 const NOTICE_TAG = { label: 'Notice', color: 'var(--accent)', bg: 'var(--accentBg)' };
 const BOOKING_TAG = { label: 'Booking', color: '#0891b2', bg: 'rgba(8,145,178,0.12)' };
+// MULTI_CATEGORY_SERVICES_PLAN.md Phase 7 — gold, matching Phase 8's
+// gold-accent errand card treatment on Services.jsx, so a student
+// recognizes the same "someone's out delivering" signal in both places.
+const ERRAND_TAG = { label: 'Runner', color: '#b45309', bg: 'rgba(180,83,9,0.12)' };
 
-function buildMergedItems(profile, notices, dismissedAlertIds, readNoticeIds, firstSeenMap, bookingAlerts, uid, isProviderViewer) {
+function buildMergedItems(profile, notices, dismissedAlertIds, readNoticeIds, firstSeenMap, bookingAlerts, errandBroadcasts, dismissedBroadcastIds, uid, isProviderViewer) {
   const noticeItems = notices.map(n => ({
     id: `notice:${n.id}`,
     kind: 'notice',
@@ -130,15 +137,39 @@ function buildMergedItems(profile, notices, dismissedAlertIds, readNoticeIds, fi
     markRead: () => uid && markBookingAlertRead(uid, a.id),
   }));
 
+  // Errand broadcasts (Phase 7) — "read" here just means "this student
+  // has opened the panel with this broadcast visible at least once",
+  // tracked as a locally-dismissed id set (dismissedBroadcastIds), same
+  // shape as Alert items' dismissedAlertIds — NOT a per-user Firestore
+  // doc, since errandBroadcasts/{serviceId} is a shared population doc
+  // (see subscribeActiveErrandBroadcasts in serviceSync.js) with no
+  // per-reader read-state to write to. updatedAt is a live Firestore
+  // Timestamp same as booking items' createdAt, same defensive
+  // toMillis-or-now fallback for the same reason (brief window right
+  // after an optimistic write before the server timestamp round-trips).
+  const errandItems = (errandBroadcasts || []).map((b) => ({
+    id: `errand:${b.id}`,
+    kind: 'errand',
+    tag: ERRAND_TAG,
+    title: b.serviceName
+      ? `${b.serviceName} এখন ডেলিভারি করছে${b.priceNote ? ` · ${b.priceNote}` : ''}`
+      : 'একজন Runner এখন খোলা আছে',
+    link: `/services/${b.serviceId || b.id}`,
+    isUnread: !dismissedBroadcastIds.has(b.id),
+    at: b.updatedAt?.toMillis ? b.updatedAt.toMillis() : Date.now(),
+    markRead: () => alertApi.setAlertDismissed(`errandBroadcast:${b.id}`, true),
+  }));
+
   // Single time-sorted list (newest first) using real timestamps
   // throughout: Notice uses its real createdAt, Alert uses its real
   // first-seen-at (stamped once, persisted, reused on later renders,
   // since alerts are computed live from current state and have no
-  // inherent event timestamp), Booking uses its real createdAt. On a tie
-  // or when timestamps land close together, Notice wins — it's the
-  // highest-priority channel (admin/CR/CL broadcasts vs. auto-computed
-  // academic flags or a single booking event).
-  return [...noticeItems, ...alertItems, ...bookingItems].sort((a, b) => {
+  // inherent event timestamp), Booking uses its real createdAt, Errand
+  // uses its real updatedAt. On a tie or when timestamps land close
+  // together, Notice wins — it's the highest-priority channel
+  // (admin/CR/CL broadcasts vs. auto-computed academic flags, a single
+  // booking event, or an errand broadcast).
+  return [...noticeItems, ...alertItems, ...bookingItems, ...errandItems].sort((a, b) => {
     if (b.at !== a.at) return b.at - a.at;
     if (a.kind !== b.kind) return a.kind === 'notice' ? -1 : 1;
     return 0;
@@ -266,9 +297,36 @@ export function NotificationPanel({ isOpen, onClose }) {
     return subscribeBookingAlerts(uid, setBookingAlerts);
   }, [uid]);
 
+  // Errand broadcasts (Phase 7) — student-only (never faculty, see the
+  // platform-level rule in shouldShowErrandBroadcasts), and skipped
+  // entirely for a student who has globally opted out. The opt-out flag
+  // itself is a one-shot read here (not a live subscription) since this
+  // panel already fully remounts its data on refreshTick/uid changes —
+  // a student flipping the toggle mid-session sees it take effect next
+  // time they open the panel, not necessarily this exact millisecond,
+  // which is an acceptable trade for not adding a second live listener
+  // just for a rarely-changed settings flag.
+  const [errandOptedOut, setErrandOptedOut] = useState(false);
+  useEffect(() => {
+    if (!uid || isFacultyViewer || isProviderViewer) { setErrandOptedOut(false); return; }
+    getErrandBroadcastOptOut(uid).then(setErrandOptedOut).catch(() => setErrandOptedOut(false));
+  }, [uid, isFacultyViewer, isProviderViewer, refreshTick]);
+
+  const [errandBroadcasts, setErrandBroadcasts] = useState([]);
+  const canSeeErrandBroadcasts = !isFacultyViewer && !isProviderViewer
+    && shouldShowErrandBroadcasts(isFacultyViewer ? 'faculty' : 'student', errandOptedOut);
+  useEffect(() => {
+    if (!canSeeErrandBroadcasts) { setErrandBroadcasts([]); return undefined; }
+    return subscribeActiveErrandBroadcasts(setErrandBroadcasts);
+  }, [canSeeErrandBroadcasts]);
+  const dismissedBroadcastIds = useMemo(
+    () => new Set([...dismissedAlertIds].filter(id => id.startsWith('errandBroadcast:')).map(id => id.replace('errandBroadcast:', ''))),
+    [dismissedAlertIds]
+  );
+
   const items = useMemo(
-    () => buildMergedItems(profile, notices, dismissedAlertIds, readNoticeIds, firstSeenMap, bookingAlerts, uid, isProviderViewer),
-    [profile, notices, dismissedAlertIds, readNoticeIds, firstSeenMap, bookingAlerts, uid, isProviderViewer]
+    () => buildMergedItems(profile, notices, dismissedAlertIds, readNoticeIds, firstSeenMap, bookingAlerts, errandBroadcasts, dismissedBroadcastIds, uid, isProviderViewer),
+    [profile, notices, dismissedAlertIds, readNoticeIds, firstSeenMap, bookingAlerts, errandBroadcasts, dismissedBroadcastIds, uid, isProviderViewer]
   );
 
   const visibleItems = filter === 'unread' ? items.filter(i => i.isUnread) : items;

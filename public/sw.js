@@ -1,12 +1,17 @@
 // KUETx Service Worker — offline cache + auto-update
-const CACHE_NAME = 'kuetx-v4.2.4'; // bumped to clear browser and mobile caches — bump this on every future deploy too
+const CACHE_NAME = 'kuetx-v4.2.7'; // bumped: new turtle mascot icon set (favicon/PWA/maskable) replaces old placeholder SVGs — bump this on every future deploy too
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/favicon.svg',
-  '/icon-192.svg',
-  '/icon-512.svg',
+  '/favicon.ico',
+  '/favicon-32.png',
+  '/favicon-16.png',
+  '/apple-touch-icon.png',
+  '/icon-192.png',
+  '/icon-512.png',
+  '/icon-192-maskable.png',
+  '/icon-512-maskable.png',
   '/vendor/fullcalendar-fallback.css',
 ];
 

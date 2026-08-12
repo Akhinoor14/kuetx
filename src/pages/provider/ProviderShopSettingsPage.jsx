@@ -11,7 +11,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, MapPin, Truck, Pause, Play, Power, Navigation, ExternalLink, Settings as SettingsIcon,
+  ArrowLeft, MapPin, Truck, Pause, Play, Power, Navigation, ExternalLink, Settings as SettingsIcon, Users,
 } from 'lucide-react';
 import {
   subscribeProviderServices, updateServiceDetails, withServiceDefaults,
@@ -153,6 +153,10 @@ function BackLink({ navigate, t }) {
 function ShopMetaEditor({ service, t }) {
   const [locationText, setLocationText] = useState(service.locationText || '');
   const [hasDelivery, setHasDelivery] = useState(Boolean(service.hasDelivery));
+  // Phase 6 (SERVICE_BOOKING_REDESIGN_PLAN_PROMPT.md): errand-type
+  // services only. withServiceDefaults() already guarantees a definite
+  // 'all'/'student'/'faculty' string (never undefined) on `service`.
+  const [errandAcceptFrom, setErrandAcceptFrom] = useState(service.errandAcceptFrom || 'all');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState('');
@@ -160,14 +164,19 @@ function ShopMetaEditor({ service, t }) {
   useEffect(() => {
     setLocationText(service.locationText || '');
     setHasDelivery(Boolean(service.hasDelivery));
-  }, [service.id, service.locationText, service.hasDelivery]);
+    setErrandAcceptFrom(service.errandAcceptFrom || 'all');
+  }, [service.id, service.locationText, service.hasDelivery, service.errandAcceptFrom]);
 
   const save = async () => {
     setSaving(true);
     setSaved(false);
     setError('');
     try {
-      await updateServiceDetails(service.id, { locationText, hasDelivery });
+      await updateServiceDetails(service.id, {
+        locationText,
+        hasDelivery,
+        ...(service.type === 'errand' ? { errandAcceptFrom } : {}),
+      });
       setSaved(true);
     } catch (e) {
       setError(t('shopSettings.saveError'));
@@ -221,6 +230,40 @@ function ShopMetaEditor({ service, t }) {
           />
         </span>
       </button>
+
+      {/* Phase 6 (SERVICE_BOOKING_REDESIGN_PLAN_PROMPT.md): errand-type
+          (Runner) services only. Three-way segmented control, not a
+          single on/off toggle like hasDelivery above — this is a
+          3-value enum (all/student/faculty), not a boolean. */}
+      {service.type === 'errand' && (
+        <div>
+          <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+            <Users size={13} /> {t('shopSettings.acceptFromLabel')}
+          </label>
+          <div style={{ display: 'flex', gap: 6, borderRadius: 10, border: '1px solid var(--border)', padding: 3, background: 'var(--card)' }}>
+            {[
+              ['all', t('shopSettings.acceptFromAll')],
+              ['student', t('shopSettings.acceptFromStudent')],
+              ['faculty', t('shopSettings.acceptFromFaculty')],
+            ].map(([value, label]) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setErrandAcceptFrom(value)}
+                style={{
+                  flex: 1, padding: '8px 6px', borderRadius: 8, border: 'none', cursor: 'pointer',
+                  fontSize: 12.5, fontWeight: 700,
+                  background: errandAcceptFrom === value ? 'var(--accent)' : 'transparent',
+                  color: errandAcceptFrom === value ? '#fff' : 'var(--muted)',
+                  transition: 'background 0.15s, color 0.15s',
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {error && <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)' }}>{error}</div>}
 

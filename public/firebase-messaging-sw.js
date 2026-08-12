@@ -28,8 +28,8 @@ messaging.onBackgroundMessage((payload) => {
   const body = payload.notification?.body || payload.data?.body || '';
   self.registration.showNotification(title, {
     body,
-    icon: '/icon-192.svg',
-    badge: '/icon-192.svg',
+    icon: '/icon-192.png',
+    badge: '/icon-192.png',
     data: { url: payload.data?.link || '/notice' },
     tag: payload.data?.noticeId || undefined,
   });

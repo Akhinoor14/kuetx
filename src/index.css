@@ -3039,9 +3039,10 @@ h3 { font-size: 15px; font-weight: 600; }
 }
 
 .topbar {
-  height: 56px;
-  min-height: 56px;
-  max-height: 56px;
+  --topbar-h: 56px;
+  height: var(--topbar-h);
+  min-height: var(--topbar-h);
+  max-height: var(--topbar-h);
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   display: flex;
@@ -3054,26 +3055,18 @@ h3 { font-size: 15px; font-weight: 600; }
   /* raise above typical page cards and overlays so the header never gets covered */
   z-index: 60;
 }
-/* Mobile + chip-strip pages only: the topbar is no longer sticky here —
-   it scrolls away naturally with the page content, the same way any
-   other element would. The chip strip below (.topbar-mobile-tabs,
-   always `position: sticky; top: 0`) catches itself at the very top the
-   instant the topbar has scrolled past, and stays pinned there while
-   the rest of the page keeps scrolling underneath it. Scrolling back up
-   reverses the same way for free — once the page is back near its own
-   top, the topbar (now back in normal flow) reappears above the chip
-   strip and pushes it back down to sit just beneath it again. This is
-   plain CSS sticky-positioning behavior, so no scroll listener/JS is
-   needed to drive it — see Navbar.jsx, hasChipStrip pages no longer run
-   a scroll effect at all on mobile.
-   Desktop, and mobile pages WITHOUT a chip strip, keep the topbar
-   sticky as before (this only applies when body.has-mobile-chip-strip
-   is set — see Navbar.jsx). */
-@media (max-width: 768px) {
-  body.has-mobile-chip-strip .topbar {
-    position: static;
-  }
-}
+/* BUGFIX (person requested): topbar used to go position:static on mobile
+   chip-strip pages (scrolling away with the page, then the chip strip
+   would catch itself at top:0 once the bar scrolled past — see git
+   history for the old comment/behavior). Person found the appear/
+   disappear-on-scroll motion distracting and asked for the topbar to
+   just stay fixed at the top always, on every mobile page, chip-strip
+   or not — so removed the static override entirely. The topbar keeps
+   its normal `position: sticky; top: 0` (set above, unconditionally)
+   on mobile now, same as desktop. The chip strip (.topbar-mobile-tabs)
+   still uses `position: sticky; top: 56px` (see below) so it pins
+   directly beneath the now-always-visible topbar instead of at the
+   very top of the viewport. */
 
 /* Logo: visible on mobile, hidden on desktop (desktop shows breadcrumb) */
 .topbar-logo {
@@ -3109,17 +3102,17 @@ h3 { font-size: 15px; font-weight: 600; }
    Navbar.jsx). Only rendered when the current page has siblings to
    swap between (see Navbar.jsx), so pages without siblings incur zero
    extra height.
-   Always sticky at top:0 — on chip-strip pages the topbar above it is
-   now `position: static` (see .topbar's mobile override), so this strip
-   naturally scrolls along with the topbar while both are still in view,
-   then catches and pins itself at the very top the moment the topbar
-   has scrolled fully past. Scrolling back up reverses for free: once
-   the page nears its own top again, the topbar (back in normal flow)
-   pushes this strip back down beneath it. Plain CSS sticky behavior —
-   no scroll listener needed. */
+   BUGFIX (person requested): topbar is now always fixed/sticky on
+   mobile (see .topbar's comment above), so this strip sticks right
+   below it at top: var(--topbar-h) instead of top: 0 — otherwise it
+   would sit UNDER the always-visible topbar and get hidden behind it
+   once both are pinned. Uses the same --topbar-h custom property
+   .topbar sets (and overrides per breakpoint at 640px/480px), so this
+   stays correctly glued to the topbar's actual height at every screen
+   size instead of a single hardcoded number going stale. */
 .topbar-mobile-tabs {
   position: sticky;
-  top: 0;
+  top: var(--topbar-h, 56px);
   z-index: 59;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -6415,8 +6408,9 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
   }
 
   .topbar {
+    --topbar-h: 52px;
     padding: 0 12px;
-    height: 52px;
+    height: var(--topbar-h);
   }
 
   .tag {
@@ -7238,8 +7232,9 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
   }
 
   .topbar {
+    --topbar-h: 48px;
     padding: 0 8px;
-    height: 48px;
+    height: var(--topbar-h);
   }
 
   .divider {

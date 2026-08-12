@@ -928,6 +928,22 @@ service cloud.firestore {
       return svc.isOpen == true && svc.interactionMode == 'errand';
     }
 
+    // Phase 6 (SERVICE_BOOKING_REDESIGN_PLAN_PROMPT.md): provider-side
+    // "who can send me a request" filter — errandAcceptFrom is
+    // 'all' | 'student' | 'faculty' on the service doc (defaults to
+    // 'all' when absent, matching withServiceDefaults()'s client-side
+    // fallback for services created before this field existed — a
+    // missing field must mean the same thing here as it does there,
+    // or an old service would silently start rejecting everyone).
+    // requesterRole comes from the booking doc being created, not a
+    // separate profile lookup — the same field createErrandRequest()
+    // already stamps into every errand request doc.
+    function _errandRequesterAllowed(serviceId, requesterRole) {
+      let svc = get(/databases/$(database)/documents/services/$(serviceId)).data;
+      let acceptFrom = svc.keys().hasAny(['errandAcceptFrom']) ? svc.errandAcceptFrom : 'all';
+      return acceptFrom == 'all' || acceptFrom == requesterRole;
+    }
+
     // Phase 4: an open errand request is visible to a Runner if it's
     // broadcast, or targeted directly at them. isVerifiedProviderUid
     // already gates who can even reach this — this only decides which
@@ -951,6 +967,61 @@ service cloud.firestore {
     // confirmedStudents' own existence-only shape.
     function hasNoActiveBooking(serviceId, studentUid) {
       return !exists(/databases/$(database)/documents/services/$(serviceId)/activeBooking/$(studentUid));
+    }
+
+    // Phase 3 (SERVICE_BOOKING_REDESIGN_PLAN_PROMPT.md): booking-mode
+    // multi-item create (hotel/food) reuses the exact same bounded-item
+    // validation shape as _inquiryItemValid/_allInquiryItemsValid above
+    // — a booking's items[] entry needs the same offeringId/label/
+    // quantity>0 shape an inquiry's does. Kept as separate functions
+    // (not reused directly) only because "booking" vs "inquiry" is a
+    // meaningful name at the call site below; the body is identical.
+    function _bookingItemValid(items, idx) {
+      return idx < items.size()
+        && items[idx].offeringId is string
+        && items[idx].label is string
+        && items[idx].quantity is number
+        && items[idx].quantity > 0;
+    }
+    function _allBookingItemsValid(items) {
+      return items.size() > 0
+        && (items.size() <= 0 || _bookingItemValid(items, 0))
+        && (items.size() <= 1 || _bookingItemValid(items, 1))
+        && (items.size() <= 2 || _bookingItemValid(items, 2))
+        && (items.size() <= 3 || _bookingItemValid(items, 3))
+        && (items.size() <= 4 || _bookingItemValid(items, 4))
+        && (items.size() <= 5 || _bookingItemValid(items, 5))
+        && (items.size() <= 6 || _bookingItemValid(items, 6))
+        && (items.size() <= 7 || _bookingItemValid(items, 7))
+        && (items.size() <= 8 || _bookingItemValid(items, 8))
+        && (items.size() <= 9 || _bookingItemValid(items, 9))
+        && items.size() <= 10;
+    }
+
+    // Phase 5 (SERVICE_BOOKING_REDESIGN_PLAN_PROMPT.md, Part B):
+    // "did {reviewerUid} actually complete {bookingId} on
+    // {serviceId}" — the real gate behind reviews/{bookingId}'s create
+    // rule above. Mirrors getReviewableBookingsForUser()'s definition
+    // in serviceSync.js exactly:
+    //   booking (salon/hotel)              -> status == 'done'
+    //   inquiry (medicine/bookstore/mart)  -> status == 'answered', OR
+    //     status == 'closed' AND a non-empty replyText (plain 'closed'
+    //     alone doesn't prove the provider replied — a student can
+    //     close their own still-unanswered inquiry via closeInquiry())
+    //   errand                             -> status == 'finished'
+    // Ownership check accepts EITHER studentUid or requesterUid
+    // matching the caller, since errand-request docs key off
+    // requesterUid while booking/inquiry docs key off studentUid — the
+    // booking doc itself never has both, so this is safe as an "or".
+    function _reviewedBookingIsComplete(serviceId, bookingId, uid) {
+      let b = get(/databases/$(database)/documents/services/$(serviceId)/bookings/$(bookingId)).data;
+      return (b.studentUid == uid || (b.keys().hasAny(['requesterUid']) && b.requesterUid == uid))
+        && (
+          b.status == 'done'
+          || b.status == 'finished'
+          || b.status == 'answered'
+          || (b.status == 'closed' && b.keys().hasAny(['replyText']) && b.replyText is string && b.replyText.size() > 0)
+        );
     }
 
     match /services/{serviceId} {
@@ -980,7 +1051,11 @@ service cloud.firestore {
         && isValidServiceStatus(request.resource.data.status)
         && request.resource.data.status == 'closed'
         && request.resource.data.dormantReason == null
-        && request.resource.data.dormantSince == null;
+        && request.resource.data.dormantSince == null
+        // Phase 5 rating-denormalize follow-up: a brand new service
+        // must start at exactly 0/0 — never born with reviews.
+        && request.resource.data.avgRating == 0
+        && request.resource.data.reviewCount == 0;
 
       // Update: the owning provider can edit their own service (details,
       // isOpen toggle, offerings) — Founder can also edit/deactivate
@@ -1009,11 +1084,65 @@ service cloud.firestore {
           && isValidInteractionMode(request.resource.data.interactionMode)
           && isValidServiceStatus(request.resource.data.status)
           && isValidProviderDormantReason(request.resource.data.dormantReason)
-          && isValidLocationWrite())
+          && isValidLocationWrite()
+          // Phase 6: if this update touches errandAcceptFrom at all, it
+          // must be one of the three real values — same "don't let a
+          // stray string silently break the filter" reasoning as
+          // isValidServiceType/isValidInteractionMode above.
+          && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['errandAcceptFrom'])
+              || request.resource.data.errandAcceptFrom == 'all'
+              || request.resource.data.errandAcceptFrom == 'student'
+              || request.resource.data.errandAcceptFrom == 'faculty'))
         || (isAdmin()
           && isValidServiceType(request.resource.data.type)
           && isValidInteractionMode(request.resource.data.interactionMode)
-          && isValidServiceStatus(request.resource.data.status));
+          && isValidServiceStatus(request.resource.data.status))
+        // Phase 5 rating-denormalize follow-up (Aug 12, 2026): a
+        // reviewer (NOT the provider — this is deliberately a
+        // different actor than the branches above) may update ONLY
+        // avgRating/reviewCount, and only as part of the exact same
+        // write that creates their own reviews/{bookingId} doc (see
+        // submitReview() in serviceSync.js, which writes both in one
+        // batch()). Every other field must stay byte-identical to
+        // what it already was — a reviewer can never touch isOpen,
+        // offerings, revenueTotal, or anything else via this path.
+        // reviewCount is strictly enforced as +1 per write (so a
+        // reviewer can only ever push it up by exactly one, matching
+        // one new review doc). avgRating's exact weighted-average
+        // arithmetic is NOT independently re-verified here — doing
+        // that correctly in rules would need reading every existing
+        // review doc, which defeats the point of denormalizing in the
+        // first place — so this only bounds it to the valid 1-5
+        // range. A malicious reviewer could in principle push
+        // avgRating to an inaccurate-but-in-range number; this is a
+        // deliberate, small trust boundary (same class of trade-off
+        // as any client-computed aggregate on Spark), acceptable
+        // because reviews/{bookingId} itself (the source of truth)
+        // stays fully rule-verified — a bad avgRating write is a
+        // cosmetic display bug, never a security or data-integrity
+        // issue, and is trivially recomputable from the reviews
+        // subcollection if it's ever noticed to have drifted.
+        //
+        // Two sub-branches: services created after this change already
+        // have avgRating/reviewCount == 0/0 (createService()'s create
+        // rule enforces that), so the normal case is a plain +1. Older
+        // services (created before this change shipped) won't have
+        // either field yet — get()-ing a missing map key in rules
+        // throws, so `resource.data.reviewCount` would hard-fail
+        // there instead of just being falsy; the second sub-branch
+        // handles exactly that one-time "first review ever on an old
+        // service" case by allowing the fields to be created fresh
+        // (reviewCount must start at 1, not require a prior +1).
+        || (isSignedIn() && request.auth.uid != resource.data.providerUid
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['avgRating', 'reviewCount'])
+          && request.resource.data.avgRating is number
+          && request.resource.data.avgRating >= 1 && request.resource.data.avgRating <= 5
+          && (
+            (resource.data.keys().hasAny(['reviewCount'])
+              && request.resource.data.reviewCount == resource.data.reviewCount + 1)
+            || (!resource.data.keys().hasAny(['reviewCount'])
+              && request.resource.data.reviewCount == 1)
+          ));
 
       allow delete: if isAdmin();
 
@@ -1047,10 +1176,17 @@ service cloud.firestore {
 
         // Create: any signed-in student, for themselves only. Two shapes
         // now, gated on the parent service's interactionMode:
-        //  - booking-mode create (unchanged from before Phase 2): always
-        //    starting in 'pending' with every other terminal/derived
-        //    field at its zero value, offering must be open+available,
-        //    one active booking per service.
+        //  - booking-mode create: always starting in 'pending' with
+        //    every other terminal/derived field at its zero value, one
+        //    active booking per service. Phase 3
+        //    (SERVICE_BOOKING_REDESIGN_PLAN_PROMPT.md) split this into
+        //    two sub-shapes: single-offeringId (salon — offeringId must
+        //    be bookable, items absent/null) OR multi-item items[]
+        //    (hotel/food — offeringId null, items validated via
+        //    _allBookingItemsValid, same per-entry shape as an
+        //    inquiry's items[]). Exactly one of the two must hold, never
+        //    both/neither, so a client can't submit a booking with
+        //    neither an offering nor any items.
         //  - MULTI_CATEGORY_SERVICES_PLAN.md Phase 2 inquiry-mode create:
         //    starts 'open', no offeringId/preferredTime/cancelledBy/
         //    confirmedSlot fields (booking-mode-specific), instead an
@@ -1066,7 +1202,13 @@ service cloud.firestore {
             (request.resource.data.status == 'pending'
               && request.resource.data.cancelledBy == null
               && request.resource.data.confirmedSlot == null
-              && offeringIsBookable(serviceId, request.resource.data.offeringId))
+              && (
+                (request.resource.data.offeringId != null
+                  && offeringIsBookable(serviceId, request.resource.data.offeringId))
+                || (request.resource.data.offeringId == null
+                  && request.resource.data.keys().hasAny(['items'])
+                  && _allBookingItemsValid(request.resource.data.items))
+              ))
             || (request.resource.data.status == 'open'
               && request.resource.data.replyText == null
               && serviceAcceptsInquiry(serviceId)
@@ -1089,6 +1231,14 @@ service cloud.firestore {
             && request.resource.data.itemDescription.size() > 0
             && (request.resource.data.visibility == 'broadcast'
                 || request.resource.data.visibility == 'targeted')
+            // Phase 6: requesterRole must be one of the two real
+            // values (never trust an arbitrary client string here,
+            // since it's also what _errandRequesterAllowed compares
+            // the provider's filter against), AND the provider's own
+            // errandAcceptFrom filter must allow this requester.
+            && (request.resource.data.requesterRole == 'student'
+                || request.resource.data.requesterRole == 'faculty')
+            && _errandRequesterAllowed(serviceId, request.resource.data.requesterRole)
             && serviceAcceptsErrand(serviceId));
 
         // Update: exactly the transitions in §7 (booking mode) plus the
@@ -1285,6 +1435,98 @@ service cloud.firestore {
           && (request.auth.uid == studentUid || ownsService(serviceId) || isAdmin());
         allow update: if false; // existence-only — never modified, only created/deleted
       }
+
+      // -----------------------------------------------------------
+      // reviews/{bookingId} — Phase 5 (SERVICE_BOOKING_REDESIGN_PLAN_
+      // PROMPT.md, Part B). Doc id IS the bookingId being reviewed
+      // (deterministic, not auto-id) — that's what makes "one review
+      // per completed booking" a create-time impossibility-to-violate
+      // rather than a race-prone application-level check: a second
+      // create attempt on the same bookingId is just a normal
+      // already-exists document create, which Firestore itself
+      // rejects before this rule even runs.
+      //
+      // "This project is Spark-permanent, no Cloud Functions ever
+      // deploy" (see docs/ACCOUNT_DELETION_PLAN.md for the same
+      // constraint already documented elsewhere) is why this is a
+      // direct client write gated by a cross-collection get(), not a
+      // callable — the plan doc's original "Cloud Function is safer"
+      // note assumed Blaze was available, which it explicitly isn't
+      // for this project. get() has a real Firestore read-quota cost
+      // per rule evaluation, but it's one extra read on an
+      // infrequent, human-paced write (a person submitting one
+      // review), not a hot path — acceptable here.
+      match /reviews/{bookingId} {
+        allow read: if isSignedIn();
+
+        // Create: the caller must be the reviewer they claim to be,
+        // rating must be an in-range integer, comment length-capped
+        // (mirrors submitReview()'s client-side trim, enforced here
+        // for real), AND the booking doc named by this same
+        // {bookingId} must exist under this service, belong to this
+        // caller (as studentUid OR requesterUid — errand requests use
+        // the latter), and be in one of the "successfully completed"
+        // states per interactionMode — mirrors
+        // getReviewableBookingsForUser()'s definition in
+        // serviceSync.js exactly; keep both in sync if this changes.
+        allow create: if isSignedIn()
+          && request.resource.data.reviewerUid == request.auth.uid
+          && request.resource.data.rating is int
+          && request.resource.data.rating >= 1 && request.resource.data.rating <= 5
+          && request.resource.data.comment is string
+          && request.resource.data.comment.size() <= 500
+          && request.resource.data.bookingId == bookingId
+          && _reviewedBookingIsComplete(serviceId, bookingId, request.auth.uid);
+
+        // No edits or deletes from anyone but the Founder — a review,
+        // once posted, is a permanent record (same "don't let people
+        // quietly rewrite history" posture as staffRoleHistory
+        // elsewhere in this file); a mis-posted review is a manual
+        // Admin cleanup, not a self-service edit.
+        allow update: if false;
+        allow delete: if isAdmin();
+      }
+    }
+
+    // -------------------------------------------------------------
+    // errandBroadcasts/{serviceId} — MULTI_CATEGORY_SERVICES_PLAN.md
+    // Phase 7. One doc per errand-type service, mirroring that service's
+    // own isOpen state (see serviceSync.js's syncErrandBroadcastState,
+    // the only writer). Deliberately NOT an event log — a Runner does
+    // not "send" repeated broadcasts, isOpen==true simply IS the
+    // broadcast for as long as it stays open (Founder's answer to open
+    // question #2 in the plan). Read is population-level (any signed-in
+    // student, same "not individually sensitive" reasoning as
+    // notices.audience.type=='all') — filtering out faculty happens
+    // client-side (shouldShowErrandBroadcasts in serviceSync.js) since
+    // "never shown to faculty by default" is a product default here,
+    // not a security boundary (a faculty account seeing that a Runner
+    // is open isn't a privacy leak, unlike the individually-targeted
+    // notice audiences above). Write is scoped to the service's own
+    // provider via ownsService(), same ownership check used everywhere
+    // else a provider writes into their own service's data.
+    match /errandBroadcasts/{serviceId} {
+      allow read: if isSignedIn();
+      allow create, update: if ownsService(serviceId)
+        && request.resource.data.serviceId == serviceId
+        && request.resource.data.providerUid == request.auth.uid
+        && request.resource.data.active is bool;
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // studentPreferences/{uid} — MULTI_CATEGORY_SERVICES_PLAN.md
+    // Phase 7. Currently holds exactly one flag: errandBroadcastOptOut
+    // (global — "আমাকে পাঠাইও না" silences EVERY Runner's broadcast for
+    // this student, not a per-Runner mute list; Founder's answer to open
+    // question #3). Kept as its own top-level collection rather than
+    // folded into users/{uid}/data/{key} (see serviceSync.js's comment
+    // on studentPreferencesDocRef) since that collection is the generic
+    // local-store-mirror sync engine (firebaseSync.js), not meant to be
+    // read directly by other app logic the way this flag is read by
+    // NotificationPanel.jsx / Services.jsx.
+    match /studentPreferences/{uid} {
+      allow read, write: if isSignedIn() && request.auth.uid == uid;
     }
 
     // -------------------------------------------------------------

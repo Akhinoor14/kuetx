@@ -11,6 +11,7 @@ import { getAllCourses } from '../store/curriculumStore';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeCRStatus, subscribeRoutine, subscribePlannerSettings } from '../lib/groupSync';
 import { resolveTeacherNames } from '../lib/teacherRegistry';
+import { ALTERNATE_TEACHER } from './Schedule';
 import { getEffectiveOccurrence } from '../lib/sessionalCadence';
 import { useCanEditGroup } from '../hooks/useCanEditGroup';
 
@@ -128,9 +129,13 @@ const slotKey = (s) => `${s.courseId}::${s.day}::${s.slot}`;
 // Merge in any teacher name observed for a slot, so the pool grows as
 // routine edits happen over the term (append-only; never removes names,
 // since a rotated-away teacher may still own historical logs).
+// Ignores ALTERNATE_TEACHER — that's a rotating-slot marker, not a real
+// teacher name; resolveTeachersForDate expands it into the course's real
+// two names on its own (see there), so recording it here would just leak
+// the raw sentinel into the pool as a fake "teacher".
 function recordSlotTeacherSighting(courseId, day, slot, teacherName) {
   const name = String(teacherName || '').trim();
-  if (!name) return;
+  if (!name || name === ALTERNATE_TEACHER) return;
   const key = `${courseId}::${day}::${slot}`;
   const pool = store.get('attSlotTeacherPool') || {};
   const existing = Array.isArray(pool[key]) ? pool[key] : [];
@@ -156,16 +161,26 @@ function setRotationOverride(courseId, day, slot, date, teacherName) {
 // routine teacher when there's no ambiguity), isRotating flags whether a
 // per-date choice is needed/was made, and slotEntries are the raw routine
 // rows (one per weekly slot) this course has on that weekday.
-function resolveTeachersForDate(schedule, courseId, date) {
+//
+// ALTERNATE_TEACHER support: a routine slot explicitly marked "Alternative"
+// in Schedule (s.teacherName === ALTERNATE_TEACHER) is rotating BY
+// DEFINITION — the CR already told us both course teachers can show up, so
+// there's no need to wait for a manual Switch to build up attSlotTeacherPool
+// (the old auto-learn path, still used for organically-discovered rotation).
+// settings/teacherRegistry are passed through to getTeachersForCourse so
+// the pool can be seeded with the course's real two names immediately.
+function resolveTeachersForDate(schedule, courseId, date, settings, teacherRegistry) {
   const dayName = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' });
   const slotEntries = (schedule || []).filter(s => s.courseId === courseId && s.day === dayName);
   const pool = store.get('attSlotTeacherPool') || {};
   const results = slotEntries.map(s => {
     const key = slotKey(s);
     const seenTeachers = Array.isArray(pool[key]) ? pool[key] : [];
-    const currentTeacher = String(s.teacherName || '').trim();
-    const knownPool = [...new Set([...seenTeachers, currentTeacher].filter(Boolean))];
-    const isRotating = knownPool.length > 1;
+    const isAlternate = s.teacherName === ALTERNATE_TEACHER;
+    const currentTeacher = isAlternate ? '' : String(s.teacherName || '').trim();
+    const alternatePool = isAlternate ? getTeachersForCourse(settings, schedule, courseId, teacherRegistry) : [];
+    const knownPool = [...new Set([...seenTeachers, currentTeacher, ...alternatePool].filter(Boolean))];
+    const isRotating = isAlternate || knownPool.length > 1;
     // Manual per-date override (rotating-slot pick OR a Switch-teacher
     // choice from the Daily Log modal) — read regardless of isRotating so
     // Switch works uniformly for every course, not just rotating slots.
@@ -715,7 +730,7 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
       toShow = courses.filter(c => !isAutoFull(c.type));
     }
     return toShow.map((course, idx) => {
-      const resolved = resolveTeachersForDate(schedule, course.id, date);
+      const resolved = resolveTeachersForDate(schedule, course.id, date, settings, teacherRegistry);
       const anyRotating = resolved.some(r => r.isRotating);
       const anyNeedsPick = resolved.some(r => r.needsPick);
       const onDate = [...new Set(resolved.map(r => r.resolvedTeacher).filter(Boolean))];

@@ -1,1 +1,0 @@
-import{r as o}from"./vendor-C1WfLDDx.js";function s(e,n){o.useEffect(()=>{const c=document.title;e&&(document.title=e);let t=document.querySelector('meta[name="description"]');const u=t?t.getAttribute("content"):null;return n&&t&&t.setAttribute("content",n),()=>{document.title=c,t&&u!==null&&t.setAttribute("content",u)}},[e,n])}export{s as u};

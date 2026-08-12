@@ -34,12 +34,16 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   Store, Circle, Scissors, Cross, UtensilsCrossed, BookOpen, ShoppingBag, Bike, Package,
-  ArrowUpDown, SlidersHorizontal, Check, X,
+  ArrowUpDown, SlidersHorizontal, Check, X, Star,
 } from 'lucide-react';
-import { subscribeAllServices, SERVICE_TYPE_LABELS, SERVICE_TYPES, withServiceDefaults } from '../lib/serviceSync';
+import {
+  subscribeAllServices, SERVICE_TYPE_LABELS, SERVICE_TYPES, withServiceDefaults,
+  subscribeActiveErrandBroadcasts, shouldShowErrandBroadcasts, getErrandBroadcastOptOut,
+} from '../lib/serviceSync';
 import { listAllProviderAccounts } from '../lib/providerSync';
 import { onSnapshot, collection, query, where } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+import { db, auth } from '../lib/firebase';
+import { useIsFaculty } from '../hooks/useIsFaculty';
 
 // Phase 6: one icon per category type, shared by the full grid (this
 // file) and the compact home-page preview row (Dashboard.jsx imports
@@ -279,6 +283,20 @@ export function ServiceCategoryGrid({ showHeader = true }) {
     const openCount = shopsInCategory.filter((s) => s.isOpen).length;
     return { type, total: shopsInCategory.length, openCount };
   });
+  // MULTI_CATEGORY_SERVICES_PLAN.md Phase 8, item 2: errand (Pick and
+  // Drop) always sorts first in the category grid, regardless of
+  // SERVICE_TYPES' declared order (errand is declared LAST there, see
+  // serviceSync.js's comment on why it was added at the end of that
+  // object — display order and declaration order are deliberately kept
+  // independent here rather than reordering SERVICE_TYPE_LABELS itself,
+  // since that object's key order also drives provider-onboarding
+  // dropdowns and other surfaces that have no reason to change). Stable
+  // sort — every other category keeps its existing relative order.
+  const orderedCategoryStats = [...categoryStats].sort((a, b) => {
+    if (a.type === 'errand') return -1;
+    if (b.type === 'errand') return 1;
+    return 0;
+  });
 
   return (
     <div>
@@ -293,13 +311,20 @@ export function ServiceCategoryGrid({ showHeader = true }) {
 
       <div className="kx-services-section">
         <div className="kx-category-grid">
-          {categoryStats.map(({ type, total, openCount }) => {
+          {orderedCategoryStats.map(({ type, total, openCount }) => {
             const Icon = CATEGORY_ICONS[type] || Store;
             const label = CATEGORY_LABELS_EN[type] || SERVICE_TYPE_LABELS[type] || type;
+            // Phase 8, item 1: errand card gets a gold/amber accent,
+            // visually distinct from every other category card's normal
+            // accent-color treatment — same amber (#b45309) used for the
+            // Phase 7 "Runner" notification tag and broadcast strip, so
+            // a student learns one consistent color for "Runner-related"
+            // across the whole app rather than a third new color here.
+            const isErrandCard = type === 'errand';
             return (
               <button
                 key={type}
-                className="kx-category-card"
+                className={`kx-category-card${isErrandCard ? ' kx-category-card-gold' : ''}`}
                 onClick={() => navigate(`/services/category/${type}`)}
               >
                 <div className="kx-category-icon"><Icon size={26} strokeWidth={1.6} /></div>
@@ -370,6 +395,25 @@ export function ServiceCategoryGrid({ showHeader = true }) {
           box-shadow: 0 8px 20px -6px rgba(var(--accentRGB), 0.25);
           transform: translateY(-2px);
         }
+        /* Phase 8, item 1 — errand/Pick-and-Drop category card gets its
+           own gold/amber accent instead of the default var(--accent)
+           tint used above, so it visually stands apart from the other
+           five service-type cards at a glance. */
+        .kx-category-card-gold {
+          border-color: rgba(180,83,9,0.35) !important;
+        }
+        .kx-category-card-gold:hover {
+          border-color: rgba(180,83,9,0.55) !important;
+          box-shadow: 0 8px 20px -6px rgba(180,83,9,0.3) !important;
+        }
+        .kx-category-card-gold .kx-category-icon {
+          background: rgba(180,83,9,0.12);
+          color: #b45309;
+        }
+        .kx-category-card-gold .kx-category-badge.is-live {
+          color: #b45309;
+          background: rgba(180,83,9,0.12);
+        }
         .kx-category-icon {
           width: 52px; height: 52px; border-radius: 14px;
           display: flex; align-items: center; justify-content: center;
@@ -386,6 +430,79 @@ export function ServiceCategoryGrid({ showHeader = true }) {
           color: #16a34a;
           background: rgba(22,163,74,0.10);
         }
+      `}</style>
+    </div>
+  );
+}
+
+// MULTI_CATEGORY_SERVICES_PLAN.md Phase 7 — minimal broadcast strip.
+// Deliberately plain/compact for now: Phase 8 (not yet scoped/approved)
+// owns the fuller gold-accent card treatment + top-of-list repositioning
+// for errand cards generally. This just satisfies "card" from the
+// notification+card decision without pre-empting Phase 8's design —
+// same list of active broadcasts NotificationPanel.jsx already
+// subscribes to via subscribeActiveErrandBroadcasts, same
+// shouldShowErrandBroadcasts gate (never faculty, respects the global
+// opt-out).
+function ActiveErrandBroadcastStrip() {
+  const [broadcasts, setBroadcasts] = useState([]);
+  const [optedOut, setOptedOut] = useState(false);
+  const { isFaculty, isFounderBypass } = useIsFaculty();
+  const isFacultyViewer = isFaculty || isFounderBypass;
+  const uid = auth.currentUser?.uid;
+  // Bug fix: this used to call window.location.assign(), which does a
+  // full hard page reload — the only place in this whole file that
+  // didn't use the router's soft navigate() like every other click
+  // target (category card, orders card, shop card). Fixed to match.
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!uid || isFacultyViewer) { setOptedOut(false); return; }
+    getErrandBroadcastOptOut(uid).then(setOptedOut).catch(() => setOptedOut(false));
+  }, [uid, isFacultyViewer]);
+
+  const canSee = !isFacultyViewer && shouldShowErrandBroadcasts('student', optedOut);
+  useEffect(() => {
+    if (!canSee) { setBroadcasts([]); return undefined; }
+    return subscribeActiveErrandBroadcasts(setBroadcasts);
+  }, [canSee]);
+
+  if (!canSee || broadcasts.length === 0) return null;
+
+  return (
+    <div className="kx-errand-broadcast-strip">
+      {broadcasts.map((b) => (
+        <button
+          key={b.id}
+          className="kx-errand-broadcast-pill"
+          onClick={() => navigate(`/services/${b.serviceId || b.id}`)}
+        >
+          <span className="kx-errand-broadcast-dot" />
+          {b.serviceName || 'Runner'} এখন ডেলিভারি করছে
+          {b.priceNote ? <span className="kx-errand-broadcast-price">{b.priceNote}</span> : null}
+        </button>
+      ))}
+      <style>{`
+        .kx-errand-broadcast-strip {
+          display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;
+        }
+        .kx-errand-broadcast-pill {
+          display: flex; align-items: center; gap: 7px;
+          padding: 8px 14px; border-radius: 999px; cursor: pointer;
+          border: 1px solid rgba(180,83,9,0.35);
+          background: linear-gradient(135deg, rgba(180,83,9,0.14), rgba(180,83,9,0.05));
+          color: #b45309; font-size: 13px; font-weight: 700;
+          transition: transform 0.15s ease;
+        }
+        .kx-errand-broadcast-pill:hover { transform: translateY(-1px); }
+        .kx-errand-broadcast-dot {
+          width: 7px; height: 7px; border-radius: 50%; background: #b45309;
+          box-shadow: 0 0 0 3px rgba(180,83,9,0.18);
+        }
+        .kx-errand-broadcast-price {
+          font-weight: 800; opacity: 0.85;
+        }
+        .kx-errand-broadcast-price::before { content: '· '; font-weight: 400; }
       `}</style>
     </div>
   );
@@ -430,6 +547,8 @@ export default function Services() {
         </div>
       </button>
       <div className="kx-orders-hub-divider" />
+
+      <ActiveErrandBroadcastStrip />
 
       <ServiceCategoryGrid showHeader={false} />
 
@@ -684,7 +803,7 @@ function ShopCard({ service: s, pendingCount, onOpen }) {
   // open/runner_accepted/confirmed/finished/cancelled).
   const isErrandMode = s.interactionMode === 'errand';
   return (
-    <button onClick={onOpen} className="kx-shop-card">
+    <button onClick={onOpen} className={`kx-shop-card${isErrandMode ? ' kx-shop-card-gold' : ''}`}>
       <div className="kx-shop-card-media">
         {s.coverImageUrl ? (
           <img src={s.coverImageUrl} alt={s.name} />
@@ -701,6 +820,22 @@ function ShopCard({ service: s, pendingCount, onOpen }) {
       </div>
       <div className="kx-shop-card-body">
         <div className="kx-shop-card-name">{s.name}</div>
+        {/* Phase 5 rating-denormalize follow-up (Aug 12, 2026):
+            avgRating/reviewCount live directly on the service doc
+            (kept in sync by submitReview()'s transaction in
+            serviceSync.js) — already present in `s` from
+            subscribeAllServices, so this is zero extra reads, not a
+            per-card fetch. Hidden entirely until the shop has at
+            least one real review (reviewCount > 0) — a fresh "0.0 ★
+            (0)" badge on every never-reviewed shop would look broken,
+            not informative, on a marketplace this early in its life. */}
+        {typeof s.reviewCount === 'number' && s.reviewCount > 0 && (
+          <div className="kx-shop-card-rating">
+            <Star size={11} fill="var(--accent)" color="var(--accent)" />
+            <span>{Number(s.avgRating || 0).toFixed(1)}</span>
+            <span className="kx-shop-card-rating-count">({s.reviewCount})</span>
+          </div>
+        )}
         {s.locationText && <div className="kx-shop-card-location">{s.locationText}</div>}
         <div className="kx-shop-card-action">
           {isErrandMode ? 'Send errand request' : isInquiryMode ? 'Send inquiry' : `Queue: ${pendingCount ?? '…'}`}
@@ -719,6 +854,17 @@ function ShopCard({ service: s, pendingCount, onOpen }) {
           box-shadow: 0 10px 24px -12px rgba(0,0,0,0.18);
           border-color: rgba(var(--accentRGB), 0.3);
         }
+        /* Phase 8, item 1 — same gold/amber accent as the Level-1
+           category card and the Phase 7 Runner tag/strip, applied here
+           at the individual Runner shop-card level too. */
+        .kx-shop-card-gold {
+          border-color: rgba(180,83,9,0.3) !important;
+        }
+        .kx-shop-card-gold:hover {
+          border-color: rgba(180,83,9,0.5) !important;
+          box-shadow: 0 10px 24px -12px rgba(180,83,9,0.25) !important;
+        }
+        .kx-shop-card-gold .kx-shop-card-action { color: #b45309; }
         .kx-shop-card-media {
           position: relative;
           width: 100%; aspect-ratio: 4 / 3;
@@ -743,6 +889,8 @@ function ShopCard({ service: s, pendingCount, onOpen }) {
         .kx-shop-card-body { padding: 12px 14px 16px; display: flex; flex-direction: column; gap: 4px; }
         .kx-shop-card-name { font-size: 15px; font-weight: 700; color: var(--text); }
         .kx-shop-card-location { font-size: 12px; color: var(--muted); }
+        .kx-shop-card-rating { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+        .kx-shop-card-rating-count { font-weight: 500; color: var(--muted); }
         .kx-shop-card-action { font-size: 12.5px; color: var(--accent); font-weight: 600; margin-top: 6px; }
       `}</style>
     </button>

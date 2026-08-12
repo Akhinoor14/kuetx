@@ -9,7 +9,7 @@
 // can't import this file directly, so its CACHE_NAME must be bumped by
 // hand alongside APP_VERSION below — keep the two numbers identical.
 
-export const APP_VERSION = '4.2.5';
+export const APP_VERSION = '4.2.6';
 
 // Short display form used in compact UI (Footer, Sidebar): "4.1.0" -> "4.1"
 export const APP_VERSION_SHORT = APP_VERSION.split('.').slice(0, 2).join('.');

@@ -23,17 +23,21 @@
 // booking document with a fresh requestedAt, so queue order stays correct.
 
 import {
-  collection, collectionGroup, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, onSnapshot,
+  collection, collectionGroup, doc, getDoc, getDocs, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot,
   query, where, orderBy, serverTimestamp, runTransaction, writeBatch,
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
 import { queueBookingAlertWrite } from './bookingAlerts';
-import { withPromiseTimeout } from './safeSnapshot';
+import { withPromiseTimeout, retryableOnSnapshot } from './safeSnapshot';
 
 const serviceDocRef = (serviceId) => doc(db, 'services', serviceId);
 const servicesCollectionRef = () => collection(db, 'services');
 const bookingsCollectionRef = (serviceId) => collection(db, 'services', serviceId, 'bookings');
 const bookingDocRef = (serviceId, bookingId) => doc(db, 'services', serviceId, 'bookings', bookingId);
+// MULTI_CATEGORY_SERVICES_PLAN.md Phase 7 — see setServiceOpen /
+// syncErrandBroadcastState / subscribeActiveErrandBroadcasts below.
+const errandBroadcastDocRef = (serviceId) => doc(db, 'errandBroadcasts', serviceId);
+const errandBroadcastsCollectionRef = () => collection(db, 'errandBroadcasts');
 
 // A tiny id generator for offering sub-ids — offerings live inside the
 // service doc as an array (not a subcollection), since they're small,
@@ -168,6 +172,16 @@ export async function createService(providerUid, {
     coverImageUrl: null,
     offerings: [],
     revenueTotal: 0,
+    // Phase 5 rating-denormalize follow-up (Aug 12, 2026): every NEW
+    // service starts with these so firestore.rules' reviewer-update
+    // branch can always assume they exist and just do
+    // reviewCount + 1 — no "field might be missing" branch needed
+    // there. Services created BEFORE this change won't have these
+    // fields yet; see the same rules block's separate first-review
+    // branch (keys().hasAny(['reviewCount']) == false) for how that's
+    // handled without a one-off backfill script.
+    avgRating: 0,
+    reviewCount: 0,
     createdAt: serverTimestamp(),
   });
 
@@ -241,6 +255,60 @@ export async function setServiceOpen(serviceId, isOpen) {
   await updateDoc(serviceDocRef(serviceId), { isOpen });
   if (!isOpen) {
     await expirePendingBookingsForClosedShop(serviceId);
+  }
+  // MULTI_CATEGORY_SERVICES_PLAN.md Phase 7: errand-type services double
+  // as a persistent broadcast while isOpen is true — no separate on/off
+  // toggle, isOpen IS the broadcast state (per Founder's answer: "Persistent
+  // — যতক্ষণ isOpen থাকে ততক্ষণ সবার কাছে দেখা যায়", not a repeat-able
+  // action). Every other service type is a no-op here (errandBroadcasts
+  // is only ever read filtered by type=='errand' anyway, but skipping the
+  // write for non-errand types avoids a useless doc + avoids surprising a
+  // salon/hotel provider with an unrelated collection appearing under
+  // their uid).
+  await syncErrandBroadcastState(serviceId, isOpen);
+}
+
+/**
+ * Keeps errandBroadcasts/{serviceId} in sync with the service's own
+ * isOpen + name — one doc per errand service, always overwritten in
+ * place (merge: true), never appended to. This is deliberately NOT an
+ * event log: Founder's answer to "can a Runner broadcast repeatedly?"
+ * was persistent-while-open, not repeat-able pushes, so there is exactly
+ * one doc per service and it just reflects current state. Read-fanout
+ * cost this way is O(1) write regardless of student count — the expensive
+ * "write to every student" alternative the plan's Phase 7 notes flagged
+ * as a cost/rate-limit risk is avoided entirely; every student instead
+ * runs ONE shared onSnapshot query (see subscribeActiveErrandBroadcasts
+ * below), same population-broadcast shape as notices.audience.type=='all'.
+ *
+ * Silently no-ops for non-errand service types (checked via the service
+ * doc's own `type` field) and is best-effort — a failure here should
+ * never block the isOpen toggle itself from completing, so callers
+ * (setServiceOpen above) don't await-fail on it.
+ */
+async function syncErrandBroadcastState(serviceId, isOpen) {
+  try {
+    const snap = await getDoc(serviceDocRef(serviceId));
+    if (!snap.exists()) return;
+    const service = snap.data();
+    if (service.type !== 'errand') return;
+    await setDoc(errandBroadcastDocRef(serviceId), {
+      serviceId,
+      providerUid: service.providerUid,
+      serviceName: service.name || '',
+      // Phase 8, item 3: broadcast card shows title + money only, full
+      // detail lives on the service's own /services/:id page (which the
+      // card already links to) — priceNote is the service-level rate
+      // note (e.g. "৳20 delivery fee"), the closest "money" a
+      // persistent errand-open broadcast has, since this isn't tied to
+      // any single request the way a Runner-inbox item's proposedPrice
+      // is.
+      priceNote: service.priceNote || '',
+      active: Boolean(isOpen),
+      updatedAt: serverTimestamp(),
+    }, { merge: true });
+  } catch (err) {
+    console.warn('[serviceSync] syncErrandBroadcastState failed (non-fatal):', err);
   }
 }
 
@@ -337,7 +405,7 @@ export function addOfferingId() {
  */
 export async function updateServiceDetails(serviceId, {
   type, name, description, priceNote, locationText, hasDelivery, coverImageUrl,
-  locationLat, locationLng, locationAccuracy,
+  locationLat, locationLng, locationAccuracy, errandAcceptFrom,
 }) {
   const patch = {};
   // CATEGORY_SETUP_EDIT_UNIFY: category was previously write-once at
@@ -370,6 +438,17 @@ export async function updateServiceDetails(serviceId, {
   }
   if (locationLat !== undefined || locationLng !== undefined) {
     patch.locationSetAt = serverTimestamp();
+  }
+  // Phase 6 (SERVICE_BOOKING_REDESIGN_PLAN_PROMPT.md): errand-type
+  // (Runner) services only — who's allowed to send this Runner a
+  // request. Not type-checked against service.type here deliberately
+  // (a non-errand service just never reads this field, harmless if
+  // present) — firestore.rules' update rule is the actual gate on
+  // what values are acceptable, matching this file's usual pattern of
+  // trusting rules as the real enforcement point.
+  if (errandAcceptFrom !== undefined) {
+    patch.errandAcceptFrom = ['all', 'student', 'faculty'].includes(errandAcceptFrom)
+      ? errandAcceptFrom : 'all';
   }
   await updateDoc(serviceDocRef(serviceId), patch);
 }
@@ -438,7 +517,23 @@ export function withServiceDefaults(service) {
   if (!service) return service;
   const interactionMode = service.interactionMode || defaultInteractionModeForType(service.type);
   const status = service.status || (service.isOpen ? 'open' : 'closed');
-  return { ...service, interactionMode, status };
+  // Phase 5 rating-denormalize follow-up (Aug 12, 2026): services
+  // created before this change don't have avgRating/reviewCount on
+  // their doc yet — default them here so every UI reading these two
+  // fields (ShopCard, ServiceAbout) can assume they're always numbers,
+  // never undefined, without each callsite re-deriving its own
+  // fallback.
+  const avgRating = typeof service.avgRating === 'number' ? service.avgRating : 0;
+  const reviewCount = typeof service.reviewCount === 'number' ? service.reviewCount : 0;
+  // Phase 6: errand-type services created before this change don't
+  // have errandAcceptFrom yet — default to 'all' so createErrandRequest's
+  // gate-check and this same field's read in ErrandForm below can both
+  // always assume a definite string, never undefined.
+  const errandAcceptFrom = ['all', 'student', 'faculty'].includes(service.errandAcceptFrom)
+    ? service.errandAcceptFrom : 'all';
+  return {
+    ...service, interactionMode, status, avgRating, reviewCount, errandAcceptFrom,
+  };
 }
 
 /**
@@ -634,34 +729,80 @@ export async function createBooking(serviceId, {
       message: `${studentName || 'কেউ একজন'} ${service.name || 'আপনার শপ'}-এ নতুন প্রশ্ন/অনুরোধ পাঠিয়েছেন।`,
     });
   } else {
-    const offering = (service.offerings || []).find((o) => o.id === offeringId);
-    if (!offering || !offering.isAvailable) {
-      throw new Error('This offering is not currently available.');
-    }
+    // Phase 3 (SERVICE_BOOKING_REDESIGN_PLAN_PROMPT.md): booking-mode now
+    // accepts EITHER a single offeringId (salon — unchanged) OR a
+    // multi-item items[] array (hotel/food — new). Exactly one of the
+    // two paths is used per submission; interactionMode stays 'booking'
+    // either way (status flow, confirm/finish/cancel, everything below
+    // this function is untouched — this is purely which shape the doc's
+    // "what was ordered" field takes).
     const normalizedPreferredTime = preferredTime && preferredTime.date && preferredTime.time
       ? { date: preferredTime.date, time: preferredTime.time }
       : null;
 
-    // Gap 7 (now also enforced server-side, see firestore.rules'
-    // hasNoActiveBooking()): the booking doc and its activeBooking marker
-    // are written in the same batch, so a client can never end up with
-    // one but not the other. The rule's `create` check on the booking
-    // itself re-verifies the marker doesn't already exist, closing the
-    // race the earlier read-then-write check above couldn't fully close
-    // on its own — a second concurrent createBooking() call from the same
-    // student now fails at the rules layer even if both calls' own
-    // getDocs() check (above) raced and both saw "no active booking".
-    batch.set(bookingRef, {
-      studentUid,
-      studentName: String(studentName || '').trim(),
-      studentPhone: String(studentPhone || '').trim(),
-      offeringId,
-      preferredTime: normalizedPreferredTime,
-      requestedAt: serverTimestamp(),
-      status: 'pending',
-      cancelledBy: null,
-      confirmedSlot: null,
-    });
+    if (Array.isArray(items) && items.length > 0) {
+      // hotel/food path — same per-item normalization as the inquiry
+      // branch above (re-verify against the live offerings list server
+      // hasn't gone stale on, drop unavailable/zero-qty items), just
+      // written onto a 'pending' booking doc instead of an 'open'
+      // inquiry doc.
+      const offeringsById = new Map((service.offerings || []).map((o) => [o.id, o]));
+      const normalizedItems = items
+        .map((item) => {
+          const offering = offeringsById.get(item.offeringId);
+          const quantity = Number(item.quantity);
+          if (!offering || !offering.isAvailable || !(quantity > 0)) return null;
+          return {
+            offeringId: offering.id,
+            label: offering.label,
+            price: typeof offering.price === 'number' ? offering.price : null,
+            quantity,
+          };
+        })
+        .filter(Boolean);
+      if (normalizedItems.length === 0) {
+        throw new Error('অন্তত একটা আইটেম বেছে নিন যেটা এখন available।');
+      }
+      batch.set(bookingRef, {
+        studentUid,
+        studentName: String(studentName || '').trim(),
+        studentPhone: String(studentPhone || '').trim(),
+        items: normalizedItems,
+        offeringId: null,
+        preferredTime: normalizedPreferredTime,
+        requestedAt: serverTimestamp(),
+        status: 'pending',
+        cancelledBy: null,
+        confirmedSlot: null,
+      });
+    } else {
+      // salon path — unchanged single-offering shape.
+      const offering = (service.offerings || []).find((o) => o.id === offeringId);
+      if (!offering || !offering.isAvailable) {
+        throw new Error('This offering is not currently available.');
+      }
+
+      // Gap 7 (now also enforced server-side, see firestore.rules'
+      // hasNoActiveBooking()): the booking doc and its activeBooking marker
+      // are written in the same batch, so a client can never end up with
+      // one but not the other. The rule's `create` check on the booking
+      // itself re-verifies the marker doesn't already exist, closing the
+      // race the earlier read-then-write check above couldn't fully close
+      // on its own — a second concurrent createBooking() call from the same
+      // student now fails at the rules layer even if both calls' own
+      // getDocs() check (above) raced and both saw "no active booking".
+      batch.set(bookingRef, {
+        studentUid,
+        studentName: String(studentName || '').trim(),
+        studentPhone: String(studentPhone || '').trim(),
+        offeringId,
+        preferredTime: normalizedPreferredTime,
+        requestedAt: serverTimestamp(),
+        status: 'pending',
+        cancelledBy: null,
+        confirmedSlot: null,
+      });
+    }
   }
 
   // Same activeBooking marker doc for both modes — Phase 2's decision to
@@ -1150,9 +1291,13 @@ export async function finishBooking(serviceId, bookingId, priceForRevenue = 0) {
 
 /**
  * Student/Faculty creates a new errand request on a Runner's service
- * (plan §4.2). requesterRole is stored purely for display/analytics —
- * both roles are treated identically by the state machine and rules,
- * matching the plan's "role-নিরপেক্ষ" decision.
+ * (plan §4.2). requesterRole was originally stored purely for display/
+ * analytics; Phase 6 (SERVICE_BOOKING_REDESIGN_PLAN_PROMPT.md) made it
+ * load-bearing too — it's now also checked against the service's own
+ * errandAcceptFrom filter below (and re-checked server-side by
+ * firestore.rules' _errandRequesterAllowed()). The status machine and
+ * accept/confirm/finish transitions themselves still don't care which
+ * role a request came from — only this one create-time gate does.
  */
 export async function createErrandRequest(serviceId, {
   requesterUid, requesterName, requesterPhone, requesterRole = 'student',
@@ -1168,6 +1313,22 @@ export async function createErrandRequest(serviceId, {
   }
   if (!service.isOpen) {
     throw new Error('এই Runner এখন সক্রিয় নেই।');
+  }
+  // Phase 6 (SERVICE_BOOKING_REDESIGN_PLAN_PROMPT.md): provider-side
+  // "who can send me a request" filter. This check here is a friendly
+  // early error for the common case — firestore.rules' create rule on
+  // bookings/{bookingId} re-checks the exact same condition
+  // server-side (see _errandRequesterAllowed() there), so a client
+  // that skips this function entirely still can't bypass the filter.
+  const acceptFrom = ['all', 'student', 'faculty'].includes(service.errandAcceptFrom)
+    ? service.errandAcceptFrom : 'all';
+  const normalizedRequesterRole = requesterRole === 'faculty' ? 'faculty' : 'student';
+  if (acceptFrom !== 'all' && acceptFrom !== normalizedRequesterRole) {
+    throw new Error(
+      acceptFrom === 'faculty'
+        ? 'এই Runner শুধু Faculty-দের থেকে রিকোয়েস্ট নিচ্ছেন।'
+        : 'এই Runner শুধু Student-দের থেকে রিকোয়েস্ট নিচ্ছেন।',
+    );
   }
   const trimmedDescription = String(itemDescription || '').trim();
   if (!trimmedDescription) {
@@ -1442,4 +1603,250 @@ export async function finishErrandRequest(serviceId, bookingId) {
   } catch (e) {
     console.error('finishErrandRequest: activeBooking marker cleanup failed', e);
   }
+}
+
+// ---------------------------------------------------------------------
+// Phase 5 (SERVICE_BOOKING_REDESIGN_PLAN_PROMPT.md — Part B): shop
+// reviews. New path: services/{serviceId}/reviews/{reviewId}.
+//
+// "Successful completion" per interactionMode (plan's own open question,
+// resolved here — see Reviewer note #3 in the plan doc for why this
+// needed care):
+//   booking (salon/hotel) -> status === 'done'
+//   inquiry (medicine/bookstore/onlinemart) -> status === 'answered', OR
+//     status === 'closed' AND replyText is non-empty. Plain 'closed'
+//     alone is NOT enough — a student can close their own inquiry
+//     (closeInquiry() above) before the provider ever replies, so
+//     'closed' by itself doesn't prove the provider actually served
+//     them. Requiring replyText on the closed path closes that gap.
+//   errand -> status === 'finished'
+// This exact definition is re-implemented (not just referenced) inside
+// firestore.rules' _bookingIsReviewable() below — the rule is the real
+// enforcement point, so the two must be kept in sync if this ever
+// changes. See the "why not a Cloud Function" note there: this project
+// is permanently on the Firebase Spark (free) plan (see
+// docs/ACCOUNT_DELETION_PLAN.md for the same constraint already
+// documented elsewhere in this codebase) — Cloud Functions never
+// deploy here, so a callable-based submitReview was never a real
+// option for this project, regardless of what the plan doc originally
+// proposed as a "safer" default.
+//
+// Duplicate-review prevention: reviews/{reviewId} is written with a
+// deterministic doc id of `${bookingId}` (not auto-id) — a create on an
+// already-existing doc id fails outright, which is what actually stops
+// double-reviewing the same booking (the rules' create check also
+// re-confirms bookingId isn't already reviewed, but the deterministic
+// id is the primary, race-proof guard).
+// ---------------------------------------------------------------------
+
+/**
+ * Live-subscribes to a service's reviews, newest first. Read-only —
+ * writes only ever go through submitReview() below.
+ */
+export function subscribeServiceReviews(serviceId, callback) {
+  const q = query(
+    collection(db, 'services', serviceId, 'reviews'),
+    orderBy('createdAt', 'desc'),
+  );
+  return onSnapshot(q, (snap) => {
+    callback(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+  }, (err) => {
+    console.error('subscribeServiceReviews error', err);
+    callback([]);
+  });
+}
+
+/**
+ * Writes a review directly to Firestore (services/{serviceId}/reviews/
+ * {bookingId}) — firestore.rules' create rule re-derives "is this
+ * booking actually a completed one belonging to me" itself via a
+ * cross-collection get() into the bookings subcollection, so this is
+ * not a client-trusted write despite not going through a callable.
+ * reviewerName is passed in by the caller (ServiceDetail.jsx already
+ * has the signed-in student/faculty's display name from getProfile()/
+ * getFacultyProfile() for its own booking forms — reused here rather
+ * than this file reaching into store.js itself, keeping serviceSync.js
+ * profile-shape-agnostic same as the rest of the file). rating must be
+ * an integer 1-5; comment is optional, trimmed, capped at 500 chars
+ * (rule-side cap is the real enforcement, this is just a client-side
+ * mirror so oversized payloads don't even get sent).
+ *
+ * Rating denormalize follow-up (Aug 12, 2026): the same transaction
+ * also recomputes services/{serviceId}.avgRating/reviewCount, so
+ * Services.jsx's ShopCard can show a rating badge straight from the
+ * already-subscribed service doc with zero extra reads — no per-card
+ * review subscription needed. Uses runTransaction (not a plain batch)
+ * specifically so two students reviewing the same service at nearly
+ * the same moment don't race each other into an incorrect count —
+ * Firestore retries the whole transaction automatically if the
+ * service doc changed between its read and write, which a batch
+ * can't do (a batch's writes are unconditional once sent, so a lost
+ * update here would silently under-count). Throws a Firestore
+ * 'permission-denied' error (surfaced as-is to the caller) if the
+ * booking doesn't qualify or was already reviewed.
+ */
+export async function submitReview(serviceId, bookingId, { rating, comment = '', reviewerName = '' }) {
+  const uid = auth.currentUser?.uid;
+  if (!uid) throw new Error('Not signed in.');
+  const cleanRating = Math.max(1, Math.min(5, Math.round(Number(rating))));
+  const reviewRef = doc(db, 'services', serviceId, 'reviews', bookingId);
+  const svcRef = serviceDocRef(serviceId);
+
+  await runTransaction(db, async (tx) => {
+    const svcSnap = await tx.get(svcRef);
+    const svcData = svcSnap.exists() ? svcSnap.data() : {};
+    const prevCount = typeof svcData.reviewCount === 'number' ? svcData.reviewCount : 0;
+    const prevAvg = typeof svcData.avgRating === 'number' ? svcData.avgRating : 0;
+    const newCount = prevCount + 1;
+    // Weighted-average recompute: (old average × old count + this
+    // review's rating) / new count — standard running-average formula,
+    // no need to re-read every prior review doc for this.
+    const newAvg = (prevAvg * prevCount + cleanRating) / newCount;
+
+    tx.set(reviewRef, {
+      reviewerUid: uid,
+      reviewerName: String(reviewerName || '').trim().slice(0, 120),
+      rating: cleanRating,
+      comment: String(comment || '').trim().slice(0, 500),
+      bookingId,
+      createdAt: serverTimestamp(),
+    });
+    tx.update(svcRef, { avgRating: newAvg, reviewCount: newCount });
+  });
+}
+
+/**
+ * Finds bookings/inquiries/errands belonging to `uid` on `serviceId`
+ * that are (a) in a "successfully completed" state per the definition
+ * above, and (b) don't already have a review written for them yet — the
+ * candidate set the UI offers a "leave a review" prompt for. Client-side
+ * convenience only (drives whether the review form shows at all); the
+ * actual gate is submitReview's server-side re-check, so a stale/missing
+ * read here can never let an invalid review through, only hide a valid
+ * prompt in a rare race (e.g. review submitted in another tab).
+ */
+export async function getReviewableBookingsForUser(serviceId, uid) {
+  const bookingsSnap = await getDocs(
+    query(collection(db, 'services', serviceId, 'bookings'), where('studentUid', '==', uid)),
+  );
+  const requesterSnap = await getDocs(
+    query(collection(db, 'services', serviceId, 'bookings'), where('requesterUid', '==', uid)),
+  );
+  const seen = new Set();
+  const candidates = [];
+  [...bookingsSnap.docs, ...requesterSnap.docs].forEach((d) => {
+    if (seen.has(d.id)) return;
+    seen.add(d.id);
+    const b = d.data();
+    const isCompleted = b.status === 'done'
+      || b.status === 'finished'
+      || (b.status === 'answered')
+      || (b.status === 'closed' && !!(b.replyText || '').trim());
+    if (isCompleted) candidates.push({ id: d.id, ...b });
+  });
+  if (candidates.length === 0) return [];
+  const reviewsSnap = await getDocs(collection(db, 'services', serviceId, 'reviews'));
+  const reviewedBookingIds = new Set(reviewsSnap.docs.map((d) => d.data().bookingId));
+  return candidates.filter((b) => !reviewedBookingIds.has(b.id));
+}
+
+// ---------------------------------------------------------------------
+// Phase 7 (MULTI_CATEGORY_SERVICES_PLAN.md) — Errand broadcast, student side
+//
+// Founder's answers to the three open questions this phase needed before
+// implementation (২০২৬-০৮-১২ session):
+//   1. Delivery: BOTH — a highlighted card AND an in-app notification
+//      (bell/Notice panel item), not just one or the other.
+//   2. Repeat vs persistent: persistent. A Runner does not "send" a
+//      broadcast repeatedly — isOpen==true on an errand service simply
+//      IS the broadcast state for as long as it stays open. See
+//      syncErrandBroadcastState above, which is the only writer of
+//      errandBroadcasts/{serviceId} and fires from the existing
+//      setServiceOpen() toggle, nothing new on the Runner's UI.
+//   3. Opt-out scope: GLOBAL. One flag turns off every Runner's
+//      broadcast for that student, not a per-Runner mute list. See
+//      studentPreferences/{uid} below — deliberately a single boolean,
+//      not a set/array of excluded provider uids.
+// ---------------------------------------------------------------------
+
+const studentPreferencesDocRef = (uid) => doc(db, 'studentPreferences', uid);
+
+/**
+ * Live list of currently-active errand broadcasts (active: true), for
+ * rendering the gold-accent card(s) on Services.jsx / Dashboard.jsx
+ * (Phase 8 handles the visual treatment; this just supplies the data).
+ *
+ * Population-broadcast shape, same reasoning as notices.audience.type ==
+ * 'all': ONE shared query, not one write/read per student — this is what
+ * keeps the cost flat regardless of student count (the plan's Phase 7
+ * notes specifically flagged per-student fanout as the expensive,
+ * rate-limit-prone alternative).
+ *
+ * This function does NOT itself check the caller's role or opt-out flag
+ * — callers (Services.jsx, Dashboard.jsx, the Notice-panel wiring) are
+ * expected to gate on those first via shouldShowErrandBroadcasts() below,
+ * same "fetch broad, filter client-side" split used throughout
+ * groupSync.js's notice functions. Kept separate (rather than baking the
+ * role/opt-out check into this subscription) so a caller that already
+ * knows the answer (e.g. Dashboard.jsx already resolved the viewer's
+ * role once for other reasons) isn't forced to re-derive it here.
+ */
+export function subscribeActiveErrandBroadcasts(callback) {
+  if (!auth.currentUser || auth.currentUser.isAnonymous) return () => {};
+  return retryableOnSnapshot(
+    query(errandBroadcastsCollectionRef(), where('active', '==', true)),
+    (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+    (err) => {
+      console.error('[serviceSync] subscribeActiveErrandBroadcasts error:', err);
+      callback([]);
+    },
+  );
+}
+
+/**
+ * Client-side gate for whether errand broadcasts should be shown to this
+ * viewer at all: never for faculty (platform-level rule, not a
+ * provider-overridable setting — see the plan's Phase 7 draft notes),
+ * and never for a student who has globally opted out.
+ *
+ * `role` should be whatever the caller already resolved via
+ * accountRole.js elsewhere (kept as a plain param instead of re-deriving
+ * it here, same reasoning as subscribeActiveErrandBroadcasts above).
+ */
+export function shouldShowErrandBroadcasts(role, optedOut) {
+  if (role === 'faculty') return false;
+  return !optedOut;
+}
+
+/** One-shot read of the signed-in student's global opt-out flag. */
+export async function getErrandBroadcastOptOut(uid) {
+  if (!uid) return false;
+  const snap = await getDoc(studentPreferencesDocRef(uid));
+  return snap.exists() ? Boolean(snap.data().errandBroadcastOptOut) : false;
+}
+
+/** Live subscription to the same flag, for a settings toggle that reacts to changes made in another tab/device. */
+export function subscribeErrandBroadcastOptOut(uid, callback) {
+  if (!uid) return () => {};
+  return retryableOnSnapshot(
+    studentPreferencesDocRef(uid),
+    (snap) => callback(snap.exists() ? Boolean(snap.data().errandBroadcastOptOut) : false),
+    (err) => {
+      console.error('[serviceSync] subscribeErrandBroadcastOptOut error:', err);
+      callback(false);
+    },
+  );
+}
+
+/**
+ * Set the global opt-out flag ("আমাকে পাঠাইও না"). Global by design —
+ * this single boolean silences EVERY Runner's broadcast for this
+ * student, not just one; there is deliberately no per-provider variant
+ * (Founder's answer to open question #3).
+ */
+export async function setErrandBroadcastOptOut(uid, optOut) {
+  await setDoc(studentPreferencesDocRef(uid), {
+    errandBroadcastOptOut: Boolean(optOut),
+    updatedAt: serverTimestamp(),
+  }, { merge: true });
 }

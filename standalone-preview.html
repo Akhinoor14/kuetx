@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>KUETx Splash — Real Photo Cut</title>
+<style>
+  html, body {
+    margin: 0; padding: 0;
+    background: #0a0a0c;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  #stage {
+    position: relative;
+    width: 390px; height: 844px;
+    margin: 20px auto;
+    overflow: hidden;
+    border-radius: 28px;
+    box-shadow: 0 0 0 2px #222;
+    background: #0a0a0c;
+  }
+
+  .scene {
+    position: absolute; inset: 0;
+    background-size: cover;
+    background-position: center 40%;
+    opacity: 0;
+    transform: scale(1.06);
+    filter: brightness(0.92);
+    transition: opacity 1.3s ease, transform 4.5s cubic-bezier(0.22,1,0.36,1), filter 1.8s ease;
+  }
+  .scene.active {
+    opacity: 1;
+    transform: scale(1.0);
+    filter: brightness(1);
+  }
+  .scene.exit {
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+
+  #scene1 { background-image: url('scene-1-gate.webp'); background-position: 78% 15%; transform-origin: 60% 30%; }
+  #scene2 { background-image: url('scene-2-statue.webp'); background-position: center 35%; transform-origin: 50% 40%; }
+  #scene3 { background-image: url('scene-3-sign.webp'); background-position: 25% 55%; transform-origin: 40% 45%; }
+
+  /* consistent grade overlay across every photo so they read as one film, not three snapshots */
+  #gradeOverlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(8,12,22,0.42) 0%, rgba(8,12,22,0.16) 26%, rgba(8,12,22,0.12) 55%, rgba(5,9,9,0.55) 100%);
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 5;
+  }
+  #warmOverlay {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 40% at 50% 60%, rgba(255,170,90,0.14) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 2s ease;
+  }
+  #warmOverlay.show { opacity: 1; }
+
+  #vignette {
+    position: absolute; inset: 0;
+    box-shadow: inset 0 0 120px 40px rgba(3,5,10,0.55);
+    pointer-events: none;
+    z-index: 6;
+  }
+
+  /* film grain for cohesion / premium texture */
+  #grain {
+    position: absolute; inset: 0;
+    opacity: 0.05;
+    pointer-events: none;
+    z-index: 7;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  #curtain {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 45%, #0f2818 0%, #0a1710 70%, #060d09 100%);
+    opacity: 0;
+    transition: opacity 1s ease;
+    pointer-events: none;
+    z-index: 8;
+  }
+  #curtain.show { opacity: 1; }
+
+  #logoLayer {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 16px;
+    opacity: 0;
+    transform: scale(0.88);
+    transition: opacity 0.9s ease 0.1s, transform 1s cubic-bezier(0.34,1.56,0.64,1) 0.1s;
+    pointer-events: none;
+    z-index: 9;
+  }
+  #logoLayer.show { opacity: 1; transform: scale(1); }
+
+  #wordmark {
+    font-weight: 800;
+    font-size: 42px;
+    letter-spacing: -0.02em;
+    color: #f5f5f0;
+  }
+  #wordmark span { color: #4ade80; font-weight: 900; }
+
+  #tagline {
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.9s ease 0.5s;
+  }
+  #tagline.show { opacity: 1; }
+
+  .dot-row {
+    display: flex; gap: 6px; margin-top: 10px;
+    opacity: 0;
+    transition: opacity 0.6s ease 0.9s;
+  }
+  .dot-row.show { opacity: 1; }
+  .dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: #4ade80;
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+  .dot:nth-child(2) { animation-delay: 0.15s; }
+  .dot:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.25; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.15); }
+  }
+
+  #captionRow {
+    position: absolute; left: 0; right: 0; bottom: 46px;
+    text-align: center;
+    z-index: 6;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+  #captionRow.show { opacity: 1; }
+  #captionRow span {
+    color: rgba(255,255,255,0.75);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+  }
+
+  #replay {
+    position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%);
+    background: #16a34a; color: white; border: none;
+    padding: 8px 18px; border-radius: 20px; font-size: 13px; cursor: pointer;
+    font-weight: 600;
+  }
+  #timelabel {
+    position: fixed; top: 10px; left: 50%; transform: translateX(-50%);
+    color: #9ca3af; font-size: 12px; font-family: monospace;
+  }
+</style>
+</head>
+<body>
+
+<div id="timelabel">t = 0.00s</div>
+<div id="stage">
+  <div class="scene" id="scene1"></div>
+  <div class="scene" id="scene2"></div>
+  <div class="scene" id="scene3"></div>
+  <div id="gradeOverlay"></div>
+  <div id="warmOverlay"></div>
+  <div id="vignette"></div>
+  <div id="grain"></div>
+
+  <div id="captionRow"><span id="captionText">Khulna University of Engineering &amp; Technology</span></div>
+
+  <div id="curtain"></div>
+  <div id="logoLayer">
+    <svg width="80" height="80" viewBox="0 0 512 512">
+      <rect width="512" height="512" rx="112" fill="#14532d"/>
+      <ellipse cx="256" cy="256" rx="148" ry="132" fill="#16a34a"/>
+      <ellipse cx="256" cy="320" rx="118" ry="68" fill="#a3e635"/>
+      <ellipse cx="256" cy="152" rx="62" ry="54" fill="#a3e635"/>
+      <path d="M228 146 Q242 134 254 146" stroke="#15803d" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <path d="M258 146 Q272 134 284 146" stroke="#15803d" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <ellipse cx="148" cy="338" rx="48" ry="26" fill="#a3e635" transform="rotate(-30 148 338)"/>
+      <ellipse cx="364" cy="338" rx="48" ry="26" fill="#a3e635" transform="rotate(30 364 338)"/>
+      <rect x="196" y="98" width="120" height="20" rx="5" fill="#0f4c21"/>
+      <polygon points="192,98 320,98 296,72 224,72" fill="#166534"/>
+    </svg>
+    <div id="wordmark">KUET<span>x</span></div>
+    <div id="tagline">The digital ecosystem for KUET</div>
+    <div class="dot-row"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+  </div>
+</div>
+
+<button id="replay">Replay</button>
+
+<script>
+  const scene1 = document.getElementById('scene1');
+  const scene2 = document.getElementById('scene2');
+  const scene3 = document.getElementById('scene3');
+  const warmOverlay = document.getElementById('warmOverlay');
+  const curtain = document.getElementById('curtain');
+  const logoLayer = document.getElementById('logoLayer');
+  const tagline = document.getElementById('tagline');
+  const dotRow = document.querySelector('.dot-row');
+  const captionRow = document.getElementById('captionRow');
+  const timelabel = document.getElementById('timelabel');
+
+  let startTime = null;
+  function tick(ts) {
+    if (!startTime) startTime = ts;
+    const t = (ts - startTime) / 1000;
+    timelabel.textContent = 't = ' + t.toFixed(2) + 's';
+    if (t < 6.2) requestAnimationFrame(tick);
+  }
+
+  function run() {
+    [scene1, scene2, scene3, warmOverlay, curtain, logoLayer, tagline, dotRow, captionRow].forEach(el => {
+      el.classList.remove('active','exit','show');
+    });
+    startTime = null;
+    requestAnimationFrame(tick);
+
+    requestAnimationFrame(() => {
+      // Beat 1 (0.0 - 2.1s): Main Gate, dawn-blue, camera pushes in slowly
+      setTimeout(() => { scene1.classList.add('active'); }, 30);
+      setTimeout(() => { captionRow.classList.add('show'); }, 500);
+      setTimeout(() => { captionRow.classList.remove('show'); }, 1900);
+
+      // Beat 2 (2.1 - 4.1s): cut to Liberation War statue, golden hour, warm light blooms in
+      setTimeout(() => { scene1.classList.add('exit'); }, 2100);
+      setTimeout(() => { scene2.classList.add('active'); warmOverlay.classList.add('show'); }, 2100);
+      setTimeout(() => {
+        document.getElementById('captionText').textContent = 'A campus community, always connected';
+        captionRow.classList.add('show');
+      }, 2700);
+      setTimeout(() => { captionRow.classList.remove('show'); }, 3900);
+
+      // Beat 3 (4.1 - 5.3s): cut to KUET sign at dusk — brand reveal beat, lights glowing
+      setTimeout(() => { scene2.classList.add('exit'); }, 4100);
+      setTimeout(() => { scene3.classList.add('active'); }, 4100);
+
+      // Beat 4 (5.3 - 6.0s): curtain + logo settle
+      setTimeout(() => { curtain.classList.add('show'); }, 5300);
+      setTimeout(() => { logoLayer.classList.add('show'); }, 5550);
+      setTimeout(() => { tagline.classList.add('show'); }, 5950);
+      setTimeout(() => { dotRow.classList.add('show'); }, 6150);
+    });
+  }
+
+  document.getElementById('replay').addEventListener('click', run);
+  run();
+</script>
+
+</body>
+</html>

@@ -41,7 +41,7 @@ export default defineConfig({
     swCacheVersionPlugin(),
     // VitePWA({
     //   registerType: 'autoUpdate',
-    //   includeAssets: ['favicon.svg', 'icon-192.svg', 'icon-512.svg'],
+    //   includeAssets: ['favicon.ico', 'icon-192.png', 'icon-512.png'],
     //   manifest: { /* ...original manifest omitted for brevity... */ },
     //   workbox: { /* ... */ },
     //   devOptions: { enabled: true },

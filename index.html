@@ -11,9 +11,10 @@
     <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin />
     <link rel="dns-prefetch" href="https://firestore.googleapis.com" />
     <link rel="manifest" href="/manifest.json" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" href="/icon-192.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="KUETx" />
@@ -23,11 +24,11 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.kuetx.com/" />
     <meta property="og:site_name" content="KUETx" />
-    <meta property="og:image" content="https://www.kuetx.com/icon-512.svg" />
+    <meta property="og:image" content="https://www.kuetx.com/og-image.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="KUETx — The Digital Ecosystem for KUET" />
     <meta name="twitter:description" content="Connecting students, Class Representatives, faculty, and local service providers at Khulna University of Engineering & Technology. Free forever." />
-    <meta name="twitter:image" content="https://www.kuetx.com/icon-512.svg" />
+    <meta name="twitter:image" content="https://www.kuetx.com/og-image.png" />
     <link rel="canonical" href="https://www.kuetx.com/" />
     <!-- offline: no external preconnect to fonts -->
     <!-- Use system fonts for full offline support -->
@@ -70,6 +71,128 @@
         #app-shell-skeleton .sk-sidebar { display: none; }
       }
     </style>
+
+    <!-- ── Cold-start splash (real-photo cinematic sequence) ────────────────
+         Shown ONCE per browser session (sessionStorage flag below) on the
+         very first cold load — NOT on every internal route change, and NOT
+         on repeat visits within the same tab session, so it never gets in
+         the way of someone who's already using the app. It sits ON TOP OF
+         #app-shell-skeleton (higher z-index) and fades itself out after
+         ~5.6s or as soon as React has mounted real content, whichever the
+         person's device/network allows — it never blocks or delays the
+         real app underneath; #app-shell-skeleton and React are both loading
+         normally the whole time behind it.
+         All three photos are local files under /public/splash/ (see
+         STATIC_ASSETS in sw.js — they're precached there for offline use),
+         graded/cropped/compressed ahead of time, no runtime image
+         processing, no external requests. Respects prefers-reduced-motion
+         by skipping straight to a static logo instead of the photo
+         sequence. -->
+    <style>
+      #kx-splash {
+        position: fixed; inset: 0; z-index: 10000;
+        background: #0a0a0c;
+        overflow: hidden;
+        opacity: 1;
+        transition: opacity 0.7s ease;
+      }
+      #kx-splash.kx-hide {
+        opacity: 0;
+        pointer-events: none;
+      }
+      #kx-splash .kx-scene {
+        position: absolute; inset: 0;
+        background-size: cover;
+        background-repeat: no-repeat;
+        opacity: 0;
+        transform: scale(1.06);
+        filter: brightness(0.92);
+        transition: opacity 1.3s ease, transform 4.5s cubic-bezier(0.22,1,0.36,1), filter 1.8s ease;
+      }
+      #kx-splash .kx-scene.kx-active { opacity: 1; transform: scale(1); filter: brightness(1); }
+      #kx-splash .kx-scene.kx-exit { opacity: 0; transition: opacity 1.2s ease; }
+      #kx-scene1 { background-image: url('/splash/scene-1-gate.webp'); background-position: 78% 15%; transform-origin: 60% 30%; }
+      #kx-scene2 { background-image: url('/splash/scene-2-statue.webp'); background-position: center 35%; transform-origin: 50% 40%; }
+      #kx-scene3 { background-image: url('/splash/scene-3-sign.webp'); background-position: center 45%; transform-origin: 50% 45%; }
+
+      #kx-gradeOverlay {
+        position: absolute; inset: 0;
+        background: linear-gradient(180deg, rgba(8,12,22,0.42) 0%, rgba(8,12,22,0.16) 26%, rgba(8,12,22,0.12) 55%, rgba(5,9,9,0.55) 100%);
+        mix-blend-mode: multiply;
+        pointer-events: none;
+      }
+      #kx-warmOverlay {
+        position: absolute; inset: 0;
+        background: radial-gradient(ellipse 60% 40% at 50% 60%, rgba(255,170,90,0.14) 0%, transparent 70%);
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 2s ease;
+      }
+      #kx-warmOverlay.kx-show { opacity: 1; }
+      #kx-vignette {
+        position: absolute; inset: 0;
+        box-shadow: inset 0 0 120px 40px rgba(3,5,10,0.55);
+        pointer-events: none;
+      }
+      #kx-caption {
+        position: absolute; left: 16px; right: 16px; bottom: 12%;
+        text-align: center;
+        opacity: 0;
+        transition: opacity 0.8s ease;
+      }
+      #kx-caption.kx-show { opacity: 1; }
+      #kx-caption span {
+        color: rgba(255,255,255,0.75);
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+      }
+      #kx-curtain {
+        position: absolute; inset: 0;
+        background: radial-gradient(ellipse at 50% 45%, #0f2818 0%, #0a1710 70%, #060d09 100%);
+        opacity: 0;
+        transition: opacity 1s ease;
+      }
+      #kx-curtain.kx-show { opacity: 1; }
+      #kx-logoLayer {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        gap: 16px;
+        opacity: 0;
+        transform: scale(0.88);
+        transition: opacity 0.9s ease 0.1s, transform 1s cubic-bezier(0.34,1.56,0.64,1) 0.1s;
+      }
+      #kx-logoLayer.kx-show { opacity: 1; transform: scale(1); }
+      #kx-wordmark { font-weight: 800; font-size: 40px; letter-spacing: -0.02em; color: #f5f5f0; }
+      #kx-wordmark span { color: #4ade80; font-weight: 900; }
+      #kx-tagline {
+        font-size: 12.5px; color: rgba(255,255,255,0.5);
+        letter-spacing: 0.06em; text-transform: uppercase;
+        opacity: 0; transition: opacity 0.9s ease 0.5s;
+      }
+      #kx-tagline.kx-show { opacity: 1; }
+      #kx-dots { display: flex; gap: 6px; margin-top: 10px; opacity: 0; transition: opacity 0.6s ease 0.9s; }
+      #kx-dots.kx-show { opacity: 1; }
+      #kx-dots span {
+        width: 5px; height: 5px; border-radius: 50%;
+        background: #4ade80;
+        animation: kx-pulse 1.2s ease-in-out infinite;
+      }
+      #kx-dots span:nth-child(2) { animation-delay: 0.15s; }
+      #kx-dots span:nth-child(3) { animation-delay: 0.3s; }
+      @keyframes kx-pulse {
+        0%, 100% { opacity: 0.25; transform: scale(0.8); }
+        50% { opacity: 1; transform: scale(1.15); }
+      }
+      /* Static fallback: prefers-reduced-motion skips the photo sequence
+         entirely and shows only the logo, faded in once, no motion. */
+      @media (prefers-reduced-motion: reduce) {
+        #kx-splash .kx-scene, #kx-warmOverlay, #kx-caption, #kx-curtain { display: none !important; }
+        #kx-splash { background: #14532d; }
+        #kx-logoLayer, #kx-tagline, #kx-dots { transition-duration: 0.01ms !important; }
+      }
+    </style>
     <script>
       (function () {
         try {
@@ -108,7 +231,7 @@
           "operatingSystem": "Web",
           "url": "https://www.kuetx.com/",
           "description": "KUETx is the digital ecosystem for Khulna University of Engineering & Technology (KUET) — connecting students, Class Representatives (CRs), faculty members, and local service providers in one platform. Covers academic management, attendance and GPA tracking, CR administrative tools, a faculty portal, a campus services and provider marketplace, and a shared question bank.",
-          "image": "https://www.kuetx.com/icon-512.svg",
+          "image": "https://www.kuetx.com/icon-512.png",
           "featureList": [
             "Academic management (attendance, GPA, CGPA tracking)",
             "Class Representative (CR) administrative tools",
@@ -129,7 +252,7 @@
           "url": "https://www.kuetx.com/",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://www.kuetx.com/icon-512.svg",
+            "url": "https://www.kuetx.com/icon-512.png",
             "width": "512",
             "height": "512"
           },
@@ -164,6 +287,100 @@
   </head>
   <body>
     <div id="root"><h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">KUETx — The Digital Ecosystem for KUET</h1><div id="app-shell-skeleton"><div class="sk-sidebar"></div><div class="sk-main"><div class="sk-topbar"></div></div></div></div>
+
+    <script>
+      // Only paint the cinematic splash once per browser session — first
+      // cold load of the tab. Every subsequent internal navigation or
+      // refresh-within-session skips straight to #app-shell-skeleton like
+      // before, so returning users are never slowed down by a sequence
+      // they've already seen. sessionStorage (not localStorage) is
+      // deliberate: a brand-new tab/session gets the splash again, but
+      // reloading the SAME tab repeatedly during normal use does not.
+      (function () {
+        try {
+          if (sessionStorage.getItem('kx_splash_shown')) return;
+          sessionStorage.setItem('kx_splash_shown', '1');
+        } catch (e) {
+          // sessionStorage unavailable (private mode) — fall through and
+          // show the splash anyway, just won't be remembered for next tab.
+        }
+
+        var el = document.createElement('div');
+        el.id = 'kx-splash';
+        el.innerHTML =
+          '<div class="kx-scene" id="kx-scene1"></div>' +
+          '<div class="kx-scene" id="kx-scene2"></div>' +
+          '<div class="kx-scene" id="kx-scene3"></div>' +
+          '<div id="kx-gradeOverlay"></div>' +
+          '<div id="kx-warmOverlay"></div>' +
+          '<div id="kx-vignette"></div>' +
+          '<div id="kx-caption"><span id="kx-captionText">Khulna University of Engineering &amp; Technology</span></div>' +
+          '<div id="kx-curtain"></div>' +
+          '<div id="kx-logoLayer">' +
+            '<img src="/icon-512.png" width="88" height="88" alt="" style="box-shadow:0 8px 28px rgba(0,0,0,0.35)" />' +
+            '<div id="kx-wordmark">KUET<span>x</span></div>' +
+            '<div id="kx-tagline">The digital ecosystem for KUET</div>' +
+            '<div id="kx-dots"><span></span><span></span><span></span></div>' +
+          '</div>';
+        document.body.appendChild(el);
+
+        var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var scene1 = document.getElementById('kx-scene1');
+        var scene2 = document.getElementById('kx-scene2');
+        var scene3 = document.getElementById('kx-scene3');
+        var warmOverlay = document.getElementById('kx-warmOverlay');
+        var caption = document.getElementById('kx-caption');
+        var captionText = document.getElementById('kx-captionText');
+        var curtain = document.getElementById('kx-curtain');
+        var logoLayer = document.getElementById('kx-logoLayer');
+        var tagline = document.getElementById('kx-tagline');
+        var dots = document.getElementById('kx-dots');
+
+        function hideSplash() {
+          el.classList.add('kx-hide');
+          setTimeout(function () {
+            if (el.parentNode) el.parentNode.removeChild(el);
+          }, 750);
+        }
+
+        if (reduceMotion) {
+          // Static fallback: no photo sequence, logo appears once, short hold, done.
+          logoLayer.classList.add('kx-show');
+          tagline.classList.add('kx-show');
+          dots.classList.add('kx-show');
+          setTimeout(hideSplash, 1400);
+          return;
+        }
+
+        requestAnimationFrame(function () {
+          setTimeout(function () { scene1.classList.add('kx-active'); }, 30);
+          setTimeout(function () { caption.classList.add('kx-show'); }, 500);
+          setTimeout(function () { caption.classList.remove('kx-show'); }, 1900);
+
+          setTimeout(function () { scene1.classList.add('kx-exit'); }, 2100);
+          setTimeout(function () { scene2.classList.add('kx-active'); warmOverlay.classList.add('kx-show'); }, 2100);
+          setTimeout(function () {
+            captionText.textContent = 'A campus community, always connected';
+            caption.classList.add('kx-show');
+          }, 2700);
+          setTimeout(function () { caption.classList.remove('kx-show'); }, 3900);
+
+          setTimeout(function () { scene2.classList.add('kx-exit'); }, 4100);
+          setTimeout(function () { scene3.classList.add('kx-active'); }, 4100);
+
+          setTimeout(function () { curtain.classList.add('kx-show'); }, 5300);
+          setTimeout(function () { logoLayer.classList.add('kx-show'); }, 5550);
+          setTimeout(function () { tagline.classList.add('kx-show'); }, 5950);
+          setTimeout(function () { dots.classList.add('kx-show'); }, 6150);
+
+          // Hard cap: always resolve to the real app by ~7s even if the
+          // browser is under load and timers drift — the splash must never
+          // be able to strand someone indefinitely in front of it.
+          setTimeout(hideSplash, 7000);
+        });
+      })();
+    </script>
+
     <script type="module" src="/src/main.jsx"></script>
     <!-- FullCalendar removed: using local simple calendar component instead -->
     <script>

@@ -319,14 +319,16 @@ export function Navbar({ onMenuClick }) {
     preloadSiblings(siblings);
   }, [siblings]);
 
-  // Mobile chip-strip pages: the topbar scrolls away naturally with the
-  // page (position: static, see index.css's body.has-mobile-chip-strip
-  // rule) instead of staying pinned, and the chip strip below it
-  // (always position: sticky; top: 0) catches itself at the very top
-  // the moment the topbar has scrolled past. Scrolling back up reverses
-  // for free once the page nears its own top again. This is plain CSS
-  // sticky-positioning behavior — the only thing JS needs to do is flag
-  // which pages are in this mode, via a body class the CSS can key off.
+  // hasChipStrip still drives the topbar-page-title visibility below
+  // (chip strip already shows the active page, so the redundant title
+  // is hidden), and the body class stays in case other CSS keys off it.
+  // BUGFIX (person requested): topbar used to go position:static on
+  // mobile chip-strip pages so it would scroll away and the chip strip
+  // would catch itself at the top — person found that appear/disappear
+  // motion distracting and asked for the topbar to just stay fixed
+  // always. See index.css's .topbar comment — it's now sticky
+  // unconditionally on mobile too, and .topbar-mobile-tabs sticks at
+  // top: 56px (right below it) instead of top: 0.
   const hasChipStrip = !!siblingGroups || (siblings && siblings.length > 1);
   useEffect(() => {
     document.body.classList.toggle('has-mobile-chip-strip', !!hasChipStrip);

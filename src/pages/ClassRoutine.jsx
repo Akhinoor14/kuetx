@@ -4,6 +4,7 @@ import { CalendarDays, Clock3, Copy, Download, Users, PowerOff, Power, X } from 
 import Modal from '../components/Modal';
 import { getBDNow } from '../store/store';
 import { useClassManagementState, ROUTINE_DAY_DEFS } from './useClassManagementState';
+import { ALTERNATE_TEACHER } from './Schedule';
 
 /**
  * Independent "Routine" page — split out of the old ClassManagement.jsx
@@ -201,7 +202,13 @@ export default function ClassRoutine() {
                                   Class Setup until this slot is individually re-saved. Falling
                                   back to entry.teacherName keeps old/local-mode entries that
                                   predate this working the same as before. */}
-                              {(s.effectiveCourseTeacherMap?.[entry.courseId] || []).join(', ') || entry.teacherName || 'Teacher not set'}{entry.room ? ` · Room ${entry.room}` : ''}{entry.type ? ` · ${entry.type}` : ''}
+                              {/* Rotating-slot entries (teacherName === ALTERNATE_TEACHER) are
+                                  checked BEFORE the live-registry lookup below, otherwise the
+                                  join(', ') of both course teachers would silently mask the
+                                  "Alternative" flag the CR deliberately set. */}
+                              {entry.teacherName === ALTERNATE_TEACHER
+                                ? 'Alternative'
+                                : ((s.effectiveCourseTeacherMap?.[entry.courseId] || []).join(', ') || entry.teacherName || 'Teacher not set')}{entry.room ? ` · Room ${entry.room}` : ''}{entry.type ? ` · ${entry.type}` : ''}
                             </div>
                           </div>
                           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flexShrink: 0 }}>

@@ -12,7 +12,10 @@ import DeleteAccountModal from '../components/DeleteAccountModal';
 import { APP_VERSION } from '../version';
 import { confirmDialog } from '../lib/dialog';
 import { useIsProvider } from '../hooks/useIsProvider';
+import { useIsFaculty } from '../hooks/useIsFaculty';
 import { useProviderLang } from '../hooks/useProviderLang';
+import { auth } from '../lib/firebase';
+import { getErrandBroadcastOptOut, setErrandBroadcastOptOut } from '../lib/serviceSync';
 
 const THEME_ICON = { light: Sun, milky: Droplets, dark: Moon };
 
@@ -31,6 +34,8 @@ function StatusDot({ color }) {
 export default function Settings() {
   const { themeId, setTheme } = useTheme();
   const { isProvider } = useIsProvider();
+  const { isFaculty, isFounderBypass } = useIsFaculty();
+  const isFacultyViewer = isFaculty || isFounderBypass;
   const { t, lang, setLang } = useProviderLang();
   const [msg, setMsg] = useState('');
   const [msgType, setMsgType] = useState('success');
@@ -45,6 +50,34 @@ export default function Settings() {
   const [loggingOut, setLoggingOut] = useState(false);
   const [sendingReset, setSendingReset] = useState(false);
   const [showDeleteAccount, setShowDeleteAccount] = useState(false);
+  // MULTI_CATEGORY_SERVICES_PLAN.md Phase 7 — global "আমাকে পাঠাইও না"
+  // toggle. Loaded once on mount (not a live subscription — this page
+  // is the only writer, so there's no other-tab-changed-it case worth a
+  // second listener here, same reasoning NotificationPanel.jsx used for
+  // its own one-shot read of the same flag).
+  const [errandBroadcastOptOut, setErrandBroadcastOptOutState] = useState(false);
+  const [errandOptOutLoading, setErrandOptOutLoading] = useState(false);
+  useEffect(() => {
+    const uid = auth.currentUser?.uid;
+    if (!uid || isProvider || isFacultyViewer) return;
+    getErrandBroadcastOptOut(uid).then(setErrandBroadcastOptOutState).catch(() => {});
+  }, [isProvider, isFacultyViewer]);
+
+  const handleToggleErrandBroadcastOptOut = async () => {
+    const uid = auth.currentUser?.uid;
+    if (!uid || errandOptOutLoading) return;
+    const next = !errandBroadcastOptOut;
+    setErrandOptOutLoading(true);
+    setErrandBroadcastOptOutState(next); // optimistic
+    try {
+      await setErrandBroadcastOptOut(uid, next);
+    } catch (err) {
+      setErrandBroadcastOptOutState(!next); // revert on failure
+      flash('✗ সেটিং সেভ করা যায়নি, আবার চেষ্টা করুন', 'error');
+    } finally {
+      setErrandOptOutLoading(false);
+    }
+  };
 
   const handleSignOut = async () => {
     const confirmMsg = isProvider
@@ -320,6 +353,38 @@ export default function Settings() {
           })}
         </div>
       </div>
+
+      {!isFacultyViewer && (
+        <div className="card" style={{ marginBottom: 12 }}>
+          <SectionLabel>Notifications</SectionLabel>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+            <div>
+              <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text)' }}>Runner broadcasts</div>
+              <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>
+                যখন কোনো Runner (Pick and Drop) open থাকে, তার একটা card/notification দেখাও। বন্ধ করলে সব Runner-এর broadcast-ই বন্ধ হয়ে যাবে।
+              </div>
+            </div>
+            <button
+              onClick={handleToggleErrandBroadcastOptOut}
+              disabled={errandOptOutLoading}
+              aria-pressed={!errandBroadcastOptOut}
+              style={{
+                flexShrink: 0,
+                width: 44, height: 26, borderRadius: 999, border: 'none', cursor: errandOptOutLoading ? 'default' : 'pointer',
+                background: errandBroadcastOptOut ? 'var(--border)' : 'var(--accent)',
+                position: 'relative', transition: 'background 0.15s ease',
+                opacity: errandOptOutLoading ? 0.6 : 1,
+              }}
+            >
+              <span style={{
+                position: 'absolute', top: 3, left: errandBroadcastOptOut ? 3 : 21,
+                width: 20, height: 20, borderRadius: '50%', background: '#fff',
+                transition: 'left 0.15s ease', boxShadow: '0 1px 3px rgba(0,0,0,0.25)',
+              }} />
+            </button>
+          </div>
+        </div>
+      )}
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16, marginBottom: 12 }}>
 

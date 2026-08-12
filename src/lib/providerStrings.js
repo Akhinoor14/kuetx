@@ -85,6 +85,9 @@ export const providerStrings = {
     'dashboard.errand.cancelAccept': 'বাতিল করুন',
     'dashboard.errand.finish': 'সম্পন্ন হয়েছে বলে মার্ক করুন',
     'dashboard.errand.genericError': 'সমস্যা হয়েছে।',
+    'dashboard.errand.showMore': 'বিস্তারিত দেখুন',
+    'dashboard.errand.showLess': 'কম দেখাও',
+    'dashboard.errand.broadcastHint': 'Open থাকলে সব Student আপনার শপ একটা ব্রডকাস্ট কার্ড/নোটিফিকেশন হিসেবে দেখবে।',
 
     // ---- ProviderMyShopHub.jsx ----
     'shopHub.title': 'আমার দোকান',
@@ -150,6 +153,12 @@ export const providerStrings = {
     'shopSettings.locationLabel': 'লোকেশন (ঐচ্ছিক, ফ্রি-টেক্সট)',
     'shopSettings.locationPlaceholder': 'যেমন: Hall-3 Gate, Fazlul Haque Hall market',
     'shopSettings.deliveryLabel': 'হোম ডেলিভারি আছে',
+    // Phase 6 (SERVICE_BOOKING_REDESIGN_PLAN_PROMPT.md): errand-type
+    // (Runner) services only — who can send this Runner a request.
+    'shopSettings.acceptFromLabel': 'কার থেকে রিকোয়েস্ট নেবেন',
+    'shopSettings.acceptFromAll': 'সবাই',
+    'shopSettings.acceptFromStudent': 'শুধু Student',
+    'shopSettings.acceptFromFaculty': 'শুধু Faculty',
     'shopSettings.saveError': 'সেভ করতে সমস্যা হয়েছে।',
     'shopSettings.saving': 'সেভ হচ্ছে…',
     'shopSettings.save': 'সেভ করুন',
@@ -362,6 +371,9 @@ export const providerStrings = {
     'dashboard.errand.cancelAccept': 'Cancel',
     'dashboard.errand.finish': 'Mark as finished',
     'dashboard.errand.genericError': 'Something went wrong.',
+    'dashboard.errand.showMore': 'See details',
+    'dashboard.errand.showLess': 'Show less',
+    'dashboard.errand.broadcastHint': 'While open, every student sees your shop as a broadcast card/notification.',
 
     // ---- ProviderMyShopHub.jsx ----
     'shopHub.title': 'My Shop',
@@ -427,6 +439,12 @@ export const providerStrings = {
     'shopSettings.locationLabel': 'Location (optional, free text)',
     'shopSettings.locationPlaceholder': 'e.g. Hall-3 Gate, Fazlul Haque Hall market',
     'shopSettings.deliveryLabel': 'Home delivery available',
+    // Phase 6 (SERVICE_BOOKING_REDESIGN_PLAN_PROMPT.md): errand-type
+    // (Runner) services only — who can send this Runner a request.
+    'shopSettings.acceptFromLabel': 'Accept requests from',
+    'shopSettings.acceptFromAll': 'Everyone',
+    'shopSettings.acceptFromStudent': 'Students only',
+    'shopSettings.acceptFromFaculty': 'Faculty only',
     'shopSettings.saveError': 'Failed to save.',
     'shopSettings.saving': 'Saving…',
     'shopSettings.save': 'Save',

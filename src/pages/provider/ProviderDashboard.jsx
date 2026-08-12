@@ -17,7 +17,7 @@
 // and letting the owner enter a real price when finishing a booking
 // (previously hardcoded to 0, so revenueTotal never actually moved).
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Store, Check, X as XIcon, Clock, MessageCircle, Info,
@@ -37,6 +37,20 @@ import {
 } from '../../lib/serviceSync';
 import { getCategorySetupConfig } from '../../lib/serviceCategoryConfig';
 import { useProviderLang } from '../../hooks/useProviderLang';
+
+// Phase 3 (SERVICE_BOOKING_REDESIGN_PLAN_PROMPT.md): a booking doc can
+// now be either single-offering (offeringId, salon) or multi-item
+// (items[], hotel/food — new this phase). Both PendingBookingCard and
+// the confirmed-bookings list below previously assumed offeringId
+// always existed (via their own local offeringLabel(b.offeringId)
+// closures) — that would render "unknown offering" for every hotel
+// order otherwise. This is the shared fallback used by both instead.
+function bookingSummaryText(booking, offerings, offeringLabelFn) {
+  if (Array.isArray(booking.items) && booking.items.length > 0) {
+    return booking.items.map((item) => `${item.label} × ${item.quantity}`).join(', ');
+  }
+  return offeringLabelFn(booking.offeringId);
+}
 
 function formatWhen(ts) {
   if (!ts) return '';
@@ -64,7 +78,7 @@ export default function ProviderDashboard({ providerProfile }) {
   const stillLoading = services === null;
 
   return (
-    <div style={{ padding: '20px 16px', maxWidth: 640, margin: '0 auto' }}>
+    <div className="kx-provider-dashboard" style={{ padding: '20px 16px', maxWidth: 640, margin: '0 auto' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
         <div style={{
           width: 44, height: 44, borderRadius: 12, background: 'var(--accentSoft)',
@@ -93,6 +107,22 @@ export default function ProviderDashboard({ providerProfile }) {
       {!stillLoading && myService && (
         <ServiceManager service={myService} />
       )}
+
+      {/* Desktop widening: this page had no @media rules at all before —
+          the 640px inline maxWidth kept it mobile-narrow even on a large
+          screen, leaving most of the viewport empty. Mobile layout
+          (padding/spacing/font-size, all inline styles below) is
+          untouched; only the outer column's cap grows on wider
+          viewports, same breakpoint convention Services.jsx already
+          uses (480px / 900px). */}
+      <style>{`
+        @media (min-width: 900px) {
+          .kx-provider-dashboard { max-width: 880px !important; }
+        }
+        @media (min-width: 1280px) {
+          .kx-provider-dashboard { max-width: 1040px !important; }
+        }
+      `}</style>
     </div>
   );
 }
@@ -328,6 +358,25 @@ function ServiceManager({ service: rawService }) {
         closedLabel={t('dashboard.shopClosed')}
       />
 
+      {/* Phase 7 follow-up: this toggle IS the broadcast trigger for an
+          errand-type (Runner) service (see syncErrandBroadcastState in
+          serviceSync.js) — opening the shop now surfaces it to every
+          student as a broadcast card + notification, which wasn't true
+          before Phase 7 shipped. The plan flagged this as an optional
+          gap (a Runner had no way to know "open" now means "public
+          announcement", not just an internal-looking status flag) —
+          worth a small explicit note here rather than leaving it silent. */}
+      {isErrandMode && (
+        <div style={{
+          fontSize: 12, color: 'var(--muted)', marginTop: -8, padding: '0 4px',
+          display: 'flex', alignItems: 'center', gap: 6,
+        }}
+        >
+          <Info size={13} style={{ flexShrink: 0 }} />
+          {t('dashboard.errand.broadcastHint')}
+        </div>
+      )}
+
       {/* MULTI_CATEGORY_SERVICES_PLAN.md Phase 5 / Phase 4 (Errand Runner
           plan §4): mutually exclusive by interactionMode — booking keeps
           PendingQueue + ConfirmedList + revenue exactly as before,
@@ -536,7 +585,7 @@ function PendingQueue({ serviceId, bookings, offerings }) {
           key={b.id}
           serviceId={serviceId}
           booking={b}
-          offeringLabel={offeringLabel(b.offeringId)}
+          offeringLabel={bookingSummaryText(b, offerings, offeringLabel)}
           busy={busyId === b.id}
           onConfirm={() => doConfirm(b.id, b.preferredTime)}
           onCancel={() => doCancel(b.id)}
@@ -798,7 +847,7 @@ function ConfirmedList({ serviceId, bookings, offerings }) {
       {bookings.map((b) => (
         <div key={b.id} style={{ padding: 12, borderRadius: 12, marginBottom: 8, border: '1px solid var(--border)' }}>
           <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)' }}>{b.studentName || t('dashboard.confirmed.student')}</div>
-          <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>{offeringLabel(b.offeringId)}</div>
+          <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>{bookingSummaryText(b, offerings, offeringLabel)}</div>
           {b.confirmedSlot && (
             <div style={{ fontSize: 12.5, color: 'var(--accent)', fontWeight: 700, marginTop: 4 }}>
               {t('dashboard.confirmed.slot')} {b.confirmedSlot.date} {t('dashboard.confirmed.at')} {b.confirmedSlot.time}
@@ -867,6 +916,63 @@ function ConfirmedList({ serviceId, bookings, offerings }) {
 // confirmed) errands, mirroring booking mode's Pending/Confirmed split.
 // ---------------------------------------------------------------------
 
+// Phase 8, item 3: itemDescription is unbounded free-text (ServiceDetail.jsx
+// textarea has no maxLength, firestore.rules only checks non-empty), so a
+// long description can make the Runner's request list hard to scan. Per the
+// handoff decision, we keep the card summarized (2-line clamp) but expand it
+// in-place on click rather than navigating away — Runner's accept decision
+// needs the full text without losing the list. The toggle only renders when
+// the text is actually long enough to be clamped, to avoid clutter on short
+// one-line descriptions.
+const ERRAND_DESC_CLAMP_LINES = 2;
+
+function TruncatedErrandDescription({ text, t }) {
+  const [expanded, setExpanded] = useState(false);
+  const [isClamped, setIsClamped] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    // If the clamped scrollHeight exceeds what N lines can hold, the text
+    // is actually being truncated — only then do we need a toggle at all.
+    setIsClamped(el.scrollHeight > el.clientHeight + 1);
+  }, [text]);
+
+  if (!text) return null;
+
+  return (
+    <div style={{ marginTop: 4 }}>
+      <div
+        ref={ref}
+        style={{
+          fontSize: 13, color: 'var(--text)',
+          ...(expanded ? {} : {
+            display: '-webkit-box',
+            WebkitLineClamp: ERRAND_DESC_CLAMP_LINES,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+          }),
+        }}
+      >
+        {text}
+      </div>
+      {isClamped && (
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          style={{
+            background: 'none', border: 'none', padding: 0, marginTop: 2,
+            fontSize: 12, fontWeight: 700, color: 'var(--accent)', cursor: 'pointer',
+          }}
+        >
+          {expanded ? t('dashboard.errand.showLess') : t('dashboard.errand.showMore')}
+        </button>
+      )}
+    </div>
+  );
+}
+
 function ErrandQueue({ serviceId, providerUid, requests }) {
   const { t } = useProviderLang();
   const [busyId, setBusyId] = useState(null);
@@ -907,7 +1013,7 @@ function ErrandQueue({ serviceId, providerUid, requests }) {
           <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)' }}>
             {r.requesterName || t('dashboard.errand.requester')}
           </div>
-          <div style={{ fontSize: 13, color: 'var(--text)', marginTop: 4 }}>{r.itemDescription}</div>
+          <TruncatedErrandDescription text={r.itemDescription} t={t} />
           <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--accent)', marginTop: 4 }}>৳{r.proposedPrice}</div>
           <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 4 }}>{t('dashboard.errand.requested')} {formatWhen(r.requestedAt)}</div>
           {r.visibility === 'targeted' && (
@@ -977,7 +1083,7 @@ function RunnerActiveErrands({ serviceId, requests }) {
           <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 2 }}>
             {t(r.status === 'confirmed' ? 'dashboard.errand.statusConfirmed' : 'dashboard.errand.statusAwaitingConfirm')}
           </div>
-          <div style={{ fontSize: 13, color: 'var(--text)', marginTop: 4 }}>{r.itemDescription}</div>
+          <TruncatedErrandDescription text={r.itemDescription} t={t} />
           <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--accent)', marginTop: 4 }}>৳{r.proposedPrice}</div>
 
           {r.status === 'confirmed' && r.requesterPhone && (

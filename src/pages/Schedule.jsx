@@ -96,6 +96,22 @@ const MESSAGE_FORMATS = [
 // everywhere else in the app.
 const normalizeTeacherName = (value) => String(value || '').trim().replace(/\s+/g, ' ');
 
+// Sentinel teacherName value meaning "either of this course's two set
+// teachers may show up — no fixed pattern" (rotating/alternating slot).
+// Stored as a plain string in the same teacherName field as a real name
+// (never resolved through teacherRegistry, so it's safe in both local and
+// group mode — see teacherRegistry.js's own note on what stays name-based).
+// Consumers that read teacherName (grid display, autoDisplayName,
+// Attendance.jsx's getTeachersForCourseOnDate/resolveTeachersForDate) must
+// special-case this value instead of treating it as a person's name.
+export const ALTERNATE_TEACHER = '__ALTERNATE__';
+const isAlternateTeacher = (name) => name === ALTERNATE_TEACHER;
+// Every place that prints teacherName as human-readable text (grid cells,
+// WhatsApp/Telegram share text, etc.) must go through this instead of
+// reading item.teacherName directly, or the raw sentinel leaks out.
+const teacherDisplayLabel = (teacherName, fallback = 'Teacher not set') =>
+  isAlternateTeacher(teacherName) ? 'Alternative' : (teacherName || fallback);
+
 const normalizeScheduleEntries = (entries) => {
   const seen = new Set();
   return (entries || []).map(item => ({
@@ -159,11 +175,13 @@ const normalizeSettings = (raw) => ({
   }, {}),
 });
 
-// Get all unique teacher names from schedule, sorted
+// Get all unique teacher names from schedule, sorted. Excludes the
+// ALTERNATE_TEACHER sentinel — it's a rotating-slot marker, not a real
+// teacher, and must never appear in name suggestion lists.
 const getUniqueTeacherNames = (schedule) => {
   const teachers = new Set();
   (schedule || []).forEach(item => {
-    if (item.teacherName && item.teacherName.trim()) {
+    if (item.teacherName && item.teacherName.trim() && item.teacherName !== ALTERNATE_TEACHER) {
       teachers.add(item.teacherName);
     }
   });
@@ -292,7 +310,7 @@ const buildDailyText = (day, classes, getCourse, assignments = [], messageFormat
       
       sortedClasses.forEach((item, idx) => {
         const cleanSlot = String(item.slot).replace(/\s+break\s*$/i, '').trim();
-        const classLabel = isSessionalType(item.type) ? getClassShareLabel(item) : (item.teacherName || 'Teacher not set');
+        const classLabel = isSessionalType(item.type) ? getClassShareLabel(item) : teacherDisplayLabel(item.teacherName);
         
         // Theory: Time — Teacher, Sessional: Time — Course/Lab name
         lines.push(`${idx + 1}. *${cleanSlot}* — _${classLabel}_`);
@@ -342,7 +360,7 @@ const buildDailyText = (day, classes, getCourse, assignments = [], messageFormat
         .forEach(item => {
           const course = getCourse(item.courseId);
           const courseLabel = item.displayName || course?.name || course?.code || 'Unknown Course';
-          const teacherLabel = item.teacherName || 'Teacher not set';
+          const teacherLabel = teacherDisplayLabel(item.teacherName);
           const visibleLabel = isSessionalType(item.type) ? courseLabel : teacherLabel;
           lines.push(`${item.slot} · ${visibleLabel}`);
         });
@@ -386,7 +404,7 @@ const buildDailyText = (day, classes, getCourse, assignments = [], messageFormat
 const getRoutineLabel = (course, item) => {
   if (item.displayName) return item.displayName;
   const courseLabel = course?.name || course?.code || 'Unknown Course';
-  const teacherLabel = item.teacherName || 'Teacher not set';
+  const teacherLabel = teacherDisplayLabel(item.teacherName);
   return `${courseLabel} · ${teacherLabel}`;
 };
 
@@ -874,7 +892,9 @@ export default function Schedule() {
   const autoDisplayName = (courseId, teacherName) => {
     const course = getCourse(courseId);
     const base = course ? `${course.code} — ${course.name}` : '';
-    const teacher = normalizeTeacherName(teacherName) ? ` · ${normalizeTeacherName(teacherName)}` : '';
+    const teacher = isAlternateTeacher(teacherName)
+      ? ' · Alternative'
+      : (normalizeTeacherName(teacherName) ? ` · ${normalizeTeacherName(teacherName)}` : '');
     return `${base}${teacher}`.trim();
   };
 
@@ -1657,7 +1677,7 @@ export default function Schedule() {
                               </div>
                               {!hideTeacherInGrid && (
                                 <div style={{ fontSize: 'clamp(9px, 2vw, 11px)', fontWeight: 600, marginTop: 'clamp(2px, 0.5vw, 4px)', color: 'var(--text)', opacity: 0.95, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                                  Teacher: {s.teacherName || 'Not set'}
+                                  Teacher: {teacherDisplayLabel(s.teacherName, 'Not set')}
                                 </div>
                               )}
                               {canEditSchedule && (
@@ -1936,7 +1956,7 @@ export default function Schedule() {
               {selectedClasses.slice().sort((a, b) => a.slot.localeCompare(b.slot)).map(item => {
                 const course = getCourse(item.courseId);
                 const courseCode = course?.code || 'Unknown';
-                const teacherName = item.teacherName || 'Teacher not set';
+                const teacherName = teacherDisplayLabel(item.teacherName);
                 const timeRange = item.slot;
                 return (
                   <div key={item.id} style={{ display: 'grid', gridTemplateColumns: '90px 1fr', gap: '10px', alignItems: 'flex-start', padding: '10px 12px', borderRadius: '10px', border: '1px solid var(--border)', background: 'var(--card)' }}>
@@ -2122,6 +2142,12 @@ export default function Schedule() {
                       {getCourseTeachers(form.courseId).map(name => (
                         <option key={name} value={name}>{name}</option>
                       ))}
+                      {/* Rotating-slot option: only meaningful once the
+                          course actually has 2 teachers set up, otherwise
+                          "either of two" has nothing to alternate between. */}
+                      {getCourseTeachers(form.courseId).length >= 2 && (
+                        <option value={ALTERNATE_TEACHER}>Alternative</option>
+                      )}
                     </select>
                     <button
                       type="button"
@@ -2813,6 +2839,9 @@ export default function Schedule() {
                     {getCourseTeachers(quickFormData.courseId).map(name => (
                       <option key={name} value={name}>{name}</option>
                     ))}
+                    {getCourseTeachers(quickFormData.courseId).length >= 2 && (
+                      <option value={ALTERNATE_TEACHER}>Alternative</option>
+                    )}
                   </select>
                   <button
                     type="button"

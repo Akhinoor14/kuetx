@@ -149,10 +149,19 @@ const FacultyContact = lazy(() => import('./pages/faculty/FacultyContact'));
 // separate component/import (would defeat the point: needs to be part of
 // the initial shell bundle, always available instantly, never itself
 // something the user waits on).
+// Kept intentionally lightweight — this is NOT the cold-start splash
+// (see index.html's #kx-splash for that). This fires many times per
+// session, every time a lazy route chunk is loading, so it stays inline
+// here (not a separate imported component) to be part of the initial
+// shell bundle, and stays a small subtle pulse rather than repeating the
+// big cinematic sequence.
 function PageLoadingFallback() {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '40vh', color: 'var(--muted)', fontSize: 14 }}>
-      Loading…
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, minHeight: '40vh', color: 'var(--muted)', fontSize: 14 }}>
+      <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#16a34a', animation: 'kx-plf-pulse 1.2s ease-in-out infinite' }} />
+      <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#16a34a', animation: 'kx-plf-pulse 1.2s ease-in-out 0.15s infinite' }} />
+      <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#16a34a', animation: 'kx-plf-pulse 1.2s ease-in-out 0.3s infinite' }} />
+      <style>{'@keyframes kx-plf-pulse{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}'}</style>
     </div>
   );
 }

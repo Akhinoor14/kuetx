@@ -248,7 +248,7 @@ export default function About() {
         }}>
           {/* Mobile Hero - Icon */}
           <div style={{ marginBottom: '1.2rem' }}>
-            <img src="/icon-512.svg" alt="KUETX" style={{ width: '140px', height: '140px', margin: '0 auto', display: 'block' }} />
+            <img src="/icon-512.png" alt="KUETX" style={{ width: '140px', height: '140px', margin: '0 auto', display: 'block' }} />
           </div>
 
           {/* Mobile Hero - App Name */}
