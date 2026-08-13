@@ -783,7 +783,42 @@ yet")। কারণ — **এই chip strip `Services.jsx`-এর কার্
 
 **Verified:** আবার ক্লিন `npm install && npm run build` পাস করেছে।
 
-### পুরনো `/services/category/errand` route — কেন এখনো আছে, কিন্তু এখন redirect করে
+### 🔴 আসল কারণ ধরা পড়েছে — সব ফিক্স ছিল ভুল ফাইলে!
+
+Owner deploy করার পরও UI-তে কোনো পরিবর্তনই দেখা যায়নি ("This service
+couldn't be found" চলতেই থাকল)। খুঁজতে গিয়ে যা পাওয়া গেছে সেটা এই পুরো
+কাজের সবচেয়ে বড় ভুল:
+
+**প্রজেক্টে দুইটা `App.jsx` ফাইল ছিল** — একটা root-এ (`/App.jsx`), আরেকটা
+`src/`-এ (`/src/App.jsx`)। `src/main.jsx` (আসল entry point) import করে
+`./App.jsx` — মানে **`src/App.jsx`-ই একমাত্র ফাইল যেটা আসলে build/deploy
+হয়**। কিন্তু এই পুরো session-এ আমি ভুল করে **root-level `App.jsx`**-এ
+সব routing এডিট করে গিয়েছিলাম (`ErrandFeed`/`ErrandMyRequests`-এর lazy
+import, `/services/errands` আর `/services/errands/mine` route) —
+`src/App.jsx`-এ এগুলোর **কিছুই ছিল না**। তাই যতবারই owner
+build+deploy করেছেন, ততবারই আসল build-এ নতুন route পুরোপুরি অনুপস্থিত
+থেকে গেছে — deploy ঠিকই হচ্ছিল, কিন্তু ভুল/পুরনো `src/App.jsx` দিয়েই।
+
+**Fix**: একই ৩টা এডিট (lazy import + দুইটা route) এখন সরাসরি
+`src/App.jsx`-এ বসানো হয়েছে। এই ভুল ভবিষ্যতে যেন আর না হয়, সেজন্য
+বিভ্রান্তিকর root-level `App.jsx` ফাইলটাই **মুছে ফেলা হয়েছে** (ওটা
+dead code ছিল, কোথাও import হতো না — মোছার আগে diff করে নিশ্চিত হওয়া
+হয়েছে ওতে errand-সংক্রান্ত ৩টা এডিট ছাড়া root আর src-এর মধ্যে আর কোনো
+পার্থক্য ছিল না, তাই মোছাটা নিরাপদ)।
+
+**Verified — এবার আসল প্রমাণসহ**: শুধু build পাস করাই না, এবার
+`dist/assets/`-এ actual output ফাইল চেক করে নিশ্চিত হওয়া হয়েছে যে
+`ErrandFeed-*.js` আর `ErrandMyRequests-*.js` bundle সত্যিই তৈরি হচ্ছে
+এবং `services/errands` স্ট্রিং bundle-এর ভেতরে আছে — মানে এবার deploy
+করলে নতুন কোড সত্যিকারের ভাবে লাইভ যাবে।
+
+**এটা কেন এতক্ষণ ধরা পড়েনি**: প্রতিবার আমি `npm run build` চালিয়ে "ক্লিন
+পাস করেছে" বলেছি — কিন্তু build পাস করা মানে শুধু syntax/import ঠিক
+আছে, সেটা প্রমাণ করে না যে আমি *সঠিক* ফাইলে এডিট করেছি। দুটো `App.jsx`-ই
+আলাদাভাবে valid, buildable ফাইল ছিল — তাই ভুল ফাইলে এডিট করলেও build
+নীরবে পাস করে যেত।
+
+
 
 Owner-এর প্রশ্ন: পুরনো route-টা কেন এখনো আছে, সরিয়ে ফেলা উচিত না?
 

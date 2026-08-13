@@ -94,6 +94,8 @@ const CategoryShopList = lazy(() => import('./pages/Services').then((m) => ({ de
 const ServiceDetail = lazy(() => import('./pages/ServiceDetail'));
 const ServiceAbout = lazy(() => import('./pages/ServiceAbout'));
 const ServiceOrdersHub = lazy(() => import('./pages/ServiceOrdersHub'));
+const ErrandFeed = lazy(() => import('./pages/ErrandFeed'));
+const ErrandMyRequests = lazy(() => import('./pages/ErrandMyRequests'));
 const ProviderDashboardPage = lazy(() => import('./pages/provider/ProviderDashboard'));
 const ProviderMyShopHubPage = lazy(() => import('./pages/provider/ProviderMyShopHub'));
 const ProviderOfferingsPagePage = lazy(() => import('./pages/provider/ProviderOfferingsPage'));
@@ -363,6 +365,18 @@ function Layout({ authState, onboardingActive }) {
                 here anyway, right after the other literal /services/*
                 routes, for readability. */}
             <Route path="/services/orders" element={<ServiceOrdersHub />} />
+            {/* Open Errand Request Feed (shop-less Pick and Drop
+                migration) — a literal path segment, same specificity
+                reasoning as /services/orders above: must be declared
+                before the /services/:serviceId param route so React
+                Router resolves it correctly. */}
+            <Route path="/services/errands" element={<ErrandFeed />} />
+            {/* /mine is a literal path segment nested under /services/errands
+                itself — same specificity reasoning as above, declared
+                before nothing else conflicts here since /services/errands
+                has no param sibling, but kept consistent with the pattern
+                regardless. */}
+            <Route path="/services/errands/mine" element={<ErrandMyRequests />} />
             {/* Phase 5 (SERVICE_BOOKING_REDESIGN_PLAN_PROMPT.md, Part B):
                 /about is a literal path segment nested under the param
                 route below — declared first so React Router's
