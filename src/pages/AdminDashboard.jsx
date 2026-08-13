@@ -40,6 +40,7 @@ import { BatchesContent } from './FounderBatchSettings';
 import { listAllFacultyAccounts, adminVerifyFaculty, adminDeleteFaculty } from '../lib/facultySync';
 import { listAllBloodDonors, searchBloodDonorsByGroup } from '../lib/bloodDonorSync';
 import { listAllActiveFacultyAssignments } from '../lib/facultyClassSync';
+import { getAllErrandAcceptsForAdmin } from '../lib/errandRequests';
 import AnalyticsDashboard from '../components/AnalyticsDashboard';
 import { useIsFaculty } from '../hooks/useIsFaculty';
 // Only the read-only subscribe is used here now — approveManualVerifyRequest/
@@ -542,6 +543,25 @@ function ProviderManagementView({ onBack, onSelectCategory, countCtx }) {
   const [bulkApproving, setBulkApproving] = useState(false);
 
   useEffect(() => withTimeout((cb) => subscribeProviderVerifyRequests(cb), setProviderVerifyRequests, { onTimeout: flagSlowLoad }), []);
+
+  // --- Errand Requests (Open Errand Request Feed migration) ---
+  // Person's explicit ask: a centralized log of every accept, ever —
+  // one-shot fetch (getAllErrandAcceptsForAdmin, not a live
+  // subscription — see errandRequests.js's own comment: pagination is a
+  // later concern, this is a launch-sized dataset read), loaded only
+  // when the Founder actually opens this sub-tab rather than on every
+  // Service Providers view load.
+  const [errandAccepts, setErrandAccepts] = useState(null);
+  useEffect(() => {
+    if (subTab !== 'errands' || errandAccepts !== null) return;
+    getAllErrandAcceptsForAdmin()
+      .then(setErrandAccepts)
+      .catch((e) => {
+        console.error('[AdminDashboard] getAllErrandAcceptsForAdmin failed:', e);
+        setErrandAccepts([]);
+      });
+  }, [subTab, errandAccepts]);
+
   useEffect(() => {
     if (!providerVerifyRequests || providerVerifyRequests.length === 0) return;
     let cancelled = false;
@@ -960,6 +980,37 @@ function ProviderManagementView({ onBack, onSelectCategory, countCtx }) {
             })}
           </Section>
         </>
+      )}
+
+      {subTab === 'errands' && (
+        <Section title="Errand Requests — accept log">
+          {errandAccepts === null && <EmptyState>Loading…</EmptyState>}
+          {errandAccepts !== null && errandAccepts.length === 0 && <EmptyState>No one has accepted an errand request yet.</EmptyState>}
+          {errandAccepts !== null && errandAccepts.map((a) => (
+            <div key={`${a.requestId}-${a.id}`} className="card" style={{ padding: 10, marginBottom: 6 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'center' }}>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 700 }}>{a.acceptorName || 'Unknown'}</div>
+                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>{a.acceptorPhone}</div>
+                </div>
+                <span
+                  style={{
+                    fontSize: 10.5, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.03em',
+                    padding: '2px 8px', borderRadius: 999,
+                    background: a.status === 'confirmed' ? 'color-mix(in srgb, var(--accent) 12%, var(--surface))' : a.status === 'rejected' ? 'color-mix(in srgb, var(--danger) 12%, var(--surface))' : 'var(--warn-bg, #fef3c7)',
+                    color: a.status === 'confirmed' ? 'var(--accent)' : a.status === 'rejected' ? 'var(--danger)' : 'var(--warn, #b45309)',
+                  }}
+                >
+                  {a.status}
+                </span>
+              </div>
+              <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6 }}>
+                Request: {a.requestId} · Accepted:{' '}
+                {a.acceptedAt?.toDate ? a.acceptedAt.toDate().toLocaleString() : '—'}
+              </div>
+            </div>
+          ))}
+        </Section>
       )}
     </CategoryShell>
   );

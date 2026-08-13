@@ -644,6 +644,180 @@ width-এও ভেঙে পড়েনি — শুধু grid-template-colu
 
 `npm run build` ক্লিন পাস করেছে।
 
+## Open Errand Request Feed migration — shop-less Pick and Drop (চলমান)
+
+**সমস্যা যেটা fix হচ্ছে:** পুরনো "Pick n Drop" (errand) ফিচার
+shop-based ছিল — একজন Runner-কে আগে থেকে নিজের shop/service সেটআপ করতে
+হতো, তারপরই কেউ request পাঠাতে পারত। ভুল মডেল হিসেবে চিহ্নিত হয়েছে —
+কোনো shop/Runner account ছাড়াই যেকোনো verified student/faculty
+সরাসরি open request পোস্ট করতে পারবে এমন নতুন মডেলে migrate করা হচ্ছে।
+
+**নতুন মডেল (owner-confirmed, চূড়ান্ত):**
+- কোনো shop/Runner account লাগে না — verified যেকেউ open request পোস্ট
+  করতে পারে, broadcast হয়ে যায় সবার কাছে (নিজেরটা নিজে দেখে না)
+- যেকেউ accept করতে পারে (multiple accept সম্ভব) — timestamp-ভিত্তিক
+  queue তৈরি হয়, কিন্তু requester যেকোনো একজনকে confirm করতে পারে
+  (প্রথমজনই হতে হবে এমন না)
+- Confirm করলে বাকি সব accept auto-reject (atomic batch)
+- Finish হলে ফিড থেকে card সরে যায় (status filter দিয়েই হয়)
+- Optional deadline, phone number persist (`errandContact/{uid}`, একবার
+  দিলে আর জিজ্ঞেস করে না)
+- Founder/Admin dashboard-এ centralized accept log
+- আগে থেকে থাকা broadcast opt-out টগল (Settings.jsx,
+  `studentPreferences/{uid}`) নতুন ফিডেও respect করা হয়
+
+**ডেটা লেয়ার + রুলস (সম্পূর্ণ, deploy বাকি):**
+- `src/lib/errandRequests.js` — নতুন ফাইল, সম্পূর্ণ CRUD + subscription
+  সেট (creation, feed, accept, confirm, finish/cancel, admin log,
+  contact persistence)। Collections: `errandRequests/{requestId}`,
+  `errandRequests/{requestId}/accepts/{acceptorUid}`,
+  `errandContact/{uid}`
+- `firestore.rules` — errandRequests/accepts/errandContact rules যোগ
+  হয়েছে (`studentPreferences` ব্লকের পরে)। পুরনো shop-based `bookings`
+  errand-mode rules legacy ডেটার জন্য এখনো আছে, সরানো হয়নি
+- `firestore.indexes.json` — composite indexes + collectionGroup field
+  overrides যোগ হয়েছে
+- **⚠️ Deploy pending:** `firebase deploy --only
+  firestore:rules,firestore:indexes` owner-কে চালাতে হবে, নাহলে নতুন
+  কালেকশন "Missing or insufficient permissions" দেবে
+
+**নাম-সংঘর্ষ সতর্কতা:** `serviceSync.js`-এ পুরনো shop-based
+`createErrandRequest`/`acceptErrandRequest`/`cancelErrandRequest`/
+`finishErrandRequest` আগে থেকেই আছে। নতুন `errandRequests.js`-এ প্রায়
+একই নামের ফাংশন আছে। দুটো ফাইল থেকে একসাথে import করলে conflict হবে —
+alias ব্যবহার করতে হবে।
+
+### UI — ধাপ ১-৩ সম্পন্ন: পোস্ট ফর্ম + Open Feed + Detail Modal
+
+- **`src/pages/ErrandFeed.jsx`** (নতুন ফাইল, route `/services/errands`)
+  — একটা কম্বাইন্ড পেজ, তিনটা closely-coupled অংশ নিয়ে:
+  - **পোস্ট ফর্ম** (Modal): item description, optional ছবি (পুরনো
+    `uploadServiceImage()` reuse করা হয়েছে — `serviceId`-এর বদলে
+    freshly-generated `requestId` key হিসেবে ব্যবহার করা হয়, কোনো
+    পরিবর্তন লাগেনি `serviceImageUpload.js`-এ), price/free toggle,
+    optional deadline (datetime-local picker)। Requester-এর
+    নাম/role — student হলে `getProfile()` (store.js), faculty হলে
+    `subscribeFacultyProfile` (facultySync.js), `useIsFaculty()`
+    দিয়ে সার্ভার-ভেরিফায়েড রোল নির্ধারণ করে (self-reported না)
+  - **Open Feed**: `subscribeOpenErrandRequests()` — কার্ডে item
+    description, ছবি (থাকলে), price/free badge, deadline, লাইভ accept
+    count (প্রতি কার্ড নিজের `subscribeErrandAccepts()` সাবস্ক্রাইব
+    করে, কোনো denormalized counter field ছাড়াই)
+  - **Detail Modal**: তিনটা ভিউ — (ক) Requester নিজে: accept queue
+    (নাম/ফোন/সময়সহ) + Confirm/Finish/Cancel বাটন, (খ) Confirmed
+    acceptor নিজে: requester-এর নাম + Finish বাটন, (গ) অন্য যেকেউ:
+    Accept বাটন — ট্যাপ করলে `getSavedErrandPhone()` দিয়ে prefill,
+    নতুন হলে ফোন নাম্বার ফিল্ড দেখায়
+  - "আমার রিকোয়েস্ট" বাটন `/services/errands/mine`-এ পয়েন্ট করে (পরের
+    ধাপে বানানো হবে — এখনো route নেই)
+
+- **`App.jsx`**: `/services/errands` route যোগ হয়েছে
+  (`/services/orders`-এর মতোই literal segment, `/services/:serviceId`
+  param route-এর আগে declare করা, নাহলে React Router ভুল route
+  ম্যাচ করত)
+
+- **`Services.jsx`**: errand category card এখন সরাসরি
+  `/services/errands`-এ নেভিগেট করে (আগে shop list-এ যেত)। Badge এখন
+  live open-request count দেখায় (`subscribeOpenErrandRequests()`) —
+  shop count-এর বদলে, কারণ এই মডেলে আর কোনো shop নেই। কার্ডের
+  gold/amber accent, প্রথম position — অপরিবর্তিত
+
+**Verified:** ক্লিন `npm install && npm run build` পাস করেছে, কোনো
+error/warning ছাড়া।
+
+### UI — ধাপ ৪-৫ সম্পন্ন: My Requests/My Accepted পেজ + Admin dashboard
+
+- **`src/pages/ErrandMyRequests.jsx`** (নতুন ফাইল, route
+  `/services/errands/mine`) — দুইটা ট্যাব:
+  - **"আমার পোস্ট করা"**: `subscribeMyErrandRequests(uid)` — নিজের
+    পোস্ট করা সব request (any status)
+  - **"আমি রাজি হয়েছি"**: `subscribeMyAcceptedErrandRequests(uid)` —
+    যেগুলোতে accept দিয়েছি, নেস্টেড `.request` object থেকে card-এর
+    দরকারি ফিল্ড বের করে flatten করা হয়
+  - উভয় ট্যাব `ServiceOrdersHub.jsx`-এর established pattern অনুসরণ
+    করে: active/done/closed গ্রুপিং, progress bar, tap-card-to-open-
+    modal — কিন্তু detail modal-এর জন্য নতুন কম্পোনেন্ট লেখা হয়নি,
+    `ErrandFeed.jsx`-এর `RequestDetailModal` সরাসরি reuse করা হয়েছে
+    (`ErrandFeed.jsx`-এ `RequestDetailModal`, `useRequesterIdentity`,
+    `ErrandDeadline` এখন named export)
+  - `App.jsx`-এ `/services/errands/mine` route যোগ হয়েছে
+
+- **Admin dashboard** — Founder-এর "Service Providers" ক্যাটাগরির
+  অধীনে নতুন subcategory "Errand Requests" যোগ হয়েছে
+  (`founderCategories.js`, `providers` ক্যাটাগরির subcategories-এ)।
+  `AdminDashboard.jsx`-এর `ProviderManagementView` কম্পোনেন্টে নতুন
+  `subTab === 'errands'` ব্র্যাঞ্চ — `getAllErrandAcceptsForAdmin()`
+  দিয়ে one-shot fetch (live subscription না, launch-sized dataset
+  ধরে নিয়ে), শুধু ট্যাব খোলা হলে lazy-load হয়। প্রতিটা accept-এর
+  acceptor নাম/ফোন, status (waiting/confirmed/rejected রঙ-কোডেড),
+  request ID, accepted-at টাইমস্ট্যাম্প দেখায়। কোনো নতুন top-level
+  ক্যাটাগরি বানানো হয়নি — এটা এখনো conceptually "Campus Services"
+  ক্লাস্টারেরই অংশ, শুধু আর shop-based না।
+
+**Verified:** এই পরিবর্তনগুলোসহ আবার ক্লিন `npm install && npm run
+build` পাস করেছে।
+
+### বাগ ফিক্স — ছবির লাইফসাইকেল (owner-এর প্রশ্ন থেকে ধরা পড়েছে)
+
+Owner ধরিয়ে দিয়েছিলেন: request finish হয়ে গেলে সেই ছবি R2-তে পড়ে থাকার
+কোনো মানে নেই। খুঁজতে গিয়ে দুটো real bug পাওয়া গেছে, দুটোই ফিক্স
+করা হয়েছে:
+
+1. **Upload আসলে কখনোই কাজ করত না** — `service-images-worker`-এর
+   `ownsService()` চেক করে `services/{id}` ডকুমেন্ট, কিন্তু errand
+   request থাকে `errandRequests/{id}`-এ। ফলে errand ছবি আপলোড করলে
+   worker সবসময় "Not authorized" রিটার্ন করত — কিন্তু আমার আগের কোডে
+   এই fail সাইলেন্টলি catch হয়ে যেত (non-blocking try/catch), তাই কেউ
+   খেয়ালই করত না। **Fix**: worker-এ নতুন `ownsErrandRequest()` চেক
+   যোগ হয়েছে, `errands/{requestId}/...` নামের আলাদা key prefix
+   (আগের `services/{serviceId}/...`-এর পাশাপাশি), upload/delete দুটো
+   route-ই এখন `kind` ফিল্ড দেখে কোন চেক ব্যবহার করবে ঠিক করে।
+2. **Create-then-patch flow rules-এর সাথে মিলত না** — doc তৈরি হওয়ার
+   পর আলাদা `updateDoc({itemImageUrl})` কল rules-এর 4-transition
+   whitelist-এ পড়ত না, reject হতো। **Fix**: নতুন flow —
+   `generateErrandRequestId()` দিয়ে আগে থেকে id বানানো →
+   `createOpenErrandRequest({requestId, ...})` দিয়ে doc তৈরি (ছবি
+   ছাড়া) → এখন doc-টা exist করে বলে worker upload authorize করে →
+   `patchErrandRequestImage()` দিয়ে URL বসানো (`firestore.rules`-এ
+   নতুন ৫ম update-branch, শুধু `itemImageUrl`+`updatedAt` diff-এর
+   জন্য, শুধু `open` স্ট্যাটাসে)
+
+**Storage cleanup (মূল অনুরোধ)**: `finishErrandRequest()` আর
+`cancelErrandRequest()` এখন request finish/cancel হওয়ার পরে
+best-effort ভাবে `deleteServiceImage()` কল করে R2 থেকে ছবিটা মুছে
+দেয়। `itemImageUrl` ফিল্ডটা doc-এ থেকে যায় (মুছে ফেলা হয় না) — কারণ
+সেটা মুছতে গেলে rules-এর status-transition-only diff-এর বাইরে
+আরেকটা write লাগত, আর finished/cancelled request কোথাও দেখানো হয়
+না বলে ওই স্টেল URL আসলে অদৃশ্য/নিরীহ। Worker-এর delete route এখন
+requester **এবং** confirmed acceptor দুজনকেই authorize করে (যেহেতু
+finish দুইজনের যে কেউ করতে পারে)।
+
+**পরিবর্তিত ফাইল**: `service-images-worker/src/index.js`,
+`src/lib/serviceImageUpload.js` (kind param, errands/ prefix
+delete-allow), `src/lib/errandRequests.js`
+(`generateErrandRequestId`, `patchErrandRequestImage`,
+`deleteErrandImageIfAny`), `src/pages/ErrandFeed.jsx` (post flow
+reorder), `firestore.rules` (৫ম update branch)।
+
+**⚠️ Worker আবার deploy করতে হবে** — `service-images-worker/`-এ কোড
+বদলেছে, শুধু Firestore rules/indexes deploy করলে হবে না, worker-ও
+নতুন করে deploy করতে হবে (`wrangler deploy` বা যেভাবে আগে করা
+হয়েছিল)।
+
+**Verified:** ক্লিন `npm install && npm run build` আবার পাস
+করেছে। **তবে real worker/R2-এর বিরুদ্ধে লাইভ টেস্ট করা হয়নি** —
+deploy করার পরে actual upload → finish → R2-তে ছবি আসলেই delete
+হচ্ছে কিনা owner-কে হাতে চেক করে দেখতে হবে।
+
+**বাকি (এখনো owner-side/পরের সিদ্ধান্তের অপেক্ষায়):**
+- পুরনো কোড cleanup (ServiceDetail.jsx-এর `ErrandForm`/
+  `MyActiveErrand`, serviceSync.js-এর পুরনো shop-based errand
+  ফাংশন) — **ইচ্ছাকৃতভাবে touch করা হয়নি**, legacy ডেটার কারণে owner
+  confirm করার আগে সরানো হবে না বলে hand-off prompt-এ স্পষ্ট বলা ছিল
+- Deploy (`firebase deploy --only firestore:rules,firestore:indexes`
+  + frontend build/Vercel push) — **owner-কে করতে হবে**, নাহলে নতুন
+  কালেকশন "Missing or insufficient permissions" দেবে
+
 ## এই ফাইলে নতুন কাজ যোগ করার নিয়ম
 
 নতুন কোনো আপডেট/বাগফিক্স/ফিচার এলে —

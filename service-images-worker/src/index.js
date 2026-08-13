@@ -136,13 +136,45 @@ async function ownsService(env, serviceId, uid, idToken) {
   return providerUid === uid;
 }
 
+// Open Errand Request Feed migration — errand request images reuse this
+// same worker/bucket, but there's no services/{id} doc to check
+// ownership against (an open request has no shop). Same
+// "re-derive from Firestore, never trust the client" pattern, just
+// checking errandRequests/{requestId} instead. Upload is
+// requester-only (only the requester ever posts the image, at create
+// time). Delete additionally allows the confirmed acceptor — either
+// party may call finishErrandRequest() (see errandRequests.js), and
+// finishing is what triggers image cleanup, so whichever of the two
+// actually finishes it must be allowed to delete it.
+async function ownsErrandRequest(env, requestId, uid, idToken, { allowConfirmedAcceptor = false } = {}) {
+  const url = `https://firestore.googleapis.com/v1/projects/${env.FIREBASE_PROJECT_ID}/databases/(default)/documents/errandRequests/${requestId}`;
+  const res = await fetch(url, {
+    headers: idToken ? { Authorization: `Bearer ${idToken}` } : {},
+  });
+  if (res.status !== 200) return false;
+  const doc = await res.json();
+  const requesterUid = doc.fields?.requesterUid?.stringValue;
+  if (requesterUid === uid) return true;
+  if (allowConfirmedAcceptor) {
+    const confirmedAcceptorUid = doc.fields?.confirmedAcceptorUid?.stringValue;
+    if (confirmedAcceptorUid === uid) return true;
+  }
+  return false;
+}
+
 function requireBearerToken(request) {
   const authHeader = request.headers.get('Authorization') || '';
   return authHeader.replace(/^Bearer\s+/i, '');
 }
 
 // ---------------------------------------------------------------------
-// POST /upload — multipart/form-data: file, serviceId
+// POST /upload — multipart/form-data: file, serviceId, kind (optional)
+//   kind === 'errand' -> serviceId field actually carries an
+//   errandRequests/{requestId} id, ownership checked against
+//   requesterUid instead of providerUid, key prefixed errands/ instead
+//   of services/ (see ownsErrandRequest above for why this is a
+//   separate check rather than reusing ownsService on a different
+//   collection name).
 // ---------------------------------------------------------------------
 async function handleUpload(request, env) {
   const idToken = requireBearerToken(request);
@@ -159,11 +191,14 @@ async function handleUpload(request, env) {
   const form = await request.formData();
   const file = form.get('file');
   const serviceId = form.get('serviceId');
+  const kind = form.get('kind') === 'errand' ? 'errand' : 'service';
   if (!file || typeof file === 'string') return json({ error: 'Missing file' }, env, 400);
   if (!serviceId) return json({ error: 'Missing serviceId' }, env, 400);
 
-  const authorized = await ownsService(env, serviceId, uid, idToken);
-  if (!authorized) return json({ error: 'Not authorized to upload images for this service' }, env, 403);
+  const authorized = kind === 'errand'
+    ? await ownsErrandRequest(env, serviceId, uid, idToken)
+    : await ownsService(env, serviceId, uid, idToken);
+  if (!authorized) return json({ error: kind === 'errand' ? 'Not authorized to upload images for this request' : 'Not authorized to upload images for this service' }, env, 403);
 
   if (!ALLOWED_CONTENT_TYPES.has(file.type)) {
     return json({ error: `Unsupported image type: ${file.type || 'unknown'}` }, env, 400);
@@ -173,7 +208,8 @@ async function handleUpload(request, env) {
   }
 
   const ext = extForContentType(file.type);
-  const key = `services/${serviceId}/${crypto.randomUUID()}.${ext}`;
+  const prefix = kind === 'errand' ? 'errands' : 'services';
+  const key = `${prefix}/${serviceId}/${crypto.randomUUID()}.${ext}`;
 
   await env.SERVICE_IMAGES_BUCKET.put(key, await file.arrayBuffer(), {
     httpMetadata: { contentType: file.type },
@@ -187,7 +223,10 @@ async function handleUpload(request, env) {
 }
 
 // ---------------------------------------------------------------------
-// DELETE /image — body: { key }
+// DELETE /image — body: { key }. Key prefix (services/ vs errands/)
+// determines which ownership check applies — same re-derive-from-the-
+// key principle as before, just branching on two possible prefixes now
+// instead of one.
 // ---------------------------------------------------------------------
 async function handleDelete(request, env) {
   const idToken = requireBearerToken(request);
@@ -203,18 +242,22 @@ async function handleDelete(request, env) {
 
   const body = await request.json();
   const { key } = body;
-  if (typeof key !== 'string' || !key.startsWith('services/')) {
-    return json({ error: 'Invalid key (must start with "services/")' }, env, 400);
+  const isErrandKey = typeof key === 'string' && key.startsWith('errands/');
+  const isServiceKey = typeof key === 'string' && key.startsWith('services/');
+  if (!isErrandKey && !isServiceKey) {
+    return json({ error: 'Invalid key (must start with "services/" or "errands/")' }, env, 400);
   }
-  // Re-derive serviceId from the key itself (services/{serviceId}/...),
-  // never from a separate client-supplied field — closes the same class
-  // of gap the question-bank worker's handleDeletePublicObject() guards
-  // against with its "keys must start with public/" check.
-  const serviceId = key.split('/')[1];
-  if (!serviceId) return json({ error: 'Invalid key' }, env, 400);
+  // Re-derive the owning id from the key itself, never from a separate
+  // client-supplied field — closes the same class of gap the
+  // question-bank worker's handleDeletePublicObject() guards against
+  // with its "keys must start with public/" check.
+  const ownerId = key.split('/')[1];
+  if (!ownerId) return json({ error: 'Invalid key' }, env, 400);
 
-  const authorized = await ownsService(env, serviceId, uid, idToken);
-  if (!authorized) return json({ error: 'Not authorized to delete images for this service' }, env, 403);
+  const authorized = isErrandKey
+    ? await ownsErrandRequest(env, ownerId, uid, idToken, { allowConfirmedAcceptor: true })
+    : await ownsService(env, ownerId, uid, idToken);
+  if (!authorized) return json({ error: isErrandKey ? 'Not authorized to delete images for this request' : 'Not authorized to delete images for this service' }, env, 403);
 
   await env.SERVICE_IMAGES_BUCKET.delete(key);
   return json({ ok: true, deleted: key }, env);

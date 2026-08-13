@@ -1302,6 +1302,7 @@ export async function finishBooking(serviceId, bookingId, priceForRevenue = 0) {
 export async function createErrandRequest(serviceId, {
   requesterUid, requesterName, requesterPhone, requesterRole = 'student',
   itemDescription, proposedPrice, visibility = 'broadcast', targetRunnerUid = null,
+  itemImageUrl = null,
 }) {
   const serviceSnap = await getDoc(serviceDocRef(serviceId));
   if (!serviceSnap.exists()) {
@@ -1334,9 +1335,15 @@ export async function createErrandRequest(serviceId, {
   if (!trimmedDescription) {
     throw new Error('কী লাগবে সেটা লিখুন।');
   }
-  const price = Number(proposedPrice);
-  if (!(price > 0)) {
-    throw new Error('একটা বৈধ প্রস্তাবিত মূল্য দিন।');
+  const price = Number(proposedPrice) || 0;
+  // BUGFIX (person reported): this used to reject price === 0 outright
+  // (`if (!(price > 0)) throw`), so there was no honest way to submit a
+  // free request — someone genuinely offering "no charge" had to type a
+  // fake placeholder number just to get past this check. 0 is now a
+  // valid, intentional value (the UI's "free request" checkbox sends 0
+  // explicitly); only negative/garbage input is rejected.
+  if (!(price >= 0)) {
+    throw new Error('একটা বৈধ প্রস্তাবিত মূল্য দিন, অথবা ফ্রি রিকোয়েস্ট হিসেবে মার্ক করুন।');
   }
   const normalizedVisibility = visibility === 'targeted' ? 'targeted' : 'broadcast';
   if (normalizedVisibility === 'targeted' && !targetRunnerUid) {
@@ -1370,6 +1377,7 @@ export async function createErrandRequest(serviceId, {
     requesterPhone: String(requesterPhone || '').trim(),
     requesterRole: requesterRole === 'faculty' ? 'faculty' : 'student',
     itemDescription: trimmedDescription,
+    itemImageUrl: itemImageUrl || null,
     proposedPrice: price,
     visibility: normalizedVisibility,
     targetRunnerUid: normalizedVisibility === 'targeted' ? targetRunnerUid : null,
@@ -1467,9 +1475,9 @@ export function subscribeMyErrandRequestsForService(serviceId, requesterUid, cal
  * above sort by updatedAt descending.
  */
 export async function editErrandProposedPrice(serviceId, bookingId, newPrice) {
-  const price = Number(newPrice);
-  if (!(price > 0)) {
-    throw new Error('একটা বৈধ মূল্য দিন।');
+  const price = Number(newPrice) || 0;
+  if (!(price >= 0)) {
+    throw new Error('একটা বৈধ মূল্য দিন, অথবা ফ্রি হিসেবে রাখুন।');
   }
   const ref = bookingDocRef(serviceId, bookingId);
   const snap = await getDoc(ref);
@@ -1478,6 +1486,34 @@ export async function editErrandProposedPrice(serviceId, bookingId, newPrice) {
     throw new Error('এই রিকোয়েস্ট আর এডিট করা যাবে না — ইতিমধ্যে একজন Runner গ্রহণ করেছেন।');
   }
   await updateDoc(ref, { proposedPrice: price, updatedAt: serverTimestamp() });
+}
+
+/**
+ * Edits an open errand request's description and/or attached image
+ * (person requested a modal that can fully edit a pending request, not
+ * just its price — mirrors editErrandProposedPrice's own guard: only
+ * while still 'open', since once a Runner has accepted, changing what
+ * was asked for out from under them would be unfair/confusing).
+ * itemImageUrl may be explicitly null to remove a previously attached
+ * image; undefined leaves it untouched.
+ */
+export async function editErrandRequestDetails(serviceId, bookingId, { itemDescription, itemImageUrl } = {}) {
+  const ref = bookingDocRef(serviceId, bookingId);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) throw new Error('Request not found.');
+  if (snap.data().status !== 'open') {
+    throw new Error('এই রিকোয়েস্ট আর এডিট করা যাবে না — ইতিমধ্যে একজন Runner গ্রহণ করেছেন।');
+  }
+  const patch = { updatedAt: serverTimestamp() };
+  if (typeof itemDescription === 'string') {
+    const trimmed = itemDescription.trim();
+    if (!trimmed) throw new Error('কী লাগবে সেটা লিখুন।');
+    patch.itemDescription = trimmed;
+  }
+  if (itemImageUrl !== undefined) {
+    patch.itemImageUrl = itemImageUrl || null;
+  }
+  await updateDoc(ref, patch);
 }
 
 /**

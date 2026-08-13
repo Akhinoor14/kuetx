@@ -44,6 +44,11 @@ import { listAllProviderAccounts } from '../lib/providerSync';
 import { onSnapshot, collection, query, where } from 'firebase/firestore';
 import { db, auth } from '../lib/firebase';
 import { useIsFaculty } from '../hooks/useIsFaculty';
+// Open Errand Request Feed migration — the errand category card no
+// longer shows a shop count (there are no shops anymore), it shows a
+// live count of open requests instead, via the same
+// subscribeOpenErrandRequests() the feed page itself uses.
+import { subscribeOpenErrandRequests } from '../lib/errandRequests';
 
 // Phase 6: one icon per category type, shared by the full grid (this
 // file) and the compact home-page preview row (Dashboard.jsx imports
@@ -233,6 +238,14 @@ function sortServices(list, sortBy) {
 export function ServiceCategoryGrid({ showHeader = true }) {
   const navigate = useNavigate();
   const services = useVisibleServices();
+  // Open Errand Request Feed migration — live open-request count for
+  // the errand card's badge (replaces the old shop-count badge, since
+  // this category no longer has shops at all).
+  const [openErrandCount, setOpenErrandCount] = useState(null);
+  useEffect(() => {
+    const uid = auth.currentUser?.uid || null;
+    return subscribeOpenErrandRequests(uid, (reqs) => setOpenErrandCount(reqs.length));
+  }, []);
 
   if (services === null) {
     return (
@@ -325,11 +338,19 @@ export function ServiceCategoryGrid({ showHeader = true }) {
               <button
                 key={type}
                 className={`kx-category-card${isErrandCard ? ' kx-category-card-gold' : ''}`}
-                onClick={() => navigate(`/services/category/${type}`)}
+                onClick={() => navigate(isErrandCard ? '/services/errands' : `/services/category/${type}`)}
               >
                 <div className="kx-category-icon"><Icon size={26} strokeWidth={1.6} /></div>
                 <div className="kx-category-label">{label}</div>
-                {total > 0 ? (
+                {isErrandCard ? (
+                  openErrandCount === null ? (
+                    <div className="kx-category-badge">...</div>
+                  ) : openErrandCount > 0 ? (
+                    <div className="kx-category-badge is-live">{openErrandCount}টা রিকোয়েস্ট খোলা</div>
+                  ) : (
+                    <div className="kx-category-badge">রিকোয়েস্ট দিন</div>
+                  )
+                ) : total > 0 ? (
                   <div className="kx-category-badge is-live">
                     {openCount > 0 ? `${openCount} open now` : `${total} shop${total > 1 ? 's' : ''}`}
                   </div>

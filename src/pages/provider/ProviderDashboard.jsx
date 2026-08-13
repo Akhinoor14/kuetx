@@ -1014,7 +1014,14 @@ function ErrandQueue({ serviceId, providerUid, requests }) {
             {r.requesterName || t('dashboard.errand.requester')}
           </div>
           <TruncatedErrandDescription text={r.itemDescription} t={t} />
-          <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--accent)', marginTop: 4 }}>৳{r.proposedPrice}</div>
+          {r.itemImageUrl && (
+            <img
+              src={r.itemImageUrl}
+              alt=""
+              style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 8, border: '1px solid var(--border)', marginTop: 6 }}
+            />
+          )}
+          <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--accent)', marginTop: 4 }}>{r.proposedPrice > 0 ? `৳${r.proposedPrice}` : t('dashboard.errand.free')}</div>
           <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 4 }}>{t('dashboard.errand.requested')} {formatWhen(r.requestedAt)}</div>
           {r.visibility === 'targeted' && (
             <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', marginTop: 2 }}>{t('dashboard.errand.targeted')}</div>
@@ -1084,7 +1091,14 @@ function RunnerActiveErrands({ serviceId, requests }) {
             {t(r.status === 'confirmed' ? 'dashboard.errand.statusConfirmed' : 'dashboard.errand.statusAwaitingConfirm')}
           </div>
           <TruncatedErrandDescription text={r.itemDescription} t={t} />
-          <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--accent)', marginTop: 4 }}>৳{r.proposedPrice}</div>
+          {r.itemImageUrl && (
+            <img
+              src={r.itemImageUrl}
+              alt=""
+              style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 8, border: '1px solid var(--border)', marginTop: 6 }}
+            />
+          )}
+          <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--accent)', marginTop: 4 }}>{r.proposedPrice > 0 ? `৳${r.proposedPrice}` : t('dashboard.errand.free')}</div>
 
           {r.status === 'confirmed' && r.requesterPhone && (
             <div style={{

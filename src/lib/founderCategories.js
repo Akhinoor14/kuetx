@@ -128,6 +128,12 @@ export const FOUNDER_CATEGORIES = [
     subcategories: [
       { key: 'verify', label: 'Verification Requests', getCount: (ctx) => ctx.providerVerifyRequests },
       { key: 'directory', label: 'All Providers' },
+      // Open Errand Request Feed migration — centralized accept log
+      // (person's explicit ask: "ke kobe ki accept korse shob ekjaygay").
+      // Lives here rather than as its own top-level category since it's
+      // still conceptually part of Campus Services / the old "Pick and
+      // Drop" cluster, just no longer shop-based.
+      { key: 'errands', label: 'Errand Requests' },
     ],
   },
   {

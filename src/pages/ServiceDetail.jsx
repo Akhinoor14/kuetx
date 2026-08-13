@@ -64,10 +64,10 @@
 //   through every type's empty/closed/loading state) — no functional
 //   changes, see plan doc's Phase 4 section for what was checked.
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
-  Store, Circle, MapPin, Truck, Minus, Plus, ExternalLink, ImageOff, Check, Package,
+  Store, Circle, MapPin, Truck, Minus, Plus, ExternalLink, ImageOff, ImagePlus, Check, Package,
   Phone, Copy, ArrowUpDown, X, Info,
 } from 'lucide-react';
 import { auth } from '../lib/firebase';
@@ -81,12 +81,14 @@ import {
   // points. UI-only addition — all of these were already written and
   // tested in serviceSync.js; this file just wires them up.
   createErrandRequest, subscribeMyErrandRequestsForService, subscribeAllServices,
-  editErrandProposedPrice, confirmErrandRequest, rejectErrandAccept,
+  editErrandProposedPrice, editErrandRequestDetails, confirmErrandRequest, rejectErrandAccept,
   cancelErrandRequest, finishErrandRequest,
 } from '../lib/serviceSync';
 import { getProviderPhone } from '../lib/providerSync';
+import { uploadServiceImage } from '../lib/serviceImageUpload';
 import { renderFormattedNoticeBody } from '../lib/noticeFormat.jsx';
 import Modal from '../components/Modal';
+
 
 const STATUS_LABEL = {
   pending: 'Pending',
@@ -560,7 +562,7 @@ function DormantInfoBanner({ service }) {
   );
 }
 
-function MyActiveInquiry({ serviceId, inquiry }) {
+export function MyActiveInquiry({ serviceId, inquiry }) {
   const [closing, setClosing] = useState(false);
 
   const doClose = async () => {
@@ -956,7 +958,7 @@ function InquiryForm({ service }) {
   );
 }
 
-function MyActiveBooking({ serviceId, booking, providerUid, offerings }) {
+export function MyActiveBooking({ serviceId, booking, providerUid, offerings }) {
   const [cancelling, setCancelling] = useState(false);
   // BUGFIX (missing shop phone number on confirmed bookings):
   // firestore.rules' providers/{uid}/contact/phone read rule already
@@ -1780,7 +1782,7 @@ function HotelOrderForm({ service }) {
 // actions valid in each, per the plan's status-flow diagram.
 // ---------------------------------------------------------------------
 
-function MyActiveErrand({ serviceId, errand }) {
+export function MyActiveErrand({ serviceId, errand }) {
   const [editing, setEditing] = useState(false);
   const [newPrice, setNewPrice] = useState(String(errand.proposedPrice || ''));
   const [busy, setBusy] = useState(false);
@@ -1866,9 +1868,17 @@ function MyActiveErrand({ serviceId, errand }) {
 
       <div style={{ fontSize: 13, color: 'var(--text)', marginBottom: 4 }}>{errand.itemDescription}</div>
 
+      {errand.itemImageUrl && (
+        <img
+          src={errand.itemImageUrl}
+          alt=""
+          style={{ width: 96, height: 96, objectFit: 'cover', borderRadius: 10, border: '1px solid var(--border)', marginBottom: 10 }}
+        />
+      )}
+
       {!editing ? (
         <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent)', marginBottom: 10 }}>
-          Proposed price: ৳{errand.proposedPrice}
+          {errand.proposedPrice > 0 ? `Proposed price: ৳${errand.proposedPrice}` : 'Free request (no charge)'}
         </div>
       ) : (
         <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
@@ -1933,6 +1943,28 @@ function ErrandForm({ service }) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [done, setDone] = useState(false);
+  // Person requested: a way to attach a photo when sending an errand
+  // request (e.g. a picture of the exact product wanted, or a screenshot
+  // of a shopping list) — reuses uploadServiceImage(), the same
+  // Cloudflare-Worker-backed pipeline provider shop setup already uses
+  // for item photos (see ProviderOfferingsPage.jsx), so no new upload
+  // infra. Upload happens on submit (not on file-pick) since an
+  // unsubmitted request shouldn't leave an orphaned image in storage if
+  // the person changes their mind and navigates away.
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const imageInputRef = useRef(null);
+  const onPickImage = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setImageFile(file);
+    setImagePreview((prev) => { if (prev) URL.revokeObjectURL(prev); return URL.createObjectURL(file); });
+  };
+  const clearImage = () => {
+    setImagePreview((prev) => { if (prev) URL.revokeObjectURL(prev); return null; });
+    setImageFile(null);
+    if (imageInputRef.current) imageInputRef.current.value = '';
+  };
 
   // SHOP_LOCATION_AND_UPCOMING_FEATURES_PLAN.md Phase 4 targeted-picker:
   // broadcast (default) vs targeted-at-one-specific-Runner. The backend
@@ -1942,6 +1974,15 @@ function ErrandForm({ service }) {
   // form lives on, since targeting the page's own Runner is redundant —
   // broadcast/plain-submit already reaches them, and a same-Runner
   // "target" would be a confusing no-op).
+  // BUGFIX (person reported): "Proposed price" was mandatory (> 0) with
+  // no way to mark a request as free — so people who genuinely meant
+  // "no charge, just do it as a favor" had no honest way to submit that
+  // and were left typing 0 or 1 into a field labeled as a price, which
+  // reads as a data-quality bug from the Runner's side (an incoming
+  // request that says "৳0" looks like an error, not an intentional
+  // free ask). This checkbox makes "free" an explicit, first-class
+  // choice instead of a workaround.
+  const [isFree, setIsFree] = useState(false);
   const [visibility, setVisibility] = useState('broadcast');
   const [targetRunnerUid, setTargetRunnerUid] = useState('');
   const [runners, setRunners] = useState(null);
@@ -1980,8 +2021,8 @@ function ErrandForm({ service }) {
       setError('Please describe what you need.');
       return;
     }
-    if (!(Number(proposedPrice) > 0)) {
-      setError('Please enter a valid proposed price.');
+    if (!isFree && !(Number(proposedPrice) > 0)) {
+      setError('Please enter a valid proposed price, or mark this as a free request.');
       return;
     }
     if (!requesterPhone.trim()) {
@@ -1995,13 +2036,26 @@ function ErrandForm({ service }) {
 
     setSubmitting(true);
     try {
+      let itemImageUrl = null;
+      if (imageFile) {
+        // service.id is a real, already-created shop doc here (this
+        // form only renders once the Runner's service exists), so the
+        // same uploadServiceImage(serviceId, file) call used for
+        // provider offering photos works as-is — the errand request's
+        // own doc ID doesn't exist yet at this point (it's about to be
+        // created by createErrandRequest below), so the image is keyed
+        // under the SHOP's id, same folder every other image for this
+        // shop already lives under.
+        itemImageUrl = await uploadServiceImage(service.id, imageFile);
+      }
       await createErrandRequest(service.id, {
         requesterUid: auth.currentUser.uid,
         requesterName,
         requesterPhone,
         requesterRole: isFaculty ? 'faculty' : 'student',
         itemDescription,
-        proposedPrice: Number(proposedPrice),
+        itemImageUrl,
+        proposedPrice: isFree ? 0 : Number(proposedPrice),
         visibility,
         targetRunnerUid: visibility === 'targeted' ? targetRunnerUid : null,
       });
@@ -2068,17 +2122,56 @@ function ErrandForm({ service }) {
         }}
       />
 
+      <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>ছবি (ঐচ্ছিক)</label>
+      <div style={{ marginTop: 6, marginBottom: 12 }}>
+        {imagePreview ? (
+          <div style={{ position: 'relative', width: 96, height: 96 }}>
+            <img src={imagePreview} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 10, border: '1px solid var(--border)' }} />
+            <button
+              type="button"
+              onClick={clearImage}
+              aria-label="Remove image"
+              style={{
+                position: 'absolute', top: -6, right: -6, width: 22, height: 22, borderRadius: '50%',
+                background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--text)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: 13, lineHeight: 1,
+              }}
+            >×</button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => imageInputRef.current?.click()}
+            className="btn btn-sm btn-secondary"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+          >
+            <ImagePlus size={15} /> ছবি যোগ করুন
+          </button>
+        )}
+        <input ref={imageInputRef} type="file" accept="image/*" onChange={onPickImage} style={{ display: 'none' }} />
+      </div>
+
       <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>Proposed price (item cost + delivery fee)</label>
       <input
         type="number"
         value={proposedPrice}
         onChange={(e) => setProposedPrice(e.target.value)}
         placeholder="৳"
+        disabled={isFree}
         style={{
-          width: '100%', marginTop: 6, marginBottom: 12, padding: '10px 12px', borderRadius: 10,
-          border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontSize: 14,
+          width: '100%', marginTop: 6, marginBottom: 8, padding: '10px 12px', borderRadius: 10,
+          border: '1px solid var(--border)', background: isFree ? 'var(--border)' : 'var(--card)',
+          color: 'var(--text)', fontSize: 14, opacity: isFree ? 0.6 : 1,
         }}
       />
+      <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--text)', marginBottom: 12, cursor: 'pointer' }}>
+        <input
+          type="checkbox"
+          checked={isFree}
+          onChange={(e) => { setIsFree(e.target.checked); if (e.target.checked) setProposedPrice(''); }}
+        />
+        এটা ফ্রি রিকোয়েস্ট (কোনো পেমেন্ট ছাড়া)
+      </label>
 
       {isFaculty && (
         <>

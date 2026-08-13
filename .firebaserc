@@ -1,7 +1,6 @@
 {
   "projects": {
-    "default": "kuetx-8a184",
-    "no": "a3km-studio"
+    "default": "kuetx-8a184"
   },
   "targets": {},
   "etags": {}

@@ -43,10 +43,18 @@ async function authHeader() {
  * worker re-validates server-side too (never trust client-side-only
  * checks for something enforcing a real limit).
  *
+ * `kind` ('service' default, or 'errand') tells the worker which
+ * ownership check and key prefix to use — see the worker's own
+ * ownsErrandRequest comment for why errand requests need a distinct
+ * check (no services/{id} doc exists for them). `serviceId` doubles as
+ * the errandRequests/{requestId} id when kind === 'errand' — same
+ * param, different meaning, matching the worker's own field reuse.
+ *
  * Returns the full public URL (via serviceImageUrl), not the bare key —
- * callers store this URL directly in coverImageUrl / offering.images[].
+ * callers store this URL directly in coverImageUrl / offering.images[]
+ * (or itemImageUrl for errand requests).
  */
-export async function uploadServiceImage(serviceId, file) {
+export async function uploadServiceImage(serviceId, file, kind = 'service') {
   if (!WORKER_URL) throw new Error('Image upload isn\'t configured yet (VITE_SERVICE_IMAGES_WORKER_URL missing).');
   if (!file) throw new Error('No file given.');
   if (file.size > MAX_IMAGE_BYTES) {
@@ -56,6 +64,7 @@ export async function uploadServiceImage(serviceId, file) {
   const form = new FormData();
   form.append('file', file);
   form.append('serviceId', serviceId);
+  if (kind === 'errand') form.append('kind', 'errand');
 
   const headers = await authHeader();
   const res = await fetch(`${WORKER_URL.replace(/\/$/, '')}/upload`, {
@@ -82,7 +91,11 @@ export async function uploadServiceImage(serviceId, file) {
 export async function deleteServiceImage(url) {
   if (!WORKER_URL || !url) return;
   const key = url.startsWith(PUBLIC_BASE_URL) ? url.slice(PUBLIC_BASE_URL.length).replace(/^\//, '') : url;
-  if (!key.startsWith('services/')) return; // not one of ours (or already a bare non-matching value) — skip
+  // Open Errand Request Feed migration — errand images use the same
+  // worker/bucket under a separate errands/ prefix (see this file's
+  // uploadServiceImage kind param and the worker's own key-shape
+  // comment), so both prefixes are valid here now, not just services/.
+  if (!key.startsWith('services/') && !key.startsWith('errands/')) return; // not one of ours (or already a bare non-matching value) — skip
   try {
     const headers = await authHeader();
     await fetch(`${WORKER_URL.replace(/\/$/, '')}/image`, {

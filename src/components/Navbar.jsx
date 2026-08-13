@@ -87,22 +87,24 @@ function getPageMeta(pathname, navSource) {
 // one cluster is expanded (accordion) at a time, showing that subgroup's
 // own item chips.
 //
-// Section-tinted colors (Campus Life + Services sharing one hubPath, so
-// far the only two-cluster case — see getPageMeta's siblingGroups).
-// Keyed by cluster `name` so it's a pure lookup with no hardcoded
-// ordering assumption; add an entry here for any future third+ cluster
-// that ends up sharing a hubPath. Each cluster gets its own hue so, at a
-// glance, "which section am I in" reads from color alone, not just
-// position — the open cluster's chips sit on a tinted background in
-// that hue, while any collapsed cluster button nearby uses a visibly
-// muted/pastel version of the SAME hue (not gray), so it still reads as
-// "this button belongs to that colored group", not as a neutral,
-// unrelated control.
+// BUGFIX (person reported): these clusters used hardcoded violet/orange
+// hues that clashed with whichever theme the person had active — a
+// fixed color picked independent of the theme reads as visually "off"
+// no matter which theme it's compared against. Switched to the theme's
+// own '--accentRGB' CSS variable (see useTheme.jsx — every theme defines
+// this, it's the single color already used for every other accented UI
+// element in the app) so the chip strip always matches whatever theme is
+// active instead of fighting it. Both clusters share the same
+// theme-accent color now rather than each getting its own distinct hue —
+// a per-cluster/per-item rainbow was tried and reported as worse, not
+// better (see removed ACCENT_RGB/itemColor below in git history), so
+// this intentionally goes back to ONE calm tint for the whole strip.
+const THEME_ACCENT_VAR = 'var(--accentRGB)';
 const CLUSTER_COLORS = {
-  'Campus Life': { rgb: '124, 58, 237', fg: '#ffffff' },   // violet
-  'Services':    { rgb: '234, 88, 12',  fg: '#ffffff' },   // orange
+  'Campus Life': { rgb: THEME_ACCENT_VAR, fg: 'var(--accentFg)' },
+  'Services':    { rgb: THEME_ACCENT_VAR, fg: 'var(--accentFg)' },
 };
-const DEFAULT_CLUSTER_COLOR = { rgb: '107, 114, 128', fg: '#ffffff' }; // neutral fallback for any unmapped cluster name
+const DEFAULT_CLUSTER_COLOR = { rgb: THEME_ACCENT_VAR, fg: 'var(--accentFg)' };
 
 // Local (per-device, not synced) click counter for the grouped chip
 // strip's items — powers "usage-boosted" ordering: the person's chosen
@@ -123,21 +125,7 @@ function recordChipUsage(itemId) {
     store.set(CHIP_USAGE_KEY, { ...usage, [itemId]: (usage[itemId] || 0) + 1 });
   } catch { /* localStorage unavailable — usage boost just won't apply, base order still works */ }
 }
-// Returns `items` re-sorted by usage count (most-clicked first), tying
-// back to the original base-priority index for anything at equal usage
-// — which includes EVERY item on a fresh device (all counts start at 0),
-// so with no click history yet this returns the exact base order from
-// nav.js untouched. As real usage accumulates, the most-tapped items
-// gradually rise to the front; a single stray click doesn't reshuffle
-// anything unless it actually overtakes another item's count.
-function getUsageOrderedItems(items) {
-  let usage = {};
-  try { usage = store.get(CHIP_USAGE_KEY) || {}; } catch { /* fall through to base order */ }
-  return items
-    .map((item, baseIndex) => ({ item, baseIndex, count: usage[item.id] || 0 }))
-    .sort((a, b) => (b.count - a.count) || (a.baseIndex - b.baseIndex))
-    .map((entry) => entry.item);
-}
+
 
 function GroupedChipStrip({ siblingGroups, openClusterName, onToggleCluster, currentPath, onLinkHover }) {
   // Collapsed cluster(s) render first, open cluster last — so the compact
@@ -157,7 +145,14 @@ function GroupedChipStrip({ siblingGroups, openClusterName, onToggleCluster, cur
         return (
           <div key={cluster.name} style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
             {isOpen ? (
-              getUsageOrderedItems(cluster.items).map(item => {
+              // BUGFIX (person reported): chip order was drifting —
+              // whichever category got tapped more would float toward the
+              // front, so the row visibly reshuffled under the person's
+              // thumb between visits. That's what getUsageOrderedItems did
+              // on purpose, but it reads as broken/unpredictable rather
+              // than helpful, so switched back to cluster.items' plain
+              // base order from nav.js — fixed serial, same every time.
+              cluster.items.map(item => {
                 const active = currentPath === item.path;
                 return (
                   <Link
@@ -167,10 +162,11 @@ function GroupedChipStrip({ siblingGroups, openClusterName, onToggleCluster, cur
                     style={{
                       textDecoration: 'none', flexShrink: 0, marginRight: 6,
                       // Non-active chips in an open cluster get a soft tint
-                      // of the cluster's color (not the generic gray
-                      // .filter-tab default) so the whole open row reads
-                      // as "belonging to" that section; the active chip
-                      // still uses the normal .active accent styling
+                      // of the theme's own accent color (not the generic
+                      // gray .filter-tab default) so the whole open row
+                      // reads as "belonging to" that section while still
+                      // matching whichever theme is active. The active
+                      // chip still uses the normal .active accent styling
                       // (handled by the className above) so "which page
                       // am I on" stays unambiguous within the section.
                       ...(active ? {} : {

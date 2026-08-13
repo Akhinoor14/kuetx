@@ -1226,9 +1226,22 @@ service cloud.firestore {
             && request.resource.data.status == 'open'
             && request.resource.data.acceptedByRunnerUid == null
             && request.resource.data.proposedPrice is number
-            && request.resource.data.proposedPrice > 0
+            // BUGFIX (person reported): was `> 0`, which made a free
+            // request impossible to submit honestly — 0 is now a valid,
+            // intentional value (paired with the client UI's explicit
+            // "free request" checkbox, not a fallback/placeholder).
+            && request.resource.data.proposedPrice >= 0
             && request.resource.data.itemDescription is string
             && request.resource.data.itemDescription.size() > 0
+            // itemImageUrl: optional (a request may or may not have a
+            // photo attached) — when present, must be a string; the
+            // "field absent" case is covered by the || itself since
+            // Firestore rules only checks a key's type when comparing a
+            // .keys().hasAny() gate, so this line only fires validation
+            // when the key was actually sent.
+            && (!request.resource.data.keys().hasAny(['itemImageUrl'])
+                || request.resource.data.itemImageUrl == null
+                || request.resource.data.itemImageUrl is string)
             && (request.resource.data.visibility == 'broadcast'
                 || request.resource.data.visibility == 'targeted')
             // Phase 6: requesterRole must be one of the two real
@@ -1306,16 +1319,29 @@ service cloud.firestore {
           // ever touch exactly the fields serviceSync.js's corresponding
           // function writes, nothing else.
 
-          // open -> open (requester edits proposedPrice, re-surfacing via
-          // updatedAt) — the requester's own request only, and only
-          // while it's still unaccepted.
+          // open -> open (requester edits proposedPrice and/or
+          // itemDescription/itemImageUrl, re-surfacing via updatedAt) —
+          // the requester's own request only, and only while it's still
+          // unaccepted. Any non-empty subset of these four fields (plus
+          // updatedAt, always required) may be touched in one write —
+          // editErrandProposedPrice() only ever sends
+          // {proposedPrice, updatedAt}, editErrandRequestDetails() only
+          // ever sends some combination of
+          // {itemDescription, itemImageUrl, updatedAt} — so hasOnly()
+          // against the full four-field set covers both call sites
+          // without needing two separate rule branches.
           || (resource.data.keys().hasAny(['requesterUid'])
             && resource.data.requesterUid == request.auth.uid
             && resource.data.status == 'open'
             && request.resource.data.status == 'open'
-            && request.resource.data.proposedPrice is number
-            && request.resource.data.proposedPrice > 0
-            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['proposedPrice', 'updatedAt']))
+            && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['proposedPrice'])
+                || (request.resource.data.proposedPrice is number && request.resource.data.proposedPrice >= 0))
+            && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['itemDescription'])
+                || (request.resource.data.itemDescription is string && request.resource.data.itemDescription.size() > 0))
+            && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['itemImageUrl'])
+                || request.resource.data.itemImageUrl == null
+                || request.resource.data.itemImageUrl is string)
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['proposedPrice', 'itemDescription', 'itemImageUrl', 'updatedAt']))
 
           // open -> runner_accepted (any verified provider account, i.e.
           // a Runner, accepting a request visible to them) — mirrors
@@ -1526,6 +1552,143 @@ service cloud.firestore {
     // read directly by other app logic the way this flag is read by
     // NotificationPanel.jsx / Services.jsx.
     match /studentPreferences/{uid} {
+      allow read, write: if isSignedIn() && request.auth.uid == uid;
+    }
+
+    // -------------------------------------------------------------
+    // errandRequests/{requestId} + errandRequests/{requestId}/accepts/
+    // {acceptorUid} — the OPEN request feed (replaces the old shop-
+    // based errand mode under services/{serviceId}/bookings; that
+    // block above stays in place only for any already-existing legacy
+    // docs, nothing new is written there going forward).
+    //
+    // Person's explicit design (see src/lib/errandRequests.js's module
+    // doc comment for the full reasoning): no shop/provider account
+    // required — ANY signed-in real account can post a request or
+    // accept someone else's. Multiple accounts may accept the same
+    // request; the requester later confirms exactly one, and that
+    // confirm step (confirmErrandAcceptor in errandRequests.js) is a
+    // batch write touching both the parent doc AND every sibling
+    // accept doc at once — enforced below as two paired rule blocks,
+    // same "transition-locked, one legitimate shape per step" pattern
+    // used throughout this file for bookings/{bookingId}.
+    // -------------------------------------------------------------
+    match /errandRequests/{requestId} {
+      // Read: any real signed-in account — this is a broadcast feed,
+      // not a private record between two parties (unlike a booking).
+      // The "don't show me my own post" rule is enforced client-side
+      // in subscribeOpenErrandRequests (a pure display filter, not a
+      // security boundary — a requester seeing their own post is not
+      // a privacy leak), so no read-side restriction is needed here.
+      allow read: if isRealAccount();
+
+      // Create: the requester, for themselves, always starting 'open'
+      // with no acceptor chosen yet.
+      allow create: if isRealAccount()
+        && request.resource.data.requesterUid == request.auth.uid
+        && request.resource.data.status == 'open'
+        && request.resource.data.confirmedAcceptorUid == null
+        && request.resource.data.itemDescription is string
+        && request.resource.data.itemDescription.size() > 0
+        && request.resource.data.proposedPrice is number
+        && request.resource.data.proposedPrice >= 0
+        && (!request.resource.data.keys().hasAny(['itemImageUrl'])
+            || request.resource.data.itemImageUrl == null
+            || request.resource.data.itemImageUrl is string)
+        && (request.resource.data.requesterRole == 'student'
+            || request.resource.data.requesterRole == 'faculty');
+
+      // Update: exactly four legitimate transitions.
+      allow update: if isRealAccount() && (
+        // open -> confirmed (requester only, via confirmErrandAcceptor's
+        // batch — the paired accepts/{acceptorUid} writes are enforced
+        // by that subcollection's own rule below, not here).
+        (resource.data.requesterUid == request.auth.uid
+          && resource.data.status == 'open'
+          && request.resource.data.status == 'confirmed'
+          && request.resource.data.confirmedAcceptorUid is string
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'confirmedAcceptorUid', 'updatedAt']))
+
+        // open -> cancelled (requester withdraws, never confirmed).
+        || (resource.data.requesterUid == request.auth.uid
+          && resource.data.status == 'open'
+          && request.resource.data.status == 'cancelled'
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt']))
+
+        // confirmed -> finished (EITHER the requester or the confirmed
+        // acceptor may mark it done — mirrors the old shop-based
+        // errand mode's same "either party" finish rule).
+        || ((resource.data.requesterUid == request.auth.uid || resource.data.confirmedAcceptorUid == request.auth.uid)
+          && resource.data.status == 'confirmed'
+          && request.resource.data.status == 'finished'
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt']))
+
+        // itemImageUrl attach (requester only, only while still 'open').
+        // Needed because the image worker's ownership check (see
+        // service-images-worker/src/index.js's ownsErrandRequest) requires
+        // the errandRequests/{requestId} doc to already exist before it
+        // will authorize an upload against that id — so the real create
+        // flow is: create doc (no image) -> upload image -> patch this
+        // one field in, via patchErrandRequestImage() in errandRequests.js.
+        // Scoped to 'open' only (not 'confirmed'/'finished') since a
+        // request's image is meant to be settled before anyone accepts,
+        // not edited mid-flow.
+        || (resource.data.requesterUid == request.auth.uid
+          && resource.data.status == 'open'
+          && request.resource.data.status == 'open'
+          && (request.resource.data.itemImageUrl == null || request.resource.data.itemImageUrl is string)
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['itemImageUrl', 'updatedAt']))
+      );
+
+      allow delete: if isAdmin();
+
+      match /accepts/{acceptorUid} {
+        // Read: any real signed-in account (same broadcast-feed
+        // reasoning as the parent — an open request's queue length/
+        // composition isn't sensitive, and the requester needs to read
+        // every accept to choose one).
+        allow read: if isRealAccount();
+
+        // Create/overwrite-own: the acceptor, for themselves only, and
+        // only while the PARENT request is still 'open' (can't accept
+        // into something already confirmed/finished/cancelled) — get()
+        // reads the parent doc's current status inside the rule, same
+        // "cross-doc guard via get()" pattern _errandRequesterAllowed
+        // and offeringIsBookable already use elsewhere in this file.
+        allow create: if isRealAccount()
+          && acceptorUid == request.auth.uid
+          && request.resource.data.acceptorUid == request.auth.uid
+          && request.resource.data.status == 'waiting'
+          && request.resource.data.acceptorPhone is string
+          && request.resource.data.acceptorPhone.size() > 0
+          && get(/databases/$(database)/documents/errandRequests/$(requestId)).data.status == 'open'
+          && get(/databases/$(database)/documents/errandRequests/$(requestId)).data.requesterUid != request.auth.uid;
+
+        allow update: if isRealAccount() && (
+          // waiting -> withdrawn (the acceptor pulls their own offer back).
+          (acceptorUid == request.auth.uid
+            && resource.data.status == 'waiting'
+            && request.resource.data.status == 'withdrawn'
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']))
+
+          // waiting -> confirmed / waiting -> rejected — ONLY the
+          // request's own requester may flip these (this is the other
+          // half of confirmErrandAcceptor's paired batch write; the
+          // requester touches every sibling accept doc in the same
+          // transaction that flips the parent to 'confirmed' above).
+          || (get(/databases/$(database)/documents/errandRequests/$(requestId)).data.requesterUid == request.auth.uid
+            && resource.data.status == 'waiting'
+            && (request.resource.data.status == 'confirmed' || request.resource.data.status == 'rejected')
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']))
+        );
+      }
+    }
+
+    // errandContact/{uid} — one saved phone number per account, reused
+    // across every future accept (person's explicit "ask once, save
+    // forever" requirement). Same owner-only read/write shape as
+    // studentPreferences/{uid} above.
+    match /errandContact/{uid} {
       allow read, write: if isSignedIn() && request.auth.uid == uid;
     }
 
