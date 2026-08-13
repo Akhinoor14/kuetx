@@ -116,7 +116,12 @@ export const NAV_FACULTY = [
           // nav row, so faculty viewers could never reach it via the
           // Services chip strip/sidebar (Bike icon already registered in
           // iconRegistry.js by the student-side fix).
-          { id: 'f-services-errand',     label: 'Pick and Drop',    icon: 'Bike',            path: '/services/category/errand' },
+          //
+          // BUGFIX (Open Errand Request Feed migration): path updated
+          // from /services/category/errand (old shop-list route, always
+          // empty now) to /services/errands — same fix as nav.js's
+          // student-side entry, this file just mirrors it separately.
+          { id: 'f-services-errand',     label: 'Pick and Drop',    icon: 'Bike',            path: '/services/errands' },
         ],
       },
     ],

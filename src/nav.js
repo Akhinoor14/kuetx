@@ -197,6 +197,15 @@ export const NAV = [
         // Labels/icons intentionally hardcoded (not read from
         // serviceSync.js's SERVICE_TYPE_LABELS) since nav.js is plain
         // static config with no imports from app code elsewhere.
+        //
+        // BUGFIX (Open Errand Request Feed migration): services-errand's
+        // path was still /services/category/errand (the old shop-list
+        // route, which now always shows "No shops in this category yet"
+        // since errand shops no longer exist in this model) — this chip
+        // strip is a SEPARATE static config from Services.jsx's own card
+        // grid, so updating Services.jsx's click handler alone missed
+        // this one entirely. Now points at /services/errands, matching
+        // the same change already made in Services.jsx and App.jsx.
         name: 'Services',
         hubPath: '/campus-life',
         hubIcon: 'ShoppingBag',
@@ -206,7 +215,7 @@ export const NAV = [
           { id: 'services-medicine',   label: 'Pharmacy',   shortLabel: 'Pharmacy',   icon: 'Cross',          accent: 'red',    path: '/services/category/medicine' },
           { id: 'services-bookstore',  label: 'Stationery', shortLabel: 'Stationery', icon: 'BookOpen',       accent: 'purple', path: '/services/category/bookstore' },
           { id: 'services-onlinemart', label: 'Online Mart',shortLabel: 'Online Mart',icon: 'ShoppingBag',    accent: 'green',  path: '/services/category/onlinemart' },
-          { id: 'services-errand',     label: 'Pick and Drop',   shortLabel: 'Pick n Drop',   icon: 'Bike',           accent: 'teal',   path: '/services/category/errand' },
+          { id: 'services-errand',     label: 'Pick and Drop',   shortLabel: 'Pick n Drop',   icon: 'Bike',           accent: 'teal',   path: '/services/errands' },
         ]
       },
       {

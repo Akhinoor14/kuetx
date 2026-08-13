@@ -713,6 +713,20 @@ export function CategoryShopList() {
   const navigate = useNavigate();
   const services = useVisibleServices();
 
+  // Open Errand Request Feed migration — 'errand' no longer has shops
+  // at all (this route always showed "No shops in this category yet"
+  // for it, permanently, since the model changed), so anyone who still
+  // lands here for errand (an old bookmark, a stale link, or a client
+  // that hasn't picked up the nav.js/nav-faculty.js chip-path fix yet)
+  // is bounced straight to the real feed instead of a dead end. This
+  // whole route/component stays as-is for every OTHER category (salon,
+  // hotel, medicine, bookstore, onlinemart all still shop-based and use
+  // this exact component) — only this one category gets redirected.
+  useEffect(() => {
+    if (categoryType === 'errand') navigate('/services/errands', { replace: true });
+  }, [categoryType, navigate]);
+  if (categoryType === 'errand') return null;
+
   const categoryServices = (services || []).filter((s) => s.type === categoryType);
   const serviceIds = categoryServices.map((s) => s.id);
   const pendingCounts = usePendingCounts(serviceIds);

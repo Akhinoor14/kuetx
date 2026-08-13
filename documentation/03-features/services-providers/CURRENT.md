@@ -757,7 +757,58 @@ error/warning ছাড়া।
 **Verified:** এই পরিবর্তনগুলোসহ আবার ক্লিন `npm install && npm run
 build` পাস করেছে।
 
-### বাগ ফিক্স — ছবির লাইফসাইকেল (owner-এর প্রশ্ন থেকে ধরা পড়েছে)
+### বাগ ফিক্স — chip strip-এ পুরনো path (owner deploy করার পর ধরা পড়েছে)
+
+Deploy করার পর owner স্ক্রিনশট দিয়ে দেখান: Campus Life-এর top chip
+strip-এ "Pick n Drop" চিপ ক্লিক করলে এখনো পুরনো
+`/services/category/errand` route-এ যাচ্ছে ("No shops in this category
+yet")। কারণ — **এই chip strip `Services.jsx`-এর কার্ড গ্রিড থেকে
+সম্পূর্ণ আলাদা একটা static config**:
+
+- `src/nav.js` (student sidebar/chip strip) — `services-errand` entry-র
+  `path` হার্ডকোডেড ছিল `/services/category/errand`
+- `src/nav-faculty.js` (faculty-side একই) — একই সমস্যা
+
+আমি আগে শুধু `Services.jsx`-এর কার্ড গ্রিডের ক্লিক-হ্যান্ডলার বদলেছিলাম
+(errand card যেটা `/services`-এ দেখা যায়), কিন্তু `nav.js`/
+`nav-faculty.js`-এর এই আলাদা chip strip config দুটো মিস করে গিয়েছিলাম
+— দুটোই এখন `/services/errands`-এ পয়েন্ট করছে।
+
+(`/services/errands` সরাসরি URL দিলে "This service couldn't be found"
+দেখানোটা এই বাগ না — সেটা নতুন build deploy না হওয়ার লক্ষণ ছিল, deploy
+করার পরে ঠিক হয়ে যাওয়ার কথা, যেহেতু route App.jsx-এ সঠিক জায়গায়
+আগে থেকেই আছে।)
+
+**পরিবর্তিত ফাইল**: `src/nav.js`, `src/nav-faculty.js`
+
+**Verified:** আবার ক্লিন `npm install && npm run build` পাস করেছে।
+
+### পুরনো `/services/category/errand` route — কেন এখনো আছে, কিন্তু এখন redirect করে
+
+Owner-এর প্রশ্ন: পুরনো route-টা কেন এখনো আছে, সরিয়ে ফেলা উচিত না?
+
+**কেন পুরো route সরানো যায় না**: `/services/category/:categoryType`
+route-টা (`CategoryShopList` component, `App.jsx`-এ declare করা) salon,
+hotel, medicine, bookstore, onlinemart — এই ৫টা category-র জন্য এখনো
+সক্রিয়ভাবে ব্যবহৃত হচ্ছে (এরা এখনো সবাই shop-based)। এই route/component
+সরিয়ে দিলে ওই ৫টা category-ই ভেঙে যাবে — শুধু errand-এর জন্য এই
+shared route/component ডিলিট করা সম্ভব না।
+
+**যা করা হয়েছে**: `CategoryShopList` কম্পোনেন্টে একটা redirect যোগ করা
+হয়েছে — `categoryType === 'errand'` হলে সাথে সাথে `/services/errands`
+(আসল নতুন ফিড)-এ পাঠিয়ে দেয় (`navigate(..., { replace: true })`, তাই
+browser history-তে dead route থাকে না)। বাকি ৫টা category-র জন্য এই
+কম্পোনেন্ট আগের মতোই কাজ করে, কোনো পরিবর্তন নেই।
+
+**ফলাফল**: কেউ যদি পুরনো bookmark/লিংক দিয়ে
+`/services/category/errand`-এ যায়, সাথে সাথে সঠিক জায়গায় বাউন্স হয়ে
+যাবে — "No shops in this category yet" আর কখনো দেখাবে না।
+
+**পরিবর্তিত ফাইল**: `src/pages/Services.jsx` (`CategoryShopList`)
+
+**Verified:** আবার ক্লিন `npm install && npm run build` পাস করেছে।
+
+
 
 Owner ধরিয়ে দিয়েছিলেন: request finish হয়ে গেলে সেই ছবি R2-তে পড়ে থাকার
 কোনো মানে নেই। খুঁজতে গিয়ে দুটো real bug পাওয়া গেছে, দুটোই ফিক্স
