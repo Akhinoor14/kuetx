@@ -104,11 +104,13 @@ const ProviderShopSettingsPagePage = lazy(() => import('./pages/provider/Provide
 const ProviderProfilePage = lazy(() => import('./pages/provider/ProviderProfile'));
 const ProviderNotificationsPage = lazy(() => import('./pages/provider/ProviderNotifications'));
 const About = lazy(() => import('./pages/About'));
+// Phase A (DEMO_MODE_FULL_PLAN_PROMPT.md): public landing page for
+// signed-out visitors at route '/'. Lazy-loaded like every other page —
+// zero impact on signed-in accounts' bundle-load path since they never
+// hit the branch that renders it (see the root <Route> below).
+const LandingPage = lazy(() => import('./pages/LandingPage'));
 import RequireGuestMode from './components/RequireGuestMode';
-const GuestDashboard = lazy(() => import('./pages/guest/GuestDashboard'));
-const GuestSchedule = lazy(() => import('./pages/guest/GuestSchedule'));
-const GuestAttendance = lazy(() => import('./pages/guest/GuestAttendance'));
-const GuestMarks = lazy(() => import('./pages/guest/GuestMarks'));
+
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const ClassRoutine = lazy(() => import('./pages/ClassRoutine'));
 const ClassSetup = lazy(() => import('./pages/ClassSetup'));
@@ -324,10 +326,31 @@ function Layout({ authState, onboardingActive }) {
                 resolves and disagrees with the client flag: client-trust
                 for the fast paint, server-verified correction after, no
                 block screen, no manual click required. */}
+            {/* GUEST MODE Phase A (DEMO_MODE_FULL_PLAN_PROMPT.md): root
+                now branches on auth state, not just accountRole. A
+                signed-out visitor (no auth.currentUser at all) never
+                reaches the accountRole ternary below — accountRole is a
+                purely client-cached flag for SIGNED-IN sessions (see
+                accountRole.js's own doc comment) and is meaningless for
+                a visitor who has never logged in, so checking it first
+                would be wrong here even though it works for every
+                already-authenticated case beneath it.
+                RequireGuestMode wraps LandingPage as the second,
+                server-verified layer of the same guarantee: if a
+                signed-in session's client flags haven't caught up yet
+                (race condition) and somehow reaches this branch, it
+                still gets bounced to /dashboard rather than seeing the
+                landing page meant for signed-out visitors. This is the
+                exact same component Phase 2 built for /guest/* routes —
+                reused with zero changes (see Phase 0's Findings #5),
+                since its check (authState.authReady && authState.user)
+                is route-agnostic. */}
             <Route path="/" element={
-              getAccountRole() === 'teacher' ? <Navigate to="/faculty" replace /> :
-              getAccountRole() === 'provider' ? <Navigate to="/provider" replace /> :
-              <RootRouteResolver>{() => <Dashboard />}</RootRouteResolver>
+              !auth.currentUser
+                ? <RequireGuestMode authState={authState}><LandingPage /></RequireGuestMode>
+                : getAccountRole() === 'teacher' ? <Navigate to="/faculty" replace /> :
+                  getAccountRole() === 'provider' ? <Navigate to="/provider" replace /> :
+                  <RootRouteResolver>{() => <Dashboard />}</RootRouteResolver>
             } />
             <Route path="/profile" element={<RequireStudentMode><Profile /></RequireStudentMode>} />
             <Route path="/courses" element={<RequireStudentMode><Courses /></RequireStudentMode>} />
@@ -394,20 +417,15 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/notes" element={<RequireStudentMode><Notes /></RequireStudentMode>} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/about" element={<About />} />
-            {/* GUEST MODE (Phase 2.1) — /guest redirects to the dashboard
-                demo per the plan's recommended structure. Sub-routes are
-                the four presentational-only demo pages built this phase
-                (see documentation/03-features/guest-mode/GUEST_MODE_PLAN_PROMPT.md Phase 2.3's BLOCKED status for why
-                these are hand-built pages, not the real Dashboard/
-                Schedule/Attendance/Marks reused with injected data).
-                Each wrapped in RequireGuestMode (Phase 4, item 3) so a
-                signed-in user who manually navigates here is bounced to
-                the real /dashboard instead of seeing fake demo data. */}
-            <Route path="/guest" element={<Navigate to="/guest/dashboard" replace />} />
-            <Route path="/guest/dashboard" element={<RequireGuestMode authState={authState}><GuestDashboard /></RequireGuestMode>} />
-            <Route path="/guest/schedule" element={<RequireGuestMode authState={authState}><GuestSchedule /></RequireGuestMode>} />
-            <Route path="/guest/attendance" element={<RequireGuestMode authState={authState}><GuestAttendance /></RequireGuestMode>} />
-            <Route path="/guest/marks" element={<RequireGuestMode authState={authState}><GuestMarks /></RequireGuestMode>} />
+            {/* Phase H cleanup: old /guest/* demo pages removed — the
+                new / landing page (Phase A-G) fully replaces them.
+                Bookmarks/links redirect straight into the new landing
+                page with the matching role pre-selected. */}
+            <Route path="/guest" element={<Navigate to="/?role=student" replace />} />
+            <Route path="/guest/dashboard" element={<Navigate to="/?role=student" replace />} />
+            <Route path="/guest/schedule" element={<Navigate to="/?role=student" replace />} />
+            <Route path="/guest/attendance" element={<Navigate to="/?role=student" replace />} />
+            <Route path="/guest/marks" element={<Navigate to="/?role=student" replace />} />
             {/* Publicly reachable (no route guard) — a brand-new account
                 still on the Role Select screen needs to be able to open
                 this before finishing signup, and it's also linked from
@@ -636,14 +654,24 @@ function Layout({ authState, onboardingActive }) {
 // here stays synchronous/local, matching the original function's cost
 // profile as closely as possible.
 //
+// HISTORICAL NOTE (Phase H cleanup, DEMO_MODE_FULL_PLAN_PROMPT.md):
+// GuestNav.jsx and the old /guest/dashboard, /guest/schedule,
+// /guest/attendance, /guest/marks pages this comment used to reference
+// were deleted in Phase H — all five /guest/* paths now redirect
+// straight to /?role=student (see the <Route> block above), so the
+// SPA-navigation nuance described below no longer applies to them. Left
+// here for context on why '/guest' is still in PUBLIC_PATHS below (old
+// bookmarks/links still need to resolve without a hard 404) rather than
+// removing the explanation entirely.
+//
 // KNOWN GAP — verified in Phase 2, turned out to be a non-issue for the
 // current guest-mode scope: the queue only rebuilds when
 // authState.authReady/isAnonymous/uid changes (see the effect below), not
 // on every client-side route change. This means buildQueue() runs once
 // per public path on the page's initial load and does NOT re-run just
-// because GuestNav's links (see components/guest/GuestNav.jsx) SPA-
-// navigate between /guest/dashboard, /guest/schedule, /guest/attendance,
-// /guest/marks. In practice this is fine: once buildQueue() resolves to
+// because of SPA navigation between /guest/dashboard, /guest/schedule,
+// /guest/attendance, /guest/marks (now moot — those all just redirect).
+// In practice this is fine: once buildQueue() resolves to
 // an EMPTY queue for one public path, `current` stays null and Layout
 // keeps rendering regardless of which PUBLIC_PATHS entry the URL bar
 // shows next — the empty-queue state doesn't need to know "which" public
@@ -651,11 +679,20 @@ function Layout({ authState, onboardingActive }) {
 // for every public path at the moment of the initial (non-SPA) page
 // load. The only case this WOULD matter is a signed-out visitor SPA-
 // navigating from a public path to a genuinely gated path (e.g. typing
-// '/marks' into the guest nav, which doesn't exist today) without a full
-// reload in between — not a scenario the current GuestNav/GuestShell
-// exposes, since it only links between PUBLIC_PATHS entries. Revisit if
-// a future phase adds an in-app link from a public path to a gated one.
-const PUBLIC_PATHS = ['/about', '/guest', '/guest/dashboard', '/guest/schedule', '/guest/attendance', '/guest/marks'];
+// '/marks' into the address bar) without a full reload in between — not
+// a scenario the current public routes expose, since they all only
+// redirect to '/'. Revisit if a future phase adds an in-app link from a
+// public path to a gated one.
+// GUEST MODE Phase A (DEMO_MODE_FULL_PLAN_PROMPT.md): '/' added so a
+// signed-out visitor gets an empty queue at root too, exactly like
+// '/about' already worked — otherwise buildQueue() below would push
+// 'auth' for root and Layout would never mount, so the new root <Route>
+// branch above (which checks auth.currentUser itself) would never even
+// get a chance to render LandingPage. Signed-in accounts are unaffected:
+// they never hit the isPublicPath() branch inside buildQueue() below in
+// the first place, since that branch only fires when
+// isAnonymous || !auth.currentUser?.uid is true.
+const PUBLIC_PATHS = ['/', '/about', '/guest', '/guest/dashboard', '/guest/schedule', '/guest/attendance', '/guest/marks']; // kept for old bookmarks — all now just redirect into /
 const isPublicPath = (pathname) => PUBLIC_PATHS.includes(pathname);
 
 async function buildQueue(isAnonymous, pathname) {

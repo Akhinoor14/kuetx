@@ -14,39 +14,11 @@ import { subscribeGroupTermStartDate } from '../lib/termStartDateSync';
 import { getGroupId } from '../lib/groupUtils';
 import { CATEGORY_ICONS } from './Services';
 import TodayCard from '../components/TodayCard';
-
-function StatCard({ label, value, sub, color, bgColor, icon: Icon, to }) {
-  const inner = (
-    <div className="card" style={{ 
-      display: 'flex', 
-      flexDirection: 'column', 
-      gap: 6, 
-      cursor: to ? 'pointer' : 'default', 
-      transition: 'all 0.2s',
-      padding: '14px 16px',
-      border: `1.5px solid ${color}20`,
-      background: bgColor || 'rgba(var(--accentRGB), 0.02)',
-      boxShadow: `0 4px 12px ${color}12`,
-      position: 'relative',
-      overflow: 'hidden',
-      borderRadius: 12,
-      minHeight: 100
-    }}>
-      {/* Background accent blob */}
-      <div style={{ position: 'absolute', top: -30, right: -30, width: 100, height: 100, borderRadius: '50%', background: `${color}08` }} />
-      
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', zIndex: 1 }}>
-        <span style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{label}</span>
-        {Icon && <Icon size={20} color={color} strokeWidth={2.2} />}
-      </div>
-      <div style={{ fontSize: 32, fontWeight: 900, color: color, letterSpacing: '-0.02em', lineHeight: 1, zIndex: 1 }}>
-        {value}
-      </div>
-      {sub && <div style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 500, zIndex: 1, marginTop: 2 }}>{sub}</div>}
-    </div>
-  );
-  return to ? <Link to={to} style={{ textDecoration: 'none' }}>{inner}</Link> : inner;
-}
+// Phase B (student slice) of DEMO_MODE_FULL_PLAN_PROMPT.md — StatCard
+// moved to components/shared so LandingPage's student demo (Phase C) can
+// reuse the exact same component with demo-data props. Verified pure
+// before the move (props-only, no store/Firestore calls).
+import StatCard from '../components/shared/StatCard';
 
 // MULTI_CATEGORY_SERVICES_PLAN.md Phase 6: compact 5-category preview
 // row for the Home page, linking to the full category grid at

@@ -325,7 +325,7 @@ export default function About() {
             Key Features
           </h2>
           <p style={{ fontSize: '0.95rem', color: 'var(--muted)', margin: 0 }}>
-            Organized into four powerful modules
+            Organized into five powerful modules
           </p>
         </div>
         <div className="about-features-grid" style={{
@@ -336,19 +336,23 @@ export default function About() {
           {[
             {
               category: 'Academics',
-              items: ['Course Management', 'Attendance Tracking', 'Marks & Results', 'Class Schedule', 'Syllabus Browser', 'Teacher Directory']
+              items: ['Attendance Tracking', 'Marks & Results', 'Class Schedule', 'Syllabus Browser', 'Teacher Directory', 'Question Bank']
             },
             {
-              category: 'Daily Life',
-              items: ['Class Diary', 'Assignment Tracker', 'Self-Study Logs', 'Time Tracking', 'Namaz Reminder', 'Self Evaluation']
+              category: 'Class Rep (CR) System',
+              items: ['Class Setup', 'Roster Management', 'Notice Broadcasting', 'CT/Quiz Planning']
             },
             {
-              category: 'Finance & Activities',
-              items: ['Money Management', 'Tuition Tracker', 'Food & Health', 'Club Memberships', 'Project Portfolio', 'Event Calendar']
+              category: 'Faculty Portal',
+              items: ['Class & Schedule Management', 'Session Tracking', 'Marks Entry', 'Notices', 'Meetings']
             },
             {
-              category: 'Tools & Analytics',
-              items: ['Smart Score', 'Alert System', 'Report Generation', 'Notes Manager', 'Profile Settings', 'Data Export']
+              category: 'Campus Services',
+              items: ['Service/Provider Marketplace', 'Booking & Inquiries', 'Errand Requests']
+            },
+            {
+              category: 'Personal Tools',
+              items: ['Class Diary', 'Namaz Reminder', 'Money Management', 'Club Memberships', 'Self Evaluation', 'Notes Manager']
             }
           ].map((section, i) => (
             <div key={i} style={{
