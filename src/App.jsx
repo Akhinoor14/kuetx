@@ -344,7 +344,18 @@ function Layout({ authState, onboardingActive }) {
                 exact same component Phase 2 built for /guest/* routes —
                 reused with zero changes (see Phase 0's Findings #5),
                 since its check (authState.authReady && authState.user)
-                is route-agnostic. */}
+                is route-agnostic.
+
+                UPDATE (sidebar-on-landing-page bugfix): the primary gate
+                for "should Layout even mount for a signed-out visitor at
+                '/'" now lives one level up, in App()'s own return (see
+                the comment there next to `!auth.currentUser ? <LandingPage
+                standalone> : <Layout>`) — Layout no longer mounts at all
+                for a signed-out session, so this ternary's first branch
+                is now unreachable in the normal case. Left in place as a
+                defense-in-depth fallback only (e.g. if Layout somehow
+                still mounts mid-race before auth.currentUser clears), not
+                the primary mechanism anymore. */}
             <Route path="/" element={
               !auth.currentUser
                 ? <RequireGuestMode authState={authState}><LandingPage /></RequireGuestMode>
@@ -1718,7 +1729,31 @@ export default function App() {
             <div style={{ position: 'fixed', inset: 0, zIndex: 1, background: 'var(--bg)' }} />
           )
         ) : (
-          <Layout authState={authState} onboardingActive={!!current} />
+          // BUGFIX (sidebar/navbar showing on the guest landing page):
+          // Layout unconditionally renders the real app chrome (Sidebar,
+          // Navbar, BottomNav) around whatever <Routes> resolves to,
+          // including '/' — but '/' for a signed-out visitor should be
+          // LandingPage with NO app chrome at all (it has its own
+          // navbar). The '/' route's `!auth.currentUser ? <LandingPage/>
+          // : ...` ternary further down (inside Layout's own <Routes>)
+          // never actually protects against this, because by the time
+          // that ternary runs, Layout itself has already mounted the
+          // Sidebar/Navbar around it. Root cause: '/' is listed in
+          // PUBLIC_PATHS so buildQueue() returns an EMPTY queue for a
+          // signed-out visitor there (same as a fully-onboarded signed-in
+          // account gets), which is exactly the condition this branch
+          // uses to decide "mount Layout" — with no separate check for
+          // "but is anyone actually signed in first". Fix: check
+          // auth.currentUser here, one level up, before ever mounting
+          // Layout — a signed-out visitor gets LandingPage standalone; a
+          // signed-in one gets Layout exactly as before.
+          !auth.currentUser
+            ? (
+              <Suspense fallback={<PageLoadingFallback />}>
+                <RequireGuestMode authState={authState}><LandingPage /></RequireGuestMode>
+              </Suspense>
+            )
+            : <Layout authState={authState} onboardingActive={!!current} />
         )}
         {/* Nudges anyone who used "Finish now, add rest later" to fill in the
             full profile — but only from a later session, never right after
