@@ -28,6 +28,7 @@ import {
   updateProfile,
 } from 'firebase/auth';
 import { auth } from './firebase';
+import { clearAccountRole } from './accountRole';
 import { checkEmailDomain } from './emailDomainCheck';
 
 const googleProvider = new GoogleAuthProvider();
@@ -303,6 +304,22 @@ function clearRoleStatusCaches() {
 export const logout = async () => {
   await signOut(auth);
   clearRoleStatusCaches();
+  // BUGFIX (guest-mode landing page never showing after sign-out): this
+  // was the missing piece flagged in accountRole.js's own doc comment
+  // ("not currently wired to the sign-out button"). Without this, the
+  // 'accountRole' localStorage key set at sign-in (see setAccountRole())
+  // survived a full sign-out. App.jsx's root route branches on
+  // `!auth.currentUser` for the guest-vs-signed-in split, which correctly
+  // resolved to signed-out — but once a returning session (or the same
+  // tab, later) re-authenticated even briefly, or any code path re-read
+  // getAccountRole() before this was cleared, the stale role sent
+  // formerly-signed-in visitors straight into <Dashboard>/<RootRouteResolver>
+  // instead of the LandingPage guest experience, with the real Sidebar/
+  // Navbar rendering against a session that no longer has a valid auth
+  // token — which is exactly the Firestore "Missing or insufficient
+  // permissions" errors seen in the console for provider/service/errand
+  // listeners that require auth.currentUser.
+  clearAccountRole();
 };
 
 // ─── Error messages in Bangla/English ────────────────────────────────────────

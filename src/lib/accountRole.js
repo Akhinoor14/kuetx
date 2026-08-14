@@ -109,9 +109,9 @@ export function setAccountRole(role, uid = auth.currentUser?.uid) {
   if (uid) store.set(ROLE_OWNER_KEY, uid);
 }
 
-/** Sign-out (or "choose again") should clear this so Role Select reappears
- * — not currently wired to the sign-out button; noted here for Phase 8/
- * final-pass follow-up if the logout flow needs it. */
+/** Sign-out should clear this so a signed-out visitor doesn't get routed
+ * by a stale role and Role Select correctly reappears on next sign-in.
+ * Wired into logout() in firebaseAuth.js. */
 export function clearAccountRole() {
   store.set(ROLE_KEY, null);
   store.set(ROLE_OWNER_KEY, null);

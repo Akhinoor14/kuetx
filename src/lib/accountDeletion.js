@@ -23,6 +23,7 @@ import {
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
 import { clearLocalDataOnLogout } from './accountLifecycle';
+import { clearAccountRole } from './accountRole';
 import { leaveGroup } from './groupSync';
 import { withPromiseTimeout } from './safeSnapshot';
 
@@ -149,6 +150,7 @@ export async function deleteMyAccount(confirmText) {
   // 6. Clear this device's local copy and drop the session, same as a
   //    normal logout.
   await clearLocalDataOnLogout();
+  clearAccountRole(); // BUGFIX: same stale-role issue as logout() in firebaseAuth.js — this signs out independently, so needs the same fix.
   try {
     await auth.signOut();
   } catch {
