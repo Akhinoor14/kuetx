@@ -1,0 +1,64 @@
+{
+  "id": "991_p5_Q6",
+  "course": {
+    "code": "CE 4125",
+    "title": null,
+    "department": "Department of Architecture",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2023\\4th_Year_1st_Term_2023_991.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "6",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the buckling strength of a w 24 x 162 column. The length of the column is 35ft For major axis buckling pinned at both end & for minor axis buckling it is pinned at one end and fixed on the other.Given, section properties, $\\mathrm { I _ { x } } = \\dot { 5 } 1 7 0 \\ \\mathrm { i n ^ { 4 } } , \\mathrm { I _ { y } } = 4 4 3 \\ \\mathrm { i n ^ { 4 } } , \\mathrm { E = 2 9 0 0 0 k s i }$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_01f91baab850406a23e9017cba20f2a11debc823a85c35546650f9b61933ddbc.jpg",
+      "_source_path": "images/01f91baab850406a23e9017cba20f2a11debc823a85c35546650f9b61933ddbc.jpg"
+    },
+    {
+      "type": "text",
+      "value": "o) A column of a building issubjected $\\mathrm {  { \\left( \\mathrm { 4 0 1 2 0 0 k i p s } \\right) } }$ loads. To renovate the building newequipmentsneed to be move into the building which will increase the loads on the column. If the section used isw 16 x 100, how much load canbe increased on that column? Section properties, $\\overline { { \\mathrm { A g } ^ { = } 2 9 . 4 } }$ inch2, $\\mathrm { I } _ { \\mathrm { x } } { = } 1 4 9 0$ in⁴, Iy=186 in⁴, $F _ { \\mathrm { y } } = 5 0$ ksi. The column is fixed at major axis& pinned at minor axis with a bracing in the middle. 人 9 t"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d101a4e1ea5ccb2f05bd417918171fd47b1e4864c51b232cecc12bce0375bf93.jpg",
+      "_source_path": "images/d101a4e1ea5ccb2f05bd417918171fd47b1e4864c51b232cecc12bce0375bf93.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Determine My, M Z for the steel T beam shown in the following figure. Calculate the shape factor& the nominal load $( \\mathrm { W _ { n } } )$ that can be placed on the beam for a 12ft simple span. $\\mathrm { F _ { y } } = 6 0$ ksi."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_9c8b2c5276e529e8cb9f0d277c6070993cbb4ab1b44f27c23b6d71716abeaa69.jpg",
+      "_source_path": "images/9c8b2c5276e529e8cb9f0d277c6070993cbb4ab1b44f27c23b6d71716abeaa69.jpg"
+    },
+    {
+      "type": "text",
+      "value": "a beam with unbraced length."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch 4th Year 1st Term Regular Examination, 2023"
+}

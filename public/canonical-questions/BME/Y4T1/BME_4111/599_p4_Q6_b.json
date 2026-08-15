@@ -1,0 +1,42 @@
+{
+  "id": "599_p4_Q6(b)",
+  "course": {
+    "code": "BME 4111",
+    "title": "Biomedical Image Processing",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2019\\4th_Year_1st_Term_2019_599.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "What are the advantages of converting RGB color space to HIS color space? An RGB image has (15) the following color planes. Convert this from RGB to HIS."
+    },
+    {
+      "type": "formula",
+      "value": "$$\nR = \\bigl [ \\begin{array} { l l } { 7 0 } & { 8 2 } \\\\ { 1 0 } & { 4 0 } \\end{array} \\bigr ] ; \\qquad G = \\bigl [ \\begin{array} { l l } { 1 1 0 } & { 1 7 0 } \\\\ { 1 1 1 } & { 1 6 0 } \\end{array} \\bigr ] ; \\qquad B = \\bigl [ \\begin{array} { l l } { 5 0 } & { 4 2 } \\\\ { 4 8 } & { 4 3 } \\end{array} \\bigr ]\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2019"
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "569_p4_Q6(c)",
+    "course": {
+      "code": "MATH 1125",
+      "title": "Mathematics",
+      "department": "Department of Architecture",
+      "year_term": "1st Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2018\\1st_Year_Backlog_2018_569.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "6(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Find the length of the shortest distance between two skew lines $x + y = 0 .$ $\\begin{array} { r } { z = 4 \\mathsf { a n d } \\frac { x - 1 } { 4 } = \\frac { y - 2 } { 3 } = \\frac { z - 3 6 } { - 6 } . } \\end{array}$"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year Backlog Examination, 2018",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো গাণিতিক টপিক নেই, শুধুমাত্র একটি 'Sorry' মেসেজ আছে তাই প্রশ্নের সাথে মেলানোর জন্য কোনো ভ্যালিড টপিক নাম্বার পাওয়া যাচ্ছে না।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

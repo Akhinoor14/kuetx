@@ -1,0 +1,42 @@
+{
+  "id": "620_p2_Q7(c)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\2nd_Year_2nd_Term_2015_620.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is array? How could youdeclare array? Develop a FORTRAN program (15) to find out the. multiplication of two matrices given below-"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\dot { A } = \\left[ \\begin{array} { l l } { - 3 } & { 0 } \\\\ { 3 } & { 7 } \\\\ { 9 } & { 6 } \\end{array} \\right] , \\dot { B } = \\left[ \\begin{array} { l l l } { - 1 } & { 5 } & { 7 } \\\\ { 2 } & { 9 } & { 6 } \\end{array} \\right]\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

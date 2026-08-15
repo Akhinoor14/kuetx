@@ -1,0 +1,37 @@
+{
+  "id": "625_p5_Q7(c)",
+  "course": {
+    "code": "CE 3113",
+    "title": "Reinforced Concrete Structures - I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\3rd_Year_1st_Term_2017_625.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "An 18 ft span simply supported beam carries a uniform dead load of 4 k/ft and a live load of 1.5 k/ft. The beam has a width $b = 1 2$ in. and a depth d=24 in. and is reinforced with six no. 9 bars in two rows. Check the beam for shear and design the necessary shear reinforcement. Given: $\\boldsymbol { f } ^ { \\prime } { } _ { c } = 3$ ksi, and $f _ { y t } = 6 0$ ksi. Use USD method."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

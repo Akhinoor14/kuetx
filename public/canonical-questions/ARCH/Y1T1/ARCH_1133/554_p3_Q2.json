@@ -1,0 +1,42 @@
+[
+  {
+    "id": "554_p3_Q2",
+    "course": {
+      "code": "ARCH 1133",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2017,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2017\\1st_Year_1st_Term_2017_554.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "2",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "a. Define Order. Outline the Principles that can be utilized to create order in an 05   \narchitectural composition.   \nb. What is Hierarchy? Discuss the ways in which visual emphasis can be 15   \nachieved in the arrangement of forms and spaces.   \nc. What is Datum? In how many ways a Datum can organize elements? State 15   \nwith examples.   \na.What is Centralized Organization?Give an example from Bangladesh. 05   \nb. Discuss various types of Spatial Relationship in brief. 15   \n\\* c. What is linear organization? Discuss with examples. 15   \na. How forms of Circulation Space affect our perception, movement and 10   \nactivities through a space? Give an example of Enclosed Circulation Space.   \nb. Discuss various forms of Entrances to a building. State the locational 15   \nimpact of Entrances on space. How Entrances can be visually reinforced?   \nc. Outline the elements of circulation. In how many ways a building can be 10   \napproached? Discuss with examples."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 1st Year 1st Term Regular Examination, 2017",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় প্রশ্নের সাথে মিল রেখে যেকোনো একটি টপিক নেই, তাহলে সবচেয়ে কাছাকাছি কোনোটিও নির্বাচন করা সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

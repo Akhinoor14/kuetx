@@ -1,0 +1,51 @@
+[
+  {
+    "id": "998_p11_Q5(c)",
+    "course": {
+      "code": "CE 2125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\2nd_Year_Backlog_2022_998.pdf",
+      "source_page": null,
+      "paper_index": 11
+    },
+    "question_number": "5(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Find out centroid of the shape formed from the equations: 15"
+      },
+      {
+        "type": "text",
+        "value": "$y ^ { 2 } = 1 6 x$ , and"
+      },
+      {
+        "type": "formula",
+        "value": "$$\nx ^ { 2 } = 1 6 y\n$$",
+        "format": "latex"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 2nd Year Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো গাণিতিক টপিক নেই, তাই প্রশ্নের সাথে মেলায় এমন একটি topic পাওয়া যাচ্ছে না।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

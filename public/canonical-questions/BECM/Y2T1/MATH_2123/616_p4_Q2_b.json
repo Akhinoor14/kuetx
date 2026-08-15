@@ -1,0 +1,45 @@
+{
+  "id": "616_p4_Q2(b)",
+  "course": {
+    "code": "MATH 2123",
+    "title": "Mathematics - III",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\2nd_Year_1st_Term_2017_616.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "A cantilever beam is clamped at the end x = 0 and is free at the end x = L. It carries a load per unit length given by W(x) ={w0 0<x<1/2 0. l/2<x<l. Find the deflection. Using Laplace transform"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "text",
+      "value": ":"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

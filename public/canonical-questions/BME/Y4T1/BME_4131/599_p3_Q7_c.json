@@ -1,0 +1,47 @@
+{
+  "id": "599_p3_Q7(c)",
+  "course": {
+    "code": "BME 4131",
+    "title": "Bio-optics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2019\\4th_Year_1st_Term_2019_599.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": "A prism was coated with a thin layer of silver $( \\mathfrak { E } _ { \\mathfrak { m } } = - 2 7 . 6$ at λ = 800 nm), and placed in an (09) aqueous environment $( n _ { d } { = } 1 . 3 3 )$ . Light from a focused LED was incident on the rear surface of the silver through the prism $( n _ { p } { = } 1 . 5 0 )$ , and scanned through a range of incident angles. Using the equations provided, calculate the Plasmon resonance angle of the system."
+    },
+    {
+      "type": "formula",
+      "value": "$$\nk _ { s p } = k n _ { p } \\sin \\theta _ { s p } \\quad \\quad \\quad \\quad k _ { s p } = k \\times N _ { s p }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nN _ { s p } = \\sqrt { \\frac { \\varepsilon _ { m } \\varepsilon _ { d } } { \\varepsilon _ { m } + \\varepsilon _ { d } } }\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2019"
+}

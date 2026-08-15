@@ -1,0 +1,58 @@
+{
+  "id": "766_p3_Q3",
+  "course": {
+    "code": "URP 3225",
+    "title": null,
+    "department": "Department of Architecture",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\3rd_Year_2nd_Term_2019_766.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "a. Prepare a shadow diagram at 9.00 am for point A, B and C of the plan from the given information"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=2>Chart 1</td></tr><tr><td rowspan=1 colspan=1>Time</td><td rowspan=1 colspan=1>Angle(Azimuth)</td></tr><tr><td rowspan=1 colspan=1>9.00 am</td><td rowspan=1 colspan=1>46°25&#x27;</td></tr><tr><td rowspan=1 colspan=1>12.00 pm</td><td rowspan=1 colspan=1>5052&#x27;</td></tr><tr><td rowspan=1 colspan=1>3.00 pm</td><td rowspan=1 colspan=1>325°25&#x27;</td></tr></table>"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=2>Chart 2</td></tr><tr><td rowspan=1 colspan=1>Time</td><td rowspan=1 colspan=1>Length of ShadowCast by 1m Pole</td></tr><tr><td rowspan=1 colspan=1>9.00 am</td><td rowspan=1 colspan=1>3.56 m</td></tr><tr><td rowspan=1 colspan=1>12.00 pm</td><td rowspan=1 colspan=1>2.25 m</td></tr><tr><td rowspan=1 colspan=1>3.00 pim</td><td rowspan=1 colspan=1>2.15m</td></tr></table>"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_561e066d467b38a268d55382a6166a42a4c1669199938160372b1c9523bbabdf.jpg",
+      "_source_path": "images/561e066d467b38a268d55382a6166a42a4c1669199938160372b1c9523bbabdf.jpg"
+    },
+    {
+      "type": "text",
+      "value": "b. Write about the benefits of using technologies for site and area planning in the modern era with its limitations. 05"
+    },
+    {
+      "type": "text",
+      "value": "c. “Neighborhood is a nucleus for the development of the local social life of the environment\"– Explain the statement with relations to site and area planning. 10"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Arch 3rd Year 2nd Term Regular Examination, 2019"
+}

@@ -1,0 +1,59 @@
+{
+  "id": "607_p3_Q6",
+  "course": {
+    "code": "MATH 1123",
+    "title": "Mathematics-I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\1st_Year_1st_Term_2019_607.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6",
+  "numbering_source": "regex",
+  "marks": 35,
+  "content": [
+    {
+      "type": "text",
+      "value": "Evaluate any three of the followings:"
+    },
+    {
+      "type": "text",
+      "value": "(35)"
+    },
+    {
+      "type": "text",
+      "value": "(i) 1 n² n² 1 n→∞ Lt n⁺ (n+1)³ + (n+2)3 ...+ 8n"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\mathfrak { u } } \\quad \\int _ { 0 } ^ { \\pi } { \\frac { x s i n x } { 1 + c o s ^ { 2 } x } } d x\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r l } { ( \\ \" { \\ ! } ) } & { { } \\int _ { 0 } ^ { 1 } \\dot { x ^ { 3 } } \\left( 1 - x ^ { 2 } \\right) \\overline { { ^ { 2 } } } \\ d x } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "(iv) $\\int _ { 0 } ^ { \\frac { \\pi } { 2 } } l o g c o s x d x$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "637_p5_Q8(b)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\4th_Year_2nd_Term_2017_637.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 22,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the lap joint shown in figure, the axial service loads are $P _ { 0 } = 2 7 . 5$ k and $P _ { L } = 4 0$ k. Determine the number of 1-in A325 slip-critical bolts in standard-size holes needed for the limit state of the slip if the faying -surface is class A. The edge distance is 1.75 in., and the c. to c. spacing of the bolts is 3 in. $F _ { y } = 5 0$ ksi, $F _ { u } = 6 5$ ksi."
+    },
+    {
+      "type": "text",
+      "value": "(22)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_aed02ce384c806226a89c2afbfee84352ea79803697418ba60095f3c8677dbe8.jpg",
+      "_source_path": "images/aed02ce384c806226a89c2afbfee84352ea79803697418ba60095f3c8677dbe8.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2017"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "920_p2_Q5(a)",
+  "course": {
+    "code": "PH 1115",
+    "title": "Physics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\1st_Year_1st_Term_2022_920.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is the difference between natural and artificial radioactivity? Prove that $N = N _ { o } e ^ { - \\lambda t }$ , where the symbols have their usual meanings. Hence show that"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nT _ { \\frac { 1 } { 2 } } = \\frac { 0 . 6 9 3 } { \\lambda } .\\tag{15}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2022"
+}

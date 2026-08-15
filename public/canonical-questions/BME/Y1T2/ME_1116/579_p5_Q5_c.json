@@ -1,0 +1,42 @@
+{
+  "id": "579_p5_Q5(c)",
+  "course": {
+    "code": "ME 1116",
+    "title": "Engineering Drawing and Design",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2017\\1st_Year_2nd_Term_2017_579.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Differentiate between voltage and power amplifier. The circuit shown in Fig. $\\gamma _ { \\{ \\mathsf { c } \\} }$ uses (10) variable resistor RE to change the frequency of pulses delivered at Vout . The variable resistor $\\tt R _ { E }$ $\\mathrm { v } _ { \\mathsf { o u t } }$ is initially set at 5kΩ and then adjusted to 10kΩ. Determine the frequency of voltage spikes produced for (i) 5kΩ setting and (ii) 10kΩ setting."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_55eb252e8983b3a909061e0e4bb2b9b726a9da3cb1d8f432ca77287c88e84e01.jpg",
+      "_source_path": "images/55eb252e8983b3a909061e0e4bb2b9b726a9da3cb1d8f432ca77287c88e84e01.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

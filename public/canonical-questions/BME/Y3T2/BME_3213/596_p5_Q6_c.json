@@ -1,0 +1,42 @@
+{
+  "id": "596_p5_Q6(c)",
+  "course": {
+    "code": "BME 3213",
+    "title": "Biomechanics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2018\\3rd_Year_2nd_Term_2018_596.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Show the Bernoulli equation. Given the following position Vector, calculate the velocity and acceleration of a fluid particle as a function of time. This particle starts at the origin of the coordinate axis at time zero. Ploț the fluid particles position and velocity for times 0s, 1s, 2s and 4s."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\vec { x } } ( t ) = ( 3 m s ^ { - 1 } ) \\left( t + \\left( { \\frac { 5 } { 2 } } s ^ { - 1 } \\right) t ^ { 2 } \\right) { \\vec { \\imath } } + ( 2 m s ^ { - 1 } ) t { \\vec { \\jmath } }\\tag{10}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

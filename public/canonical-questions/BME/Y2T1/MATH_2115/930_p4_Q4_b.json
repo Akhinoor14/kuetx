@@ -1,0 +1,58 @@
+{
+  "id": "930_p4_Q4(b)",
+  "course": {
+    "code": "MATH 2115",
+    "title": "Transforms Analysis",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2023\\2nd_Year_1st_Term_2023_930.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the inverse DFT of $X ( k ) = \\{ 1 , 2 , 3 , 4 \\}$"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "text",
+      "value": "<sub>e)</sub> Find the Fourier sine and cosine transforms of"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nh ( t ) = { \\left\\{ \\begin{array} { l l } { e ^ { a t } , } & { \\quad | t | < 1 } \\\\ { 0 , } & { \\quad { \\mathrm { o t h e r w i s e } } } \\end{array} \\right. }\\tag{10}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Section 11 (Answer ANY TIIIH'.fo: questions from this section in Script B)"
+    },
+    {
+      "type": "text",
+      "value": "\"' <sub>)</sub> Discuss the concept uf piecewise continuity and function of' exponential order with ( I 0) <sub>;,.</sub> <sub>n</sub> suitnhlc examples."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

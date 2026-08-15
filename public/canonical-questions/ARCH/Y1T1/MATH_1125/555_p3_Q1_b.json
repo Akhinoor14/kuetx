@@ -1,0 +1,50 @@
+[
+  {
+    "id": "555_p3_Q1(b)",
+    "course": {
+      "code": "MATH 1125",
+      "title": "Mathematics",
+      "department": "Department of Architecture",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2018\\1st_Year_1st_Term_2018_555.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "1(b)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Change the following words as asked in brackets and make sentence with the 12 changed forms."
+      },
+      {
+        "type": "text",
+        "value": "Require (into noun), Success (into adj.), Aware (into noun), Acquit (into noun),"
+      },
+      {
+        "type": "text",
+        "value": "Length (into adj.), Rich (into verb)."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 1st Year 1st Term Regular Examination, 2018",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো ইংরেজি ভাষাবিজ্ঞান (Morphology/Word Formation) বা লেসন-১ এর বিষয়বস্তু নেই, তাই এই প্রশ্নের সাথে কোনো টপিক মেলেনি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

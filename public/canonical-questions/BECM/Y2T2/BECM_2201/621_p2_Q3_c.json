@@ -1,0 +1,53 @@
+{
+  "id": "621_p2_Q3(c)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\2nd_Year_2nd_Term_2017_621.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "A commodity is to be supplied at a constant rate of 200 units per day. Supplies of any amounts can be had at any required time, but each ordering costs Tk 50, cost of holding the commodity costs Tk. 50, cost of holding the commodity in inventory is Tk. 2 per unit per day while the delay in the supply of the item induces a penalty of Tk. 10 per unit per delay of 1 day. Find the optional policy"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "text",
+      "value": "(08)"
+    },
+    {
+      "type": "text",
+      "value": "(q, t), where t is the re-order cycle period and q is the inventory level after reorder. What would be the policy, if the penalty cost becomes ∞ ?"
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

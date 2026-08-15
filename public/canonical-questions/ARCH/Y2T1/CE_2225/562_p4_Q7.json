@@ -1,0 +1,50 @@
+[
+  {
+    "id": "562_p4_Q7",
+    "course": {
+      "code": "CE 2225",
+      "title": "Structure II",
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\2nd_Year_1st_Term_2019_562.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "7",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "a What is SITAR model? Explain."
+      },
+      {
+        "type": "text",
+        "value": "b. What is your understanding about the sustainability triangle of the three conflicting 15 Planning goals? (Hint: Can be defined as Three E)"
+      },
+      {
+        "type": "text",
+        "value": "c. Explain the concept of Mined Scanning Approach of planning with appropriate example. 12"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 2nd Year 1st Term Regular Examination, 2019",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় শুধুমাত্র একটি ভুল বার্তা রয়েছে এবং কোনো শিক্ষামূলক টপিক নেই, তাই প্রশ্নের সাথে মেলানোর জন্য কোনো সংখ্যা বাছাই করা সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

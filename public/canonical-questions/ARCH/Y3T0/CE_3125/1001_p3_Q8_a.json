@@ -1,0 +1,50 @@
+[
+  {
+    "id": "1001_p3_Q8(a)",
+    "course": {
+      "code": "CE 3125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "3rd Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\Backlog_2022_1001.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "8(a)",
+    "numbering_source": "regex",
+    "marks": 35,
+    "content": [
+      {
+        "type": "text",
+        "value": "A concrete floor system consists of parallel T-beams spaced at 10ft on centers and spanning over 30ft between supports.The 5in. thick slab is casted monolithically with T-beams webs having width of 14in. and total depth of 28in. The T-beam must carry a superimposed dead load of50 psf and a service live loadof 220psf. Assume, fc=4000psi and fy=60000psi. Determine the required tensile steel area with neat sketch using USD method."
+      },
+      {
+        "type": "text",
+        "value": "Khulna University of Engineering& Technology Department of Architecture"
+      },
+      {
+        "type": "text",
+        "value": "B. Arch 3rd Year Special Backlog Examination, 2022"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 3rd Year Special Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো ইঞ্জিনিয়ারিং টপিক নেই, শুধুমাত্র একটি এলোমেলো বার্তা রয়েছে তাই প্রশ্নের সাথে মিল পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

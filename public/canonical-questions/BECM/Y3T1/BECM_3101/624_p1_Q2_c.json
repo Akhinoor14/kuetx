@@ -1,0 +1,45 @@
+{
+  "id": "624_p1_Q2(c)",
+  "course": {
+    "code": "BECM 3101",
+    "title": "Construction and Project Management - I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\3rd_Year_1st_Term_2016_624.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A project has the following characteristics:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>Activity</td><td></td><td>Preceding activity</td><td>Expected completion time</td><td>(weeks)</td></tr><tr><td></td><td>A B</td><td>None A</td><td></td><td>5 2</td></tr><tr><td></td><td>C</td><td>A</td><td></td><td>6</td></tr><tr><td></td><td>D</td><td>B</td><td></td><td>12</td></tr><tr><td>E</td><td></td><td>D</td><td></td><td>10</td></tr><tr><td>F</td><td></td><td>D</td><td></td><td>9</td></tr><tr><td></td><td>G</td><td>D</td><td></td><td>5</td></tr><tr><td></td><td>H</td><td>B</td><td></td><td>9</td></tr><tr><td>1</td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>C, E</td><td></td><td>1</td></tr><tr><td></td><td>J</td><td>G</td><td></td><td>2</td></tr><tr><td>K</td><td></td><td>F, 1, J</td><td></td><td>3</td></tr><tr><td>L</td><td></td><td>K</td><td></td><td>9</td></tr><tr><td>M.</td><td></td><td>H, G</td><td></td><td>7</td></tr><tr><td>N</td><td></td><td>M</td><td></td><td>8</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "so, what will be the new critical path?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

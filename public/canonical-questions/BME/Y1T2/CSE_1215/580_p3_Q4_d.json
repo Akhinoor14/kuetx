@@ -1,0 +1,50 @@
+{
+  "id": "580_p3_Q4(d)",
+  "course": {
+    "code": "CSE 1215",
+    "title": "Computer Programming",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2018\\1st_Year_2nd_Term_2018_580.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write down the significance of pointer in C programming."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_84254e0e535d00b4cafd4f466be5036c0bae2f476c4f0c64d4f90076d3735ff6.jpg",
+      "_source_path": "images/84254e0e535d00b4cafd4f466be5036c0bae2f476c4f0c64d4f90076d3735ff6.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Section B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Answer Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

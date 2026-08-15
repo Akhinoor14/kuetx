@@ -1,0 +1,69 @@
+{
+  "id": "580_p4_Q2(a)",
+  "course": {
+    "code": "HUM 1215",
+    "title": "Technical English",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2018\\1st_Year_2nd_Term_2018_580.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make WH-question with the underlined words of the following sentences:"
+    },
+    {
+      "type": "text",
+      "value": "(14)"
+    },
+    {
+      "type": "text",
+      "value": "i. Azad met me at the playground."
+    },
+    {
+      "type": "text",
+      "value": "ii.Monir doesn't like what Pip says about you."
+    },
+    {
+      "type": "text",
+      "value": "iii. The train can leave the station at 8:30pm."
+    },
+    {
+      "type": "text",
+      "value": "iv. He runs the car 30 miles per hour."
+    },
+    {
+      "type": "text",
+      "value": "v. The river is very deep."
+    },
+    {
+      "type": "text",
+      "value": "vi. He struck him in the head."
+    },
+    {
+      "type": "text",
+      "value": "vii. Masum goes to school every day."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

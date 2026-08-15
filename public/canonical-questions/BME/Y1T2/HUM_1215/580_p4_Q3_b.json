@@ -1,0 +1,41 @@
+{
+  "id": "580_p4_Q3(b)",
+  "course": {
+    "code": "HUM 1215",
+    "title": "Technical English",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2018\\1st_Year_2nd_Term_2018_580.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Change the following words as asked in brackets and make sentences with the changed forms:(12) Vital. (into verb), offend (into adjective), patron (into verb), vary (into noun), settlement (into adjective), govern (into adverb)."
+    },
+    {
+      "type": "text",
+      "value": "(14)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

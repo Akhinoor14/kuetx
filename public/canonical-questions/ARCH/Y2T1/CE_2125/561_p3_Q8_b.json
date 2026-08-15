@@ -1,0 +1,114 @@
+[
+  {
+    "id": "561_p3_Q8(b)",
+    "course": {
+      "code": "CE 2125",
+      "title": "Structure 1: Mechanics",
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2018\\2nd_Year_1st_Term_2018_561.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "8(b)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Determine the maximúm and minimum moment of inertia of the following figure. 25 (Check figure section)"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_fb9d266c2c146e8e243a6dd71c3d6e58018f0704002db9fa7b3e7111bd17e1c9.jpg",
+        "_source_path": "images/fb9d266c2c146e8e243a6dd71c3d6e58018f0704002db9fa7b3e7111bd17e1c9.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_b8942ea9837e7bd71afd482734e414e0c462ab83502078ce11a664e4985158e3.jpg",
+        "_source_path": "images/b8942ea9837e7bd71afd482734e414e0c462ab83502078ce11a664e4985158e3.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_c0b006bd011ffcd7cf81545cc930bf1eb754ade7258ac7993244c6db4d3ea33c.jpg",
+        "_source_path": "images/c0b006bd011ffcd7cf81545cc930bf1eb754ade7258ac7993244c6db4d3ea33c.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_59f20889ba53feacfda5530f59f9ce649dc10ee479af6f148c70945549ba952d.jpg",
+        "_source_path": "images/59f20889ba53feacfda5530f59f9ce649dc10ee479af6f148c70945549ba952d.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_0f3424f110fd48b2e10bb8435d100803f81e94747850bb812d8f2f86cb7368e4.jpg",
+        "_source_path": "images/0f3424f110fd48b2e10bb8435d100803f81e94747850bb812d8f2f86cb7368e4.jpg"
+      },
+      {
+        "type": "formula",
+        "value": "$$\n\\mathbb { W } _ { \\mathsf { A } } { = } 2 \\mathbb { k } \\mathrm { i p s }\n$$",
+        "format": "latex"
+      },
+      {
+        "type": "text",
+        "value": "Figure for question No:2(b)"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_1921f1f61027f5181cac9d2ae4a0d96c547a6089286605fe8b5d50e742401294.jpg",
+        "_source_path": "images/1921f1f61027f5181cac9d2ae4a0d96c547a6089286605fe8b5d50e742401294.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_d5cc5c52f11d73b2658cad2765268c2460336848ace5e29c6cb0621355b29481.jpg",
+        "_source_path": "images/d5cc5c52f11d73b2658cad2765268c2460336848ace5e29c6cb0621355b29481.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_58b1acc8383e778fcb5aef1f5758bb940bab497fb328723dabaa317746dc79c4.jpg",
+        "_source_path": "images/58b1acc8383e778fcb5aef1f5758bb940bab497fb328723dabaa317746dc79c4.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_7f1460058995037b3118440725d77fe60bd7d054ad5926bcd83681feeebcdf5b.jpg",
+        "_source_path": "images/7f1460058995037b3118440725d77fe60bd7d054ad5926bcd83681feeebcdf5b.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_d28630efe89371c87ae45bf8d4c8233a73f770465f7d58c0feb96ca36c65e224.jpg",
+        "_source_path": "images/d28630efe89371c87ae45bf8d4c8233a73f770465f7d58c0feb96ca36c65e224.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_cadb6da4c575339f64fc6301011bfc15af03956c07f7400c680db3ccab8dd1b5.jpg",
+        "_source_path": "images/cadb6da4c575339f64fc6301011bfc15af03956c07f7400c680db3ccab8dd1b5.jpg"
+      },
+      {
+        "type": "text",
+        "value": "Khulna University of Engineering and Technology Department of Architecture"
+      },
+      {
+        "type": "text",
+        "value": "B.Arch 2ⁿd Year 1st Term Regular Examination, 2018"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 2nd Year 1st Term Regular Examination, 2018",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো ইঞ্জিনিয়ারিং টপিক নেই, তাই প্রশ্নের সাথে মেলাতে সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

@@ -1,0 +1,60 @@
+{
+  "id": "575_p2_Q4(d)",
+  "course": {
+    "code": "EEE 1115",
+    "title": "Electrical Circuits",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2019\\1st_Year_1st_Term_2019_575.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "Describe the working principle of Ammeter and Voltmeter and mention their functions in circuit (07) analysis."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_2a3ce7442e6b39000107276a3e49104ea1ed2e17db30ff02bd2b2a9616c25fc0.jpg",
+      "_source_path": "images/2a3ce7442e6b39000107276a3e49104ea1ed2e17db30ff02bd2b2a9616c25fc0.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b3cce35ff1edfad223e3cba6dfaf53b06977e4cf28dc7911ea6e3c353aecc88b.jpg",
+      "_source_path": "images/b3cce35ff1edfad223e3cba6dfaf53b06977e4cf28dc7911ea6e3c353aecc88b.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_fc6d0f9e4783964420fc701578f437e00ee98385593f49c93032470116692746.jpg",
+      "_source_path": "images/fc6d0f9e4783964420fc701578f437e00ee98385593f49c93032470116692746.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Section B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Answer Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
+}

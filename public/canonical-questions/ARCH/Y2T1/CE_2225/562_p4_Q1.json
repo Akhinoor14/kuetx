@@ -1,0 +1,46 @@
+[
+  {
+    "id": "562_p4_Q1",
+    "course": {
+      "code": "CE 2225",
+      "title": "Structure II",
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\2nd_Year_1st_Term_2019_562.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "1",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "a. Discuss the three dimensions of planning with niecessary example. 07   \nb. Illustrate the cyclic process of Planning 08   \nC. Describe the following terms (any four) 20   \ni.City ii. Mega City iii.Primate City iv.Suburb v. Cosmopolitan City   \n2.a Show the settlement hierarchy with diagram. 05   \nb. Define and classify region with necessary examples. As per the Pourashova Ordinance- 15   \n2009   \nWhat are the conditions for declaring urban area in Bangladesh? 15   \nC. Define the following terms (Ant three)   \ni.Project ii. Programme iii. Policy iv.Strategy   \n3.a Describe the following terms (Any three) 15   \ni. Master Plan ii. Detailed Area Plan iii.Action Plan iv.Grid Iron /Chess Board Plan   \nv.Structure Plan   \nb. Describe about the strategic plan with necessary example. 10   \nC. Describe the Project Planning for Urban Development Plan with the flow Diagram. 10   \n4.a What the term SMART indicates in Planning ? How a general goal become SMART goal? 15   \nDescribe with necessary examples.   \nb. Show the classification of projects with their approving authorities in Bangladesh 05   \nC. Show the institutional linkage of Planning Commission in Bangladesh. 05   \nd. Illustrate the diagram of simplified steps in investment project processing/approval 10   \nprocess"
+      },
+      {
+        "type": "text",
+        "value": "Section B"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 2nd Year 1st Term Regular Examination, 2019",
+    "classification_notes": "প্রদত্ত সিলেবাসের তালিকায় কোনো ভ্যালিড টপিক নেই কারণ ১ নম্বর আইটেমে একটি এরর মেসেজ রয়েছে এবং বাকি অংশটি অনুপস্থিত, তাই প্রশ্নের বিষয়বস্তুর সাথে মেলানোর জন্য কোনো উপযুক্ত টপিক নির্বাচন করা সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

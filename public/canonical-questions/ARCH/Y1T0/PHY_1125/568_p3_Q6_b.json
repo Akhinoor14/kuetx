@@ -1,0 +1,46 @@
+[
+  {
+    "id": "568_p3_Q6(b)",
+    "course": {
+      "code": "PHY 1125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2017,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2017\\1st_Year_Backlog_2017_568.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "6(b)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Prove that the straight lines $\\begin{array} { r } { x _ { / \\alpha } = { y _ { / } } _ { \\beta } = z _ { / \\gamma } , \\quad \\frac { x } { \\alpha \\alpha } = \\frac { y } { b \\beta } = \\frac { z } { c \\gamma } , \\quad \\frac { x } { l } = \\frac { y } { m } = \\frac { z } { n } } \\end{array}$ will lie one plane it $\\begin{array} { r } { \\frac { \\ i } { \\alpha } ( b - c ) + \\frac { m } { \\beta } ( c - a ) + \\frac { n } { \\gamma } ( a - b ) = 0 } \\end{array}$"
+      },
+      {
+        "type": "text",
+        "value": "Q."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year Backlog Examination, 2017",
+    "classification_notes": "প্রদত্ত তালিকায় শুধুমাত্র একটি বার্তা রয়েছে যা সিলেবাসের বিষয়বস্তু নয়, তাই কোনো প্রযোজ্য টপিক বাছাই করা সম্ভব হয়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

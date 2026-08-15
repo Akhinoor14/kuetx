@@ -1,0 +1,82 @@
+{
+  "id": "588_p2_Q4(b)",
+  "course": {
+    "code": "HUM 2215",
+    "title": "Economics and Sociology",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2017\\2nd_Year_2nd_Term_2017_588.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "The “Karim Brothers\" is a publisher of romance novels. The corporation hired an economist (20) 77 to determine the demand for its product. After months of hard work the economistinfórmed the company that the demand for the firm's novel is given by the following equation"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nQ _ { X } = 1 . 2 , 0 0 0 - 5 , 0 0 0 P _ { x } + 5 I + 5 0 0 P _ { c }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Where,"
+    },
+    {
+      "type": "text",
+      "value": "$Q _ { X }$ is the demand from “Karim Brothers\" novels."
+    },
+    {
+      "type": "text",
+      "value": "$P _ { x }$ is the price charged for the novels"
+    },
+    {
+      "type": "text",
+      "value": "1is the income per capitá."
+    },
+    {
+      "type": "text",
+      "value": "$P _ { c }$ is the price of books from competing publishers."
+    },
+    {
+      "type": "text",
+      "value": "Assume that the initial values of $P _ { x }$ , I and $P _ { c }$ are \\$5, \\$10,000 and \\$6respectively."
+    },
+    {
+      "type": "text",
+      "value": "Using the above information, the company's manager wants to"
+    },
+    {
+      "type": "text",
+      "value": "(i) Determine what effect a price increase would have on total revenue."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Evaluate how sales of the novels would change during a period of rising income."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Assess the probable impact if competing públishers would raise their price.."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

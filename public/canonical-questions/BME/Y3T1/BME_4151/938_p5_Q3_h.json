@@ -1,0 +1,61 @@
+{
+  "id": "938_p5_Q3(h)",
+  "course": {
+    "code": "BME 4151",
+    "title": "Clinical Engineering and Hospital Management",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2023\\3rd_Year_1st_Term_2023_938.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(h)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider n stack which stuns nt location 5000h and has a size o/'lW bytes. Now draw the stack (13) by showing SP register for each ofthe following consecutive operations:"
+    },
+    {
+      "type": "text",
+      "value": "(i) push 6,"
+    },
+    {
+      "type": "text",
+      "value": "(ii) push 17,"
+    },
+    {
+      "type": "text",
+      "value": "(iii) pop,"
+    },
+    {
+      "type": "text",
+      "value": "(iv) push 5483,"
+    },
+    {
+      "type": "text",
+      "value": "(v) push 456,"
+    },
+    {
+      "type": "text",
+      "value": "(vi) pop."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "620_p3_Q7(c)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\2nd_Year_2nd_Term_2015_620.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "A solid shaft is subjected to simultaneous twisting. and bending due to a (15) torque T and a maximum bending moment M. Express the maximum shearing stress τ and the maximum normal stress σ in terms of T, M and the radius r of the shaft. By means of these relations, determine the proper diameter of a solid shaft to carry simultaneously T = 9000 Ib-ft and M = 600 lb-ft τ ≤10ksi and $\\sigma \\le 1 6 k s i$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

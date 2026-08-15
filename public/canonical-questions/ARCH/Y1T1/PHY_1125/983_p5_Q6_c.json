@@ -1,0 +1,42 @@
+[
+  {
+    "id": "983_p5_Q6(c)",
+    "course": {
+      "code": "PHY 1125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2023,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2023\\1st_Year_1st_Term_2023_983.pdf",
+      "source_page": null,
+      "paper_index": 5
+    },
+    "question_number": "6(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Using the beer-lambert law, find the molar extinction coefficient for a species that absorbs 0.561 a.u. at λmax of 534.0 nm. The path length of cuvette is 100 cm, and the concentration of the solution is 1.5x10-⁵M."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year 1st Term Regular Examination, 2023",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো রাসায়নিক বিশ্লেষণ, বর্ণকীয় আইনি (Beer-Lambert law), অথবা প্যারামিটার পরিমাপের বিষয়বস্তু নেই তাই এই প্রশ্নটির সাথে উপস্থিত থাকা একমাত্র টপিক ১-এর কোনো মিল নেই।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

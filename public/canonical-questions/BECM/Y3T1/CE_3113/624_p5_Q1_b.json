@@ -1,0 +1,58 @@
+{
+  "id": "624_p5_Q1(b)",
+  "course": {
+    "code": "CE 3113",
+    "title": "Reinforced Concrete Structures - I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\3rd_Year_1st_Term_2016_624.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "A RC beam shown in figure below. Span length of the beam is 23 ft. Determine (25)"
+    },
+    {
+      "type": "text",
+      "value": "i) Maximum factored applied moment."
+    },
+    {
+      "type": "text",
+      "value": "ii) Usable moment capacity of the beam."
+    },
+    {
+      "type": "text",
+      "value": "iii) Is the beam is acceptable based on $\\rho _ { m a x } ?$"
+    },
+    {
+      "type": "text",
+      "value": "Given $f _ { y } = 6 0$ ksi and $f _ { c } ^ { \\prime } = 3 \\mathsf { k } \\mathsf { s } \\mathsf { i } .$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a537cde7d85e08add5f202898f9de8272d04d6b175f91027cee21ee3ae94cffa.jpg",
+      "_source_path": "images/a537cde7d85e08add5f202898f9de8272d04d6b175f91027cee21ee3ae94cffa.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

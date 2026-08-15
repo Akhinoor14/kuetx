@@ -1,0 +1,37 @@
+{
+  "id": "942_p3_Q7(b)",
+  "course": {
+    "code": "BME 3213",
+    "title": "Biomechanics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\3rd_Year_2nd_Term_2022_942.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Wh<sub>y</sub> is it neces sar<sub>y</sub> to <sub>p</sub>erform clinical <sub>g</sub>ait anal<sub>y</sub>sis ? l low is kinematic data analysis ( 1 5 ) <sub>per</sub>f<sub>orme</sub>d? Gi<sub>ven</sub> th<sub>e</sub> f<sub>o</sub>ll<sub>ow</sub>i<sub>n mar</sub>k<sub>er coor</sub>di<sub>na</sub>t<sub>e</sub> d<sub>a</sub>t<sub>a o</sub>f<sub>a pa</sub>ti<sub>en</sub>t-L<sub>a</sub>t<sub>era</sub>l f<sub>emora</sub>l <sub>con</sub>d<sub>y</sub>l<sub>e</sub> <sub>mar</sub>k<sub>er</sub> $L K = - 0 . 8 8 1 i - 0 . 8 5 8 j + 0 . 3 2 5 k$ M<sub>e</sub>di<sub>a</sub>l f<sub>emora</sub>l <sub>con</sub>d<sub>y</sub>l<sub>e mar</sub>k<sub>er</sub> $M K = - 0 . 8 5 5 i - 0 . 7 6 7 j + 0 . 3 1 8 k$ I li<sub>p</sub> center location $H = - 0 . 9 0 6 i - 0 . 7 6 3 j + 0 . 5 9 3 k$ C<sub>ompu</sub>t<sub>e an ana</sub>t<sub>om</sub>i<sub>ca</sub>l <sub>coor</sub>di<sub>na</sub>t<sub>e sys</sub>t<sub>em</sub> f<sub>or</sub> th<sub>e</sub> thi<sub>g</sub>h<sub>.</sub>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

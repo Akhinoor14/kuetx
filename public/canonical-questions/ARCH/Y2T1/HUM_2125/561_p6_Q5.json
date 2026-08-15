@@ -1,0 +1,42 @@
+[
+  {
+    "id": "561_p6_Q5",
+    "course": {
+      "code": "HUM 2125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2018\\2nd_Year_1st_Term_2018_561.pdf",
+      "source_page": null,
+      "paper_index": 6
+    },
+    "question_number": "5",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "a. What is GDP? Why do economists use real GDP rather than nominal GDP 15   \nto gauge economic well-being?   \nb. Which contributes more to GDP - the production of an economy car or the 10   \nproduction of a luxury car? Why?   \nc. List the four components of GDP. Give an example of each. 10   \n6. a. Define inflation. Discuss the causes of inflation. 20   \nb. “True inflation begins only after the level of full employment”- Explain. 15   \n7. a. What is the role of Financial system? What is stock? What is Bond? How 20   \nare they different? How are they similar?   \nb. Define private savings, public savings, national savings, and investment. 15   \nHow are they related?   \n8. Write short notes on the followings.   \na. The GDP Deflator. 10   \nb. The consumer price index (CPI). 10   \nc. Market for loanable funds. 15"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 2nd Year 1st Term Regular Examination, 2018",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো সংখ্যক টপিক নেই কারণ প্রথম আইটেমটি একটি ভুলবার্তা, তাই প্রশ্নের অর্থনৈতিক বিষয়গুলো (GDP, Inflation, Financial System) এর সাথে মেলানোর জন্য উপযুক্ত সিলেবাস নম্বর পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

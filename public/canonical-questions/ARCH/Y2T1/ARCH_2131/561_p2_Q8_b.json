@@ -1,0 +1,46 @@
+[
+  {
+    "id": "561_p2_Q8(b)",
+    "course": {
+      "code": "ARCH 2131",
+      "title": "Buddhist and Hindu Architecture of Indian Subcontinent",
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2018\\2nd_Year_1st_Term_2018_561.pdf",
+      "source_page": null,
+      "paper_index": 2
+    },
+    "question_number": "8(b)",
+    "numbering_source": "regex",
+    "marks": 20,
+    "content": [
+      {
+        "type": "text",
+        "value": "‘Pandyas had major contribution on the architecture of Dravidian period’- justify the 15 statement using proper examples and sketches."
+      },
+      {
+        "type": "text",
+        "value": "c. Draw the principal parts of Orissan Temple. 05"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 2nd Year 1st Term Regular Examination, 2018",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো ইঞ্জিনিয়ারিং বিষয়ক টপিক নেই, বরং এটি একটি অসম্পূর্ণ বা ভুল মেসেজ ('Sorry...') যা প্রশ্নের সাথে মেলানো সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

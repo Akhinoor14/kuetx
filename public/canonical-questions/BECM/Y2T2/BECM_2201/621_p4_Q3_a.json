@@ -1,0 +1,55 @@
+{
+  "id": "621_p4_Q3(a)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\2nd_Year_2nd_Term_2017_621.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": ".Compute the combined stresses at A, B, C and D shown in figure below."
+    },
+    {
+      "type": "text",
+      "value": "(20)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e07d2d62a1f1462a35f94d9b82efdb24269f648cedd399074cc8c408793add78.jpg",
+      "_source_path": "images/e07d2d62a1f1462a35f94d9b82efdb24269f648cedd399074cc8c408793add78.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8e6527a059327106e205d9fb1c842a54547961467b0825f596bef878cbb23cc7.jpg",
+      "_source_path": "images/8e6527a059327106e205d9fb1c842a54547961467b0825f596bef878cbb23cc7.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

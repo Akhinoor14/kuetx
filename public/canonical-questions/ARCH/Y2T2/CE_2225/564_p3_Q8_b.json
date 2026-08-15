@@ -1,0 +1,76 @@
+[
+  {
+    "id": "564_p3_Q8(b)",
+    "course": {
+      "code": "CE 2225",
+      "title": "Structure II",
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2018\\2nd_Year_2nd_Term_2018_564.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "8(b)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Figure-8(b)"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_577016131ee5be8c37f2279b95abe59850a09adc17fcd322e759f5a1dd593e50.jpg",
+        "_source_path": "images/577016131ee5be8c37f2279b95abe59850a09adc17fcd322e759f5a1dd593e50.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_29790cffaf643cf9f76260cfb03d41276c6ea1709e7708e056c7f6c44b83c1de.jpg",
+        "_source_path": "images/29790cffaf643cf9f76260cfb03d41276c6ea1709e7708e056c7f6c44b83c1de.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_626dac091fa68c7df2742e9c6392fa2648277713b172fa7ade009053f2b15c1c.jpg",
+        "_source_path": "images/626dac091fa68c7df2742e9c6392fa2648277713b172fa7ade009053f2b15c1c.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_14f8be2afab43a13d5ca6bcfc388eb653f9bcfccecd39083f6a6ed8791ec1fdd.jpg",
+        "_source_path": "images/14f8be2afab43a13d5ca6bcfc388eb653f9bcfccecd39083f6a6ed8791ec1fdd.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_61e5196a7d7e4b9198eb1a6255cbc8f52f81cd4fc0120f513a130022266baaab.jpg",
+        "_source_path": "images/61e5196a7d7e4b9198eb1a6255cbc8f52f81cd4fc0120f513a130022266baaab.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_227220f11380e14791feb8c96d5ec7d3bbbb7fab8a8a448a1c9a253e4fff69da.jpg",
+        "_source_path": "images/227220f11380e14791feb8c96d5ec7d3bbbb7fab8a8a448a1c9a253e4fff69da.jpg"
+      },
+      {
+        "type": "table",
+        "value_html": "<table><tr><td></td><td>Steel</td><td>B1</td></tr><tr><td>Area(mm²)</td><td>600</td><td></td></tr><tr><td>È (GPa)</td><td>200</td><td></td></tr><tr><td>Propertional limit (MPa)</td><td>240</td><td></td></tr></table>"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 2nd Year 2nd Term Regular Examination, 2018",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় শুধুমাত্র একটি ভুল বার্তা (Error message) রয়েছে, তাই কোনো প্রযোজ্য টপিক বাছাই করা সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

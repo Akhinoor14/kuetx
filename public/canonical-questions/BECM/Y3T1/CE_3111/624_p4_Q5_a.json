@@ -1,0 +1,54 @@
+{
+  "id": "624_p4_Q5(a)",
+  "course": {
+    "code": "CE 3111",
+    "title": "Structural Analysis and Design - I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\3rd_Year_1st_Term_2016_624.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "Draw the influence lines with ordinate for the flowing structure."
+    },
+    {
+      "type": "text",
+      "value": "(i) Vertical reaction at C."
+    },
+    {
+      "type": "text",
+      "value": "(20)"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Shear at 1, 2, 3 and 4."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_7b30498d4d164e61ddcdc0daf9260f54822987a2738014124f043a6c52f8456f.jpg",
+      "_source_path": "images/7b30498d4d164e61ddcdc0daf9260f54822987a2738014124f043a6c52f8456f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

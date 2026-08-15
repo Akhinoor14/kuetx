@@ -1,0 +1,42 @@
+{
+  "id": "627_p4_Q4(a)",
+  "course": {
+    "code": "CE 3111",
+    "title": "Structural Analysis and Design - I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\3rd_Year_1st_Term_2019_627.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "From the figure shown in below, find the rotational deflection of B due to 1 K force (18) acting down at A. Also, find horizontal deflection of C due to a 1 K force acting down @ A. Consider, E = 30,000 K/in²."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_2c62ba1ee45a4163b501fa2fe78f617211c26638493fe7639dc0d464ea8a3163.jpg",
+      "_source_path": "images/2c62ba1ee45a4163b501fa2fe78f617211c26638493fe7639dc0d464ea8a3163.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

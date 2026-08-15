@@ -1,0 +1,47 @@
+[
+  {
+    "id": "999_p5_Q8(c)",
+    "course": {
+      "code": "CE 2125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\Backlog_2022_999.pdf",
+      "source_page": null,
+      "paper_index": 5
+    },
+    "question_number": "8(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "]"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_162a9bec22e8f63fef7df04336e9a77a06c16fb9ad13221f2f0b712f72310535.jpg",
+        "_source_path": "images/162a9bec22e8f63fef7df04336e9a77a06c16fb9ad13221f2f0b712f72310535.jpg"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 2nd Year Special Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো বৈধ টপিক নেই, শুধুমাত্র একটি এরর মেসেজ রয়েছে যা থেকে সংশ্লিষ্ট প্রশ্নের সাথে যুক্ত থাকা কোনো বিষয় নির্ণয় করা সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "983_p5_Q5(a)",
+    "course": {
+      "code": "PHY 1125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2023,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2023\\1st_Year_1st_Term_2023_983.pdf",
+      "source_page": null,
+      "paper_index": 5
+    },
+    "question_number": "5(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Describe Coma, spherical aberration and distortion. How can those defects be removed?"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year 1st Term Regular Examination, 2023",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় শুধুমাত্র একটি এনট্রি রয়েছে যাতে কোর্সের কোনো বিষয়বস্তুর (topic/module) উল্লেখ নেই, তাই প্রশ্নটির সাথে মেলা এমন কোনো টপিক বাছাই করা সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

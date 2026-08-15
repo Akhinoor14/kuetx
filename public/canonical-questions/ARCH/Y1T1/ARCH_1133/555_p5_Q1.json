@@ -1,0 +1,46 @@
+[
+  {
+    "id": "555_p5_Q1",
+    "course": {
+      "code": "ARCH 1133",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2018\\1st_Year_1st_Term_2018_555.pdf",
+      "source_page": null,
+      "paper_index": 5
+    },
+    "question_number": "1",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "a. How orientation of a line affects its role in a visual construction? 05   \nb. Which is the most powerful element for creating enclosure of space? 15   \nDiscuss with examples.   \nc. How linear elements have been used in architecture according to their 15   \nvisual 'expression and functionality? Discuss with examples.   \n2. a. State seven visual properties of architectural form with examples. 15   \nb. Compare regular forms with irregular forms. 05   \nc. Discuss surface articulation in brief. 15   \na. Explain additive transformation with example of an architect's work. 10   \nb. Discuss linear form in brief. 10   \nc. Identify the reasons behind formal collisions of geometry. Give examples. 15   \n4. a. Evaluate the role of depressed base plane in defining a volume of space. 15   \nb. How U-shaped plane define a field of space? State with examples. 15   \nc. Outline the various types of openings at corners. 05"
+      },
+      {
+        "type": "text",
+        "value": "Section-B"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 1st Year 1st Term Regular Examination, 2018",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো ভ্যালিড টপিক নেই কারণ প্রথম আইটেমটি একটি এরর মেসেজ এবং বাকিগুলো প্রশ্নের সাথে সরাসরি মেলানোর উপযোগী নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

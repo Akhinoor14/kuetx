@@ -1,0 +1,65 @@
+{
+  "id": "626_p4_Q3(a)",
+  "course": {
+    "code": "CE 3111",
+    "title": "Structural Analysis and Design - I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\3rd_Year_1st_Term_2018_626.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the earthquake load at each floor level for a five-storied residential (17) reinforced concrete building for the following data:"
+    },
+    {
+      "type": "text",
+      "value": "• Height of each floor = 3.5 m"
+    },
+    {
+      "type": "text",
+      "value": "• Plan area = 25 m x 35 m"
+    },
+    {
+      "type": "text",
+      "value": "• Seismic zone co-efficient = 0.075"
+    },
+    {
+      "type": "text",
+      "value": "• Structural importance co-efficient = 1.5"
+    },
+    {
+      "type": "text",
+      "value": "• Response modification co-efficient = 8.0"
+    },
+    {
+      "type": "text",
+      "value": "• Site co-efficient for soil characteristics = 2.0"
+    },
+    {
+      "type": "text",
+      "value": "• Seismic dead load = 2500 kN/floor"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

@@ -1,0 +1,51 @@
+{
+  "id": "578_p2_Q7(b)",
+  "course": {
+    "code": "MATH 1215",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2016\\1st_Year_2nd_Term_2016_578.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve any two of the followings:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r l } { \\mathrm { ( i ) } \\ } & { { } ( D ^ { 2 } - 1 ) y = x s i n x + ( 1 + x ^ { 2 } ) e ^ { x } } \\end{array}\\tag{24}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r l } { \\mathrm { ( i i ) } } & { { } ( D ^ { 3 } + 2 D ^ { 2 } + D ) y = x ^ { 2 } e ^ { 2 x } + s i n ^ { 2 } x } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "(iii) $x ^ { 2 } { \\frac { d ^ { 2 } y } { d x ^ { 2 } } } - x { \\frac { d y } { d x } } - 3 y = x ^ { 2 } l n x ,$ where $D \\equiv \\frac { d } { d x } , D ^ { 2 } \\equiv \\frac { d ^ { 2 } } { \\cdot d x ^ { 2 } }$ and sò on."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

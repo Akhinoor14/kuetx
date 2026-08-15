@@ -1,0 +1,50 @@
+[
+  {
+    "id": "998_p2_Q8(a)",
+    "course": {
+      "code": "CE 3223",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\2nd_Year_Backlog_2022_998.pdf",
+      "source_page": null,
+      "paper_index": 2
+    },
+    "question_number": "8(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Design a waste stabilization pond system to treat waste water from a lowincome settlement with a population of 20,000 at khalishpur Khulna. The average waste water flow is about 110 liters per person per day and the BOD contribution is35gm/person/day. The mean temperature of the coolest month is $2 0 ^ { 0 }$ c and during irrigation season, $2 5 ^ { 0 } \\mathrm { c } .$ It is described that the final effluent be used for crop irrigation. Assume, faecal coliform concentration in raw wastewater to be $1 \\mathrm { x } 1 0 ^ { 8 }$ per 100 ml and permissible $\\mathrm { F c } \\leq 1 0 0 0 / 1 0 0$ ml. volumetric loading rate at $2 0 \\%$ is 320 gm/m³/day and BOD removal at $2 0 \\%$ is 60%. BOD surface loading rate at $2 0 \\%$ is 255 kg/ha/day and at $2 5 \\%$ is 350 kg/ha/day."
+      },
+      {
+        "type": "text",
+        "value": "Khulna Universityof Engineering&Technology Department of Architecture"
+      },
+      {
+        "type": "text",
+        "value": "B.Arch 2ndYear Backlog Examination, 2022"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 2nd Year Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত তালিকায় শুধুমাত্র একটি বার্তা রয়েছে যে সিলেবাস সংগ্রহ করা সম্ভব নয়, তাই কোনো প্রযোজ্য টপিক বাছাই করা যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

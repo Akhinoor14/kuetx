@@ -1,0 +1,51 @@
+[
+  {
+    "id": "996_p4_Q5(a)",
+    "course": {
+      "code": "MATH 1125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\1st_Year_Backlog_2022_996.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "5(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Find the values of a and b such that the function,"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_29b9cb4d6de92fa788079eb42b7d7daf049633e5ff8907b048e63f4a974fe5ab.jpg",
+        "_source_path": "images/29b9cb4d6de92fa788079eb42b7d7daf049633e5ff8907b048e63f4a974fe5ab.jpg"
+      },
+      {
+        "type": "text",
+        "value": "x +√2 asinx ;0 ≤ x ≤ πー4π2   \nπ   \nf(x) = 2xcotx + b; 4 ≤x≤   \nacos2x - bsinx ; $\\frac { \\pi } { 4 } \\leq x \\leq \\pi$   \nIs continuous for all values of x in the interval $0 \\leq x \\leq \\pi$"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো গাণিতিক টপিক নেই, তাই প্রশ্নের সাথে মেলা এমন কোনো নাম্বার পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

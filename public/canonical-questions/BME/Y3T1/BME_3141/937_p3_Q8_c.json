@@ -1,0 +1,42 @@
+{
+  "id": "937_p3_Q8(c)",
+  "course": {
+    "code": "BME 3141",
+    "title": "X-ray and Ultrasound Imaging",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\3rd_Year_1st_Term_2022_937.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "where the angle ofinsonation is 135° and the velocity of (10) sound in blood is l.5x I 0<sup>5</sup> cm/sec. The ratio of transmitted to received frequency is 0.9. (i) Determine the speed of RBC. (ii) If the velocity of blood particle, transmitted frequency are reduced to half of their original values, and O is reduced to 60° then how will be the Doppler frequency changed?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_080c333cb503a78f469c3c40bf945f0ec0d0ff6b00174b07e56648591fab6734.jpg",
+      "_source_path": "images/080c333cb503a78f469c3c40bf945f0ec0d0ff6b00174b07e56648591fab6734.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

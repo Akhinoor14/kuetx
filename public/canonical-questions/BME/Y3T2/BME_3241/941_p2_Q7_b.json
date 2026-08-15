@@ -1,0 +1,58 @@
+{
+  "id": "941_p2_Q7(b)",
+  "course": {
+    "code": "BME 3241",
+    "title": "Magnetic and Nuclear Imaging",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2021\\3rd_Year_2nd_Term_2021_941.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Whal is cyclotron? Describe the operating principle of cyclotron. ( 15)   \nl') What is dose culibnuor? Discuss the features of the Geiger-Muller counter. ( I 0)"
+    },
+    {
+      "type": "text",
+      "value": "<sub>8.</sub> <sub>a)</sub> What is Gamma camera? Briclly de .cribc the working principle of a Gamma camera."
+    },
+    {
+      "type": "text",
+      "value": "( IO)"
+    },
+    {
+      "type": "text",
+      "value": "<sub>b)</sub> Briefly describe the image reconstruction procedure using <sup>filtered</sup> <sup>back</sup> <sup>propagation</sup> <sup>of</sup> ( 12) the Fig. S(a)."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d1bb916c02da4d9d197788a46fb24655c40b8c17c67405da0a2cd06b5aad405d.jpg",
+      "_source_path": "images/d1bb916c02da4d9d197788a46fb24655c40b8c17c67405da0a2cd06b5aad405d.jpg"
+    },
+    {
+      "type": "text",
+      "value": "( 13)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2021"
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "556_p4_Q7(a)",
+    "course": {
+      "code": "MATH 1125",
+      "title": "Mathematics",
+      "department": "Department of Architecture",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\1st_Year_1st_Term_2019_556.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "7(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Find the distance of the point (1, 2, 3) from the plane $2 x + 4 y + 3 z = 2 0$ measured parallel to the line $\\begin{array} { r } { \\frac { x } { 2 } = \\frac { \\bar { y } } { - 2 } = \\frac { \\bar { z } } { 1 } . } \\end{array}$"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 1st Year 1st Term Regular Examination, 2019",
+    "classification_notes": "প্রদত্ত তালিকায় শুধুমাত্র একটি বার্তা রয়েছে যে সিলেবাস সংগ্রহ করা সম্ভব নয়, তাই কোনো প্রযোজ্য টপিক বাছাই করা যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

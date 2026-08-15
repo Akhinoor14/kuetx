@@ -1,0 +1,41 @@
+{
+  "id": "611_p2_Q4(c)",
+  "course": {
+    "code": "CE 1213",
+    "title": "Building & Construction Materials",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\1st_Year_2nd_Term_2017_611.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Design a concrete mix using ACl method for the construction of an elevated water tank. The specified design strength of:concrete (characteristics strength) is 30 Mpa at 28 days measured on standard cylinders. Standards deviation can be taken as 4 Mpa. The specific gravity of FA and CA are 2.65 and 2.7 respectively. The dry rodded bulk density of CA is 1600 kg/m³ and fineness modulus of FA is 2.80.The maximum size of aggregate is 20mm.Ordinary portland cement (Type !) will be used. A síump of 50mm is necessary. CA is found to be absorptive totai extent of 1% and free surface moisture in sand is found to be 2 percent and non-air-entrained concrete. Assume any other essential data.[Necessary graph and table will be supplied]"
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

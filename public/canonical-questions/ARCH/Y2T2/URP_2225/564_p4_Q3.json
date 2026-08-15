@@ -1,0 +1,50 @@
+[
+  {
+    "id": "564_p4_Q3",
+    "course": {
+      "code": "URP 2225",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2018\\2nd_Year_2nd_Term_2018_564.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "3",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "a. Discuss various types of industries with necessary example."
+      },
+      {
+        "type": "text",
+        "value": "b. Describe various parameters and elements of design that are considered to establish an industrial park."
+      },
+      {
+        "type": "text",
+        "value": "c. Illustrate the concept eco-industrial park and industrial ecology with necessary example."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 2nd Year 2nd Term Regular Examination, 2018",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় শুধুমাত্র একটি ভুল বার্তা রয়েছে এবং কোনো প্রযুক্তিগত টপিক নেই, তাই প্রশ্নের সাথে মেলানোর জন্য উপযোগী কোনো নম্বর পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

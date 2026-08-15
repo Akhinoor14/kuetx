@@ -1,0 +1,45 @@
+{
+  "id": "585_p4_Q8(d)",
+  "course": {
+    "code": "BME 2151",
+    "title": "Numerical Methods and Statistics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2019\\2nd_Year_1st_Term_2019_585.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Last years violent crime distribution is given in the table Q8d(i). This years observation in the violent crime distribution is given in table Q8d(ii). Do the data provide sufficient evidence to conclude that, this year, the distribution of violent crime have changed from the last year. (α=5%)."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Types of ViolentCrime</td><td rowspan=1 colspan=1>Relative frequency</td></tr><tr><td rowspan=1 colspan=1>Murder</td><td rowspan=1 colspan=1>0.011</td></tr><tr><td rowspan=1 colspan=1>Abduction</td><td rowspan=1 colspan=1>0.063</td></tr><tr><td rowspan=1 colspan=1>Robbery</td><td rowspan=1 colspan=1>0.286</td></tr><tr><td rowspan=1 colspan=1>Assault</td><td rowspan=1 colspan=1>0.640</td></tr><tr><td rowspan=1 colspan=1>Total</td><td rowspan=1 colspan=1>1.00</td></tr></table>"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Types of ViolentCrime</td><td rowspan=1 colspan=1>Frequency</td></tr><tr><td rowspan=1 colspan=1>Murder</td><td rowspan=1 colspan=1>3</td></tr><tr><td rowspan=1 colspan=1>Abduction</td><td rowspan=1 colspan=1>37</td></tr><tr><td rowspan=1 colspan=1>Robbery</td><td rowspan=1 colspan=1>154</td></tr><tr><td rowspan=1 colspan=1>Assault</td><td rowspan=1 colspan=1>306</td></tr><tr><td rowspan=1 colspan=1>Total</td><td rowspan=1 colspan=1>500</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "610_p2_Q3(a)",
+  "course": {
+    "code": "CE 1213",
+    "title": "Building & Construction Materials",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\1st_Year_2nd_Term_2016_610.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define well graded, gap graded, and poorly graded aggregate with typical (07) gradation curve. Describe the classification of sand based on grain size distribution."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

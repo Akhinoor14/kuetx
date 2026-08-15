@@ -1,0 +1,42 @@
+{
+  "id": "927_p3_Q1(c)",
+  "course": {
+    "code": "BME 2151",
+    "title": "Numerical Methods and Statistics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2020\\2nd_Year_1st_Term_2020_927.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve the following systems of equations by simple Gauss elimination method."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { c } { 2 x _ { 1 } + 3 x _ { 2 } + 4 x _ { 3 } = 5 } \\\\ { \\qquad } \\\\ { 3 x _ { 1 } + 4 x _ { 2 } + 5 x _ { 3 } = 6 } \\\\ { \\qquad } \\\\ { 4 x _ { 1 } + 5 x _ { 2 } + 6 x _ { 3 } = 7 } \\end{array}\\tag{10}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2020"
+}

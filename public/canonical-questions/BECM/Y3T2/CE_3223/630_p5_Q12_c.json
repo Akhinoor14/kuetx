@@ -1,0 +1,37 @@
+{
+  "id": "630_p5_Q12(c)",
+  "course": {
+    "code": "CE 3223",
+    "title": "Soil Mechanics",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\3rd_Year_2nd_Term_2017_630.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "12(c)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "For a normally consolidate clay iayer in the field, the following values are (13) given: Thickness of clay layer = 8.5 ft, Void ratio = 0.8, Compression index = 0.28. Average  effective pressure on the clay $1 a y ^ { \\prime } c ^ { 2 } = 2 \\cos 0 1 b / 4 5$ $\\Delta \\sigma ^ { \\prime } = 9 7 0 ! 5 / ! ^ { 2 } .$ Secondary compression index = 0.02. What is the tctal consolidation settlement of the ciay layer five year after the compietion of primary consolidation setdement? (Note: Time for completion of primary settlement = 1.5 years)."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

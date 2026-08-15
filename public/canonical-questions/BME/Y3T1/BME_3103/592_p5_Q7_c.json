@@ -1,0 +1,46 @@
+{
+  "id": "592_p5_Q7(c)",
+  "course": {
+    "code": "BME 3103",
+    "title": "Bioelectricity",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2018\\3rd_Year_1st_Term_2018_592.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define lead field theorem. Deduce the following equation: (12)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nV _ { L E } = \\frac { 1 } { \\sigma } \\int _ { v o l } \\overline { { { J } } } _ { L E } . \\overline { { { J } } } { } ^ { i } d V ;\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Where the symbols carry their usual meaning."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

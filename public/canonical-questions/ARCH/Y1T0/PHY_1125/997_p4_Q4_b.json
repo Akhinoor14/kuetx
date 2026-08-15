@@ -1,0 +1,42 @@
+[
+  {
+    "id": "997_p4_Q4(b)",
+    "course": {
+      "code": "PHY 1125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\Backlog_2022_997.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "4(b)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "What are the acoustic requirements for a good auditorium? What factors need to 13 be addressed for designing a Hall?"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year Special Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত তালিকায় শুধুমাত্র একটি ভুল বার্তা (Error message) রয়েছে, তাই কোনো সঠিক syllabus topic নেই যা প্রশ্নের সাথে মিলে।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

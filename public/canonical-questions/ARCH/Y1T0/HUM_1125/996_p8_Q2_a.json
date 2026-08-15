@@ -1,0 +1,70 @@
+[
+  {
+    "id": "996_p8_Q2(a)",
+    "course": {
+      "code": "HUM 1125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\1st_Year_Backlog_2022_996.pdf",
+      "source_page": null,
+      "paper_index": 8
+    },
+    "question_number": "2(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Transform the following sentences as asked in brackets."
+      },
+      {
+        "type": "text",
+        "value": "i.Hasib walking every day at morning is healthy. (into Complex)."
+      },
+      {
+        "type": "text",
+        "value": "ii. That Shimu works sincerely in office is really praise worthy. (Simple)"
+      },
+      {
+        "type": "text",
+        "value": "iii. As Liza can't smoke a little, he is fine in lifestyle. (Simple)"
+      },
+      {
+        "type": "text",
+        "value": "iv. Though an honest man is happy in psyche, he suffers in society. (Simple)"
+      },
+      {
+        "type": "text",
+        "value": "v. Labu is as talented as other students in class. (Superlative)"
+      },
+      {
+        "type": "text",
+        "value": "vi. Salim struggles in life, so succeeds in life. (complex)"
+      },
+      {
+        "type": "text",
+        "value": "vii.Mamun can't progress in life inspite of his hard working. (Compound)"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো ইঞ্জিনিয়ারিং বিষয়ক টপিক নেই, বরং এটি একটি ভুল মেসেজ এবং প্রশ্নটি বাংলা ব্যাকরণের (Sentence Transformation) সাথে সম্পর্কিত যা এই তালিকা থেকে ম্যাপ করা যায় না।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

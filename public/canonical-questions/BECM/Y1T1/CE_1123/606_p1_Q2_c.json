@@ -1,0 +1,41 @@
+{
+  "id": "606_p1_Q2(c)",
+  "course": {
+    "code": "CE 1123",
+    "title": "Surveying",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\1st_Year_1st_Term_2018_606.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following staff readings were observed successively with a level, the instrument having been moved after third, fifth, eighth and tenth readings: 2.180; 1.606; 1.200; 2.090; 2.860; 1.362; 0.802; 1.982; 1.042; 2.689; 2.00; 2.240 meters. Enter the above readings in a page of a level book and calculate the R.L. of points, if the first reading was taken with a staff held on B.M. of 224.380 m."
+    },
+    {
+      "type": "text",
+      "value": "(17)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
+}

@@ -1,0 +1,47 @@
+[
+  {
+    "id": "987_p2_Q5(b)",
+    "course": {
+      "code": "CE 2225",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\2nd_Year_2nd_Term_2022_987.pdf",
+      "source_page": null,
+      "paper_index": 2
+    },
+    "question_number": "5(b)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "] carries a UDL of W, N/m (including its own weight). At two corners it also carries two point load of \"W (N)\". For the section shown in the figure, determine the maximum safe valve for W, where allowable stress one $\\sigma _ { t } \\leq 6 0 M P c$ & $\\sigma _ { c } \\le 9 0 M P a$"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_cff9fd2a8f678ae1e485bbd5790d7f796a23dbfc7219276b7915e23a9ac89b21.jpg",
+        "_source_path": "images/cff9fd2a8f678ae1e485bbd5790d7f796a23dbfc7219276b7915e23a9ac89b21.jpg"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 2nd Year 2nd Term Regular Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো ইঞ্জিনিয়ারিং টপিক নেই, শুধুমাত্র একটি এলোমেলো বার্তা রয়েছে তাই প্রশ্নের সাথে মেলায় এমন কোনো topic পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

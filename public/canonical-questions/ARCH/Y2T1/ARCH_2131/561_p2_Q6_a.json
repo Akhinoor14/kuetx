@@ -1,0 +1,46 @@
+[
+  {
+    "id": "561_p2_Q6(a)",
+    "course": {
+      "code": "ARCH 2131",
+      "title": "Buddhist and Hindu Architecture of Indian Subcontinent",
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2018\\2nd_Year_1st_Term_2018_561.pdf",
+      "source_page": null,
+      "paper_index": 2
+    },
+    "question_number": "6(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "What are the spiritual symbols of temple architecture and how these symbolism can be used 15 in designing a temple?"
+      },
+      {
+        "type": "text",
+        "value": "b. Illustrate the architectural characteristics of Sun temple with proper sketches. 2C"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 2nd Year 1st Term Regular Examination, 2018",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় মাত্র একটি বিষয় রয়েছে যাতে কোনো নির্দিষ্ট টপিক নেই, তাই প্রশ্নের সাথে মেলা এমন কোনো topic বাছাই করা সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

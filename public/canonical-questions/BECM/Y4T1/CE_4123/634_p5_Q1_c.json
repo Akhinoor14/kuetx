@@ -1,0 +1,37 @@
+{
+  "id": "634_p5_Q1(c)",
+  "course": {
+    "code": "CE 4123",
+    "title": "Foundation Engineering",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\4th_Year_1st_Term_2018_634.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "A series of unconfined compression tests in the zone of interest fro a boring logs (11) give average $\\mathtt { q } _ { \\mathtt { u } } = 5 0 0 \\ \\mathrm { k p a } , \\mathtt { D } = 1 . 2 \\ \\mathrm { m } , \\ \\Upsilon = 1 7 . 3 0 \\ \\mathrm { k N } / \\mathrm { m } ^ { 3 } , \\ \\Phi = 2 0 ^ { 0 } , \\ \\mathsf { C } = 2 0 \\ \\mathrm { k p a } .$ Estimate the allowable bearing capacity for square footing located at somewhat uncertain depths using Terzaghi's equation. Use F. S. = 3.0."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2018"
+}

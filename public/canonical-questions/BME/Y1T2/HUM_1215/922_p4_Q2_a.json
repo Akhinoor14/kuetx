@@ -1,0 +1,65 @@
+{
+  "id": "922_p4_Q2(a)",
+  "course": {
+    "code": "HUM 1215",
+    "title": "Technical English",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2019\\1st_Year_2nd_Term_2019_922.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make WH question for each of the following underlined word/words in the following sentences: (14)"
+    },
+    {
+      "type": "text",
+      "value": "i)Nasima says that she knows the fact."
+    },
+    {
+      "type": "text",
+      "value": "ii)Simu met us yesterday."
+    },
+    {
+      "type": "text",
+      "value": "iii) They come here only to listen to our idea."
+    },
+    {
+      "type": "text",
+      "value": "iv) Declare your identity."
+    },
+    {
+      "type": "text",
+      "value": "v)The room is spacious enough."
+    },
+    {
+      "type": "text",
+      "value": "vi) They will have complete the task by 10th Dec."
+    },
+    {
+      "type": "text",
+      "value": "vii)They try to probe the matter with caution."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2019"
+}

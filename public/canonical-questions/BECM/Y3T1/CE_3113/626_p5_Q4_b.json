@@ -1,0 +1,46 @@
+{
+  "id": "626_p5_Q4(b)",
+  "course": {
+    "code": "CE 3113",
+    "title": "Reinforced Concrete Structures - I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\3rd_Year_1st_Term_2018_626.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Design the panel “3” of the two-way slab system shown in figure. The floor consists $\" 3 \"$ of six panels in each direction, with a panel size of 20 × 20 ft. All panels are supported on 18 × 18 in. columns, 10 ft long. The slabs are supported by 14” $1 4 \"$ width beams along the column lines. The service live load is to be taken as 120 psf, and the superimposed dead load consists of 25 psf of floor finish in addition to the slab weight. Use normal-weight concrete with $f ^ { \\prime } _ { c } = 4$ ksi, $f _ { y } = 6 0$ ksi, and USD method. Show the reinforcement detailing of slab in a neat sketch."
+    },
+    {
+      "type": "text",
+      "value": "Ca $( - v e ) = C b ( - v e ) = 0 . 0 5 , C a ( + v e ) D L = C b ( + v e ) D L = 0 . 0 2 7$ Ca (+ve) LL = Cb (+ve) LL = 0.032"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f7bc6eae4ece5cc13d1664abaa3247d25d733eada563f5bc4eb783574f4e8152.jpg",
+      "_source_path": "images/f7bc6eae4ece5cc13d1664abaa3247d25d733eada563f5bc4eb783574f4e8152.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "580_p2_Q3(c)",
+  "course": {
+    "code": "MATH 1215",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2018\\1st_Year_2nd_Term_2018_580.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Prove that the lines $\\begin{array} { r } { \\frac { x - \\alpha + d } { \\alpha - \\delta } = \\frac { y - \\alpha } { \\alpha } = \\frac { z - \\alpha - d } { \\alpha + \\delta } } \\end{array}$ and ${ \\frac { x - b + c } { \\beta - \\gamma } } = { \\frac { y - b } { \\beta } } = { \\frac { z - b - c } { \\beta + \\gamma } }$ are coplanar and find the equation of the plane in which they lie."
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

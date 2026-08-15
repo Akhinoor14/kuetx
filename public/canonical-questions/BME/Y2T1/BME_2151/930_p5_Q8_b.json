@@ -1,0 +1,37 @@
+{
+  "id": "930_p5_Q8(b)",
+  "course": {
+    "code": "BME 2151",
+    "title": "Numerical Methods and Statistics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2023\\2nd_Year_1st_Term_2023_930.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "A correlation coefficient based on a sample of size 18 was computed to be 0.32. Can we (07) conclude at significance level of i) 0.05 and ii) 0.01 that the corresponding population correlation coefficient differs from zero?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

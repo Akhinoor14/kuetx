@@ -1,0 +1,42 @@
+{
+  "id": "624_p4_Q3(b)",
+  "course": {
+    "code": "CE 3111",
+    "title": "Structural Analysis and Design - I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\3rd_Year_1st_Term_2016_624.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "Using the three moment equation, analyze the continuous beam shown in figure (18) below. Draw the shear and moment diagram. Sketch the elastic curve. Take $E = 3 0 \\times 1 0 ^ { 6 }$ psi and $1 = 1 0 0 0 \\mathrm { i n } ^ { 4 }$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d35d75c6c3c4b73b82e97b22ac43b559fe9be0da4ada66e513c6673385a22098.jpg",
+      "_source_path": "images/d35d75c6c3c4b73b82e97b22ac43b559fe9be0da4ada66e513c6673385a22098.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

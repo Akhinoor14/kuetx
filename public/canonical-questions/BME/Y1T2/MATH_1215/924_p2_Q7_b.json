@@ -1,0 +1,42 @@
+{
+  "id": "924_p2_Q7(b)",
+  "course": {
+    "code": "MATH 1215",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2021\\1st_Year_2nd_Term_2021_924.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve the following boundary value problem by the method of separation of variables"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\frac { \\partial u } { \\partial t } = 4 \\frac { \\partial ^ { 2 } u } { \\partial x ^ { 2 } } , u ( 0 , t ) = 0 , u ( \\pi , t ) = 0 , u ( x , 0 ) = 2 s i n 3 x - 4 s i n 5 x .\\tag{12}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

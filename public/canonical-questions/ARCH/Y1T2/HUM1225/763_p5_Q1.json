@@ -1,0 +1,40 @@
+[
+  {
+    "id": "763_p5_Q1",
+    "course": {
+      "code": "HUM1225",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\1st_Year_2nd_Term_2019_763.pdf",
+      "source_page": null,
+      "paper_index": 5
+    },
+    "question_number": "1",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "a. What is sociology? 05   \nb. Describe the origin of 'Sociology' as a separate discipline 15   \nc.Discuss the importance of studying sociology for the students of Architecture 15   \n2. a. Critically discuss scope of Sociology with example from your own society 15   \nb. What are the differences between society and community? 10   \nc. Explain nature of Sociology in the light of your own society. 10   \n3. a. What do you mean by Sociological perspective? Critically explain major sociological   \nperspectives. 20   \nb. Discuss contributing factors behind origin and development of sociology 15   \nas a distinct science.   \n4. a. What is meant by culture? Discussimpact of culture on house form. 10   \nb. Define society. Discuss distinctive features of different types of society 15   \nc. Explain elements of civilization with example 10   \nSection B   \n5. a. What is Globalization? 05   \nb. Show the impact of globalization around the world. 10   \nc. How Globalization influence to the change of our society from traditional to   \nmodernstage- explain it with example. 20   \n5. a. What is social stratification. 05   \nb. Explain the major characteristics of social stratification 15   \nc. Briefly describe the social stratification system in Bangladesh 15   \n7. a. What do you mean by social control ?05   \nb. Explain the major agencies of social control and their function with example. 20   \nc. Define religion. Describe the functions of religion in our life. 10   \n8. a. What is Urban Ecology? Discuss major urban growth models with example. 20   \nb. What do you mean by religion? Explain role of religion in strengthening social 15   \nharmony."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "extracted",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 1st Year 2nd Term Regular Examination, 2019",
+    "classification_notes": "Syllabus lookup key 'Department of Architecture::HUM1225' পাওয়া যায়নি।"
+  }
+]

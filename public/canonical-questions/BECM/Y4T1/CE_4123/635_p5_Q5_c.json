@@ -1,0 +1,41 @@
+{
+  "id": "635_p5_Q5(c)",
+  "course": {
+    "code": "CE 4123",
+    "title": "Foundation Engineering",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\4th_Year_1st_Term_2019_635.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "Design a rectangular footing of uniform thickness for an axially loaded column of 20 inch x 15 inch in size transmitting a load of 300 Kips. The safe bearing capacity of soil is 2.25 Ksf. Use $f ^ { \\prime } { _ { \\mathrm { { c } } } } = 3 0 0 0$ psi and $\\mathsf { f } _ { \\mathsf { s } } = 2 4 0 0 0$ psi. Show the reinforcement details."
+    },
+    {
+      "type": "text",
+      "value": "(25)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2019"
+}

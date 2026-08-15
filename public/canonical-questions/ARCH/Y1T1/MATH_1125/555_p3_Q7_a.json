@@ -1,0 +1,42 @@
+[
+  {
+    "id": "555_p3_Q7(a)",
+    "course": {
+      "code": "MATH 1125",
+      "title": "Mathematics",
+      "department": "Department of Architecture",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2018\\1st_Year_1st_Term_2018_555.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "7(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Write a sports report on a world cup football match you have enjoyed recently."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 1st Year 1st Term Regular Examination, 2018",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো টপিক নেই যা ক্রীড়া রিপোর্ট বা ইংরেজি লেখার সাথে সম্পর্কিত, তাই উপলব্ধ অপশন অনুযায়ী খালি তালিকা দেওয়া হলো।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

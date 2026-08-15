@@ -1,0 +1,41 @@
+{
+  "id": "622_p1_Q3(a)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\2nd_Year_2nd_Term_2018_622.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Select the better of two proposals on the basis of conventional and modified (15) B/C Analysis."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Proposa! A</td><td rowspan=1 colspan=1>Proposal B</td></tr><tr><td rowspan=1 colspan=1>First cost, Tk.</td><td rowspan=1 colspan=1>320,000</td><td rowspan=1 colspan=1>540,000</td></tr><tr><td rowspan=1 colspan=1>Annual O &amp; M Cost, Tk.</td><td rowspan=1 colspan=1>45,000</td><td rowspan=1 colspan=1>35,000</td></tr><tr><td rowspan=1 colspan=1>Annual benefits, Tk.</td><td rowspan=1 colspan=1>110,000</td><td rowspan=1 colspan=1>150,000</td></tr><tr><td rowspan=1 colspan=1>Annual dis benefits, Tk.</td><td rowspan=1 colspan=1>20,000</td><td rowspan=1 colspan=1>45,000</td></tr><tr><td rowspan=1 colspan=1>Salvage value</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>0</td></tr><tr><td rowspan=1 colspan=1>Life, years</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>20</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1003_p2_Q7(a)",
+  "course": {
+    "code": "CE 5125",
+    "title": null,
+    "department": "Department of Architecture",
+    "year_term": "5th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\5th_Year_Backlog_2022_1003.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define cash flow. Draw a cash flow diagram for the following transactions. A manager of a company pay 50,000 tk as rent of the office space every month. He has to pay salary of4,00,000 tk every month to the office staffs. He withdraw 70,000 tk as a salary from this office. This office also has a cost for client entertainment which roughly estimated as 10,000 tk a month."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch 5th Year Backlog Examination, 2022"
+}

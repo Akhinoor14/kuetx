@@ -1,0 +1,42 @@
+{
+  "id": "939_p2_Q2(b)",
+  "course": {
+    "code": "BME 3213",
+    "title": "Biomechanics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2019\\3rd_Year_2nd_Term_2019_939.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Axial (20) loads are applied at the positions indicated. Find the largest value of P that will not exceed an overall deformation of 3.0 mm, or the following stresses: 140 MPa in the steel, 120 MPa in the bronze and 80 MPa in the aluminum. Assume that assembly is suitably braced to prevent buckling. Use $\\mathrm { E } _ { \\mathrm { S t } } = 2 0 0$ GPa, $\\mathrm { E } _ { \\mathrm { A l } } = 7 0$ GPa, and $\\mathrm { E _ { B r } } { = } 8 3 ~ \\mathrm { G P a }$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_548356847ea67abca9d0181f767a8177bdae3dcdcf899993a1d6a2b4fd9a5518.jpg",
+      "_source_path": "images/548356847ea67abca9d0181f767a8177bdae3dcdcf899993a1d6a2b4fd9a5518.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2019"
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "764_p2_Q5",
+    "course": {
+      "code": "ARCH 2231",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\2nd_Year_2nd_Term_2019_764.pdf",
+      "source_page": null,
+      "paper_index": 2
+    },
+    "question_number": "5",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "a. “Taj Mahal is the finest example of Mughai Architecture\"- Justify it with neat sketches. 28   \nb. Draw and identify the features of \"Shahjahani Column\". 07   \n6. a. What is exceptional comparing Mughal style that you have found in \"Jami Mosque\" at   \nFatehpur Sikri? 25   \nb. Elucidate the architectural features of\"Shalimar bagh\" at Kashmir. 10   \n7. a. \"Humayun's tomb represents an Indian interpretation of a Persian conception\"- explain with   \nnecessary illustration. 25   \nb. Write short note on “Mosque at Panipath”. 10   \n8. a. Draw and identify the architectural features of \"Panch Mahal\" 07   \nb. Describe the planning layout of Fatehpur Siķri with its major building features. 22   \nc. Sketch neatly “Sabj Burj” at Delhi. 06"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 2nd Year 2nd Term Regular Examination, 2019",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় শুধুমাত্র একটি ভুল বার্তা (Error message) রয়েছে এবং কোনো আসল টপিক নেই, তাই প্রশ্নের সাথে মেলায় এমন কোনো topic বাছাই করা সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

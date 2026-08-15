@@ -1,0 +1,37 @@
+{
+  "id": "606_p1_Q8(c)",
+  "course": {
+    "code": "CE 1123",
+    "title": "Surveying",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\1st_Year_1st_Term_2018_606.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "To find the elevation of top of a tower of KUET, observations were made from two stations P and R, 30 m apart. The horizontál angle measured at P between R and top of the tower was 60º15' and that measured at R between top of the tower and P station was 6820'. The angle of elevation was measured 10º45'.at R and. 10º20' at P. Staff readings on BM when the instrument was at P = 1.969 m and at R = 2.073 m. Calculate the elevation of top of the tower of KUET if BM was 200 m."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
+}

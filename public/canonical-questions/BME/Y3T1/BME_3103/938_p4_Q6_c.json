@@ -1,0 +1,78 @@
+{
+  "id": "938_p4_Q6(c)",
+  "course": {
+    "code": "BME 3103",
+    "title": "Bioelectricity",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2023\\3rd_Year_1st_Term_2023_938.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write the <sub>input-output</sub> <sub>relationship</sub> of a rcalizahlc IIR <sub>digital</sub> tilter. Enumerate a summary or (10) the impulse invariant method."
+    },
+    {
+      "type": "text",
+      "value": "<sub>a)</sub> <sub>Applying</sub> the <sub>impulse</sub> invariant method, design a digital filter to approximate the normalized analogue transfer function,"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nH ( s ) = { \\frac { 1 } { s ^ { 2 } + { \\sqrt { 2 } } s + 1 } }\\tag{c20:}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Obtain the transfer function, $I I ( z )$ and structure of the digital filter assuming a 3 dB cutoff frequency of 150 I Iz and a sampling frequency of 1.28 kHz. In the case of a complex conjugate pole pair, consider"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nH ( z ) = { \\frac { 2 C _ { r } - [ C _ { r } \\cos ( P _ { i } T ) + C _ { i } s i n ( P _ { i } T ) ] 2 e ^ { p _ { r } T } z ^ { - 1 } } { 1 - 2 e ^ { p _ { r } T } \\cos ( P _ { i } T ) z ^ { - 1 } + e ^ { p _ { r } T } z ^ { - 2 } } }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "where $C _ { r } , C _ { i } , P _ { r } ,$ and $P _ { i }$ arc real and imaginary parts of constant and poles, respectively."
+    },
+    {
+      "type": "text",
+      "value": "List the IIR filter coefficient calculation methods. Use the pole-zero placement method to determine the transfer function, the difference equation as well as coefficient of a notch filter that meets the following specifications:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathtt { N o t c h f r e q u e n c y 5 0 H z }\\tag{15}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n3 ~ \\mathrm { d B } ~ \\mathrm { w i d t h ~ o f ~ n o t c h } \\pm 5 ~ \\mathrm { H z }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { S a m p l i n g f r e q u e n c y } 5 0 0 \\mathrm { H z }\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

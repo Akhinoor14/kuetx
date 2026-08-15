@@ -1,0 +1,46 @@
+{
+  "id": "571_p2_Q1(a)",
+  "course": {
+    "code": "MATH 1115",
+    "title": "Differential and Integral Calculus",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2015\\1st_Year_1st_Term_2015_571.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define continuity of a function. A function $f ( x )$ is defined as follows:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nf ( x ) . = { \\left\\{ \\begin{array} { l l } { x - 2 } & { w h e n x \\geq 2 } \\\\ { - x + 2 } & { w h e n x < 2 } \\end{array} \\right. }\\tag{13}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Discuss the continuity and differentiability of $\\gamma ( x )$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2015"
+}

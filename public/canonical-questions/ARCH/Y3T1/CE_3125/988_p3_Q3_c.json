@@ -1,0 +1,52 @@
+{
+  "id": "988_p3_Q3(c)",
+  "course": {
+    "code": "CE 3125",
+    "title": "Structure III Reinforced Concrete Design",
+    "department": "Department of Architecture",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2023\\3rd_Year_1st_Term_2023_988.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A $2 0 ^ { \\circ } \\mathbf { x } 1 6 ^ { \\circ }$ slab has a thickness of $5 . 5 ^ { \\mathrm { > } }$ and carrying a live load of 80psf and its self-weight as shown in figure below. Determine the factored load utilized for the design of beam and supporting column."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8b4403fb7b452cd512eb0bc6b864c3ee9fc07de12bc8fc008eb6a499449f1c43.jpg",
+      "_source_path": "images/8b4403fb7b452cd512eb0bc6b864c3ee9fc07de12bc8fc008eb6a499449f1c43.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f93445bac736e97ce0888409e1595bcb2abbe631f2a11e5972fc28585068aa35.jpg",
+      "_source_path": "images/f93445bac736e97ce0888409e1595bcb2abbe631f2a11e5972fc28585068aa35.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0c5e306728a39dd6897f511f8b20e8040d30d17508aa2868b7a565e2fbb1b37c.jpg",
+      "_source_path": "images/0c5e306728a39dd6897f511f8b20e8040d30d17508aa2868b7a565e2fbb1b37c.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch 3rd Year 1st Term Regular Examination, 2023"
+}

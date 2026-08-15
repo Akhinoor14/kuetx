@@ -1,0 +1,42 @@
+[
+  {
+    "id": "997_p4_Q2(c)",
+    "course": {
+      "code": "PHY 1125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\Backlog_2022_997.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "2(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Two trains travelling in opposite directions at 70 km/hr each, cross each other 10 while one of them is whistling. If the frequency of the note is 500 Hz, find the apparent pitch as heard by an observer in the other train: (i) before trains cross each other, and (ii) after the trains have crossed each other. Velocity of sound in air is 332 m/s."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year Special Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো পদার্থবিজ্ঞান, ধ্বনি (Sound), বা ডপলার ইফেক্ট সংক্রান্ত টপিক নেই যা এই প্রশ্নের সাথে মেলাতে পারে।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

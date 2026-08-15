@@ -1,0 +1,42 @@
+{
+  "id": "626_p4_Q7(b)",
+  "course": {
+    "code": "CE 3111",
+    "title": "Structural Analysis and Design - I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\3rd_Year_1st_Term_2018_626.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "Analyze the building frame shown in figure below subjected to lateral loads by (18) cantilever method. Area in parenthesis is shown in the figure for each member."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_82a88964d8a2ceb948b8a33f5a226ea2703793e9baf29d4f2de9037afaf2c457.jpg",
+      "_source_path": "images/82a88964d8a2ceb948b8a33f5a226ea2703793e9baf29d4f2de9037afaf2c457.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

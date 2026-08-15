@@ -1,0 +1,65 @@
+{
+  "id": "627_p1_Q7(c)",
+  "course": {
+    "code": "BECM 3101",
+    "title": "Construction and Project Management - I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\3rd_Year_1st_Term_2019_627.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The total construction cost of a refinery with a production capacity of 200,000 bbl/day in Gary, Indiana, completed in 2001 was \\$100 million. It is proposed that a similar refinery with a production capacity of 300,000 bbl/day be built in Los Angeles (LA), California, for completion in 2003. For the additional information given below, make an order of magnitude estimate of the cost of the proposed plant."
+    },
+    {
+      "type": "text",
+      "value": "(i) In the total construction cost for the Gary, Indiana, plant, there was an item of \\$ 5 million for site preparation which is not typical for other plants."
+    },
+    {
+      "type": "text",
+      "value": "(ii) The variation of sizes of the refineries can be approximated by the exponential rule equation with m = 0.6 $y = y _ { n } { \\Bigg ( } { \\frac { Q } { Q _ { n } } } { \\Bigg ) } ^ { n }$ where,"
+    },
+    {
+      "type": "text",
+      "value": "y = Unknown cost for new facility, $y _ { n } =$ known cost for existing facility, $\\boldsymbol { \\mathsf { Q } } =$ capacity of new facility, $Q _ { n } = \\cos p \\sin y$ of existing facility"
+    },
+    {
+      "type": "text",
+      "value": "(iii) The inflation rate is expected to be 8% per year from 1999 to 2003."
+    },
+    {
+      "type": "text",
+      "value": "(iv) The location index was 0.92 for Gary, Indiana and 1.14 for LA in 1999. These indices are deemed to be appropriate for adjusting the costs between these two cities."
+    },
+    {
+      "type": "text",
+      "value": "(v) New air pollution equipment for the LA plant costs \\$ 7 million in 2003 (not required in the Gary plant)."
+    },
+    {
+      "type": "text",
+      "value": "(vi) The contingency cost due to the inclement weather delay will be reduced by the amount of 2% of total construction cost because of the favorable climate in LA (compared to Gary). On the basis of the above conditions, estimate the order of magnitude for the new project."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

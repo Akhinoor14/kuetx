@@ -1,0 +1,46 @@
+[
+  {
+    "id": "998_p10_Q06(c)",
+    "course": {
+      "code": "URP 2225",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\2nd_Year_Backlog_2022_998.pdf",
+      "source_page": null,
+      "paper_index": 10
+    },
+    "question_number": "06(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Discuss the issues that a Planner needs to consider while planning a Bus Terminal. 14"
+      },
+      {
+        "type": "text",
+        "value": "Section-B"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 2nd Year Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় প্রশ্নের সাথে মেলানোর যোগ্য কোনো টপিক নেই কারণ লিস্টটি শুধুমাত্র একটি ভুলবার্তা (Error Message) প্রদর্শন করেছে।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

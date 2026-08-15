@@ -1,0 +1,52 @@
+[
+  {
+    "id": "986_p6_Q3(c)",
+    "course": {
+      "code": "CE 2125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2023,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2023\\2nd_Year_1st_Term_2023_986.pdf",
+      "source_page": null,
+      "paper_index": 6
+    },
+    "question_number": "3(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "A 4700 lb sphere rests on a smooth plane inclined at an angle $\\theta { = } 4 5 ^ { \\circ }$ with the horizontal and against a smooth vertical wall. What are the reactions at the contact surfacesA and B? (Figure"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_99cf01833e5bf8dd10be259fe833c7abeb9d11552fd0623c6e6b28c28969f593.jpg",
+        "_source_path": "images/99cf01833e5bf8dd10be259fe833c7abeb9d11552fd0623c6e6b28c28969f593.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_639954c10c0c851b0aa3a11d758db38817d08cb7d08ec3da1d2f7ffc5b181d7b.jpg",
+        "_source_path": "images/639954c10c0c851b0aa3a11d758db38817d08cb7d08ec3da1d2f7ffc5b181d7b.jpg"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 2nd Year 1st Term Regular Examination, 2023",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো প্রযোজ্য টপিক নেই কারণ ১ নম্বর আইটেমে কোর্সের বিষয়বস্তুর পরিবর্তে একটি ভুল বার্তা রয়েছে।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

@@ -1,0 +1,46 @@
+{
+  "id": "921_p2_Q6(b)",
+  "course": {
+    "code": "EEE 1115",
+    "title": "Electrical Circuits",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2023\\1st_Year_1st_Term_2023_921.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 16,
+  "content": [
+    {
+      "type": "text",
+      "value": ", determine current, power, power factor, vars. reactive factor, and voltampcrcs. Also calculate the voltage across each circuit clement. Draw the corresponding phasor diagram."
+    },
+    {
+      "type": "text",
+      "value": "(16)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b9b0e61bed50e6efa4d6157a82f0d6f87d801a7f7478e7c7d109257a8c625493.jpg",
+      "_source_path": "images/b9b0e61bed50e6efa4d6157a82f0d6f87d801a7f7478e7c7d109257a8c625493.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2023"
+}

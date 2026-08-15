@@ -1,0 +1,45 @@
+{
+  "id": "918_p2_Q4(b)",
+  "course": {
+    "code": "EEE 1115",
+    "title": "Electrical Circuits",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2020\\1st_Year_1st_Term_2020_918.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "A voltage $v = 2 0 0 s i n 3 7 7 t$ is applied to an inductive branch and the maximum (15) current is found 10 amperes."
+    },
+    {
+      "type": "text",
+      "value": "(i) Find the value of L in millihenrys."
+    },
+    {
+      "type": "text",
+      "value": "(ii) If it is known that this inductance coil actually possesses 1.0 ohm resistance, what is the true value of L?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2020"
+}

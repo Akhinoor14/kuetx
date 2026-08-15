@@ -1,0 +1,46 @@
+[
+  {
+    "id": "1000_p3_Q4(b)",
+    "course": {
+      "code": "CE 3125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "3rd Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\3rd_Year_Backlog_2022_1000.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "4(b)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "An isolated T – beam is composed of a flange 28 in. wide and 6 in. deep casted monolithically with a web of 10 in.width that extends 24 in. below the bottom surface of the flange to produce a beam of 30 in. total depth. Tensile reinforcement consists of six #10 bars placed in two rows at1in. vertical spacing. The centroid of the bar group is 26in. from the top of the beam. If ${ f ^ { \\prime } } _ { c } = 3 0 0 \\bar { 0 }$ psi and $f _ { y } = 6 0 , 0 0 0 \\ \\mathrm { p s i }$ what is the design moment capacity of the beam?"
+      },
+      {
+        "type": "text",
+        "value": "Section-B"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch. 3rd Year Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো ইঞ্জিনিয়ারিং টপিক নেই, শুধুমাত্র একটি এলোমেলো বার্তা রয়েছে তাই প্রশ্নের সাথে মেলায় এমন কোনো topic পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

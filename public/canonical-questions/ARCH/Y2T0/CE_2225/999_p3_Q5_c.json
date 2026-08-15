@@ -1,0 +1,47 @@
+[
+  {
+    "id": "999_p3_Q5(c)",
+    "course": {
+      "code": "CE 2225",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2000,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\Backlog_2022_999.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "5(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "The homogenous bar ABCD shown in figure is supported by a cable that runs from A to Baround the smooth peg at E, a vertical cable atC, and a smooth $C ,$ inclined surface at D. Determine the mass of the heaviest bar that can be supported if the stress in each cable is limited to100 MPa. The area of the cable AB is 250mm² and that of the cable atC is 1300 mm²."
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_af554fac097bc5d7ff1c0b33a2a100b2fa5cc97e02cc37d8119ba1020a357c11.jpg",
+        "_source_path": "images/af554fac097bc5d7ff1c0b33a2a100b2fa5cc97e02cc37d8119ba1020a357c11.jpg"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 2nd Year Special Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় শুধুমাত্র একটি এলোমেলো বার্তা রয়েছে যা কোনো ইঞ্জিনিয়ারিং টপিক বা মডুলের নাম উল্লেখ করে না, তাই প্রশ্নটির সাথে যুক্ত হওয়া সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

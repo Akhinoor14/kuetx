@@ -1,0 +1,41 @@
+{
+  "id": "1000_p1_Q4(b)",
+  "course": {
+    "code": "HUM 2225",
+    "title": "Philosophy",
+    "department": "Department of Architecture",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\3rd_Year_Backlog_2022_1000.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write short note on:(any 04) 4x5=20   \ni. Rococo   \nii. Chicago Fire   \niii. Art Nouveau   \niv. Form ever follows function   \nv. Expressionism"
+    },
+    {
+      "type": "text",
+      "value": "Section B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch. 3rd Year Backlog Examination, 2022"
+}

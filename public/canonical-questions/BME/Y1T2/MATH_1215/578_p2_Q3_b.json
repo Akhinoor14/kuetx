@@ -1,0 +1,51 @@
+{
+  "id": "578_p2_Q3(b)",
+  "course": {
+    "code": "MATH 1215",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2016\\1st_Year_2nd_Term_2016_578.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define right circular cone. Find the equation of the right circular cone whose vertex is ${ \\dot { P } } ( 2 , - 3 , 5 )$ , axis PQ which makes equal angles with the axes and semivertical angle is $4 5 ^ { \\circ }$"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nA , B , C .\\tag{10}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n( x ^ { 2 } + y ^ { 2 } + z ^ { 2 } ) = { \\frac { 4 } { 9 } } k ^ { 2 }\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "928_p5_Q8(d)",
+  "course": {
+    "code": "ME 2115",
+    "title": "Basic Mechanics and Thermodynamics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2021\\2nd_Year_1st_Term_2021_928.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "Air is contained in a vertical piston-cylinder assembly fitted with an electric resistor. The ( 11) atmosphere exerts a pressure of I atrn on the top of the piston, which has a mass of45 kg and a face area of 0.1 m<sup>2•</sup> Electric current passes through a resistor, and the volume of the air slowly increases by 0.051113 while its pressure remains constant. The mass of the air is 0.3kg and its specific internal energy increases by 42kJ/kg. The air and the piston arc at rest initially and finally. The piston-cylinder material is a ceramic composite and thus a good insulator. Friction between the piston and cylinder wall can be ignored, and local acceleration of gravity is 9.8m/s2• Determine the heat transfer from the resistor to the air for a system consisting of the air alone."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

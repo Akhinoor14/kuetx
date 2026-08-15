@@ -1,0 +1,42 @@
+{
+  "id": "587_p3_Q5(b)",
+  "course": {
+    "code": "BME 2211",
+    "title": "Signals and Systems",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2016\\2nd_Year_2nd_Term_2016_587.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the discrete-time Fourier series coefficients for"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nx ( n ) = 1 + \\sin \\left( { \\frac { 2 \\pi } { N } } \\right) n + c o s \\left( { \\frac { 2 \\pi } { N } } \\right) n + 2 c o s \\left( { \\frac { 6 \\pi } { N } } \\right) n + 3 s i n \\left( { \\frac { 8 \\pi } { N } } n + { \\frac { \\pi } { 3 } } \\right)\\tag{10}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

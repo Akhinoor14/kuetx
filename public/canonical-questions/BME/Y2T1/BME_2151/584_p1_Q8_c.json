@@ -1,0 +1,41 @@
+{
+  "id": "584_p1_Q8(c)",
+  "course": {
+    "code": "BME 2151",
+    "title": "Numerical Methods and Statistics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2018\\2nd_Year_1st_Term_2018_584.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "shows Glucose level of male and female patients in a hospital. At 1% significance (13) level, do the data provide sufficient evidence to conclude that, on average, male pàtients have higher glucose level than female patients?"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=2>Glucose level (units)</td></tr><tr><td rowspan=1 colspan=1>Male</td><td rowspan=1 colspan=1>Female</td></tr><tr><td rowspan=1 colspan=1>13,22, 18, 09, 30, 11</td><td rowspan=1 colspan=1>20, 32, 12, 11, 08, 14</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

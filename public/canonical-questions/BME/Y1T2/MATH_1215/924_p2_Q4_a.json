@@ -1,0 +1,41 @@
+{
+  "id": "924_p2_Q4(a)",
+  "course": {
+    "code": "MATH 1215",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2021\\1st_Year_2nd_Term_2021_924.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is meant by skew lines? Find the length of shortest distance between the lines x-1 y + 1 z- 4 x - 1 y − 2 z-36 二 二 and =. 二 1 -1 0 4 3 -6"
+    },
+    {
+      "type": "text",
+      "value": "(13)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

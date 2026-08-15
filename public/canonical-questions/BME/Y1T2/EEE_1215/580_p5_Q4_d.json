@@ -1,0 +1,50 @@
+{
+  "id": "580_p5_Q4(d)",
+  "course": {
+    "code": "EEE 1215",
+    "title": "Analog Electronics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2018\\1st_Year_2nd_Term_2018_580.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the followings for the network shown in above Fig. Q4(d):"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nV _ { G s Q } \\left( \\mathrm { i i } \\right) I _ { D Q } \\left( \\mathrm { i i i } \\right) V _ { D S } \\left( \\mathrm { i v } \\right) V _ { D } \\left( \\mathrm { v } \\right) V _ { G }\\tag{10}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Section B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Answer Seript B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

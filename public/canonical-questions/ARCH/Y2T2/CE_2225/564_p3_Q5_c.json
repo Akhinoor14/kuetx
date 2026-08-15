@@ -1,0 +1,46 @@
+[
+  {
+    "id": "564_p3_Q5(c)",
+    "course": {
+      "code": "CE 2225",
+      "title": "Structure II",
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2018\\2nd_Year_2nd_Term_2018_564.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "5(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Determine the largest weight W that can be supported by two wires shown in figure. The stress in either wire is not to exceed 30 ksi. The cross-sectional areas of wires AB and AC are 0.4 in² and 0.5 in² respectively."
+      },
+      {
+        "type": "text",
+        "value": "Figure-5(C)"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 2nd Year 2nd Term Regular Examination, 2018",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো ইঞ্জিনিয়ারিং টপিক নেই, শুধুমাত্র একটি এলোমেলো বার্তা রয়েছে তাই প্রশ্নের সাথে মিল পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

@@ -1,0 +1,37 @@
+{
+  "id": "631_p2_Q2(c)",
+  "course": {
+    "code": "BECM 3205",
+    "title": "Acoustics and Lighting",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\3rd_Year_2nd_Term_2018_631.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "A classroom, 60 ft long by 40 ft wide by 12 ft high nas sound absorption co- (15) efficient a's of 0.30 for walls, 0.40 for ceiling, and 0.10 for floor. All a's are at 500 Hz. Find reverberation time T i 60 percent of tne ceiling surface (along the perimeter of the room) is treated with acoustical panels at a of 0.85."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

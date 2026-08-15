@@ -1,0 +1,46 @@
+{
+  "id": "566_p2_Q4(d)",
+  "course": {
+    "code": "ARCH 3114",
+    "title": "Working Drawing I",
+    "department": "Department of Architecture",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\3rd_Year_1st_Term_2019_566.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is an electrical substation layout? What are the different types of substation 07 layout? Show schematically."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f657e04c4ac06afebb7b162fc9c484874fbfbbb649e9f619e1fd609ff87a646f.jpg",
+      "_source_path": "images/f657e04c4ac06afebb7b162fc9c484874fbfbbb649e9f619e1fd609ff87a646f.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Section-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Arch 3rd Year 1st Term Regular Examination, 2019"
+}

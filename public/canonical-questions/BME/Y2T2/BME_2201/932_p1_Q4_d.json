@@ -1,0 +1,37 @@
+{
+  "id": "932_p1_Q4(d)",
+  "course": {
+    "code": "BME 2201",
+    "title": "Human Physiology",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2020\\2nd_Year_2nd_Term_2020_932.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": 6,
+  "content": [
+    {
+      "type": "text",
+      "value": "A patient comes with 65 mmHg of glomerular blood hydrostatic pressure, 25 (06) mmHg of capsulari hydrostatic pressure and 35mmHg of blood colloid osmotic pressure. Calculate the Net Filtration Pressure of this patient."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2020"
+}

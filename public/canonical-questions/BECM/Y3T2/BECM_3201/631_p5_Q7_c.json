@@ -1,0 +1,45 @@
+{
+  "id": "631_p5_Q7(c)",
+  "course": {
+    "code": "BECM 3201",
+    "title": "Construction and Project Management - II",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\3rd_Year_2nd_Term_2018_631.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "The results of a consolidated undrained test on a sample of fully saturated clay (14) are given below:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Specimen 01</td><td rowspan=1 colspan=1>Specimen 02</td><td rowspan=1 colspan=1>Specimen 03</td></tr><tr><td rowspan=1 colspan=1>Cell Pressure(KN/m²)</td><td rowspan=1 colspan=1>300</td><td rowspan=1 colspan=1>400</td><td rowspan=1 colspan=1>600</td></tr><tr><td rowspan=1 colspan=1>Deviator stress(KN/m²)</td><td rowspan=1 colspan=1>326</td><td rowspan=1 colspan=1>416</td><td rowspan=1 colspan=1>635</td></tr><tr><td rowspan=1 colspan=1>PWP(KN/m²)</td><td rowspan=1 colspan=1>146</td><td rowspan=1 colspan=1>206</td><td rowspan=1 colspan=1>280</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Find out the strength parameters for effective stress conditions"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

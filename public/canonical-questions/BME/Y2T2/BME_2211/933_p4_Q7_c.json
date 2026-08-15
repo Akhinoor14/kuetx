@@ -1,0 +1,42 @@
+{
+  "id": "933_p4_Q7(c)",
+  "course": {
+    "code": "BME 2211",
+    "title": "Signals and Systems",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2021\\2nd_Year_2nd_Term_2021_933.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Using residue method, find the inverse z-translorm of"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nX ( z ) = { \\frac { z } { ( z - 1 ) ( z ^ { 2 } + 1 ) } }\\tag{I 0}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

@@ -1,0 +1,89 @@
+{
+  "id": "616_p5_Q5(b)",
+  "course": {
+    "code": "HUM 2123",
+    "title": "Engineering Economics and Financial Accounting",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\2nd_Year_1st_Term_2017_616.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "Mr. Hasan Foyez starts his law practice and established a law firm. The (25) following transactions were completed during the month of March, 2017:"
+    },
+    {
+      "type": "text",
+      "value": "March 01: He investigated Tk. 1,60,000 cash and law books Tk. 25,000 in the law firm."
+    },
+    {
+      "type": "text",
+      "value": "03: Paid rent for five months in advance Tk. 20,000."
+    },
+    {
+      "type": "text",
+      "value": "05: Purchased óffice supplies on account Tk. 9,000."
+    },
+    {
+      "type": "text",
+      "value": "(25)"
+    },
+    {
+      "type": "text",
+      "value": "08: Completed legal works for cash Tk. 24,000."
+    },
+    {
+      "type": "text",
+      "value": "12: Purchased office equipment Tk. 48,000 of which paid Tk. 22,000 in cash and balance on account."
+    },
+    {
+      "type": "text",
+      "value": "15: Service of legal work performed on credit Tk. 35,000."
+    },
+    {
+      "type": "text",
+      "value": "20: Cash withdrew by owner for his personal use Tk. 10,000."
+    },
+    {
+      "type": "text",
+      "value": "23: Cash received from account receivable Tk. 18,000."
+    },
+    {
+      "type": "text",
+      "value": "25: Utilities expenses paid Tk. 4,500."
+    },
+    {
+      "type": "text",
+      "value": "30: Supplies used during the month Tk. 6,500."
+    },
+    {
+      "type": "text",
+      "value": "31: Recognized that one month's rent has been expired."
+    },
+    {
+      "type": "text",
+      "value": "Required: Journalise above the transactions."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

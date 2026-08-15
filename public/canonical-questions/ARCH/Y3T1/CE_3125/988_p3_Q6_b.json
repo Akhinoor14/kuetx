@@ -1,0 +1,42 @@
+{
+  "id": "988_p3_Q6(b)",
+  "course": {
+    "code": "CE 3125",
+    "title": "Structure III Reinforced Concrete Design",
+    "department": "Department of Architecture",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2023\\3rd_Year_1st_Term_2023_988.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 35,
+  "content": [
+    {
+      "type": "text",
+      "value": "Design the overhanging rectangular beam as shown in figure supports a uniform live load of 1K/ft and dead load of 0.5K/ft. Design the beam by WSD method, and show reinforcement detailing (long section and cross section). Use $f ^ { \\prime } c = 3 , 0 0 0$ psi and $f y = 6 0 , 0 0 0$ psi."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0d8ba0ae2c6308a33c99bb8b552a494550e0ac4aee59f52b588a389dea10eee0.jpg",
+      "_source_path": "images/0d8ba0ae2c6308a33c99bb8b552a494550e0ac4aee59f52b588a389dea10eee0.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch 3rd Year 1st Term Regular Examination, 2023"
+}

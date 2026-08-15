@@ -1,0 +1,42 @@
+{
+  "id": "1000_p5_Q2(b)",
+  "course": {
+    "code": "EEE 3125",
+    "title": "Electrical Installation in Building",
+    "department": "Department of Architecture",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\3rd_Year_Backlog_2022_1000.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_52bb53d6423bce4a81b3bf3fcfbc10d3a005d100772c26bf94ba434baf9fdc9e.jpg",
+      "_source_path": "images/52bb53d6423bce4a81b3bf3fcfbc10d3a005d100772c26bf94ba434baf9fdc9e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch. 3rd Year Backlog Examination, 2022"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "946_p5_Q1(b)",
+  "course": {
+    "code": "BME 4131",
+    "title": "Bio-optics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2023\\4th_Year_1st_Term_2023_946.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Show that the reflection coefficients $r _ { x }$ and $r _ { y }$ can be written in terms of only the incident angle ( I 0) $\\theta _ { I }$ and the refractive index ratio 1121= n1!112 as"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { c } { { r _ { \\perp } = r _ { x } = \\displaystyle \\frac { C o s \\theta _ { 1 } - ( n _ { 2 1 } ^ { 2 } - s i n ^ { 2 } \\theta _ { 1 } ) ^ { \\frac { 1 } { 2 } } } { C o s \\theta _ { 1 } + ( n _ { 2 1 } ^ { 2 } - s i n ^ { 2 } \\theta _ { 1 } ) ^ { \\frac { 1 } { 2 } } } } } \\\\ { { r _ { \\parallel } = r _ { y } = \\displaystyle \\frac { n _ { 2 1 } ^ { 2 } C o s \\theta _ { 1 } - ( n _ { 2 1 } ^ { 2 } - s i n ^ { 2 } \\theta _ { 1 } ) ^ { \\frac { 1 } { 2 } } } { n _ { 2 1 } ^ { 2 } C o s \\theta _ { 1 } + ( n _ { 2 1 } ^ { 2 } - s i n ^ { 2 } \\theta _ { 1 } ) ^ { \\frac { 1 } { 2 } } } } } \\end{array}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2023"
+}

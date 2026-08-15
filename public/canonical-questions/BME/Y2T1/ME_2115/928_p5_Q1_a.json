@@ -1,0 +1,55 @@
+{
+  "id": "928_p5_Q1(a)",
+  "course": {
+    "code": "ME 2115",
+    "title": "Basic Mechanics and Thermodynamics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2021\\2nd_Year_1st_Term_2021_928.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": ". (17)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ca98d81473d2beb3d2795b602ad6da8537103d12edc264b6d8f7581ba17c56d1.jpg",
+      "_source_path": "images/ca98d81473d2beb3d2795b602ad6da8537103d12edc264b6d8f7581ba17c56d1.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_748fbc5391bf8f99e467e211450f8c5394063144ad8865f67c45b70b87639cb5.jpg",
+      "_source_path": "images/748fbc5391bf8f99e467e211450f8c5394063144ad8865f67c45b70b87639cb5.jpg"
+    },
+    {
+      "type": "text",
+      "value": "The rod shown in the above Fig. l(b) is supported by two bracket at J\\ and B. Determine the (18)<sub>b)</sub> moment MAn produced by $F = \\{ - 6 0 0 \\hat { \\imath } + 2 0 0 \\hat { \\jmath } - 3 0 0 \\hat { k } \\} \\mathrm { N }$ , which tends to rotate the rod about the J\\B axis."
+    },
+    {
+      "type": "text",
+      "value": "<sup>J\\</sup> <sup>force</sup> <sup>of280N</sup> <sup>is</sup> <sup>applied</sup> <sup>at</sup> <sup>the</sup> <sup>end</sup> <sup>C</sup> <sup>of</sup> <sup>600mm</sup> <sup>rod</sup> <sup>AC</sup> <sup>attached</sup> <sup>to</sup> <sup>a</sup> <sup>bracket</sup> <sup>at</sup> <sup>A</sup> <sup>and</sup> <sup>B</sup> <sup>(18:</sup>a) 2. as shown in Fig."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "935_p2_Q5(c)",
+  "course": {
+    "code": "BME 3141",
+    "title": "X-ray and Ultrasound Imaging",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2020\\3rd_Year_1st_Term_2020_935.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Show the relationship between acoustic impedance and reflection. At a \"muscle-liver\" <sub>(14)</sub> interface, $Z _ { 1 } = 1 . 7 \\times 1 0 ^ { - 4 } \\mathrm { K g / ( m ^ { 2 } s e c ) }$ and $Z _ { 2 } = 1 . 6 5 \\times 1 0 ^ { - 4 } ~ \\mathrm { K g / ( m ^ { 2 } s e c ) }$ . Evaluate the reflection coefficient and transmission coefficient. Comment on the obtained results."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2020"
+}

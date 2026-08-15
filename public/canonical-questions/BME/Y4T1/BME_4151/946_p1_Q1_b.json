@@ -1,0 +1,45 @@
+{
+  "id": "946_p1_Q1(b)",
+  "course": {
+    "code": "BME 4151",
+    "title": "Clinical Engineering and Hospital Management",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2023\\4th_Year_1st_Term_2023_946.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "An ICU at home is the true replica of Hospital Intensive Care Unit with more personalized (15) care provided by equally and efficiently trained healthcare professionals at home. Biomedical engineers at Apollo Home Care offers the required technical support, on-site installation, staff training, maintenance, and after sales services for developing home ICU."
+    },
+    {
+      "type": "text",
+      "value": "(i) As a CE in X hospital, how would you design Home ICU for a chronic asthma patient?"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Which financial strategy will you consider to design Home ICU? Service contract or T&M contract? Why so?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2023"
+}

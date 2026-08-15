@@ -1,0 +1,42 @@
+{
+  "id": "932_p5_Q2(a)",
+  "course": {
+    "code": "MATH 2215",
+    "title": "Linear Algebra, Complex Variable and Vector Analysis",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2020\\2nd_Year_2nd_Term_2020_932.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Discuss the consistency of the following system of equations, and if found (13) consistent, solve the system using the inverse of the coefficient matrix:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { c } { 2 x + 3 y + 4 z = 1 1 } \\\\ { x + 5 y + 7 z = 1 5 } \\\\ { 3 x + 1 1 y + 1 3 z = 2 5 } \\end{array}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2020"
+}

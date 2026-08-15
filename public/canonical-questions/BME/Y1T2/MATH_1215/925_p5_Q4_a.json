@@ -1,0 +1,42 @@
+{
+  "id": "925_p5_Q4(a)",
+  "course": {
+    "code": "MATH 1215",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\1st_Year_2nd_Term_2022_925.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the length and equation of shortest distance (S. D.) between the lines whose equations"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\operatorname { a r c } \\quad { \\frac { x - 1 } { 4 } } = { \\frac { y - 2 } { 3 } } = { \\frac { z - 3 6 } { - 6 } } \\quad { \\mathrm { a n d } } \\quad x + y = 0 , z = 4 .\\tag{15}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2022"
+}

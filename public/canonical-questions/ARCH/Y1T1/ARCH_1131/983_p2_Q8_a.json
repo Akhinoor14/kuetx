@@ -1,0 +1,55 @@
+[
+  {
+    "id": "983_p2_Q8(a)",
+    "course": {
+      "code": "ARCH 1131",
+      "title": "Architecture of Ancient Civilization",
+      "department": "Department of Architecture",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2023,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2023\\1st_Year_1st_Term_2023_983.pdf",
+      "source_page": null,
+      "paper_index": 2
+    },
+    "question_number": "8(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Interpret your understanding about traditional Japanese houses with 20   \nnecessary illustrations.   \nb Write short notes on: 3x5   \nPointed Arch =15   \nRosetta window   \nla. Great wall of China"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_58e1c905fc4be7615e04332a08efdf6ed6fcc354286aa4021a0d17e8f97435b6.jpg",
+        "_source_path": "images/58e1c905fc4be7615e04332a08efdf6ed6fcc354286aa4021a0d17e8f97435b6.jpg"
+      },
+      {
+        "type": "text",
+        "value": "Khulna University of Engineering & Technology Department of Architecture"
+      },
+      {
+        "type": "text",
+        "value": "B. Arch 1st Year 1st Term Regular Examination, 2023"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year 1st Term Regular Examination, 2023",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় শুধুমাত্র একটি 'Error' মেসেজ রয়েছে যা কোনো নির্দিষ্ট টপিক নাম্বার বা বিষয়বস্তুর প্রতিনিধিত্ব করে না, তাই প্রশ্নের সাথে মেলানোর জন্য কোনো ভ্যালিড টপিক নেম্বার পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

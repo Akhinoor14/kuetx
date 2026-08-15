@@ -1,0 +1,64 @@
+[
+  {
+    "id": "1000_p3_Q7(b)",
+    "course": {
+      "code": "CE 3125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "3rd Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\3rd_Year_Backlog_2022_1000.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "7(b)",
+    "numbering_source": "regex",
+    "marks": 10,
+    "content": [
+      {
+        "type": "text",
+        "value": "A reinforced concrete two-way slab panel consists of square bays measuring 25ft X 25ft between the supporting beams. It is continuous on three sides and discontinuous in one side. The floor has to carry a live load of 80 psf, a floor finish of 20 psf and its own weight. Use $f ^ { \\prime } { } _ { c } = 4 0 0 0$ psi and $f _ { y } = 6 0 { , } 0 0 0$ psi. ACI moment coefficients are as follows-"
+      },
+      {
+        "type": "formula",
+        "value": "$$\nC _ { a . n e g } = 0 . 0 6 1 , C _ { a . d l } = 0 . 0 2 3 , C _ { a . l l } = 0 . 0 3 0\n$$",
+        "format": "latex"
+      },
+      {
+        "type": "formula",
+        "value": "$$\nC _ { b . n e g } = 0 . 0 3 3 , C _ { b . d l } = 0 . 0 2 0 , C _ { b . l l } = 0 . 0 2 8\n$$",
+        "format": "latex"
+      },
+      {
+        "type": "text",
+        "value": "Design the slab panel and show reinforcement detailing."
+      },
+      {
+        "type": "text",
+        "value": "Khulna University of Engineering& Technology Department of Architecture"
+      },
+      {
+        "type": "text",
+        "value": "B. Arch. 3rd Year Backlog Examination, 2022"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch. 3rd Year Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় শুধুমাত্র একটি বার্তা রয়েছে যে কোর্সের সিলেবাস সংগ্রহ করা সম্ভব হয়নি, তাই কোনো প্রযোজ্য টপিক বাছাই করতে পারছি না।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

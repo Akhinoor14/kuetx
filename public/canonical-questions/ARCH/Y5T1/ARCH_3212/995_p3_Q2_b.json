@@ -1,0 +1,41 @@
+{
+  "id": "995_p3_Q2(b)",
+  "course": {
+    "code": "ARCH 3212",
+    "title": "Specification and Cost Estimation",
+    "department": "Department of Architecture",
+    "year_term": "5th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2000,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2023\\5th_Year_1st_Term_2023_995.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Machine that have the following costs are under considered for welding process. Using an interest rate of 10% per year determine which alternative should be selected."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Machine X</td><td rowspan=1 colspan=1>Machine Y</td></tr><tr><td rowspan=1 colspan=1>First cost (Tk)</td><td rowspan=1 colspan=1>-250,000</td><td rowspan=1 colspan=1>-430,000</td></tr><tr><td rowspan=1 colspan=1>M&amp;O cost (Tk/yr.)</td><td rowspan=1 colspan=1>-60,000</td><td rowspan=1 colspan=1>-40,000</td></tr><tr><td rowspan=1 colspan=1>Salvage Value (Tk)</td><td rowspan=1 colspan=1>70,000</td><td rowspan=1 colspan=1>95,000</td></tr><tr><td rowspan=1 colspan=1>Life (Yr.)</td><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>6</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch 5th Year 1st Term Regular Examination, 2023"
+}

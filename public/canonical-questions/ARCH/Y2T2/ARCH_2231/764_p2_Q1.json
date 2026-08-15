@@ -1,0 +1,50 @@
+[
+  {
+    "id": "764_p2_Q1",
+    "course": {
+      "code": "ARCH 2231",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\2nd_Year_2nd_Term_2019_764.pdf",
+      "source_page": null,
+      "paper_index": 2
+    },
+    "question_number": "1",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "a. What is Islamic Architecture? How would you define the three styles of Islamic Architecture in the Indian Sub-Continent? (02+09)"
+      },
+      {
+        "type": "text",
+        "value": "b. What was the reason behind the construction of Qutb Minar? What function did it serve as a built structure? (02+02)"
+      },
+      {
+        "type": "text",
+        "value": "c. Discuss the architectural characteristics of Qutb Mįnar with neat sketches. 20"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 2nd Year 2nd Term Regular Examination, 2019",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় প্রশ্নের সাথে মিল রেখে যেকোনো একটি টপিক নেই, তাহত কোনো নাম্বার দেওয়া সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

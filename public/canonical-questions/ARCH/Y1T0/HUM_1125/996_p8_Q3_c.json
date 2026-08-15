@@ -1,0 +1,42 @@
+[
+  {
+    "id": "996_p8_Q3(c)",
+    "course": {
+      "code": "HUM 1125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\1st_Year_Backlog_2022_996.pdf",
+      "source_page": null,
+      "paper_index": 8
+    },
+    "question_number": "3(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Write two antonyms for each of the following words and make sentence with the antonyms. Hatred, Tolerance, Cheerfulness."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাসের তালিকায় কোনো ইঞ্জিনিয়ারিং বিষয়ক টপিক নেই, বরং এটি একটি সাধারণ ভুলবার্তা (Error Message), তাই এই ল্যাঙ্গুয়েজ অ্যার্টস/ভোকাবULARি প্রশ্নটির সাথে সিলেবাসের কোনো মিল নেই।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

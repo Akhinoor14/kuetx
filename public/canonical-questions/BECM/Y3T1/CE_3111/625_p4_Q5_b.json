@@ -1,0 +1,42 @@
+{
+  "id": "625_p4_Q5(b)",
+  "course": {
+    "code": "CE 3111",
+    "title": "Structural Analysis and Design - I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\3rd_Year_1st_Term_2017_625.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Classify the štructures shown in the figure below. Check the structures, wh:ether (0ß) stable or unstable and also statically determinate or indeterminate."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d4b20debedce912b7dde677575559521760668a69b1eb745bea6c907f17e9343.jpg",
+      "_source_path": "images/d4b20debedce912b7dde677575559521760668a69b1eb745bea6c907f17e9343.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

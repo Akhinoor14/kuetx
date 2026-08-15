@@ -1,0 +1,53 @@
+{
+  "id": "1003_p2_Q8(a)",
+  "course": {
+    "code": "CE 5125",
+    "title": null,
+    "department": "Department of Architecture",
+    "year_term": "5th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\5th_Year_Backlog_2022_1003.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "By using C/B ratio with an MARR of 10% per year, choose the better project among the following two projects."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Project A</td><td rowspan=1 colspan=1>Project B</td></tr><tr><td rowspan=1 colspan=1>Initial cost, $</td><td rowspan=1 colspan=1>10x10⁶</td><td rowspan=1 colspan=1>25x10⁶</td></tr><tr><td rowspan=1 colspan=1>Annual O &amp; M, $/Year</td><td rowspan=1 colspan=1>100,000</td><td rowspan=1 colspan=1>70,000</td></tr><tr><td rowspan=1 colspan=1>Annual Income, $/Year</td><td rowspan=1 colspan=1>700,000</td><td rowspan=1 colspan=1>970,000</td></tr><tr><td rowspan=1 colspan=1>Annual Dis-benefits, $/Year</td><td rowspan=1 colspan=1>110,00</td><td rowspan=1 colspan=1>100,000</td></tr><tr><td rowspan=1 colspan=1>Life</td><td rowspan=1 colspan=1>∞</td><td rowspan=1 colspan=1>∞</td></tr></table>"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=2 colspan=1>Activity</td><td rowspan=1 colspan=2>Normal</td><td rowspan=1 colspan=2>Crash</td></tr><tr><td rowspan=1 colspan=1>Duration (day)</td><td rowspan=1 colspan=1>Cost (tk)</td><td rowspan=1 colspan=1>Duration (day)</td><td rowspan=1 colspan=1>Cost (tk)</td></tr><tr><td rowspan=1 colspan=1>1-2</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>1000</td><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>2000</td></tr><tr><td rowspan=1 colspan=1>1-3</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>1500</td><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>3500</td></tr><tr><td rowspan=1 colspan=1>2-4</td><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>500</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>900</td></tr><tr><td rowspan=1 colspan=1>2-5</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>1000</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>4000</td></tr><tr><td rowspan=1 colspan=1>3-4</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>1000</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>2000</td></tr><tr><td rowspan=1 colspan=1>4-5</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>800</td><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>1000</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Khulna University of Engineering &Technology Department of Architecture"
+    },
+    {
+      "type": "text",
+      "value": "B. Arch 5th Year Backlog Examination, 2022"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch 5th Year Backlog Examination, 2022"
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "996_p4_Q2(c)",
+    "course": {
+      "code": "MATH 1125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\1st_Year_Backlog_2022_996.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "2(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Find the distance of the point $( 1 , - 2 , 3 )$ from the plane $x - y + z = 5$ measured parallel to the line $\\frac { x } { 2 } = \\frac { y } { 3 } = \\frac { z } { - 6 }$"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত তালিকায় শুধুমাত্র একটি ভুল বার্তা রয়েছে, তাই কোনো সঠিক টপিক নেম্বার পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

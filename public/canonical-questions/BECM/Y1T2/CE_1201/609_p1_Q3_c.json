@@ -1,0 +1,42 @@
+{
+  "id": "609_p1_Q3(c)",
+  "course": {
+    "code": "CE 1201",
+    "title": "Engineering Mechanics",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\1st_Year_2nd_Term_2015_609.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "If a body $\" \\mathbb { A } ^ { \\prime \\prime }$ is relatively tall and slender, it may tip over intend of sliding. If the weight of the body is 105 Ib and $\\hbar = 0 . 3 5$ and the inclination of the plane is $3 0 ^ { 0 }$ with the horizontal shown in the figure below. Will the body slide or tip over when a gradually increasing force Q is applied to it?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_7e81c3d81e7d61c7ced88808c0f7e9c17bd18221bc1e28743d8eb8cb96bd9845.jpg",
+      "_source_path": "images/7e81c3d81e7d61c7ced88808c0f7e9c17bd18221bc1e28743d8eb8cb96bd9845.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
+}

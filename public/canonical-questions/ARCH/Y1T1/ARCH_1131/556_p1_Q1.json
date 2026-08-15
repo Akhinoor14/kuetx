@@ -1,0 +1,42 @@
+[
+  {
+    "id": "556_p1_Q1",
+    "course": {
+      "code": "ARCH 1131",
+      "title": "Architecture of Ancient Civilization",
+      "department": "Department of Architecture",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\1st_Year_1st_Term_2019_556.pdf",
+      "source_page": null,
+      "paper_index": 1
+    },
+    "question_number": "1",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Write short notes on : 7x5 = 35   \ni. Hellenic Period   \nii. lonic Order   \niii. Doric Order   \niv. Roman Urban Design   \nV. Propylaea   \n2. a. Discuss with drawing- The Pantheon, Rome . 20   \nb. Critically interpret Geographical, Geological and climatic aspects of Greece. 15   \n3. a. Evaluate and discuss Agora with drawings. 15   \nb. Interpret your understanding on Parthenon with Drawings 20   \n4. write short notes on: 7x5=35   \na. Roman Forum   \nb. The Forum Romanum   \nc. The Forum of Trajan   \nd. Corinthian Order   \ne. Amphitheatre"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 1st Year 1st Term Regular Examination, 2019",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো ভৌগোলিক, ইতিহাস অথবা স্থাপত্য বিষয়ক টপিক নেই যা প্রশ্নের সাথে মেলানো সম্ভব।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

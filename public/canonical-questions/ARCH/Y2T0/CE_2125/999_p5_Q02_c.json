@@ -1,0 +1,47 @@
+[
+  {
+    "id": "999_p5_Q02(c)",
+    "course": {
+      "code": "CE 2125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\Backlog_2022_999.pdf",
+      "source_page": null,
+      "paper_index": 5
+    },
+    "question_number": "02(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "]"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_b64af758d52fb16cfcb26d93144e3310376ad6e1180032cdfe1a807e327a5331.jpg",
+        "_source_path": "images/b64af758d52fb16cfcb26d93144e3310376ad6e1180032cdfe1a807e327a5331.jpg"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 2nd Year Special Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো বৈধ টপিক নেই, তাই প্রশ্নের সাথে মেলায় এমন একটিও পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

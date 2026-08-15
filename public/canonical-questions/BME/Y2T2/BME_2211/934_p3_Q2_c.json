@@ -1,0 +1,50 @@
+{
+  "id": "934_p3_Q2(c)",
+  "course": {
+    "code": "BME 2211",
+    "title": "Signals and Systems",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\2nd_Year_2nd_Term_2022_934.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Find the relationship between the input x(t) (13) and the output y(t)."
+    },
+    {
+      "type": "text",
+      "value": "(i) ${ \\mathrm { I f } } x ( t ) = v _ { s } ( t ) { \\mathrm { a n d } } y ( t ) = v _ { c } ( t )$"
+    },
+    {
+      "type": "text",
+      "value": "(ii) $\\operatorname { I f } x ( t ) = v _ { s } ( t ) \\operatorname { a n d } y ( t ) = i ( t )$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_868ada85cde4d6f8feacf26a818e8c006c28e68653a53443d747486418f4e0fe.jpg",
+      "_source_path": "images/868ada85cde4d6f8feacf26a818e8c006c28e68653a53443d747486418f4e0fe.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2022"
+}

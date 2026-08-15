@@ -1,0 +1,37 @@
+{
+  "id": "624_p5_Q7(d)",
+  "course": {
+    "code": "CE 3113",
+    "title": "Reinforced Concrete Structures - I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\3rd_Year_1st_Term_2016_624.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the reguired length of deformed bars in the following case: (12 inch of concrete below top reinforcement). Assume that #3 stirrups are used for shear, and stirrup spacing based on shear calculations is 6 inch throughout the beam, ${ \\tt S } = { \\tt 6 }$ in. $\\mathsf { d } = 1 5 \\mathsf { i n . , A _ { s \\ r e q u i r e d } = 1 . 6 \\mathsf { i n } ^ { 2 } . }$ 3 #7 bars top reinforcement in a single layer in a beam with No. 3 stirrups. $\\begin{array} { r } { f _ { c } ^ { \\prime } = 4 0 0 0 } \\end{array}$ psi and $f _ { y t } = 6 0 , 0 0 0$ psi. Clear spacing betwéen bars is equal to one inch. The bars are epoxy coated. Given values are $\\alpha = 1 . 3 , \\beta =$ $1 . 5 , \\gamma = 1 . 0 , \\mathsf { a n d } \\lambda = 1 . 0 .$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

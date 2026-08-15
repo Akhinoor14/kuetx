@@ -1,0 +1,37 @@
+{
+  "id": "627_p4_Q3(a)",
+  "course": {
+    "code": "CE 3111",
+    "title": "Structural Analysis and Design - I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\3rd_Year_1st_Term_2019_627.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the earthquake load at each floor level for a four storied residential (17) reinforced concrete building from the following data: Height of each floor = 4 m Plan area = 20 m x 30 m Seismic zone co-efficient = 0.15 Structural importance co-efficient = 1.5 Response modification co-efficient = 8 Site co-efficient for soil characteristics = 2.0 Seismic dead load = 2000 KN/floor"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

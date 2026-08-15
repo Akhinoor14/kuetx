@@ -1,0 +1,46 @@
+{
+  "id": "988_p3_Q5(c)",
+  "course": {
+    "code": "CE 3125",
+    "title": "Structure III Reinforced Concrete Design",
+    "department": "Department of Architecture",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2023\\3rd_Year_1st_Term_2023_988.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A rectangular beam has the dimensions as shown in figure below is reinforced with three no.8 bars. The concrete cylinder strength $( f ^ { \\prime } c )$ is 3,000psi and the tensile strength in bending (modulus of rapture) is 450 psi. The yield point of the steel $( f y )$ is 60,000 psi."
+    },
+    {
+      "type": "text",
+      "value": "Determine the stresses caused by a bending moment 40 K-ft."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_739d33dd1f2826542743838343e6d3e3942efd225427ace5b5c0860a9d092f7b.jpg",
+      "_source_path": "images/739d33dd1f2826542743838343e6d3e3942efd225427ace5b5c0860a9d092f7b.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch 3rd Year 1st Term Regular Examination, 2023"
+}

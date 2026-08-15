@@ -1,0 +1,37 @@
+{
+  "id": "603_p1_Q7(d)",
+  "course": {
+    "code": "CE 1123",
+    "title": "Surveying",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\1st_Year_1st_Term_2015_603.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "To find the elevation of the top of a tower of KUET, observations were made from two stations P and R, 30 m apart. The horizontal angle measured at P between R and the top of the tower was $60 ^ { \\circ } 3 0 ^ { \\prime }$ and that measured at R between the top of the tower and P station was $6 8 ^ { 0 } 1 8 ^ { \\prime }$ The angle of elevation to the top of the tower was measured to be $1 0 . 4 8 ^ { 0 }$ at R and that was $1 0 . 1 7 ^ { 0 }$ at P. Staff readings on BM when the instrument was at $P = 1 . 9 6 9 m$ and that with the instrument at ${ \\sf R } = 2 . 0 7 3$ m. Calculate the elevation of the top of the tower of KUET if that ofBM was 420 m."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2015"
+}

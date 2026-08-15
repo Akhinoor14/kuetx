@@ -1,0 +1,42 @@
+[
+  {
+    "id": "764_p6_Q3(c)",
+    "course": {
+      "code": "CE 2225",
+      "title": "Structure II",
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\2nd_Year_2nd_Term_2019_764.pdf",
+      "source_page": null,
+      "paper_index": 6
+    },
+    "question_number": "3(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Calculate shear force and bending moment at section a-a and b-b. [see figure"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 2nd Year 2nd Term Regular Examination, 2019",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো প্রযোজ্য টপিক নেই কারণ ১ নম্বর আইটেমে একটি ভুলবার্তা রয়েছে এবং অন্য কোনো ইঞ্জিনিয়ারিং বিষয়ক টপিক পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "id": "929_p2_Q2(a)",
+  "course": {
+    "code": "ME 2115",
+    "title": "Basic Mechanics and Thermodynamics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\2nd_Year_1st_Term_2022_929.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the centroid of the rollowing area shown in Figure <sub>2(a).</sub>"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e29349151640a57cd2e90167af42a28992191ce3f17064c7a529c51b4ec73e1a.jpg",
+      "_source_path": "images/e29349151640a57cd2e90167af42a28992191ce3f17064c7a529c51b4ec73e1a.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

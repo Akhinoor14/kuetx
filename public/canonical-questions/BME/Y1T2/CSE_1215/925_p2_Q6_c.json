@@ -1,0 +1,51 @@
+{
+  "id": "925_p2_Q6(c)",
+  "course": {
+    "code": "CSE 1215",
+    "title": "Computer Programming",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\1st_Year_2nd_Term_2022_925.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Compare call by value and call by references with necessary examples. (10)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r l } { \\mathrm { d ) } } & { { } \\mathrm { S u p p o s e \\ y o u \\ h a v e \\ a \\ 5 \\ b y \\ 5 \\ m a t r i x \\ a s \\ s h o w n \\ b e l o w ; } } \\end{array}\\tag{06}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\mathrm { i n t ~ m a t r i x } } \\left[ 5 \\right] \\left[ 5 \\right] ;\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "How can you access matrix [2] [3] element of the mentioned two dimensional array using pointer?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2022"
+}

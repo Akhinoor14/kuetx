@@ -1,0 +1,46 @@
+{
+  "id": "622_p2_Q5(a)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\2nd_Year_2nd_Term_2018_622.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define C programming. Write down the syntax of printf and scanf function. (13) Develop a program to write a pattern(six times) like"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_44e73346c79505ecbc5e6f4b3bea601d4640cb9e4d1dcbc2c40232e4ee62a1a1.jpg",
+      "_source_path": "images/44e73346c79505ecbc5e6f4b3bea601d4640cb9e4d1dcbc2c40232e4ee62a1a1.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Using C programming language."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

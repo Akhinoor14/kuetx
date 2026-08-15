@@ -1,0 +1,42 @@
+[
+  {
+    "id": "983_p3_Q3(a)",
+    "course": {
+      "code": "HUM 1125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2023,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2023\\1st_Year_1st_Term_2023_983.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "3(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Read the passage and answer the questions that follow. The man who is always hesitating which of the two things he will do first will do neither. The man who resolves, but allows his resolution to be  mod changed by the counter-suggestion of a friend- who changes from opinion to opinion, from plan to plan, and turns like a weather-cock to every point of compass with every breath- can never accomplish anything great or useful. It is only the man who first consult wisely, then resolves firmly, and then executes the purpose with perseverance in the face of whatever difficulties may come in the way, - that can advance to any line. Take your course wisely, but firmly; and having taken it, hold to it with resolution, and the Alps and the Himalayas will sink before itgo) .amod as boolsl as ai sxiI .y Questions: (sfqmi) .ndy qlsr 1nlliw sw ,soivbs mo ot zneiail uoy liaU .iv i. How does a man always hesitating behave and fare in life?low idd iiv ii. What kindofpeople succeed in life2oa n abrow gniwollot orh to oau olsM iii. What is the author's advice to the young?xl (dov 2) nov(b )"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year 1st Term Regular Examination, 2023",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় শুধুমাত্র একটি 'Error' মেসেজ রয়েছে যা কোনো শিক্ষামূলক টপিক নয়, তাই এই প্রশ্নের সাথে যুক্ত করার জন্য উপযুক্ত কোনো topic নেই।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

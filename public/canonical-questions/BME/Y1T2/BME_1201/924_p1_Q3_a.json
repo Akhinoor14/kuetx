@@ -1,0 +1,69 @@
+{
+  "id": "924_p1_Q3(a)",
+  "course": {
+    "code": "BME 1201",
+    "title": "Biochemistry",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2021\\1st_Year_2nd_Term_2021_924.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make sentences with the following structures:"
+    },
+    {
+      "type": "text",
+      "value": "(14)"
+    },
+    {
+      "type": "text",
+      "value": "i) Sub + T.V + obj + N. complement"
+    },
+    {
+      "type": "text",
+      "value": "ii) Sub + In.T.V + adverbial"
+    },
+    {
+      "type": "text",
+      "value": "iii) Sub + T.V + obj + obj"
+    },
+    {
+      "type": "text",
+      "value": "iv) There + V + sub"
+    },
+    {
+      "type": "text",
+      "value": "v) Sub + L.V + complement"
+    },
+    {
+      "type": "text",
+      "value": "vi) Sub + T.V + infinitive as obj"
+    },
+    {
+      "type": "text",
+      "value": "vii) Sub + T.V + obj + adj complement."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

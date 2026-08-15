@@ -1,0 +1,42 @@
+{
+  "id": "580_p2_Q3(b)",
+  "course": {
+    "code": "MATH 1215",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2018\\1st_Year_2nd_Term_2018_580.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "If the axes are rectangular, then show that the equation of straight line through the point (10) $( \\alpha , \\beta , \\gamma )$ is perpendicular to the straight lines,"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\frac { x } { l _ { 1 } } } = { \\frac { y } { m _ { 1 } } } = { \\frac { z } { n _ { 1 } } } { \\mathrm { ~ a n d ~ } } { \\frac { x } { l _ { 2 } } } = { \\frac { y } { m _ { 2 } } } = { \\frac { z } { n _ { 2 } } } { \\mathrm { ~ i f ~ } } { \\frac { x - \\alpha } { m _ { 1 } n _ { 2 } - m _ { 2 } n _ { 1 } } } = { \\frac { y - \\beta } { n _ { 1 } l _ { 2 } - n _ { 2 } l _ { 1 } } } = { \\frac { z - \\gamma } { l _ { 1 } m _ { 2 } - l _ { 2 } m _ { 1 } } } .\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

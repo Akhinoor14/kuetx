@@ -1,0 +1,49 @@
+{
+  "id": "620_p5_Q5(c)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\2nd_Year_2nd_Term_2015_620.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following values represent a portion of the result of an investigation of (15) various characteristics of low-income families."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Age of head</td><td rowspan=1 colspan=1>15-24</td><td rowspan=1 colspan=1>25-34</td><td rowspan=1 colspan=1>35-44</td><td rowspan=1 colspan=1>45-54</td><td rowspan=1 colspan=1>55-64</td><td rowspan=1 colspan=1>65 orolder</td></tr><tr><td rowspan=1 colspan=1>Number offamilies</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>17</td><td rowspan=1 colspan=1>21</td><td rowspan=1 colspan=1>16</td><td rowspan=1 colspan=1>14</td><td rowspan=1 colspan=1>22</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "(i) Find the median and modal age of the family head and comment."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Why the mean age can't be calculated?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

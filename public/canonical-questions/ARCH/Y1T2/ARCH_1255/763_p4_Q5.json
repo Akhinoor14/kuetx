@@ -1,0 +1,46 @@
+[
+  {
+    "id": "763_p4_Q5",
+    "course": {
+      "code": "ARCH 1255",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\1st_Year_2nd_Term_2019_763.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "5",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "a. How the study of periodic heat flow helps in design phase of climate 10   \nresponsive building.   \nb. Define vertical shadow angle. 05   \nc. illustrate the characteristics of courtyard to solve climatic issues in Hot 20   \nDry climate.   \n6. a. Write short note on (any two): 2X10=2   \ni) The Solar Altitude Angle   \nii) Traditional Shelter of Composite climate   \niii) Air flow around building   \nb. How shading devices control the solar radiation in interior space, 15   \ndiscuss with sketches.   \n7. a. Define Ventilation System. What is Pienum Ventilation System? 15   \nb. Why tunnel effect of ventilation system is using in apartment building 20   \nto solve climate, discuss with illustrations."
+      },
+      {
+        "type": "text",
+        "value": "b. Calculate the required horizontal shading device for given condition of a 20 building: Facing- South Opening Size- 5’X6 Date- 12 june Time- 3 p.m."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 1st Year 2nd Term Regular Examination, 2019",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় শুধুমাত্র ১ নম্বর টপিকটি আছে যা একটি এরর মেসেজ, তাই প্রশ্নের কোনো বিষয় (যেমন: হিট ফ্লো, শ্যাডিং ডিভাইস, ভেন্টিলেশন) এর সাথে এটির মিল নেই এবং সর্বোচ্চ ৩ টা বাছাই করার নিয়ম অনুযায়ী বৈধ উত্তর দেওয়া সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

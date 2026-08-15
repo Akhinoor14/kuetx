@@ -1,0 +1,42 @@
+{
+  "id": "611_p1_Q4(a)",
+  "course": {
+    "code": "CE 1201",
+    "title": "Engineering Mechanics",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\1st_Year_2nd_Term_2017_611.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the nature and magnitude of the forces in the members DE, EF and FH (17) for the following truss."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8ba9c56d5c00886324bc50b3862915982737a834966e02abfda2809ecfb4de7c.jpg",
+      "_source_path": "images/8ba9c56d5c00886324bc50b3862915982737a834966e02abfda2809ecfb4de7c.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "939_p3_Q3(b)",
+  "course": {
+    "code": "BME 3231",
+    "title": "Biomedical Devices and Control",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2019\\3rd_Year_2nd_Term_2019_939.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": ", evaluate the static error constants and find the expected error for (12) the standard step, ramp and parabolic inputs."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a4938885f9259df53710220b06a996963098bad78e86b1bf0df30d87ac94efd2.jpg",
+      "_source_path": "images/a4938885f9259df53710220b06a996963098bad78e86b1bf0df30d87ac94efd2.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2019"
+}

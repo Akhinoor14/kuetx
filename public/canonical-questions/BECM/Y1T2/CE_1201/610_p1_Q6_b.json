@@ -1,0 +1,42 @@
+{
+  "id": "610_p1_Q6(b)",
+  "course": {
+    "code": "CE 1201",
+    "title": "Engineering Mechanics",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\1st_Year_2nd_Term_2016_610.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 22,
+  "content": [
+    {
+      "type": "text",
+      "value": "Why basic concept of moment of inertia is significant? For the shaded area of the (22) following figure: (i) Compute lx and $\\cdot \\mathsf { I } _ { \\mathsf { y } } .$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_22f8ee5c0ccc7231699f112ccc4d7459c81b03a65ade8a12cca65e57d2b5fb1e.jpg",
+      "_source_path": "images/22f8ee5c0ccc7231699f112ccc4d7459c81b03a65ade8a12cca65e57d2b5fb1e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

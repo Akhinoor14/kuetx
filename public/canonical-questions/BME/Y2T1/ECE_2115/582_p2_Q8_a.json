@@ -1,0 +1,37 @@
+{
+  "id": "582_p2_Q8(a)",
+  "course": {
+    "code": "ECE 2115",
+    "title": "Digital Electronics and Logic Design",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2016\\2nd_Year_1st_Term_2016_582.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "Derive the three dimensional general governing equation of conduction heat transfer in solid, (20) then deduce the equation for the special conditions: (i) steady state, (ii) transient, no heat generation, and (iii) steady state, no heat generation."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2016"
+}

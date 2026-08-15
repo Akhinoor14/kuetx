@@ -1,0 +1,42 @@
+{
+  "id": "612_p1_Q1(b)",
+  "course": {
+    "code": "CE 1201",
+    "title": "Engineering Mechanics",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\1st_Year_2nd_Term_2018_612.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the centroid about X axis and Y axis of the shaded area as shown in figure (25) below."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_7f601e1b10146fbf6ec1119d9c9d92d83213e6f5e34d79be05e3bcfe3d8ba6c5.jpg",
+      "_source_path": "images/7f601e1b10146fbf6ec1119d9c9d92d83213e6f5e34d79be05e3bcfe3d8ba6c5.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

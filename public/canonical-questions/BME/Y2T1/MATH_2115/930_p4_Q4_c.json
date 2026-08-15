@@ -1,0 +1,42 @@
+{
+  "id": "930_p4_Q4(c)",
+  "course": {
+    "code": "MATH 2115",
+    "title": "Transforms Analysis",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2023\\2nd_Year_1st_Term_2023_930.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Sulvc $y ^ { \\prime \\prime } + y = f ( t ) , \\ y ( 0 ) = 1 , y ^ { \\prime } ( 0 ) = 0$ using Laplace transforms where"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nf ( t ) = \\left\\{ { 1 , \\quad 0 \\leq t < \\frac { \\pi } { 2 } } \\right.\\tag{13}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

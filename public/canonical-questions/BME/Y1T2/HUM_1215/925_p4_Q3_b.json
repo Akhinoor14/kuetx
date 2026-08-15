@@ -1,0 +1,65 @@
+{
+  "id": "925_p4_Q3(b)",
+  "course": {
+    "code": "HUM 1215",
+    "title": "Technical English",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\1st_Year_2nd_Term_2022_925.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make sentences using the following Modals as directed:"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "text",
+      "value": "i) My (To guess about the present)"
+    },
+    {
+      "type": "text",
+      "value": "ii) Should (To express duty in the past)"
+    },
+    {
+      "type": "text",
+      "value": "iii) Need (To express unnecessary action in the past)"
+    },
+    {
+      "type": "text",
+      "value": "iv) Had better (To express performance)"
+    },
+    {
+      "type": "text",
+      "value": "v) Be to (To express command)"
+    },
+    {
+      "type": "text",
+      "value": "vi) Be going to (To express plan/intention)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2022"
+}

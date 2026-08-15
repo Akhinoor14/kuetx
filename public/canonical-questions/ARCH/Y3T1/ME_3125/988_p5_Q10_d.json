@@ -1,0 +1,37 @@
+{
+  "id": "988_p5_Q10(d)",
+  "course": {
+    "code": "ME 3125",
+    "title": "Mechanical Equipment in Building",
+    "department": "Department of Architecture",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2000,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2023\\3rd_Year_1st_Term_2023_988.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "10(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "How is thermal energy quantified in HVAC system? Explain. 05"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch 3rd Year 1st Term Regular Examination, 2023"
+}

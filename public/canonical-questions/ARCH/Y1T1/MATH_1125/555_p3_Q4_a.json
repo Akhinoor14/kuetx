@@ -1,0 +1,70 @@
+[
+  {
+    "id": "555_p3_Q4(a)",
+    "course": {
+      "code": "MATH 1125",
+      "title": "Mathematics",
+      "department": "Department of Architecture",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2018\\1st_Year_1st_Term_2018_555.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "4(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Correct the following sentences."
+      },
+      {
+        "type": "text",
+        "value": "(i) . Police is liable to control law and order."
+      },
+      {
+        "type": "text",
+        "value": "(ii) He drank slowly the milk."
+      },
+      {
+        "type": "text",
+        "value": "(iii) That is he liable to family is fine."
+      },
+      {
+        "type": "text",
+        "value": "(iv) He hopes he will not pass."
+      },
+      {
+        "type": "text",
+        "value": "(v) See the word in the dictionary."
+      },
+      {
+        "type": "text",
+        "value": "(vi) He loves to play cricket."
+      },
+      {
+        "type": "text",
+        "value": "(vii) He will buy a pencii, pen sharpener and others."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 1st Year 1st Term Regular Examination, 2018",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় শুধুমাত্র একটি 'Error' মেসাজ রয়েছে যা ইংরেজি ব্যাকরণের কোনো টপিক নয়, তাই এই প্রশ্নটির সাথে সরাসরি কোনো সংখ্যক টপিক মেলানো সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

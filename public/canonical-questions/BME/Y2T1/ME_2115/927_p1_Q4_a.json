@@ -1,0 +1,47 @@
+{
+  "id": "927_p1_Q4(a)",
+  "course": {
+    "code": "ME 2115",
+    "title": "Basic Mechanics and Thermodynamics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2020\\2nd_Year_1st_Term_2020_927.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "below."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f97634cd58b6c6ecbd56677ed9997bf99649c5c1f4904124f55044ba6f4f8ab5.jpg",
+      "_source_path": "images/f97634cd58b6c6ecbd56677ed9997bf99649c5c1f4904124f55044ba6f4f8ab5.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_5280af43fbecfc4400972c95e6b2258993f2744f986af0d97c301404451f612c.jpg",
+      "_source_path": "images/5280af43fbecfc4400972c95e6b2258993f2744f986af0d97c301404451f612c.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2020"
+}

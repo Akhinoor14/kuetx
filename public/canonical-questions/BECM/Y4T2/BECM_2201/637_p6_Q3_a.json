@@ -1,0 +1,42 @@
+{
+  "id": "637_p6_Q3(a)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\4th_Year_2nd_Term_2017_637.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make a final design for the preliminary section as shown in figure, allowing $f _ { \\mathfrak { b } } = \\cdot$ (15) $1 2 . 5 \\ : \\mathrm { M P a } , \\ : \\mathsf { f } _ { 0 } = 1 0 3 5$ MPa. Other given values were: $M _ { \\mathrm { T } } = 4 3 5$ kN-m; $\\mathsf { M } _ { \\odot } = 5 5 \\mathsf { k N } \\mathsf { - m } ;$ f= -11 MPa; $\\mathfrak { f } _ { \\mathtt { s e } } = 8 6 0 \\mathsf { M P a }$ and ${ \\sf F } = 8 2 6 { \\sf k N } .$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d0f27f03159670d3d21996b50007978b992693a649ffc7530812a7514c4d0a2f.jpg",
+      "_source_path": "images/d0f27f03159670d3d21996b50007978b992693a649ffc7530812a7514c4d0a2f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2017"
+}

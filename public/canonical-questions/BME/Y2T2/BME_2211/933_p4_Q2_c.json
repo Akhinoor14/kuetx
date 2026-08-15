@@ -1,0 +1,50 @@
+{
+  "id": "933_p4_Q2(c)",
+  "course": {
+    "code": "BME 2211",
+    "title": "Signals and Systems",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2021\\2nd_Year_2nd_Term_2021_933.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Fin I the l.aplace trunslonn of $x ( t ) = e ^ { a t } u ( t )$ and depict the ROC and the locations of poles (12) and /l'rn: ins-plane. As .umc that a is real and (i) positive and (ii) negative."
+    },
+    {
+      "type": "text",
+      "value": "I) ·1 ·r111i11�· thl· ll1rc�·J rvs] ,111se. natural response. and output of a system described by the ( 15) dilkr�·ntial equation"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\frac { d } { d t } } y ( t ) + 3 y ( t ) = 4 x ( t )\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "in l\"l'.°J onsc to the input $x ( t ) = \\cos ( 2 t ) u ( t )$ and the initial condition $y ( 0 ^ { + } ) = - 2$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

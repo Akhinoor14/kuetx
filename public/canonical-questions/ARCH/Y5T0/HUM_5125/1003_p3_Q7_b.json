@@ -1,0 +1,42 @@
+{
+  "id": "1003_p3_Q7(b)",
+  "course": {
+    "code": "HUM 5125",
+    "title": null,
+    "department": "Department of Architecture",
+    "year_term": "5th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\5th_Year_Backlog_2022_1003.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Should waltson accept the special order?Why or why not?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f94db1728fcc224fa32cd7fd0bcb206f42d1ecd620691fe1e9918b76b2ed8b98.jpg",
+      "_source_path": "images/f94db1728fcc224fa32cd7fd0bcb206f42d1ecd620691fe1e9918b76b2ed8b98.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch 5th Year Backlog Examination, 2022"
+}

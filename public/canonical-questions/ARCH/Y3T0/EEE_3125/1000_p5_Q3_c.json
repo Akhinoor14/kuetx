@@ -1,0 +1,37 @@
+{
+  "id": "1000_p5_Q3(c)",
+  "course": {
+    "code": "EEE 3125",
+    "title": "Electrical Installation in Building",
+    "department": "Department of Architecture",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\3rd_Year_Backlog_2022_1000.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What are the different sources of renewable energy usable in house-building? 09   \nShow the layout of a solar PV system"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch. 3rd Year Backlog Examination, 2022"
+}

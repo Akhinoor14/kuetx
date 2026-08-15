@@ -1,0 +1,47 @@
+{
+  "id": "629_p5_Q8(b)",
+  "course": {
+    "code": "CE 3223",
+    "title": "Soil Mechanics",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\3rd_Year_2nd_Term_2016_629.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is the allowable soil pressure? If SF=3.0, using the Hansen bearing (20) capacity equation for the footing shown in the figure below."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f24391dba9f233f4d793260c2b43292e9ed117ff27da12f26cb9d923c5d8f4cd.jpg",
+      "_source_path": "images/f24391dba9f233f4d793260c2b43292e9ed117ff27da12f26cb9d923c5d8f4cd.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_dc6a3232be3cc851bde0d54e66ed8beda652b301d386721c5034ed3f6639c193.jpg",
+      "_source_path": "images/dc6a3232be3cc851bde0d54e66ed8beda652b301d386721c5034ed3f6639c193.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

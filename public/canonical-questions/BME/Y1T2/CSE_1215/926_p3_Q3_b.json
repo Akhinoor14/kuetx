@@ -1,0 +1,45 @@
+{
+  "id": "926_p3_Q3(b)",
+  "course": {
+    "code": "CSE 1215",
+    "title": "Computer Programming",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2023\\1st_Year_2nd_Term_2023_926.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define FILE in C. Compare the file opening modes-read, write, append with proper ( 10) examples of every mode."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td colspan=\"2\"># include &lt;stdio.h&gt; int main ( ) { int a = 5; int b = 4; int c = a &amp; 1? a+++--b : a---b; printf (&quot;c:%d&quot;, c); }</td></tr><tr><td># include &lt;stdio.h&gt; # define print (i) printf (“x&quot; #i=%d, x##i*2); int main ( ) { # ifndef x5 # define x5 10</td><td># include &lt;stdio.h&gt; int main ( ) { do { while (i &gt; 2) { printf (“A&quot;); i--;</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "II) Wril •, horl 11111 ·11 on Ilic f'ollowi11g C function : (I 0) i) strcpy (),ii) trcmp ( ), :u,d (iii) strlcn ( }."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2023"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "625_p5_Q2(b)",
+  "course": {
+    "code": "CE 3113",
+    "title": "Reinforced Concrete Structures - I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\3rd_Year_1st_Term_2017_625.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A rectanġular beam is limited architectural considerations to a width of 12 inch and a total depth of 25 inch. It must resist a total working moment of 2700 kip-inch. If fs = 30,000 psi and $f _ { c } ^ { \\prime } = 4 0 0 0$ psi, What reinforcement is required for flexural design? Design the beam by WSD method and show reinforcement details."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

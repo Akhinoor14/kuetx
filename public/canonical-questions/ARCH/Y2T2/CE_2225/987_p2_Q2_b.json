@@ -1,0 +1,46 @@
+[
+  {
+    "id": "987_p2_Q2(b)",
+    "course": {
+      "code": "CE 2225",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\2nd_Year_2nd_Term_2022_987.pdf",
+      "source_page": null,
+      "paper_index": 2
+    },
+    "question_number": "2(b)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": ":"
+      },
+      {
+        "type": "table",
+        "value_html": "<table><tr><td rowspan=1 colspan=1>Load(</td><td rowspan=1 colspan=1>KN)</td><td rowspan=1 colspan=1>Deformed Length(mm)</td></tr><tr><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>0</td></tr><tr><td rowspan=1 colspan=1>6.</td><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>50.01</td></tr><tr><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>.6</td><td rowspan=1 colspan=1>50.02</td></tr><tr><td rowspan=1 colspan=1>18</td><td rowspan=1 colspan=1>.9</td><td rowspan=1 colspan=1>50.03</td></tr><tr><td rowspan=1 colspan=1>25.</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>50.04</td></tr><tr><td rowspan=1 colspan=1>31.</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>50.05</td></tr><tr><td rowspan=1 colspan=1>37.</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>50.06</td></tr><tr><td rowspan=1 colspan=1>40.</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>50.163</td></tr><tr><td rowspan=1 colspan=1>41.</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>50.433</td></tr><tr><td rowspan=1 colspan=2>46.2</td><td rowspan=1 colspan=1>51.25</td></tr><tr><td rowspan=1 colspan=2>52.4</td><td rowspan=1 colspan=1>52.50</td></tr><tr><td rowspan=1 colspan=2>68.0</td><td rowspan=1 colspan=1>57.50</td></tr><tr><td rowspan=1 colspan=2>65.0</td><td rowspan=1 colspan=1>70.0</td></tr><tr><td rowspan=1 colspan=2>61.0</td><td rowspan=1 colspan=1>Fracture</td></tr></table>"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 2nd Year 2nd Term Regular Examination, 2022",
+    "classification_notes": "প্রদত্ত তালিকায় কোনো বৈধ সিলেবাস টপিক নেই, শুধুমাত্র একটি ভুলবার্তা রয়েছে তাই কোনও সংখ্যা বাছাই করা সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

@@ -1,0 +1,41 @@
+{
+  "id": "620_p1_Q5(b)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\2nd_Year_2nd_Term_2015_620.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "An electronics firm is undecided.as to the most profitable mix for its products. The products now manufactured are transistors, resistors and carbon tubes with a profit (per 100 units) of Tk. 10, Tk. 6 and Tk. 4 respectively. To produce a shipment of transistors containing 100 units requires 1 hour of engineering, 10 hours of direct labors and 2 hour of administration service. To produce 100 resistors are 1 hour, 4 hours and 2 hours of engineering, direct labor and administration time respectively. To produce one shipment of. the tubes (100 units) requires 1 hour of engineering, 5 hours of direct labor and 6 hours of administration. These are 100 hours of engineering services available, 600 hours of direct labor and 300 hours of administration. What is the most profitable mix?"
+    },
+    {
+      "type": "text",
+      "value": "(25)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

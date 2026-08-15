@@ -1,0 +1,47 @@
+{
+  "id": "939_p2_Q1(a)",
+  "course": {
+    "code": "BME 3213",
+    "title": "Biomechanics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2019\\3rd_Year_2nd_Term_2019_939.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Dynamometer readings indicate that for a given speed, the tension is 40N in cable AB and 60N in cable AE. Determine the drag force exerted on the hull and the tension in cable AC."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0330ceb209b6d244304ab3bec1fd91d1b3f011e08623309f2186d7a6831003dc.jpg",
+      "_source_path": "images/0330ceb209b6d244304ab3bec1fd91d1b3f011e08623309f2186d7a6831003dc.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_c49484e859276ff6666240cbd06a139a3c0cb69044d1c3ff4f012cf05479cb36.jpg",
+      "_source_path": "images/c49484e859276ff6666240cbd06a139a3c0cb69044d1c3ff4f012cf05479cb36.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2019"
+}

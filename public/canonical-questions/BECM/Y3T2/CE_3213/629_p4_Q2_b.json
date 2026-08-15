@@ -1,0 +1,49 @@
+{
+  "id": "629_p4_Q2(b)",
+  "course": {
+    "code": "CE 3213",
+    "title": "Reinforced Concrete Structures - II",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\3rd_Year_2nd_Term_2016_629.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 30,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Design and draw reinforcement details of the stair case shown in figure below. Consider $f _ { c } ^ { \\prime } = 3 0 0 0$ psi, $f _ { y } = 6 0 0 0 0 \\mathrm { . }$ psi, live load on stair is 100 psf and floor finish. load is 25 psf. Floor to floor height of this system is $1 0 ^ { \\circ } { \\bf - } 0 ^ { \\circ } ,$"
+    },
+    {
+      "type": "text",
+      "value": "(30)"
+    },
+    {
+      "type": "text",
+      "value": "An office building is designed using a flat plate floor system is composed of slab panels measuring 24 ft x 24 ft. Beams, drop panels and column capitals are not permitted. Specified live load is 100 psf and dead load will include the weight of the slab plus an allowance of 25 psf for finish floor plus suspended loads. The column will be 24 inch square, and the floor to floor height of the structure will be 12 ft. Design the exterior panel, using materials strengths $f _ { c } ^ { \\prime } = 3 0 0 0$ psi and $f _ { y } = 6 0 , 0 0 0$ psi, straight bar used as reinforcement in this slab."
+    },
+    {
+      "type": "text",
+      "value": "(35)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

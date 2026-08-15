@@ -1,0 +1,57 @@
+[
+  {
+    "id": "555_p1_Q8(a)",
+    "course": {
+      "code": "MATH 1125",
+      "title": "Mathematics",
+      "department": "Department of Architecture",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2018\\1st_Year_1st_Term_2018_555.pdf",
+      "source_page": null,
+      "paper_index": 1
+    },
+    "question_number": "8(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Evaluate any two of the followings"
+      },
+      {
+        "type": "formula",
+        "value": "$$\n\\int _ { 0 . } ^ { \\pi / 2 } \\frac { \\sqrt { \\sigma \\mathrm { { o t } } \\kappa } } { 1 + \\sqrt { \\sigma \\mathrm { { o t } } \\kappa } } \\mathrm { d } \\mathbf { { x } }\\tag{ii}\n$$",
+        "format": "latex"
+      },
+      {
+        "type": "formula",
+        "value": "$$\n\\int \\limits _ { 0 } ^ { \\pi } \\frac { \\mathrm { d } \\mathbf { x } } { \\cos \\mathbf { x } + 2 \\sin \\mathbf { x } + 3 }\\tag{iii}\n$$",
+        "format": "latex"
+      },
+      {
+        "type": "formula",
+        "value": "$$\n\\int _ { 0 } ^ { \\log 2 } { \\frac { e ^ { x } } { 1 + e ^ { x } } } \\ d x\n$$",
+        "format": "latex"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 1st Year 1st Term Regular Examination, 2018",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় শুধুমাত্র একটি ভুল বার্তা রয়েছে এবং কোনো গণিতের টপিক নেই, তাই এই প্রশ্নটির সাথে মেলানোর উপযুক্ত কোনো topic পাওয়া যাচ্ছে না।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

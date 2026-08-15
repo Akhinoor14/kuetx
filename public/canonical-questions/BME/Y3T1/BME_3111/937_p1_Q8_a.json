@@ -1,0 +1,49 @@
+{
+  "id": "937_p1_Q8(a)",
+  "course": {
+    "code": "BME 3111",
+    "title": "Biomedical Signal Processing",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\3rd_Year_1st_Term_2022_937.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "analogue transfer function $H ( s ) = { \\frac { 1 } { s ^ { 2 } + { \\sqrt { 2 } } s + 1 } } .$"
+    },
+    {
+      "type": "text",
+      "value": "Obtain the transfer function, $H ( z )$ and. structure of the digital filter assuming a 3 dB cutoff frequency of 150 I Iz and a sampling frequency of 1.28 kl lz. In case of a complex conjugate pole pair."
+    },
+    {
+      "type": "text",
+      "value": "$H ( z ) = { \\frac { 2 C _ { \\mathrm { , } } - \\left[ C _ { \\mathrm { , } } \\cos ( P / T ) + C _ { \\mathrm { , } } \\sin ( P / T ) \\right] 2 e ^ { r / T } z ^ { - 1 } } { 1 - 2 e ^ { r / T } \\cos ( P / T ) z ^ { - 1 } + e ^ { r / T } z ^ { - 2 } } }$ <sup>h</sup> , W CrC $C _ { \\ r } , \\ C _ { \\ r } , \\ P _ { \\ r }$ <sup>d</sup> <sub>,</sub> an $P _ { i }$ <sup>I</sup> arc rca"
+    },
+    {
+      "type": "text",
+      "value": "and imaginary parts of constant and poles, respectively."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

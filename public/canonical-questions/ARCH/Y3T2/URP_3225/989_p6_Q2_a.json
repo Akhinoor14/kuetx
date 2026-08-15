@@ -1,0 +1,51 @@
+{
+  "id": "989_p6_Q2(a)",
+  "course": {
+    "code": "URP 3225",
+    "title": null,
+    "department": "Department of Architecture",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2012,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\3rd_Year_2nd_Term_2022_989.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Prepare a shadow diagram at 12:00 PM for the buildingX' from the given 22 information."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=2>Chart 1</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=2>Chart 2</td></tr><tr><td rowspan=1 colspan=1>Time</td><td rowspan=1 colspan=2>Angle (Azimuth)</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Time</td><td rowspan=1 colspan=1>Length of shadow castby 1m pole</td></tr><tr><td rowspan=1 colspan=1>9:00 AM</td><td rowspan=1 colspan=2>45°25&quot;</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>9:00 AM</td><td rowspan=1 colspan=1>4.02 m</td></tr><tr><td rowspan=1 colspan=1>12:00 PM</td><td rowspan=1 colspan=2>5°55&quot;</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>12:00 PM</td><td rowspan=1 colspan=1>2.85 m</td></tr><tr><td rowspan=1 colspan=1>3:00 PM</td><td rowspan=1 colspan=2>330°25&quot;</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>3:00 PM</td><td rowspan=1 colspan=1>2.15 m</td></tr></table>"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_74ebd99957b68304172c5629770da4e463a83d52a7c3026a42b201ac62a464aa.jpg",
+      "_source_path": "images/74ebd99957b68304172c5629770da4e463a83d52a7c3026a42b201ac62a464aa.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_85d8b0af50b2740f50ecfe63ee76c66c14e6ed1ca8b829c88ec4d6d695daaae0.jpg",
+      "_source_path": "images/85d8b0af50b2740f50ecfe63ee76c66c14e6ed1ca8b829c88ec4d6d695daaae0.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch 3rd Year 2nd Term Regular Examination, 2022"
+}

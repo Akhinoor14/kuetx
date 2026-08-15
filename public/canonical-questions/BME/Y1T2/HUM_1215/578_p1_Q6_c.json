@@ -1,0 +1,55 @@
+{
+  "id": "578_p1_Q6(c)",
+  "course": {
+    "code": "HUM 1215",
+    "title": "Technical English",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2016\\1st_Year_2nd_Term_2016_578.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Draw the circuit diagram using operational amplifier circuit for the following mathematical (12) expression.."
+    },
+    {
+      "type": "formula",
+      "value": "$$\nR i + L { \\frac { d i } { d t } } + { \\frac { 1 } { C } } \\int i d t = v\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nV _ { 0 } = \\frac { R _ { F } } { R _ { 1 } } ( V _ { 2 } - V _ { 1 } )\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "d Draw the instrumentation amplifier circuit."
+    },
+    {
+      "type": "text",
+      "value": "(04)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

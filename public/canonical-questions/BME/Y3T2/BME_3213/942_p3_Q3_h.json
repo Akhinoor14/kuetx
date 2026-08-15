@@ -1,0 +1,41 @@
+{
+  "id": "942_p3_Q3(h)",
+  "course": {
+    "code": "BME 3213",
+    "title": "Biomechanics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\3rd_Year_2nd_Term_2022_942.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(h)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "\\\\ hat is pcnuation unglc? Discuss muscle force production with appropriate diagram<sub>.</sub> (1 2)"
+    },
+    {
+      "type": "text",
+      "value": ") <sup>l l</sup>ow <sup>i</sup>s mec<sup>h</sup>an<sup>i</sup>ca<sup>l l</sup>oa<sup>d di</sup>str<sup>ib</sup>ute<sup>d i</sup>n <sup>h</sup>uman <sup>b</sup>o<sup>d</sup>y<sup>'? fl</sup>ow muc<sup>h</sup> compress<sup>i</sup>ve stress <sup>i</sup>s present (<sup>1</sup> 3) <sub>on</sub> 1 <sub>.</sub> 1 <sub>an</sub>d L2 <sub>ver</sub>ti<sub>ca</sub>l di<sub>scs o</sub>f <sub>a</sub> 500 N <sub>man</sub>? Gi<sub>ven</sub> th<sub>a</sub>t <sub>approx</sub>i<sub>ma</sub>t<sub>e</sub>l<sub>y</sub> 50% <sub>o</sub>f b<sub>o</sub>d<sub>y we</sub>i<sub>g</sub>ht is supported by the disc when he stands in anatomical position<sub>.</sub> (the disc is oriented h<sub>or</sub>i<sub>zon</sub>t<sub>a</sub>ll<sub>y w</sub>ith <sub>a sur</sub>f<sub>ace area o</sub>f25 <sub>cm</sub><sup>2</sup>)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

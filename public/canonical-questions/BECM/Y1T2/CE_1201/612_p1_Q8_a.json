@@ -1,0 +1,42 @@
+{
+  "id": "612_p1_Q8(a)",
+  "course": {
+    "code": "CE 1201",
+    "title": "Engineering Mechanics",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\1st_Year_2nd_Term_2018_612.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "A motor cycle strut rider passes point A, in the following figure at a speed of 70 mph. (15) What is the maximum value of 'h', if the motor cycle (consider as particle) is to jump the 20 ft ditch? Neglect the air resistance and somersaults."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_c957f9378c9bee9cceca8a6b0eafa6f053e084ba58fe3c3fae0ea1e09b6de7cb.jpg",
+      "_source_path": "images/c957f9378c9bee9cceca8a6b0eafa6f053e084ba58fe3c3fae0ea1e09b6de7cb.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

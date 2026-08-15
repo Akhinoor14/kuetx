@@ -1,0 +1,49 @@
+{
+  "id": "936_p2_Q1",
+  "course": {
+    "code": "BME 3103",
+    "title": "Bioelectricity",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2021\\3rd_Year_1st_Term_2021_936.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "aWhat is bioelectricity? Write down some applications of bioelectricity and bioimpedance.(10)"
+    },
+    {
+      "type": "text",
+      "value": "b Distinguish between active and passive conduction. Briefly explain the process of saltatory (12) conduction in neurons."
+    },
+    {
+      "type": "text",
+      "value": "c Deduce the Nernst equation for an ion traversing the cell membrane. Calculate the Nernst (13) potential for Na\\*, K\\*, and Cl' ions at room temperature from the following table:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=2 colspan=1>Ion</td><td rowspan=1 colspan=2>Concentration (mM)</td></tr><tr><td rowspan=1 colspan=1>Inside cell</td><td rowspan=1 colspan=1>Outside cell</td></tr><tr><td rowspan=1 colspan=1>Na+</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>120</td></tr><tr><td rowspan=1 colspan=1>K+</td><td rowspan=1 colspan=1>139</td><td rowspan=1 colspan=1>2.5</td></tr><tr><td rowspan=1 colspan=1>Cl</td><td rowspan=1 colspan=1>3.8</td><td rowspan=1 colspan=1>120</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

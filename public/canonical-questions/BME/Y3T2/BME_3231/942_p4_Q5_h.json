@@ -1,0 +1,50 @@
+{
+  "id": "942_p4_Q5(h)",
+  "course": {
+    "code": "BME 3231",
+    "title": "Biomedical Devices and Control",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\3rd_Year_2nd_Term_2022_942.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(h)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ", li11d !J, $\\mathsf { W } _ { \\mathsf { I } } , \\mathsf { T } _ { \\mathsf { p } } ,$ %,OS, 1111d T�."
+    },
+    {
+      "type": "text",
+      "value": "(IOJ"
+    },
+    {
+      "type": "text",
+      "value": "( I OJ"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_20bf89c9f5feab4cc227615d38665107d5803ac90c15091facec195deae1923f.jpg",
+      "_source_path": "images/20bf89c9f5feab4cc227615d38665107d5803ac90c15091facec195deae1923f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

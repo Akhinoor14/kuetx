@@ -1,0 +1,46 @@
+{
+  "id": "614_p2_Q7(c)",
+  "course": {
+    "code": "CE 1201",
+    "title": "Engineering Mechanics",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\2nd_Year_1st_Term_2015_614.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "A jet of water A, whose velocity is $V _ { A } = 6 0$ fps, strikes a blade B which is (13) moving at $v _ { 8 } = 3 0$ fps in the same direction as A, shown in figure below. Eight pounds per second of water strike the blade, two-third passing without friction along the lower part, the rest across the upper. Determine the horizontal and vertical components of the force on the blade."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_55a864b8ff0d0022bb269820a0587c3b6c57aa915bcf486d21673faee3cc19cf.jpg",
+      "_source_path": "images/55a864b8ff0d0022bb269820a0587c3b6c57aa915bcf486d21673faee3cc19cf.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(05)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2015"
+}

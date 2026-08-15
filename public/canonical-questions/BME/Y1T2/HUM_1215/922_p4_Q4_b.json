@@ -1,0 +1,61 @@
+{
+  "id": "922_p4_Q4(b)",
+  "course": {
+    "code": "HUM 1215",
+    "title": "Technical English",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2019\\1st_Year_2nd_Term_2019_922.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make use of the following modals in sentence as asked in the brackets: (12)"
+    },
+    {
+      "type": "text",
+      "value": "i)Shall. (To express a proposal to somebody else)"
+    },
+    {
+      "type": "text",
+      "value": "ii)Will. (To express a gentle request)"
+    },
+    {
+      "type": "text",
+      "value": "iii)Would. (To express a polite request)"
+    },
+    {
+      "type": "text",
+      "value": "iv)Dare. (To express indulgence)"
+    },
+    {
+      "type": "text",
+      "value": "v) Should + have + past participle of verb. (To express past duty which was not implemented)"
+    },
+    {
+      "type": "text",
+      "value": "vi)Can. (To express approval for someone else)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2019"
+}

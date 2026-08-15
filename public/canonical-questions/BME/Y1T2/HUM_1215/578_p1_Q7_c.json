@@ -1,0 +1,47 @@
+{
+  "id": "578_p1_Q7(c)",
+  "course": {
+    "code": "HUM 1215",
+    "title": "Technical English",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2016\\1st_Year_2nd_Term_2016_578.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "for $\\begin{array} { r } { R _ { J } = R _ { 2 } = } \\end{array}$ (11) $2 . 1 \\mathrm { k } \\Omega , C _ { I } = C _ { 2 } = 0 . 0 5 \\mu \\bar { \\mathrm { F } } , R _ { G } = 1 0 \\mathrm { k } \\Omega ,$ , and $R _ { F } = 5 0 { \\bf k } \\bar { \\Omega } ,$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_51a86bc9cf44027bf35e417b228db1e775c603f828065e15eee32087dbcfda0c.jpg",
+      "_source_path": "images/51a86bc9cf44027bf35e417b228db1e775c603f828065e15eee32087dbcfda0c.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_860577e4fb2e1102a45170484a876a118182bd06c53e936272d7a20bd711d991.jpg",
+      "_source_path": "images/860577e4fb2e1102a45170484a876a118182bd06c53e936272d7a20bd711d991.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

@@ -1,0 +1,61 @@
+[
+  {
+    "id": "556_p4_Q2(c)",
+    "course": {
+      "code": "MATH 1125",
+      "title": "Mathematics",
+      "department": "Department of Architecture",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\1st_Year_1st_Term_2019_556.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "2(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "1f $u = { \\frac { 1 } { r } } \\mathsf { a n d } = { \\sqrt { x ^ { 2 } + y ^ { 2 } + z ^ { 2 } } }$ , then find the value of $\\begin{array} { r } { x \\frac { \\partial u } { \\partial x } + y \\frac { \\partial u } { \\partial y } + z \\frac { \\partial u } { \\partial z } . } \\end{array}$"
+      },
+      {
+        "type": "text",
+        "value": "3 Evaluate any three of the followings:"
+      },
+      {
+        "type": "formula",
+        "value": "$$\n\\int \\frac { 3 x + 2 } { 5 x ^ { 2 } + 2 x + 3 } d x .\n$$",
+        "format": "latex"
+      },
+      {
+        "type": "formula",
+        "value": "$$\n\\int \\frac { d x } { ( 1 - x ) \\sqrt { 1 + x } } .\n$$",
+        "format": "latex"
+      },
+      {
+        "type": "formula",
+        "value": "$$\n\\int { \\frac { 3 c o s \\dot { x } + 5 s i n x } { 2 s i n x - 4 c o s x } } \\ d x .\n$$",
+        "format": "latex"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 1st Year 1st Term Regular Examination, 2019",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো গাণিতিক টপিক নেই, তাই প্রশ্নের সাথে মেলায় এমন কোনো topic পাওয়া যায় না।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

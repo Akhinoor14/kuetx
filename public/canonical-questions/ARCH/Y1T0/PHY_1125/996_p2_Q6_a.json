@@ -1,0 +1,47 @@
+[
+  {
+    "id": "996_p2_Q6(a)",
+    "course": {
+      "code": "PHY 1125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\1st_Year_Backlog_2022_996.pdf",
+      "source_page": null,
+      "paper_index": 2
+    },
+    "question_number": "6(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "What is meant by term polarization of light? Distinguish between 10 ordinary light and polarized light"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_eee1b4e01e7b23800fcc362ef68ecf180a27694b000df62181427a5518d1154d.jpg",
+        "_source_path": "images/eee1b4e01e7b23800fcc362ef68ecf180a27694b000df62181427a5518d1154d.jpg"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো অপশন নেই যা আলোর পোলারাইজেশনের সাথে মিলবে, কারণ ১ নম্বর অপশনে একটি ভুল বার্তা রয়েছে।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

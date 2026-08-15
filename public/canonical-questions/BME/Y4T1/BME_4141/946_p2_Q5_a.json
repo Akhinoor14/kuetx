@@ -1,0 +1,37 @@
+{
+  "id": "946_p2_Q5(a)",
+  "course": {
+    "code": "BME 4141",
+    "title": "Brain and Neuroengineering",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2023\\4th_Year_1st_Term_2023_946.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "<sup>llow</sup> <sup>can</sup> you <sup>describe</sup> <sup>the</sup> <sup>localization</sup> <sup>of'</sup> <sup>focal</sup> <sup>discharge</sup> <sup>in</sup> <sup>EEG</sup> <sup>with</sup> <sup>referential</sup> <sup>montage?</sup> <sup>(I</sup> <sup>I)</sup>   \nExplain, ith schematic illustrution.   \n<sub>b)</sub> \\\\ hat is nerve regeneration? Describe any two nerve regeneration techniques. (I 0)   \n<sub>e)</sub> Describe the fundamental principles underlying the BOLD IMRJ signal using schematic <sup>(14)</sup>   \nrepresentations."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2023"
+}

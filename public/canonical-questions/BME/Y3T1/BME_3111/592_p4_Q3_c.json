@@ -1,0 +1,42 @@
+{
+  "id": "592_p4_Q3(c)",
+  "course": {
+    "code": "BME 3111",
+    "title": "Biomedical Signal Processing",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2018\\3rd_Year_1st_Term_2018_592.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Explain the following transfer function in terms of its poles and zeros and sketch the pole- (12) zero diagram."
+    },
+    {
+      "type": "formula",
+      "value": "$$\nH \\left( z \\right) = \\frac { 1 - z ^ { - 1 } - 2 z ^ { - 2 } } { 1 - 1 . 7 5 z ^ { - 1 } + 1 . 2 5 z ^ { - 2 } - 0 . 3 7 5 z ^ { - 3 } }\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

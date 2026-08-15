@@ -1,0 +1,73 @@
+{
+  "id": "924_p1_Q1(a)",
+  "course": {
+    "code": "BME 1201",
+    "title": "Biochemistry",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2021\\1st_Year_2nd_Term_2021_924.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Frame Wh questions from the following questions:"
+    },
+    {
+      "type": "text",
+      "value": "(14)"
+    },
+    {
+      "type": "text",
+      "value": "i) The school team can get this work done by some people."
+    },
+    {
+      "type": "text",
+      "value": "ii) 1 am looking for the word in the dictionary."
+    },
+    {
+      "type": "text",
+      "value": "iii) Among all the boys Baby came first."
+    },
+    {
+      "type": "text",
+      "value": "iv) A tape recorder operates mechanically."
+    },
+    {
+      "type": "text",
+      "value": "v) He was arrested for being involved in a bank dacoity."
+    },
+    {
+      "type": "text",
+      "value": "vi) The dead body was found in a deserted house."
+    },
+    {
+      "type": "text",
+      "value": "vii) Everyone knows his background."
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

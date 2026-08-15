@@ -1,0 +1,46 @@
+{
+  "id": "1001_p5_Q4(c)",
+  "course": {
+    "code": "MATH 1125",
+    "title": "Mathematics",
+    "department": "Department of Architecture",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\Backlog_2022_1001.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Compare alternating current with direct current. What is the phase relationship 13 between the sinusoidal wave forms of the following sets?"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { l } { { \\underline { { \\mathrm { S e t - 1 } } } : \\ { \\mathrm { v } } = 3 \\sin { \\left( \\omega { \\sf t } - 1 \\displaystyle 5 0 \\right) } } } \\\\ { { \\mathrm { i } = - 2 \\mathrm { c o s } \\left( \\omega { \\sf t } - 6 0 \\right) } } \\\\ { { \\underline { { \\mathrm { S e t - 2 } } } : \\ { \\mathrm { v } } = 1 0 \\mathrm { c o s ~ o t } } } \\\\ { { \\mathrm { i } = 5 \\mathrm { s i n } \\left( \\omega { \\sf t } + 4 5 \\right) } } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Section-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch 3rd Year Special Backlog Examination, 2022"
+}

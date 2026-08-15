@@ -1,0 +1,46 @@
+{
+  "id": "920_p1_Q5(a)",
+  "course": {
+    "code": "EEE 1115",
+    "title": "Electrical Circuits",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\1st_Year_1st_Term_2022_920.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "An equation which is useful in filter circuit analysis is"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\alpha + j \\beta = 2 l n \\left( \\sqrt { 1 + \\frac { z _ { 1 } } { 4 z _ { 2 } } } \\right) + \\sqrt { \\frac { z _ { 1 } } { 4 z _ { 2 } } }\\tag{13}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "If $z _ { 1 } = 2 5 . 1 4 \\angle - 9 0 ^ { o }$ n and $4 z _ { 2 } = 7 9 5 \\angle + 9 0 ^ { o } \\Omega$ evaluate a and $\\beta .$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2022"
+}

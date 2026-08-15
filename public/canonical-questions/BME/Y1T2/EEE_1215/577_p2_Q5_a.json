@@ -1,0 +1,53 @@
+{
+  "id": "577_p2_Q5(a)",
+  "course": {
+    "code": "EEE 1215",
+    "title": "Analog Electronics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2015\\1st_Year_2nd_Term_2015_577.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Read the passage and answer the questions."
+    },
+    {
+      "type": "text",
+      "value": "Are you unhappy about the shape of your nose? Or do you feel that your ears are too big or your eyes too small? You don't need to despair about any of these things any longer. They can all be put right by the surgeon, Surgeons are doctors who make sick people well by operating on them. But some surgeons are beauty specialists. Their job is to make ugly or plain people beautiful. This work is called plastic surgery."
+    },
+    {
+      "type": "text",
+      "value": "Plastic surgeons are very popular in some countries. They make a lot of money by selling beauty to men and women. Plastic surgery is very expensive. A new nose may cost almost as much as a new car. Suppose I can afford to pay so much money and want to change my ugly nose for a more handsome one. I must consult a plastic surgeon. What will he do?"
+    },
+    {
+      "type": "text",
+      "value": "First of all, he will ask me to enter a nursing home. I shall have to spend about three weeks there. The surgeon will give me an anesthetic. Then he will operate on my nose to give it the shape I want. He will put a plaster case over it to keep it in its new shape. I shall have to spend the next week or two anxiously wondering whether the operation has been successful or not. ‘Will my nose really look better? Or shalļ I look uglier than before? Won't there be scars after the operation? What shall I do if my nose is not the shape I wanted?' And so on. And then the great day will come. The surgeon will take off the bandages and the plaster, and I shall see my expensive new nose! Will it be worth all the trouble and expense? Sometimes these operations go wrong, and then the patient comes away looking worse than before."
+    },
+    {
+      "type": "text",
+      "value": "i. What is the job of a plastic surgeon?   \n-ii.How much does a new nose cost?   \niii. What is the process of plastic surgery?   \niv.What do you think is the author's opinion about plastic surgery?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "614_p2_Q3(a)",
+  "course": {
+    "code": "CE 1201",
+    "title": "Engineering Mechanics",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\2nd_Year_1st_Term_2015_614.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define: Angle of friction, angle of repose and wedge. The following figure represents a boom that support is a load $W = 1 K i p . 1 f A B = B C = B D = 8$ ft and BE =.10 ft, find tension in the cable and force in each member."
+    },
+    {
+      "type": "text",
+      "value": "(20)"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2015"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "611_p1_Q6(a)",
+  "course": {
+    "code": "CE 1201",
+    "title": "Engineering Mechanics",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\1st_Year_2nd_Term_2017_611.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define rectangular moment of inertia, polar moment of inertia and radius of . (12) gyration. Prove that, $J = 1 _ { x } + 1 _ { y } ,$ where the symbols bear their usual meanings."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

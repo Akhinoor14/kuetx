@@ -1,0 +1,41 @@
+{
+  "id": "931_p5_Q2(a)",
+  "course": {
+    "code": "MATH 2215",
+    "title": "Linear Algebra, Complex Variable and Vector Analysis",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2019\\2nd_Year_2nd_Term_2019_931.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Use suitable theorem to evaluate $\\begin{array} { r l } { \\oint _ { c } } & { { } \\frac { 3 z ^ { 2 } + 5 } { ( z + 1 ) ( z ^ { 2 } + 1 6 ) } d z } \\end{array}$ , where C is the circle $| z + i | = 4$ traversed in the positive sense."
+    },
+    {
+      "type": "text",
+      "value": "(13)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

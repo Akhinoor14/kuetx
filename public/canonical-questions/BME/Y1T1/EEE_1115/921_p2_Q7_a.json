@@ -1,0 +1,42 @@
+{
+  "id": "921_p2_Q7(a)",
+  "course": {
+    "code": "EEE 1115",
+    "title": "Electrical Circuits",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2023\\1st_Year_1st_Term_2023_921.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find all possible roots of"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\sqrt [ 3 ] { \\frac { 1 0 \\angle 4 5 ^ { 0 } e ^ { j 6 0 } ( - 4 . 0 9 7 - j 2 . 9 4 ) } { 1 - j 1 . 7 3 2 } }\\tag{I 0}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2023"
+}

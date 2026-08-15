@@ -1,0 +1,42 @@
+{
+  "id": "582_p3_Q7(c)",
+  "course": {
+    "code": "BME 2101",
+    "title": "Human Anatomy",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2016\\2nd_Year_1st_Term_2016_582.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define correlation. If the regression line of Y. on X is given by $Y = a _ { 0 } + a _ { l } X ,$ prove that the (10) standard error of estimate $s _ { Y . X }$ is given by:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\ns _ { Y , X } ^ { 2 } = { \\frac { \\sum Y ^ { 2 } - a _ { 0 } \\sum Y - a _ { 1 } \\sum X Y } { N } }\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2016"
+}

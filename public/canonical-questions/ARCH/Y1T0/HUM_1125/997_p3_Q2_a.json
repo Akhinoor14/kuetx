@@ -1,0 +1,70 @@
+[
+  {
+    "id": "997_p3_Q2(a)",
+    "course": {
+      "code": "HUM 1125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\Backlog_2022_997.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "2(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Transform the following sentences as asked in brackets."
+      },
+      {
+        "type": "text",
+        "value": "i) Shova, an engineer, works sincerely at office. (Complex)"
+      },
+      {
+        "type": "text",
+        "value": "ii) Habiba,who exercises regularly, is healthy. (Simple)"
+      },
+      {
+        "type": "text",
+        "value": "iii) That who are punctual inspires us. (Simple)"
+      },
+      {
+        "type": "text",
+        "value": "iv) As you behaves well, we like you. (Compound)"
+      },
+      {
+        "type": "text",
+        "value": "り) Liza not only works at an office,but also does social welfare."
+      },
+      {
+        "type": "text",
+        "value": "vi)Mim is the best buy in this village. (Positive)"
+      },
+      {
+        "type": "text",
+        "value": "vii)Mitu is idle, but fortunate at life. (Complex)"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year Special Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো ইংরেজি ব্যাকরণ (Sentence Transformation, Complex/Simple/Compound sentences) সম্পর্কিত টপিক নেই এবং প্রথম নম্বরটি একটি ভুল বার্তা হওয়ায় এই প্রশ্নের সাথে কোনো উপযুক্ত টপিক মেলা যায় না।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

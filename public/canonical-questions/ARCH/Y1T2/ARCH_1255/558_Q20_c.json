@@ -1,0 +1,50 @@
+[
+  {
+    "id": "558_Q20(c)",
+    "course": {
+      "code": "ARCH 1255",
+      "title": "Climate and Built Environment",
+      "department": "Department of Architecture",
+      "year_term": "1st Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2017,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2017\\1st_Year_2nd_Term_2017_558.pdf",
+      "source_page": null,
+      "paper_index": null
+    },
+    "question_number": "20(c)",
+    "numbering_source": "regex",
+    "marks": 5,
+    "content": [
+      {
+        "type": "text",
+        "value": "Describe the five (05) characteristics of good Timber. 05"
+      },
+      {
+        "type": "text",
+        "value": "Section-B"
+      },
+      {
+        "type": "text",
+        "value": "15"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 1st Year 2nd Term Regular Examination, 2017",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় শুধুমাত্র একটি এনট্রি রয়েছে যাতে কোর্সের কোনো বিষয়বস্তুর (topic/module) নাম্বার বা শিরোনাম নেই, তাই প্রশ্নটির সাথে মেলা এমন কোনো টপিক পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

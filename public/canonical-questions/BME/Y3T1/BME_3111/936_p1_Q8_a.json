@@ -1,0 +1,45 @@
+{
+  "id": "936_p1_Q8(a)",
+  "course": {
+    "code": "BME 3111",
+    "title": "Biomedical Signal Processing",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2021\\3rd_Year_1st_Term_2021_936.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Explain how we can implement IIR filters ."
+    },
+    {
+      "type": "text",
+      "value": "( 1 O)"
+    },
+    {
+      "type": "text",
+      "value": "<sup>b</sup>) <sup>Ill</sup>us<sup>t</sup>ra<sup>t</sup>e spec<sup>t</sup>ra<sup>l</sup> <sup>l</sup>ea<sup>k</sup>age an<sup>d</sup> spec<sup>t</sup>ra<sup>l</sup> smear<sup>i</sup>ng w<sup>ith</sup> su<sup>it</sup>a<sup>bl</sup>e examp<sup>l</sup>e. <sup>Wh</sup>a<sup>t</sup> <sup>i</sup>s <sup>th</sup>e reason ( 1 2) b<sub>e</sub>hi<sub>n</sub>d th<sub>ese</sub> <sub>p</sub>h<sub>enomena</sub>? H<sub>ow</sub> <sub>can</sub> <sub>we</sub> <sub>overcome</sub> th<sub>ese</sub>?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

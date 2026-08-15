@@ -1,0 +1,41 @@
+{
+  "id": "929_p1_Q7(a)",
+  "course": {
+    "code": "BME 2151",
+    "title": "Numerical Methods and Statistics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\2nd_Year_1st_Term_2022_929.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "using long and coding methods."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Wage ($)</td><td rowspan=1 colspan=1>No. of employces</td></tr><tr><td rowspan=1 colspan=1>250.00-259.99</td><td rowspan=1 colspan=1>8</td></tr><tr><td rowspan=1 colspan=1>260.00-269.99</td><td rowspan=1 colspan=1>10</td></tr><tr><td rowspan=1 colspan=1>270.00-279.99</td><td rowspan=1 colspan=1>16</td></tr><tr><td rowspan=1 colspan=1>280.00-289.99</td><td rowspan=1 colspan=1>14</td></tr><tr><td rowspan=1 colspan=1>290.00-299.99</td><td rowspan=1 colspan=1>10</td></tr><tr><td rowspan=1 colspan=1>300.00-309.99</td><td rowspan=1 colspan=1>5</td></tr><tr><td rowspan=1 colspan=1>310.00-319.99</td><td rowspan=1 colspan=1>2</td></tr><tr><td rowspan=1 colspan=2>Total = 65</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

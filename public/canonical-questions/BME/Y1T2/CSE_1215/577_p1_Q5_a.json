@@ -1,0 +1,37 @@
+{
+  "id": "577_p1_Q5(a)",
+  "course": {
+    "code": "CSE 1215",
+    "title": "Computer Programming",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2015\\1st_Year_2nd_Term_2015_577.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is actual and formal argument? Write the benefits of using functions. (10)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
+}

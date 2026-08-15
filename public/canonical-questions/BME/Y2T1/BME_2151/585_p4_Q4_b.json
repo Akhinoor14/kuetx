@@ -1,0 +1,37 @@
+{
+  "id": "585_p4_Q4(b)",
+  "course": {
+    "code": "BME 2151",
+    "title": "Numerical Methods and Statistics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2019\\2nd_Year_1st_Term_2019_585.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 1,
+  "content": [
+    {
+      "type": "text",
+      "value": "Given the equation $\\begin{array} { r } { y ^ { \\prime } ( x ) = \\frac { 2 y } { x } } \\end{array}$ with $y ( 1 ) = 2$ . Estimate $y ( 2 )$ using Heun's method with (13) $h = 0 . 2 5$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

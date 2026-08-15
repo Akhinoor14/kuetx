@@ -1,0 +1,51 @@
+[
+  {
+    "id": "998_p2_Q5(a)",
+    "course": {
+      "code": "CE 3223",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\2nd_Year_Backlog_2022_998.pdf",
+      "source_page": null,
+      "paper_index": 2
+    },
+    "question_number": "5(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "What isCBOD. Explain the term NBOD-with reaction."
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_ed10c16092857c5d6323998bb9f8a2c8d1c13080153ff3a2d317e0d22fa41155.jpg",
+        "_source_path": "images/ed10c16092857c5d6323998bb9f8a2c8d1c13080153ff3a2d317e0d22fa41155.jpg"
+      },
+      {
+        "type": "text",
+        "value": "The $B O D _ { 5 }$ of a waste water is determined as160 mg/L. the k value is known as 0.23 per day. What would be the $B O D _ { 8 }$ if the test were run at $1 5 ^ { 0 }$ C. What is tricklingfilter? Draw a typical trickling filter and explain its working principle."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 2nd Year Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় শুধুমাত্র একটি এনট্রি রয়েছে যাতে কোর্সের কোনো বিষয়বস্তুর (topic) উল্লেখ নেই, তাই প্রশ্নটির সাথে মেলা এমন কোনো টপিক পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

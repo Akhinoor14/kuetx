@@ -1,0 +1,42 @@
+{
+  "id": "930_p2_Q3(d)",
+  "course": {
+    "code": "ECE 2115",
+    "title": "Digital Electronics and Logic Design",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2023\\2nd_Year_1st_Term_2023_930.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is decoder? Implement the following function using decoder:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nF ( A , B , C , D ) = \\sum ( 0 , 1 , 3 , 4 , 8 , 9 , 1 0 , 1 1 ) .\\tag{06}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "635_p5_Q6(a)",
+  "course": {
+    "code": "CE 4123",
+    "title": "Foundation Engineering",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\4th_Year_1st_Term_2019_635.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": 35,
+  "content": [
+    {
+      "type": "text",
+      "value": "A structure is supported on six columns arranged as shown in the figure given below. All columns are 20 inch x 20 inch in size. The central columns carry a load 275 kips each. The load on each of the end columns is 175 kips. Design the suitable raft foundation (slab-beam type). The allowable bearing capacity of the soil is 2.0 ksf. Use $\\mathrm { ~ \\textit ~ { ~ f ~ } ~ } _ { \\mathrm { c } } = 3 0 0 0$ psi and $\\mathfrak { f } _ { \\mathfrak { s } } = 2 4 0 0 0$ psi. Show the reinforcement detaits."
+    },
+    {
+      "type": "text",
+      "value": "(35)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_11fad271b659511c7e3e3f0f2c8f3c304cd97c6235fcc0cd698a2e65bd80d395.jpg",
+      "_source_path": "images/11fad271b659511c7e3e3f0f2c8f3c304cd97c6235fcc0cd698a2e65bd80d395.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2019"
+}

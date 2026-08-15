@@ -1,0 +1,46 @@
+{
+  "id": "630_p4_Q5(c)",
+  "course": {
+    "code": "CE 3213",
+    "title": "Reinforced Concrete Structures - II",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\3rd_Year_2nd_Term_2017_630.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "Use the appropriate interaction diagrams to determine the $P _ { n }$ values for the short round circular columns shown in figure, which have bending about both axis if $e _ { x } =$ 9 in. and $e _ { y } = 1 2 \\mathrm { i n }$ Assume $f _ { y } = 6 0 , 0 0 0$ psi and $f _ { c } ^ { \\prime } = 4 0 0 0$ psi. Use USD method [Necessary graph will be supplied]"
+    },
+    {
+      "type": "text",
+      "value": "(25)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ef25320181287e37d5c26ddd5689b4782d1410c98633db078b30d402d531d824.jpg",
+      "_source_path": "images/ef25320181287e37d5c26ddd5689b4782d1410c98633db078b30d402d531d824.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

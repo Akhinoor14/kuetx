@@ -1,0 +1,42 @@
+{
+  "id": "603_p5_Q6(a)",
+  "course": {
+    "code": "HUM 1123",
+    "title": "English",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\1st_Year_1st_Term_2015_603.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Amplify the following idea (Around 1200 words)."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\ \" { | } \\mathtt { g n o r a n c e \\ i s \\ t h e \\ C u r s e \\ o f \\ G o d . } ^ { \\prime }\\tag{20}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2015"
+}

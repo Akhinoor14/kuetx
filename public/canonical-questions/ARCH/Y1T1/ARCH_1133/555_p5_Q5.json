@@ -1,0 +1,47 @@
+[
+  {
+    "id": "555_p5_Q5",
+    "course": {
+      "code": "ARCH 1133",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2018\\1st_Year_1st_Term_2018_555.pdf",
+      "source_page": null,
+      "paper_index": 5
+    },
+    "question_number": "5",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "a. Explain the term \"Ergonomics\". Discuss Visual scale and Human scale with 15   \nexamples.   \nb. Briefly interpret the following proportioning systems with examples- 15   \ni. Golden Section   \nii. Modulor   \nc. Distinguish between proportion and scale. 05   \n6. a. Define Order. 05   \nb. Make your understanding clear about Hierarchy. Analyze the ways in 15   \nwhich visual emphasis can be achieved in the arrangement of forms and   \nspaces.   \nc. What is Axis? Outline the terminating elements of an axis. 15   \n7. a. In how many ways interlocking spaces can be generated? Discuss with 15   \nexamples.   \nb. Explain centralized organization. Give an example from Bangladesh. 15   \nc. Discuss linear organization with examples. 05   \n1   \n8. a. Outline the elements of circulation. 05   \nb. Discuss path-space relationship. 15   \nc. Evaluate and interpret various types of approaches towards a building 15   \nwith examples."
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_ec5580591fa730430e48a764274bfbbfc228bf81dfcf2c6013bd83a1e6a41b7d.jpg",
+        "_source_path": "images/ec5580591fa730430e48a764274bfbbfc228bf81dfcf2c6013bd83a1e6a41b7d.jpg"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 1st Year 1st Term Regular Examination, 2018",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো সংখ্যক টপিক নেই, তাই প্রশ্নের সাথে মেলাতে অসম্ভব।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

@@ -1,0 +1,54 @@
+[
+  {
+    "id": "997_p4_Q3(c)",
+    "course": {
+      "code": "PHY 1125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\Backlog_2022_997.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "3(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "A musical instrument of frequency 550 is sending out waves of amplitude $1 0 ^ { - 3 }$ 10 cm. Find,"
+      },
+      {
+        "type": "text",
+        "value": "(i) Energy of waves/m³, and"
+      },
+      {
+        "type": "text",
+        "value": "(ii) Intensity of sound in Joules/second/m2."
+      },
+      {
+        "type": "text",
+        "value": "Given the velocity of sound as 332 m/s and density of air is 1.29 kg/m³."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year Special Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো ভৌত বিজ্ঞান, অ্যাকোস্টিক্স বা ইঞ্জিনিয়ারিং বিষয়ক টপিক নেই যা এই প্রশ্নের সাথে মেলাতে পারে।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

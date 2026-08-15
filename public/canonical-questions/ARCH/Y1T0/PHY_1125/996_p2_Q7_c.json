@@ -1,0 +1,42 @@
+[
+  {
+    "id": "996_p2_Q7(c)",
+    "course": {
+      "code": "PHY 1125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\1st_Year_Backlog_2022_996.pdf",
+      "source_page": null,
+      "paper_index": 2
+    },
+    "question_number": "7(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Using the Beer – Lambert law, find the molar extinction co-efficient for a species that absorbs 0.561 a.u. at $\\lambda _ { m a x }$ of 534.0 nm. The path length of the cuvette is 1.00 cm, and the concentration of the solution is 1 $. 5 \\mathrm { X } 1 0 ^ { - 5 }$ M."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো রাসায়নিক বিশ্লেষণ, বর্ণক (Spectroscopy), অথবা বি-ল্যাম্বার্ট আইনের মতো বিষয় নেই তাই এই প্রশ্নের সাথে উপরের তালিকা থেকে কোনো টপিক মেলা যায় না।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

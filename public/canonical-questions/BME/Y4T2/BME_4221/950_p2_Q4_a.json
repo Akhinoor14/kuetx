@@ -1,0 +1,45 @@
+{
+  "id": "950_p2_Q4(a)",
+  "course": {
+    "code": "BME 4221",
+    "title": "Bioinformatics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\4th_Year_2nd_Term_2022_950.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Fi<sub>g</sub> S(a) <sup>i</sup>s s<sup>h</sup>ow<sup>i</sup>ng <sup>f</sup>our sequences <sup>J\\</sup><sub>,</sub> <sup>B</sup> <sub>,</sub> <sup>C</sup><sub>,</sub> an<sup>d</sup> <sup>D</sup> . <sup>C</sup>onstruct a <sup>di</sup>stance matr<sup>i</sup>x <sup>f</sup>rom t<sup>h</sup>e ( <sup>1 0</sup>) <sub>sequences u</sub>tili<sub>z</sub>i<sub>ng</sub> th<sub>e</sub> J<sub>u</sub>k<sub>es</sub>-C<sub>an</sub>t<sub>or</sub> <sub>mo</sub>d<sub>e</sub>l."
+    },
+    {
+      "type": "text",
+      "value": "J\\---+MTf AGCTAACCTGGCACCTB---+AGTCCGCTACCCTAACACCTC---+AATCAG<sup>'</sup>ITMTfCTGGCACCD---+J\\GTfJ\\GCTJ\\J\\CTrGGCJ\\CTT"
+    },
+    {
+      "type": "text",
+      "value": "Fi<sub>g</sub> . S"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2022"
+}

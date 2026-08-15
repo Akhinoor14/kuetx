@@ -1,0 +1,69 @@
+{
+  "id": "617_p6_Q2(b)",
+  "course": {
+    "code": "HUM 2123",
+    "title": "Engineering Economics and Financial Accounting",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\2nd_Year_1st_Term_2018_617.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve the problem:"
+    },
+    {
+      "type": "text",
+      "value": "(25)"
+    },
+    {
+      "type": "text",
+      "value": "There are 10,000 identical individuals in the market for commodity x, each with a demand equation is given by $\\theta _ { d x } = 1 2 - 2 P _ { x }$ , and 1000 identical producers of commodity x, each with a supply equation is given by $\\theta _ { s x } = 2 0 P _ {  x }$"
+    },
+    {
+      "type": "text",
+      "value": "(i) Find the market demand and market supply equation for commodity x."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Obtain equation price and quantity"
+    },
+    {
+      "type": "text",
+      "value": "Now, if the government decides to collect sales tax \\$2 per unit sold, from each of the 1000 sellers of commodity x."
+    },
+    {
+      "type": "text",
+      "value": "(iii) What effect does this have on the equilibrium price and quantity of commodity x?"
+    },
+    {
+      "type": "text",
+      "value": "(iv) Who actually pays the tax?"
+    },
+    {
+      "type": "text",
+      "value": "(v) What is the total amount of taxes collected by the government?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

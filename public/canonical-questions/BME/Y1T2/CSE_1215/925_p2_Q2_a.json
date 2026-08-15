@@ -1,0 +1,47 @@
+{
+  "id": "925_p2_Q2(a)",
+  "course": {
+    "code": "CSE 1215",
+    "title": "Computer Programming",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\1st_Year_2nd_Term_2022_925.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose, \"XYZ\" is a signed integer data type of size 6 bits with format specifier “%x\". Then (10) what will be the output of the following code segment."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\bar { \\mathrm { X Y Z } } } \\ \\mathrm { v a r } = 1 2 7 ;\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\operatorname { p r i n t f } ( ^ { \\ast \\ast 0 } / \\mathrm { o x } ^ { 3 3 } , \\mathrm { v a r } ) ;\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2022"
+}

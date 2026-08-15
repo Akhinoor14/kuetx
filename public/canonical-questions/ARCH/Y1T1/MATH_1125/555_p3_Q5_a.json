@@ -1,0 +1,67 @@
+[
+  {
+    "id": "555_p3_Q5(a)",
+    "course": {
+      "code": "MATH 1125",
+      "title": "Mathematics",
+      "department": "Department of Architecture",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2018\\1st_Year_1st_Term_2018_555.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "5(a)",
+    "numbering_source": "regex",
+    "marks": 1,
+    "content": [
+      {
+        "type": "text",
+        "value": "Read the passage and answer the questions that follow."
+      },
+      {
+        "type": "text",
+        "value": "À person once went to a Shadhu and asked two questions: (1) why do people say God is everywhere? i see him nowhere, therefore, show me where he is. (2) Why is man punished for crime, since he is not a free agent, but made to do as God wishes? The Shadhu took up a lump of earth and flung it at the head of the questioner. The man went to the judge and complained against the Shadhu for having inflicted a"
+      },
+      {
+        "type": "text",
+        "value": "severe pain in his head. The judge had the Shadhu arrested and brought up for trial. As the accused stood in the dock, the judge said, \"why\", instead of answering the complaint's questions, did you throw a lump of earth at him? The Shadhu replied, \"The blow he received with the lamp was an answer to his questions. He has told you that there is a pain in his head. Let him show me the pain, and I show him God. And why does he complain against me, for what i did was, according to hir, an act of God.\" The judge was pleased with the Shadhu's defence and dismissed the case. The complainant left the court a sadder but a wiser man."
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_f45df6c04dfb581a73c1a6e1684efe073cdb78b5f2c115ab164597b417bebdd8.jpg",
+        "_source_path": "images/f45df6c04dfb581a73c1a6e1684efe073cdb78b5f2c115ab164597b417bebdd8.jpg"
+      },
+      {
+        "type": "text",
+        "value": "Questions: (i) What were the questions the Shadhu was asked?"
+      },
+      {
+        "type": "text",
+        "value": "(li) What did the Shadhu do cn hearing the questions?"
+      },
+      {
+        "type": "text",
+        "value": "(iii) How did the Shadhu explain that his action contained the answers to the questions?"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 1st Year 1st Term Regular Examination, 2018",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় শুধুমাত্র একটি এনট্রি রয়েছে যাতে কোনো বিষয়বস্তু নেই, তাই এই প্রশ্নের সাথে যুক্ত হওয়া সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

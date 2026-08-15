@@ -1,0 +1,51 @@
+{
+  "id": "580_p2_Q7(a)",
+  "course": {
+    "code": "MATH 1215",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2018\\1st_Year_2nd_Term_2018_580.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "$y ^ { \\prime \\prime } + 6 y ^ { \\prime } + 9 y = x e ^ { - 3 x }$ COS x"
+    },
+    {
+      "type": "text",
+      "value": "(13)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nb ) \\ y ^ { \\prime \\prime } + 3 y ^ { \\prime } - 4 y = e ^ { - 4 x } + 2 \\sin 3 x\\tag{10}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r l } { \\mathrm { c } ) } & { { } x ^ { 2 } . \\frac { d ^ { 2 } y } { d x ^ { 2 } } - 2 x \\frac { d y } { d x } - 4 y = x ^ { 3 } } \\end{array}\\tag{12}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

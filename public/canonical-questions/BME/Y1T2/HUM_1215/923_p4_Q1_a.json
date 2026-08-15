@@ -1,0 +1,37 @@
+{
+  "id": "923_p4_Q1(a)",
+  "course": {
+    "code": "HUM 1215",
+    "title": "Technical English",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2020\\1st_Year_2nd_Term_2020_923.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make sentence with the following structures using the words given in brackets. (10) i. Subj. + Linking verb + Adj. complement. (Appear as verb) ii. Subj. + Transitive verb + Direct object. (Write as verb) iii. That + Subj. + Verb + Adv. + Verb + Adj. complement. (Work and is as verb) iv. Subj. + Verb + as + Subj. + Verb + Obj.. (Complete and suggest as verb) v. Neither + Subj. + nor + Subj. + Verb + Obj.. (Answer as verb)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2020"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "621_p5_Q1(b)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\2nd_Year_2nd_Term_2017_621.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find Ras for circuit shown in figure below."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d6de93faa8ca4c39202fb465da18e54875886fb3ee25fb4aae0b6498d0a3dfa1.jpg",
+      "_source_path": "images/d6de93faa8ca4c39202fb465da18e54875886fb3ee25fb4aae0b6498d0a3dfa1.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

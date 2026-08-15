@@ -1,0 +1,51 @@
+{
+  "id": "583_p3_Q1(a)",
+  "course": {
+    "code": "ME 2115",
+    "title": "Basic Mechanics and Thermodynamics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2017\\2nd_Year_1st_Term_2017_583.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "."
+    },
+    {
+      "type": "text",
+      "value": "Figure"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ae943be649f1f88489732c2f205e8124cfae3c997c22d8273926a22bc3860e38.jpg",
+      "_source_path": "images/ae943be649f1f88489732c2f205e8124cfae3c997c22d8273926a22bc3860e38.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d4ef93076cffb764bc5a270079992aaa3b9c3d2c6b49ffc9584791c57a134b4c.jpg",
+      "_source_path": "images/d4ef93076cffb764bc5a270079992aaa3b9c3d2c6b49ffc9584791c57a134b4c.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "579_p2_Q4(c)",
+  "course": {
+    "code": "MATH 1215",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2017\\1st_Year_2nd_Term_2017_579.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the length and equation of the shortest distançe between the lines $\\textstyle { \\frac { x - 3 } { 1 } } = { \\frac { y - 5 } { - 2 } } = { \\frac { z - 7 } { 1 } }$ and $\\textstyle { \\frac { x + 1 } { 7 } } = { \\frac { y + 1 } { - 6 } } = { \\frac { z + 1 } { 1 } }$ . Also find the coordinates of the points where the shortest distance meets the given lines."
+    },
+    {
+      "type": "text",
+      "value": "Section B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

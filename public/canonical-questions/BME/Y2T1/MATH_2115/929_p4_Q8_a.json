@@ -1,0 +1,42 @@
+{
+  "id": "929_p4_Q8(a)",
+  "course": {
+    "code": "MATH 2115",
+    "title": "Transforms Analysis",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\2nd_Year_1st_Term_2022_929.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the Discrete Time Fourier Transform (DTFT) of the following finite duration sequence of (08) length L."
+    },
+    {
+      "type": "formula",
+      "value": "$$\nx ( n ) = \\left\\{ { \\begin{array} { r l } { A , } & { { } \\quad { \\mathrm { f o r ~ } } 0 \\leq x \\leq L } \\\\ { 0 , } & { { } \\quad { \\mathrm { o t h e r w i s e } } } \\end{array} } \\right.\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

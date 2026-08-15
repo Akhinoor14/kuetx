@@ -1,0 +1,37 @@
+{
+  "id": "579_p2_Q1(c)",
+  "course": {
+    "code": "MATH 1215",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2017\\1st_Year_2nd_Term_2017_579.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the distance from the point $( 2 , - 4 , 5 )$ to the plane $2 x + 5 y + 6 z = 1 1$ measured parallel (12) to the line $\\textstyle { \\frac { x } { 2 } } = { \\frac { y } { 1 } } = { \\frac { z } { - 2 } }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

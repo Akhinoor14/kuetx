@@ -1,0 +1,50 @@
+[
+  {
+    "id": "564_p1_Q3",
+    "course": {
+      "code": "ARCH 2251",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2018\\2nd_Year_2nd_Term_2018_564.pdf",
+      "source_page": null,
+      "paper_index": 1
+    },
+    "question_number": "3",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "What are the factors that affect the efficiency of sound absorption? Explain 35 the effects of material properties on absorption efficiency."
+      },
+      {
+        "type": "text",
+        "value": "A lecture room of 50 ft X 30 ft with 12 ft high has NRC 0.20 for walls, 0.03 35 for ceiling and 0.10 for floor. Compute the reduction in reverberation time if 70% of the ceiling is treated with materials having its NRC 0.80."
+      },
+      {
+        "type": "text",
+        "value": "Section-B"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 2nd Year 2nd Term Regular Examination, 2018",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় শুধুমাত্র একটি এনট্রি রয়েছে যাতে কোর্সের কোনো টপিক নেই, তাই প্রশ্নটির সাথে মেলা এমন কোনো ভ্যালিড টপিক পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

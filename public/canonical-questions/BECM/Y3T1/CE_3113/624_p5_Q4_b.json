@@ -1,0 +1,49 @@
+{
+  "id": "624_p5_Q4(b)",
+  "course": {
+    "code": "CE 3113",
+    "title": "Reinforced Concrete Structures - I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\3rd_Year_1st_Term_2016_624.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A rectangular reinforced beam has dimensions b = 12 inch, $d = 2 1$ inch, and h = 24 inch, and is reinforced with three No.10 t ars. Material strengths are $f _ { y } = 6 0 { , } 0 0 0$ psi, $f _ { c } ^ { \\prime } = 4 0 0 0$ psi and concrete tensile strength in bending (modúlus of rupture) is 475 psi."
+    },
+    {
+      "type": "text",
+      "value": "i). Find the moment that will produce the first cracking at the bottom of the beam based on calcúlation of Ig (Gross moment of inertia)."
+    },
+    {
+      "type": "text",
+      "value": "ii) Calculate the Iut, the moment of inertia of. the uncracked transformed section."
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

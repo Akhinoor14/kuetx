@@ -1,0 +1,69 @@
+{
+  "id": "938_p4_Q8(d)",
+  "course": {
+    "code": "BME 3103",
+    "title": "Bioelectricity",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2023\\3rd_Year_1st_Term_2023_938.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "Explain where the band electrodes should be placed in order to measure the (07)   \nlongitudinal thoracic impedance."
+    },
+    {
+      "type": "text",
+      "value": "Khulna University or Engineering & Technology B.Sc. Engineering 3nl Year <sub>1s</sub>1 Term l�xamination, 2023 Dcpuruucnt or Biomedical Engineering"
+    },
+    {
+      "type": "text",
+      "value": "BME3111 Biomctlical Signal Processing"
+    },
+    {
+      "type": "text",
+      "value": "Time: 3 Hours"
+    },
+    {
+      "type": "text",
+      "value": "Full Marks: 210"
+    },
+    {
+      "type": "text",
+      "value": "N.H. i) Answer any TH REE questions from each section in separate scripts ii) Figures in the right margin indicate full marks."
+    },
+    {
+      "type": "text",
+      "value": "Section A"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script J\\)"
+    },
+    {
+      "type": "text",
+      "value": "l."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

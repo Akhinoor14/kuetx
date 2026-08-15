@@ -1,0 +1,37 @@
+{
+  "id": "577_p2_Q3(b)",
+  "course": {
+    "code": "EEE 1215",
+    "title": "Analog Electronics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2015\\1st_Year_2nd_Term_2015_577.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Complete the following sentences with clauses as asked in brackets. i. The snow was melting ..... ......... . (Adverb clause of time) ii. He develops a life long love ........ ..... . (Adjective clause) iii. .….. is certain. (Noun clause) iv. She's better at math ...... . . (Adverb clausé of comparison) V. He is so fine in manners ... . (Adverb clause of cause and eff ıri . Some thinas are better (Adverh clause of comnarison)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
+}

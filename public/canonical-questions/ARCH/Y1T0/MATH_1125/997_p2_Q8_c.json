@@ -1,0 +1,55 @@
+[
+  {
+    "id": "997_p2_Q8(c)",
+    "course": {
+      "code": "MATH 1125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\Backlog_2022_997.pdf",
+      "source_page": null,
+      "paper_index": 2
+    },
+    "question_number": "8(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Find the equation of the sphere that passes through the circle $x ^ { 2 } + y ^ { 2 } + z ^ { 2 } - 4 \\mathbf { x } - \\mathbf { y } + 3 z + 1 2 = 0 , 2 \\mathbf { x } + 3 \\mathbf { y } - 7 \\mathbf { z } - 1 0 = 0$ and cuts the sphere $x ^ { 2 } + y ^ { 2 } +$ $z ^ { 2 } - 2 x + 2 z - 4 = 0$ orthogonally."
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_3d6b6fc6586e20bb0e75bd493c0fa2022d03496ef583031725f79b4be753e516.jpg",
+        "_source_path": "images/3d6b6fc6586e20bb0e75bd493c0fa2022d03496ef583031725f79b4be753e516.jpg"
+      },
+      {
+        "type": "text",
+        "value": "Khulna Universityof Engineering &Technology Department of Architecture"
+      },
+      {
+        "type": "text",
+        "value": "B. Arch 1stYear Special Backlog Examination, 2022"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year Special Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত তালিকায় কোনো গাণিতিক টপিক নেই, তাই প্রশ্নের সাথে মেলা এমন একটিও পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1001_p3_Q6(a)",
+    "course": {
+      "code": "CE 3125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "3rd Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\Backlog_2022_1001.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "6(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "A rectangular beam has a width of 12in. and an effected depth of 20in. It is reinforced with three nos. 10 bars in one row. Assume, f’c=4000psi and fy=60000psi. What is the maximumworking moment that can be resisted?"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 3rd Year Special Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো ইঞ্জিনিয়ারিং টপিক নেই, তাই প্রশ্নের সাথে মেলাতে সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

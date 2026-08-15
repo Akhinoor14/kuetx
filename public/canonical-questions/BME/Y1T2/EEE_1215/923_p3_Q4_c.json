@@ -1,0 +1,77 @@
+{
+  "id": "923_p3_Q4(c)",
+  "course": {
+    "code": "EEE 1215",
+    "title": "Analog Electronics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2020\\1st_Year_2nd_Term_2020_923.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "."
+    },
+    {
+      "type": "text",
+      "value": "(i) Find $\\mathrm { R } _ { \\mathrm { B } 1 }$ and $\\mathrm { R } _ { \\mathrm { B } 2 }$ at $\\mathrm { I } _ { \\mathrm { E } } = 0 \\mathrm { \\ : A } .$"
+    },
+    {
+      "type": "text",
+      "value": "(11)"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Determine ${ \\mathrm { V } } _ { \\mathrm { P } } ,$ the voltage necessary to turn on the UJT."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Determine whether $\\mathrm { R } _ { 1 }$ is within the permissible range."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_966c13ef096f12c8c354a16901f9363540bbd193ef47cf1a9a70bea2992c506c.jpg",
+      "_source_path": "images/966c13ef096f12c8c354a16901f9363540bbd193ef47cf1a9a70bea2992c506c.jpg"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { R } _ { \\mathrm { B B } } = 1 0 \\mathrm { k } \\Omega , \\eta = 0 . 5 5\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { V _ { v } } = 1 . 2 \\mathrm { V } , \\mathrm { I _ { v } } = 5 \\mathrm { m A }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { I _ { p } } = 5 0 \\mu \\mathrm { A }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "$( \\mathrm { R } _ { \\mathrm { B } 1 } = 2 0 0 \\Omega$ during discharge phase)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2020"
+}

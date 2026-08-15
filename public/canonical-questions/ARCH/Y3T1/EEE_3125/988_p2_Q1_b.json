@@ -1,0 +1,42 @@
+{
+  "id": "988_p2_Q1(b)",
+  "course": {
+    "code": "EEE 3125",
+    "title": null,
+    "department": "Department of Architecture",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2023\\3rd_Year_1st_Term_2023_988.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_bcf1c002e824d2af8001d879819f3015402a358f6bead82bc6244295b367a1c5.jpg",
+      "_source_path": "images/bcf1c002e824d2af8001d879819f3015402a358f6bead82bc6244295b367a1c5.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch 3rd Year 1st Term Regular Examination, 2023"
+}

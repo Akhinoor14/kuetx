@@ -1,0 +1,50 @@
+{
+  "id": "578_p2_Q5(a)",
+  "course": {
+    "code": "MATH 1215",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2016\\1st_Year_2nd_Term_2016_578.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define ordinary and partial differential equation with examples. Form a differential equation"
+    },
+    {
+      "type": "text",
+      "value": "(09)"
+    },
+    {
+      "type": "text",
+      "value": "for which $b e ^ { a x } + a e ^ { - b y } = c$ (constant)."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\left( x c o s \\frac { y } { x } + y s i n \\frac { y } { x } \\right) y = \\left( y s i n \\frac { y } { x } - x c o s \\frac { y } { x } \\right) x \\frac { d y } { d x } ,\\tag{10}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

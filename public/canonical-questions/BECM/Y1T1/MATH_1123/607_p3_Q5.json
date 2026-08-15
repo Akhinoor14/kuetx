@@ -1,0 +1,57 @@
+{
+  "id": "607_p3_Q5",
+  "course": {
+    "code": "MATH 1123",
+    "title": "Mathematics-I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\1st_Year_1st_Term_2019_607.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5",
+  "numbering_source": "regex",
+  "marks": 35,
+  "content": [
+    {
+      "type": "text",
+      "value": "Evaluate any three of the followings:"
+    },
+    {
+      "type": "text",
+      "value": "(35)"
+    },
+    {
+      "type": "text",
+      "value": "(i) $\\int ( 3 x - 1 ) { \\sqrt { x ^ { 2 } - x + 1 } } \\ d x$"
+    },
+    {
+      "type": "text",
+      "value": "(ii) $\\int { \\frac { 3 s i n x - 4 c o s x - 5 } { 2 - c o s x - 2 s i n x } } d x$"
+    },
+    {
+      "type": "text",
+      "value": "(iii) $\\int { \\frac { \\ d x } { 5 + 4 c o s x } }$"
+    },
+    {
+      "type": "text",
+      "value": "(iv) $\\int e ^ { 2 x } \\left( { \\frac { 1 + s i n 2 x } { 1 + c o s 2 x } } \\right) d x$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
+}

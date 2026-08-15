@@ -1,0 +1,67 @@
+[
+  {
+    "id": "556_p2_Q30(b)",
+    "course": {
+      "code": "ARCH 1133",
+      "title": "Design Theory",
+      "department": "Department of Architecture",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\1st_Year_1st_Term_2019_556.pdf",
+      "source_page": null,
+      "paper_index": 2
+    },
+    "question_number": "30(b)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Define scale. 05   \n4. a. What is Order? Outline the principles that can be utilized to create Order in 05   \nan architectural composition.   \nb. What is Axis? Discuss various terminating elements of an Axis. 15   \nc. What is Symmetry? Discuss various types of Symmetry in brief. 15"
+      },
+      {
+        "type": "text",
+        "value": "Full Marks: 210"
+      },
+      {
+        "type": "text",
+        "value": "Time: 3 Hours"
+      },
+      {
+        "type": "text",
+        "value": "N.B i) Answer any three questions from each section in separate\\_script."
+      },
+      {
+        "type": "text",
+        "value": "ii) Figures in the right margin indicate full marks."
+      },
+      {
+        "type": "text",
+        "value": "Section-A"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_959ecc5070cb076fbb17f1e1f3c013cd03a5766f1e09b438751c1823b1dd0007.jpg",
+        "_source_path": "images/959ecc5070cb076fbb17f1e1f3c013cd03a5766f1e09b438751c1823b1dd0007.jpg"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 1st Year 1st Term Regular Examination, 2019",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো ভিত্তিগত টপিক নেই কারণ প্রথম নম্বরটিতে একটি ত্রুটির বার্তা রয়েছে এবং প্রশ্নের বিষয়বস্তু (আর্কিটেকচার, অক্ষ, প্রতিফলন) সিলেবাসের সাথে মেলেনি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

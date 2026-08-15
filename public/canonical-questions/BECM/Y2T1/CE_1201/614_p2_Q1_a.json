@@ -1,0 +1,42 @@
+{
+  "id": "614_p2_Q1(a)",
+  "course": {
+    "code": "CE 1201",
+    "title": "Engineering Mechanics",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\2nd_Year_1st_Term_2015_614.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define transmissibility of force, free body diagram and two force members. (18) Draw the free body diagram of different members as shown in figure."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_29f5a506ff4f04345f66949ddbfd1536b8cfba5453e7bdca848cccd3a932cd0a.jpg",
+      "_source_path": "images/29f5a506ff4f04345f66949ddbfd1536b8cfba5453e7bdca848cccd3a932cd0a.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2015"
+}

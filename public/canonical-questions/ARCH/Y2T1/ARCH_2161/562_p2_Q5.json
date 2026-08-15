@@ -1,0 +1,95 @@
+[
+  {
+    "id": "562_p2_Q5",
+    "course": {
+      "code": "ARCH 2161",
+      "title": "Construction Details",
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\2nd_Year_1st_Term_2019_562.pdf",
+      "source_page": null,
+      "paper_index": 2
+    },
+    "question_number": "5",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "a What is Floor? Describe its components. 3+6   \nb. Between mud flooring and cement flooring, which one would you suggest as an efficient 16   \nflooring material for a primary school and why?   \nC. What are the differences between Partition Wall and Curtain Wall 10   \n6.a What is expansion joint? Why is it necessary in large buildings? 05   \nb What are the considerations of expansion joint? 08   \nC Identify different parts of a stair with neat sketches 12   \nd What are the rules of thumb for calculating standard stair dimension? 10   \n7. a Explain advantage and disadvantage of flat roof 15   \nb. Explain ClearstoryRoof and Hip Roof with necessary sketches 10"
+      },
+      {
+        "type": "text",
+        "value": "C. Write short notes on:"
+      },
+      {
+        "type": "text",
+        "value": "i. Quarter turn stair"
+      },
+      {
+        "type": "text",
+        "value": "ii. Circular Stair"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_e25e580702e215bfa0d61dc7a142f7636fff043704b01f1ee46725d92e54c75f.jpg",
+        "_source_path": "images/e25e580702e215bfa0d61dc7a142f7636fff043704b01f1ee46725d92e54c75f.jpg"
+      },
+      {
+        "type": "text",
+        "value": "Write short notes with sketches (Any Five)"
+      },
+      {
+        "type": "text",
+        "value": "a. Bay window."
+      },
+      {
+        "type": "text",
+        "value": "b. Pivoted window"
+      },
+      {
+        "type": "text",
+        "value": "ic. Dormer window"
+      },
+      {
+        "type": "text",
+        "value": "d. Lantern window"
+      },
+      {
+        "type": "text",
+        "value": "e. Battened, ledged and braced door"
+      },
+      {
+        "type": "text",
+        "value": "f. Flush door"
+      },
+      {
+        "type": "text",
+        "value": "g. Splayed step"
+      },
+      {
+        "type": "text",
+        "value": "Khulna University of Engineering and Technology Department of Architecture"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 2nd Year 1st Term Regular Examination, 2019",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো ভুল সংখ্যা (যেমন 1, 6a-7c) ছাড়াও প্রকৃত টপিক বা মডিউলের নাম উল্লেখ করা নেই এবং 'Sorry' মেসেজটি দেখিয়ে দেওয়া হয়েছে তাই প্রশ্নের সাথে যেকোনো সিলেবাস টপিক মেলানো সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

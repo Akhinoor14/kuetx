@@ -1,0 +1,45 @@
+{
+  "id": "950_p2_Q4(b)",
+  "course": {
+    "code": "BME 4221",
+    "title": "Bioinformatics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\4th_Year_2nd_Term_2022_950.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "(i) <sup>J\\</sup> <sup>di</sup>stance matr<sup>i</sup>x <sup>i</sup>s <sub>g</sub>iven <sup>i</sup>n <sup>T</sup>a<sup>bl</sup>e S(b) . <sup>C</sup>onstruct a p<sup>h</sup>y<sup>l</sup>ogenet<sup>i</sup>c tree <sup>f</sup>rom t<sup>h</sup>e matr<sup>i</sup>x (<sup>25</sup> ) d<sub>a</sub>t<sub>a</sub> <sub>us</sub>i<sub>ng</sub> th<sub>e</sub> UPGMJ\\ <sub>me</sub>th<sub>o</sub>d <sub>an</sub>d <sub>compare</sub> th<sub>e</sub> <sub>new</sub>l<sub>y</sub> f<sub>orme</sub>d di<sub>s</sub>t<sub>ance</sub> <sub>ma</sub>t<sub>r</sub>i<sub>x</sub> <sub>w</sub>ith th<sub>e</sub> <sub>g</sub>i<sub>ven</sub> one."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>C</td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>0.40</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>0.35</td><td rowspan=1 colspan=1>0.45</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>D</td><td rowspan=1 colspan=1>0.60</td><td rowspan=1 colspan=1>0.70</td><td rowspan=1 colspan=1>0.55</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Using the same matrix in Table"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2022"
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "561_p2_Q7(c)",
+    "course": {
+      "code": "ARCH 2131",
+      "title": "Buddhist and Hindu Architecture of Indian Subcontinent",
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2018\\2nd_Year_1st_Term_2018_561.pdf",
+      "source_page": null,
+      "paper_index": 2
+    },
+    "question_number": "7(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Geometry of Hindu temple differed from region to region but Vastu purusha madala was the basic geometry for temple architecture. To what extent do you agree with the statement? Use proper illustration and references for your position about the statement."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 2nd Year 1st Term Regular Examination, 2018",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় শুধুমাত্র একটি এনট্রি রয়েছে যাতে কোনো বিষয়বস্তু নেই, তাই প্রশ্নের সাথে মেলা এমন কোনো টপিক বাছাই করা সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

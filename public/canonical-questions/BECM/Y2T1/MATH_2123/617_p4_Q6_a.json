@@ -1,0 +1,42 @@
+{
+  "id": "617_p4_Q6(a)",
+  "course": {
+    "code": "MATH 2123",
+    "title": "Mathematics - III",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\2nd_Year_1st_Term_2018_617.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Using Laplace transform solve the following equation"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\frac { \\mathrm { d } ^ { 2 } \\mathbf { x } } { \\mathrm { d t } ^ { 2 } } } - 2 { \\frac { \\mathrm { d } \\mathbf { x } } { \\mathrm { d t } } } + \\mathbf { x } = \\operatorname { e } ^ { \\mathrm { t } } \\operatorname { w i t h } \\mathbf { x } = 2 , { \\frac { \\mathrm { d } \\mathbf { x } } { \\mathrm { d t } } } = - 1 \\ { \\mathrm { a t t } } = 0 .\\tag{15}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

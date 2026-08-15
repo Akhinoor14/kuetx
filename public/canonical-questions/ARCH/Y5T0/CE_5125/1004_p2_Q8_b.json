@@ -1,0 +1,55 @@
+{
+  "id": "1004_p2_Q8(b)",
+  "course": {
+    "code": "CE 5125",
+    "title": null,
+    "department": "Department of Architecture",
+    "year_term": "5th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2023\\Backlog_2023_1004.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the following network diagram, find out"
+    },
+    {
+      "type": "text",
+      "value": "i) Total float of each activity"
+    },
+    {
+      "type": "text",
+      "value": "ii) The critical path"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_75e3c88728508821cd773c1ef1eb7b0cbdd98fcda0e34e0917d7a8afe725f7ec.jpg",
+      "_source_path": "images/75e3c88728508821cd773c1ef1eb7b0cbdd98fcda0e34e0917d7a8afe725f7ec.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_2230f5facab8b0d8b9fa04107b6a08c8a10151d238b99d84f9e031d359c78ab2.jpg",
+      "_source_path": "images/2230f5facab8b0d8b9fa04107b6a08c8a10151d238b99d84f9e031d359c78ab2.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch 5th Year Special Backlog Examination, 2023"
+}

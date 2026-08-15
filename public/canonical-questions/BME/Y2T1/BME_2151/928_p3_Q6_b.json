@@ -1,0 +1,41 @@
+{
+  "id": "928_p3_Q6(b)",
+  "course": {
+    "code": "BME 2151",
+    "title": "Numerical Methods and Statistics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2021\\2nd_Year_1st_Term_2021_928.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "to find the mean height of I 00 male ( 12) students at xyz university (use short and coding method)."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Height (in)</td><td rowspan=1 colspan=1>No. of students</td></tr><tr><td rowspan=1 colspan=1>60-62</td><td rowspan=1 colspan=1>5</td></tr><tr><td rowspan=1 colspan=1>63-65</td><td rowspan=1 colspan=1>18</td></tr><tr><td rowspan=1 colspan=1>66-68</td><td rowspan=1 colspan=1>42</td></tr><tr><td rowspan=1 colspan=1>69-71</td><td rowspan=1 colspan=1>27</td></tr><tr><td rowspan=1 colspan=1>72-74</td><td rowspan=1 colspan=1>8</td></tr><tr><td rowspan=1 colspan=1>Total</td><td rowspan=1 colspan=1>100</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

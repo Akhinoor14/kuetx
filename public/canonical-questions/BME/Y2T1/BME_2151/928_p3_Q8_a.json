@@ -1,0 +1,41 @@
+{
+  "id": "928_p3_Q8(a)",
+  "course": {
+    "code": "BME 2151",
+    "title": "Numerical Methods and Statistics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2021\\2nd_Year_1st_Term_2021_928.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "shows the respective heights x and y of a sample of 12 fathers and their oldest (10) sons. Calculate the coefficient of rank correlation."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Height X of father (in)</td><td rowspan=1 colspan=1>65</td><td rowspan=1 colspan=1>63</td><td rowspan=1 colspan=1>67</td><td rowspan=1 colspan=1>64</td><td rowspan=1 colspan=1>68</td><td rowspan=1 colspan=1>62</td><td rowspan=1 colspan=1>70</td><td rowspan=1 colspan=1>66</td><td rowspan=1 colspan=1>68</td><td rowspan=1 colspan=1>67</td><td rowspan=1 colspan=1>69</td><td rowspan=1 colspan=1>71</td></tr><tr><td rowspan=1 colspan=1>Height Y of son (in)</td><td rowspan=1 colspan=1>68</td><td rowspan=1 colspan=1>66</td><td rowspan=1 colspan=1>68</td><td rowspan=1 colspan=1>65</td><td rowspan=1 colspan=1>69</td><td rowspan=1 colspan=1>66</td><td rowspan=1 colspan=1>68</td><td rowspan=1 colspan=1>65</td><td rowspan=1 colspan=1>71</td><td rowspan=1 colspan=1>67</td><td rowspan=1 colspan=1>68</td><td rowspan=1 colspan=1>70</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

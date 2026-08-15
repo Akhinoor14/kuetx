@@ -1,0 +1,37 @@
+{
+  "id": "620_p4_Q6(d)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\2nd_Year_2nd_Term_2015_620.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 250 V, 25 KW dc shunt motor has an efficiency of 85% when running at (09) 1000 r.p.m on full load. The armature resistance is 0.1 ohm and field resistance is 125 ohms. Find the starting resistance required to limit the starting current to 150% of the rated current."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

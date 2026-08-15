@@ -1,0 +1,57 @@
+{
+  "id": "924_p1_Q5(a)",
+  "course": {
+    "code": "BME 1201",
+    "title": "Biochemistry",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2021\\1st_Year_2nd_Term_2021_924.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "Read the passage and answer the following questions:"
+    },
+    {
+      "type": "text",
+      "value": "(20)"
+    },
+    {
+      "type": "text",
+      "value": "More and more people are becoming addicted to their mobile devices. They use them everywhere. In restaurants, on buses, in class. They are dependent on their phones."
+    },
+    {
+      "type": "text",
+      "value": "A recent study found that, people in the UK check their phones once every 12 minutes and that increasingly, how people feel is more and more dependent on the number of likes’ or 'followers' or 'views' they have."
+    },
+    {
+      "type": "text",
+      "value": "Some people can suffer serious mental health problems when they are not validated on social media. Furthermore, mobile phones are a terrible distraction because often, when using phones, people are not mindful of what is happening around them."
+    },
+    {
+      "type": "text",
+      "value": "In many countries, more people and businesses are trying to limit the amount of time people spend on mobile phones. Governments now recognise that for some people, mobile phone use is a dangerous addiction, similar to smoking and gambling. 'Thus Apple, Facebook, and Instagram are introducing features designed to allow mobile user to see how much time they have spent on the phones and set limits on the time they are on social media."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

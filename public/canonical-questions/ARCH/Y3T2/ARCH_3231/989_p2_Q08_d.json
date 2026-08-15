@@ -1,0 +1,45 @@
+{
+  "id": "989_p2_Q08(d)",
+  "course": {
+    "code": "ARCH 3231",
+    "title": null,
+    "department": "Department of Architecture",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\3rd_Year_2nd_Term_2022_989.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "08(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Describe the hydraulic design of sewers. 07   \n4. Design a waste stabilization pond system to treat waste water from a low-income 35   \nsettlement with a population of 25,000 at Mohammadpur, Dhaka. The average waste   \nwater flow is about 110 liters per person per day and the BOD contribution is   \n30gm/P/day. The mean temperature of the coolest month is $2 0 \\%$ and during   \nirrigation season, 26°C. It is desired that the final effluent be used for crop irrigation.   \nAssume faecal coliform concentration in raw waste-water to be 1x108 per 100mL   \nand permissible Fe≤1000/100 mLvolumetric loading rate at $2 0 \\%$ is300gm/m³/day   \nand BOD removal at 20°C is60% BOD. Surface loading rate at $2 0 \\textdegree C$ is   \n253kg/ha/day and at 26°C is 369 kg/ha/day."
+    },
+    {
+      "type": "text",
+      "value": "Khulna University of Engineering& Technology Department of Architecture"
+    },
+    {
+      "type": "text",
+      "value": "B. Arch 3rd Year 2ⁿd Term Regular Examination, 2022"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch 3rd Year 2nd Term Regular Examination, 2022"
+}

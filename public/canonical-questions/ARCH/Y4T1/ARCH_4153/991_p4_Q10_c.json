@@ -1,0 +1,45 @@
+{
+  "id": "991_p4_Q10(c)",
+  "course": {
+    "code": "ARCH 4153",
+    "title": null,
+    "department": "Department of Architecture",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2023\\4th_Year_1st_Term_2023_991.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "10(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Discuss the differences of extensive and intensive green roof. 05"
+    },
+    {
+      "type": "text",
+      "value": "Khulna University of Engineering&Technology Department of Architecture"
+    },
+    {
+      "type": "text",
+      "value": "B. Arch 4thYear 1st Term Regular Examination, 2023"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch 4th Year 1st Term Regular Examination, 2023"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "621_p2_Q3(b)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\2nd_Year_2nd_Term_2017_621.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "An item is produced at the rate 50 items per day. The demand occurs at the rate of 25 items per day. If the setup cost is Tk. 100 per setup and holding cost Tk. 0.01 per unit item per day, find the economic lot size for one run, assuming that the shortages are not permitted. Also find the time of cycle and minimum total cost for one run."
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

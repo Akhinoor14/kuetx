@@ -1,0 +1,46 @@
+[
+  {
+    "id": "996_p7_Q4(a)",
+    "course": {
+      "code": "ARCH 1233",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\1st_Year_Backlog_2022_996.pdf",
+      "source_page": null,
+      "paper_index": 7
+    },
+    "question_number": "4(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Write short notes on: 5X7   \ni) The Bayeux Tapestry =35   \nii) Madonna of the Meadow   \niii) Gattamelata   \niv) The Holy Trinity   \nv) The Last Supper"
+      },
+      {
+        "type": "text",
+        "value": "Section-B"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো ইতিহাস, শিল্পকলা বা আর্ট হিস্ট্রি বিষয়ক টপিক নেই যেখানে এই প্রশ্নের উত্তর দেওয়া সম্ভব।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

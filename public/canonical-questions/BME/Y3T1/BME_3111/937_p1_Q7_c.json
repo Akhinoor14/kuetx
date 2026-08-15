@@ -1,0 +1,53 @@
+{
+  "id": "937_p1_Q7(c)",
+  "course": {
+    "code": "BME 3111",
+    "title": "Biomedical Signal Processing",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\3rd_Year_1st_Term_2022_937.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Using the pole-zero placement method to calculate coefficients of a notch filter obtain, by (15) pole-zero replacement method, the transfer function and the difference equation and structure of a simple digital notch filter that meets the following specifications:"
+    },
+    {
+      "type": "text",
+      "value": "Notch frequency: 50 I lz"
+    },
+    {
+      "type": "text",
+      "value": "3 dB width of Notch: ±5 I lz"
+    },
+    {
+      "type": "text",
+      "value": "Sampling frequency: 500 I lz."
+    },
+    {
+      "type": "text",
+      "value": "(25) Applying the impulse invariant method, design a digital filter to approximate the normalized"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "950_p2_Q5(b)",
+  "course": {
+    "code": "BME 4221",
+    "title": "Bioinformatics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\4th_Year_2nd_Term_2022_950.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "<sub>,</sub> construct a <sub>p</sub>h<sub>y</sub>lo<sub>g</sub>enetic tree through the NJ method and compare the output with that of out<sub>p</sub>ut from the <sub>p</sub>roblem in (i) ."
+    },
+    {
+      "type": "text",
+      "value": "6 <sub>.</sub>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2022"
+}

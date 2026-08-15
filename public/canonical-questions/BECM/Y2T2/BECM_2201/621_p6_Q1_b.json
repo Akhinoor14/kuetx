@@ -1,0 +1,42 @@
+{
+  "id": "621_p6_Q1(b)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\2nd_Year_2nd_Term_2017_621.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Use the method of Frobehius to find solution of the differential equation"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n2 x ^ { 2 } y ^ { \\prime \\prime } - x y ^ { \\prime } + ( x ^ { \\prime } - 5 ) y = 0 { \\mathrm { ~ i n ~ } } 5 0 m \\in { \\mathrm { i n t e r v a l ~ } } 0 < x < R\\tag{18}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

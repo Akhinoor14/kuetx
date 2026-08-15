@@ -1,0 +1,42 @@
+{
+  "id": "614_p3_Q4(a)",
+  "course": {
+    "code": "CE 2111",
+    "title": "Mechanics of Solids - I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\2nd_Year_1st_Term_2015_614.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "A portion of the floor plan of a certain building is shown in figure below. The (20) total loading (including live and dead loads) in each bay is also shown. Determine the size of the section of the beam B-2 if the allowable flexural stress is 120 MPa. Assume the beams are adequately braced and the depth of the cross-section is 1.5 times of the width."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_42c215f1c4474b11b43f57b0a73bcdd3b2bf18b6b4580f6ed1fc9410ef59739f.jpg",
+      "_source_path": "images/42c215f1c4474b11b43f57b0a73bcdd3b2bf18b6b4580f6ed1fc9410ef59739f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2015"
+}

@@ -1,0 +1,69 @@
+{
+  "id": "630_p5_Q4(b)",
+  "course": {
+    "code": "CE 3223",
+    "title": "Soil Mechanics",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\3rd_Year_2nd_Term_2017_630.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Following are the resuls of a filed unit weight determination test performed on (14) the soil by sand-cone method:"
+    },
+    {
+      "type": "text",
+      "value": "Calibrated dry density of Ottawa sand = 1570 kg/m³"
+    },
+    {
+      "type": "text",
+      "value": "Calibrated mass of Ottawa sand to fill the cone = 0.565 kg"
+    },
+    {
+      "type": "text",
+      "value": "Mass.of jar + cone + sand (before use) = 8.69 kg"
+    },
+    {
+      "type": "text",
+      "value": "Mas of jar + cone + sand (after use) = 4.78 kg"
+    },
+    {
+      "type": "text",
+      "value": "Mass of moist soil from hole = 3.907 kg"
+    },
+    {
+      "type": "text",
+      "value": "Moisture content of the moist soil = 13.2%"
+    },
+    {
+      "type": "text",
+      "value": "Determine - (i) In place dry density."
+    },
+    {
+      "type": "text",
+      "value": "(ii) If the maximum dry density is equal to $2 0 k N / m ^ { 3 }$ in lab, calculate relative field compaction."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

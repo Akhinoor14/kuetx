@@ -1,0 +1,41 @@
+{
+  "id": "575_p1_Q2(c)",
+  "course": {
+    "code": "BME 1101",
+    "title": "Basic Biomedical Engineering",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2019\\1st_Year_1st_Term_2019_575.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Approximate intracellular and extracellular concentrations of the important ions across a squid (12) giant axon, rațio of permiabilities at resting and action conditions are given in Table Q2c below. At room temperature find Ek, ENa, Ecl, Vm,rest and Vm,action."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Ion</td><td rowspan=1 colspan=1>Cytoplasm (mM)</td><td rowspan=1 colspan=1>Extracellular fluid(mM)</td><td rowspan=1 colspan=1>Rate of permiabilities atrest</td><td rowspan=1 colspan=1>Rate of permiabilities ataction</td></tr><tr><td rowspan=1 colspan=1>K+</td><td rowspan=1 colspan=1>400</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>1</td></tr><tr><td rowspan=1 colspan=1>Na+</td><td rowspan=1 colspan=1>50</td><td rowspan=1 colspan=1>470</td><td rowspan=1 colspan=1>0.03</td><td rowspan=1 colspan=1>15</td></tr><tr><td rowspan=1 colspan=1>Cl</td><td rowspan=1 colspan=1>40</td><td rowspan=1 colspan=1>550</td><td rowspan=1 colspan=1>0.1</td><td rowspan=1 colspan=1>0.1</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
+}

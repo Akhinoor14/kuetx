@@ -1,0 +1,77 @@
+[
+  {
+    "id": "569_p5_Q8(h)",
+    "course": {
+      "code": "CE 2125",
+      "title": "Structure 1: Mechanics",
+      "department": "Department of Architecture",
+      "year_term": "1st Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2018\\1st_Year_Backlog_2018_569.pdf",
+      "source_page": null,
+      "paper_index": 5
+    },
+    "question_number": "8(h)",
+    "numbering_source": "regex",
+    "marks": 20,
+    "content": [
+      {
+        "type": "text",
+        "value": "]"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_6108d313bf896aa458250b2e995c38dafe26d6746367326c001c225057308cb7.jpg",
+        "_source_path": "images/6108d313bf896aa458250b2e995c38dafe26d6746367326c001c225057308cb7.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_d0cea052c02cc6e67213eb48ee168990a1d07dbaf949d4127948571d177a4e2e.jpg",
+        "_source_path": "images/d0cea052c02cc6e67213eb48ee168990a1d07dbaf949d4127948571d177a4e2e.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_a19021baa037f6897048baa56f41d5b57e1e48711a2ef8bd0ead6cd7317da2cd.jpg",
+        "_source_path": "images/a19021baa037f6897048baa56f41d5b57e1e48711a2ef8bd0ead6cd7317da2cd.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_721994e18eb4b61654b57209abba5211835fa6bee0810f1a3ace19546903f392.jpg",
+        "_source_path": "images/721994e18eb4b61654b57209abba5211835fa6bee0810f1a3ace19546903f392.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_d85feb69d43b0e56f585206fc06e16f0cf8cd7030b3df8f0c0dd3621efce39fc.jpg",
+        "_source_path": "images/d85feb69d43b0e56f585206fc06e16f0cf8cd7030b3df8f0c0dd3621efce39fc.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_1ff772d9e946c7ab5423c248efb47e233d79bf39b0857d507ea7500b2928ff40.jpg",
+        "_source_path": "images/1ff772d9e946c7ab5423c248efb47e233d79bf39b0857d507ea7500b2928ff40.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_263073ce3d57b807d65daba529bd13903edb14bf7fec2138b33947557f3d2337.jpg",
+        "_source_path": "images/263073ce3d57b807d65daba529bd13903edb14bf7fec2138b33947557f3d2337.jpg"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year Backlog Examination, 2018",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো প্রযুক্তিগত টপিক নেই, শুধুমাত্র একটি ভুলবার্তা রয়েছে তাই কোনও সংখ্যা বাছাই করা সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

@@ -1,0 +1,37 @@
+{
+  "id": "622_p4_Q7(b)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\2nd_Year_2nd_Term_2018_622.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the vibration of a rectangular membrane of side $\\pmb { \\alpha } = 4 f$ and $b = 2 \\mathcal { \\hat { H } }$ if the tension is $1 2 . 5 \\%$ , the density is $2 . 5 ^ { s l u g s } \\bigg / _ { f ^ { 2 } }$ (as for light rubber), the initial velocity:is 0 and the initial displacement is $f ( x , y ) { \\overset {  } { = } } 0 . 1 ( 4 x - x ^ { 2 } ) ( 2 y - y ^ { 2 } ) \\ f$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

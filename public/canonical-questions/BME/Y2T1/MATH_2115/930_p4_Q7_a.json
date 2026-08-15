@@ -1,0 +1,37 @@
+{
+  "id": "930_p4_Q7(a)",
+  "course": {
+    "code": "MATH 2115",
+    "title": "Transforms Analysis",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2023\\2nd_Year_1st_Term_2023_930.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define inner product of functions and norm of functions. Find the inner product of (11) $f _ { 1 } ( x ) = x , \\ f _ { 2 } ( x ) = c o s 2 x$ over $[ 0 , \\pi ]$ and norm of each of them. Are they orthogonal? Why or why not?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

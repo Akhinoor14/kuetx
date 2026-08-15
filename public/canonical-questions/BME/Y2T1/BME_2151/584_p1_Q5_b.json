@@ -1,0 +1,41 @@
+{
+  "id": "584_p1_Q5(b)",
+  "course": {
+    "code": "BME 2151",
+    "title": "Numerical Methods and Statistics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2018\\2nd_Year_1st_Term_2018_584.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "A laboratory blood test is 99% effective in detecting a certain disease when it is, in fact, present. However, the test also yields a false positive' result for 1% of the healthy persons tested. (That is, if a healthy person is tested, then, with probability 0.01, the test résult will imply he or she has the disease.). If 0.5% of the population actually has the disease, what is the probability a person has the disease given that his test result is positive?"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

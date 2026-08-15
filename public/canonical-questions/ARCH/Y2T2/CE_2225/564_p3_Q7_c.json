@@ -1,0 +1,46 @@
+[
+  {
+    "id": "564_p3_Q7(c)",
+    "course": {
+      "code": "CE 2225",
+      "title": "Structure II",
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2018\\2nd_Year_2nd_Term_2018_564.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "7(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "The rigid bar ABC in figure is pinned at B and attached to the two vertical rods. Initially, the bar is 18 horizontal and the vertical rods are stress free. Determine the stress in the aluminium rod if the temperature of the steel rod is decreased by 40º c. Neglect the weight of bar ABC."
+      },
+      {
+        "type": "text",
+        "value": "Figure-7(c)"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 2nd Year 2nd Term Regular Examination, 2018",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় মাত্র একটি এন্ট্রি রয়েছে যাতে কোর্সের কোনো বিষয়বস্তুর (topic) উল্লেখ নেই, তাই প্রশ্নটির সাথে মেলা এমন কোনো টপিক পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

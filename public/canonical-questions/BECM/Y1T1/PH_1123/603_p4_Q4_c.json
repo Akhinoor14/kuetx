@@ -1,0 +1,41 @@
+{
+  "id": "603_p4_Q4(c)",
+  "course": {
+    "code": "PH 1123",
+    "title": "Physics-I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\1st_Year_1st_Term_2015_603.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "A uniform rigid rod 120 cm long is clamped horizontally at one end. A load of (10) 100 gm is attached to the free end. Calculate the depression of the end point. Given that the Young's modulus of the material of the rod is 1.013 x 1011 dynes/cm², g = 980 cm/sec² and the geometrical moment of the rod is 12.56 cm⁴."
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2015"
+}

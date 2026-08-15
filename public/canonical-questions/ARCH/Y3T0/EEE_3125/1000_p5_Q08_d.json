@@ -1,0 +1,37 @@
+{
+  "id": "1000_p5_Q08(d)",
+  "course": {
+    "code": "EEE 3125",
+    "title": "Electrical Installation in Building",
+    "department": "Department of Architecture",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\3rd_Year_Backlog_2022_1000.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "08(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Why is the fuse not used in the neutral? 05   \n8. Draw the floor plan of a primary school consist of two classrooms, one 35   \nteacher's room, one veranda and two toilets.   \ni)Calculate the illumination of the floor plan   \nii)Draw the electrical installation of this floor plan building according to   \ncalculated illumination.   \niii)Draw the conduit run and electrical wiring diagrams for both light and   \npower circuits according to the installation plan.   \niv) Calculate the load and determine the conductor size.   \nv)Finally estimate the quantity of conduit and wire of different sizes   \nrequired for complete curing of this building."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch. 3rd Year Backlog Examination, 2022"
+}

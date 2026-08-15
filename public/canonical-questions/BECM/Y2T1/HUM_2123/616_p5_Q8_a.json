@@ -1,0 +1,61 @@
+{
+  "id": "616_p5_Q8(a)",
+  "course": {
+    "code": "HUM 2123",
+    "title": "Engineering Economics and Financial Accounting",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\2nd_Year_1st_Term_2017_616.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": 35,
+  "content": [
+    {
+      "type": "text",
+      "value": "The trial balance of Sonali Enterprise are as follows for the year ended (35) December 31, 2016:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Account title</td><td rowspan=1 colspan=1>DebitTaka</td><td rowspan=1 colspan=1>CreditTaka</td></tr><tr><td rowspan=1 colspan=1>Cash</td><td rowspan=1 colspan=1>32,100</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Account receivable</td><td rowspan=1 colspan=1>36,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Supplies</td><td rowspan=1 colspan=1>7,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Prepaid insurance</td><td rowspan=1 colspan=1>14,500</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Equipment</td><td rowspan=1 colspan=1>81,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Accumulated depreciation - Equipment</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>4,500</td></tr><tr><td rowspan=1 colspan=1>Building</td><td rowspan=1 colspan=1>2,00,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Accumulated depreciation - Building</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>15,000</td></tr><tr><td rowspan=1 colspan=1>Account payable</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>25,500</td></tr><tr><td rowspan=1 colspan=1>Notes payable</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>35,000</td></tr><tr><td rowspan=1 colspan=1>Unearned service revenue</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>20,000</td></tr><tr><td rowspan=1 colspan=1>Capital</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>1,70,000</td></tr><tr><td rowspan=1 colspan=1>Drawing</td><td rowspan=1 colspan=1>15,900</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Service revenue</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>1,35,000</td></tr><tr><td rowspan=1 colspan=1>Salaries expense</td><td rowspan=1 colspan=1>6,500</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Advertisement expense</td><td rowspan=1 colspan=1>4,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Utilities expense</td><td rowspan=1 colspan=1>8,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>4,05,000</td><td rowspan=1 colspan=1>4,05,000</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Adjustments:"
+    },
+    {
+      "type": "text",
+      "value": "(i) Supplies unused at the end of the year Tk. 2,500."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Prepaid insurance expired during the year Tk. 3,000."
+    },
+    {
+      "type": "text",
+      "value": "(iii) Service revenue earned but not receive Tk. 12,500."
+    },
+    {
+      "type": "text",
+      "value": "(iv) Two months salaries not yet paid."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

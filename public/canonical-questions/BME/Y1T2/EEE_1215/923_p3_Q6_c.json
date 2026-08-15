@@ -1,0 +1,47 @@
+{
+  "id": "923_p3_Q6(c)",
+  "course": {
+    "code": "EEE 1215",
+    "title": "Analog Electronics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2020\\1st_Year_2nd_Term_2020_923.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "shows the (08) negative voltage feedback amplifier. If the gain of the amplifier without feedback is 12000, find (i) feedback fraction and (ii) overall voltage gain."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_5b6d4598df6ff4325f7513a6570f0cb13cebd0dffaec9aaba39024e01e5cff57.jpg",
+      "_source_path": "images/5b6d4598df6ff4325f7513a6570f0cb13cebd0dffaec9aaba39024e01e5cff57.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e65e2c09523419c8f0e90213b202301013fc3f5babda3575bb5052f0511137eb.jpg",
+      "_source_path": "images/e65e2c09523419c8f0e90213b202301013fc3f5babda3575bb5052f0511137eb.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2020"
+}

@@ -1,0 +1,112 @@
+[
+  {
+    "id": "764_p6_Q8(c)",
+    "course": {
+      "code": "CE 2225",
+      "title": "Structure II",
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\2nd_Year_2nd_Term_2019_764.pdf",
+      "source_page": null,
+      "paper_index": 6
+    },
+    "question_number": "8(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "]"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_4ede89bc277a8c7a9e0398d76c4ac07af10540f5321db1231dc38ab1b1cdec6f.jpg",
+        "_source_path": "images/4ede89bc277a8c7a9e0398d76c4ac07af10540f5321db1231dc38ab1b1cdec6f.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_43196384388a401a29928ee40dc1885b6787e38ac8555274c28d83bfa70b6be5.jpg",
+        "_source_path": "images/43196384388a401a29928ee40dc1885b6787e38ac8555274c28d83bfa70b6be5.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_8fddedcd516dafd6baa53dd41d6afca029719da8a2377a0011d1d82df88fa2c8.jpg",
+        "_source_path": "images/8fddedcd516dafd6baa53dd41d6afca029719da8a2377a0011d1d82df88fa2c8.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_33ebdeeeb49902c834af28e87cb43d0547598929d5dd71ae74e501ccf0e9d1c8.jpg",
+        "_source_path": "images/33ebdeeeb49902c834af28e87cb43d0547598929d5dd71ae74e501ccf0e9d1c8.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_bf545b31ac4b49d2af495458b148965e1d94d4c18f382109ab9fc8ddf426c992.jpg",
+        "_source_path": "images/bf545b31ac4b49d2af495458b148965e1d94d4c18f382109ab9fc8ddf426c992.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_140bc84b19f7495283b9bc9ffb0a35712967356b6e3b15225e5e4b8618b31bc8.jpg",
+        "_source_path": "images/140bc84b19f7495283b9bc9ffb0a35712967356b6e3b15225e5e4b8618b31bc8.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_1707a5fc589d422c9a214c3ea7fc313d86c5ea147a1fc20fdecad43ede658d4d.jpg",
+        "_source_path": "images/1707a5fc589d422c9a214c3ea7fc313d86c5ea147a1fc20fdecad43ede658d4d.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_7f51ef9791fb5138f5f318e8b64a10ab32a7bcf26c5c17c3e5ecb7372f8f4a05.jpg",
+        "_source_path": "images/7f51ef9791fb5138f5f318e8b64a10ab32a7bcf26c5c17c3e5ecb7372f8f4a05.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_847f78e1ab995a8f8debc89c569c493cc0ce3c53c1785c41881465b7dec92171.jpg",
+        "_source_path": "images/847f78e1ab995a8f8debc89c569c493cc0ce3c53c1785c41881465b7dec92171.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_a23eb32e2ba201ba792770d5445fdb3db30b7781e4d486a0fa6902c2014a477c.jpg",
+        "_source_path": "images/a23eb32e2ba201ba792770d5445fdb3db30b7781e4d486a0fa6902c2014a477c.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_541969f76fdae97623218d9651e84c1879940d0160bf67c5822e19e1c67f0a7f.jpg",
+        "_source_path": "images/541969f76fdae97623218d9651e84c1879940d0160bf67c5822e19e1c67f0a7f.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_71becbb6b353734ccfe2d8247c01ad77b5a202ae183a109cad50998d2172eaac.jpg",
+        "_source_path": "images/71becbb6b353734ccfe2d8247c01ad77b5a202ae183a109cad50998d2172eaac.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_27fd67eea2f7ef1695ae50c760e6478eedee940829c7c1b7282b1b37aa85621a.jpg",
+        "_source_path": "images/27fd67eea2f7ef1695ae50c760e6478eedee940829c7c1b7282b1b37aa85621a.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_d8ebfa1ba184eb94d172e5ae9352d9009af949a72b6bf734126c79400ca79048.jpg",
+        "_source_path": "images/d8ebfa1ba184eb94d172e5ae9352d9009af949a72b6bf734126c79400ca79048.jpg"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 2nd Year 2nd Term Regular Examination, 2019",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় শুধুমাত্র একটি ভুলবার্তা (Error message) রয়েছে, তাই কোনো বৈধ টপিক নেম্বার বাছাই করা সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

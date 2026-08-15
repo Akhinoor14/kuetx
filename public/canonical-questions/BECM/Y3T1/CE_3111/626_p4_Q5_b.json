@@ -1,0 +1,42 @@
+{
+  "id": "626_p4_Q5(b)",
+  "course": {
+    "code": "CE 3111",
+    "title": "Structural Analysis and Design - I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\3rd_Year_1st_Term_2018_626.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "A suspension cable is supported at two points A and B as shown in figure below. (15) Find out the maximum tension in the cable. Find also the length of cable."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_33ea1087a61b462d66e306182977c3a598c2cd3547e4ae4a38a11c8f455fb58a.jpg",
+      "_source_path": "images/33ea1087a61b462d66e306182977c3a598c2cd3547e4ae4a38a11c8f455fb58a.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

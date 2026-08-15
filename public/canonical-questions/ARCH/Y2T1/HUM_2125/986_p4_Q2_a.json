@@ -1,0 +1,42 @@
+[
+  {
+    "id": "986_p4_Q2(a)",
+    "course": {
+      "code": "HUM 2125",
+      "title": "Principles of Economics",
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2023,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2023\\2nd_Year_1st_Term_2023_986.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "2(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Define perfect competition. Show the differences between monopolistic 05 competition and monopoly."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 2nd Year 1st Term Regular Examination, 2023",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় শুধুমাত্র একটি এলোমেলো বার্তা রয়েছে যা কোনো শিক্ষাগত বিষয় (topic/module) নির্দেশ করে না, তাই প্রশ্নের সাথে মেলা এমন কোনো টপিক পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

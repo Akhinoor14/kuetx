@@ -1,0 +1,41 @@
+{
+  "id": "622_p4_Q7(a)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\2nd_Year_2nd_Term_2018_622.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "lf α and β are two roots of $I _ { n } ( x ) = 0$ then prove that, $\\int _ { 0 } ^ { 1 } x J _ { n } ( \\alpha \\alpha ) J _ { n } ( \\beta x ) d x = { \\left\\{ \\begin{array} { l l } { 0 } & { ; } \\\\ { { \\frac { 1 } { 2 } } } & { J ^ { 2 } _ { n + 1 } ( \\alpha ) ; } \\end{array} \\right. } \\alpha \\neq { \\beta }$"
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

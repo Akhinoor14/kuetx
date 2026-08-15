@@ -1,0 +1,37 @@
+{
+  "id": "766_p5_Q05(c)",
+  "course": {
+    "code": "CE 3223",
+    "title": "Plumbing",
+    "department": "Department of Architecture",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\3rd_Year_2nd_Term_2019_766.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "05(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the flow in the following pipe network for the inflow and outflow 15 shown in the diagram using the Hardy Cross method. “Figure"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Arch 3rd Year 2nd Term Regular Examination, 2019"
+}

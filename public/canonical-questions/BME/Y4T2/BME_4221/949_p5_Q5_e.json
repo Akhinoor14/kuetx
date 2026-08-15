@@ -1,0 +1,45 @@
+{
+  "id": "949_p5_Q5(e)",
+  "course": {
+    "code": "BME 4221",
+    "title": "Bioinformatics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2021\\4th_Year_2nd_Term_2021_949.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(e)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is database? The following flat file contains records of five students from four different (12) regions, each taking a different course."
+    },
+    {
+      "type": "text",
+      "value": "Name, Region, Course Number, Course TitlelS. Saha, Noakhali, BME: 3213, Biomechanics I. Khan, Pabna, BME 4231, 'Telemedicin S. Ahmed, Rangpur, Math 2115, Differential Equations | Λ. Naim, Khulna, CSE 1215, Computer Programming | M. Hasan, Noakhali, ME 1115, Engineering Drawing."
+    },
+    {
+      "type": "text",
+      "value": "Construct a relational database."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2021"
+}

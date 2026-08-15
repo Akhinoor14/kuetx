@@ -1,0 +1,42 @@
+{
+  "id": "588_p3_Q1(b)",
+  "course": {
+    "code": "MATH 2215",
+    "title": "Linear Algebra, Complex Variable and Vector Analysis",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2017\\2nd_Year_2nd_Term_2017_588.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 16,
+  "content": [
+    {
+      "type": "text",
+      "value": "When a system of non-homogeneous linear equations is said to be consistent? Ascertain: (16) whether the following system is consistent; if it is, find all solutions"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { c } { { x _ { 1 } + x _ { 2 } - 2 x _ { 3 } + x _ { 4 } = 1 } } \\\\ { { 2 x _ { 1 } - x _ { 2 } + 2 x _ { 3 } + 2 x _ { 4 } = 2 } } \\\\ { { 3 x _ { 1 } + 2 x _ { 2 } - 4 x _ { 3 } - 3 x _ { 4 } = 3 . } } \\end{array}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

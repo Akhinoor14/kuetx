@@ -1,0 +1,37 @@
+{
+  "id": "1001_p5_Q6(c)",
+  "course": {
+    "code": "MATH 1125",
+    "title": "Mathematics",
+    "department": "Department of Architecture",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\Backlog_2022_1001.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "An illumination on the working plane of 3footcandle is requiredon a rom 1 270'x50'. The lamps are required to be hung 15ft. above the work benches. Assuming space-height ratio of 1.25, utilization factor of 0.5 and a candle power depreciation of 20%, estimate the number, rating and disposition of suitable lamps. Efficiency of a lamp may be taken as 0.5 watt per candle power."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch 3rd Year Special Backlog Examination, 2022"
+}

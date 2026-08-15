@@ -1,0 +1,42 @@
+[
+  {
+    "id": "764_p6_Q1(a)",
+    "course": {
+      "code": "CE 2225",
+      "title": "Structure II",
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\2nd_Year_2nd_Term_2019_764.pdf",
+      "source_page": null,
+      "paper_index": 6
+    },
+    "question_number": "1(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "What are the assumptions used in the elementary analysis of trusses? For the truss members shown in figure below, find the stresses in members AB, AG, BC and CE. The cross sectional area of each member is 1800mm². [see figure"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 2nd Year 2nd Term Regular Examination, 2019",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় মাত্র একটি বিষয় রয়েছে যাতে কোনো প্রযুক্তিগত টপিক নেই, তাই প্রশ্নের সাথে মেলা এমন কোনো topic পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

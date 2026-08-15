@@ -1,0 +1,41 @@
+{
+  "id": "620_p5_Q5(a)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\2nd_Year_2nd_Term_2015_620.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Explain raw data and secondary data. Draw (i) Histogram (ii) Ogive (iii) (15) Frequency polygon from the following data:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Class</td><td rowspan=1 colspan=1>0-5</td><td rowspan=1 colspan=1>5-10</td><td rowspan=1 colspan=1>10-15</td><td rowspan=1 colspan=1>15-20</td><td rowspan=1 colspan=1>20-25</td><td rowspan=1 colspan=1>25-30</td><td rowspan=1 colspan=1>30-35</td><td rowspan=1 colspan=1>35-40</td></tr><tr><td rowspan=1 colspan=1>Marks</td><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>11</td><td rowspan=1 colspan=1>5</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

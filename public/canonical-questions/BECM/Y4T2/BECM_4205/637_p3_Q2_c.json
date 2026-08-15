@@ -1,0 +1,37 @@
+{
+  "id": "637_p3_Q2(c)",
+  "course": {
+    "code": "BECM 4205",
+    "title": "Real Estate Development",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\4th_Year_2nd_Term_2017_637.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What are the fundamental ways to use the wor real estate in empirical and professional field? How in real estate market activity influenced by the activities and conditions that take place in three sectors of a n:arket economy?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2017"
+}

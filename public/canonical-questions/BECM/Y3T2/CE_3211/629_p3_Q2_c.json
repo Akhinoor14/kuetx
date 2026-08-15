@@ -1,0 +1,54 @@
+{
+  "id": "629_p3_Q2(c)",
+  "course": {
+    "code": "CE 3211",
+    "title": "Structural Analysis and Design - II",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\3rd_Year_2nd_Term_2016_629.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 23,
+  "content": [
+    {
+      "type": "text",
+      "value": "Analyze the symmetrical V-shaped folded plate roof shown in figure below and find (23) the stresses in the folded plate shell."
+    },
+    {
+      "type": "text",
+      "value": "Span of the folded plate = 20m Thickness of plates = 100mm Live load = 0.75 kN/m² Concreté strength = 20MPa Steel yield strength = 415MPa"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_6ec182d03a1fb16349012c4761429f52d9b31e885e4c1968415265cdbd232202.jpg",
+      "_source_path": "images/6ec182d03a1fb16349012c4761429f52d9b31e885e4c1968415265cdbd232202.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Note: All dimensions are in millimeter (mm)"
+    },
+    {
+      "type": "text",
+      "value": "(35)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

@@ -1,0 +1,64 @@
+{
+  "id": "638_p5_Q3(b)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\4th_Year_2nd_Term_2018_638.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Concrete flexural- stresses in the fully loaded stage assuming live load of 120 psf."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r l } & { \\mathsf { C a } ( - \\mathsf { v e } ) = 0 . 0 7 6 , \\mathsf { C b } ( - \\mathsf { v e } ) = 0 . 0 2 4 , \\mathsf { C a } , \\mathsf { D L } \\left( + \\mathsf { v e } \\right) = 0 . 0 4 3 , \\mathsf { C b } , \\mathsf { D L } ( + \\mathsf { v e } ) = 0 . 0 1 3 , } \\\\ & { \\mathsf { C a } , \\mathsf { L L } ( + \\mathsf { v e } ) = 0 . 0 5 2 , \\mathsf { C b } , \\mathsf { L L } ( + \\mathsf { v e } ) = 0 . 0 1 6 } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_3279104fc263ebf63524e4f9fb2ff9bf07df3a7a69c31092817b465889b6ec8f.jpg",
+      "_source_path": "images/3279104fc263ebf63524e4f9fb2ff9bf07df3a7a69c31092817b465889b6ec8f.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Calculate the center deflection of the 50-ft span I-beam. shown in figure at age 0, 30, 180, and 360 days, using step by step method. The member, originally studied in connection with elastic stress analysis, is to. carry its own weight of 195 plf and will be subjected to a service live load of 590 plf. The following data are given:"
+    },
+    {
+      "type": "text",
+      "value": "$P _ { i } = { \\ o { 1 6 9 } } , { \\ 0 0 0 }$ Ib, $\\mathcal { A } _ { p } = 0 . 9 6$ in^2, $\\dot { } _ { \\mathcal { I } _ { y } } = 2 1 0 , 0 0 0$ psi, $\\cdot f _ { p i } = 1 7 5 , 0 0 0$ psi $A _ { c } = 1 7 6$ in.2, $I _ { c } = 1 2 , 0 0 0 \\mathrm { i n } ^ { 4 } , r ^ { 2 } = \\vec { 6 } 8 . 2 \\mathrm { i n } ^ { 2 } , \\dot { E _ { c } } = 4 , 0 3 0 , 0 0 0 \\mathrm { p s i } , \\dot { C _ { u } } = 2 . 4 , \\dot { \\varepsilon } _ { s h , u } = 8 0 0 \\times 1 0 ^ { - 6 }$ The member will be constructed of normal density concrete, moist-cured, and will be prestressed at age seven days. $\\ E _ { \\circ }$ will be taken as constant."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_24b778becc13745d188e82b95667090aa9a7d3c53e9635271cde664173452385.jpg",
+      "_source_path": "images/24b778becc13745d188e82b95667090aa9a7d3c53e9635271cde664173452385.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2018"
+}

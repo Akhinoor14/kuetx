@@ -1,0 +1,37 @@
+{
+  "id": "942_p3_Q6(b)",
+  "course": {
+    "code": "BME 3213",
+    "title": "Biomechanics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\3rd_Year_2nd_Term_2022_942.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "<sup>l</sup> <sup>f</sup>a musc<sup>l</sup>e <sup>h</sup>as a pcnnat<sup>i</sup>on ang<sup>l</sup>e o<sup>f</sup> 20<sup>°</sup> an<sup>d</sup> t<sup>h</sup>e <sup>l</sup>engt<sup>h</sup> o<sup>f</sup> musc<sup>l</sup>e <sup>fib</sup>ers <sup>i</sup>s IO cm<sub>,</sub> ca<sup>l</sup>cu<sup>l</sup>ate (0 8) th<sub>e e</sub>ff<sub>ec</sub>ti<sub>ve</sub> l<sub>eng</sub>th <sub>o</sub>fth<sub>e musc</sub>l<sub>e</sub> fib<sub>ers</sub>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

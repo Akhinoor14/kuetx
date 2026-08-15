@@ -1,0 +1,41 @@
+{
+  "id": "620_p5_Q8(c)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\2nd_Year_2nd_Term_2015_620.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define regression and coefficient of determination. Find the correlation coefficient between age and playing habits of the following students and comment:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Age</td><td rowspan=1 colspan=1>15</td><td rowspan=1 colspan=1>16</td><td rowspan=1 colspan=1>17</td><td rowspan=1 colspan=1>18</td><td rowspan=1 colspan=1>19</td><td rowspan=1 colspan=1>20</td></tr><tr><td rowspan=1 colspan=1>No. of students</td><td rowspan=1 colspan=1>250</td><td rowspan=1 colspan=1>200</td><td rowspan=1 colspan=1>150</td><td rowspan=1 colspan=1>120</td><td rowspan=1 colspan=1>100</td><td rowspan=1 colspan=1>80</td></tr><tr><td rowspan=1 colspan=1>Regular player</td><td rowspan=1 colspan=1>200</td><td rowspan=1 colspan=1>150</td><td rowspan=1 colspan=1>90</td><td rowspan=1 colspan=1>48</td><td rowspan=1 colspan=1>30</td><td rowspan=1 colspan=1>12</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

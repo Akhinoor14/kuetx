@@ -1,0 +1,47 @@
+[
+  {
+    "id": "999_p3_Q5(b)",
+    "course": {
+      "code": "CE 2225",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2000,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\Backlog_2022_999.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "5(b)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "The composite bar shown in figure is made of two segments, AB and BC having cross-sectional area of $\\mathtt { A _ { A B } } = 2 0 0$ mm²and $_ { \\mathrm { A B C } } = 1 0 0 \\mathrm { m m } ^ { 2 }$ Their Young's moduli are $\\mathrm { E } _ { \\mathrm { A B } } = 1 0 0$ GPa and $E _ { \\mathrm { B C } } = 2 1 0$ GPa respectively. Find the total displacement at the right end."
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_27186aa06118a11aaa29b53c13f9a6308b9130ec43ae7a3bc6d456cb80fd267a.jpg",
+        "_source_path": "images/27186aa06118a11aaa29b53c13f9a6308b9130ec43ae7a3bc6d456cb80fd267a.jpg"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 2nd Year Special Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো ইঞ্জিনিয়ারিং টপিক নেই, শুধুমাত্র একটি এলোমেলো বার্তা রয়েছে তাই প্রশ্নের সাথে মেলায় এমন কোনো topic পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

@@ -1,0 +1,46 @@
+{
+  "id": "588_p4_Q8(c)",
+  "course": {
+    "code": "BME 2211",
+    "title": "Signals and Systems",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2017\\2nd_Year_2nd_Term_2017_588.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the system function for the causal LTI system with difference equation,"
+    },
+    {
+      "type": "formula",
+      "value": "$$\ny [ n ] - { \\frac { 1 } { 2 } } y \\{ n - 1 ] + { \\frac { 1 } { 4 } } y [ n - 2 ] = x [ n ]\\tag{13}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Also using z-transforms, determine y[n] if $x [ n ] ^ { ! } = { \\binom { 1 } { 2 } } ^ { \\dot { n } } u [ n ] . \\cdot \\cdot ^ { \\dot { ! } }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

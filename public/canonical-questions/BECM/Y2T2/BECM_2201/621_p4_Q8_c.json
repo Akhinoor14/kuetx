@@ -1,0 +1,42 @@
+{
+  "id": "621_p4_Q8(c)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\2nd_Year_2nd_Term_2017_621.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "A downward distributed load and an upward concentrated load act on the (17) cantilever beam as shown in figure below. Find the amount of the free end deflection and mention the direction. If $\\mathsf E = 1 0 \\times 1 0 ^ { 9 }$ N/m² and $1 = 1 . 5 \\times 1 0 ^ { 6 }$ mm⁴."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_aa0ad2c21a2d2860877e672097bfeaf5cb9992a97208889b6e190bc0de9d3c1b.jpg",
+      "_source_path": "images/aa0ad2c21a2d2860877e672097bfeaf5cb9992a97208889b6e190bc0de9d3c1b.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

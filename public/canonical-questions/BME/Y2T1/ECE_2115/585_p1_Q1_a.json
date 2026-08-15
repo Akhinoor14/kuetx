@@ -1,0 +1,41 @@
+{
+  "id": "585_p1_Q1(a)",
+  "course": {
+    "code": "ECE 2115",
+    "title": "Digital Electronics and Logic Design",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2019\\2nd_Year_1st_Term_2019_585.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Convert the following numbers from the given base to the bases indicated: (i) Decimal number to 249.6 to base-3, base-4, base-7. (ii) Hexadecimal 2AC5.D to decimal, octal and binary."
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

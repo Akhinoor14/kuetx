@@ -1,0 +1,42 @@
+{
+  "id": "988_p3_Q1(c)",
+  "course": {
+    "code": "CE 3125",
+    "title": "Structure III Reinforced Concrete Design",
+    "department": "Department of Architecture",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2023\\3rd_Year_1st_Term_2023_988.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Aslab shown in followingfigure carries a live load of100psf and its selfweight. The beam position is also shown. Use $f ^ { \\prime } c = 2 { , } 5 0 0 p s i .$ $f y =$ 60,000 psi. Design the slab and show the reinforcement detailing as well."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_26070d6fa375be517a898b77e2efc2bf4f92b6d1886bbc10588ee71ac7c41c02.jpg",
+      "_source_path": "images/26070d6fa375be517a898b77e2efc2bf4f92b6d1886bbc10588ee71ac7c41c02.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch 3rd Year 1st Term Regular Examination, 2023"
+}

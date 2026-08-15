@@ -1,0 +1,41 @@
+{
+  "id": "604_p2_Q3(b)",
+  "course": {
+    "code": "MATH 1123",
+    "title": "Mathematics-I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\1st_Year_1st_Term_2016_604.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make sentences on the following structure. i) Subject + vi + adverbial + extension ii) Subject + linking verb + adjective complement + extension. jii) Subject + linking verb + noun complement + extension."
+    },
+    {
+      "type": "text",
+      "value": "iv)Subject + vt + object + extension. v) Subject + vt + object + adjective complement.   \nvi)Subject + vt + object + noun complement."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2016"
+}

@@ -1,0 +1,60 @@
+[
+  {
+    "id": "987_p2_Q3(c)",
+    "course": {
+      "code": "CE 2225",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\2nd_Year_2nd_Term_2022_987.pdf",
+      "source_page": null,
+      "paper_index": 2
+    },
+    "question_number": "3(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "State and describe moment-area theorem that is used to determine the tangential deviation."
+      },
+      {
+        "type": "text",
+        "value": "A steel beam is loaded as shown in [fig. 4]. Calculate the slope at A and E and deflection at B and D. Given,E=29000Ksi and $\\operatorname { I } = 3 4 \\operatorname { I i n } ^ { 4 }$"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_332e4aaa5ab53b5bc37f542d3cb0b1ad209679c580418711ccdb0c34b8b52eb9.jpg",
+        "_source_path": "images/332e4aaa5ab53b5bc37f542d3cb0b1ad209679c580418711ccdb0c34b8b52eb9.jpg"
+      },
+      {
+        "type": "text",
+        "value": "Section-B"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_f6930adda4890c2263b4a8f171361097916e6b3f1fb41e3738af0a24c6f7cb25.jpg",
+        "_source_path": "images/f6930adda4890c2263b4a8f171361097916e6b3f1fb41e3738af0a24c6f7cb25.jpg"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 2nd Year 2nd Term Regular Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় মাত্র একটি বিষয় রয়েছে যা কোর্সের অংশ নয়, তাই প্রশ্নটির সাথে কোনো প্রযোজ্য টপিক মেলাতে সম্ভব হয়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

@@ -1,0 +1,57 @@
+{
+  "id": "610_p2_Q7(b)",
+  "course": {
+    "code": "CE 1213",
+    "title": "Building & Construction Materials",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\1st_Year_2nd_Term_2016_610.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Concrete is required for a heavy bridge pier that will be exposed to fresh water in a severe climate: Required corpressive strength will be 250 kg/cm² at 28 days with a slump of 100mm. The coarse aggregate has a nominal maximum size of 37.5mm and dry rodded mass of 1600 kg/m³. The specific gravity of fine and coarse aggregate are 2.64 and 2.68 respectively. FM of fine aggregate is 2.80. Ordinary Portland Cement of specific gravity 3.10 is used. Given"
+    },
+    {
+      "type": "text",
+      "value": "(i) W/C = 0.52 for 250 kg/cm² compressive strength (ii) Approximate mixing water = 165 kg/m³ for the known slump 100mm and aggregate size 37.5mm."
+    },
+    {
+      "type": "text",
+      "value": "(iii) Volume of dry rodded CA per unit volume of concrete = 0.71 m³"
+    },
+    {
+      "type": "text",
+      "value": "(iv)Restricted W/C = 0.50 for the structure."
+    },
+    {
+      "type": "text",
+      "value": "(v) Recommended air content = 5.5%"
+    },
+    {
+      "type": "text",
+      "value": "(vi) Moisture content of CA and FA are 1% and 5% respectively."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

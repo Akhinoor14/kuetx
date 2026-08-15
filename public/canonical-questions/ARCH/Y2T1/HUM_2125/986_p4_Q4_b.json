@@ -1,0 +1,77 @@
+[
+  {
+    "id": "986_p4_Q4(b)",
+    "course": {
+      "code": "HUM 2125",
+      "title": "Principles of Economics",
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2023,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2023\\2nd_Year_1st_Term_2023_986.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "4(b)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Sajib trader is the producer of tea. The organization hires an economist to 20 determine the demand for its product. After months of hard work the economist informs the firm that the demand for the firms tea is given by the following equation:"
+      },
+      {
+        "type": "formula",
+        "value": "$$\nQ _ { x } = 1 2 0 0 0 - 5 0 0 0 P _ { x } + 5 I + 5 0 0 P _ { c }\n$$",
+        "format": "latex"
+      },
+      {
+        "type": "text",
+        "value": "where,"
+      },
+      {
+        "type": "formula",
+        "value": "$$\nP _ { x } = P r i c e c h a r g e d f o r S a j i b t r a d e r ^ { \\prime } s t e a\n$$",
+        "format": "latex"
+      },
+      {
+        "type": "formula",
+        "value": "$$\nI = I n c o m e p e r \\ : C a p i t a\n$$",
+        "format": "latex"
+      },
+      {
+        "type": "text",
+        "value": "Pc =Price of tea from competing tea producers"
+      },
+      {
+        "type": "text",
+        "value": "Assume the initialvalues of $P _ { x } , I$ and $P _ { c }$ are \\$5, \\$10,000 and \\$6, respectively.Using the above information the manager wanted to determine:"
+      },
+      {
+        "type": "text",
+        "value": "i) What effect a price increased would have on Total Revenue (TR)? ii) Evaluate how sales of the tea would change during a period of rising income."
+      },
+      {
+        "type": "text",
+        "value": "iii) Assess the probable impact if competing tea producers would raise their price."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 2nd Year 1st Term Regular Examination, 2023",
+    "classification_notes": "",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "id": "929_p2_Q1(b)",
+  "course": {
+    "code": "ME 2115",
+    "title": "Basic Mechanics and Thermodynamics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\2nd_Year_1st_Term_2022_929.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the resultant of the three forces as shown in figure l (b ), knowing that $\\alpha = 3 0 ^ { o }$ . ( 17)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_4bdc5f9a06cb657157d9f9e179a913bae0b4daced9a118c3039e163142f1ff78.jpg",
+      "_source_path": "images/4bdc5f9a06cb657157d9f9e179a913bae0b4daced9a118c3039e163142f1ff78.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

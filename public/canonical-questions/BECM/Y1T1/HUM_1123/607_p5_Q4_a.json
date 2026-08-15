@@ -1,0 +1,69 @@
+{
+  "id": "607_p5_Q4(a)",
+  "course": {
+    "code": "HUM 1123",
+    "title": "English",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\1st_Year_1st_Term_2019_607.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Correct the following:"
+    },
+    {
+      "type": "text",
+      "value": "(14)"
+    },
+    {
+      "type": "text",
+      "value": "(i) We usually write by pen."
+    },
+    {
+      "type": "text",
+      "value": "(ii) We should not hanker for money."
+    },
+    {
+      "type": "text",
+      "value": "(iii) He is in hurry."
+    },
+    {
+      "type": "text",
+      "value": "(iv) How good man he is!"
+    },
+    {
+      "type": "text",
+      "value": "(v) Tell me why are you not reading your lesson?"
+    },
+    {
+      "type": "text",
+      "value": "(vi) I will see their answer scripts."
+    },
+    {
+      "type": "text",
+      "value": "(vii) Labu likes vegetable."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
+}

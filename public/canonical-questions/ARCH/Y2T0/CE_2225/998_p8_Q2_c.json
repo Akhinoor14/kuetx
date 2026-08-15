@@ -1,0 +1,47 @@
+[
+  {
+    "id": "998_p8_Q2(c)",
+    "course": {
+      "code": "CE 2225",
+      "title": "Structure II",
+      "department": "Department of Architecture",
+      "year_term": "2nd Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\2nd_Year_Backlog_2022_998.pdf",
+      "source_page": null,
+      "paper_index": 8
+    },
+    "question_number": "2(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": ". Each copper rod has an area of 900mm2; E=120GPa; and the allowable stress is70MPa. The steel has an area of 1200mm2; E=200 GPa; and the allowable stress is 140MPa. Determine the largest mass m which can be supported."
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_2c515269ccea18be5100d0c6dea3ba24874f47ecd4283e41ea220c5a8df642a6.jpg",
+        "_source_path": "images/2c515269ccea18be5100d0c6dea3ba24874f47ecd4283e41ea220c5a8df642a6.jpg"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 2nd Year Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় মাত্র একটি বিষয় রয়েছে যাতে কোর্সের কোনো টপিক নেই, তাই প্রশ্নটির সাথে মেলা এমন কোনো topic বাছাই করা সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

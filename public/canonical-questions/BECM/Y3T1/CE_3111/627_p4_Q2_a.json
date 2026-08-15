@@ -1,0 +1,42 @@
+{
+  "id": "627_p4_Q2(a)",
+  "course": {
+    "code": "CE 3111",
+    "title": "Structural Analysis and Design - I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\3rd_Year_1st_Term_2019_627.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Draw the typical shape of fink, saw tooth, and crescent trusses. Solve the compi. truss by Henneberg method as shown in figure."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_1cff26dd71980722be540845f1321be8488a9505ca52b4202a9e801dd44a6991.jpg",
+      "_source_path": "images/1cff26dd71980722be540845f1321be8488a9505ca52b4202a9e801dd44a6991.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

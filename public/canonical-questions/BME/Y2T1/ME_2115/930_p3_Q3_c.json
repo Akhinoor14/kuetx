@@ -1,0 +1,42 @@
+{
+  "id": "930_p3_Q3(c)",
+  "course": {
+    "code": "ME 2115",
+    "title": "Basic Mechanics and Thermodynamics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2023\\2nd_Year_1st_Term_2023_930.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The dynamic viscosity of the oil is 0.027 Pa.s. Assuming the velocity in each oil layer to vary linearly, (i) plot the velocity profile and find the location where the oil velocity is zero, and (ii) determine the force that needs to applied on the plate to maintain the motion."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_29eda9675b3590b125726fbb0f2de3deb56166f338bc8b593935245e46b39cfd.jpg",
+      "_source_path": "images/29eda9675b3590b125726fbb0f2de3deb56166f338bc8b593935245e46b39cfd.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

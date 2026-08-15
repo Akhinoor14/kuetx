@@ -1,0 +1,42 @@
+{
+  "id": "626_p4_Q2(b)",
+  "course": {
+    "code": "CE 3111",
+    "title": "Structural Analysis and Design - I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\3rd_Year_1st_Term_2018_626.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the bending moment at 30 m from the right hand support of the three - $( 2 0 ) ^ { 2 }$ hinged parabolic arch as shown in figure below."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_c87e6357ac3bfb91f1d9a13a3cbad029fe00d9c04cedd951f4143bd7bc9a5c6d.jpg",
+      "_source_path": "images/c87e6357ac3bfb91f1d9a13a3cbad029fe00d9c04cedd951f4143bd7bc9a5c6d.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

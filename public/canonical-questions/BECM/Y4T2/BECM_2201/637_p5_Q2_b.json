@@ -1,0 +1,37 @@
+{
+  "id": "637_p5_Q2(b)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\4th_Year_2nd_Term_2017_637.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "A column is subjected to an axial load of 500 kn. The beam connected to the flange (20) of a column, has an eccentric load of 100 kN and the beam connected to the web of a column has an eccentric load of 50 kN. If the effective length of the column is 4 meters and only rolled H-sections are available. Design the column."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2017"
+}

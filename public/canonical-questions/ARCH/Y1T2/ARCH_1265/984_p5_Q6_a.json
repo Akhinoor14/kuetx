@@ -1,0 +1,42 @@
+[
+  {
+    "id": "984_p5_Q6(a)",
+    "course": {
+      "code": "ARCH 1265",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\1st_Year_2nd_Term_2022_984.pdf",
+      "source_page": null,
+      "paper_index": 5
+    },
+    "question_number": "6(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Why is luminescent paint used in buildings? Explain the rationale for10+10   \nthe application of paint finish to a building. =20"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year 2nd Term Regular Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় শুধুমাত্র একটি এলোমেলো বার্তা রয়েছে যাতে কোনো নির্দিষ্ট টপিক নেই, তাই প্রশ্নের সাথে মেলা এমন কোনো টপিক বাছাই করা সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

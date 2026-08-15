@@ -1,0 +1,45 @@
+{
+  "id": "942_p3_Q3(b)",
+  "course": {
+    "code": "BME 3213",
+    "title": "Biomechanics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\3rd_Year_2nd_Term_2022_942.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Th length of femur is 500 mm and the cross-sectional area is 370 <sup>1111112•</sup> llow much docs it (12) shorten when you stand on one foot? Assuming linear behavior, calculate the strain at UCS. [mass= 70 kg, Y = l 79x 10<sup>2</sup> Nmrn\", and UCS = 170 Nmm·<sup>2</sup>1"
+    },
+    {
+      "type": "text",
+      "value": "( <sup>'</sup> onsidcr slt<sup>'</sup> l<sup>'</sup> S s · slmin <sub>rn</sub> h shm <sup>1 1 1</sup> <sub>1 1</sub> Flit1 1 1 · · ] ( · ) <sub>.</sub> Wlti · <sup>I t</sup> line in <sup>Ili</sup>c prnph <sup>i</sup> s valid for cortic al ( 1 3 ) h1<sub>m</sub>l<sup>'</sup> <sub>mu</sub>l <sub>w</sub>hi<sub>c</sub>h 1<sub>m</sub>1 · li 1<sub>r uu</sub>h<sub>ccu</sub>l<sub>nr</sub> h1 1 1 1 · ? I > •li<sub>rn:</sub> I ·<sub>v</sub> ·I <sub>: o</sub>f<sup>'</sup> ill<sub>r</sub> · 1 1 <sub>g</sub>lh d<sub>uc</sub>tilit<sub>y</sub> to<sub>ug</sub>hne s s <sub>an</sub>d <sub>s</sub> l i<sub>n</sub>i l l <sup>'</sup> ! <sup>'</sup>l S liH · 1 • 1 1 1 <sub>:</sub> h b <sub>o</sub> n <sub>e rn</sub> 1 1 <sub>s</sub> l d 1 • i l 1 1 th · J <sup>'</sup> l <sup>'</sup> l l <sub>p</sub> l 1"
+    },
+    {
+      "type": "text",
+      "value": "· ' - <sub>1 1)</sub> \\\\ h n t <sup>i</sup> s <sup>hl</sup> 1 1 m<sup>l</sup> tlw1 1 l 1 1 • l <sup>i</sup>rnv t<sup>h</sup> · vllu•oHlt<sub>y</sub> vs <sub>.</sub> <sup>I</sup> t . n r- ru te grap<sup>h</sup> m i d s h ow th at b l ood (IO) · i <sub>s</sub> l<sup>'</sup> l\\! <sup>'</sup>lil <sup>'</sup> 1 kt<sup>'</sup> ll <sup>'</sup> l\\S l <sup>'</sup> S II S <sub>s</sub>h<sub>cnr</sub> n <sub>u</sub> c llll <sup>'</sup> ll <sup>'</sup> l\\S l<sup>'</sup>H"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

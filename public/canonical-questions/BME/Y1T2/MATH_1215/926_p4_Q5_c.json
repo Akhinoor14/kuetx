@@ -1,0 +1,42 @@
+{
+  "id": "926_p4_Q5(c)",
+  "course": {
+    "code": "MATH 1215",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2023\\1st_Year_2nd_Term_2023_926.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nx s i n y d x + ( x ^ { 2 } + 1 ) c o s y d y = 0 ; y ( 1 ) = \\pi / 2 .\\tag{10}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2023"
+}

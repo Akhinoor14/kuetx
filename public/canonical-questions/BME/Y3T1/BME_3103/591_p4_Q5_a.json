@@ -1,0 +1,37 @@
+{
+  "id": "591_p4_Q5(a)",
+  "course": {
+    "code": "BME 3103",
+    "title": "Bioelectricity",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2017\\3rd_Year_1st_Term_2017_591.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Derive Nernst equation for equilibrium condition associated with semipermeable (15) cell membrane. Find $\\mathrm { E _ { k ^ { + } } }$ when the concentration of ${ \\boldsymbol { \\mathrm { k } } } ^ { + }$ ion inside and outside the cell membrane are 140 mM and 5 mM respectively."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

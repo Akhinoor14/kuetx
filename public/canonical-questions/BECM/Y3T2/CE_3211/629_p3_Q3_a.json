@@ -1,0 +1,42 @@
+{
+  "id": "629_p3_Q3(a)",
+  "course": {
+    "code": "CE 3211",
+    "title": "Structural Analysis and Design - II",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\3rd_Year_2nd_Term_2016_629.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the truss shown below, use the stiffness method to: (i) Determine the end forces of each member and reactions at supports. (ii) Determine the deflections of the loaded joint. The support B settles downward 2.5mm. Temperature in member BD increases $2 0 \\%$ Take $\\alpha = 1 2 \\times 1 0 ^ { - 6 } / ^ { \\circ } \\mathrm { C } , A E = 8 ( \\dot { 1 } 0 ^ { 3 } ) \\mathsf { k N } .$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_91338a52d9b53e01c78e753016424186180cb42aa09a2b37c8bf3413ab9b021c.jpg",
+      "_source_path": "images/91338a52d9b53e01c78e753016424186180cb42aa09a2b37c8bf3413ab9b021c.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

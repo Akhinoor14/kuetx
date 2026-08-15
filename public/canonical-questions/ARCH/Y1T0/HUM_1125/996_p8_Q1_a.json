@@ -1,0 +1,70 @@
+[
+  {
+    "id": "996_p8_Q1(a)",
+    "course": {
+      "code": "HUM 1125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\1st_Year_Backlog_2022_996.pdf",
+      "source_page": null,
+      "paper_index": 8
+    },
+    "question_number": "1(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Make sentence with the following structures using the words given in brackets."
+      },
+      {
+        "type": "text",
+        "value": "i. Subj. + Transitive Verb + Object. (Write as verb)"
+      },
+      {
+        "type": "text",
+        "value": "ii. Subj. + Intransitive Verb + Adv. Of Manner. (Walk as verb)"
+      },
+      {
+        "type": "text",
+        "value": "iii. That + Subj. + Verb + Adv. of Manner + Verb + Adj. Complement. (Study and is as verb)"
+      },
+      {
+        "type": "text",
+        "value": "iv.Subj. + Relative Pronoun + Verb + Adv. of Place, + Verb + Adj. Complement (Work and is as verb)"
+      },
+      {
+        "type": "text",
+        "value": "v. As + Subj. + Verb + Adj. Complement, Subj. + Verb + Obj. (is and like as verb)"
+      },
+      {
+        "type": "text",
+        "value": "vi. Neither + Subj. + nor + Subj. + Verb + Adv. of Manner. (Sleep as verb)"
+      },
+      {
+        "type": "text",
+        "value": "vii. Though + Subj. + Verb + Adv. of Manner, Subj. + Verb +Adv. + Adv. of place. (Study and do as verb)"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাসের তালিকায় কোনো ইংরেজি ব্যাকরণগত টপিক নেই, তাই প্রশ্নটির সাথে মেলানোর জন্য উপযুক্ত কোনো topic পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

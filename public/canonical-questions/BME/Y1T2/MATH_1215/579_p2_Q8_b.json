@@ -1,0 +1,41 @@
+{
+  "id": "579_p2_Q8(b)",
+  "course": {
+    "code": "MATH 1215",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2017\\1st_Year_2nd_Term_2017_579.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 24,
+  "content": [
+    {
+      "type": "text",
+      "value": "$\\begin{array} { r } { \\mathrm { S o l v e } 2 x ^ { 2 } \\frac { d ^ { 2 } y } { d x ^ { 2 } } - x \\frac { d y } { d x } + ( 1 - x ^ { 2 } ) y = 0 } \\end{array}$ by the method of Frobenius."
+    },
+    {
+      "type": "text",
+      "value": "(24)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

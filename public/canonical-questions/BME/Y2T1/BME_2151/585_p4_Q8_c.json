@@ -1,0 +1,41 @@
+{
+  "id": "585_p4_Q8(c)",
+  "course": {
+    "code": "BME 2151",
+    "title": "Numerical Methods and Statistics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2019\\2nd_Year_1st_Term_2019_585.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Table Q8c shows duration efficacy of a certain drug for northern and southern people. At 5% significance level, do the data provide sufficient evidence to conclude that, on average, northern people have higher duration of efficacy than the southern people?"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=2></td></tr><tr><td rowspan=1 colspan=2>Duration of Efficacy (unit time)</td></tr><tr><td rowspan=1 colspan=1>Northern people</td><td rowspan=1 colspan=1>Southern people</td></tr><tr><td rowspan=1 colspan=1>09, 12, 13, 13, 18</td><td rowspan=1 colspan=1>20, 12,07, 14, 28</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

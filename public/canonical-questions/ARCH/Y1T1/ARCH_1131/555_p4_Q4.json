@@ -1,0 +1,46 @@
+[
+  {
+    "id": "555_p4_Q4",
+    "course": {
+      "code": "ARCH 1131",
+      "title": "Architecture of Ancient Civilization",
+      "department": "Department of Architecture",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2018\\1st_Year_1st_Term_2018_555.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "4",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "a. Elucidate character of Persian Architecture. 10 b. Elaborate your understanding on Apadana and Throne Hall with necessary 25 drawings."
+      },
+      {
+        "type": "text",
+        "value": "Section B"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 1st Year 1st Term Regular Examination, 2018",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো ভৌগোলিক ইতিহাস, স্থাপত্য শৈলী বা পারসিয়ান সংক্রান্ত টপিক নেই যা প্রশ্নের সাথে মেলার।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

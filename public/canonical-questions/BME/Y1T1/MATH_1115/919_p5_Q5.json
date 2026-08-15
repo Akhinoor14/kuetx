@@ -1,0 +1,102 @@
+{
+  "id": "919_p5_Q5",
+  "course": {
+    "code": "MATH 1115",
+    "title": "Differential and Integral Calculus",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2021\\1st_Year_1st_Term_2021_919.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5",
+  "numbering_source": "regex",
+  "marks": 35,
+  "content": [
+    {
+      "type": "text",
+      "value": "Integratethe followings:"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_60f23f07800af5a117f10bf9ad8bd411f892ea814dfa382a0163bd930d30d522.jpg",
+      "_source_path": "images/60f23f07800af5a117f10bf9ad8bd411f892ea814dfa382a0163bd930d30d522.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(iii) $\\int { \\frac { d x } { \\sqrt { x } \\left( 1 + x \\right) ^ { 3 / 2 } } }$"
+    },
+    {
+      "type": "text",
+      "value": "(35)"
+    },
+    {
+      "type": "text",
+      "value": "Evaluate the followings:"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f7575c5ee38697316e06f4cb4e3831a7bea0ebd07af9c86c191f0708668aa535.jpg",
+      "_source_path": "images/f7575c5ee38697316e06f4cb4e3831a7bea0ebd07af9c86c191f0708668aa535.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b25b3cd5faac86ebc0c66000d31b29ea4b618f82fbe277bfaaf4082da9ebd752.jpg",
+      "_source_path": "images/b25b3cd5faac86ebc0c66000d31b29ea4b618f82fbe277bfaaf4082da9ebd752.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e4a6905d2700a15b55ac2b7cd101e623a1aa6684d1dcd633ed6fbb807fec0206.jpg",
+      "_source_path": "images/e4a6905d2700a15b55ac2b7cd101e623a1aa6684d1dcd633ed6fbb807fec0206.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(11)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_04f35398d35befc33239eae15df897db4b2a546a2d62ad9deb779025913f6820.jpg",
+      "_source_path": "images/04f35398d35befc33239eae15df897db4b2a546a2d62ad9deb779025913f6820.jpg"
+    },
+    {
+      "type": "text",
+      "value": "What is Beta function? Show that $\\displaystyle { \\int _ { 0 } ^ { \\infty } e ^ { - x ^ { 2 } } d x = \\frac { 1 } { 2 } \\sqrt { \\pi } }$"
+    },
+    {
+      "type": "text",
+      "value": "(13)"
+    },
+    {
+      "type": "text",
+      "value": "Obtain the reduction formula for $\\int x ^ { n } e ^ { a x } d x .$"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2021"
+}

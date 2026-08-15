@@ -1,0 +1,41 @@
+{
+  "id": "612_p4_Q1(c)",
+  "course": {
+    "code": "PH 1223",
+    "title": "Physics - II",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\1st_Year_2nd_Term_2018_612.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Show that, the total energy of the electron in ${ \\mathfrak { n } } ^ { \\mathfrak { h } }$ orbit is, $\\begin{array} { r } { E _ { n } = - \\frac { { \\bf \\nabla } \\cdot { \\bf n } e ^ { 4 } z ^ { 2 } } { 8 { \\varepsilon _ { \\circ } } ^ { 2 } n ^ { 2 } h ^ { 2 } } } \\end{array}$ where the symbols have their usual meanings."
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

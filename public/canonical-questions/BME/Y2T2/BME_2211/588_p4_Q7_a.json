@@ -1,0 +1,62 @@
+{
+  "id": "588_p4_Q7(a)",
+  "course": {
+    "code": "BME 2211",
+    "title": "Signals and Systems",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2017\\2nd_Year_2nd_Term_2017_588.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following facts about a sequence $x [ n ]$ are given :"
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    },
+    {
+      "type": "text",
+      "value": "(i) x[n] is periodic with period $N = 8$"
+    },
+    {
+      "type": "text",
+      "value": "(ii) $\\sum _ { n = 0 } ^ { 7 } x [ n ] = 3$"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n( \\operatorname* { i i i } ) : \\sum _ { n = 3 } ^ { 1 0 } ( - 1 ) ^ { n } x [ n ] { \\overset { \\cdot } { = } } 1 ; \\operatorname { a i n } { \\dot { \\mathsf { d } } } \\quad\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "(iv) x[n] has the minimum power per period:"
+    },
+    {
+      "type": "text",
+      "value": "Determine the sequence $x [ n ]$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

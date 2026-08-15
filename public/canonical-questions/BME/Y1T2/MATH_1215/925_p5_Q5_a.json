@@ -1,0 +1,51 @@
+{
+  "id": "925_p5_Q5(a)",
+  "course": {
+    "code": "MATH 1215",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\1st_Year_2nd_Term_2022_925.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is meant by order and degree of a differential equation? By eliminating the constants $\\lambda _ { 1 }$ and $\\lambda _ { 2 }$ obtain the differential equation for which $x y = \\lambda _ { 1 } e ^ { x } + \\lambda _ { 2 } e ^ { - x }$ is a solution."
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { b ) } \\quad \\mathrm { I d c n t i f y ~ a n d ~ s o l v e } ~ ( x y ^ { 2 } + x ) d x + ( x ^ { 2 } y + y ) d y = 0 .\\tag{08}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\begin{array} { r l } { \\mathbf { c } ) \\ } & { { \\mathrm { U s e ~ s e p a r a t i o n ~ o f ~ v a r i a b l e s ~ m e t h o d ~ t o ~ s o l v e } } \\quad { \\frac { \\partial u } { \\partial t } } = 2 { \\frac { \\partial ^ { 2 } u } { \\partial x ^ { 2 } } } \\quad { \\mathrm { s u b j e c t ~ t o ~ t h c ~ b o u n d a r y } } } \\\\ & { { \\mathrm { c o n d i t i o n s ~ } } u ( 0 , t ) = 0 , u ( 3 , t ) = 0 , { \\mathrm { a n d ~ } } u ( x , 0 ) = 3 s i n 3 \\pi x . } \\end{array} }\\tag{15}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2022"
+}

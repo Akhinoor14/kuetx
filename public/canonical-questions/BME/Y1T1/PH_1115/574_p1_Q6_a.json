@@ -1,0 +1,57 @@
+{
+  "id": "574_p1_Q6(a)",
+  "course": {
+    "code": "PH 1115",
+    "title": "Physics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2018\\1st_Year_1st_Term_2018_574.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": 35,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve any three of the followings:"
+    },
+    {
+      "type": "text",
+      "value": "(35)"
+    },
+    {
+      "type": "text",
+      "value": "(i) $\\int _ { 0 } ^ { \\pi } / 2 { \\frac { \\sqrt { \\tan x } } { \\sqrt { \\tan x } + \\sqrt { \\cot x } } } d x$"
+    },
+    {
+      "type": "text",
+      "value": "(ii) $\\begin{array} { r } { \\int _ { 0 } ^ { \\pi } \\ln ( 1 + \\cos x ) d x } \\end{array}$"
+    },
+    {
+      "type": "text",
+      "value": "(iii) $\\int _ { 0 } ^ { 1 } { \\frac { x ^ { 3 } \\sin ^ { - 1 } { x } } { \\sqrt { 1 - x ^ { 2 } } } } \\ d x$"
+    },
+    {
+      "type": "text",
+      "value": "(iv) $\\int _ { 2 } ^ { \\infty } { \\frac { 2 x ^ { 2 } } { x ^ { 4 } - 1 } } d x$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "615_p2_Q3(b)",
+  "course": {
+    "code": "BECM 2151",
+    "title": "Aesthetics and Design",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\2nd_Year_1st_Term_2016_615.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 30,
+  "content": [
+    {
+      "type": "text",
+      "value": "A portion of the floor plan of a certain building is shown in figure below. The total loading (including live and dead loads) in each bay is also shown. Determine the size of the section of the beam B-2 if the allowable flexural stress is 150 Mpa. Assume the beams are adequately braced and the depth of the cross-section is 1.5 times of the width."
+    },
+    {
+      "type": "text",
+      "value": "(30)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td colspan=\"6\"></td></tr><tr><td>2.5m</td><td>-2.5m</td><td></td><td></td><td></td><td></td><td>1 Wail</td></tr><tr><td colspan=\"2\"></td><td>2.5m</td><td>-2.5m</td><td>-2.5m</td><td>-2.5m</td><td></td></tr><tr><td colspan=\"2\" rowspan=\"3\">15kN/m² 7m (B-3)</td><td rowspan=\"3\">15kN/m² (B-2)</td><td>10kN/m²</td><td>10kN/m²</td><td>15kN/m² 15kN/m²</td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td>(B-1)</td><td>2 (--</td><td>(B-3)</td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td>&#x27;Stair Well:</td><td>20</td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td>—Wall</td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td colspan=\"2\"></td><td></td></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2016"
+}

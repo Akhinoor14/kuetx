@@ -1,0 +1,54 @@
+{
+  "id": "935_p2_Q4(c)",
+  "course": {
+    "code": "BME 3141",
+    "title": "X-ray and Ultrasound Imaging",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2020\\3rd_Year_1st_Term_2020_935.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Assume the simple case in Figure Q4( c ), where the angle of insonation is 180° and that the velocity of sound in blood is $1 . 5 \\times 1 0 ^ { 5 }$ cm/sec. If the ratio of transmitted to received frequency is 0.9."
+    },
+    {
+      "type": "text",
+      "value": "i) Determine the speed of RBC."
+    },
+    {
+      "type": "text",
+      "value": "ii) If the velocity of blood particles, transmitted frequency are reduced to half of their original values, and () is reduced to 50°. How will be the Doppler frequency changed?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_95594841cfb43f8c2e7fb30a3e432ed612b6e07c31ffe559f439f4da5ac88e94.jpg",
+      "_source_path": "images/95594841cfb43f8c2e7fb30a3e432ed612b6e07c31ffe559f439f4da5ac88e94.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2020"
+}

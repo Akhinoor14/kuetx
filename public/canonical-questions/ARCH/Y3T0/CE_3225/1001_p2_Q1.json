@@ -1,0 +1,37 @@
+{
+  "id": "1001_p2_Q1",
+  "course": {
+    "code": "CE 3225",
+    "title": null,
+    "department": "Department of Architecture",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\Backlog_2022_1001.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Design an interior flat plate having C/C span lengthof 16ftin both directions. The plate is supported on square columns of dimension 14in. x 14in.and height of 10ft. Assume a service liveload of 85psf and aservice dead load of 125psf (including self-weight), $f { \\boldsymbol { c } } ^ { \\prime } { = } 3 5 0 0 p s i$ and $f y { = } 6 0 0 0 0 p s i$ Given that percentage of interior negative design momentsto be resisted by column strip is 75% and percentages of positive design moment to be resisted by middle strip is40%. Also draw reinforcement detailing"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch 3rd Year Special Backlog Examination, 2022"
+}

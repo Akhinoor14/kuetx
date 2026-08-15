@@ -1,0 +1,37 @@
+{
+  "id": "624_p4_Q6(b)",
+  "course": {
+    "code": "CE 3111",
+    "title": "Structural Analysis and Design - I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\3rd_Year_1st_Term_2016_624.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "A bridge cable suspended between two piers 60m apart carries a load of 2000kg/m (15) throughout the span. The top of the piers are at the same level and the cable at its lowest point sags 10m below this level. Calculate the maximum value of the cable tension. What will be the tension in the back-stay and pressure on the pier if the cable passes over saddles and back-stay is inclined at 30º to horizontal? ${ 3 0 } ^ { 0 . }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

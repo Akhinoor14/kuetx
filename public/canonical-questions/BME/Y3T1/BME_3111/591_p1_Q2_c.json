@@ -1,0 +1,54 @@
+{
+  "id": "591_p1_Q2(c)",
+  "course": {
+    "code": "BME 3111",
+    "title": "Biomedical Signal Processing",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2017\\3rd_Year_1st_Term_2017_591.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "A causal linear time-invariant system has impulse response h[n], for which the (14) z-transform is"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nH ( z ) = { \\frac { 1 + z ^ { - 1 } } { ( 1 - 0 . 5 z ^ { - 1 } ) ( 1 + 0 . 2 5 z ^ { - 1 } ) } }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "(i) What is ROC of H(z)?"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Is the system stable? Why?"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Find the impulse response h[n] of the system."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "987_p5_Q15(c)",
+    "course": {
+      "code": "ARCH 2251",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\2nd_Year_2nd_Term_2022_987.pdf",
+      "source_page": null,
+      "paper_index": 5
+    },
+    "question_number": "15(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Write short note on ‘Reverberation Time'. 05   \n2. A computer lab room of 40'X30' with height of 15' has absorption co-efficient 35   \nof 0.2, 0.03, 0.1 for walls, celling and floor respectively. What would be the   \nreduction in reverberation time if 70% of the ceiling gets treated with a   \nmaterial with absorption co-efficient of 0.9."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 2nd Year 2nd Term Regular Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় শুধুমাত্র একটি ভুল বার্তা রয়েছে যা প্রশ্নের কোনো বিষয়বস্তু (Reverberation Time বা Acoustics) এর সাথে মেলেনি, তাই উপযুক্ত টপিক পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

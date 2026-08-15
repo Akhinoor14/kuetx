@@ -1,0 +1,55 @@
+[
+  {
+    "id": "986_p5_Q8(c)",
+    "course": {
+      "code": "ARCH 2161",
+      "title": "Construction Details",
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2023,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2023\\2nd_Year_1st_Term_2023_986.pdf",
+      "source_page": null,
+      "paper_index": 5
+    },
+    "question_number": "8(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Write short te t setches: Khulna. 05x3=15   \nLliaaery   \nRenntal 0   \nBifurcated stair   \nSpiral stair"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_09d0161f7783ea2c1aa4c25fd22e5cbff05b4e8d44c78730f017bd7cc5da9387.jpg",
+        "_source_path": "images/09d0161f7783ea2c1aa4c25fd22e5cbff05b4e8d44c78730f017bd7cc5da9387.jpg"
+      },
+      {
+        "type": "text",
+        "value": "Khulna University of Engineering& Technology Department of Architecture"
+      },
+      {
+        "type": "text",
+        "value": "B. Arch 2nd Year 1st Term Regular Examination, 2023"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 2nd Year 1st Term Regular Examination, 2023",
+    "classification_notes": "প্রদত্ত তালিকায় শুধুমাত্র একটি placeholder টেক্সট রয়েছে যা সিলেবাসের কোনো বিষয়বস্তু প্রকাশ করে না, তাই প্রশ্নটির সাথে মেলা এমন কোনো topic বাছাই করা সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

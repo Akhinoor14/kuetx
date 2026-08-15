@@ -1,0 +1,42 @@
+{
+  "id": "943_p3_Q5(c)",
+  "course": {
+    "code": "BME 4111",
+    "title": "Biomedical Image Processing",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2020\\4th_Year_1st_Term_2020_943.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 6,
+  "content": [
+    {
+      "type": "text",
+      "value": "An RGB color image has the following color planes. Convert this from RGB to HSI. (06)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nR = { \\bigl [ } { \\begin{array} { l l } { 7 5 } & { 8 3 } \\\\ { 1 4 } & { 4 5 } \\end{array} } { \\bigr ] } , \\operatorname { G } = { \\bigl [ } { \\begin{array} { l l } { 1 0 5 } & { 1 8 5 } \\\\ { 1 1 2 } & { 1 8 0 } \\end{array} } { \\bigr ] } , B = { \\bigl [ } { \\begin{array} { l l } { 4 5 } & { 3 8 } \\\\ { 4 9 } & { 4 1 } \\end{array} } { \\bigr ] }\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2020"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "919_p1_Q5(b)",
+  "course": {
+    "code": "EEE 1115",
+    "title": "Electrical Circuits",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2021\\1st_Year_1st_Term_2021_919.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find v(t) and i(t) in the following integrodifferential equations using the phasor approach. (14)"
+    },
+    {
+      "type": "text",
+      "value": "(i) $v ( t ) + \\int v d t = 1 0 c o s t \\lor$"
+    },
+    {
+      "type": "text",
+      "value": "(ii) $1 0 \\int i d t + { \\frac { d i } { d t } } + 6 i ( t ) = 5 \\cos ( 5 t + 2 2 ^ { o } ) \\mathbb { A }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2021"
+}

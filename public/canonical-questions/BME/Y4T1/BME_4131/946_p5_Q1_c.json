@@ -1,0 +1,42 @@
+{
+  "id": "946_p5_Q1(c)",
+  "course": {
+    "code": "BME 4131",
+    "title": "Bio-optics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2023\\4th_Year_1st_Term_2023_946.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 6,
+  "content": [
+    {
+      "type": "text",
+      "value": "Diffraction pattern is produced in the screen from the monochromatic source by the (06) arrangement shown in Fig. 1 ( c ). How this arrangement produces interference fringes on the screen? Explain with proper conditions."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_71a2c1a0936a66e81cadd3f076ffdc75dfdc96a3747da9f8ac8f4a8dbbaf58dc.jpg",
+      "_source_path": "images/71a2c1a0936a66e81cadd3f076ffdc75dfdc96a3747da9f8ac8f4a8dbbaf58dc.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2023"
+}

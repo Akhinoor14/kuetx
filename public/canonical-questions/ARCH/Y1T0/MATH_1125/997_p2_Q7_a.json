@@ -1,0 +1,42 @@
+[
+  {
+    "id": "997_p2_Q7(a)",
+    "course": {
+      "code": "MATH 1125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\Backlog_2022_997.pdf",
+      "source_page": null,
+      "paper_index": 2
+    },
+    "question_number": "7(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Find the distance of the point (1,1,1) from the point where the line $\\begin{array} { r } { \\frac { x - 1 } { 2 } = \\frac { y - 1 } { 3 } = } \\end{array}$ $\\frac { z - 2 } { 6 }$ cuts the plane $4 x - 3 y + 2 z + 6 = 0$"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year Special Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত তালিকায় শুধুমাত্র একটি বার্তা রয়েছে যে সিলেবাস সংগ্রহ করা সম্ভব নয়, তাই কোনো প্রযোজ্য টপিক বাছাই করা যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

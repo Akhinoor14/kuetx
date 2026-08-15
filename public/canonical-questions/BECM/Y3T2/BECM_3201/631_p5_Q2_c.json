@@ -1,0 +1,45 @@
+{
+  "id": "631_p5_Q2(c)",
+  "course": {
+    "code": "BECM 3201",
+    "title": "Construction and Project Management - II",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\3rd_Year_2nd_Term_2018_631.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "The moisture content of a soil sample is 19.2%. The soil sample has dry unit (13) weight of 120 Ib/ft³ and the specific gravity is 2.63. Calculate:"
+    },
+    {
+      "type": "text",
+      "value": "(i). The degree of saturation and"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Maximum dry unit weight to which this soil can be compacted without change in its moisture content."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

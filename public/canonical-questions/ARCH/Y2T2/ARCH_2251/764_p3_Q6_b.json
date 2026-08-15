@@ -1,0 +1,62 @@
+[
+  {
+    "id": "764_p3_Q6(b)",
+    "course": {
+      "code": "ARCH 2251",
+      "title": "Architectural Acoustics",
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\2nd_Year_2nd_Term_2019_764.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "6(b)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "·Explain the following singular phenomena; (Any four) (4x5)"
+      },
+      {
+        "type": "text",
+        "value": "i.Reverberation."
+      },
+      {
+        "type": "text",
+        "value": "II. Flutter Écho."
+      },
+      {
+        "type": "text",
+        "value": "III. Sound Foci."
+      },
+      {
+        "type": "text",
+        "value": "IV. Dead Spots."
+      },
+      {
+        "type": "text",
+        "value": "V. Acoustical Site Planning."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 2nd Year 2nd Term Regular Examination, 2019",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো অডিটনমিক্স বা শোরের মৌলিক ধারণা (যেমন Reverberation, Flutter Echo) নিয়ে টপিক নেই; প্রথম আইটেমে একটি এয়াররোরেজ মেসেজ রয়েছে যা বৈধ সিলেবাস নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

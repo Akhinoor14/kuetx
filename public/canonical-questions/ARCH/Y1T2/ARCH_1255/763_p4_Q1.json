@@ -1,0 +1,46 @@
+[
+  {
+    "id": "763_p4_Q1",
+    "course": {
+      "code": "ARCH 1255",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\1st_Year_2nd_Term_2019_763.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "1",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "a. 'The earth-sun relationship affects the amount of radiation received on 15   \nearth's surface'- Do you agree with the statement? Give reasons for   \nyour answer.   \nb. Discuss the major attributes of Hot-Dry desert climate. 20   \n2. a. What are the factors of Site climate? How these factors affect 15   \nprecipitation?.Discuss with examples.   \nb. Write short notes on: 2X10=20   \ni) Temperature inversion   \nii) Funneling Effect   \na. What do you understand by thermal comfort? Explain thermo- 15   \nregulatory mechanism of the human body.   \nb. Write short notes on: 2X10=20   \ni) Corrected Effective Temperature (CET)   \n. ii) Mean Radiant Temperature (MRT)   \n4. a. What do you understand by Sol-air temperature? Discuss its application.: 15   \nb. What is periodic heat flow? Discuss time-lag and decrement factor. 20"
+      },
+      {
+        "type": "text",
+        "value": "Section-B"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 1st Year 2nd Term Regular Examination, 2019",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো সংখ্যক টপিক নেই, শুধুমাত্র একটি ভুল বার্তা রয়েছে যা প্রশ্নের সাথে মেলানো সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

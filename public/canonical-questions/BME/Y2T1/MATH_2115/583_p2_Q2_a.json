@@ -1,0 +1,51 @@
+{
+  "id": "583_p2_Q2(a)",
+  "course": {
+    "code": "MATH 2115",
+    "title": "Transforms Analysis",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2017\\2nd_Year_1st_Term_2017_583.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "A full wave rectified output is given by $I ( t ) = I _ { 0 } s i n t , 0 \\leq t \\leq \\pi$ as shown in the $\\mathrm { F i g . } 2 ( \\mathsf { a } )$ . Find it's Fourier series expansion."
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_1d775e4b175d6002a89ed8c1d801c60426aade10dc840e577cbfe4c2e1406b19.jpg",
+      "_source_path": "images/1d775e4b175d6002a89ed8c1d801c60426aade10dc840e577cbfe4c2e1406b19.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_558f9e47650b128276329a78a7c6ba1bab6e3bc1f94d36066fd2d3c32c398839.jpg",
+      "_source_path": "images/558f9e47650b128276329a78a7c6ba1bab6e3bc1f94d36066fd2d3c32c398839.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "615_p2_Q6(c)",
+  "course": {
+    "code": "BECM 2151",
+    "title": "Aesthetics and Design",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\2nd_Year_1st_Term_2016_615.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "The tank shown in figure below is fabricated from $\\int \\frac { 1 } { 4 } \\pi$ steel plate. Calculate girth stress and longitudinal stress caused by an internal pressure of 120 psi."
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e3638b14e9da697a6973d03b70ddceec06f2e645497880c11d6da7beaf6570c6.jpg",
+      "_source_path": "images/e3638b14e9da697a6973d03b70ddceec06f2e645497880c11d6da7beaf6570c6.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2016"
+}

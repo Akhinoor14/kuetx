@@ -1,0 +1,45 @@
+{
+  "id": "584_p1_Q8(b)",
+  "course": {
+    "code": "BME 2151",
+    "title": "Numerical Methods and Statistics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2018\\2nd_Year_1st_Term_2018_584.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Last year's color distribution of sold car is given in table 8b(i). This year's observation in the color (12) distribution of sold car is given in table 8b(ii). Do the data provide sufficient evidence to conclude that the color distribution of sold car differs from the last year? Use 5% and 1% level of significance. Use chi-square test."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Color</td><td rowspan=1 colspan=1>Percentage</td></tr><tr><td rowspan=1 colspan=1>Brown</td><td rowspan=1 colspan=1>30</td></tr><tr><td rowspan=1 colspan=1>Yellow</td><td rowspan=1 colspan=1>20</td></tr><tr><td rowspan=1 colspan=1>Red</td><td rowspan=1 colspan=1>20</td></tr><tr><td rowspan=1 colspan=1>Orange</td><td rowspan=1 colspan=1>10</td></tr><tr><td rowspan=1 colspan=1>Green</td><td rowspan=1 colspan=1>10</td></tr><tr><td rowspan=1 colspan=1>Blue</td><td rowspan=1 colspan=1>10</td></tr></table>"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Color</td><td rowspan=1 colspan=1>Observed frequency</td></tr><tr><td rowspan=1 colspan=1>Brown</td><td rowspan=1 colspan=1>152</td></tr><tr><td rowspan=1 colspan=1>Yellow</td><td rowspan=1 colspan=1>114</td></tr><tr><td rowspan=1 colspan=1>Red</td><td rowspan=1 colspan=1>106</td></tr><tr><td rowspan=1 colspan=1>Orange</td><td rowspan=1 colspan=1>51</td></tr><tr><td rowspan=1 colspan=1>Green</td><td rowspan=1 colspan=1>43</td></tr><tr><td rowspan=1 colspan=1>Blue</td><td rowspan=1 colspan=1>43</td></tr><tr><td rowspan=1 colspan=1>Total</td><td rowspan=1 colspan=1>509</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

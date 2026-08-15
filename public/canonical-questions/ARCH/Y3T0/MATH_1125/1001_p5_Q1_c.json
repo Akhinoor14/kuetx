@@ -1,0 +1,54 @@
+{
+  "id": "1001_p5_Q1(c)",
+  "course": {
+    "code": "MATH 1125",
+    "title": "Mathematics",
+    "department": "Department of Architecture",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\Backlog_2022_1001.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Three light bulbs are connected to a 9V battery as shown in fig1(c). Calculate: 12"
+    },
+    {
+      "type": "text",
+      "value": "(i) Total current supplied by the battery."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Current through each bulb."
+    },
+    {
+      "type": "text",
+      "value": "(iii)The resistance of each bulb."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_66520c4b17bf21e2c429a98baca5c13a0425c4d72e17911f2c3cfa03e40b8b9a.jpg",
+      "_source_path": "images/66520c4b17bf21e2c429a98baca5c13a0425c4d72e17911f2c3cfa03e40b8b9a.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch 3rd Year Special Backlog Examination, 2022"
+}

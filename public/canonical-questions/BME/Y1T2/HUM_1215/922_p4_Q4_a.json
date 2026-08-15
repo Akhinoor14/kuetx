@@ -1,0 +1,65 @@
+{
+  "id": "922_p4_Q4(a)",
+  "course": {
+    "code": "HUM 1215",
+    "title": "Technical English",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2019\\1st_Year_2nd_Term_2019_922.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Correct the following sentences: (14)"
+    },
+    {
+      "type": "text",
+      "value": "i)Sunshine dries the dews."
+    },
+    {
+      "type": "text",
+      "value": "ii)President is supposed to come today in Khulna."
+    },
+    {
+      "type": "text",
+      "value": "iii)You what do impresses all of our friends."
+    },
+    {
+      "type": "text",
+      "value": "iv)The teacher lives in the college quarter."
+    },
+    {
+      "type": "text",
+      "value": "v)We tried to make amend of the loss."
+    },
+    {
+      "type": "text",
+      "value": "vi)His sprit goes out of control frequently."
+    },
+    {
+      "type": "text",
+      "value": "vii) Cattle is grazing in the field."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2019"
+}

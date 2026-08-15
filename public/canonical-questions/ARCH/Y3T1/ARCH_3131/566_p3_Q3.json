@@ -1,0 +1,37 @@
+{
+  "id": "566_p3_Q3",
+  "course": {
+    "code": "ARCH 3131",
+    "title": "Modern Architecture",
+    "department": "Department of Architecture",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\3rd_Year_1st_Term_2019_566.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "a. Write short note on: (i) Humidification (ii) Humidity (iii) Degree of saturation (iv) Psychrometry 12 b. What is meant by air conditioning? Describe the factors that affect human 08 comfort. c. Write down the name of different types of installation of air conditioner. 15 . Also explain split air conditioning system with neat sketch."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Arch 3rd Year 1st Term Regular Examination, 2019"
+}

@@ -1,0 +1,74 @@
+{
+  "id": "617_p5_Q3(b)",
+  "course": {
+    "code": "HUM 2123",
+    "title": "Engineering Economics and Financial Accounting",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\2nd_Year_1st_Term_2018_617.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The “Meghna Corporation” is a producer of cement. The corporation hires an economist to determine the demand for its cement. After months of hard work the economist informed that the demand for its product is given by the following equation:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\theta _ { x } = 1 2 0 0 0 - 5 0 0 0 P _ { x } + 5 I + 5 0 0 P _ { c }\\tag{25}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "where, $P _ { x }$ , is the price charged for Meghna cement."
+    },
+    {
+      "type": "text",
+      "value": "I , is the income per capita."
+    },
+    {
+      "type": "text",
+      "value": "$P _ { c }$ , is the price of cement from competing producer."
+    },
+    {
+      "type": "text",
+      "value": "Assume that the initial values of $P _ { x } , ~ I$ and $P _ { c }$ are \\$5, \\$10000 and \\$6 respectively."
+    },
+    {
+      "type": "text",
+      "value": "Using the above information the manager wanted to determine -"
+    },
+    {
+      "type": "text",
+      "value": "(i) What effect a price increased would have on total revenues."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Evaluate how sale of the product would change during a period of rising incomes."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Asses the probable impact if competing producer would raise their prices."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

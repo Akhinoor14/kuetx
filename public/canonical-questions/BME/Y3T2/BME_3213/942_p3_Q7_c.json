@@ -1,0 +1,42 @@
+{
+  "id": "942_p3_Q7(c)",
+  "course": {
+    "code": "BME 3213",
+    "title": "Biomechanics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\3rd_Year_2nd_Term_2022_942.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". As a ( 1 0) <sub>consequence</sub> th<sub>e con</sub>t<sub>ac</sub>t f<sub>orce exer</sub>t<sub>e</sub>d b<sub>y</sub> th<sub>e groun</sub>d <sub>on</sub> hi<sub>s</sub> l<sub>e</sub>ft f<sub>oo</sub>t i<sub>s</sub> 200 N. Hi<sub>s</sub> f<sub>ee</sub>t <sub>are</sub> 3 0 cm a<sub>p</sub>art Find the distance ofinjured foot to the line that passes through the C <sub>.</sub> G<sub>.</sub> Calculate th<sub>e</sub> <sub>con</sub>t<sub>ac</sub>t f<sub>orce</sub> <sub>exer</sub>t<sub>e</sub>d b<sub>y</sub> th<sub>e</sub> <sub>groun</sub>d <sub>on</sub> th<sub>e</sub> h<sub>ea</sub>lth<sub>y</sub> <sub>r</sub>i<sub>g</sub>ht f<sub>oo</sub>t<sub>.</sub>"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8eb732db30bcb6d4bed6df650bacf584fc7fbc933f7a28b3c8d0167e0d506cde.jpg",
+      "_source_path": "images/8eb732db30bcb6d4bed6df650bacf584fc7fbc933f7a28b3c8d0167e0d506cde.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

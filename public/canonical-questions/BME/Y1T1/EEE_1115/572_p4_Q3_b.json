@@ -1,0 +1,56 @@
+{
+  "id": "572_p4_Q3(b)",
+  "course": {
+    "code": "EEE 1115",
+    "title": "Electrical Circuits",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2016\\1st_Year_1st_Term_2016_572.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "."
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_acf19e531f6d73564a7cbc606360891adf87c1ecfcd8b81e45c042fae0018c3c.jpg",
+      "_source_path": "images/acf19e531f6d73564a7cbc606360891adf87c1ecfcd8b81e45c042fae0018c3c.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_25e0f11a9fca33a40ae34cd585dec7b473f863cf81bddb8334f36e56f33e0fed.jpg",
+      "_source_path": "images/25e0f11a9fca33a40ae34cd585dec7b473f863cf81bddb8334f36e56f33e0fed.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_6ac66456fe740a474192a2999a5aabc56aac954acabd66a7adf55e6b19a10a53.jpg",
+      "_source_path": "images/6ac66456fe740a474192a2999a5aabc56aac954acabd66a7adf55e6b19a10a53.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2016"
+}

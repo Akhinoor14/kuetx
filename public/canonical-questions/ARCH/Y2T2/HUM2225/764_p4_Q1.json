@@ -1,0 +1,44 @@
+[
+  {
+    "id": "764_p4_Q1",
+    "course": {
+      "code": "HUM2225",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\2nd_Year_2nd_Term_2019_764.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "1",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "a. What do you mean by Philosophy? 10   \nb. Discuss the scope of Philosophy. 10   \nc. Explain the function of Philosophy 15   \n2. a. Is Philosophy Love of. Wisdom? Explain It. 10   \nb. What is knowledge? 10   \nc. How many theories of the Origin of Knowledge? Describe this. 15   \n3, a. 'I think therefore I exist'– Explain this quotation. 10   \nb. John Locke's ‘Tabula Rasa' ( Clean, Sheet/Slate) describe according to his Empiricism   \ntheory. 10   \nc. What is intuitionism? Which theory is the best of the origin of knowledge and why? 15   \n4. a. Truth, Beauty and Value-explain these three principles of philosophy. 15   \nb. What is environmental philosophy? 10   \nc. Why environmental philosophy is now very important.10"
+      },
+      {
+        "type": "text",
+        "value": "Section B"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "extracted",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 2nd Year 2nd Term Regular Examination, 2019",
+    "classification_notes": "Syllabus lookup key 'Department of Architecture::HUM2225' পাওয়া যায়নি।"
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "id": "582_p2_Q1(b)",
+  "course": {
+    "code": "ECE 2115",
+    "title": "Digital Electronics and Logic Design",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2016\\2nd_Year_1st_Term_2016_582.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "A container of weight W is suspended from ring A as shown in Fig. 1·(b). Cable BAC passes (20) through the ring and is attached to fixed supports at B and C. Two forces $\\overline { { \\boldsymbol { p } } } = p \\widehat { \\boldsymbol { \\mathbf { \\mathit { i } } } }$ and $\\stackrel { - } { Q } = Q . \\hat { k }$ are applied to the ring to maintain the container in the position shown. Knowing that $\\mathrm { W } { = } 3 7 6 \\mathrm { N } ,$ determine P and Q."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_68354e8d6c2b0944d3b55b833e13c86eeac2292dc985043a5566b4d9b813f7cc.jpg",
+      "_source_path": "images/68354e8d6c2b0944d3b55b833e13c86eeac2292dc985043a5566b4d9b813f7cc.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2016"
+}

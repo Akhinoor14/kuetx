@@ -1,0 +1,37 @@
+{
+  "id": "918_p4_Q1(c)",
+  "course": {
+    "code": "PH 1115",
+    "title": "Physics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2020\\1st_Year_1st_Term_2020_918.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "A scale of a spring balance reading from 0 to 10 kg is 0.5 m long. A body suspended (08) from the balance is found to oscillate vertically with a frequency of 10/π hertz. Calculate the mass of the body attached to the spring."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2020"
+}

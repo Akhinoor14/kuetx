@@ -1,0 +1,49 @@
+{
+  "id": "944_p4_Q4(c)",
+  "course": {
+    "code": "BME 4131",
+    "title": "Bio-optics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2021\\4th_Year_1st_Term_2021_944.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Describe in detail any one of the following bioimaging techniques: (12)"
+    },
+    {
+      "type": "text",
+      "value": "(i) Confocal microscopy"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Near-field optical microscopy."
+    },
+    {
+      "type": "text",
+      "value": "Scdion B   \n<sub>(Answer</sub> ANY Tl I IH:E questions from this section in Script B)   \n5. Outline the main processes that light undergoes in tissue, and explain how these processes (08�   \ncontribute t(, the measurement ol'u signal in finger probe pulse oximctcr,   \n<sub>h)</sub> \\\\ hat arc the uvuiluhlc methods ollight delivery for in-vivo photocxcitation? Briefly describe (08)   \nthe <sub>process</sub> or optical fiber delivery system.   \n<sub>c)</sub> <sub>Explain</sub> the <sub>process</sub> or optical biopsy with its several advantages. (08)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2021"
+}

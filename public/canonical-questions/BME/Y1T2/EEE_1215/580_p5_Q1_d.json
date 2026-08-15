@@ -1,0 +1,47 @@
+{
+  "id": "580_p5_Q1(d)",
+  "course": {
+    "code": "EEE 1215",
+    "title": "Analog Electronics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2018\\1st_Year_2nd_Term_2018_580.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "Draw the simplified diode model. Using this model solve the following network and find (07) Vq and ID."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_1d58c4dc0a6cc018af0e4988eaa212ecc20ac5200d9b5fa8241605afac95e8ed.jpg",
+      "_source_path": "images/1d58c4dc0a6cc018af0e4988eaa212ecc20ac5200d9b5fa8241605afac95e8ed.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e3740a7ce133a46b8899f0a9fb7bebea762ab91f70d3efe29bbf9ad979d22ef1.jpg",
+      "_source_path": "images/e3740a7ce133a46b8899f0a9fb7bebea762ab91f70d3efe29bbf9ad979d22ef1.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

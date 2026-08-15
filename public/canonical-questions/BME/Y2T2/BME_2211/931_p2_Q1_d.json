@@ -1,0 +1,47 @@
+{
+  "id": "931_p2_Q1(d)",
+  "course": {
+    "code": "BME 2211",
+    "title": "Signals and Systems",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2019\\2nd_Year_2nd_Term_2019_931.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Sketch the following signal derived from x(t): (08) $x ( 3 t ) + x ( 3 t + 2 )$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a25ff1eeab88f596a428c31be93ad2ca7678734ba544f68214e436b6807ea2ba.jpg",
+      "_source_path": "images/a25ff1eeab88f596a428c31be93ad2ca7678734ba544f68214e436b6807ea2ba.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_bb8ad39684cb035589e5ca1da5638223ca8cae18cb17b2aad664c28cf787ac00.jpg",
+      "_source_path": "images/bb8ad39684cb035589e5ca1da5638223ca8cae18cb17b2aad664c28cf787ac00.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

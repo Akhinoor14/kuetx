@@ -1,0 +1,42 @@
+{
+  "id": "637_p6_Q3(b)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\4th_Year_2nd_Term_2017_637.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "Check the shear strength for the beam shown in figure at section 1-1 which is h/2 (20) from the support. Given that this section is adequate for $\\mathsf { W } _ { \\mathsf { u } } = 7 0$ kN/m, $\\mathsf { A } \\ : =$ $2 3 . 4 5 \\times 1 0 ^ { 4 } { \\mathrm { m m } } ^ { 2 } , 1 = 2 . 3 0 4 \\times 1 0 ^ { 1 0 } { \\mathrm { m m } } ^ { 4 } , \\mathbb { S } = 5 . 1 2 \\times 1 0 ^ { 7 } { \\mathrm { m m } } ^ { 3 }$ and $f _ { c } ^ { \\prime } = 4 9 \\mathsf { M P a }$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_3674d6460e6d2d755b87468173a49131413584f83c21b212ea711e4df8db60ad.jpg",
+      "_source_path": "images/3674d6460e6d2d755b87468173a49131413584f83c21b212ea711e4df8db60ad.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2017"
+}

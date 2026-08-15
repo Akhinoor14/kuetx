@@ -1,0 +1,46 @@
+{
+  "id": "925_p2_Q5(d)",
+  "course": {
+    "code": "CSE 1215",
+    "title": "Computer Programming",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\1st_Year_2nd_Term_2022_925.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r l } & { \\left[ \\begin{array} { l } { \\mathrm { i n c l u d e < s t d i o . h > ; } } \\\\ { \\mathrm { i n t ~ m a i n ~ ( ) } } \\\\ { \\{ \\quad \\mathrm { \\textit { ~ X ~ } } { = } 1 8 ; } \\\\ { \\quad \\mathrm { \\textit { ~ Y ~ } } { = } 3 7 ; \\} } \\end{array} \\right] } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "What are the values that will be stored in variable x and y."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2022"
+}

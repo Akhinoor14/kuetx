@@ -1,0 +1,64 @@
+[
+  {
+    "id": "554_p4_Q1(a)",
+    "course": {
+      "code": "HUM1125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2017,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2017\\1st_Year_1st_Term_2017_554.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "1(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Read the following passage carefully and answers the questions that follow"
+      },
+      {
+        "type": "text",
+        "value": "The work of has making mainly depends upon fair weather. As sunny weather in a cold country or in a wet country is a very uncertain factor, the farmers, so, have to make use of their opportunities. They are to take time by the forelock. They have to make use of the bright sunshine in drying their hay. If they are indolent, let the opportunity of drying their hay in summer season slip uselessly away, their grass is likely to be ruined. In a broader sense, the difficulties that the farmer has to face are difficulties of tall man kind. Just as the weather is uncertain so is the care with our life. Life too is uncertain. Bright sunshine is the youth of our life. Youth comes but once in a whole life time, as in this time life can use the full of opportunities with energy and willingness in face of difficulties and it never possible in the time out of youth, chances never repeat themselves, or if they do, either the circumstances are not favourable or our need is too great. Sometimes we do not feel so strong as to avail ourselves of the opportunity. Hence we must learn to make the most of the opportunities that present themselves is our life. We must, like the farmer, be even on the look out for sunshine to serve our needs. If we do not avail ourselves of the opportunities today, we shall be left wringing our hands in despair when the opportunities have slipped away. A man, who is always putting off til tomorrow what he should do today, suffers an irreparable loss. Opportunities therefore, must not be passed unnoticed, particularly when they are within our grasp."
+      },
+      {
+        "type": "text",
+        "value": "Questions:"
+      },
+      {
+        "type": "text",
+        "value": "I) What does a farmer do in a cold country and why?"
+      },
+      {
+        "type": "text",
+        "value": "ll) What is life and what should a life do in its youth?"
+      },
+      {
+        "type": "text",
+        "value": "IlI) What should we do in case of chance? And why?"
+      },
+      {
+        "type": "text",
+        "value": "IV) What should we do today for our opportunities? And why?"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "extracted",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 1st Year 1st Term Regular Examination, 2017",
+    "classification_notes": "Syllabus lookup key 'Department of Architecture::HUM1125' পাওয়া যায়নি।"
+  }
+]

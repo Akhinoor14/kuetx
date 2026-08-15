@@ -1,0 +1,42 @@
+[
+  {
+    "id": "998_p4_Q7(b)",
+    "course": {
+      "code": "ARCH 2231",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\2nd_Year_Backlog_2022_998.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "7(b)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "What was the concept of \"Din-i-ilahi\"? 10"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 2nd Year Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় 'Din-i-ilahi' (একটি ঐতিহাসিক বিষয়) সম্পর্কে কোনো টপিক নেই এবং প্রথম নম্বরযুক্ত আইটেমেও ক্লাসের সিলেবাস পাওয়া যায়নি, তাই এই প্রশ্নটির সাথে তালিকাভুক্ত কোনো টপিক মেলানো সম্ভব নয়।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

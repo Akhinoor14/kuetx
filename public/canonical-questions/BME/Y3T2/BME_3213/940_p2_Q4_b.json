@@ -1,0 +1,37 @@
+{
+  "id": "940_p2_Q4(b)",
+  "course": {
+    "code": "BME 3213",
+    "title": "Biomechanics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2020\\3rd_Year_2nd_Term_2020_940.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "With no stress the femur is 0.5m long. The body weight of 70kg is distributed over (10) the femur cross-sectional area 370mm². How much does the femur shorten when you stand on one foot? What is the strain at the UCS (assuming linear behavior)? Where $\\mathrm { Y } { = } 1 7 9 \\mathrm { ~ x ~ } 1 0 ^ { 2 } \\mathrm { N } / \\mathrm { m m } ^ { 2 }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2020"
+}

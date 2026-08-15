@@ -1,0 +1,37 @@
+{
+  "id": "583_p5_Q6(c)",
+  "course": {
+    "code": "ECE 2115",
+    "title": "Digital Electronics and Logic Design",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2017\\2nd_Year_1st_Term_2017_583.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "The content of a 4-bit shift register is initially 1101. The register is shifted six (13) times to·right with the serial input being 101101. What is the content of the register after each shift?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

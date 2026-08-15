@@ -1,0 +1,42 @@
+[
+  {
+    "id": "998_p2_Q3(a)",
+    "course": {
+      "code": "CE 3223",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\2nd_Year_Backlog_2022_998.pdf",
+      "source_page": null,
+      "paper_index": 2
+    },
+    "question_number": "3(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Calculate the peak demand of a city having present population of 1, 00,000 with 10   \na growth rate of 2%. The design period is 20 years and per capita water demand   \nis 140 lcpd with 2.0 peak factor. Assume loss and waster percentage is 30%."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 2nd Year Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় শুধুমাত্র একটি বার্তা রয়েছে যা বলে কোর্সের সিলেবাস সংগ্রহ করা সম্ভব নয়, তাই কোনো প্রযোজ্য টপিক বাছাই করা যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

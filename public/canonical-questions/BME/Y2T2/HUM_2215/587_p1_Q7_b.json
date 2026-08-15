@@ -1,0 +1,50 @@
+{
+  "id": "587_p1_Q7(b)",
+  "course": {
+    "code": "HUM 2215",
+    "title": "Economics and Sociology",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2016\\2nd_Year_2nd_Term_2016_587.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "State the Divergence theorem. Use it to evaluate"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "text",
+      "value": "$\\iint _ { \\textrm { \\tiny S } } \\overrightarrow { F } . \\hat { n } d s$ over the entire surface of the region bounded by the cylinder"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nx ^ { 2 } + z ^ { 2 } = 9 , x = 0 , y = 0 , z = 0 , { \\mathrm { ~ a n d ~ } } y = 8 { \\mathrm { ~ i f ~ } } \\vec { F } = 6 z { \\hat { \\imath } } + ( 2 x + y ) { \\hat { \\jmath } } - x { \\hat { \\ell } } .\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

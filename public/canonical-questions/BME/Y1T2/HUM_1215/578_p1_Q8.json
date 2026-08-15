@@ -1,0 +1,57 @@
+{
+  "id": "578_p1_Q8",
+  "course": {
+    "code": "HUM 1215",
+    "title": "Technical English",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2016\\1st_Year_2nd_Term_2016_578.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8",
+  "numbering_source": "regex",
+  "marks": 35,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write a free composition on one of the followings (around 2000 words): (35)"
+    },
+    {
+      "type": "text",
+      "value": "(13)"
+    },
+    {
+      "type": "text",
+      "value": "Time: 3 hours"
+    },
+    {
+      "type": "text",
+      "value": "N.B. i) Answer ANY THREE questions from each section in separate scripts. ii) Figures in the right margin indicate full marks."
+    },
+    {
+      "type": "text",
+      "value": "Section A"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ÀNY THREÉ questions from this section in Script A)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

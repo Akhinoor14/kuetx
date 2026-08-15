@@ -1,0 +1,46 @@
+{
+  "id": "609_p1_Q4(b)",
+  "course": {
+    "code": "CE 1201",
+    "title": "Engineering Mechanics",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\1st_Year_2nd_Term_2015_609.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determining the reactions and forces of the members DE, EF, MJ and KL of (25) the following truss. 8K"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_559d79ebc1b8dff930e16fb82a066109deadca0008fb408ab1bcbdecc147d2eb.jpg",
+      "_source_path": "images/559d79ebc1b8dff930e16fb82a066109deadca0008fb408ab1bcbdecc147d2eb.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
+}

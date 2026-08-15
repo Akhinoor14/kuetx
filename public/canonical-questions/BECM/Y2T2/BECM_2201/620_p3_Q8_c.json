@@ -1,0 +1,46 @@
+{
+  "id": "620_p3_Q8(c)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\2nd_Year_2nd_Term_2015_620.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the shearing stress developed in each spring for the following data . (17) as shown in figure below."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Property</td><td rowspan=1 colspan=1>Outer Spring</td><td rowspan=1 colspan=1>Inner Spring</td></tr><tr><td rowspan=1 colspan=1>n</td><td rowspan=1 colspan=1>18</td><td rowspan=1 colspan=1>24</td></tr><tr><td rowspan=1 colspan=1>d</td><td rowspan=1 colspan=1>10 mm</td><td rowspan=1 colspan=1>20 mm</td></tr><tr><td rowspan=1 colspan=1>D</td><td rowspan=1 colspan=1>100 mm</td><td rowspan=1 colspan=1>200 mm</td></tr><tr><td rowspan=1 colspan=1>G</td><td rowspan=1 colspan=1>83 Gpa</td><td rowspan=1 colspan=1>83 Gpa</td></tr></table>"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_929a4b19e977a73924a20bda8dded26b3db587dd66f8c3c7bb07fb8e1b545d56.jpg",
+      "_source_path": "images/929a4b19e977a73924a20bda8dded26b3db587dd66f8c3c7bb07fb8e1b545d56.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

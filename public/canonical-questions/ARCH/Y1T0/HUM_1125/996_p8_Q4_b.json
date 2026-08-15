@@ -1,0 +1,66 @@
+[
+  {
+    "id": "996_p8_Q4(b)",
+    "course": {
+      "code": "HUM 1125",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\1st_Year_Backlog_2022_996.pdf",
+      "source_page": null,
+      "paper_index": 8
+    },
+    "question_number": "4(b)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Complete the sentences with subordinate clauses."
+      },
+      {
+        "type": "text",
+        "value": "i.The man... ....... came to see me yesterday. (Adjective clause)"
+      },
+      {
+        "type": "text",
+        "value": "ii. Professor Ali is a scholar... .. ..... ... (Adjective clause)"
+      },
+      {
+        "type": "text",
+        "value": "iii.Mumu nursed her mother......... (Adv. clause of time)"
+      },
+      {
+        "type": "text",
+        "value": "iv. ......, he teacher refused to let him in. ( Adv. clause of cause)"
+      },
+      {
+        "type": "text",
+        "value": "v........., you would have passed. (Adv. clause of condition)"
+      },
+      {
+        "type": "text",
+        "value": "vi........., is important. (Noun Clause)"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো গ্রামার টপিক নেই, তাই প্রশ্নের সাথে মেলা এমন কোনো থিম্পেক্ট পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

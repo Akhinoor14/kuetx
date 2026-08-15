@@ -1,0 +1,61 @@
+{
+  "id": "579_p1_Q3(b)",
+  "course": {
+    "code": "HUM 1215",
+    "title": "Technical English",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2017\\1st_Year_2nd_Term_2017_579.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Transfer the following sentences as asked in brackets:"
+    },
+    {
+      "type": "text",
+      "value": "(i) Mim, a passionate boy, could hardly believe reason in life. (into complex)"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Labib, who studies in KUET, feels an overwhelming sense of loss. (into simple)"
+    },
+    {
+      "type": "text",
+      "value": "(iii) As you are far away from me, I will send you a text message by email. (into simple)"
+    },
+    {
+      "type": "text",
+      "value": "(iv) His work is better than yours. (Positive)"
+    },
+    {
+      "type": "text",
+      "value": "(v) He is getting better and better. (Negative)"
+    },
+    {
+      "type": "text",
+      "value": "(vi) He has a lovely voice, so is popular. (Simple)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "622_p4_Q2(e)",
+  "course": {
+    "code": "BECM 2201",
+    "title": "Engineering Construction Management",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\2nd_Year_2nd_Term_2018_622.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(e)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the voltages V1, V3 and $V _ { a b }$ for the network shown in figure below."
+    },
+    {
+      "type": "text",
+      "value": "(11)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_7149a0b8e87d716a85a5c69e600a5bc2b9f4cb671730bcf88a51dd3c5d748b2f.jpg",
+      "_source_path": "images/7149a0b8e87d716a85a5c69e600a5bc2b9f4cb671730bcf88a51dd3c5d748b2f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "945_p1_Q4(d)",
+  "course": {
+    "code": "BME 4131",
+    "title": "Bio-optics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\4th_Year_1st_Term_2022_945.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the electric field amplitude of an evanescent wave with electronic field value of3.0 <sub>(07)</sub> N/C al the surface or the prism, when a light wave (633 nm) is travelling from a <sub>prism</sub> (RJ=l.52) to a cellular medium (1.37). Given the distance into the cellular medium is 90 nm and the angle of 65° from normal to prism-cell interface."
+    },
+    {
+      "type": "text",
+      "value": "SccCion n"
+    },
+    {
+      "type": "text",
+      "value": "(Answer AN\\' TIIREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

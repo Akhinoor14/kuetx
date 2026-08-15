@@ -1,0 +1,41 @@
+{
+  "id": "926_p4_Q4(c)",
+  "course": {
+    "code": "MATH 1215",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2023\\1st_Year_2nd_Term_2023_926.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the equation of the sphere which touches 3x + y - 4z - 12 = 0 at <sub>(1,</sub> 1, <sub>-2)</sub> and is <sub>(12)</sub> orthogonal to the sphere $x ^ { \\dot { 2 } } + y ^ { 2 } + z ^ { 2 } - 4 x + 6 y - 8 z - 7 = 0 .$"
+    },
+    {
+      "type": "text",
+      "value": "Section B (An wcr AN\\ TIIH.F.E quc tion from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2023"
+}

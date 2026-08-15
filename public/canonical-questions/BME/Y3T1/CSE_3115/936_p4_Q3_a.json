@@ -1,0 +1,37 @@
+{
+  "id": "936_p4_Q3(a)",
+  "course": {
+    "code": "CSE 3115",
+    "title": "Microprocessors and Microcontrollers",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2021\\3rd_Year_1st_Term_2021_936.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Give a comparison between CISC and RISC processes. A program with 80% of executed (12) instructions being simple and 20% complex. For CISC, simple instructions take 4 cycles, complex take 6 cycles, cycle time = 80 ns. For RISC, simple instructions take 1 cycles, complex take 12 cycles, cycle time = 60 ns. How much time is required for a program with 1 million instructions?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

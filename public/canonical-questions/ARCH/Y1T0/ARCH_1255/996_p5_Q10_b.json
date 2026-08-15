@@ -1,0 +1,50 @@
+[
+  {
+    "id": "996_p5_Q10(b)",
+    "course": {
+      "code": "ARCH 1255",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\1st_Year_Backlog_2022_996.pdf",
+      "source_page": null,
+      "paper_index": 5
+    },
+    "question_number": "10(b)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "What are the objectives of thermal control both in a rural and an urban 25   \nsetting?   \nWhat is a climatic shading device? 08   \nRefer to a few buildings to illustrate the impact of shading devices in 27   \narchitecture.   \nWhat is stack effect? 05   \nWhat are the key passive design strategies in our tropical climate? 30   \nIllustrate in favour of vour answer"
+      },
+      {
+        "type": "text",
+        "value": "Khulna University of Engineering & Technology Department of Architecture"
+      },
+      {
+        "type": "text",
+        "value": "B. Arch1st Year Backlog Examination, 2022"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year Backlog Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় প্রশ্নের সাথে মিলার কোনো টপিক নেই কারণ প্রথম আইটেমটি একটি ভুলবার্তা এবং বাকি অংশ শূন্য।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

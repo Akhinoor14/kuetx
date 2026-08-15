@@ -1,0 +1,42 @@
+{
+  "id": "612_p1_Q2(b)",
+  "course": {
+    "code": "CE 1201",
+    "title": "Engineering Mechanics",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\1st_Year_2nd_Term_2018_612.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Prescribed the real life application of first and second moment of inertia. Calculate the second moment of area of the shaded area about parallel axis and centroidal axis parallel to X and Y axis."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_aab750ee112db073391ba07e198cdeb437dc1908d177a8585f6ad057d20e06f4.jpg",
+      "_source_path": "images/aab750ee112db073391ba07e198cdeb437dc1908d177a8585f6ad057d20e06f4.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

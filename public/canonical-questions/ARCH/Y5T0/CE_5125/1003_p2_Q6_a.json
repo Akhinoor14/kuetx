@@ -1,0 +1,50 @@
+{
+  "id": "1003_p2_Q6(a)",
+  "course": {
+    "code": "CE 5125",
+    "title": null,
+    "department": "Department of Architecture",
+    "year_term": "5th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\5th_Year_Backlog_2022_1003.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the following Network diagram find out:"
+    },
+    {
+      "type": "text",
+      "value": "i. Total float of each activity"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_3c33448f4bdcea21d73e1e3b6cf5ee955634b129969e8e05de460942955afb04.jpg",
+      "_source_path": "images/3c33448f4bdcea21d73e1e3b6cf5ee955634b129969e8e05de460942955afb04.jpg"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Project A</td><td rowspan=1 colspan=1>Project B</td><td rowspan=1 colspan=1>Project C</td></tr><tr><td rowspan=1 colspan=1>First cost, BDT</td><td rowspan=1 colspan=1>-5,00,000</td><td rowspan=1 colspan=1>-4,50,000</td><td rowspan=1 colspan=1>-7,00,000</td></tr><tr><td rowspan=1 colspan=1>AOC, BDT/year</td><td rowspan=1 colspan=1>-70,000</td><td rowspan=1 colspan=1>-90,000</td><td rowspan=1 colspan=1>-25,000</td></tr><tr><td rowspan=1 colspan=1>Salvage value, BDT</td><td rowspan=1 colspan=1>50,000</td><td rowspan=1 colspan=1>1,00,000</td><td rowspan=1 colspan=1>70,000</td></tr><tr><td rowspan=1 colspan=1>Life, Years</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>10</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Arch 5th Year Backlog Examination, 2022"
+}

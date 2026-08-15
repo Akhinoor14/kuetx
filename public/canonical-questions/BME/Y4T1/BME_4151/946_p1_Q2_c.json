@@ -1,0 +1,37 @@
+{
+  "id": "946_p1_Q2(c)",
+  "course": {
+    "code": "BME 4151",
+    "title": "Clinical Engineering and Hospital Management",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2023\\4th_Year_1st_Term_2023_946.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "A hospital has 157 patient monitoring devices and the CE supervises the repair crews (BMET) (10) who repair malfunctioning devices. The policy is to repair the broken down device and bring back in execution within 2 hours on the average. If average breakdown rate is 3 .5 devices/hour and each repair crew can repair 0.25 device per hour on average, how many BMETs arc required?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2023"
+}

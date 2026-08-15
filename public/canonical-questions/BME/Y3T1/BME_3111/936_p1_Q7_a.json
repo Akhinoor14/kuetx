@@ -1,0 +1,53 @@
+{
+  "id": "936_p1_Q7(a)",
+  "course": {
+    "code": "BME 3111",
+    "title": "Biomedical Signal Processing",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2021\\3rd_Year_1st_Term_2021_936.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "A bandpass digital filter is required to meet the f<sub>o</sub>ll<sub>ow</sub>i<sub>n s ec</sub>ifi<sub>ca</sub>ti<sub>ons :</sub> (i) Complete signal rej ection at de and 25 0 Hz"
+    },
+    {
+      "type": "text",
+      "value": "(20)"
+    },
+    {
+      "type": "text",
+      "value": "(ii) A narrow passband centered at 12 5 Hz"
+    },
+    {
+      "type": "text",
+      "value": "(iii) A 3 dB bandwidth of 1 0 Hz"
+    },
+    {
+      "type": "text",
+      "value": "A<sub>ssum</sub>i<sub>ng a samp</sub>li<sub>ng</sub> f<sub>requency o</sub>f 500 H<sub>z o</sub>bt<sub>a</sub>i<sub>n</sub> th<sub>e</sub> t<sub>rans</sub>f<sub>er</sub> f<sub>unc</sub>ti<sub>on o</sub>f th<sub>e</sub> fil<sub>ter b</sub> <sub>su</sub>it<sub>a</sub>bl<sub>y</sub> <sub>p</sub>l<sub>ac</sub>i<sub>ng</sub> <sub>z</sub>-<sub>p</sub>l<sub>ane</sub> <sub>po</sub>l<sub>es</sub> <sub>an</sub>d <sub>zeros ;</sub> filt<sub>er</sub> <sub>coe</sub>ffi<sub>c</sub>i<sub>en</sub>t<sub>s</sub> it<sub>s</sub> diff<sub>erence</sub> <sub>equat</sub>i<sub>on an</sub>d bl<sub>oc</sub>k dia<sub>g</sub>ram <sub>represen</sub>t<sub>a</sub>ti<sub>on</sub>."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

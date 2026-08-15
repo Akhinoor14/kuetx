@@ -1,0 +1,41 @@
+{
+  "id": "631_p1_Q7(d)",
+  "course": {
+    "code": "BECM 3201",
+    "title": "Construction and Project Management - II",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\3rd_Year_2nd_Term_2018_631.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "The precedence and durations are given in Table-1 shows the normal (13) schedule for a project. You can decrease (crash) the durations at an additional expense. The time-cost information for the activities is also given in the Table-1. The owner wants you to finish the project in 115 days. Find the minimum possible cost for the project if you want to finish it on 115 days."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Activity</td><td rowspan=1 colspan=1>Predecessor</td><td rowspan=1 colspan=1>NormalDuration(Days)</td><td rowspan=1 colspan=1>CrashDuration(Days)</td><td rowspan=1 colspan=1>NormalCost(TK)</td><td rowspan=1 colspan=1>CrashCost(TK)</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>一</td><td rowspan=1 colspan=1>120</td><td rowspan=1 colspan=1>100</td><td rowspan=1 colspan=1>12000.00</td><td rowspan=1 colspan=1>14000.00</td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>■</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>15</td><td rowspan=1 colspan=1>1800.00</td><td rowspan=1 colspan=1>2800.00</td></tr><tr><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>40</td><td rowspan=1 colspan=1>30</td><td rowspan=1 colspan=1>16000.00</td><td rowspan=1 colspan=1>20000.00</td></tr><tr><td rowspan=1 colspan=1>D</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>30</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>1400.00</td><td rowspan=1 colspan=1>2000.00</td></tr><tr><td rowspan=1 colspan=1>E</td><td rowspan=1 colspan=1>D, F</td><td rowspan=1 colspan=1>50</td><td rowspan=1 colspan=1>40</td><td rowspan=1 colspan=1>3600.00</td><td rowspan=1 colspan=1>4800.00</td></tr><tr><td rowspan=1 colspan=1>F</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>60</td><td rowspan=1 colspan=1>45</td><td rowspan=1 colspan=1>13500.00</td><td rowspan=1 colspan=1>1800.00</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

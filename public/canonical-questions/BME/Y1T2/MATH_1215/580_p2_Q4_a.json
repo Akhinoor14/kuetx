@@ -1,0 +1,42 @@
+{
+  "id": "580_p2_Q4(a)",
+  "course": {
+    "code": "MATH 1215",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2018\\1st_Year_2nd_Term_2018_580.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the length of the shortest distance and its equation between the lines,"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r } { \\frac { x + 1 } { 2 } = \\frac { y - 3 } { 3 } = \\frac { z + 3 } { - 4 } \\operatorname { a n d } \\frac { x - 2 } { - 3 } = \\frac { y + 4 } { 4 } = \\frac { z - 5 } { 5 } . } \\end{array}\\tag{15}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

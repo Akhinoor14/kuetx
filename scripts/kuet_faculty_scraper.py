@@ -652,9 +652,19 @@ def scrape_department_with_fallback(dept_code: str, urls: list[str]) -> list[Tea
     return []
 
 
-def scrape_all_departments() -> list[Teacher]:
+def scrape_all_departments(only_department: Optional[str] = None) -> list[Teacher]:
+    """only_department: if set (e.g. "CSE"), scrape just that one dept
+    instead of all 20 — for fast local testing via --only-department,
+    so a first parse-check doesn't require running all 500+ teachers."""
     all_teachers: list[Teacher] = []
-    for dept_code, urls in DEPARTMENT_FACULTY_URLS.items():
+    depts_to_scrape = DEPARTMENT_FACULTY_URLS
+    if only_department:
+        code = only_department.strip().upper()
+        if code not in DEPARTMENT_FACULTY_URLS:
+            logger.error(f"--only-department '{code}' not found. Valid codes: {list(DEPARTMENT_FACULTY_URLS.keys())}")
+            return []
+        depts_to_scrape = {code: DEPARTMENT_FACULTY_URLS[code]}
+    for dept_code, urls in depts_to_scrape.items():
         logger.info(f"Scraping {dept_code} (candidates: {urls})")
         dept_teachers = scrape_department_with_fallback(dept_code, urls)
         all_teachers.extend(dept_teachers)
@@ -807,10 +817,12 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="শুধু JSON বের করবে, Firestore-এ push করবে না")
     parser.add_argument("--skip-profiles", action="store_true",
                          help="listing page-ই যথেষ্ট হলে profile-page scraping (publications ইত্যাদি) স্কিপ করো — দ্রুত টেস্টের জন্য")
+    parser.add_argument("--only-department", type=str, default=None,
+                         help="শুধু একটা department code (e.g. CSE, EEE) scrape করো — প্রথমবার parse ঠিক আছে কিনা দ্রুত যাচাই করতে, ৫০০+ teacher-এর পুরো run না করে")
     args = parser.parse_args()
 
     logger.info("=== KUET faculty scrape started ===")
-    teachers = scrape_all_departments()
+    teachers = scrape_all_departments(only_department=args.only_department)
 
     if not teachers:
         logger.warning("No teachers scraped — selectors বসানো হয়নি নাকি site structure বদলেছে, চেক করো।")

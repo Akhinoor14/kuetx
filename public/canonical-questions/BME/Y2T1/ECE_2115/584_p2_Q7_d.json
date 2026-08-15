@@ -1,0 +1,47 @@
+{
+  "id": "584_p2_Q7(d)",
+  "course": {
+    "code": "ECE 2115",
+    "title": "Digital Electronics and Logic Design",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2018\\2nd_Year_1st_Term_2018_584.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "Design CMOS digital circuits that realizes the following Boolean functions: (08)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\ny = a b c + d ^ { \\prime }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n( \\mathrm { i i } ) \\ y = a b ^ { \\prime } + c ^ { \\prime } ( a + b )\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

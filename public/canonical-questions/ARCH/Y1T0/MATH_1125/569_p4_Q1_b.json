@@ -1,0 +1,51 @@
+[
+  {
+    "id": "569_p4_Q1(b)",
+    "course": {
+      "code": "MATH 1125",
+      "title": "Mathematics",
+      "department": "Department of Architecture",
+      "year_term": "1st Year Backlog"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Backlog",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2018\\1st_Year_Backlog_2018_569.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "1(b)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "What is meant by continuity of a function? A function $f ( x )$ is given by 15"
+      },
+      {
+        "type": "formula",
+        "value": "$$\nf ( x ) = \\left\\{ \\begin{array} { c l } { { } } & { { \\cdot 2 x - 2 , \\ x \\geq 2 } } \\\\ { { } } & { { 2 , \\quad \\quad 0 \\leq x < 2 } } \\\\ { { } } & { { 2 - 2 x , x < 0 } } \\end{array} \\right.\n$$",
+        "format": "latex"
+      },
+      {
+        "type": "text",
+        "value": "Discuss the continuity and differentiability of $f ( x )$ in the given interval."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 1st Year Backlog Examination, 2018",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো গাণিতিক টপিক নেই, তাই প্রশ্নের সাথে মেলায় এমন কোনো topic পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

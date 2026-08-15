@@ -1,0 +1,50 @@
+{
+  "id": "927_p4_Q5(b)",
+  "course": {
+    "code": "MATH 2115",
+    "title": "Transforms Analysis",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2020\\2nd_Year_1st_Term_2020_927.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "A periodic function has the following graph over its period:"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ffb3ecdc9edc51d8ed88361489e09ce52df8bdcdf55ab2f58a1a35b77b822b9f.jpg",
+      "_source_path": "images/ffb3ecdc9edc51d8ed88361489e09ce52df8bdcdf55ab2f58a1a35b77b822b9f.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Describe the function mathematically and hence find its Fourier series up to $3 ^ { \\mathrm { r d } }$ harmonics at least."
+    },
+    {
+      "type": "text",
+      "value": "(18)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2020"
+}

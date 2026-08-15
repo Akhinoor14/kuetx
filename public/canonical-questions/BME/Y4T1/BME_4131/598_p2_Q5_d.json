@@ -1,0 +1,47 @@
+{
+  "id": "598_p2_Q5(d)",
+  "course": {
+    "code": "BME 4131",
+    "title": "Bio-optics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2018\\4th_Year_1st_Term_2018_598.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": 6,
+  "content": [
+    {
+      "type": "text",
+      "value": "·As shown in figure bellow, a light ray impinges on the surface of a prism $( n _ { p } = 1 . 5 0 )$ which (06) has an air superstrate $( n _ { s } = 1 . 0 0 )$ . Calculate the wavelength of light required to produce an evanescent wave penetration depth of 150 nm for a system in which $\\theta _ { i } = 6 6 . 1 ^ { \\circ }$"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nd _ { p } = \\frac { \\lambda } { 2 \\pi n _ { 1 } \\sqrt { s i n ^ { 2 } \\theta _ { i } - s i n ^ { 2 } \\theta _ { c } } }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_80af38cd403db894a5e4977e70911969fe89a7c174e5dd35201ec950ea27dfc5.jpg",
+      "_source_path": "images/80af38cd403db894a5e4977e70911969fe89a7c174e5dd35201ec950ea27dfc5.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2018"
+}

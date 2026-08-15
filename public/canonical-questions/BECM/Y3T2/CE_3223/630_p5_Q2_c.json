@@ -1,0 +1,37 @@
+{
+  "id": "630_p5_Q2(c)",
+  "course": {
+    "code": "CE 3223",
+    "title": "Soil Mechanics",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\3rd_Year_2nd_Term_2017_630.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "A new site has been selected for the construction of KUET Auditorium building;(13) where a loose, uncompacted sand fill of 7.15 ft in depth having a relative density of 39.5%. Given, $\\mathtt { e } _ { \\mathtt { m a x } } = \\mathtt { 0 . 9 2 }$ and $\\mathsf { e } _ { \\mathsf { r } , \\mathsf { i } \\mathsf { n } } = 0 . 4 8 ^ { \\star }$ emax. (i) Compute the density of the sand at site. (ii) If the sand is compacted to a relative density of 63%, compute the decrease in thickness of the fill?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

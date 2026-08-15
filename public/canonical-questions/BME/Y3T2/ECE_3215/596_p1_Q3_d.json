@@ -1,0 +1,42 @@
+{
+  "id": "596_p1_Q3(d)",
+  "course": {
+    "code": "ECE 3215",
+    "title": "Body Sensor Networks",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2018\\3rd_Year_2nd_Term_2018_596.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(d)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": ", apply the (12) trilateration technique to determine the SN coordinates (unknown) using the three BNs coordinates and the distance (known). Let BN3 is the origin of the coordinate system."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_bae032bd135afef88a3b0522d8d12f8a0352c67f80f71771e975d4e091d9b7d5.jpg",
+      "_source_path": "images/bae032bd135afef88a3b0522d8d12f8a0352c67f80f71771e975d4e091d9b7d5.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

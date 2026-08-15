@@ -1,0 +1,42 @@
+[
+  {
+    "id": "763_p3_Q1(a)",
+    "course": {
+      "code": "ARCH 1265",
+      "title": "Building and Finish Material",
+      "department": "Department of Architecture",
+      "year_term": "1st Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\1st_Year_2nd_Term_2019_763.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "1(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "In how many ways siones can be classified? Briefly discuss the geological 15   \nclassification of building stones."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 1st Year 2nd Term Regular Examination, 2019",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো ভৌত বিজ্ঞান, জিওলজি বা নির্মাণ উপকরণ সংক্রান্ত টপিক নেই; প্রথম আইটেমটি একটি ত্রুটির বার্তা।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "id": "610_p1_Q8(b)",
+  "course": {
+    "code": "CE 1201",
+    "title": "Engineering Mechanics",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\1st_Year_2nd_Term_2016_610.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 120 Ib body is on a horizontal plane, where the co-efficient of kinetic friction, f = (10) 0.15. A force of $\\ Q = 6 0$ Ib in figure. (i) What is the impulse of Q i the horizontal direction during 3 sec? (ii) What is the net impulse on the body during the same time?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e7a73af340899835f1414dac4e71cb041282d417503bbf83948e717cd25ecb19.jpg",
+      "_source_path": "images/e7a73af340899835f1414dac4e71cb041282d417503bbf83948e717cd25ecb19.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

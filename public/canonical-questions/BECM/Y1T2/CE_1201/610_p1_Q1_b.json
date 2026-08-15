@@ -1,0 +1,47 @@
+{
+  "id": "610_p1_Q1(b)",
+  "course": {
+    "code": "CE 1201",
+    "title": "Engineering Mechanics",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\1st_Year_2nd_Term_2016_610.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Draw the free body diagram of members of the following structures."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_26cf3b4a67ea9177bcd0da1a10b74439d30359b8cf89d8d65f0ee454ab70fbe3.jpg",
+      "_source_path": "images/26cf3b4a67ea9177bcd0da1a10b74439d30359b8cf89d8d65f0ee454ab70fbe3.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_5ea0621e6270f0f3316dc0c645b4307df50865753a3b5b82ce9850b102d2f8ca.jpg",
+      "_source_path": "images/5ea0621e6270f0f3316dc0c645b4307df50865753a3b5b82ce9850b102d2f8ca.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

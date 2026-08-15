@@ -1,0 +1,42 @@
+[
+  {
+    "id": "987_p6_Q10(b)",
+    "course": {
+      "code": "ARCH 2231",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2022,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2022\\2nd_Year_2nd_Term_2022_987.pdf",
+      "source_page": null,
+      "paper_index": 6
+    },
+    "question_number": "10(b)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Discussthe history of IslamicArchitecture in the IndianSubcontinent and 25   \nmention the key characteristics of it."
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B. Arch 2nd Year 2nd Term Regular Examination, 2022",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো ইঞ্জিনিয়ারিং বা স্থাপত্য বিষয়ক টপিক নেই, তাহত প্রশ্নের সাথে মেলা এমন একটিও পাওয়া যায়নি।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

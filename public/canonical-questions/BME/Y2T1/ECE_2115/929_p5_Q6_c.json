@@ -1,0 +1,41 @@
+{
+  "id": "929_p5_Q6(c)",
+  "course": {
+    "code": "ECE 2115",
+    "title": "Digital Electronics and Logic Design",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2022\\2nd_Year_1st_Term_2022_929.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "and tabulate the reduced state table. ( 1 l) Starting from state $\\because a ^ { \\prime }$ of the reduced table, find the output sequence generated with an input sequence of 10110101001."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=2 colspan=1>Present State</td><td rowspan=1 colspan=2>Next State</td><td rowspan=1 colspan=2>Output</td></tr><tr><td rowspan=1 colspan=1>x=0</td><td rowspan=1 colspan=1>x=1</td><td rowspan=1 colspan=1>x=0</td><td rowspan=1 colspan=1>x=1</td></tr><tr><td rowspan=1 colspan=1>a</td><td rowspan=1 colspan=1>f</td><td rowspan=1 colspan=1>b</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>0</td></tr><tr><td rowspan=1 colspan=1>b</td><td rowspan=1 colspan=1>d</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>0</td></tr><tr><td rowspan=1 colspan=1>c</td><td rowspan=1 colspan=1>f</td><td rowspan=1 colspan=1>c</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>0</td></tr><tr><td rowspan=1 colspan=1>d</td><td rowspan=1 colspan=1>g</td><td rowspan=1 colspan=1>a</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>0</td></tr><tr><td rowspan=1 colspan=1>e</td><td rowspan=1 colspan=1>d</td><td rowspan=1 colspan=1>c</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>0</td></tr><tr><td rowspan=1 colspan=1>f</td><td rowspan=1 colspan=1>f</td><td rowspan=1 colspan=1>b</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>1</td></tr><tr><td rowspan=1 colspan=1>g</td><td rowspan=1 colspan=1>g</td><td rowspan=1 colspan=1>h</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>1</td></tr><tr><td rowspan=1 colspan=1>h</td><td rowspan=1 colspan=1>g</td><td rowspan=1 colspan=1>a</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>0</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

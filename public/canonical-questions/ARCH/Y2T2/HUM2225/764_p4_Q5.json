@@ -1,0 +1,40 @@
+[
+  {
+    "id": "764_p4_Q5",
+    "course": {
+      "code": "HUM2225",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "2nd Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\2nd_Year_2nd_Term_2019_764.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "5",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "a. What is Evolution? Explain the, Mechanical theory of Evolution. 10   \nb. Distinguish between Creation and Evolution as theories of the origin of the world.   \nWhich one do you like? 10   \nc. Give a critical exposition of Darwin's theory of Evolution. .15   \n6. a. Who is God? Is God one or two or many? 10   \nb. Briefly explain the traditional proofs for the existence of God. 10   \nc. How, does Kant reconcile Empiricism and Rationalism in his theory of Knowledge?. 15   \n7. a. Explain briefly the common characteristics of !ndian Philosophy. 10   \nb. Explain briefly abcut 'suffering' of Buddhism. 10   \nc. Expiain the ‘cause of suffering' of Buddhism. 15   \n8. a. Indicate some main characteristics of Evolution. 10   \nb. How many Noble Truths of Buddhism? Briefly Explain. 10   \nc. Explain briefly the Eightfold Noble Path of Buddhism.. 15"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "extracted",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 2nd Year 2nd Term Regular Examination, 2019",
+    "classification_notes": "Syllabus lookup key 'Department of Architecture::HUM2225' পাওয়া যায়নি।"
+  }
+]

@@ -1,0 +1,53 @@
+{
+  "id": "583_p4_Q6(c)",
+  "course": {
+    "code": "BME 2151",
+    "title": "Numerical Methods and Statistics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2017\\2nd_Year_1st_Term_2017_583.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "shows a frequency distribution of the weekly wages of 65 employees at the PQR (18) company. Determine the followings:"
+    },
+    {
+      "type": "text",
+      "value": "(i) Construct a relative frequency histogram."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Mean weekly wages of 65 employees using coding method."
+    },
+    {
+      "type": "text",
+      "value": "(iii) Find mean deviation of the weekly wages."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Wages ($)</td><td rowspan=1 colspan=1>No. of employees</td></tr><tr><td rowspan=1 colspan=1>250 - 259.99</td><td rowspan=1 colspan=1>8</td></tr><tr><td rowspan=1 colspan=1>260-269.99</td><td rowspan=1 colspan=1>10</td></tr><tr><td rowspan=1 colspan=1>270 - 279.99</td><td rowspan=1 colspan=1>16</td></tr><tr><td rowspan=1 colspan=1>280-289.99</td><td rowspan=1 colspan=1>14</td></tr><tr><td rowspan=1 colspan=1>290 -299.99</td><td rowspan=1 colspan=1>10</td></tr><tr><td rowspan=1 colspan=1>300 -309.99</td><td rowspan=1 colspan=1>5</td></tr><tr><td rowspan=1 colspan=1>310 - 319.99</td><td rowspan=1 colspan=1>2</td></tr><tr><td rowspan=1 colspan=1>Total</td><td rowspan=1 colspan=1>65</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

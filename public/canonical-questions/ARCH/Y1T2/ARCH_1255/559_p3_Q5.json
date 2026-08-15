@@ -1,0 +1,50 @@
+[
+  {
+    "id": "559_p3_Q5",
+    "course": {
+      "code": "ARCH 1255",
+      "title": null,
+      "department": "Department of Architecture",
+      "year_term": "1st Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Architecture\\2018\\1st_Year_2nd_Term_2018_559.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "5",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "a. Illustrate stack effect of ventilation system with necessary sketches 15   \nb. Describe the purpose of natural ventilation. 10   \nc. In which way the orientation of building affects indoor thermal 10   \nenvironment, discuss in brief.   \n6. a. “Adequate Ciimatic Knowledge is mandatory for every architect before 15   \ndesigning any space\", to what extent do you agree with this statement?   \nb. How Solar radiation affects thermal comfort of indoor space, interpret 20   \nwith necessary sketches.   \n7. a. Distinguish between active and passive climatic control with proper 10   \nexamples.   \nb.“Court-yard is the most effective means of ventilation system in warm 25   \nhumid climatic region\". Justify the statement by your own perception with   \nnecessary sketches.   \n8. à. Elaborate the charzcteristics of roof's and material's which have been 15   \nusing in warm-humid climate for ensuring thermal comfort.   \nb. Write short notes on (any two)- 02X10=   \ni. Form and planning of composite climate 20   \nii. Traditional shelter of hot-dry climate   \niii. Horizontal shadow angle   \na. What do you tmnean by Urban Ecology? Critically explain major Urban 20   \nGrowth   \nModels. 15"
+      },
+      {
+        "type": "text",
+        "value": "Khulna University of Engineering and Technology Department of Architecture"
+      },
+      {
+        "type": "text",
+        "value": "B.Arch 1st Year 2nd Term Regular Examination, 2018"
+      }
+    ],
+    "topics": [],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Arch 1st Year 2nd Term Regular Examination, 2018",
+    "classification_notes": "প্রদত্ত সিলেবাস তালিকায় কোনো ভুল সংশোধিত টপিক নেই এবং প্রশ্নের বিষয়বস্তু (ভেন্টিলেশন, ক্লাইমেটিক ডিজাইন) যাচাইযোগ্য কোনো ম্যাটিং টপিকের সাথে সরাসরি মেলে না।",
+    "topic_confidence": 0.0,
+    "verification_notes": "কোনো topic assign হয়নি।"
+  }
+]

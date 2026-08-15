@@ -1,0 +1,42 @@
+{
+  "id": "627_p4_Q6(a)",
+  "course": {
+    "code": "CE 3111",
+    "title": "Structural Analysis and Design - I",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\3rd_Year_1st_Term_2019_627.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "Using the three moment equation, analyze the following continuous beam as (20) shown in figure for a 15 mm settlement of support B. Assume, $\\mathsf { E } = 2 0 0 \\times 1 0 ^ { 6 } \\mathsf { K N } / \\mathsf { m } ^ { 2 }$ and $1 = 4 0 0 \\times 1 0 ^ { 6 } ~ \\mathsf { m } ^ { 4 }$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ad18548746bacb09fd8160b9b720c28476bef79b5b496b3893624104ad456be1.jpg",
+      "_source_path": "images/ad18548746bacb09fd8160b9b720c28476bef79b5b496b3893624104ad456be1.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

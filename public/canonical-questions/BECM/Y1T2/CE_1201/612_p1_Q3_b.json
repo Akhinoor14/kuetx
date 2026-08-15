@@ -1,0 +1,42 @@
+{
+  "id": "612_p1_Q3(b)",
+  "course": {
+    "code": "CE 1201",
+    "title": "Engineering Mechanics",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\1st_Year_2nd_Term_2018_612.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "Enumerate the product of inertia of $1 2 \\times 8 \\times 2$ inch, Z- section about the centroidal (17) axis."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_7a54ed35993f948129b002d2d25188e139accbf8bf79b012789cc3c3b24d3527.jpg",
+      "_source_path": "images/7a54ed35993f948129b002d2d25188e139accbf8bf79b012789cc3c3b24d3527.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

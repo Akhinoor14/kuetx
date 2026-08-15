@@ -1,0 +1,41 @@
+{
+  "id": "922_p3_Q5(d)",
+  "course": {
+    "code": "EEE 1215",
+    "title": "Analog Electronics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2019\\1st_Year_2nd_Term_2019_922.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "Design a colpitt's oscillator which can operate at 2MHz and feedback fraction is about 20%. Note that the available inductor is 2mH."
+    },
+    {
+      "type": "text",
+      "value": "(08)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2019"
+}

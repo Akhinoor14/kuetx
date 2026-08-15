@@ -1,0 +1,46 @@
+{
+  "id": "932_p2_Q4(c)",
+  "course": {
+    "code": "BME 2211",
+    "title": "Signals and Systems",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2020\\2nd_Year_2nd_Term_2020_932.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the analog signal"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nx _ { a } ( t ) = 3 c o s 2 0 0 0 \\pi t + 5 s i n 6 0 0 0 \\pi t + 1 0 c o s 1 2 0 0 \\pi t\\tag{05}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Assume that the signal is sampled using a sampling rate $F _ { s } = 5 0 0 0$ Hz. What is the discrete time signal obtained after sampling?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2020"
+}

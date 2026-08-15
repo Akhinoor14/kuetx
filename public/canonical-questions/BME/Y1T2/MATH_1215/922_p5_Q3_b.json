@@ -1,0 +1,46 @@
+{
+  "id": "922_p5_Q3(b)",
+  "course": {
+    "code": "MATH 1215",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2019\\1st_Year_2nd_Term_2019_922.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve the following $\\begin{array} { r } { y ^ { \\prime \\prime } - 3 y ^ { \\prime } + 2 y = \\frac { e ^ { 3 x } } { 1 + e ^ { x } } } \\end{array}$"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\mathrm { ~ \\mathsf { c } ) ~ } } \\quad { \\mathrm { S o l v e ~ t h e ~ f o l l o w i n g ~ p a r t i a l ~ d i f f e r e n t i a l ~ e q u a t i o n ~ } } \\frac { \\partial u } { \\partial t } = 2 \\frac { \\partial u } { \\partial x } , u ( x , 0 ) = 8 e ^ { - x } .\\tag{12}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2019"
+}

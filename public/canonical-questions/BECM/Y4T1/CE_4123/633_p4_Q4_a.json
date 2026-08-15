@@ -1,0 +1,41 @@
+{
+  "id": "633_p4_Q4(a)",
+  "course": {
+    "code": "CE 4123",
+    "title": "Foundation Engineering",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\4th_Year_1st_Term_2017_633.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "Design a pile cap for a column 20 inch square exerting a load of 300000 Ib. Each pile has the bearing capacity of 85000 Ib and 20 inch in diameters. Take the usual stresses $f _ { s } = 2 4 0 0 0$ psi and $f _ { c } ^ { \\prime } = 3 5 0 0$ psi. Show the reinforcement detailing."
+    },
+    {
+      "type": "text",
+      "value": "(17)."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2017"
+}

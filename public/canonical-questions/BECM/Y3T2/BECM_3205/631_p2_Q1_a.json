@@ -1,0 +1,37 @@
+{
+  "id": "631_p2_Q1(a)",
+  "course": {
+    "code": "BECM 3205",
+    "title": "Acoustics and Lighting",
+    "department": "Department of Building Engineering and Construction Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\3rd_Year_2nd_Term_2018_631.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Why sound transmission is zero in free field? There's room with two equal operable windows of glass situated on the one elongated side wall of the room. The size of each of the window is $7 ^ { \\prime } \\times 1 0 ^ { \\prime } .$ The dimension of the room is $1 5 ^ { \\prime } \\times 2 0 ^ { \\prime } \\times 1 2 ^ { \\prime } .$ The sound absorption co-efficient for wall = 0.80, ceiling = 0.30, floor = 0.50 and the glass with panel = 0.70. Calculate the total room sound absorption when 50% of thesé windows are open."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

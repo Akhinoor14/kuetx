@@ -1,0 +1,47 @@
+{
+  "id": "584_p4_Q2(b)",
+  "course": {
+    "code": "ME 2115",
+    "title": "Basic Mechanics and Thermodynamics",
+    "department": "Department of Biomedical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Biomedical_Engineering\\2018\\2nd_Year_1st_Term_2018_584.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Determine the tension (20) in each cable and the reaction at the ball and socket-joint A."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_282f82f0da7a0692c07da27230e7452230f425859a1fcdef034218e7665fb37d.jpg",
+      "_source_path": "images/282f82f0da7a0692c07da27230e7452230f425859a1fcdef034218e7665fb37d.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b73b479de1f5dd03c661ef51f53d87c6ef1856d97d0820a7439f6755680eb7dc.jpg",
+      "_source_path": "images/b73b479de1f5dd03c661ef51f53d87c6ef1856d97d0820a7439f6755680eb7dc.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "766_p3_Q1",
+  "course": {
+    "code": "URP 3225",
+    "title": null,
+    "department": "Department of Architecture",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Architecture\\2019\\3rd_Year_2nd_Term_2019_766.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "a. “Site planning is involved with different professions viz.Urban planning, Architecture, Landscape architecture and Civil Engineering\"-Briefly explain with your judgments. 15"
+    },
+    {
+      "type": "text",
+      "value": "b. There are four basic models of site planning in the history. Narrate those models to understand site planning. 10"
+    },
+    {
+      "type": "text",
+      "value": "c. In site planning, road networks are classified into four categóries based on the function. Clarify the statement. 10"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Arch 3rd Year 2nd Term Regular Examination, 2019"
+}
