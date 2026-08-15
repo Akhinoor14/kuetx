@@ -1,0 +1,37 @@
+{
+  "id": "740_p3_Q3(a)",
+  "course": {
+    "code": "IPE 3115",
+    "title": "Engineering Economy",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\3rd_Year_1st_Term_2018_740.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Two processes can be used for producing a polymer that reduces friction loss in engines. Process-T will have a first cost of \\$750,000, an operating cost of \\$60,000 per year, and a savage value of \\$80,000 after its 2 years life. Process W will have a first cost of \\$1,350,000, an operating cost of \\$25,000 per year, and a \\$120,000 savage value after its 4 vears life, Process W will also require updating at the end of year 2 at a cost of \\$90,000. Which process should be selected on the basis of a future worth analysis at an interest rate of 12% per year?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

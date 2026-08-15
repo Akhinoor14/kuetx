@@ -1,0 +1,46 @@
+{
+  "id": "893_p2_Q5(d)",
+  "course": {
+    "code": "EE 3113",
+    "title": "Power System Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\3rd_Year_1st_Term_2019_893.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Air at 1Mpa and 600°C enter a converging nozzle, shown in fig. Determine the mass flow rate through the nozzle for a nozzle throat area of 50 $c m ^ { 2 }$ when back pressure is"
+    },
+    {
+      "type": "text",
+      "value": "(i) 0.7 Mpa, (ii) 0.4 Mpa"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e354d4036bf10929d0d7f3cfaddf0998c30003a6f3495b23d6502d35da17d108.jpg",
+      "_source_path": "images/e354d4036bf10929d0d7f3cfaddf0998c30003a6f3495b23d6502d35da17d108.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

@@ -1,0 +1,49 @@
+{
+  "id": "745_p2_Q8(c)",
+  "course": {
+    "code": "IPE 3217",
+    "title": "Operations Research",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\3rd_Year_2nd_Term_2017_745.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "Each year a man trades his car for a new car. If he has a Chrysler he trades for a Plymouth. If 14 he has a Plymouth he trades it for a Ford. However, if he has a Ford, he is just as likely to trade· it for a Chrysler or a Plymouth. In 1977 he bought his first car which was Ford."
+    },
+    {
+      "type": "text",
+      "value": "i) Find the probability that he has a Plymouth in 1980 and Ford in 1979."
+    },
+    {
+      "type": "text",
+      "value": "ii). In the long run how often will he have a Ford?"
+    },
+    {
+      "type": "text",
+      "value": "Khulna University of Engineering & Technology Department of Industrial Engineering and Management"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

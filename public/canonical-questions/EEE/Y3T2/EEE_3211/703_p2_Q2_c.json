@@ -1,0 +1,37 @@
+{
+  "id": "703_p2_Q2(c)",
+  "course": {
+    "code": "EEE 3211",
+    "title": "Power System I",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\3rd_Year_2nd_Term_2018_703.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "A transmission tower on a level ground gives a minimum clearance of 8 meters (10) for its lowest conductor with sag of 10 m for a span of 300 m. If the same tower is to be used over a slope of 1 in 15, find the minimum ground clearance obtained for the same span, same conductor and same weather-conditions."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

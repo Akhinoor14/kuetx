@@ -1,0 +1,65 @@
+{
+  "id": "725_p4_Q3(a)",
+  "course": {
+    "code": "IPE 1203",
+    "title": "Engineering Materials",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\1st_Year_2nd_Term_2018_725.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Frame Wh questions from the underlined parts of the following answers. 14"
+    },
+    {
+      "type": "text",
+      "value": "(i)Every success comes after hard labor."
+    },
+    {
+      "type": "text",
+      "value": "(ii)No one can know his fate beforehand."
+    },
+    {
+      "type": "text",
+      "value": "(iii)We know the man loitering here and there."
+    },
+    {
+      "type": "text",
+      "value": "(iv) It needs perseverance to be a doctor."
+    },
+    {
+      "type": "text",
+      "value": "(v)The tallest of the boy won the prize."
+    },
+    {
+      "type": "text",
+      "value": "(vi) The prime minister of the UK is supposed to visit Bangladesh this year."
+    },
+    {
+      "type": "text",
+      "value": "(vii) You can achieve credibility by honesty and sincerity."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

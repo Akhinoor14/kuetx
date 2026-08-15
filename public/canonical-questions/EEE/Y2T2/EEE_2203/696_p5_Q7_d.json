@@ -1,0 +1,46 @@
+{
+  "id": "696_p5_Q7(d)",
+  "course": {
+    "code": "EEE 2203",
+    "title": "Electronics III",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\2nd_Year_2nd_Term_2018_696.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the output voltage of the following amplifier."
+    },
+    {
+      "type": "text",
+      "value": "(07)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e5df81f3f900f01030042c2343e566edff2cb765dcfeb5109409c7cdb4adf751.jpg",
+      "_source_path": "images/e5df81f3f900f01030042c2343e566edff2cb765dcfeb5109409c7cdb4adf751.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

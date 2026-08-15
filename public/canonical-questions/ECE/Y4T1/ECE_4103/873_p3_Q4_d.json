@@ -1,0 +1,49 @@
+{
+  "id": "873_p3_Q4(d)",
+  "course": {
+    "code": "ECE 4103",
+    "title": "Wireless Communications",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\4th_Year_1st_Term_2018_873.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write short notes on man-in-the-middle attack"
+    },
+    {
+      "type": "text",
+      "value": "(05)"
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2018"
+}

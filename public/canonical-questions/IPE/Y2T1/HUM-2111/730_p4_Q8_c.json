@@ -1,0 +1,49 @@
+{
+  "id": "730_p4_Q8(c)",
+  "course": {
+    "code": "HUM-2111",
+    "title": "Financial, Cost and Management Accounting",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2019\\2nd_Year_1st_Term_2019_730.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following information of Meghna Company Ltd. for the month of January to March, 24 2019. Expected purchase and sales are'given below:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Months</td><td rowspan=1 colspan=1>Purchases, Tk.</td><td rowspan=1 colspan=1>Sales, Tk.</td></tr><tr><td rowspan=1 colspan=1>December, 2018</td><td rowspan=1 colspan=1>96,000</td><td rowspan=1 colspan=1>1,20,000</td></tr><tr><td rowspan=1 colspan=1>January, 2019</td><td rowspan=1 colspan=1>1,40,000</td><td rowspan=1 colspan=1>80,000</td></tr><tr><td rowspan=1 colspan=1>February, 2019</td><td rowspan=1 colspan=1>1,50,000</td><td rowspan=1 colspan=1>90,000</td></tr><tr><td rowspan=1 colspan=1>March, 2019</td><td rowspan=1 colspan=1>1,70,000</td><td rowspan=1 colspan=1>1,00,000</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "40% of the sales are on credit. Cash on 50% of the credit sales will be collected in the month of sales and other 50% will be collected in the next month. Purchases are all for cash. Salaries to be paid are Tk. 10,000 per month. Balance at bank on January 01, are Tk. 16,000. It has been decided by the management that in case of deficit of funds in any month within the limit of Tk. 60,000, the deficiency can be met by making arrangement of overdrawing the account in the bank. But if the deficiency exceeds Tk. 60,000, long term loan will be arranged."
+    },
+    {
+      "type": "text",
+      "value": "Instruction: Prepare a cash budget for the month. of January to March, 2019 under Receipts and Payments method."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

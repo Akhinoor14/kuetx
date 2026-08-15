@@ -1,0 +1,37 @@
+{
+  "id": "748_p1_Q10(a)",
+  "course": {
+    "code": "IPE 4125",
+    "title": "Machine Tools",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\4th_Year_1st_Term_2016_748.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "10(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define data and information What is the difference between mana<sub>g</sub>ement information 12   \n<sub>sys</sub>t<sub>em an</sub>d i<sub>n</sub>f<sub>orma</sub>ti<sub>on sys</sub>t<sub>em</sub>?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2016"
+}

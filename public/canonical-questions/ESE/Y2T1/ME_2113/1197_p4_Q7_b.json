@@ -1,0 +1,37 @@
+{
+  "id": "1197_p4_Q7(b)",
+  "course": {
+    "code": "ME 2113",
+    "title": "Statics and Solid Mechanics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\2nd_Year_1st_Term_2021_1197.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Two C 310 x 45 channels are latticed together, so they have equal moment of inertia about the principle axes. Determine the minimum length of a column having this section assuming pinned ends, E = 200 GP a and a proportional limit of 240 MP a. What safe load will the column carry for the length of 12 m with a factor of safety of 2.5. For C 310 x 45, take $I _ { x } = 6 7 . 3 \\times 1 0 ^ { - 6 } m ^ { 4 }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

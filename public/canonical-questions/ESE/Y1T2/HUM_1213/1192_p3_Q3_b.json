@@ -1,0 +1,61 @@
+{
+  "id": "1192_p3_Q3(b)",
+  "course": {
+    "code": "HUM 1213",
+    "title": "Technical English",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\1st_Year_2nd_Term_2021_1192.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ".Complete the following sentences with clauses as asked in brackets."
+    },
+    {
+      "type": "text",
+      "value": "(i) ---------------inspires us realy. (oun clause)"
+    },
+    {
+      "type": "text",
+      "value": "(ii) We ca Ranu---------------. oun clause)"
+    },
+    {
+      "type": "text",
+      "value": "(iii) You will continue your studies---------------------. (Adv. clause)"
+    },
+    {
+      "type": "text",
+      "value": "(iv) You wil do the sum------------------. (Adv. clause of Manner)"
+    },
+    {
+      "type": "text",
+      "value": "(v)-----------  wi-el compatible. (dv. clause of condition)"
+    },
+    {
+      "type": "text",
+      "value": "(vi)Labib- docto (Adj. clause)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

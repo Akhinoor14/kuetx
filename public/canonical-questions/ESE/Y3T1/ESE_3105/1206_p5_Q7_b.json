@@ -1,0 +1,49 @@
+{
+  "id": "1206_p5_Q7(b)",
+  "course": {
+    "code": "ESE 3105",
+    "title": "Heat Transfer and Mass Transfer",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\3rd_Year_1st_Term_2023_1206.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": ". ln an industrial facility air is to be preheated before entering a furnace by geothermal water at $1 2 0 ^ { \\mathrm { o } }$ C and flowing through the tubes of a tube bank located in a duct. Air enters the duct at $2 0 ~ ^ { \\circ } \\mathrm { C }$ and 1 atm with a mean velocity of 4.5 mis, and flows over the tubes in natural direction. The outer diameter of the tubes is 1.5 cm and the tubes arc arranged in-line with longitudinal and transverse pitches of $S _ { \\mathrm { { L } } } = S _ { \\mathrm { { T } } } = 5$ cm. There are 6 routs in the flow direction with 10 tubes in each row. Determine the rate of heat transfer per unit length of the tubes, and the pressure drop across the tube bank."
+    },
+    {
+      "type": "text",
+      "value": "<sub>8(a).</sub> State's the Fick's law of diffusions. Write down the difference between absorption and adsorption."
+    },
+    {
+      "type": "text",
+      "value": "<sub>8(b</sub> <sub>).</sub> A <sub>deep</sub> narrow cylindrical vessel which is open the top contains some toluene at the bottom. The air within the vessel is considered motionless, but there is sufficient air current at the top surfaces of the vessel that any toluene vapor arriving at the top surfaces is immediately removed to ensure zero toluene concentration at the surface. The entire system is at atmospheric pressure and $1 8 . 7 ^ { \\circ } \\mathrm { C }$ . Under these conditions $\\mathrm { D } = 0 . 8 2 6 \\times 1 0 ^ { - 5 } \\mathrm { m } ^ { 2 } / s$ and the saturated vapor pressure of toluene at the liquid surface in the vessel is 0.026 atm. Determine the rate of evaporation of toluene into the air per unit area of the liquid surface if the distance between the liquid toluene surface and the top of the vessel is 1.524 m."
+    },
+    {
+      "type": "text",
+      "value": "<sub>8(e).</sub> \"For thermally fully developed flow, the axial temperature gradient is independent of the radial direction\"- Justify the statement."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "727_p5_Q1(a)",
+  "course": {
+    "code": "ME 2111",
+    "title": "Engineering Mechanics and Theory of Machines",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\2nd_Year_1st_Term_2015_727.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "and a couple of moment M = 6 N.m and applied to 17 an angle bracket. (i) Find the resultant of this system of forces. (ii) Locate the points where the line of action of the resultant intersects line AB and line BC."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_bad38c72e247c28bbdf200558e90710989467e54c557b933dfe82f61a2576856.jpg",
+      "_source_path": "images/bad38c72e247c28bbdf200558e90710989467e54c557b933dfe82f61a2576856.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2015"
+}

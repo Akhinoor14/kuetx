@@ -1,0 +1,37 @@
+{
+  "id": "1124_p3_Q7(c)",
+  "course": {
+    "code": "ME 3219",
+    "title": "Fluid Mechanics & Machineries",
+    "department": "Department of Leather Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2019\\3rd_Year_2nd_Term_2019_1124.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A double acting reciprocating pump having piston area $0 . 1 ~ \\mathrm { m } ^ { 2 }$ has a stroke 0.3 m long. The <sub>pump</sub> 10 discharge $2 . 4 \\mathrm { ~ \\dot {  m } } ^ { 3 }$ of water per minute at 45 rpm through a height 10 m. Find the slip of the <sub>pump</sub> and the power required to drive the pump."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2019"
+}

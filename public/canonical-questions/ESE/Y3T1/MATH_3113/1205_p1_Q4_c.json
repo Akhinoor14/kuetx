@@ -1,0 +1,45 @@
+{
+  "id": "1205_p1_Q4(c)",
+  "course": {
+    "code": "MATH 3113",
+    "title": "Statistics and Numerical Methods",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\3rd_Year_1st_Term_2022_1205.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The grade on a class test were 0, 1, 2... 10. The main grade was 5.4 and the standard deviation was 1.5. Assume that the grade is normally distributed. Determine,"
+    },
+    {
+      "type": "text",
+      "value": "(i) the probability of students scoring 6, and (ii) the maximum grade of the lowest 20% of the class. Hence, find the estimated number of students scoring 6 among 30 students."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

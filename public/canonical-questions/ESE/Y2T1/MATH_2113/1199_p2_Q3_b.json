@@ -1,0 +1,37 @@
+{
+  "id": "1199_p2_Q3(b)",
+  "course": {
+    "code": "MATH 2113",
+    "title": "Linear Algebra and Vector Analysis",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\2nd_Year_1st_Term_2023_1199.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Consider the basis $s = \\{ v _ { 1 } , v _ { 2 } , v _ { 3 } \\}$ for $\\mathbb { R } ^ { 3 }$ , where $v _ { 1 } = ( 1 , 1 , 2 ) , v _ { 2 } = ( 1 , 1 , 0 )$ and $\\boldsymbol { v } _ { 3 } = \\left( 1 , 0 , 0 \\right)$ 2 and $T : \\mathbb { R } ^ { 3 }  \\mathbb { R } ^ { 3 }$ be linear operator such that $T ( v _ { 1 } ) = ( 2 , - 1 , 4 ) , T ( v _ { 2 } ) = ( 3 , 0 , 1 ) ,$ $T ( v _ { 3 } ) = ( - 1 , 5 , 1 )$ . Find a formula for $\\mathrm { T } ( x _ { 1 } , x _ { 2 } , x _ { 3 } )$ and use that formula to find $T ( 2 , 4 , - 1 )$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

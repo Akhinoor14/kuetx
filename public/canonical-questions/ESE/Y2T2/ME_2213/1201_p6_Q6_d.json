@@ -1,0 +1,42 @@
+{
+  "id": "1201_p6_Q6(d)",
+  "course": {
+    "code": "ME 2213",
+    "title": "Dynamics and Kinematics of Machineries",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\2nd_Year_2nd_Term_2021_1201.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": ". An epicyclic gear train consists of three gears A, B and C as shown. The gear A has 72 internal teeth and gear C has 32 external teeth. The gear B meshes with both A and C and is carried on an arm EF which rotates about the center of A at 18 rpm. If the gear A is fixed, determine the speed of gears B and C."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_bc53f553cc8cb46520735b1793ba0b0ba618be81a22740de3a27cd97c7d753fc.jpg",
+      "_source_path": "images/bc53f553cc8cb46520735b1793ba0b0ba618be81a22740de3a27cd97c7d753fc.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

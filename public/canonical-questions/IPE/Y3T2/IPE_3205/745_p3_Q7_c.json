@@ -1,0 +1,45 @@
+{
+  "id": "745_p3_Q7(c)",
+  "course": {
+    "code": "IPE 3205",
+    "title": "Product Design -II",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\3rd_Year_2nd_Term_2017_745.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A time technician for the company has conducted a time study of the job for 20 cycles and 10   \naccumulated for the following elemental times and assigned performance ratings:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Element</td><td rowspan=1 colspan=1>∑t</td><td rowspan=1 colspan=1>Rf</td></tr><tr><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>3.15</td><td rowspan=1 colspan=1>1.10</td></tr><tr><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>8.67</td><td rowspan=1 colspan=1>1.05</td></tr><tr><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>14.25</td><td rowspan=1 colspan=1>1.10</td></tr><tr><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>11.53</td><td rowspan=1 colspan=1>1.00</td></tr><tr><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>6.91</td><td rowspan=1 colspan=1>0.95</td></tr><tr><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>5.72</td><td rowspan=1 colspan=1>1.05</td></tr><tr><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>5.38</td><td rowspan=1 colspan=1>1.05</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Determine the standard time for this job using an allowance factor of 12 percent"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

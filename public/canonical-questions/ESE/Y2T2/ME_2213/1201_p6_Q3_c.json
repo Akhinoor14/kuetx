@@ -1,0 +1,42 @@
+{
+  "id": "1201_p6_Q3(c)",
+  "course": {
+    "code": "ME 2213",
+    "title": "Dynamics and Kinematics of Machineries",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\2nd_Year_2nd_Term_2021_1201.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The system as shown is at rest when a constant 150 N force is applied to collar B. Neglecting the effect of friction, determine, (i) the time at which the velocity of collar B will be 2.5 m/s to the left (ii) the corresponding tension in the cable."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_46e3776c2916d3b4a50f48e6ab1d71d236cb6abdeeb29a8c11e59872aa8a1c22.jpg",
+      "_source_path": "images/46e3776c2916d3b4a50f48e6ab1d71d236cb6abdeeb29a8c11e59872aa8a1c22.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

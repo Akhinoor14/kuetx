@@ -1,0 +1,42 @@
+{
+  "id": "734_p2_Q2(c)",
+  "course": {
+    "code": "IPE 2229",
+    "title": "Industrial Psychology and Law",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\2nd_Year_2nd_Term_2017_734.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A rigid bar, hinged at one end, is supported by two identical springs as shown in figure 2( c ). Each 13 spring consists of 20 turns of 10 mm wire having a mean diameter of 150 mm. Compute the maximum shearing stress in the springs neglect the mass of the rigid bar."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a1e35ddaf0c6f635c7aef684ad7e1c36e50c6fe3648cc6cbcddda6d958f0f87a.jpg",
+      "_source_path": "images/a1e35ddaf0c6f635c7aef684ad7e1c36e50c6fe3648cc6cbcddda6d958f0f87a.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

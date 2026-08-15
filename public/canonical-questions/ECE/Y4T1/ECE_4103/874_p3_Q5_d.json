@@ -1,0 +1,37 @@
+{
+  "id": "874_p3_Q5(d)",
+  "course": {
+    "code": "ECE 4103",
+    "title": "Wireless Communications",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2019\\4th_Year_1st_Term_2019_874.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the header checksum of the IPv4 packet: i) HLEN=6, ii) TOS=2, iii) Total (08) length=30, iv) Identity=15, v) Flag=0, vi) offset=0, vii) TTL=5, viii) Protocol=UDP, ix) Source IP=10.10.109.5, x) Destination IP=192.168.2.100"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2019"
+}

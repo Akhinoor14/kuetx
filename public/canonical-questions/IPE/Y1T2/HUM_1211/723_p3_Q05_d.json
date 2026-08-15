@@ -1,0 +1,65 @@
+{
+  "id": "723_p3_Q05(d)",
+  "course": {
+    "code": "HUM 1211",
+    "title": "Professional English",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\1st_Year_2nd_Term_2015_723.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "05(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write a program using a structure named 'student' that contains student roll, name and cgpa. 15   \nThen take data for 60 students from user and sort the list of students according to their   \nresults and finally print the sorted list and output screen."
+    },
+    {
+      "type": "text",
+      "value": "Kh<sub>u</sub>lna Uni<sub>v</sub>ersit<sub>y</sub> of E<sub>ng</sub>i<sub>neer</sub>i<sub>ng</sub> & Technolo<sub>gy</sub> D<sub>epar</sub>t<sub>men</sub>t of Industrial E<sub>ng</sub>i<sub>neer</sub>i<sub>ng</sub> and Mana<sub>g</sub>ement B <sub>.</sub> S <sub>c .</sub> E<sub>ng</sub>i<sub>neer</sub>i<sub>ng</sub> I <sub>st</sub> Y<sub>ea</sub>r 2<sup>11c1</sup> T<sub>e</sub>rm E<sub>xa</sub>min<sub>a</sub>ti<sub>o</sub>n<sub>,</sub> 20 1 5"
+    },
+    {
+      "type": "text",
+      "value": "HUM<sub>-</sub>12 1 1 (Professional English)"
+    },
+    {
+      "type": "text",
+      "value": "F<sub>u</sub>ll M<sub>ar</sub>k<sub>s :</sub> 2 1 0"
+    },
+    {
+      "type": "text",
+      "value": "Ti<sub>me :</sub> 3 h<sub>rs</sub>"
+    },
+    {
+      "type": "text",
+      "value": "<sup>N</sup><sub>.</sub> <sup>B</sup> : i) <sub>.,</sub> <sup>1 1 1</sup> <sub>.</sub> <sup>1 1 1</sup> · er anv <sup>TII/U</sup>:<sup>L</sup> 111 1 e1 ·tio1 1sfi <sup>'</sup>()/1 1 eac<sup>h</sup> section in separate scripts. ii) Fi<sub>g</sub>ures in th e righ t 111urgi11 indicatefull marks."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-A"
+    },
+    {
+      "type": "text",
+      "value": "1 <sub>.</sub>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
+}

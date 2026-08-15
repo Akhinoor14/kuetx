@@ -1,0 +1,69 @@
+{
+  "id": "709_p4_Q8(c)",
+  "course": {
+    "code": "EEE 4181",
+    "title": "Microwave Engineering",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2017\\4th_Year_2nd_Term_2017_709.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "A linear magnetron has the following operating parameters:"
+    },
+    {
+      "type": "text",
+      "value": "(08)"
+    },
+    {
+      "type": "text",
+      "value": "Anode voltage: $\\mathrm { V } _ { 0 } = 1 0 \\mathrm { k V }$"
+    },
+    {
+      "type": "text",
+      "value": "Cathode current: $\\mathrm { I } _ { 0 } = 1 \\mathrm { ~ A ~ }$"
+    },
+    {
+      "type": "text",
+      "value": "Magnetic flux density: $\\mathrm { B } _ { 0 } { = } 0 . 0 1 \\ \\mathrm { W b } / \\mathrm { m } ^ { 2 }$"
+    },
+    {
+      "type": "text",
+      "value": "Distance between cathode and anode: d = 5 cm"
+    },
+    {
+      "type": "text",
+      "value": "Compute:"
+    },
+    {
+      "type": "text",
+      "value": "(i) The Hall cut-off voltage for a fixed $\\mathrm { B } _ { 0 }$"
+    },
+    {
+      "type": "text",
+      "value": "(ii) The Hall cut-off magnetic flux density for a fixed $\\mathrm { V } _ { 0 }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2017"
+}

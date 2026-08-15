@@ -1,0 +1,42 @@
+{
+  "id": "738_p4_Q6(c)",
+  "course": {
+    "code": "IPE 3119",
+    "title": "Operations Management",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\3rd_Year_1st_Term_2016_738.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Eighty units of end item E are needed at the beginning of week 6. Three cases (30 units per case) of J have been ordered and one case is scheduled to arrive in week 3, one in week 4 and one in week 5. J must be ordered by the cases and B must be produced in multiples of 120 units, There are 60 units of B and 20 units of J now on hand. Lead times are two weeks each for E and B and one week for J. Prepare a MRP for component J."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a40f6c7d18268bfdafba265a8462864b5e4653f9cc82b19b017e5d63f42224ef.jpg",
+      "_source_path": "images/a40f6c7d18268bfdafba265a8462864b5e4653f9cc82b19b017e5d63f42224ef.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

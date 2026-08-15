@@ -1,0 +1,45 @@
+{
+  "id": "1199_p3_Q5(c)",
+  "course": {
+    "code": "EE 2113",
+    "title": "Electrical Machines",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\2nd_Year_1st_Term_2023_1199.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The equivalent circuit impedances of a 20 KVA, 800/240 V, 60 Hz transformer are to be determined. The open-circuit test was performed on the secondary side of the transformer (to reduce the maximum voltage to be measured) and the short-circuit test were performed on the primary side of the transformer (to reduce the maximum current to be measured) the following data were taken:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Open circuit test</td><td rowspan=1 colspan=1>Short circuit test</td></tr><tr><td rowspan=1 colspan=1> $\\overline { { \\mathsf { V } _ { \\mathrm { o c } } = 2 4 0 \\mathrm { ~ V ~ } } }$ </td><td rowspan=1 colspan=1> $\\overline { { \\mathrm { V _ { s c } } = 4 8 3 \\mathrm { V } } }$ </td></tr><tr><td rowspan=1 colspan=1> $\\overline { { \\mathrm { I } _ { 0 c } = 7 . 1 3 3 \\mathrm { A } } }$ </td><td rowspan=1 colspan=1> $\\overline { { \\mathrm { I } _ { \\mathrm { s c } } = 7 . 1 3 3 \\mathrm { A } } }$ </td></tr><tr><td rowspan=1 colspan=1> $\\overline { { \\mathrm { p } _ { \\mathrm { o c } } = 4 0 0 \\mathrm { ~ W ~ } } }$ </td><td rowspan=1 colspan=1> $\\overline { { \\mathrm { p } _ { \\mathrm { s c } } = 2 4 0 \\mathrm { ~ W ~ } } }$ </td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "find the impedances of the approximate equivalent circuit referred to the primary side, and draw the circuit."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

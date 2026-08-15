@@ -1,0 +1,53 @@
+{
+  "id": "877_p2_Q6(d)",
+  "course": {
+    "code": "ECE 4207",
+    "title": "Control System Engineering",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\4th_Year_2nd_Term_2016_877.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A ground based air-surveillance radar operates at a frequency of 1300Míz (L-band). its maximum range is 200 pmi for the detection of a target with a radar cross section of one square meter $( \\sigma ^ { = } \\mathrm { l n } ^ { 2 } )$ . Its antenna is 12m wide by 4m high and the antenna aperture efficiency is $\\rho _ { \\tt a } = 0 . 6 5$ . The receiver minimum detectable signal is $\\mathrm { S } _ { \\mathfrak { w i n } } { \\overset { . } { = } } 1 \\mathfrak { d } ^ { - 1 3 } \\mathbb { W }$ . Determine the followings:"
+    },
+    {
+      "type": "text",
+      "value": "(i) Antenna effective aperture, Ae and antenna gain':."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Peak transmitter power"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Pulse repetition frequency to achieve a maximum unambiguous range of 200 nmi"
+    },
+    {
+      "type": "text",
+      "value": "(iv) Average transmitter power, if the pulse width is 2 μs."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2016"
+}

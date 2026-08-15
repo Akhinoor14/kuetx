@@ -1,0 +1,45 @@
+{
+  "id": "737_p1_Q10(a)",
+  "course": {
+    "code": "IPE 3103",
+    "title": "Engineering Metallurgy",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\3rd_Year_1st_Term_2015_737.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "10(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "5 <sub>.</sub>"
+    },
+    {
+      "type": "text",
+      "value": "What is meant by the term Industrial Design (ID)? Under what conditions would ID ii1cre � e or� <sup>i</sup> I <sup>\"</sup>(<sup>b</sup>) decrease <sub>manu</sub>f<sub>ac</sub>t<sub>ur</sub>i<sub>n</sub> cost? E<sub>x</sub> l<sub>a</sub>i<sub>n</sub>"
+    },
+    {
+      "type": "text",
+      "value": "Describe the different t<sub>yp</sub>es ofmodularit<sub>y</sub> of<sub>p</sub>roduct architectures <sub>.</sub>(c)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2015"
+}

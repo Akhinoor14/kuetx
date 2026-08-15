@@ -1,0 +1,61 @@
+{
+  "id": "728_p2_Q5(b)",
+  "course": {
+    "code": "HUM-2111",
+    "title": "Financial, Cost and Management Accounting",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\2nd_Year_1st_Term_2017_728.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "From the following information of Progati manufacturing company, you are required to 25 prepare a cost sheet for half year end on June 30, 2016. Showing:"
+    },
+    {
+      "type": "text",
+      "value": "i) Cost of raw materials consumed;"
+    },
+    {
+      "type": "text",
+      "value": "ii)Prime cost;"
+    },
+    {
+      "type": "text",
+      "value": "iii)Production cost;"
+    },
+    {
+      "type": "text",
+      "value": "iv) Cost of goods sold;"
+    },
+    {
+      "type": "text",
+      "value": "v)Cost of sales and profit:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td colspan=\"1\" rowspan=\"1\">Elements of cost</td><td colspan=\"1\" rowspan=\"1\">01-01-2016(TK)</td><td colspan=\"1\" rowspan=\"1\">30-06-2016(TK)</td></tr><tr><td colspan=\"1\" rowspan=\"1\">Inventory of raw mąterials</td><td colspan=\"1\" rowspan=\"1\">66,000</td><td colspan=\"1\" rowspan=\"1\">30,000</td></tr><tr><td colspan=\"1\" rowspan=\"1\">Inventory of work-in-progress</td><td colspan=\"1\" rowspan=\"1\">20,000</td><td colspan=\"1\" rowspan=\"1\">16,000</td></tr><tr><td colspan=\"1\" rowspan=\"1\">Inventory of finish goods</td><td colspan=\"1\" rowspan=\"1\">36,000</td><td colspan=\"1\" rowspan=\"1\">24,000</td></tr><tr><td colspan=\"2\" rowspan=\"1\">Purchase of raw materials</td><td colspan=\"1\" rowspan=\"1\">2,10,000</td></tr><tr><td colspan=\"2\" rowspan=\"1\">Return of raw materials purchase</td><td colspan=\"1\" rowspan=\"1\">6,000</td></tr><tr><td colspan=\"2\" rowspan=\"1\">Direct labor cost</td><td colspan=\"1\" rowspan=\"1\">80,000</td></tr><tr><td colspan=\"2\" rowspan=\"1\">Direct expenses</td><td colspan=\"1\" rowspan=\"1\">10,000</td></tr><tr><td colspan=\"2\" rowspan=\"1\">Factory rent</td><td colspan=\"1\" rowspan=\"1\">14,000</td></tr><tr><td colspan=\"2\" rowspan=\"1\">Depreciation on machinery</td><td colspan=\"1\" rowspan=\"1\">8,000</td></tr><tr><td colspan=\"2\" rowspan=\"1\">Administrative overhead (10% of production cost)</td><td colspan=\"1\" rowspan=\"1\"></td></tr><tr><td colspan=\"2\" rowspan=\"1\">Sales manager's salary</td><td colspan=\"1\" rowspan=\"1\">20,000</td></tr><tr><td colspan=\"2\" rowspan=\"1\">Advertising expense</td><td colspan=\"1\" rowspan=\"1\">12,000</td></tr><tr><td colspan=\"2\" rowspan=\"1\">Profit: 25% on sales.</td><td colspan=\"1\" rowspan=\"1\"></td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

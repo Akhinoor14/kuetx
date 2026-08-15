@@ -1,0 +1,45 @@
+{
+  "id": "708_p7_Q3(a)",
+  "course": {
+    "code": "EEE 4107",
+    "title": "Digital Signal Processing",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2016\\4th_Year_2nd_Term_2016_708.pdf",
+    "source_page": null,
+    "paper_index": 7
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write down the following operations mathematically. Assume image resolution in $\\mathbf { M } { \\times } \\mathbf { N } .$"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "text",
+      "value": "(i) Compute per element sum of two arrays $\\mathrm { A _ { i j } ^ { \\mathrm { \\prime } } }$ and $\\mathrm { B _ { i j } , }$ (ii) Compute per element difference between two arrays $\\mathrm { A _ { i j } ^ { \\mathrm { _ { \\cdot } } } }$ and $\\mathrm { B _ { i j } } ,$ (iii) Compute per element product of two arrays $\\mathrm { A _ { i j } ^ { \\mathrm { _ { \\cdot } } } }$ and $\\mathrm { B _ { i j } , ( i v ) }$ Perform per element division of array $\\mathrm { A _ { i j } ^ { \\mathrm { _ { \\cdot } } } }$ and $\\mathrm { B _ { i j } , \\tau ( v ) }$ Transpose of an image $\\mathrm { A _ { i j } ^ { } , ~ ( v i ) }$ Flip an image $\\mathrm { \\bf A _ { i j } }$ horizontally, (vii) Flip an image $\\mathrm { A _ { i j } ^ { \\mathrm { _ { \\cdot } } } }$ vertically, (viii) Calculate average array elements of $\\mathrm { B _ { i j } , }$ (ix) Return trace of an array $\\mathbf { A } _ { \\mathrm { i j } } , ( \\mathbf { x } )$ Calculate absolute difference between two arrays $\\mathrm { { C _ { i j } } }$ and $\\mathrm { D _ { i j } }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2016"
+}

@@ -1,0 +1,73 @@
+{
+  "id": "728_p2_Q3(c)",
+  "course": {
+    "code": "HUM-2111",
+    "title": "Financial, Cost and Management Accounting",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\2nd_Year_1st_Term_2017_728.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following data are collected from the books of Adcom advertising:"
+    },
+    {
+      "type": "text",
+      "value": "i) Supplies on hand at December 31, total TK 1,850 (Trail balance shows a debit balance of supplies account TK 4,000.)."
+    },
+    {
+      "type": "text",
+      "value": "ii) Automobile depreciation for the year TK 2500."
+    },
+    {
+      "type": "text",
+      "value": "iii)Service provided but unbilled TK 4,500 at December 31."
+    },
+    {
+      "type": "text",
+      "value": "iv)Expired insurance for the year TK 1,800."
+    },
+    {
+      "type": "text",
+      "value": "v)Interest of TK 1,400 accrued on notes payable for the year."
+    },
+    {
+      "type": "text",
+      "value": "vi) TK 2000 of the unearned fees has been earned."
+    },
+    {
+      "type": "text",
+      "value": "vii) Accrued salaries at December 31 are TK 5000."
+    },
+    {
+      "type": "text",
+      "value": "viii)Repairs of automobiles of TK 800 have been incurred but bills are unpaid."
+    },
+    {
+      "type": "text",
+      "value": "Required: Prepare the adjusting entries for the above item."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

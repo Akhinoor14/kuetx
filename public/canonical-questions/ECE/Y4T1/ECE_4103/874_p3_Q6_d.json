@@ -1,0 +1,42 @@
+{
+  "id": "874_p3_Q6(d)",
+  "course": {
+    "code": "ECE 4103",
+    "title": "Wireless Communications",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2019\\4th_Year_1st_Term_2019_874.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The required no. of IP addresses that to be needed are also shown. If you assign an address block 200.190.192.0/22, how would yo provide network address for the subnetworks?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d712a53edc5215a7795e8ff5c0a11c67e966b46eb5e778a816c9bed9250a524f.jpg",
+      "_source_path": "images/d712a53edc5215a7795e8ff5c0a11c67e966b46eb5e778a816c9bed9250a524f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2019"
+}

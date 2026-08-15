@@ -1,0 +1,45 @@
+{
+  "id": "727_p4_Q4(b)",
+  "course": {
+    "code": "MATH 2111",
+    "title": "Mathematics - III",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\2nd_Year_1st_Term_2015_727.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Evaluate any two of the followings integral;"
+    },
+    {
+      "type": "text",
+      "value": "(i) $\\int _ { 0 } ^ { 2 \\pi } { \\frac { d \\theta } { 5 + 4 \\cos \\theta } }$ (ii) J0 <sup>𝑥</sup> <sup>sin 𝑥</sup><sub>2 2</sub> 𝑑𝑥 <sup>∞</sup><sub>0</sub> (iii) $\\int _ { - \\infty } ^ { \\infty } { \\frac { x ^ { 2 } } { ( x ^ { 2 } + 4 ) ( x ^ { 2 } + 9 ) } } d x$"
+    },
+    {
+      "type": "text",
+      "value": "SECTION–B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2015"
+}

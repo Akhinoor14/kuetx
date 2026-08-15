@@ -1,0 +1,61 @@
+{
+  "id": "1219_p2_Q5(a)",
+  "course": {
+    "code": "ESE 4213",
+    "title": "Nuclear Power Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\4th_Year_2nd_Term_2021_1219.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Discuss the factors that affect the performance of pump."
+    },
+    {
+      "type": "text",
+      "value": "S(b). l.xplain the various methods or pump capacity control."
+    },
+    {
+      "type": "text",
+      "value": "<sub>5(c).</sub> A centrifugal clear water pump rated for 800 m'/hr was formed to be operating at 600 <sup>nr1</sup>/hr with discharge valve throttled. The pump speed is 1500 RPM. The discharge pressure or the pump before the throttle valve is 3 kg/crrr'g. The pump draws the water from a sump 5 meters below the centerline of the pump. The input power drawn by the motor is 120 kW at a motor efficiency of 88%."
+    },
+    {
+      "type": "text",
+      "value": "(i) Find out the efficiency of the pump."
+    },
+    {
+      "type": "text",
+      "value": "(ii) If the normal required water flow rate is 450 <sup>1113</sup>/hr to 600 m<sup>3</sup>/hr, what is your opinion should be tile most energy efficient option to get tile required llow rate variation?"
+    },
+    {
+      "type": "text",
+      "value": "<sub>(iii)</sub> What would be the pump shaft power for that most energy efficient option ii' the pump is delivering the flow rate of 525 m<sup>3</sup>/hr?"
+    },
+    {
+      "type": "text",
+      "value": "Na). Write down the purposes performance assessment of refrigeration plant. What arc the basic parameters required to measure while estimating the chiller performance?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2021"
+}

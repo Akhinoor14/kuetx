@@ -1,0 +1,42 @@
+{
+  "id": "688_p2_Q2(c)",
+  "course": {
+    "code": "EEE 3211",
+    "title": "Power System I",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2016\\1st_Year_2nd_Term_2016_688.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_cade88e76fc1d3d916857c0ec58f5e2e38963f1d21ca4a0f620e4999e26b458c.jpg",
+      "_source_path": "images/cade88e76fc1d3d916857c0ec58f5e2e38963f1d21ca4a0f620e4999e26b458c.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

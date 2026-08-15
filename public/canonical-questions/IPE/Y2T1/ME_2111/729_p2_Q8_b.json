@@ -1,0 +1,53 @@
+{
+  "id": "729_p2_Q8(b)",
+  "course": {
+    "code": "ME 2111",
+    "title": "Engineering Mechanics and Theory of Machines",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\2nd_Year_1st_Term_2018_729.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Four mass A, B, C and D as shown below are to be completely balanced."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>D</td></tr><tr><td rowspan=1 colspan=1>Mass (kg)</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>30</td><td rowspan=1 colspan=1>50</td><td rowspan=1 colspan=1>40</td></tr><tr><td rowspan=1 colspan=1>Radius (mm)</td><td rowspan=1 colspan=1>180</td><td rowspan=1 colspan=1>240</td><td rowspan=1 colspan=1>120</td><td rowspan=1 colspan=1>150</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "The planes containing mass B and C·are 300 mm apart. The angle between planes containing B and $\\mathsf { C i s \\mathsf { \\Pi } } \\mathsf { \\bar { g } } \\mathsf { 0 } ^ { o }$ . B and C make angles of $2 1 0 ^ { \\circ }$ and ${ 1 2 0 ^ { o } }$ respectively with D in the same sense. Find"
+    },
+    {
+      "type": "text",
+      "value": "i) The magnitude and the angular position of mass A."
+    },
+    {
+      "type": "text",
+      "value": "ii) The positions of planes A and D."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

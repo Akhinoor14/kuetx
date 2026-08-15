@@ -1,0 +1,42 @@
+{
+  "id": "732_Q1(a)",
+  "course": {
+    "code": "IPE 2207",
+    "title": "Probability and Statistical Analysis",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\2nd_Year_2nd_Term_2015_732.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Find the maximum value of P that will not exceed a stress in steel of 140 Mpa in aluminium of 70 Mpa or in bronze of 100 Mpa."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_deb0f4f8b8f2de00f7bf92dd1211005e0588d206d9eb40a536920e723107cfe6.jpg",
+      "_source_path": "images/deb0f4f8b8f2de00f7bf92dd1211005e0588d206d9eb40a536920e723107cfe6.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

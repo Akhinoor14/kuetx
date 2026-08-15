@@ -1,0 +1,73 @@
+{
+  "id": "1196_p2_Q8",
+  "course": {
+    "code": "EE 2113",
+    "title": "Electrical Machines",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2020\\2nd_Year_1st_Term_2020_1196.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Sc. Engineering 2nd Year I st Term Examination, 2020"
+    },
+    {
+      "type": "text",
+      "value": "EE 2113"
+    },
+    {
+      "type": "text",
+      "value": "(Electrical Machines)"
+    },
+    {
+      "type": "text",
+      "value": "Time: I Hour 30 Minutes."
+    },
+    {
+      "type": "text",
+      "value": "Full Marks: 120"
+    },
+    {
+      "type": "text",
+      "value": "N.B. i) Answer any Two questions from each section in separate scripts."
+    },
+    {
+      "type": "text",
+      "value": "ii) figures in the right margin indicate full marks."
+    },
+    {
+      "type": "text",
+      "value": "iii) Assume reasonable data if any missing."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-A"
+    },
+    {
+      "type": "text",
+      "value": "I"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2020"
+}

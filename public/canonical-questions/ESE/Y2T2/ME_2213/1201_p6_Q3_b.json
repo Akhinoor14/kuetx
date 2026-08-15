@@ -1,0 +1,42 @@
+{
+  "id": "1201_p6_Q3(b)",
+  "course": {
+    "code": "ME 2213",
+    "title": "Dynamics and Kinematics of Machineries",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\2nd_Year_2nd_Term_2021_1201.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". A roller coaster is released with no velocity at A and rolls down the track as shown. The brakes are suddenly applied as the car passes through point B, causing the wheels of car to slide on the track $( \\mu _ { k } = 0 . 2 5 )$ . Assuming no energy loss between A and ${ \\mathrm { B } } ,$ and knowing that the radius of curvature of the track at B is 15 m, determine the normal and tangential components of acceleration of the car just after the brakes have been applied."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_576394935a118d52016f7256eab7b9714d8c3103d132cb4afa41c1cfb37f0413.jpg",
+      "_source_path": "images/576394935a118d52016f7256eab7b9714d8c3103d132cb4afa41c1cfb37f0413.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

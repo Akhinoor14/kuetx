@@ -1,0 +1,69 @@
+{
+  "id": "718_p2_Q0(d)",
+  "course": {
+    "code": "CHEM 1111",
+    "title": "Chemistry",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\1st_Year_1st_Term_2016_718.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "0(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What do <sub>y</sub>ou mean b<sub>y</sub> Gold Number and Micelle? 0 7"
+    },
+    {
+      "type": "text",
+      "value": "Kh<sub>u</sub>ln<sub>a</sub> U<sub>n</sub>i<sub>vers</sub>it of E<sub>n</sub> i<sub>neer</sub>i<sub>n</sub> & Technolo De artment of Ind<sub>u</sub>strial E<sub>n</sub> i<sub>neer</sub>i<sub>n</sub> and Mana ement B S<sub>c</sub> E i i <sub>J</sub> Y<sub>ea</sub>r l <sup>\"</sup> T<sub>e</sub>rm E<sub>xa</sub>min<sub>a</sub>ti<sub>o</sub>n 20 1 6"
+    },
+    {
+      "type": "text",
+      "value": "HUM<sub>-</sub>Jlll"
+    },
+    {
+      "type": "text",
+      "value": "(Economics)"
+    },
+    {
+      "type": "text",
+      "value": "F<sub>u</sub>ll M<sub>ar</sub>k<sub>s :</sub> 2 1 0"
+    },
+    {
+      "type": "text",
+      "value": "Ti<sub>me :</sub> 3 h<sub>rs</sub>"
+    },
+    {
+      "type": "text",
+      "value": "NB<sub>: i)</sub> /l11 1<sub>wer an</sub> <sup>'</sup>J<sup>\"</sup>IIJU<sub>:</sub>L <sup>'</sup> 1<sub>;</sub>1 1<sub>cs</sub>1i<sub>on</sub> 1 fi'<sub>o</sub>1 1 1 <sub>eac</sub>h <sub>sec</sub>/i<sub>on</sub> i<sub>n se arate scr</sub>i <sub>ts</sub> ii) Fi ures in the ri l1 1 1 1 1 w) ! iil indicatefull marks"
+    },
+    {
+      "type": "text",
+      "value": "SECTION<sub>-</sub>A"
+    },
+    {
+      "type": "text",
+      "value": "<sup>1</sup>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2016"
+}

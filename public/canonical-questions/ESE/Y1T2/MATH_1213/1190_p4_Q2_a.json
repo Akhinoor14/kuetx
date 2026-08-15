@@ -1,0 +1,45 @@
+{
+  "id": "1190_p4_Q2(a)",
+  "course": {
+    "code": "MATH 1213",
+    "title": "Differential Equation and Co-ordinate Geometry",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\1st_Year_2nd_Term_2019_1190.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Define direction cosine and direction ratios of a line. A line makes angles $\\alpha , \\beta , \\gamma ,$ and o with four diagonal of a cube. Show that co $s ^ { 2 } \\alpha + \\cos ^ { 2 } \\beta + \\cos ^ { 2 } \\gamma + \\cos ^ { 2 } \\delta = 4 / 3$"
+    },
+    {
+      "type": "text",
+      "value": "2(b ). Using vector form, find the perpendicular diatance of a corner of a unit cube fro a diagonal not passing through it."
+    },
+    {
+      "type": "text",
+      "value": "2( c ). Find the vector euqation of a straight line passing through the origin and parallel to a given vector b."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2019"
+}

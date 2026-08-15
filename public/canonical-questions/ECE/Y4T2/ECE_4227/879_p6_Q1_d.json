@@ -1,0 +1,41 @@
+{
+  "id": "879_p6_Q1(d)",
+  "course": {
+    "code": "ECE 4227",
+    "title": "Biomedical Engineering",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\4th_Year_2nd_Term_2018_879.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the equilibrium resting potential at 37° C temperature considering the . (05) following data:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>Species</td><td>Permeability (cm/s)</td><td>Intracellular (millimoles/litre)</td><td>Extracellular (millimoles/litre)</td></tr><tr><td>Na⁺</td><td>2x10-8</td><td>12</td><td>145</td></tr><tr><td>K⁺</td><td>2x106</td><td>155</td><td>4</td></tr><tr><td>cr</td><td>4x10-6</td><td>4</td><td>120</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2018"
+}

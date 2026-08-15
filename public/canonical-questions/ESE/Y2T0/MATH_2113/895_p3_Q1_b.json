@@ -1,0 +1,37 @@
+{
+  "id": "895_p3_Q1(b)",
+  "course": {
+    "code": "MATH 2113",
+    "title": "Linear Algebra and Vector Analysis",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2018\\2nd_Year_Backlog_2018_895.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". . Reduce the matrix A into normal form by the elementary transformations and hence find its rank. $\\begin{array} { r } { A = \\left( \\begin{array} { l l l l } { 0 . } & { 2 } & { 3 } & { 4 } \\\\ { 2 } & { 3 } & { 5 } & { 4 } \\\\ { 4 } & { 8 } & { 1 3 } & { 1 2 } \\end{array} \\right) } \\end{array}$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2018"
+}

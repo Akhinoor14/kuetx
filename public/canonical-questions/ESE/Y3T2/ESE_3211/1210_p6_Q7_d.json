@@ -1,0 +1,37 @@
+{
+  "id": "1210_p6_Q7(d)",
+  "course": {
+    "code": "ESE 3211",
+    "title": "Coal Power Generation",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\3rd_Year_2nd_Term_2021_1210.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The following particulars refer to a single row impulse turbine: Mean diameter of blade ring=2.5 m, speed 3000 rpm, nozzle angl $\\mathrm { e } { = } 2 0 ^ { \\circ }$ , ratio of blade velocity to steam velocity=0.4, blade friction factor=0.8, blade angle at exit=3° less than that at inlet, steam flow=36000 kg/h. Draw velocity diagram for moving blade and estimate i) power developed, ii) blade efficiency and iii) steam consumption in kg/ kWh."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2021"
+}

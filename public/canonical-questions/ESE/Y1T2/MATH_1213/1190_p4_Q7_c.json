@@ -1,0 +1,46 @@
+{
+  "id": "1190_p4_Q7(c)",
+  "course": {
+    "code": "MATH 1213",
+    "title": "Differential Equation and Co-ordinate Geometry",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\1st_Year_2nd_Term_2019_1190.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". State the convolution theorem. Find the Laplace transform of the function"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r } { f ( t ) = \\left\\{ \\begin{array} { c c } { E \\sin \\omega t } & { 0 < t < \\pi / \\omega } \\\\ { 0 } & { \\pi / \\omega < t < 2 \\pi / \\omega } \\end{array} \\right. } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "S(a). Find the inverse Laplace transform of $\\left\\{ { \\frac { 3 s + 7 } { ( s + 1 ) ( s - 3 ) } } \\right\\}$ using Heaviside's expansion 11 formula."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2019"
+}

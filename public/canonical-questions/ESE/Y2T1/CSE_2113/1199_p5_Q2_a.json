@@ -1,0 +1,54 @@
+{
+  "id": "1199_p5_Q2(a)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Programming",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\2nd_Year_1st_Term_2023_1199.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". for gases, the variation of viscosity with temperature is frequently modeled by the 14 equation:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mu = { \\frac { C T ^ { 3 / 2 } } { T + S } }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Where, $\\mu$ is the viscosity, T is temperature, C and S are emperical constant. Below is a table that gives viscosity of air at different temperatures."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>T(C)</td><td rowspan=1 colspan=1>-20</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>40</td><td rowspan=1 colspan=1>100</td><td rowspan=1 colspan=1>200</td><td rowspan=1 colspan=1>300</td><td rowspan=1 colspan=1>400</td><td rowspan=1 colspan=1>500</td></tr><tr><td rowspan=1 colspan=1> $\\textstyle \\overline { { \\mu \\left( \\mathrm { N s } / \\mathrm { m } ^ { 2 } \\right) } }$  $( \\times 1 0 ^ { - 5 } )$ </td><td rowspan=1 colspan=1>1.63</td><td rowspan=1 colspan=1>1.71</td><td rowspan=1 colspan=1>1.87</td><td rowspan=1 colspan=1>2.17</td><td rowspan=1 colspan=1>2.53</td><td rowspan=1 colspan=1>2.98</td><td rowspan=1 colspan=1>3.32</td><td rowspan=1 colspan=1>3.64</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Determine the constant C and S by curve-fitting the equation to the data points. Make a plot of viscosity versus temperature. In the plot show the data points with markers and curve-fitted equation with solid line. The curve-fitting can be done by rewriting the equation in the form $\\frac { T ^ { 3 / 2 } } { \\mu } = \\frac { 1 } { c } T + \\frac { S } { C }$ and using a first-order polynomial."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

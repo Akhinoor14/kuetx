@@ -1,0 +1,41 @@
+{
+  "id": "727_p3_Q5(b)",
+  "course": {
+    "code": "HUM-2111",
+    "title": "Financial, Cost and Management Accounting",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\2nd_Year_1st_Term_2015_727.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "From the following particulars of Rupsha manufacturing, you are required to prepare a cost 25 sheet. Showing cost of raw materials used; prime cost; works cost; cost of goods manufactured; cost of goods sold; total cost and sales:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>Inventories at beginning : Raw materials Work-in-progress Finished goods Direct wages</td><td>Taka 24,200 20,400 26,000 38,400</td></tr><tr><td>Raw materials purchased</td><td>62,800 2/3rds of direct wa</td></tr><tr><td>Factory overhead : Administrative expenses : Selling expenses :</td><td>20% of works cost 5% of sales</td></tr><tr><td>Profit :</td><td>15% of sales</td></tr><tr><td>Inventories at end :</td><td>18,000</td></tr><tr><td>Raw materials</td><td></td></tr><tr><td>Work-in-progress Finished goods</td><td>15,200 30,000</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2015"
+}

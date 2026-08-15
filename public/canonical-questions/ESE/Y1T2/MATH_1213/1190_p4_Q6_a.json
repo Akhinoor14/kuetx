@@ -1,0 +1,37 @@
+{
+  "id": "1190_p4_Q6(a)",
+  "course": {
+    "code": "MATH 1213",
+    "title": "Differential Equation and Co-ordinate Geometry",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\1st_Year_2nd_Term_2019_1190.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". A body originally at $8 0 ~ ^ { \\circ } \\mathrm { C }$ cools down to $6 0 ~ ^ { \\circ } \\mathrm { C }$ in 20 minutes, the temperature of the air being $4 0 ~ ^ { \\circ } \\mathrm { C } .$ What will be the temperature of the body after 40 minutes from the original?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2019"
+}

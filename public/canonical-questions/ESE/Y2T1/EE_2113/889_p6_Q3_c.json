@@ -1,0 +1,53 @@
+{
+  "id": "889_p6_Q3(c)",
+  "course": {
+    "code": "EE 2113",
+    "title": "Electrical Machines",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2018\\2nd_Year_1st_Term_2018_889.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is back emf ? A 5 hp, 240 V DC motor has full load current 20.4 Amps and field resistance of 202 Ω. If the armature resistance is 0.71 Ω, determine –"
+    },
+    {
+      "type": "text",
+      "value": "(i) Power delivered to the motor"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Power dissipated in shunt field"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Power dissipated in armature circuit"
+    },
+    {
+      "type": "text",
+      "value": "(iv) Electrical power converted into mechanical power ."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

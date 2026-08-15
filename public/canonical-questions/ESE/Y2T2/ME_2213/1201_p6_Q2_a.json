@@ -1,0 +1,42 @@
+{
+  "id": "1201_p6_Q2(a)",
+  "course": {
+    "code": "ME 2213",
+    "title": "Dynamics and Kinematics of Machineries",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\2nd_Year_2nd_Term_2021_1201.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Block A has a mass of 25 kg and block B has a mass of 15 kg. The co-efficient of friction between all surfaces of contact are $\\mu _ { s } = 0 . 2 0$ and $\\mu _ { k } = 0 . 1 5$ Knowing that $\\theta = 2 5 ^ { \\circ }$ and that the magnitude of the force P applied to the block A is 250 N, determine (i) the acceleration of the block A, (ii) the tension in the cord."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_386fffb1fc01ebd7f35427f7283b34ca5778fb7dc9b5922af801226ae2bacf1c.jpg",
+      "_source_path": "images/386fffb1fc01ebd7f35427f7283b34ca5778fb7dc9b5922af801226ae2bacf1c.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

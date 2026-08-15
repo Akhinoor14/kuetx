@@ -1,0 +1,52 @@
+{
+  "id": "874_p1_Q7(b)",
+  "course": {
+    "code": "ECE 4101",
+    "title": "VLSI Design and Nanotechnology",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2019\\4th_Year_1st_Term_2019_874.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Design ROM, PAL, PLA using resistor for the following SOP functions:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nZ _ { 0 } = A B + B \\overline { { C } }\\tag{15}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nZ _ { 1 } = \\overline { { { A } } } B C + A \\overline { { { B } } } C + A B \\overline { { { C } } }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nZ _ { 2 } = A B + \\overline { { B } } \\overline { { C } }\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2019"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "701_p1_Q4(c)",
+  "course": {
+    "code": "EEE 3211",
+    "title": "Power System I",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2016\\3rd_Year_2nd_Term_2016_701.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "The constants of a 3-Φ lines are $A = 0 . 9 \\angle 2 ^ { \\circ }$ , and $B = 1 4 0 \\angle 7 0 ^ { \\circ }$ ohm per (15) phase. The line delivers 60MVA at 132kV and 0.8 p.f. lagging. Draw circle diagram and find,"
+    },
+    {
+      "type": "text",
+      "value": "(i) Sending end voltage and power angle, (ii) The sending end power and p.f. and (iii) Line losses."
+    },
+    {
+      "type": "text",
+      "value": "Section B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

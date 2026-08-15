@@ -1,0 +1,45 @@
+{
+  "id": "872_p4_Q3(d)",
+  "course": {
+    "code": "ECE 4103",
+    "title": "Wireless Communications",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2017\\4th_Year_1st_Term_2017_872.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Let us consider a cellular system with 395 total allocated voice channel frequencies. (10) If the traffic is uniform with an average call holding time of 120 seconds and the call blocking during the system busy hour is 2%, calculatc:"
+    },
+    {
+      "type": "text",
+      "value": "i) The number of calls per cell site per hour."
+    },
+    {
+      "type": "text",
+      "value": "ii) The mean S/I ratio for cell reuse factors equal to 4, 7, and 12. Assume omnidirectional antennas with six interferers in the first tier and a slopc for the path loss of 40 dB/decade (r = 4)."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2017"
+}

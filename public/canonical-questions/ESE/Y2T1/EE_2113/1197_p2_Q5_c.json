@@ -1,0 +1,37 @@
+{
+  "id": "1197_p2_Q5(c)",
+  "course": {
+    "code": "EE 2113",
+    "title": "Electrical Machines",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\2nd_Year_1st_Term_2021_1197.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The parameters of a 2300 /230 V, SO Hz transformer are given below : 17   \n$R _ { 1 } \\stackrel { , } { = } 0 . 2 8 6 \\Omega , R _ { 2 } = 3 1 . \\dot { 9 } \\Omega , R _ { 0 } = 2 5 0 \\Omega , X _ { 1 } = 0 . 7 3 \\Omega , \\bar { X } _ { 2 } = 7 3 \\Omega , X _ { 0 } = 1 2 5 0 \\Omega .$ Solve   \nthe exact equivalent circuit with normal voltage across the primary. Consider the   \nsecondary load impedance is 0.387 + i 0.29.   \n<sub>6(a).</sub> Why transformer rating is given in kV A? Draw the exact and approximated equivalent 10   \ncircuit of a transformer with referred to secondary side.   \n6(b ). Explain briefly the process to determine the parameters and efficiency of a transformer. 15"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

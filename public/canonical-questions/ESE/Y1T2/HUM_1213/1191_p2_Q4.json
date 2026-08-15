@@ -1,0 +1,65 @@
+{
+  "id": "1191_p2_Q4",
+  "course": {
+    "code": "HUM 1213",
+    "title": "Technical English",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2020\\1st_Year_2nd_Term_2020_1191.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Read the text carefully and answer the questions."
+    },
+    {
+      "type": "text",
+      "value": "A man in the moving crowd heard hiscry, andstooping with very great difficulty, lifted him in his arms. ‘How did you get here, child? Whose baby are you?' the man asked as he moved away from the crowd. The child wept more bitterly than ever now and only cried, 'I want my mother, I want my father.' The man tried to soothe him by taking him up to the roundabout. ‘Will you have a ride on the horses?' he gently asked as he approached the ring. The child's throat tore into a thousand shrill sobs and he only shouted, 'I want my mother, I want my father.' The man headed towards the place where the juggler still played on the flute to the dancing cobra.Listen to that music, child' he pleaded. But the child shut his ears with his finger and shouted even more loudly, 'I want my mother, I want my father'."
+    },
+    {
+      "type": "text",
+      "value": "The man took him near the balloons, thinking the bright colours of the balloons would distract the child's attention.'Would you like a rainbowcoloured balloon?' he asked persuasively. But the child turned his eyes from the balloons and just sobbed, 'I want my mother, I want my father'. Then, to make the child happy, the man took to the sweetmeat shop. What sweets would you like, child?' he asked. The child turned his face away from the sweetmeat shop and only sobbed, I want my mother, I want my father'."
+    },
+    {
+      "type": "text",
+      "value": "i. Who rescued the boy and how?"
+    },
+    {
+      "type": "text",
+      "value": "ii.Why was the boy not consoled? Give your reasons."
+    },
+    {
+      "type": "text",
+      "value": "iii. How did the gentlemen try to console the boy?"
+    },
+    {
+      "type": "text",
+      "value": "iv. The gentleman should have looked for the parents or reported to the police instead of consoling the baby. Do you agree? Give reasons for your answer."
+    },
+    {
+      "type": "text",
+      "value": "V. Give a title of the text."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2020"
+}

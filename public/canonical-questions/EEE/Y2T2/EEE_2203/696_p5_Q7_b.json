@@ -1,0 +1,41 @@
+{
+  "id": "696_p5_Q7(b)",
+  "course": {
+    "code": "EEE 2203",
+    "title": "Electronics III",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\2nd_Year_2nd_Term_2018_696.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "Design an active low pass filter with a dc gain of 5 and a corner frequency of 500 Hz."
+    },
+    {
+      "type": "text",
+      "value": "(07)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

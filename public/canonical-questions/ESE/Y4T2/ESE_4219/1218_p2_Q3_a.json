@@ -1,0 +1,45 @@
+{
+  "id": "1218_p2_Q3(a)",
+  "course": {
+    "code": "ESE 4219",
+    "title": "Energy Audit and Management",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2020\\4th_Year_2nd_Term_2020_1218.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Describe the responsibilities and duties of an energy manager."
+    },
+    {
+      "type": "text",
+      "value": "3(b ). Describe how ISO 5001 will work as a system to enhance energy 10 efficiency."
+    },
+    {
+      "type": "text",
+      "value": "3 ("
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2020"
+}

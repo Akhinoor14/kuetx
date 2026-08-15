@@ -1,0 +1,46 @@
+{
+  "id": "734_p2_Q8(b)",
+  "course": {
+    "code": "IPE 2229",
+    "title": "Industrial Psychology and Law",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\2nd_Year_2nd_Term_2017_734.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The length of the section is 8 in; diameter of the rivet hole is ${ \\begin{array} { l } { { \\frac { 1 5 } { 1 6 } } \\ i n ; } \\end{array} }$ thicknes<sub>�</sub>ofmaih'plate <sup>,</sup> is $\\textstyle { \\frac { 1 } { 2 } }$ <sup>'</sup> <sup>d</sup> <sup>h</sup> m; an eac cover plate is $\\frac { 3 } { 8 }$ in. Determine the shearing, bearing and tensile stresses developed in the joint."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_98056b7bd41eaaf33667273d250faddfb4345e61a210d1e279fd732ed717258d.jpg",
+      "_source_path": "images/98056b7bd41eaaf33667273d250faddfb4345e61a210d1e279fd732ed717258d.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Khulna University of Engineering & Technology Dep·artment of Industrial Engineering and Management"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

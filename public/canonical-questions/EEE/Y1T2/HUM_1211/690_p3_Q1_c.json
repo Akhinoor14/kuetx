@@ -1,0 +1,37 @@
+{
+  "id": "690_p3_Q1(c)",
+  "course": {
+    "code": "HUM 1211",
+    "title": "Financial Account and Economic Analysis",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\1st_Year_2nd_Term_2018_690.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "A demand function of X commodity given by $Q _ { \\mathrm { d } } = 1 2 - 2 P$ and supply function given (20) by $Q _ { \\mathrm { s } } = 2 0 P$ . Find the market equilibrium price and quantity of commodity X by diagram."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

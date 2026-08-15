@@ -1,0 +1,62 @@
+{
+  "id": "1209_p2_Q6(b)",
+  "course": {
+    "code": "ESE 3203",
+    "title": "Petroleum and Natural Gas Processing",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2020\\3rd_Year_2nd_Term_2020_1209.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Find out pseudo-reduced pressure and pseudo-reduced temperature for 20 20 the following gas composition:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r } { \\mathsf C _ { 1 } = 9 0 \\% , \\quad \\mathsf C _ { 2 } = 3 \\% , \\qquad \\mathsf C _ { 3 } = 2 \\% , \\qquad \\mathsf H _ { 2 } \\mathsf S = 2 \\% , \\qquad \\mathsf N _ { 2 } = 3 \\% } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "The temperature & pressure of the gas are $2 0 0 ^ { \\circ } F$ and 2000 psia respectively."
+    },
+    {
+      "type": "text",
+      "value": "Also find out the density and formation volume factor of the gas, assuming compressibility factor of the gas is 0.92."
+    },
+    {
+      "type": "text",
+      "value": "For necessary data, use the following table."
+    },
+    {
+      "type": "text",
+      "value": "Table 6(b ): Physical constants for typical natural gas constituents."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Compound</td><td rowspan=1 colspan=1>MolecularWeight</td><td rowspan=1 colspan=1>CriticalPressure(psia)</td><td rowspan=1 colspan=1>Critical Temperature ${ ( ^ { \\circ } \\mathbf { R } ) }$ </td></tr><tr><td rowspan=1 colspan=1> $\\mathrm { C H } _ { 4 }$ </td><td rowspan=1 colspan=1>16.043</td><td rowspan=1 colspan=1>667.8</td><td rowspan=1 colspan=1>343.1</td></tr><tr><td rowspan=1 colspan=1> ${ \\mathrm { C } } _ { 2 } { \\mathrm { H } } _ { 6 }$ </td><td rowspan=1 colspan=1>30.070</td><td rowspan=1 colspan=1>707.8</td><td rowspan=1 colspan=1>549.8</td></tr><tr><td rowspan=1 colspan=1> ${ \\mathrm { C } } _ { 3 } { \\mathrm { H } } _ { 8 }$ </td><td rowspan=1 colspan=1>44.097</td><td rowspan=1 colspan=1>616.3</td><td rowspan=1 colspan=1>665.7</td></tr><tr><td rowspan=1 colspan=1> $\\mathrm { n - C _ { 4 } H } _ { 1 0 }$ </td><td rowspan=1 colspan=1>58.124</td><td rowspan=1 colspan=1>550.7</td><td rowspan=1 colspan=1>765.4</td></tr><tr><td rowspan=1 colspan=1> $\\mathrm { i - C _ { 4 } H } _ { 1 0 }$ </td><td rowspan=1 colspan=1>58.124</td><td rowspan=1 colspan=1>529.1</td><td rowspan=1 colspan=1>734.7</td></tr><tr><td rowspan=1 colspan=1> ${ \\mathsf { C O } } _ { 2 }$ </td><td rowspan=1 colspan=1>44.010</td><td rowspan=1 colspan=1>1070.9</td><td rowspan=1 colspan=1>547.6</td></tr><tr><td rowspan=1 colspan=1> $\\mathrm { H } _ { 2 } S$ </td><td rowspan=1 colspan=1>34.076</td><td rowspan=1 colspan=1>1306.0</td><td rowspan=1 colspan=1>672.4</td></tr><tr><td rowspan=1 colspan=1> $\\Nu _ { 2 }$ </td><td rowspan=1 colspan=1>28.013</td><td rowspan=1 colspan=1>493.0</td><td rowspan=1 colspan=1>227.3</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2020"
+}

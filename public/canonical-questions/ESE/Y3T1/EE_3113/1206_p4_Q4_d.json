@@ -1,0 +1,41 @@
+{
+  "id": "1206_p4_Q4(d)",
+  "course": {
+    "code": "EE 3113",
+    "title": "Power System Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\3rd_Year_1st_Term_2023_1206.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". /\\ single-acting reciprocating pump operates at 50 rpm and has a stroke length of 40 cm. The piston diameter is 25 cm, and it discharges 0.015 m3ls of water. Determine: (i) Theoretical discharge of the pump, (ii) Slip and percentage slip of the pump, (iii) Coefficient of discharge and (iv) Power required to run the pump."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

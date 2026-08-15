@@ -1,0 +1,37 @@
+{
+  "id": "1209_p4_Q3(b)",
+  "course": {
+    "code": "ESE 3207",
+    "title": "Solar Photovoltaic System",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2020\\3rd_Year_2nd_Term_2020_1209.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Consider a Si solar cell operating at 300K with the following parameters: Area $\\mathbf { A } = 1 . 5 ~ \\mathrm { c m } ^ { 2 }$ <sup>,</sup> Accepton doping $\\mathrm { N } _ { a } = 5 \\times 1 0 ^ { 1 7 } \\mathrm { c m } ^ { - 3 }$ , Donar doping $= 8 \\times 1 0 ^ { 1 7 } \\mathrm { c m } ^ { - 3 }$ , Electron diffusion coefficient $\\mathrm { D } _ { \\mathrm { n } } \\doteq 2 2 \\mathrm { c m } ^ { 2 } / \\mathrm { s }$ , Hole diffusion coefficient $\\mathrm { D } _ { \\mathsf { p } } = 1 0 \\mathrm { c m } ^ { 2 } / \\mathsf { s }$ , Electron recombination time $\\tau _ { \\mathrm { n } } =$ $3 \\times 1 0 ^ { - 7 } s ,$ Hole recombination time $\\tau _ { \\mathfrak { p } } = 5 \\times 1 0 ^ { - 7 } s ,$ Electron hole pair generation rate by light $\\mathsf { a } _ { \\mathrm { L } } = 1 0 ^ { 2 2 } \\mathsf { c m } ^ { - 3 } s ^ { - 1 }$ <sup>.</sup> Calculate the photo current. The solar cell is reversed-biased with a voltage of 2V."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2020"
+}

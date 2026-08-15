@@ -1,0 +1,45 @@
+{
+  "id": "1211_p5_Q4(d)",
+  "course": {
+    "code": "ESE 3207",
+    "title": "Solar Photovoltaic System",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\3rd_Year_2nd_Term_2022_1211.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". What are the distinguishes perovskite solar cell from traditional silicon-based in terms of 08 their construction and materials?"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    },
+    {
+      "type": "text",
+      "value": "<sub>S(a).</sub> What are the key components of a solar home system and explain the role of each 10   \ncomponent in the process of converting sunlight into usable electric energy.   \n<sub>S(b).</sub> How does the surface area of a solar cell impact its output current, and what key factors 10   \nshould be considered in optimizing the design of a solar cell for efficient energy conversion?   \nS(c). The maximum rated power point of a crystalline solar sell is 75Wp. Calculate the maximum 07   \n<sub>power</sub> <sub>output</sub> at 45°(, 55°( and 65°( cell operating temperature. For crystalline silicon cell,   \ndecrease in maximum power per degree centigrade, increase in cell temperature(from STC   \nvalue of 25°() is -0.45% /<sup>0(</sup>   \n<sub>S(d).</sub> Why energy payback time is important of a PV system design? What factors influence the 08   \nenergy payback time of a PV system?   \n<sub>6(a).</sub> How does mismatch in current affect the performance of series connected PV modules, and 10   \nwhat strategies or technology are employed to mitigate current mismatch issues in order to   \noptimize the overall efficiency of a solar PV system?   \n6(b ). What role does a charge controller play in solar system? How does incremental conductance 12   \nalgorithm function in MPPT charge controllers and what advantages does it offer over   \nsimpler algorithms like perturb and observe?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1206_p4_Q3(d)",
+  "course": {
+    "code": "EE 3113",
+    "title": "Power System Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\3rd_Year_1st_Term_2023_1206.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". J\\ pump in a current system operates at a flow rate of 80 gpm with a maximum delivered pressure head of 90 ftI-120. The power demand is 6 hp at an impeller velocity of 750 rpm. After system modification, the total system pressure head increases to 120 Itl 120. Determine the impeller velocity needed to overcome the higher system backprcssurc."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

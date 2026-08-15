@@ -1,0 +1,42 @@
+{
+  "id": "1124_p3_Q5(d)",
+  "course": {
+    "code": "ME 3219",
+    "title": "Fluid Mechanics & Machineries",
+    "department": "Department of Leather Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2019\\3rd_Year_2nd_Term_2019_1124.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the discharge of water flowing through a pipe 30 cm diameter placed in an inclined position 13 where a venturimeter is inserted, having a throat-diameter of 15 cm. The pressure difference between the main and throat measured by an inverted U-tube manometer in Fig.04. The loss of head between main and the throat is 0.2 times the Kinetic head of the pipe."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_4d6163651b3ff50d6a6fc5c036aea9d17c50274756af3e5b581903f78fcf2073.jpg",
+      "_source_path": "images/4d6163651b3ff50d6a6fc5c036aea9d17c50274756af3e5b581903f78fcf2073.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2019"
+}

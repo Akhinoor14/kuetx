@@ -1,0 +1,46 @@
+{
+  "id": "1204_p3_Q2(d)",
+  "course": {
+    "code": "EE 3113",
+    "title": "Power System Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\3rd_Year_1st_Term_2021_1204.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". /\\ 3-Phase , 501-lz .66 kV overhead line conductors are placed in a horizontal plane as shown in following figure. The conductor diameter is 1.25 cm. Ir the line length is I 00 km and assuming complete transposition of the line, calculate the followings:"
+    },
+    {
+      "type": "text",
+      "value": "(i) capacitance per phase, (ii) charging current per phase,"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_5ec08ae6981dc7e0230fb776cab937126bf159e0bca20d6bb91ccaf9ae8c3c66.jpg",
+      "_source_path": "images/5ec08ae6981dc7e0230fb776cab937126bf159e0bca20d6bb91ccaf9ae8c3c66.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

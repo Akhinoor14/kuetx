@@ -1,0 +1,37 @@
+{
+  "id": "1195_p4_Q8(b)",
+  "course": {
+    "code": "ME 2113",
+    "title": "Statics and Solid Mechanics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\2nd_Year_1st_Term_2019_1195.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": ". What is critical load of a column? Select the lightest W shape that will act as a column 8 m long with hinged ends and support an axial load of 270 KN with a factor of safety of 2.5. Assume that the proportional limit is 200 MPa and E = 200 GPa."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

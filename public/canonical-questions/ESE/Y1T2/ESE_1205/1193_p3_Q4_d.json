@@ -1,0 +1,57 @@
+{
+  "id": "1193_p3_Q4(d)",
+  "course": {
+    "code": "ESE 1205",
+    "title": "Thermodynamics for Energy Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\1st_Year_2nd_Term_2022_1193.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". A piston-cylinder device contains 0.05 Kg of steam at 1 MPa and 300 °C. Steam now expands to a final stage of 200 kPa and $1 5 0 ^ { \\circ } \\mathrm { C } ,$ doing work. Heat losses from the system to the surroundings are estimated to be at $\\mathrm { T } _ { 0 } = 2 5 { } ^ { \\circ } \\mathrm { C }$ and $\\mathrm { P _ { 0 } } { = } 1 0 0 \\ \\mathrm { k P a }$ , determine:"
+    },
+    {
+      "type": "text",
+      "value": "(i) The exergy of the steam at the initial and final states."
+    },
+    {
+      "type": "text",
+      "value": "(ii) The exergy change of the steam."
+    },
+    {
+      "type": "text",
+      "value": "(iii) The exergy destroyed and"
+    },
+    {
+      "type": "text",
+      "value": "(iv) The second law efficiency for the process."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2022"
+}

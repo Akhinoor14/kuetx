@@ -1,0 +1,91 @@
+{
+  "id": "889_p2_Q6(a)",
+  "course": {
+    "code": "ME 2113",
+    "title": "Statics and Solid Mechanics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2018\\2nd_Year_1st_Term_2018_889.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": 6,
+  "content": [
+    {
+      "type": "text",
+      "value": "A shaft compressed of segments AC, CD and DB is fastened to rigid supports and loaded as shown in the figure. For bronze, G= 35 GPa; for aluminum, G= 28 GPa, and for steel G=83 GPa. Determine the maximum shearing stress developed in each segment."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_838741ab49d24ae997772a17d425141aa72639ea2b88eff5129caa033735eadb.jpg",
+      "_source_path": "images/838741ab49d24ae997772a17d425141aa72639ea2b88eff5129caa033735eadb.jpg"
+    },
+    {
+      "type": "text",
+      "value": "A rigid bar pinned at point $\\scriptstyle 0 ,$ is supported by two springs as shown in the figure. Each spring consists of 20 turns of / inch diameter wire having a mean diameter of 6 inch. Shearing stress in the springs is limited to 2 ksi. Determine:"
+    },
+    {
+      "type": "text",
+      "value": "(i) The maximum load W that may be supported"
+    },
+    {
+      "type": "text",
+      "value": "(ii) The deflection of load W when G = 83 GPa"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_3a38ab806ff684cf28865f394c4df64d43aa84fbcfc8c0a7a74775fe34c8ef0c.jpg",
+      "_source_path": "images/3a38ab806ff684cf28865f394c4df64d43aa84fbcfc8c0a7a74775fe34c8ef0c.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Write the shear and moment equations and draw the shear force and bending moment diagrams for the beam loaded as shown in the figure."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a17e9dde9b974a13bc0e25f5e271295639a891e1dfda8713e33ce59092c85107.jpg",
+      "_source_path": "images/a17e9dde9b974a13bc0e25f5e271295639a891e1dfda8713e33ce59092c85107.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Two designs for a beam are to be considered. Determine which one will support a moment of M=150 kN.m with the least amount of bending stress. What is that stress? Explain the result."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_cfba82fb1319fec61a9ac4e980983a5c828d33c40ae02356814da0d52c5280ab.jpg",
+      "_source_path": "images/cfba82fb1319fec61a9ac4e980983a5c828d33c40ae02356814da0d52c5280ab.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_46baffd8a67445ed2b9af60da504e0f72b0b4e4d598101357bad95aa26750877.jpg",
+      "_source_path": "images/46baffd8a67445ed2b9af60da504e0f72b0b4e4d598101357bad95aa26750877.jpg"
+    },
+    {
+      "type": "text",
+      "value": "For the bean loaded as shown in the figure, calculate the slope of the elastic curve over the right support and deflection at the midpoint between two supports."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0997403772fa5279aacd9be719f858cd462197914e840dd3bbe68be279d92ce4.jpg",
+      "_source_path": "images/0997403772fa5279aacd9be719f858cd462197914e840dd3bbe68be279d92ce4.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

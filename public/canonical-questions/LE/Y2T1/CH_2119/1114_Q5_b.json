@@ -1,0 +1,37 @@
+{
+  "id": "1114_Q5(b)",
+  "course": {
+    "code": "CH 2119",
+    "title": "Physical Chemistry",
+    "department": "Department of Leather Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2021\\2nd_Year_1st_Term_2021_1114.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Reaction between $\\mathrm { H } _ { 2 }$ and $\\mathrm { C l } _ { 2 }$ is a high quantum yield reaction on the other hand 09   \nreaction between $\\mathrm { H } _ { 2 }$ and $\\mathrm { B r } _ { 2 }$ is a low quantum yield reaction. Why? Explain."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

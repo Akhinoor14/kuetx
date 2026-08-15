@@ -1,0 +1,37 @@
+{
+  "id": "718_p2_Q6(b)",
+  "course": {
+    "code": "CHEM 1111",
+    "title": "Chemistry",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\1st_Year_1st_Term_2016_718.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Su o se GDP is \\$ 8 trillion taxes arc \\$ 1 5 trillicn rivate savin s is \\$0 5 trillion and the bli savin<sub>g</sub>s is \\$0 2 trillion Assumin<sub>g</sub> this <sub>economy</sub> is closed Calculate <sub>consum</sub> ti<sub>on overnment</sub> <sub>urc</sub>h<sub>ases na</sub>ti<sub>ona</sub>l <sub>sav</sub>i<sub>n s an</sub>d i<sub>nvcsunvn</sub>t E<sub>x</sub> l<sub>a</sub>i<sub>n</sub>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2016"
+}

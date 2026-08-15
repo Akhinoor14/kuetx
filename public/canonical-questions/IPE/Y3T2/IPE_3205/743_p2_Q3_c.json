@@ -1,0 +1,45 @@
+{
+  "id": "743_p2_Q3(c)",
+  "course": {
+    "code": "IPE 3205",
+    "title": "Product Design -II",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\3rd_Year_2nd_Term_2015_743.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Raj shahi silk mill has often weavin defect in sharee 1 0 sharees were taken 1 3 <sub>ran</sub>d<sub>om</sub>l <sub>an</sub>d <sub>num</sub>b<sub>er o</sub>fd<sub>e</sub>f<sub>ec</sub>t<sub>s no</sub>t<sub>e</sub>d i<sub>n eac</sub>h i<sub>s</sub> i<sub>ven</sub> b<sub>e</sub>l<sub>ow</sub>"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Sahree</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>9</td><td rowspan=1 colspan=1>10</td></tr><tr><td rowspan=1 colspan=1>Defects</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>3</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "D<sub>e</sub>t<sub>erm</sub>i<sub>ne</sub> th<sub>e process</sub> i<sub>s</sub> i<sub>n con</sub>t<sub>ro</sub>l? S<sub>e</sub>t <sub>up a con</sub>t<sub>ro</sub>l <sub>c</sub>h<sub>ar</sub>t"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2015"
+}

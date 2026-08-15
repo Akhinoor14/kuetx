@@ -1,0 +1,41 @@
+{
+  "id": "744_p1_Q7(b)",
+  "course": {
+    "code": "IPE 3205",
+    "title": "Product Design -II",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\3rd_Year_2nd_Term_2016_744.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 6 ton vessel can be loaded with one or more of three items. The following table gives the unit weight, $\\mathbf { W _ { i } } ,$ in tons and the unit revenue in thousands of dollars, r, for item i. How should the vessel be loaded to maximize the total return?"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>items</td><td>W r</td></tr><tr><td>1</td><td>4 70</td></tr><tr><td>2</td><td>1 20</td></tr><tr><td>3</td><td>2 40</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

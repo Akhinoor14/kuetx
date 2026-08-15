@@ -1,0 +1,37 @@
+{
+  "id": "893_p2_Q8(c)",
+  "course": {
+    "code": "EE 3113",
+    "title": "Power System Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\3rd_Year_1st_Term_2019_893.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A three-throw reciprocating pump delivering $0 . 1 m ^ { 3 } / s \\mathrm { o f }$ water against a head of 100 m. Diameter and stroke length of the cylinder are 25 cm and 50 cm réspectively. Friction losses amount to 1 m in the suction pipe and 16 m in the delivery pipe. If the velocity of water in the delivery pipe is 1.4 m/s, pump efficiency 90% and slip 2%, Determine the pump and the power required."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

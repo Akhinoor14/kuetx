@@ -1,0 +1,57 @@
+{
+  "id": "886_p2_Q8(d)",
+  "course": {
+    "code": "ESE 1205",
+    "title": "Thermodynamics for Energy Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2017\\1st_Year_2nd_Term_2017_886.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Consider a gas mixture that consists of 3 kg of $O _ { 2 }$ , 5 kg of $N _ { 2 } .$ , and 12 kg of $C H _ { 4 }$ 10 Determine –"
+    },
+    {
+      "type": "text",
+      "value": "(i) The mole fraction of each component."
+    },
+    {
+      "type": "text",
+      "value": "(ii) The average molar mass."
+    },
+    {
+      "type": "text",
+      "value": "(iii) Gas constant of the mixture."
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY"
+    },
+    {
+      "type": "text",
+      "value": "Department of Energy Science and Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

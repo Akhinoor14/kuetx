@@ -1,0 +1,42 @@
+{
+  "id": "732_Q5(b)",
+  "course": {
+    "code": "IPE 2207",
+    "title": "Probability and Statistical Analysis",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\2nd_Year_2nd_Term_2015_732.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ", determine normal and shearing stresses on the planes whose normals are at 40º and 130º with the x axis. Show these stresses on a sketch of the element."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_489af37fc6f71326945495e4ea727bdce4a295f4bf30b476e074852b016dd5cc.jpg",
+      "_source_path": "images/489af37fc6f71326945495e4ea727bdce4a295f4bf30b476e074852b016dd5cc.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

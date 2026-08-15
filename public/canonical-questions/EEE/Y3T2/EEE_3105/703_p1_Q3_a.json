@@ -1,0 +1,42 @@
+{
+  "id": "703_p1_Q3(a)",
+  "course": {
+    "code": "EEE 3105",
+    "title": "Control Systems",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\3rd_Year_2nd_Term_2018_703.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the poles and zeros of the following system. also establish the (08) differential equation."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8a0ddda0a2bc5168d089164f117ea70f3e598ca50360ac8d7ef5f857dce1e36e.jpg",
+      "_source_path": "images/8a0ddda0a2bc5168d089164f117ea70f3e598ca50360ac8d7ef5f857dce1e36e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

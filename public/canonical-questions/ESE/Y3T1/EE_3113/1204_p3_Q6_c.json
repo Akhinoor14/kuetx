@@ -1,0 +1,54 @@
+{
+  "id": "1204_p3_Q6(c)",
+  "course": {
+    "code": "EE 3113",
+    "title": "Power System Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\3rd_Year_1st_Term_2021_1204.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". A three-bus power system is shown in the following figure. The relevant per unit line admittances on I OOMVA base are indicated on the diagram and bus data are given in the table. From $Y _ { b u s }$ determine the voltage at bus 2 and 3 after the second iteration using Gauss-Seidel method. Take the acceleration factor a = 1.6."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_9b44bea864c3b259550a31a2b0e65cf8395aa6c541467750443f53ce11ad5e27.jpg",
+      "_source_path": "images/9b44bea864c3b259550a31a2b0e65cf8395aa6c541467750443f53ce11ad5e27.jpg"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=2 colspan=1>Busnumber</td><td rowspan=2 colspan=1>Type</td><td rowspan=1 colspan=2>Generation</td><td rowspan=1 colspan=2>Load</td><td rowspan=1 colspan=2>Bus voltage</td></tr><tr><td rowspan=1 colspan=1> $P _ { G }$ (MW)</td><td rowspan=1 colspan=1> $Q _ { G }$ (MVARr)</td><td rowspan=1 colspan=1> $P _ { L }$ (MW)</td><td rowspan=1 colspan=1> $Q _ { L }$ (MVAr)</td><td rowspan=1 colspan=1>V(PU)</td><td rowspan=1 colspan=1>δ(deg)</td></tr><tr><td rowspan=1 colspan=1>一</td><td rowspan=1 colspan=1>slack</td><td rowspan=1 colspan=1>?</td><td rowspan=1 colspan=1>?</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>1.02</td><td rowspan=1 colspan=1>0°</td></tr><tr><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>PQ</td><td rowspan=1 colspan=1>25</td><td rowspan=1 colspan=1>15</td><td rowspan=1 colspan=1>50</td><td rowspan=1 colspan=1>25</td><td rowspan=1 colspan=1>?</td><td rowspan=1 colspan=1>?</td></tr><tr><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>PQ</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>60</td><td rowspan=1 colspan=1>30</td><td rowspan=1 colspan=1>?</td><td rowspan=1 colspan=1>?</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY"
+    },
+    {
+      "type": "text",
+      "value": "Department of Energy Science and Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

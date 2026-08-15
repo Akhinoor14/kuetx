@@ -1,0 +1,61 @@
+{
+  "id": "886_p4_Q3(b)",
+  "course": {
+    "code": "HUM 1213",
+    "title": "Technical English",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2017\\1st_Year_2nd_Term_2017_886.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Transform the following sentences as directed –"
+    },
+    {
+      "type": "text",
+      "value": "(i) If you don't move, you will die. (Compound)"
+    },
+    {
+      "type": "text",
+      "value": "(ii) He was never late. (Affirmative)"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Nobody can ever count my love for you. (Interrogative)"
+    },
+    {
+      "type": "text",
+      "value": "(iv) Dhaka is the biggest city in Bangladesh. (Positive)"
+    },
+    {
+      "type": "text",
+      "value": "(v) It is difficult to catch a bird that is flying. (Simple)"
+    },
+    {
+      "type": "text",
+      "value": "(vi) They must hear me. (Passive)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

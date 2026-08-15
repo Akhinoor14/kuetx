@@ -1,0 +1,55 @@
+{
+  "id": "690_p4_Q5(d)",
+  "course": {
+    "code": "EEE 4247",
+    "title": "Renewable Energy",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\1st_Year_2nd_Term_2018_690.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "Is the differential equation $( y - 4 x - 1 ) ^ { 2 } d x - d y = 0$ a Bernoulli’s equation? (05) Justify your answer."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\mathrm { ( a ) } } \\quad \\operatorname { S o l v e } { \\ y ( c o s ^ { 3 } x + y s i n x ) } d x + c o s x ( s i n x c o s x + 2 y ) d y = 0 .\\tag{11}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "<sup>(b)</sup> Solve $\\begin{array} { r } { \\frac { d y } { d x } + \\frac { s i n 2 y } { x } = x ^ { 3 } c o s ^ { 2 } y . } \\end{array}$"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { S o l v e ~ } ( 2 x - y ) d x + ( 4 x + y - 3 ) d y = 0 .\\tag{12}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

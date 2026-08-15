@@ -1,0 +1,37 @@
+{
+  "id": "744_p3_Q5(a)",
+  "course": {
+    "code": "IPE 3205",
+    "title": "Product Design -II",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\3rd_Year_2nd_Term_2016_744.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The average pressure on a 6-in. full bearing is 50 psi, $\\mathsf { c } _ { \\mathsf { d } } = 0 . 0 0 3$ in., $\\mathrm { { L } } / \\mathrm { { D } } = 1$ . While the average oil temperature is maintained at $1 6 0 ^ { \\circ } \\ ]$ F with $\\mathtt { n } = 3 0 0$ rpm, the frictional force is found to be 13 lb. Compute the coefficient of friction and the average viscosity of the oil. To what grade of oil does this correspond?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

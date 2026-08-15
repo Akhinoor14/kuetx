@@ -1,0 +1,49 @@
+{
+  "id": "727_p2_Q5(d)",
+  "course": {
+    "code": "EEE 2111",
+    "title": "Electrical Circuits and Machines",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\2nd_Year_1st_Term_2015_727.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "$\\mathrm { ~ R ~ } = 1 0$ Ohms and $\\mathrm { ~ L ~ } = 0 . 0 5$ henry are connected in series and energized by a 25-cycle sinusoidal voltage. The maximum value of which is 150 volts."
+    },
+    {
+      "type": "text",
+      "value": "i) Find the complete impedance for RL branch."
+    },
+    {
+      "type": "text",
+      "value": "ii) Write the expression of supply voltage making $v = 7 5 ( ^ { d v } / _ { d t } + v e ) \\mathrm { a t t } = 0 .$"
+    },
+    {
+      "type": "text",
+      "value": "iii) Write the expression of circuit as a function of time."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2015"
+}

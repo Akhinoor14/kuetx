@@ -1,0 +1,37 @@
+{
+  "id": "1194_p6_Q6(c)",
+  "course": {
+    "code": "ESE 1205",
+    "title": "Thermodynamics for Energy Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\1st_Year_2nd_Term_2023_1194.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". A gas turbine power plant operating on an ideal Brayton cycle has a pressure ratio of 8. The gas temperature is 300 Kat the compressor inlet and 1300 Kat the turbine inlet. Utilizing the air-standard assumptions, determine (i) the gas temperature at the exit of the compressor and the turbine, (ii) the thermal efficiency."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2023"
+}

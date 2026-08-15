@@ -1,0 +1,37 @@
+{
+  "id": "703_p2_Q7(c)",
+  "course": {
+    "code": "EEE 3211",
+    "title": "Power System I",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\3rd_Year_2nd_Term_2018_703.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 132 kV line with 1.956 cm diameter conductors is built so that corona takes (10) place if the line voltage exceeds 210 kV (rms). If the value of potential gradient at which ionization occurs can be taken as 30 kV/cm, find the spacing between the conductors."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

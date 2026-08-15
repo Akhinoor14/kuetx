@@ -1,0 +1,47 @@
+{
+  "id": "694_p4_Q2(b)",
+  "course": {
+    "code": "EEE 1101",
+    "title": "Electrical Circuits I",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2016\\2nd_Year_2nd_Term_2016_694.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Obtain the state-space representation of the following system. Also find the (10) transfer function assuming that output is taken from $v _ { L } ( t )$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_379c9b8c210c623799f43df85d8a5f7661c2f4e84ece3ed00f7f0dc26a562a76.jpg",
+      "_source_path": "images/379c9b8c210c623799f43df85d8a5f7661c2f4e84ece3ed00f7f0dc26a562a76.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_1755d415d51912aee853be7f61fbcd995294cfb95a39be45703d93a25db31c68.jpg",
+      "_source_path": "images/1755d415d51912aee853be7f61fbcd995294cfb95a39be45703d93a25db31c68.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

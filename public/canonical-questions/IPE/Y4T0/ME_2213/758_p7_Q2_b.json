@@ -1,0 +1,42 @@
+{
+  "id": "758_p7_Q2(b)",
+  "course": {
+    "code": "ME 2213",
+    "title": "Mechanics of Solids",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\Backlog_2018_758.pdf",
+    "source_page": null,
+    "paper_index": 7
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". If the system is initially stress free. Calculate the temperature change that will cause a tensile stress of 90 MPa in the brass rod. Assume that both rods are subjected to the change in temperature. For Brass $\\alpha = 1 8 . 7 \\mu m / ( m . ^ { \\circ } \\mathrm { C } )$ and for Copper $\\alpha = 1 6 . 8 \\mu m / ( m . ^ { \\circ } \\mathrm { C } )$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_9b7e3a0977a8b6372f0f4f326173016023845f2eaee314eaf3ca893a8f9467ff.jpg",
+      "_source_path": "images/9b7e3a0977a8b6372f0f4f326173016023845f2eaee314eaf3ca893a8f9467ff.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Special Backlog Examination, 2018"
+}

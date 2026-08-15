@@ -1,0 +1,57 @@
+{
+  "id": "748_p1_Q12(e)",
+  "course": {
+    "code": "IPE 4125",
+    "title": "Machine Tools",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\4th_Year_1st_Term_2016_748.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "12(e)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Describe the causes and effects of rationing and shortage gaming. 12"
+    },
+    {
+      "type": "text",
+      "value": "Khulna University of Engineering & Technology Department of Industrial Engineering and Management B.Sc. Engineering 4<sup>1</sup>hYearl <sup>51</sup>Term, 2016"
+    },
+    {
+      "type": "text",
+      "value": "IPE 4029 Marketing Management"
+    },
+    {
+      "type": "text",
+      "value": "Full Marks: 210 Time: 3 hrs"
+    },
+    {
+      "type": "text",
+      "value": "N.B:i) Answer any THREE questions from each section in separate scripts. ii) Figures in the right margin indicate full marks. iii) Assume reasonable data if missing any."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-A"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2016"
+}

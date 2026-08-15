@@ -1,0 +1,41 @@
+{
+  "id": "1197_p5_Q1(c)",
+  "course": {
+    "code": "ME 2115",
+    "title": "Fluid Mechanics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\2nd_Year_1st_Term_2021_1197.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". What is surface tension? What is its cause?"
+    },
+    {
+      "type": "text",
+      "value": "l(d). A capillary tube of 1.3 mm diameter is immersed vertically in water exposed to the atmosphere. Determine how high water will rise in the tube. Take the contact angle at the inner wall of the tube to be 6° and the surface tension to be 1.2 N/m."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

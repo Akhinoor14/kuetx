@@ -1,0 +1,37 @@
+{
+  "id": "734_p2_Q4(d)",
+  "course": {
+    "code": "IPE 2229",
+    "title": "Industrial Psychology and Law",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\2nd_Year_2nd_Term_2017_734.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is <sub>sw</sub>it<sub>c</sub>h<sub>�n</sub> circuit? Write down the name <sub>g</sub>ra<sub>p</sub>hic s<sub>y</sub>mbol al<sub>g</sub>ebric function and 1 0t<sub>ru</sub>th t<sub>a</sub>bl<sub>e o</sub>fdiff<sub>eren</sub>t l<sub>og</sub>i<sub>c ga</sub>t<sub>es</sub>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

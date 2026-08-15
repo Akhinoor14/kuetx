@@ -1,0 +1,37 @@
+{
+  "id": "748_p1_Q10(b)",
+  "course": {
+    "code": "IPE 4125",
+    "title": "Machine Tools",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\4th_Year_1st_Term_2016_748.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "10(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Wh<sub>a</sub>t <sub>are</sub> th<sub>e qua</sub>liti<sub>es o</sub>f i<sub>n</sub>f<sub>orma</sub>ti<sub>on</sub>? Wh<sub>y</sub> d<sub>o we nee</sub>d <sub>a compu</sub>t<sub>er</sub> b<sub>ase</sub>d i<sub>n</sub>f<sub>orma</sub>ti<sub>on</sub> 1 5   \ns<sub>y</sub>stem<sup>?</sup>   \n( c ) If <sub>an</sub> i<sub>n</sub>f<sub>orma</sub>ti<sub>on sys</sub>t<sub>em</sub> i<sub>s</sub> t<sub>o</sub> b<sub>e</sub> d<sub>es</sub>i<sub>gne</sub>d f<sub>or a mo</sub>bil<sub>e p</sub>h<sub>one opera</sub>t<sub>or w</sub>h<sub>a</sub>t <sub>wou</sub>ld b<sub>e</sub> th<sub>e</sub> 0 8   \nt<sub>ac</sub>ti<sub>ca</sub>l i<sub>n</sub>f<sub>orma</sub>ti<sub>on</sub>?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2016"
+}

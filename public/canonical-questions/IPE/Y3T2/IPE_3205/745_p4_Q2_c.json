@@ -1,0 +1,49 @@
+{
+  "id": "745_p4_Q2(c)",
+  "course": {
+    "code": "IPE 3205",
+    "title": "Product Design -II",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\3rd_Year_2nd_Term_2017_745.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A process is being controlled with a fraction non-conforming control chart. The process average has been shown to be 0.07. Three sigma control limits are used and the procedure calls for taking daily samples of 400 items."
+    },
+    {
+      "type": "text",
+      "value": "i) Calculate the upper and lower control limits."
+    },
+    {
+      "type": "text",
+      "value": "If the process average suddenly shift to 0.01, what is the probability that the shift would be detected on the first subsequent sample?"
+    },
+    {
+      "type": "text",
+      "value": "iii) What is the probability that the shift in part (ii) would be detected on the first and second sample taken after the shift?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

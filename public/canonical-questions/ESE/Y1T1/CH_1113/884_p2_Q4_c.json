@@ -1,0 +1,42 @@
+{
+  "id": "884_p2_Q4(c)",
+  "course": {
+    "code": "CH 1113",
+    "title": "Chemistry I",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\1st_Year_1st_Term_2019_884.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". A 1.0 L vessel contained 0.0185 mole of PCl3, 0.0158 mole of PCl5 and 0.0870 mole of $\\mathrm { C l } _ { 2 }$ at 500 K in an equilibrium mixture. Calculate the value of $K _ { p }$ and $\\mathbf { K } _ { \\mathfrak { c } }$ for the reaction:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nP C l _ { 5 } ( g ) ^ { * } \\substack { , } P C l _ { 3 } ( g ) + C l _ { 2 } ( g )\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
+}

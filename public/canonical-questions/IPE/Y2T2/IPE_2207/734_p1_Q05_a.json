@@ -1,0 +1,45 @@
+{
+  "id": "734_p1_Q05(a)",
+  "course": {
+    "code": "IPE 2207",
+    "title": "Probability and Statistical Analysis",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\2nd_Year_2nd_Term_2017_734.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "05(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The mean length of a small counterbalance bar is 43 millimeters. The population supervisor is concerned that the adjustments of the machine producing the bars have changed. He asks the Engineering department to investigate. Engineeringdepartment selects a random sample of 12 bars and measures each. The results are reported below in millimeters."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>42</td><td rowspan=1 colspan=1>39</td><td rowspan=1 colspan=1>42</td><td rowspan=1 colspan=1>45</td><td rowspan=1 colspan=1>43</td><td rowspan=1 colspan=1>40</td><td rowspan=1 colspan=1>39</td><td rowspan=1 colspan=1>41</td><td rowspan=1 colspan=1>40</td><td rowspan=1 colspan=1>42</td><td rowspan=1 colspan=1>43</td><td rowspan=1 colspan=1>42</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Is it reasonable to conclude that there has been a change in the mean length of the bars? Use the 0.02 significance level."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

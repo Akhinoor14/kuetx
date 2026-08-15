@@ -1,0 +1,45 @@
+{
+  "id": "703_p1_Q2(a)",
+  "course": {
+    "code": "EEE 3105",
+    "title": "Control Systems",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\3rd_Year_2nd_Term_2018_703.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "A standard closed loop system is given in the following specifications: Plant: a dc motor with inertia and friction as motor load,"
+    },
+    {
+      "type": "text",
+      "value": "(25)"
+    },
+    {
+      "type": "text",
+      "value": "Controller: a P-controller with $\\mathrm { K } _ { \\mathrm { p } }$ gain, Feedback: unit $\\mathrm { y , }$ Input: Armature voltage, Output: angular velocity. i) Determine the performance equation of the system. ii) Determine the transfer function. iii) Write down the state equation. iv) Determine the steady state output for a step input. Assume any data for designing your system."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

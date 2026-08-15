@@ -1,0 +1,42 @@
+{
+  "id": "1199_p4_Q5(b)",
+  "course": {
+    "code": "ME 2113",
+    "title": "Statics and Solid Mechanics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\2nd_Year_1st_Term_2023_1199.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A uniform concrete slab of total weight Wis to be attached as shown in figure to two rods whose lower ends arc on the same level. Determine the ratio o[ the areas of the rods so that the slab will remain level."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0cf2b54e85894729a4af26678b95a510d0e5393b7dff2f71c7b066d2b24cae93.jpg",
+      "_source_path": "images/0cf2b54e85894729a4af26678b95a510d0e5393b7dff2f71c7b066d2b24cae93.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

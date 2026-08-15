@@ -1,0 +1,46 @@
+{
+  "id": "734_p2_Q1(a)",
+  "course": {
+    "code": "IPE 2229",
+    "title": "Industrial Psychology and Law",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\2nd_Year_2nd_Term_2017_734.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "and assume rigid is supported by a <sup>1 0</sup> b<sub>ronze</sub> <sub>ro</sub>d 2 <sub>.</sub> 0 <sub>m</sub> l<sub>ong</sub> <sub>an</sub>d <sub>a</sub> <sub>s</sub>t<sub>ee</sub>l <sub>ro</sub>d I.O<sub>m</sub> l<sub>ong</sub>. U<sub>s</sub>i<sub>ng</sub> th<sub>e</sub> d<sub>a</sub>t<sub>a</sub> i<sub>n</sub> <sub>accompany</sub>i<sub>ng</sub> t<sub>a</sub>bl<sub>e</sub> <sub>compu</sub>t<sub>e</sub> th<sub>e s</sub>t<sub>ress</sub> i<sub>n eac</sub>h <sub>ro</sub>d"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Steel</td><td rowspan=1 colspan=1>Bronze</td></tr><tr><td rowspan=1 colspan=1>Area (mm²)</td><td rowspan=1 colspan=1>600</td><td rowspan=1 colspan=1>300</td></tr><tr><td rowspan=1 colspan=1>E(GPa)</td><td rowspan=1 colspan=1>200</td><td rowspan=1 colspan=1>83</td></tr><tr><td rowspan=1 colspan=1>Proportional limit (MPa)</td><td rowspan=1 colspan=1>240</td><td rowspan=1 colspan=1>14</td></tr></table>"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e4431b739550e03e2c6f75f403ee15b8bed9de16ba4c3fbe9964f6242de07ee1.jpg",
+      "_source_path": "images/e4431b739550e03e2c6f75f403ee15b8bed9de16ba4c3fbe9964f6242de07ee1.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "871_p5_Q2(c)",
+  "course": {
+    "code": "ECE 4139",
+    "title": "TV Engineering",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\4th_Year_1st_Term_2016_871.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": ". What will' be the value of the center pixel when (11) this image is passed through"
+    },
+    {
+      "type": "text",
+      "value": "(i) Median filter, (ii) Geometric mean filter, and (iii) Hàrmonic mean filter."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_078ae804353174e752bcc764c5eb321be69dfeab1569e6236689e8cacb135eb3.jpg",
+      "_source_path": "images/078ae804353174e752bcc764c5eb321be69dfeab1569e6236689e8cacb135eb3.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2016"
+}

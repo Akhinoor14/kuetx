@@ -1,0 +1,37 @@
+{
+  "id": "723_p4_Q5(c)",
+  "course": {
+    "code": "MATH 1211",
+    "title": "Mathematics - II",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\1st_Year_2nd_Term_2015_723.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "<sub>Evaluate]</sub> ${ \\vec { F } } , { \\vec { N } } d s .$ <sub>w</sub>h<sub>ere</sub> $\\vec { F } = y z \\hat { \\imath } + z x \\hat { \\jmath } + x y \\hat { k }$ <sub>over</sub> th<sub>e sur</sub>f<sub>ace o</sub>f $x ^ { 2 } + y ^ { 2 } + z ^ { 2 } = 1$ i<sub>n</sub> 1 0 th<sub>e</sub> fi<sub>rs</sub>t <sub>oc</sub>t<sub>an</sub>t"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "738_p4_Q3(c)",
+  "course": {
+    "code": "IPE 3119",
+    "title": "Operations Management",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\3rd_Year_1st_Term_2016_738.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following table contains order-dependent setup times for four-jobs. For safety reasons, Job C cannot follow job A, nor can job A follow job C. Determine the processing sequence that will minimize the total setup time."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=6 colspan=1>Proceeding job</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>SetupTime (hrs.)</td><td rowspan=1 colspan=4>Following job&#x27;sSetup time (hrs.)</td></tr><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>D</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>-</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>X</td><td rowspan=1 colspan=1>4</td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>2</td></tr><tr><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>X</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>2</td></tr><tr><td rowspan=1 colspan=1>D</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>1</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "SECTION–B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "694_p4_Q1(d)",
+  "course": {
+    "code": "EEE 1101",
+    "title": "Electrical Circuits I",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2016\\2nd_Year_2nd_Term_2016_694.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "Show that the system described by the following equation: (07)"
+    },
+    {
+      "type": "text",
+      "value": "$\\begin{array} { r } { \\frac { d y ( t ) } { d t } + 3 y ( t ) = x ( t ) } \\end{array}$ is linear, where the symbol have their usual meaning."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

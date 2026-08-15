@@ -1,0 +1,61 @@
+{
+  "id": "1118_Q8(e)",
+  "course": {
+    "code": "LE 3101",
+    "title": "Leather Manufacturing Technology IV",
+    "department": "Department of Leather Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2019\\3rd_Year_1st_Term_2019_1118.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "8(e)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define ICP-MS. Why it is better than AAS?"
+    },
+    {
+      "type": "text",
+      "value": "Department of Leather Engineering Khulaa University of Engineering & Technology B. Sc. Engineering 3'd Year 1st Term Examination-2019"
+    },
+    {
+      "type": "text",
+      "value": "Leather Products Engineering I"
+    },
+    {
+      "type": "text",
+      "value": "LE 3109"
+    },
+    {
+      "type": "text",
+      "value": "Full Marks: 210"
+    },
+    {
+      "type": "text",
+      "value": "iii) Assume reasonable data if any missing."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-A"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

@@ -1,0 +1,54 @@
+{
+  "id": "745_p1_Q1(a)",
+  "course": {
+    "code": "IPE 3205",
+    "title": "Product Design -II",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\3rd_Year_2nd_Term_2017_745.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "is made of AISI C1020 annealed steel, with $b =  { ^ 3 / _ { 4 } }  { \\mathrm { i n } }$ n. and 15 $h = 1 \\frac 1 2$ in. Determine:"
+    },
+    {
+      "type": "text",
+      "value": "i) What force will cause breakage?"
+    },
+    {
+      "type": "text",
+      "value": "ii) What is the maximum allowable load based on ultimate strength and design factor of 4?"
+    },
+    {
+      "type": "text",
+      "value": "iii) What is the allowable load based on yield strength, If, N = 2.5?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e7e5f16645ffcf8817bd1e454db4d06314ec236f0e08e925950005306190afd3.jpg",
+      "_source_path": "images/e7e5f16645ffcf8817bd1e454db4d06314ec236f0e08e925950005306190afd3.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

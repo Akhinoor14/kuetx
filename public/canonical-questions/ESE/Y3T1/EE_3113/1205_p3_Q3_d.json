@@ -1,0 +1,42 @@
+{
+  "id": "1205_p3_Q3(d)",
+  "course": {
+    "code": "EE 3113",
+    "title": "Power System Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\3rd_Year_1st_Term_2022_1205.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Determine the view factor $\\mathrm { F } _ { 1 - 2 }$ between two rectangular surfaces $\\mathsf { A } _ { 1 }$ abd $\\mathrm { A } _ { 2 }$ for te geometric 10 arrangement shown in the figure."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_be1353646db5892c4b0b38de5b6ffaaa63a7834e8e01458263c84402c9dcceb5.jpg",
+      "_source_path": "images/be1353646db5892c4b0b38de5b6ffaaa63a7834e8e01458263c84402c9dcceb5.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

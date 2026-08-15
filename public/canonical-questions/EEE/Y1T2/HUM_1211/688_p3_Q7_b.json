@@ -1,0 +1,41 @@
+{
+  "id": "688_p3_Q7(b)",
+  "course": {
+    "code": "HUM 1211",
+    "title": "Financial Account and Economic Analysis",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2016\\1st_Year_2nd_Term_2016_688.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "From the following ledger balances, prepare a trial balance as on June 30, 2016."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>TK</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>TK</td></tr><tr><td rowspan=1 colspan=1>Cash</td><td rowspan=1 colspan=1>7150</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Capital</td><td rowspan=1 colspan=1>21750</td></tr><tr><td rowspan=1 colspan=1>Accounts receivable</td><td rowspan=1 colspan=1>10000</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Salaries payable</td><td rowspan=1 colspan=1>1500</td></tr><tr><td rowspan=1 colspan=1>Prepaid insurance</td><td rowspan=1 colspan=1>2750</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Service revenue</td><td rowspan=1 colspan=1>14400</td></tr><tr><td rowspan=1 colspan=1>Supplies</td><td rowspan=1 colspan=1>500</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Rent expense</td><td rowspan=1 colspan=1>5500</td></tr><tr><td rowspan=1 colspan=1>Office equipment</td><td rowspan=1 colspan=1>15000</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Depreciation expense</td><td rowspan=1 colspan=1>1000</td></tr><tr><td rowspan=1 colspan=1>Accumulated depreciation-office equipment</td><td rowspan=1 colspan=1>250</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Insurance expense</td><td rowspan=1 colspan=1>250</td></tr><tr><td rowspan=1 colspan=1>Accounts payable</td><td rowspan=1 colspan=1>4500</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Utilities expense</td><td rowspan=1 colspan=1>250</td></tr><tr><td rowspan=1 colspan=1>Utilities payable</td><td rowspan=1 colspan=1>150</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Supplies expense</td><td rowspan=1 colspan=1>1500</td></tr><tr><td rowspan=1 colspan=1>Unearned Service revenue</td><td rowspan=1 colspan=1>1500</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Advertisement expense</td><td rowspan=1 colspan=1>150</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

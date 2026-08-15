@@ -1,0 +1,49 @@
+{
+  "id": "745_p3_Q4(d)",
+  "course": {
+    "code": "IPE 3205",
+    "title": "Product Design -II",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\3rd_Year_2nd_Term_2017_745.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Enlist efficiency measure factors. The operating data of ABC company are shown in 10 below."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=2 colspan=1>Process characteristics</td><td rowspan=1 colspan=2>Department</td></tr><tr><td rowspan=1 colspan=1>Stamping</td><td rowspan=1 colspan=1>Grinding</td></tr><tr><td rowspan=1 colspan=1>Working hour per day</td><td rowspan=1 colspan=1>16</td><td rowspan=1 colspan=1>16</td></tr><tr><td rowspan=1 colspan=1>Processing time, mint/part</td><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>5</td></tr><tr><td rowspan=1 colspan=1>Average daily downtime , min</td><td rowspan=1 colspan=1>115</td><td rowspan=1 colspan=1>130</td></tr><tr><td rowspan=1 colspan=1>Average daily setup time, min</td><td rowspan=1 colspan=1>40</td><td rowspan=1 colspan=1>54</td></tr><tr><td rowspan=1 colspan=1>Defective output, %</td><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>8</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "All defectives are rejected as scrap. The company operates 250 working days per year. Annual demand is currently 65,000 parts, Due to preventive maintenance program the down time in each department was reduced by ten percent but setup time was increased by two percent, Determine the efficiency and equipment requirements for each department."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

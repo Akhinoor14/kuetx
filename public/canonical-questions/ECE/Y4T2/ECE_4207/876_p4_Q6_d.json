@@ -1,0 +1,41 @@
+{
+  "id": "876_p4_Q6(d)",
+  "course": {
+    "code": "ECE 4207",
+    "title": "Control System Engineering",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2015\\4th_Year_2nd_Term_2015_876.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "A exchange uses -40V battery to drive subscriber lines. A resistance of 250 Ω is placed in series with the battery to protect it from short circuits. The subscribers are required to use a standard telephone set which offers a d.c resistance of 50 Ω. The microphone requires 23 mA for proper functioning. Determine the farthest distance from the exchange at which a subscriber can be located if 26 AWG conductor is used. Note that the specifications of 26 AWG are: Diameter (mm):. 0.41, d.c resistance (Ω/km): 133.89, Attenuation (dB/km): 1.61."
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2015"
+}

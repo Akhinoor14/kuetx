@@ -1,0 +1,37 @@
+{
+  "id": "756_Q2(d)",
+  "course": {
+    "code": "IPE 4039",
+    "title": "Human Resource Management",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\4th_Year_2nd_Term_2018_756.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A frame {B } is located initially coincident with a frame $\\{ \\mathsf { A } \\}$ Werotate {B } about $\\hat { Z } _ { B } \\boldsymbol { \\mathrm { b y } }$ 3 0 d<sub>egrees an</sub>d th<sub>en we ro</sub>t<sub>a</sub>t<sub>e</sub> th<sub>e resu</sub>lti<sub>ng</sub> f<sub>rame a</sub>b<sub>ou</sub>t ${ \\hat { X } } _ { B }$ <sup>b</sup><sub>y</sub> $\\varnothing$ d<sub>egrees</sub> Gi<sub>ve</sub> th<sub>e ro</sub>t<sub>a</sub>ti<sub>on ma</sub>t<sub>r</sub>i<sub>x</sub> th<sub>a</sub>t <sub>w</sub>ill <sub>c</sub>h<sub>ange</sub> th<sub>e</sub> d<sub>escr</sub>i ti<sub>ons o</sub>f<sub>vec</sub>t<sub>ors</sub> f<sub>rom</sub> $\\mathsf { B } _ { \\mathrm { P } }$ to $\\bar { \\mathsf { A } } _ { \\mathsf { P } }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2018"
+}

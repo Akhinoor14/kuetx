@@ -1,0 +1,41 @@
+{
+  "id": "889_p6_Q5(d)",
+  "course": {
+    "code": "EE 2113",
+    "title": "Electrical Machines",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2018\\2nd_Year_1st_Term_2018_889.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 100 KVA transformer has 400 turns on the primary and 80 turns on the secondary. The primary and secondary resistances are 0.3 Ω and 0.01 Ω respectively and corresponding leakage reactances are 1.1Ω and 0.035 Ω respectively. The supply voltage is 2200 V. Calculate –"
+    },
+    {
+      "type": "text",
+      "value": "(i) equivalent impedance referred to primary (ii) the voltage regulation and the secondary terminal voltage for full load having a power factor of 0.8 leading."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

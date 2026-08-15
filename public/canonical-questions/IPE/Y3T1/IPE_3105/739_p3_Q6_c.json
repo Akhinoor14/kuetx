@@ -1,0 +1,37 @@
+{
+  "id": "739_p3_Q6(c)",
+  "course": {
+    "code": "IPE 3105",
+    "title": "Product Design -I",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\3rd_Year_1st_Term_2017_739.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A Pelton wheel has a mean bucket speed of 12 m/s and is supplied with water at a rate of 750 liters per second under ahead of 35 m. If the bucket deflect the jet through an angle of ${ 1 6 0 } ^ { 0 } ,$ , find the power developed by the turbine and its hydraulic efficiency. Take coefficient of-velocity as 0.98. Neglect the friction in bucket. Also determine the overall efficiency of the turbine if its mechanical efficiency is 80%."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

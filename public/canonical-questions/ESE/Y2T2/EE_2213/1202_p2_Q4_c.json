@@ -1,0 +1,46 @@
+{
+  "id": "1202_p2_Q4(c)",
+  "course": {
+    "code": "EE 2213",
+    "title": "Power Electronics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\2nd_Year_2nd_Term_2022_1202.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A single-phase fullwave ac voltage controller shown in figure has a resisnve load of $\\mathrm { R } = 1 0 \\Omega$ and input voltage is $\\mathrm { V } _ { s } = 1 2 0 \\mathrm { V }$ (rms), 60 Hz. The delay angles of thyristors T1 and T2 are equal: $\\begin{array} { r } { \\propto _ { 1 } = \\alpha _ { 2 } = \\alpha = \\frac { \\pi } { 2 } . } \\end{array}$ Determine (i) therms output voltage $\\mathrm { V } _ { 0 } ,$ (ii) the input PF, (iii) the average current of thyristors $\\mathrm { I _ { A } }$ and (iv) therms current of thyristors fR."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b53ab2dfebd85626cf6740f89628318be0919be7e1cc8d019201e190197d67f3.jpg",
+      "_source_path": "images/b53ab2dfebd85626cf6740f89628318be0919be7e1cc8d019201e190197d67f3.jpg"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2022"
+}

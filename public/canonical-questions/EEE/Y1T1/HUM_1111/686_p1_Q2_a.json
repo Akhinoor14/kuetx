@@ -1,0 +1,69 @@
+{
+  "id": "686_p1_Q2(a)",
+  "course": {
+    "code": "HUM 1111",
+    "title": "Technical English",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2017\\1st_Year_1st_Term_2017_686.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Frame WH questions:"
+    },
+    {
+      "type": "text",
+      "value": "i. They will address the letter to the Chairman."
+    },
+    {
+      "type": "text",
+      "value": "(14)"
+    },
+    {
+      "type": "text",
+      "value": "ii. We shall take this risk to gain something."
+    },
+    {
+      "type": "text",
+      "value": "iii. I am laughing on seeing the cartoon."
+    },
+    {
+      "type": "text",
+      "value": "iv. The widow wants to pass her life in a holy place."
+    },
+    {
+      "type": "text",
+      "value": "v. Our house is 3km from our school."
+    },
+    {
+      "type": "text",
+      "value": "vi. The gardener is watering the garden."
+    },
+    {
+      "type": "text",
+      "value": "vii. She wants to see Lipi."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2017"
+}

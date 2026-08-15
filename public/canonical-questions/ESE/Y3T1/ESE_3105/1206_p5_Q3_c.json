@@ -1,0 +1,37 @@
+{
+  "id": "1206_p5_Q3(c)",
+  "course": {
+    "code": "ESE 3105",
+    "title": "Heat Transfer and Mass Transfer",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\3rd_Year_1st_Term_2023_1206.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". A long 35cm diameter cylindrical shaft made of stainless steel 301 $( \\mathrm { k } ~ = ~ 1 4 . 9 ~ \\mathrm { W / m ^ { \\circ } C , \\rho } ~ = 7 9 0 0 ~ \\mathrm { k g / m ^ { 3 } } ~ , \\mathrm { c _ { p } } = 4 7 7 ~ \\mathrm { J / k g ^ { o } C }$ and $\\propto = 3 . 9 5 \\times 1 0 ^ { - 6 } \\mathrm { m } ^ { 2 } / s )$ comes out of an oven at a uniform temperature of $4 0 0 ^ { \\circ } \\mathrm { C } .$ The shaft is then al lowed to cool slowly in a chamber at $1 5 0 ~ ^ { \\circ } \\mathrm { C }$ with an average convection heat transfer coefficient of $\\mathrm { h } = 6 0 \\mathrm { W / m } ^ { 2 \\circ } \\mathrm { C } .$ Determine the temperature at the center of the shaft 20 min after the start of cooling process. Also, determine the rate of heat transfer per unit length of the shaft during this time period."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

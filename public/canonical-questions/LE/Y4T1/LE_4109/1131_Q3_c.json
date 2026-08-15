@@ -1,0 +1,50 @@
+{
+  "id": "1131_Q3(c)",
+  "course": {
+    "code": "LE 4109",
+    "title": "Leather Products Engineering III",
+    "department": "Department of Leather Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2022\\4th_Year_1st_Term_2022_1131.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Mention the components of ground reaction force on 2D phase. Prove that $\\mathrm { G R F } _ { \\mathrm { T o l } } = \\% \\mathrm { m g }$ [4sin(47tt) - sin(8nt)]; where the symbols have their usual meanings."
+    },
+    {
+      "type": "text",
+      "value": "<sub>3(d)</sub> The father of the modern sprinter shoe was Adlof Dassler who began making shoe in 1920. To give support to the runner Dassler added three side strips technology to the shoe which assured foot safety to some extent. The data for a sprinter both as barefoot and <sub>puma</sub> shod running was recorded. The force during puma shod was 225N. The barefoot condition data for the sprinter just before toe off at the start of the race was shown in the following figure. First, draw the lever diagram and also find: (i) Force $\\left| \\overline { { \\mathsf { F } _ { \\mathsf { H } } } } \\right|$ exerted on the heel <sub>point</sub> by calcaneal tendon; (ii) Estimate variation of the force between bare and shod condition (iii) Magnitude of the force $\\left| \\overline { { F _ { i } } } \\right|$ exerted on the foot at the ankle joint."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_efe13d5163d6d4efbc690334a8e3e8116be1dc9d85eb1d275ba1160d0f6960e5.jpg",
+      "_source_path": "images/efe13d5163d6d4efbc690334a8e3e8116be1dc9d85eb1d275ba1160d0f6960e5.jpg"
+    },
+    {
+      "type": "text",
+      "value": "<sub>4(a)</sub> Cite a few conventional software used in footwear designing."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

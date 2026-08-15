@@ -1,0 +1,45 @@
+{
+  "id": "1203_p6_Q4",
+  "course": {
+    "code": "MATH 3113",
+    "title": "Statistics and Numerical Methods",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2020\\3rd_Year_1st_Term_2020_1203.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "4",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find first moments measured from origin. Hence find mean, standard deviation, coefficient of variation, coefficient of skewness and coefficient of kurtosis of the following data:"
+    },
+    {
+      "type": "text",
+      "value": "3, R, 1, R;"
+    },
+    {
+      "type": "text",
+      "value": "Where R is the sum of last two digits of your class roll number [Hints: Roll 1713024, then R = 2 + 4 = 6]"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2020"
+}

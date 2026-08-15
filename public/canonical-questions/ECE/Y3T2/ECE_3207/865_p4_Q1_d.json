@@ -1,0 +1,37 @@
+{
+  "id": "865_p4_Q1(d)",
+  "course": {
+    "code": "ECE 3207",
+    "title": "Antenna Engineering",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2015\\3rd_Year_2nd_Term_2015_865.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The radial component of the radiated power density of an infinitesimal linear dipole of length l<<λ is given by $W _ { a v } = \\hat { a } _ { r } W _ { r } = \\hat { a } _ { r } A _ { 0 } \\sin ^ { 2 } \\theta / r ^ { 2 }$ (w/m²) where $\\dot { \\mathsf { A } } _ { 0 }$ is the peak value of the power density, θ is the usual spherical 'coordinate and $\\mathbf { a } _ { \\mathbf { r } }$ is the radial unit vector. Determine the maximum directivity of the antenna."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2015"
+}

@@ -1,0 +1,61 @@
+{
+  "id": "718_p2_Q2(b)",
+  "course": {
+    "code": "CHEM 1111",
+    "title": "Chemistry",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\1st_Year_1st_Term_2016_718.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve the problems :"
+    },
+    {
+      "type": "text",
+      "value": "Th<sub>ere arc</sub> I 0 000 id enti ca l ind i vi d ua l s i<sub>n</sub> th<sub>e</sub> ma rket fo r di<sub>t</sub> x <sub>eac</sub>h <sub>w</sub>ith <sub>a</sub> d<sub>eman</sub>d f <sub>n</sub> ti <sub>n</sub> i i b $Q _ { \\mathsf { d x } } = \\mathsf { I } 2 - 2 \\mathsf { p } \\mathrm { . }$ i d I 000 id ti l d f dit x h ith <sub>su</sub> l f<sub>unc</sub>ti<sub>on</sub> i<sub>s</sub> i<sub>ven</sub> b $\\mathrm { ( ) _ { s x } = 2 0 P _ { s } , }$"
+    },
+    {
+      "type": "text",
+      "value": "i) Obtain e uilibrium rice and uantit i) Obtain equilibrium price and quantity."
+    },
+    {
+      "type": "text",
+      "value": "N if th t d id t ll t l t f \\$2 it ld f h f th 1 000 id<sub>en</sub>ti<sub>ca</sub>l <sub>se</sub>ll<sub>ers o</sub>f<sub>commo</sub>dit <sub>x</sub>-"
+    },
+    {
+      "type": "text",
+      "value": "ii) What effect docs this have on the e uilibrium rice and uantit ofcommodit x?"
+    },
+    {
+      "type": "text",
+      "value": "iii) Who actuall<sub>y p</sub>a<sub>y</sub>s the tux?"
+    },
+    {
+      "type": "text",
+      "value": "iv) What is the amount oftax collected by the overnment?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2016"
+}

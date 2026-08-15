@@ -1,0 +1,37 @@
+{
+  "id": "889_p5_Q7(a)",
+  "course": {
+    "code": "MATH 2113",
+    "title": "Linear Algebra and Vector Analysis",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2018\\2nd_Year_1st_Term_2018_889.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". If $\\dot { { \\hat { A } } } = \\left( 3 x ^ { 2 } + 6 y \\right) \\hat { \\ i } - 1 4 y z \\hat { \\ j } + 2 0 x z ^ { 2 } \\hat { k }$ , evaluate $\\int _ { c } \\vec { A } \\cdot d \\vec { r }$ from (0,0,0) to (1,1,1) along the following paths C: the straight line from (0,0,0) to (1,0,0), then to (1,1,0), and then to (1,1,1)."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

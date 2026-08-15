@@ -1,0 +1,46 @@
+{
+  "id": "732_Q3(b)",
+  "course": {
+    "code": "IPE 2207",
+    "title": "Probability and Statistical Analysis",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\2nd_Year_2nd_Term_2015_732.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "is the cross section of a beam formed by joining two rectangular pieces of wood together. The beam is subjected to a maximum shearing force of 60 KN. Show that the NA is 34mm from the top and that $\\mathrm { I } _ { \\mathsf { N A } } = 1 0 . 5 7 \\times 1 0 ^ { 6 } \\mathrm { m m } ^ { 4 }$ . Using these values, determine the shearing stress (i) at the neutral axis and (ii) at the junction between the two pieces of wood."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_6178c5c5031e6f32ed544f19886d4ee01f74ce5a83a64861c2d2274c6e1e6603.jpg",
+      "_source_path": "images/6178c5c5031e6f32ed544f19886d4ee01f74ce5a83a64861c2d2274c6e1e6603.jpg"
+    },
+    {
+      "type": "text",
+      "value": "The bcam loaded as shown in figure"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

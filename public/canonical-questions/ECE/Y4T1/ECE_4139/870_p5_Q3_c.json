@@ -1,0 +1,45 @@
+{
+  "id": "870_p5_Q3(c)",
+  "course": {
+    "code": "ECE 4139",
+    "title": "TV Engineering",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2015\\4th_Year_1st_Term_2015_870.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "shows a 8-bit noisy image of size 7×7. Now, show the result of filtering with a (i) Max filter of size 3×3, (ii) Min filter of size 3×3. What kind of noise is removed by these type of filtering-Write your observation based on the result you obtained."
+    },
+    {
+      "type": "text",
+      "value": "(14)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>254</td><td rowspan=1 colspan=1>251</td><td rowspan=1 colspan=1>250</td><td rowspan=1 colspan=1>25</td><td rowspan=1 colspan=1>149</td><td rowspan=1 colspan=1>178</td><td rowspan=1 colspan=1>251</td></tr><tr><td rowspan=1 colspan=1>16</td><td rowspan=1 colspan=1>100</td><td rowspan=1 colspan=1>251</td><td rowspan=1 colspan=1>240</td><td rowspan=1 colspan=1>24</td><td rowspan=1 colspan=1>160</td><td rowspan=1 colspan=1>17</td></tr><tr><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>203</td><td rowspan=1 colspan=1>205</td><td rowspan=1 colspan=1>248</td><td rowspan=1 colspan=1>249</td><td rowspan=1 colspan=1>253</td><td rowspan=1 colspan=1>254</td></tr><tr><td rowspan=1 colspan=1>253</td><td rowspan=1 colspan=1>252</td><td rowspan=1 colspan=1>14</td><td rowspan=1 colspan=1>148</td><td rowspan=1 colspan=1>254</td><td rowspan=1 colspan=1>16</td><td rowspan=1 colspan=1>112</td></tr><tr><td rowspan=1 colspan=1>251</td><td rowspan=1 colspan=1>212</td><td rowspan=1 colspan=1>211</td><td rowspan=1 colspan=1>249</td><td rowspan=1 colspan=1>164</td><td rowspan=1 colspan=1>201</td><td rowspan=1 colspan=1>222</td></tr><tr><td rowspan=1 colspan=1>14</td><td rowspan=1 colspan=1>25</td><td rowspan=1 colspan=1>248</td><td rowspan=1 colspan=1>25</td><td rowspan=1 colspan=1>167</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>248</td></tr><tr><td rowspan=1 colspan=1>206</td><td rowspan=1 colspan=1>253</td><td rowspan=1 colspan=1>23</td><td rowspan=1 colspan=1>253</td><td rowspan=1 colspan=1>107</td><td rowspan=1 colspan=1>209</td><td rowspan=1 colspan=1>201</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2015"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "1105_Q1(c)",
+  "course": {
+    "code": "EEE 1119",
+    "title": "Basic Electrical Engineering",
+    "department": "Department of Leather Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2021\\1st_Year_1st_Term_2021_1105.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "State the conditions for applying superposition theorem to a circuit. Using super position 13 theorem, find the value of the output voltage $\\mathrm { v } _ { \\mathrm { 0 } }$ in the circuit of the following figure."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_7fd78c2f7e1a9b52c5cec8b7e17b66c36668331b805b24ba8595718d4d5030f5.jpg",
+      "_source_path": "images/7fd78c2f7e1a9b52c5cec8b7e17b66c36668331b805b24ba8595718d4d5030f5.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2021"
+}

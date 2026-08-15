@@ -1,0 +1,42 @@
+{
+  "id": "1124_p3_Q2(d)",
+  "course": {
+    "code": "ME 3219",
+    "title": "Fluid Mechanics & Machineries",
+    "department": "Department of Leather Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2019\\3rd_Year_2nd_Term_2019_1124.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The manometer fluid in the manometer of the following Fig. 02 has a specific gravity of 3.46. <sub>Pipe</sub> <sub>12</sub> A and B both contain water. If the pressure in pipe A is decreased by 187.2 pa and pressure in <sub>pipe</sub> B increase by 129 .6 Pa, determine the new differential reading of the manometer."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_c9e9eb7ccfd4ad26a862f41d63131a00d90047218070acd098cb36ab7344d37d.jpg",
+      "_source_path": "images/c9e9eb7ccfd4ad26a862f41d63131a00d90047218070acd098cb36ab7344d37d.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2019"
+}

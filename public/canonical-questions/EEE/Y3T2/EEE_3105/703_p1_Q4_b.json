@@ -1,0 +1,46 @@
+{
+  "id": "703_p1_Q4(b)",
+  "course": {
+    "code": "EEE 3105",
+    "title": "Control Systems",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\3rd_Year_2nd_Term_2018_703.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 16,
+  "content": [
+    {
+      "type": "text",
+      "value": ", determine: i) open loop transfer function ii) feed forward transfer function iii) control ratio iv) feedback ratio v) error ratio vi) closed loop transfer function vii) characteristic equation, viii) closed loop poles and zeros if K=10."
+    },
+    {
+      "type": "text",
+      "value": "(16)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a5b5b73d7ec55d7b8c7f684086c8c593cb4395897ae862093b2fdd8b0aa69424.jpg",
+      "_source_path": "images/a5b5b73d7ec55d7b8c7f684086c8c593cb4395897ae862093b2fdd8b0aa69424.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

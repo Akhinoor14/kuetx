@@ -1,0 +1,37 @@
+{
+  "id": "1211_p5_Q3(d)",
+  "course": {
+    "code": "ESE 3207",
+    "title": "Solar Photovoltaic System",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\3rd_Year_2nd_Term_2022_1211.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". A crystalline silicon wafer is doped with $1 0 ^ { 1 6 }$ acceptor atoms per cubic centimeter. A 1 micrometer thick emitter layer is formed at the surface of the wafer with a uniform concentration of $1 0 ^ { 1 8 }$ donors per cubic centimeter. Assume a step p-n junction and that all doping atoms are ionized. The intrinsic carrier concentration in silicon at 300K is $1 . { \\dot { 5 } } \\times 1 0 ^ { 1 0 } \\ c m ^ { - 3 }$ . Calculate built in voltage, width of the depletion region and maximum electric field at the metallurgical junction."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

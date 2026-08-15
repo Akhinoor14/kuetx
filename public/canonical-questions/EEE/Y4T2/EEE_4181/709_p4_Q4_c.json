@@ -1,0 +1,45 @@
+{
+  "id": "709_p4_Q4(c)",
+  "course": {
+    "code": "EEE 4181",
+    "title": "Microwave Engineering",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2017\\4th_Year_2nd_Term_2017_709.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Illustrate the arrays of two isotropic point sources for the following cases: (13)"
+    },
+    {
+      "type": "text",
+      "value": "(i) Two isotropic point sources of same amplitude and phase"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Two isotropic point sources of same amplitude but in-phase quadrature."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2017"
+}

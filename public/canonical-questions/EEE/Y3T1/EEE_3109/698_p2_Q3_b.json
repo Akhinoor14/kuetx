@@ -1,0 +1,57 @@
+{
+  "id": "698_p2_Q3(b)",
+  "course": {
+    "code": "EEE 3109",
+    "title": "Computational Methods in Electrical Engineering",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2017\\3rd_Year_1st_Term_2017_698.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the following distribution-"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Class interval</td><td rowspan=1 colspan=1>10-20</td><td rowspan=1 colspan=1>20-30</td><td rowspan=1 colspan=1>30-40</td><td rowspan=1 colspan=1>40-50</td><td rowspan=1 colspan=1>50-60</td><td rowspan=1 colspan=1>60-70</td><td rowspan=1 colspan=1>70-80</td></tr><tr><td rowspan=1 colspan=1>Frequency</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>2</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "(i) Find the value of mean, median, and mode."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Calculate the variance and mean deviation."
+    },
+    {
+      "type": "text",
+      "value": "(iii) Find the $2 9 ^ { \\mathrm { t h } }$ percentile, $2 ^ { \\mathrm { n d } }$ decile and $3 ^ { \\mathrm { r d } }$ quartile."
+    },
+    {
+      "type": "text",
+      "value": "(iv) Draw the histogram, frequency polygon, and ogive for the above distribution."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "889_p3_Q5(c)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Programming",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2018\\2nd_Year_1st_Term_2018_889.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". What is printed to the screen if the following commands are executed? (i) printf(\"Hello World\\r\") (ii) printf(\"Hello World\\b \\n\") (iii) printf(\"Hello World\\b \\t\\n\") (iv) $\\mathsf { \\rho } _ { \\mathsf { p r i n t f } } ( \\mathsf { \\Omega } ^ { \\ast } / \\mathsf { o d } \\mathrm { i n } ^ { \\prime \\prime } , 2 )$ (v) print $\\mathrm { f } ( ^ { \\mathrm { n o } } / \\mathrm { o f } \\mathrm { n } ^ { \\mathrm { n } } , 2 )$ (vi) $\\mathsf { p r i n t f } ( ^ { \\mathsf { m o } } / \\mathsf { o e } \\mathsf { i n } ^ { \\mathsf { m } } , 2 )$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

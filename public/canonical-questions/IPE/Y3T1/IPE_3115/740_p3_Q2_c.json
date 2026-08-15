@@ -1,0 +1,42 @@
+{
+  "id": "740_p3_Q2(c)",
+  "course": {
+    "code": "IPE 3115",
+    "title": "Engineering Economy",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\3rd_Year_1st_Term_2018_740.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ", determine the present worth in year 0, future 12 worth in vear 8 and equivalent uniform annual worth at an interest rate of 10% per year,"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_07709968232a2cef19c0cd5d19e6e7163e44de76b84be5fcc48591258f907a02.jpg",
+      "_source_path": "images/07709968232a2cef19c0cd5d19e6e7163e44de76b84be5fcc48591258f907a02.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

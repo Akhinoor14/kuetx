@@ -1,0 +1,37 @@
+{
+  "id": "739_p2_Q10(c)",
+  "course": {
+    "code": "IPE 3105",
+    "title": "Product Design -I",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\3rd_Year_1st_Term_2017_739.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "10(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "T t ti costs o<sup>f</sup>a med<sup>i</sup>um s<sup>i</sup>ze a liance d<sup>i</sup>str<sup>i</sup>butor <sup>h</sup>ave been <sup>i</sup>ncreas<sup>i</sup>n b 9% The t this <sup>'</sup> cost to be \\$ 25 000 Find the e uivalent resent <sub>an</sub>d <sub>annua</sub>l <sub>wor</sub>th<sub>s o</sub>fth<sub>e cos</sub>t<sub>s</sub> f<sub>or ears</sub> I th h 10 <sub>a</sub>t <sub>an</sub> i<sub>n</sub>t<sub>eres</sub>t <sub>ra</sub>t<sub>e o</sub>f 12% <sub>er ear</sub>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

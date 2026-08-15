@@ -1,0 +1,37 @@
+{
+  "id": "739_p3_Q1(c)",
+  "course": {
+    "code": "IPE 3105",
+    "title": "Product Design -I",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\3rd_Year_1st_Term_2017_739.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "How does pressure in a fluid (in which there is no shearin<sub>g</sub> stress) var<sub>y</sub> from point to <sub>po</sub>i<sub>n</sub>t? F<sub>or</sub> i<sub>ncompress</sub>ibl<sub>e</sub> fl<sub>u</sub>id d<sub>e</sub>d<sub>uce</sub> th<sub>e re</sub>l<sub>a</sub>ti<sub>ons</sub>hi<sub>p among a</sub>b<sub>so</sub>l<sub>u</sub>t<sub>e a</sub>t<sub>mosp</sub>h<sub>er</sub>i<sub>c an</sub>d g<sup>a</sup>ug<sup>e</sup> p<sup>re</sup>ssu<sup>re</sup>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

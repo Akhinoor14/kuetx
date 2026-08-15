@@ -1,0 +1,37 @@
+{
+  "id": "725_p5_Q7(b)",
+  "course": {
+    "code": "MATH 1211",
+    "title": "Mathematics - II",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\1st_Year_2nd_Term_2018_725.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the directional derivative of $x ^ { 2 } y ^ { 2 } z ^ { 2 }$ at the point $( 1 , 1 , - 1 )$ in the direction of the tangent to the curve $x = e ^ { t } , y = \\sin 2 t + 1 , z = 1 - \\cos t , a t t = 0$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

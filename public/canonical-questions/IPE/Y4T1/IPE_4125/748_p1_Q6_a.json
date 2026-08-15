@@ -1,0 +1,37 @@
+{
+  "id": "748_p1_Q6(a)",
+  "course": {
+    "code": "IPE 4125",
+    "title": "Machine Tools",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\4th_Year_1st_Term_2016_748.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What ar<sub>e</sub> th<sub>e requ</sub>i<sub>remen</sub>t<sub>s o</sub>fa <sub>goo</sub>d <sub>co</sub>di<sub>ng sc</sub>h<sub>e</sub>m<sub>e</sub>? 0 7   \n( b ) Writ<sub>e a</sub>n <sub>a</sub>l<sub>gor</sub>ith<sub>m</sub> f<sub>o</sub>r <sub>genera</sub>ti<sub>ng</sub> th<sub>e</sub> m<sub>o</sub>d<sub>u</sub>l<sub>us</sub>-I l <sub>co</sub>d<sub>e</sub> 1 0   \n( c ) Li<sub>s</sub>t th<sub>e</sub> i<sub>mpor</sub>t<sub>an</sub>t <sub>po</sub>i<sub>n</sub>t<sub>s</sub> t<sub>o</sub> k<sub>eep</sub> in mind <sub>w</sub>hil<sub>e</sub> d<sub>es</sub>i<sub>gn</sub>i<sub>ng</sub> th<sub>e</sub> f<sub>o</sub>rm<sub>a</sub>t <sub>o</sub>f <sub>a repor</sub>t 1 2   \n( d ) What is meant b<sub>y .</sub>b<sub>u</sub>siness <sub>grap</sub>hi<sub>cs</sub>? 06"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2016"
+}

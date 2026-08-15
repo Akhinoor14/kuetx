@@ -1,0 +1,83 @@
+{
+  "id": "887_p4_Q2(c)",
+  "course": {
+    "code": "ESE 1205",
+    "title": "Thermodynamics for Energy Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2018\\1st_Year_2nd_Term_2018_887.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Steam enters the first -stage turbine shown in figure at 40 bar and $5 0 0 \\%$ with volumetric flow rate of 90 $m ^ { 3 } / m i n$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_17e33d66117f6862b9a2b69b431446ee365865e7a94845e5135b0565ad832e47.jpg",
+      "_source_path": "images/17e33d66117f6862b9a2b69b431446ee365865e7a94845e5135b0565ad832e47.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Steam exists the turbine at 20 bar and $4 0 0 \\%$ .The steam is reheated at constant pressure to 500°C before entering the second stage turbine . Steam leavs the second stage turbine as saturated vapor at 0.6 bar. For operation at steady state, and ignoring stray heat transfer and kinetic and potential energy effects, determinine the"
+    },
+    {
+      "type": "text",
+      "value": "(i) Mass flow rate of steam."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Total power produced by the two stages of the turbine in kW"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Rate of heat transfer to the steam following through the reheater in kW."
+    },
+    {
+      "type": "text",
+      "value": "What is compressibility factor? When a gas is modeled as an ideal gas what are the equations to be used ?"
+    },
+    {
+      "type": "text",
+      "value": "Separate streams of air and water flow through the compressor and heat exchanger arrangment 1 shown in following figure."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b8b03d464fdf10c9719ac189cd32e76725855e0f4e899e0da9f2138531a0780d.jpg",
+      "_source_path": "images/b8b03d464fdf10c9719ac189cd32e76725855e0f4e899e0da9f2138531a0780d.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Heat transfer with the surroundings can be neglected, as can all kinetic and potential energy effects.The air is modeled as an ideal gas with $C p = 1 . 0 6 3 ~ k J / k g - K$ , Determine"
+    },
+    {
+      "type": "text",
+      "value": "(i) The total power required by the both compressor in kW"
+    },
+    {
+      "type": "text",
+      "value": "(ii) The mass flow rate of the water in $k g / s ,$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

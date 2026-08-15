@@ -1,0 +1,54 @@
+{
+  "id": "1195_p6_Q8(a)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Programming",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\2nd_Year_1st_Term_2019_1195.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The first derivative ${ \\frac { d f ( x ) } { d x } } 0 \\mathbf { f }$ the a function f(x) at a point $\\boldsymbol { x } = \\boldsymbol { x } _ { 0 }$ can be approximated with two point central difference formula:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\frac { { \\dot { d } } f ( x ) } { d x } } = { \\frac { f ( x _ { 0 } + h ) - f ( x _ { 0 } + h ) } { 2 h } }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Write an Octave function $d f d x = c e n t r a l d i f f ( F u n , x 0 )$ where Fun is the name of the function that is passed into centraldiff, and xO is the point where the derivative is calculated. Use $\\begin{array} { r } { h = \\frac { x _ { 0 } } { 1 0 0 } } \\end{array}$ in the two-point central difference formula. Use centraldiff to calculate-  \n(i) $f ( x ) = x ^ { 3 } e ^ { 2 x } \\mathrm { a t } x 0 = 0 . 6$"
+    },
+    {
+      "type": "text",
+      "value": "(ii) $\\textstyle f ( x ) = { \\frac { 3 x } { x ^ { 2 } } } \\ { \\mathrm { a t } } x _ { 0 } = 2 . 5$"
+    },
+    {
+      "type": "text",
+      "value": "8(b ). Write a user -defined function that adds or subtracts two polynomials of any order. Name the function P= Polyadd (Pl, P2, operation). The first two input arguments P 1 and P2 are the vectors of the coefficients of the two polynomials. (If the two polynomials are not of the same order the function adds the necessary zero elements to the shorter vector). The third input argument 'operation' is a string that can be either 'add' or 'sub', for adding or subtracting the polynomials respectively. The output argument is the resulting polynomial. Use the function to add and subtract the fol1owing $f _ { 1 } ( x ) = 2 x ^ { 6 } - 3 x ^ { 4 } - 9 x ^ { 3 } + 1 1 x ^ { 2 } - 8 x + 4 { \\mathrm { ~ a n d ~ } } f _ { 2 } ( x ) = 5 x ^ { 3 } + 7 x - 1 0$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "887_p6_Q4(a)",
+  "course": {
+    "code": "HUM 1213",
+    "title": "Technical English",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2018\\1st_Year_2nd_Term_2018_887.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Transform the following sentences as asked in brackets. 14   \n(i) Your performing dutifully is admiring.(Complex).   \n(ii) You will wait here untill our coming back .(Complex).   \n(iii) Besides taking a cup of tea we take a loaf of bread (Compound).   \n(iv) He is less brilliant than his brother.(Positive).   \n(v) Since you are ignorant, We don't like you.(Simple)   \n(vi) Though you are ill, We allow you to take part in the function.(Simple).   \n(vii) He is the sincerest man in the village. (Negative)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

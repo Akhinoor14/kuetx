@@ -1,0 +1,37 @@
+{
+  "id": "895_p4_Q2(d)",
+  "course": {
+    "code": "CH 1113",
+    "title": "Chemistry I",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2018\\2nd_Year_Backlog_2018_895.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". A certain substance absorbs 2.01x 10¹6 quanta of light per second. At the end of 10 minutes ,it is 07   \nobserved that 0.0015 mole of the irradiated substance has reacted.What is the quantum yield of   \nthe substance?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2018"
+}

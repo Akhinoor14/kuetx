@@ -1,0 +1,46 @@
+{
+  "id": "1197_p4_Q8(a)",
+  "course": {
+    "code": "ME 2113",
+    "title": "Statics and Solid Mechanics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\2nd_Year_1st_Term_2021_1197.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Select the lightest W shape that will act as column of8 m long with hinged ends and support an axial load of270 kN with factor of safety of2.5. Assume that, proportional limit is 200 MPa and E = 200 GPa."
+    },
+    {
+      "type": "text",
+      "value": "8(b ). Without writing shear and moment equations, draw shear and moment diagram for the beam shown in figure."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_4f0e4d95182fc24ef6fd02ab507b9ab2eec79d21c3f95160e244303a64bb8c6e.jpg",
+      "_source_path": "images/4f0e4d95182fc24ef6fd02ab507b9ab2eec79d21c3f95160e244303a64bb8c6e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

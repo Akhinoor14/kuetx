@@ -1,0 +1,41 @@
+{
+  "id": "728_p2_Q1(b)",
+  "course": {
+    "code": "HUM-2111",
+    "title": "Financial, Cost and Management Accounting",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\2nd_Year_1st_Term_2017_728.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Why ledger is called the king of all books?"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>2014 April 01</td><td rowspan=1 colspan=1>He invested TK 10,00,000 in cash.</td></tr><tr><td rowspan=1 colspan=1>2014 April 03</td><td rowspan=1 colspan=1>Cash paid for office rent TK 4000.</td></tr><tr><td rowspan=1 colspan=1>2014 April 08</td><td rowspan=1 colspan=1>Paid TK 3000 to advertise in the local newspaper.</td></tr><tr><td rowspan=1 colspan=1>2014 April 10</td><td rowspan=1 colspan=1>Received cash TK 15,000 for service provided.</td></tr><tr><td rowspan=1 colspan=1>2014 April 12</td><td rowspan=1 colspan=1>Completed architectural work on account TK 60,000.</td></tr><tr><td rowspan=1 colspan=1>2014 April 20</td><td rowspan=1 colspan=1>Earned revenue TK 2,20,000 of which 1,20,000 received in cash andbalance on account.</td></tr><tr><td rowspan=1 colspan=1>2014 April 25</td><td rowspan=1 colspan=1>Purchase office computer TK 50,000, paying TK 40,000 in cash andbalance on account.</td></tr><tr><td rowspan=1 colspan=1>2014 April 28</td><td rowspan=1 colspan=1>Paid TK 10,000 for utility expenses.</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

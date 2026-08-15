@@ -1,0 +1,54 @@
+{
+  "id": "1195_p5_Q8(a)",
+  "course": {
+    "code": "ME 2115",
+    "title": "Fluid Mechanics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\2nd_Year_1st_Term_2019_1195.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". What is hydrodynamic boundary layer? What are the factors that affect boundary layer 08 thickness?"
+    },
+    {
+      "type": "text",
+      "value": "8(b ). Derive the general integral momentum equation of the boundary layer, when pressure is 17 constant through the flow."
+    },
+    {
+      "type": "text",
+      "value": "8( c ). A laminar boundary layer at zero pressure gradient over a flat plate is described by the 10 velocity profile:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\frac { \\vartheta } { V } = \\sin \\Big ( \\frac { \\pi } { 2 } \\frac { y } { \\delta } \\Big ) .\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Determine the displacement thickness, momentum thickness, and energy thickness."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

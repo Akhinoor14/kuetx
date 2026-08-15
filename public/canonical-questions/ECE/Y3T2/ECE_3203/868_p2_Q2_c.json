@@ -1,0 +1,42 @@
+{
+  "id": "868_p2_Q2(c)",
+  "course": {
+    "code": "ECE 3203",
+    "title": "Digital Signal Processing",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\3rd_Year_2nd_Term_2018_868.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What are the problems involved in implementing Fourier series method of FIR filter design? Use Fourier series method to design a high-pass filter to approximate the ideal specification given by"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nH _ { d } \\big ( e ^ { j \\omega } \\big ) = \\left\\{ \\begin{array} { l r } { 0 , } & { f o r | f | \\leq f _ { p } } \\\\ { 1 , } & { f o r f _ { p } \\leq | f | \\leq F / _ { 2 } } \\end{array} \\right.\\tag{12}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

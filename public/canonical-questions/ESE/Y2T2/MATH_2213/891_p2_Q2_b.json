@@ -1,0 +1,42 @@
+{
+  "id": "891_p2_Q2(b)",
+  "course": {
+    "code": "MATH 2213",
+    "title": "Complex Variables and Fourier Analysis",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2018\\2nd_Year_2nd_Term_2018_891.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Use parsevals identity to the function $f ( x ) = \\sin x , 0 < x < \\tau$ τ and show that,"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\frac { 1 } { 1 ^ { 2 } . 3 ^ { 2 } } } + { \\frac { 1 } { 3 ^ { 2 } . 5 ^ { 2 } } } + { \\frac { 1 } { 5 ^ { 2 } . 7 ^ { 2 } } } + \\cdots \\cdots \\cdots = { \\frac { \\pi ^ { 2 } - 8 } { 1 6 } }\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

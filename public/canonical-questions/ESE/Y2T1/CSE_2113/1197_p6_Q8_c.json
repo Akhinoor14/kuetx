@@ -1,0 +1,57 @@
+{
+  "id": "1197_p6_Q8(c)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Programming",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\2nd_Year_1st_Term_2021_1197.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Write down the output of following codes:"
+    },
+    {
+      "type": "text",
+      "value": "i) n=S; for k=0:0.5:n disp ( 'ESE2Kl9') if K>3. 5 break end end"
+    },
+    {
+      "type": "text",
+      "value": "ii) n=S; for k=0:0.5:n if k> 3. 5 break end disp ( 'ESE2Kl9') end"
+    },
+    {
+      "type": "text",
+      "value": "ii) m=l; while 1 disp ( 'CSE2113') m=m+l; end"
+    },
+    {
+      "type": "text",
+      "value": "iv) m=l while 1 disp ( 'CSE 2113') m=m+l; if m>=lO break end end"
+    },
+    {
+      "type": "text",
+      "value": "Also give a brief explanation of your answer."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

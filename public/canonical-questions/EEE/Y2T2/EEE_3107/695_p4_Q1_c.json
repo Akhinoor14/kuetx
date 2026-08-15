@@ -1,0 +1,37 @@
+{
+  "id": "695_p4_Q1(c)",
+  "course": {
+    "code": "EEE 3107",
+    "title": "Electromagnetic Fields and Waves",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2017\\2nd_Year_2nd_Term_2017_695.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A steel pipe is constructed of a material for which $\\mu _ { r } = 1 8 0$ and $\\sigma = 4 \\times 1 0 ^ { 6 } \\mathrm { { S / m } }$ . The two radii are 5 and 7 mm, and the length is $7 5 ~ \\mathrm { m }$ . If the total current carried by the pipe $I ( t ) = 8$ cos𝜔𝑡 A, where $\\omega = 1 2 0 \\pi$ rad/s, find (i) the skin depth; (ii) the effective resistance; (iii) the dc resistance; and (iv) the time average power loss."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

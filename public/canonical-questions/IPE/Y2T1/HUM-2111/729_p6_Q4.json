@@ -1,0 +1,61 @@
+{
+  "id": "729_p6_Q4",
+  "course": {
+    "code": "HUM-2111",
+    "title": "Financial, Cost and Management Accounting",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\2nd_Year_1st_Term_2018_729.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "4",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "R. Kabir began operations as a private investigator on January 1, 2016. The Trial balance are as follows:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Account Titles</td><td rowspan=1 colspan=1>Debit (TK.)</td><td rowspan=1 colspan=1>Credit (TK.)</td></tr><tr><td rowspan=1 colspan=1>Cash....</td><td rowspan=1 colspan=1>14,400</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Account receivable..........</td><td rowspan=1 colspan=1>7,620</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Supplies....</td><td rowspan=1 colspan=1>1,250</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Prepaid insurance.............</td><td rowspan=1 colspan=1>4,400</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Equipment....</td><td rowspan=1 colspan=1>38,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Notes payable....</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>14,000</td></tr><tr><td rowspan=1 colspan=1>Accounts payable..</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>14,350</td></tr><tr><td rowspan=1 colspan=1>Capital.....</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>28,000</td></tr><tr><td rowspan=1 colspan=1>R. Kabir, drawing...........</td><td rowspan=1 colspan=1>1,600</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Service revenue.........</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>17,620</td></tr><tr><td rowspan=1 colspan=1>Salaries expense.......</td><td rowspan=1 colspan=1>2,200</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Travel expense...........</td><td rowspan=1 colspan=1>2,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Rent expense......</td><td rowspan=1 colspan=1>2,200</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Miscellaneous expense...........</td><td rowspan=1 colspan=1>300</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>73,970</td><td rowspan=1 colspan=1>73,970</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "i) Suppliers on hand total TK 650 at March 31, 2016."
+    },
+    {
+      "type": "text",
+      "value": "ii) Depreciation on equipment per quarter TK. 500."
+    },
+    {
+      "type": "text",
+      "value": "iii) Insurance expired at the rate of TK. 250 per month."
+    },
+    {
+      "type": "text",
+      "value": "iv) Service provided but unbilled at March 31 TK. 950."
+    },
+    {
+      "type": "text",
+      "value": "Instruction:"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1130_Q3(c)",
+  "course": {
+    "code": "LE 4109",
+    "title": "Leather Products Engineering III",
+    "department": "Department of Leather Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2021\\4th_Year_1st_Term_2021_1130.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Advances in spike technology for running shoe designed by CADD engineering is to help run faster on certain, r=even terrain and provide extra grip to the forefoot to force forward and improve stride turnover. Usain Bo.It used a Puma-spike sprinter with 6.0 no of spikes in Tokyo Olympic and this special architecture helped to reduce CTF to a certain degree and was observed 10.2 N-M. At the same time, NIKE™ introduced a super spike sprinting shoe of 5.0 no spike with 3.5 mm needle like diameter and this shoe exerted a force of 600N at heel point to CT muscle. The acute angle between the ankle joint and the X-axis was 53.2°. Determine the generated torque ofNIKE<sup>1M</sup> super spike sprinter; if the distance between ankle joint and heel point was 0.038 m. How much fluctuation of GRFv would obsrve due to bottom design variation?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2021"
+}

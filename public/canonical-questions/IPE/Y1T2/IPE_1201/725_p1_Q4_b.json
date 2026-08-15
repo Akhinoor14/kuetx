@@ -1,0 +1,41 @@
+{
+  "id": "725_p1_Q4(b)",
+  "course": {
+    "code": "IPE 1201",
+    "title": "Manufacturing Process - II",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\1st_Year_2nd_Term_2018_725.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The Taylorian tool life equation for machining C-40 steel with 18-4-1 H.S.S at a 13 feed of 0.2 mm/min and a depth of cut of 2 mm is given by VTⁿ = C where n and C are constants depending on the cutting conditions and tool work combinations. The following V and T observations have been noted: Cutting speed (v m/min): 25 36 Tool life (T min): 88 20"
+    },
+    {
+      "type": "text",
+      "value": "Calculate the index n and constant c. Hence recommended the cutting speed for a desired tool life of 65 minutes."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

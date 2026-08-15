@@ -1,0 +1,42 @@
+{
+  "id": "730_p1_Q1(b)",
+  "course": {
+    "code": "ME 2111",
+    "title": "Engineering Mechanics and Theory of Machines",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2019\\2nd_Year_1st_Term_2019_730.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The light bar AD is suspended from a cable BE and supports a 20 kg block at C. The 18 extremities A and D of the bar are in contact with frictionless vertical walls. Determine the tension in cable BE and the reactions at A and D."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_65b8c81026df977a2e98c483715468e7d70df49c6b784ee89cffd6732c603d51.jpg",
+      "_source_path": "images/65b8c81026df977a2e98c483715468e7d70df49c6b784ee89cffd6732c603d51.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

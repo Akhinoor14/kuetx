@@ -1,0 +1,37 @@
+{
+  "id": "1132_Q3(c)",
+  "course": {
+    "code": "LE 4109",
+    "title": "Leather Products Engineering III",
+    "department": "Department of Leather Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2023\\4th_Year_1st_Term_2023_1132.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "<sub>15</sub>A BOD analysis is begun on Monday. 40 ml of wastewater with a DO of O mg/Lis mixed with 260   \nmg/L of diluted water with a DO of IO mg/L. The sample is then put in the incubator. Since the $5 ^ { { \\mathrm { t h } } }$   \nday falls on Saturday, and lab personnel do not work on Saturday, the final DO does not <sub>get</sub>   \nmeasured until Monday, the 7<sup>111</sup> day. The final DO is measured at 3.5 rng/L. However, it is $7 ^ { ( b ^ { 2 } ) }$   \ndiscovered that the incubator was set at 30°C. Assume that k, = <sub>0.2/day</sub> at 20°C and e = 1.05.   \nDetermine the BOD<sub>5</sub> of the wastewater at 20°C.   \nGive the differences between carbonaceous BOD (CBOD) and nitrification BOD <sub>(NBOD).</sub>3(d) 05   \nWhat are the pollutants present in the wastewater of tannery? How can these pollutants be taken care"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2023"
+}

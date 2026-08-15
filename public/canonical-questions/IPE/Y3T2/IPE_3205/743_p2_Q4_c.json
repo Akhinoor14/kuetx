@@ -1,0 +1,41 @@
+{
+  "id": "743_p2_Q4(c)",
+  "course": {
+    "code": "IPE 3205",
+    "title": "Product Design -II",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\3rd_Year_2nd_Term_2015_743.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "When the rocess mean shift from tar et value the value o $\\mathbf { C _ { p k } }$ d<sub>ecreases an</sub>d-<sub>once</sub> 1 3 b<sub>ecome ne a</sub>ti<sub>ve</sub>-E<sub>x</sub> l<sub>a</sub>i<sub>n w</sub>ith <sub>s</sub>k<sub>e</sub>t<sub>c</sub>h<sub>es</sub>"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2015"
+}

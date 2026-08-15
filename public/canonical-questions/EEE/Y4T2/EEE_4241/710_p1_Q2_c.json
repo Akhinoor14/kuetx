@@ -1,0 +1,42 @@
+{
+  "id": "710_p1_Q2(c)",
+  "course": {
+    "code": "EEE 4241",
+    "title": "Power System Protection",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\4th_Year_2nd_Term_2018_710.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following figure shows a portion of power system in a single line diagram. Find (12) out the time of operation of relays R<sub>1</sub> and R<sub>2</sub> for a fault immediately after relaying point R<sub>2</sub>. Relay R<sub>1</sub> is voltage monitored overcurrent relay, the PS of which reduces to 40% of the set value if voltage collapses below 70% of the rated voltages."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_23793609abdfe850261dcc7815111fa623471d9ef45b5bdd59ea3800a7245d47.jpg",
+      "_source_path": "images/23793609abdfe850261dcc7815111fa623471d9ef45b5bdd59ea3800a7245d47.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2018"
+}

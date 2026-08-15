@@ -1,0 +1,42 @@
+{
+  "id": "727_p5_Q6(b)",
+  "course": {
+    "code": "ME 2111",
+    "title": "Engineering Mechanics and Theory of Machines",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\2nd_Year_1st_Term_2015_727.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The 10 lb slender rod AB is welded to the 6 lb uniform disk which rotates about a pivot at A. A spring of constant 0.625 lb/in is attached to the disk and is unstretched when rod AB is horizontal. Determine the required angular velocity of the assembly when it is in the position shown in the following fig, if its angular velocity is to be 8 rad/s, after it has rotated through $9 0 ^ { 0 }$ clockwise."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d25efedab071249ec9ac95fb87a310f1220f5447092aa935e8928df705b24d21.jpg",
+      "_source_path": "images/d25efedab071249ec9ac95fb87a310f1220f5447092aa935e8928df705b24d21.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2015"
+}

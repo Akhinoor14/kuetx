@@ -1,0 +1,41 @@
+{
+  "id": "1208_p3_Q6(d)",
+  "course": {
+    "code": "ESE 3207",
+    "title": "Solar Photovoltaic System",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\3rd_Year_2nd_Term_2019_1208.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The sample of the load profile from the SHS using a customer is i) laptop computer 2 numbers, each 20 watt, daily operation 3 hours, ii) electric lamp 4 numbers, each 30 watt, daily operation 8 hours, iii) colour television 2 numbers, each 50 watt, daily operation 6 hours, iv) gizer 1 number of 800 watt, daily operation 2 hours. The system inverter power factor is unity, DOD = 60%, autonomy days is 4, battery charging efficiency is 75%, peak sun hours daily is 5, battery voltage is 12 V."
+    },
+    {
+      "type": "text",
+      "value": "Using the above mentioned data, design a PV module. Also, calculate (i) battery capacity, (ii) charge controller capacity, (iii) DC to AC inverter capacity, (iv) switch capacity, and (v) wire size."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2019"
+}

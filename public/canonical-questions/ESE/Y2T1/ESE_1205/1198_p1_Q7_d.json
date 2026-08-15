@@ -1,0 +1,41 @@
+{
+  "id": "1198_p1_Q7(d)",
+  "course": {
+    "code": "ESE 1205",
+    "title": "Thermodynamics for Energy Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\2nd_Year_1st_Term_2022_1198.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": 1,
+  "content": [
+    {
+      "type": "text",
+      "value": "Water flows over a rectangular weir of 1 m wide at a depth of 150 mm and afterwards 12   \npasses through a triangular right-angled weir. Taking Ca for the rectangular and triangular   \nweir as 0.62 and 0.59, respectively. Find the depth over the triangular weir   \n8(1) What is the difference between skin friction and pressure drag? Deduce an expression of 20   \nVon-Karman momentum integral equation with zero pressure gradient.   \n8112) A thin pláte is moving in still atmospheric air at a velocity of 5 m/s. The length of the 15   \nplate is 0.6 ni and width of 0.5 m. Caleulate (i) the thickness of the boundary layer at ihe   \nend of the plate, and (ii) drag force on one side of the pipe. Take density of air as |.24   \nkg/m3 and kinematic viscosity 0.15 stokes."
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY Department of Energy Science and Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

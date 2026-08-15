@@ -1,0 +1,65 @@
+{
+  "id": "725_p4_Q1(a)",
+  "course": {
+    "code": "IPE 1203",
+    "title": "Engineering Materials",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\1st_Year_2nd_Term_2018_725.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Transform the following sentences as directed."
+    },
+    {
+      "type": "text",
+      "value": "(i) Give me some food that I may eat. (Simple)"
+    },
+    {
+      "type": "text",
+      "value": "(ii) No one can tell me how this will end. (Affirmative)"
+    },
+    {
+      "type": "text",
+      "value": "(iii) I returned home because of my illness. (Complex)"
+    },
+    {
+      "type": "text",
+      "value": "(iv) Propa is less clever than some other girls. (Positive)"
+    },
+    {
+      "type": "text",
+      "value": "(v)Very few countries are as rich as America. (Comparative)"
+    },
+    {
+      "type": "text",
+      "value": "(vi) One should keep one's promises. (Passive)"
+    },
+    {
+      "type": "text",
+      "value": "(vii) We must respect our constitution. (Negative)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

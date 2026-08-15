@@ -1,0 +1,37 @@
+{
+  "id": "1200_p1_Q1(b)",
+  "course": {
+    "code": "ESE 2209",
+    "title": "Bio and Wind Energy Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\2nd_Year_2nd_Term_2019_1200.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Define average wind speed. On the basis of Weibull distribution function, prove that the 2+10=12   \naverage velocity of wind, $V _ { m } = C \\Gamma ( 1 + \\frac { 1 } { \\kappa } )$ ,where the symbols have their usual meaning."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

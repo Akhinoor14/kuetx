@@ -1,0 +1,37 @@
+{
+  "id": "1124_p2_Q5(c)",
+  "course": {
+    "code": "LE 3209",
+    "title": "Leather Products Engineering II",
+    "department": "Department of Leather Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2019\\3rd_Year_2nd_Term_2019_1124.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Classify the basic methods of lasting. Draw the cross sectional view of: 15   \ni. rib-welted ii. Californian and iii. Mckay stitching methods of lasting."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2019"
+}

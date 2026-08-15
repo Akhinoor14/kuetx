@@ -1,0 +1,42 @@
+{
+  "id": "1198_p5_Q2(c)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Programming",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\2nd_Year_1st_Term_2022_1198.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Define variables, x=0.85, y=12.5, and then use them to create a column vector that has following elements:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\frac { \\sin 6 5 ^ { \\circ } } { \\sin 8 0 ^ { \\circ } } } , \\ y , \\ y ^ { x } , \\ln \\left( { \\frac { x } { y } } \\right) , \\ x \\times y , \\ \\mathrm { a n d } \\ { \\sqrt { x + y } }\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

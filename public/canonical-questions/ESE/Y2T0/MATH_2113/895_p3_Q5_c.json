@@ -1,0 +1,42 @@
+{
+  "id": "895_p3_Q5(c)",
+  "course": {
+    "code": "MATH 2113",
+    "title": "Linear Algebra and Vector Analysis",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2018\\2nd_Year_Backlog_2018_895.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Find the dimensional derivative of dreeTIO $x ^ { 2 } y ^ { 2 } z ^ { 2 }$ at the point (1, 1, -1) in the direction of the tangent to the curve $x = e ^ { t } , y = \\operatorname { s i n } _ { k \\neq t } ^ { \\ast } { t + 1 } ^ { \\ast } z = 1 - \\cos t \\mathrm { ~ a t ~ } t = 0$"
+    },
+    {
+      "type": "formula",
+      "value": "$$\ny = 1 + \\sin 2 t\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2018"
+}

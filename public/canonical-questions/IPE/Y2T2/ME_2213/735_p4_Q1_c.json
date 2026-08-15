@@ -1,0 +1,42 @@
+{
+  "id": "735_p4_Q1(c)",
+  "course": {
+    "code": "ME 2213",
+    "title": "Mechanics of Solids",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\2nd_Year_2nd_Term_2018_735.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "is pinned at B and connected to two vertical 15 rods. Assuming that the bar was initially horizontal and the rods stress free, determine the stress in each rod after the load P=20kips is applied."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_4511acc555fe954ae36881163662f88e79eee4d05527290f9ba4c009bcab8737.jpg",
+      "_source_path": "images/4511acc555fe954ae36881163662f88e79eee4d05527290f9ba4c009bcab8737.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

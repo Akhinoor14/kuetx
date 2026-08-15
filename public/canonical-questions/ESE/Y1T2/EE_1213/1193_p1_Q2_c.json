@@ -1,0 +1,42 @@
+{
+  "id": "1193_p1_Q2(c)",
+  "course": {
+    "code": "EE 1213",
+    "title": "Electrical Circuits and Electronics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\1st_Year_2nd_Term_2022_1193.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Find the Thevenin's equivalent circuit of the following circuit with respect the terminals a-b. Hence find the current through $R _ { L } = 6 ,$ 16 and 36Ω."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_6463dff78d535d1c039a539fb49ad12088adc8a14167bb38978647db12c960a1.jpg",
+      "_source_path": "images/6463dff78d535d1c039a539fb49ad12088adc8a14167bb38978647db12c960a1.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2022"
+}

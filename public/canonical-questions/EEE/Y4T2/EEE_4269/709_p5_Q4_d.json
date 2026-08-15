@@ -1,0 +1,37 @@
+{
+  "id": "709_p5_Q4(d)",
+  "course": {
+    "code": "EEE 4269",
+    "title": "Photovoltaic System",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2017\\4th_Year_2nd_Term_2017_709.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the average power in kW that can be generated in a hydro-electric (10)   \nproject from the following data: catchment $\\mathsf { a r e a } = 5 { \\times } 1 0 ^ { 9 } \\mathrm { m } ^ { 2 } ,$ mean head, H = 30   \nm, annual rainfall = 1.25 m, yield factor = 80% and overall efficiency = 70%. If   \nthe load factor is 40%, what is the rating of the generator installed?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2017"
+}

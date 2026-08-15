@@ -1,0 +1,114 @@
+{
+  "id": "893_p1_Q5(b)",
+  "course": {
+    "code": "EE 3113",
+    "title": "Power System Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\3rd_Year_1st_Term_2019_893.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The one-line diagram of a power system is shown in figure. The three-phase power and line-line ratings are given below."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_460d751a72e9515c22c50dc64c60be17c0eb1d5cf182413522c36a2332f4f079.jpg",
+      "_source_path": "images/460d751a72e9515c22c50dc64c60be17c0eb1d5cf182413522c36a2332f4f079.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Figure: one-line diagram of a power system"
+    },
+    {
+      "type": "text",
+      "value": "G: 80MVA 22 kV X=24%"
+    },
+    {
+      "type": "text",
+      "value": "T1: 50 MVA 22 /220 kV X = 10%"
+    },
+    {
+      "type": "text",
+      "value": "T2: 40 MVA 220 /22 kV X = 6.0%"
+    },
+    {
+      "type": "text",
+      "value": "T3: 40MVA 22 / 110 kV X = 6.4%"
+    },
+    {
+      "type": "text",
+      "value": "Line - 1: 220 kV X=121Ω"
+    },
+    {
+      "type": "text",
+      "value": "Line - 2: 110 kV X=42.35Ω"
+    },
+    {
+      "type": "text",
+      "value": "M: 68.85 MVA 20 kV X=22.5%"
+    },
+    {
+      "type": "text",
+      "value": "Load: 10 Mvar 4kV Δ Connected Capacitors"
+    },
+    {
+      "type": "text",
+      "value": "The three phase ratings of the three phase transformers are:"
+    },
+    {
+      "type": "text",
+      "value": "Primary: Y-Connected 40 MVA, 110 kV"
+    },
+    {
+      "type": "text",
+      "value": "Secondary: Y-Connected 40 MVA, 22 kV"
+    },
+    {
+      "type": "text",
+      "value": "Tertiary: Δ Connected 15 MVA, 4 kV"
+    },
+    {
+      "type": "text",
+      "value": "The per phase measured reactances at the terminal of a winding with the second one short-circuited and the third open circuited are:"
+    },
+    {
+      "type": "text",
+      "value": "Zps = 9.6% 40 MVA, 110 kV/22 kV"
+    },
+    {
+      "type": "text",
+      "value": "Zpt = 7.2% 40 MVA, 110 kV/4 kV"
+    },
+    {
+      "type": "text",
+      "value": "Zst = 12% 40 MVA, 22 kV/4 kV"
+    },
+    {
+      "type": "text",
+      "value": "Obtained the T-circuit equivalent impedances of the three-winding transformer to the common 100 MVA base. Draw an impedances diagram showing all impedances in per-unit on a 100 MVA base. Choose 22 kV as the voltage for generator."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

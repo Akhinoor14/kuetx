@@ -1,0 +1,69 @@
+{
+  "id": "1109_Q8(d)",
+  "course": {
+    "code": "CH 1219",
+    "title": "Organic Chemistry",
+    "department": "Department of Leather Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2021\\1st_Year_2nd_Term_2021_1109.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Draw the orbital picture of nitro group with explanation. 07"
+    },
+    {
+      "type": "text",
+      "value": "B.Sc. Engineering $1 ^ { \\sin } \\gamma \\cos 2 ^ { \\sin }$ Term Examination-2021"
+    },
+    {
+      "type": "text",
+      "value": "Mathematics II"
+    },
+    {
+      "type": "text",
+      "value": "Time: 3 Hours."
+    },
+    {
+      "type": "text",
+      "value": "Full Marks: 210"
+    },
+    {
+      "type": "text",
+      "value": "N.B. i) Answer any THREE questions from each section in separate scripts."
+    },
+    {
+      "type": "text",
+      "value": "ii) Figures in the right margin indicate full marks."
+    },
+    {
+      "type": "text",
+      "value": "ii) Assume reasonable data if any missing."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-A"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

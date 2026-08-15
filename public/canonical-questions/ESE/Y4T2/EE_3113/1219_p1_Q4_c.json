@@ -1,0 +1,49 @@
+{
+  "id": "1219_p1_Q4(c)",
+  "course": {
+    "code": "EE 3113",
+    "title": "Power System Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\4th_Year_2nd_Term_2021_1219.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Interpret the pro pert ics of' gaseous and I iqu id h ydrogcn responsible I rn -.;�ii ...:t\\_:- issues. 13"
+    },
+    {
+      "type": "text",
+      "value": "SECTION - B"
+    },
+    {
+      "type": "text",
+      "value": "S(a). Being an energy engineer. why you should study the fuel cell technology? 08"
+    },
+    {
+      "type": "text",
+      "value": "S(b). What arc the limitations or Polymer l�lcctrolytc i\\lcmbranc Fuel C ·II'! Discuss the 15 characteristics of fuel cell charge uunsport rcxistancc."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2021"
+}

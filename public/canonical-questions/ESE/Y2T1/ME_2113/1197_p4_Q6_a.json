@@ -1,0 +1,51 @@
+{
+  "id": "1197_p4_Q6(a)",
+  "course": {
+    "code": "ME 2113",
+    "title": "Statics and Solid Mechanics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\2nd_Year_1st_Term_2021_1197.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The steel shaft shown in figure rotates at 4 Hz with 35 kW taken off at A, 20 kW is removed at Band 55 kW is applied at C. Using E = 83 GPa, find the maximum shear stress and the angle of rotation of gear A relative to gear C."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_2b21eeea24f3b04209656adf74193916331ff15ad512688a0a2519d3ab1602ee.jpg",
+      "_source_path": "images/2b21eeea24f3b04209656adf74193916331ff15ad512688a0a2519d3ab1602ee.jpg"
+    },
+    {
+      "type": "text",
+      "value": "6(b ). A rigid bar hinged at one end, is supported by two identical springs as shown in figure. Each spring consists of 20 turns of 10 mm wire having a mean diameter of 150 mm. Compute the maximum shearing stress in the springs. Neglect the mass of the rigid bar."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_5eb2b7ee95c31bddaa3a54be1d3c9f9ac1fc380a933b8a27c2b991ecccee4cce.jpg",
+      "_source_path": "images/5eb2b7ee95c31bddaa3a54be1d3c9f9ac1fc380a933b8a27c2b991ecccee4cce.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

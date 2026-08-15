@@ -1,0 +1,42 @@
+{
+  "id": "695_p5_Q4(a)",
+  "course": {
+    "code": "EEE 3101",
+    "title": "Signals and Linear Systems",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2017\\2nd_Year_2nd_Term_2017_695.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the Fourier series expansion for the periodic waveform shown in (15) Fig. Q4(a):"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_602db04ec19ee627fc4edfec150083012d3fb48a95e3bf5886dbe548a53a3676.jpg",
+      "_source_path": "images/602db04ec19ee627fc4edfec150083012d3fb48a95e3bf5886dbe548a53a3676.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

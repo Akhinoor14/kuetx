@@ -1,0 +1,49 @@
+{
+  "id": "1197_p6_Q6(c)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Programming",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\2nd_Year_1st_Term_2021_1197.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": ". How will you use line command for plotting multiple graphs in the sample plot? Explain briefly."
+    },
+    {
+      "type": "text",
+      "value": "6(cl). A function is given as $z = r \\theta$ where $0 \\leq \\theta \\leq 3 6 0 ^ { \\circ }$ and $0 \\leq r \\leq 2$ Write an octave code for followings:"
+    },
+    {
+      "type": "text",
+      "value": "i) To Plot the surface in 3-D plane."
+    },
+    {
+      "type": "text",
+      "value": "ii) To take projection in xy, xz and yz plane."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

@@ -1,0 +1,61 @@
+{
+  "id": "1198_p5_Q8(a)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Programming",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\2nd_Year_1st_Term_2022_1198.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Suppose a code is written as :"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nx _ { 1 } = i n t e r p 1 ( x , y , y _ { 1 } , ^ { \\prime } n e a r e s t ^ { \\prime } )\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nx _ { 2 } = i n t e r p 1 ( x , y , y _ { 2 } , L i n e a r ^ { \\prime } )\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nx _ { 3 } = i n t e r p 1 ( x , y , y _ { 1 } , ^ { \\prime } S p l i n e ^ { \\prime } )\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nx _ { 4 } = i n t e r p 1 ( x , y , y _ { 1 } , ^ { \\prime } P c h i p ^ { \\prime } )\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Is there any error in the code? If yes then by rectifying the error, write down the correct code and explain the output of the code."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

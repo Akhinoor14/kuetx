@@ -1,0 +1,61 @@
+{
+  "id": "732_Q8(d)",
+  "course": {
+    "code": "IPE 2207",
+    "title": "Probability and Statistical Analysis",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\2nd_Year_2nd_Term_2015_732.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider two lar e arallel lates one at $\\mathrm { T } _ { 1 } \\mathrm { K }$ ith i i it $\\varepsilon _ { 1 } = 0 . 8$ <sub>an</sub>d th<sub>e o</sub>th<sub>ers t</sub> $\\mathrm { T } _ { 2 }$ K ith <sub>m</sub>i i it $\\varepsilon _ { 2 } = 0 . 4 $ A<sub>n a</sub>l<sub>um</sub>i<sub>num ra</sub>di<sub>a</sub>ti<sub>on s</sub>hi<sub>e</sub>ld <sub>w</sub>ith <sub>an</sub> emissivit<sub>y</sub> $\\varepsilon _ { 3 } = 0 . 0 5$ i<sub>s</sub> l<sub>ace</sub>d b<sub>e</sub>t<sub>ween</sub> th<sub>e</sub> l<sub>a</sub>t<sub>es</sub> Sk<sub>e</sub>t<sub>c</sub>h th<sub>e ra</sub>di<sub>a</sub>ti<sub>on ne</sub>t<sub>wor</sub>k f<sub>or</sub> th<sub>e</sub> t w<sup>ith</sup> <sub>an</sub>d <sub>w</sub>ith<sub>ou</sub>t th<sub>e ra</sub>di<sub>a</sub>ti<sub>on s</sub>hi<sub>e</sub>ld C<sub>a</sub>l<sub>cu</sub>l<sub>a</sub>t<sub>e</sub> th<sub>e ercen</sub>t<sub>a e re</sub>d<sub>uc</sub>ti<sub>on</sub> i<sub>n</sub> h<sub>ea</sub>t <sub>exc</sub>h<sub>anger ra</sub>t<sub>e</sub> <sub>res</sub> lti<sub>n</sub> f<sub>rom</sub> th<sub>e ra</sub>di<sub>a</sub>ti<sub>n s</sub>hi<sub>e</sub>ld"
+    },
+    {
+      "type": "text",
+      "value": "Khulna University of Engineering & Technology Department of Industrial Engineering and Management"
+    },
+    {
+      "type": "text",
+      "value": "C ME 2213 Mechanics of Solids"
+    },
+    {
+      "type": "text",
+      "value": "Full Marks: 210"
+    },
+    {
+      "type": "text",
+      "value": "Time:3 hrs"
+    },
+    {
+      "type": "text",
+      "value": "N.B: i) Answer any THREE questions from each section in separate scripts. ii) Figures in the right margin indicate full marks. iii) Assume reasonable data if missing any."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-A"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

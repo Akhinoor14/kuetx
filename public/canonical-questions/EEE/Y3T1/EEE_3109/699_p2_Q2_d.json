@@ -1,0 +1,41 @@
+{
+  "id": "699_p2_Q2(d)",
+  "course": {
+    "code": "EEE 3109",
+    "title": "Computational Methods in Electrical Engineering",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\3rd_Year_1st_Term_2018_699.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "A capacitive transducer uses two quartz diaphragms of area $7 5 0 ~ \\mathrm { \\ m m } ^ { 2 }$ separated by a distance of 3.5 mm. A pressure of 900 $\\mathrm { k N } / \\mathrm { m } ^ { 2 }$ when applied to the top diaphragm produces a deflection of 0.6 mm. The capacitance is 370 pF when no pressure is applied to the diaphragms. Find the value of capacitance after the application of a pressure of 900 $\\mathrm { k N } / \\mathrm { m } ^ { 2 }$"
+    },
+    {
+      "type": "text",
+      "value": "(07)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1188_p2_Q6(c)",
+  "course": {
+    "code": "MATH 1113",
+    "title": "Differential and Integral Calculus",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\1st_Year_1st_Term_2022_1188.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". State Walli's formula. If $\\begin{array} { r } { I _ { n } = \\int _ { 0 } ^ { \\pi / _ { 4 } } t a n ^ { n } \\theta d \\theta } \\end{array}$ , then show that $n ( I _ { n + 1 } + I _ { n - 1 } ) = 1$ Hence find the value of $\\int _ { 0 } ^ { \\pi / 4 } t a n ^ { 8 } \\theta d \\theta$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2022"
+}

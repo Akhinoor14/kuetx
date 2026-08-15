@@ -1,0 +1,61 @@
+{
+  "id": "710_p6_Q6(c)",
+  "course": {
+    "code": "EEE 4243",
+    "title": "Power System Operation and Control",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\4th_Year_2nd_Term_2018_710.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "An SVC connected to a 735 kV system has a reactive power range of 350 MVAR (12) production to 100 MVAR absorption. The droop is set to 5%. The system short circuit level is specified as follows:"
+    },
+    {
+      "type": "text",
+      "value": "Maximum short-circuit current, 50 kA"
+    },
+    {
+      "type": "text",
+      "value": "The minimum short-circuit current under normal operating conditions, 5 kA The minimum short-circuit current during system restoration after loss of transmission line, 500 A."
+    },
+    {
+      "type": "text",
+      "value": "Determine"
+    },
+    {
+      "type": "text",
+      "value": "(i) the pu regulator gain that ensures stable operation from 5 kA to 50 kA system short-circuit current,"
+    },
+    {
+      "type": "text",
+      "value": "(ii) the change of voltage-control response for the system variation and regulator setting in (i) and"
+    },
+    {
+      "type": "text",
+      "value": "(iii) the pu regulator gain for stable operation of the system."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2018"
+}

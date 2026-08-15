@@ -1,0 +1,42 @@
+{
+  "id": "1199_p4_Q5(a)",
+  "course": {
+    "code": "ME 2113",
+    "title": "Statics and Solid Mechanics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\2nd_Year_1st_Term_2023_1199.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The homogeneous bar shown in figure is supported by a smooth pin at C and a cable that runs from A to B around the smooth peg at D. find the stress in the cable if its diameter is 15 mm and the bar weighs 3000 kg. What would be the factor of safety if the allowable stress in the cable is 200 MPa?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_6583068328d26571a466db237f3c6ddf09321683c34d62ab7bd6f18912e99073.jpg",
+      "_source_path": "images/6583068328d26571a466db237f3c6ddf09321683c34d62ab7bd6f18912e99073.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

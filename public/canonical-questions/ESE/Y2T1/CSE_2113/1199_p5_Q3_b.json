@@ -1,0 +1,42 @@
+{
+  "id": "1199_p5_Q3(b)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Programming",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\2nd_Year_1st_Term_2023_1199.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Define LU and SVD decomposition and explain the physical significance of them. for the given matrix X, write Mi\\ TLAB code to perform LU and SVD decomposition. Also construct the matrix from the decomposed matrices."
+    },
+    {
+      "type": "formula",
+      "value": "$$\nX = { \\left[ \\begin{array} { l l l } { 1 } & { 2 } & { 3 } \\\\ { 4 } & { 5 } & { 6 } \\\\ { 7 } & { 8 } & { 9 } \\end{array} \\right] }\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

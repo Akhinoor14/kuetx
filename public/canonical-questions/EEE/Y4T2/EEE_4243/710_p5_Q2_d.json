@@ -1,0 +1,57 @@
+{
+  "id": "710_p5_Q2(d)",
+  "course": {
+    "code": "EEE 4243",
+    "title": "Power System Operation and Control",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\4th_Year_2nd_Term_2018_710.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define capacity factor and plant use factor. A central power station has annual (10) factors as follows:"
+    },
+    {
+      "type": "text",
+      "value": "Load factor = 60%; capacity factor = 40%; use factor = 45%."
+    },
+    {
+      "type": "text",
+      "value": "Power station has a maximum demand of 15,000 kW. Determine"
+    },
+    {
+      "type": "text",
+      "value": "(i) Annual energy production."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Reserve capacity over and above peak load."
+    },
+    {
+      "type": "text",
+      "value": "(iii) Hours per year not in service."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2018"
+}

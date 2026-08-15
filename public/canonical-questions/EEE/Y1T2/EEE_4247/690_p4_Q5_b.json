@@ -1,0 +1,49 @@
+{
+  "id": "690_p4_Q5(b)",
+  "course": {
+    "code": "EEE 4247",
+    "title": "Renewable Energy",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\1st_Year_2nd_Term_2018_690.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve by using the method of variation of parameters: $3 y ^ { \\prime \\prime } - 6 y ^ { \\prime } + 6 y =$ $e ^ { x } s \\mathrm { e c } x$"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "text",
+      "value": "<sup>(c)</sup> Solve $\\begin{array} { r } { x ^ { 2 } \\frac { d ^ { 2 } y } { d x ^ { 2 } } - 3 x \\frac { d y } { d x } + 4 y = x + x ^ { 2 } \\log x . } \\end{array}$"
+    },
+    {
+      "type": "text",
+      "value": "(11)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

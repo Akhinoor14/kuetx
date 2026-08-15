@@ -1,0 +1,42 @@
+{
+  "id": "745_p4_Q7(b)",
+  "course": {
+    "code": "IPE 3205",
+    "title": "Product Design -II",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\3rd_Year_2nd_Term_2017_745.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "An electrical system consists of seven components as illustrated in the following figure. Assume that, each component work independently and the reliability of each component is also shown in figure. What is the system reliability?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_9cccbc3449eec3caf9e44993b83e365d8022d0af3e4fe7bc897295c873eaa76e.jpg",
+      "_source_path": "images/9cccbc3449eec3caf9e44993b83e365d8022d0af3e4fe7bc897295c873eaa76e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

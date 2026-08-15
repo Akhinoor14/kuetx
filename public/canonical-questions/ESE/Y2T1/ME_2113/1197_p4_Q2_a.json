@@ -1,0 +1,51 @@
+{
+  "id": "1197_p4_Q2(a)",
+  "course": {
+    "code": "ME 2113",
+    "title": "Statics and Solid Mechanics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\2nd_Year_1st_Term_2021_1197.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": ". In figure shown, let $\\mathrm { F } _ { 1 } = 5 0 0$ kg and $\\mathrm { F } _ { 2 } = 2 5 0 0$ kg. Find the external reactions (components of E) and the loads on the members CG, CH and EH by using the method of section."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8eb215d3e743e9d7657bf64dfc0e7a0618db5f1dfb1b1ed25c94cb4c3130cac7.jpg",
+      "_source_path": "images/8eb215d3e743e9d7657bf64dfc0e7a0618db5f1dfb1b1ed25c94cb4c3130cac7.jpg"
+    },
+    {
+      "type": "text",
+      "value": "2(b ). For the truss shown in figure, find the external reactions and find the loads on the members CD, DG and GH by a single section."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a82406f3e723601748fa2e0f8b6c7158287e884e878cfcaee027e5d595144088.jpg",
+      "_source_path": "images/a82406f3e723601748fa2e0f8b6c7158287e884e878cfcaee027e5d595144088.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

@@ -1,0 +1,52 @@
+{
+  "id": "867_p2_Q6(c)",
+  "course": {
+    "code": "ECE 3203",
+    "title": "Digital Signal Processing",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2017\\3rd_Year_2nd_Term_2017_867.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Compare the scale factors using $L _ { 1 } , L _ { 2 }$ , and $L _ { \\alpha } ,$ methods for the filter with following (12) transfer function, assuming cascade realization with second order sections:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nH ( z ) = \\dot { H } _ { \\mathfrak { i } } ( z ) H _ { \\mathfrak { i } } ( z )\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\mathrm { : } } { \\mathrm { w h e r e , ~ } } H _ { 1 } ( z ) = { \\frac { 1 + 0 . 2 1 8 9 z ^ { - 1 } + z ^ { - 2 } \\cdot } { 1 - 0 . 0 1 2 7 z ^ { - 1 } + 0 . 9 4 4 3 z ^ { - 3 } } }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nH _ { 2 } ( z ) = { \\frac { 1 - 0 . 5 2 9 1 z ^ { - 1 } + z ^ { - 2 } } { 1 - 0 . 1 7 3 1 z ^ { - 1 } + 0 . 7 2 5 2 z ^ { - 2 } } } \\ .\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

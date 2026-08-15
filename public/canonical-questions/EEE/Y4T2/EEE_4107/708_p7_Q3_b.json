@@ -1,0 +1,46 @@
+{
+  "id": "708_p7_Q3(b)",
+  "course": {
+    "code": "EEE 4107",
+    "title": "Digital Signal Processing",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2016\\4th_Year_2nd_Term_2016_708.pdf",
+    "source_page": null,
+    "paper_index": 7
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the following image A:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nA = { \\left[ \\begin{array} { l l l } { 2 } & { 1 0 } & { 2 0 } \\\\ { 2 0 } & { 1 0 0 } & { 2 5 5 } \\\\ { 2 5 4 } & { 2 0 } & { 2 1 0 } \\end{array} \\right] }\\tag{12}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Find (i) average, (ii) standard deviation, (iii) coefficient of variation, (iv) mode, (v) signal-tonoise ratio, and (vi) median."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2016"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "1194_p3_Q3(c)",
+  "course": {
+    "code": "EE 1213",
+    "title": "Electrical Circuits and Electronics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\1st_Year_2nd_Term_2023_1194.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Prove that the evvective value of sinusoidal voltage is 70% of the peak voltage. Also 12 determine the power dissipated in a 6n resistor, if the voltage shown in figure is applied on it."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_bb11b5eede4c16b181fde8b3cc1d12f5058e47bac8ea6ef1e1e77d9fb3bea20b.jpg",
+      "_source_path": "images/bb11b5eede4c16b181fde8b3cc1d12f5058e47bac8ea6ef1e1e77d9fb3bea20b.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2023"
+}

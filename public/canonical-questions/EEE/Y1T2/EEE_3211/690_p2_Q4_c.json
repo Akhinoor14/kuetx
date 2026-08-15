@@ -1,0 +1,55 @@
+{
+  "id": "690_p2_Q4(c)",
+  "course": {
+    "code": "EEE 3211",
+    "title": "Power System I",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\1st_Year_2nd_Term_2018_690.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the reading of the wattmeters for the following circuit shown in Fig (15) Q4(c)."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_811d79efc44cd4f599b6b2c93a8db74a406545e3f5f71665caa471d138a6836f.jpg",
+      "_source_path": "images/811d79efc44cd4f599b6b2c93a8db74a406545e3f5f71665caa471d138a6836f.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_9c1db67ae2042736ffae09996e16baa7d7be55e91f6099d836dc49573aea1086.jpg",
+      "_source_path": "images/9c1db67ae2042736ffae09996e16baa7d7be55e91f6099d836dc49573aea1086.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(20)"
+    },
+    {
+      "type": "text",
+      "value": "Section B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

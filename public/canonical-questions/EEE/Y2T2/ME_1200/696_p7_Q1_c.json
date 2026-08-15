@@ -1,0 +1,41 @@
+{
+  "id": "696_p7_Q1(c)",
+  "course": {
+    "code": "ME 1200",
+    "title": "Engineering Drawing",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\2nd_Year_2nd_Term_2018_696.pdf",
+    "source_page": null,
+    "paper_index": 7
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Dutta is in the second year of his first full-time job offer graduation in engineering. He enjoys design, but he is becoming increasingly concerned by more experienced engineers. He has been assigned to assist in the design of a number of projects that involve public safety, such as schools and overhead walk ways between buildings. He spoke to his supervisor, whose engineering competence he respects, and the supervisor told that more experienced engineer checked his work. Later, he discovers that his work is often not checked. Instead, his drawings are stamped and passed on to the contractor. Some of the smaller projects he designs are under construction within a few weeks after the designs are completed."
+    },
+    {
+      "type": "text",
+      "value": "At this point, Dutta calls one of his professors in Engineering college for advice. “I am really scared that I am going to make a mistake that will kill someone,” Dutta says. “I try to over-design, but the projects that I have been assigned to, are becoming increasingly difficult. What should I do?” Dutta’s Professor tell him that be connect ethically continue on his present course, for his work surpasses, his qualifications and may endanger the public. What should Dutta do?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

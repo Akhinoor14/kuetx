@@ -1,0 +1,41 @@
+{
+  "id": "1208_p4_Q4(c)",
+  "course": {
+    "code": "ESE 3203",
+    "title": "Petroleum and Natural Gas Processing",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\3rd_Year_2nd_Term_2019_1208.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Light naphtha with a specific gravity of 0.724 is used as a feed to the isomerization unit with a feed rate of 1000 m³/h. The yields of converted components are given in the following table. Find the product composition considering both converted and unconverted products."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Component</td><td rowspan=1 colspan=1>Yield (wt %)</td></tr><tr><td rowspan=1 colspan=1> $C _ { 3 }$ </td><td rowspan=1 colspan=1>0.348</td></tr><tr><td rowspan=1 colspan=1>iC4</td><td rowspan=1 colspan=1>0.619</td></tr><tr><td rowspan=1 colspan=1>nC4</td><td rowspan=1 colspan=1>1.770</td></tr><tr><td rowspan=1 colspan=1>C5</td><td rowspan=1 colspan=1>97.261</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2019"
+}

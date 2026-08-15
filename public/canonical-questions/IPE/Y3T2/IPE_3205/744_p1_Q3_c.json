@@ -1,0 +1,45 @@
+{
+  "id": "744_p1_Q3(c)",
+  "course": {
+    "code": "IPE 3205",
+    "title": "Product Design -II",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\3rd_Year_2nd_Term_2016_744.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A control chart for the number of nonconformin iston rin s is maintained on a f<sub>org</sub>i<sub>ng process w</sub>ith <sub>np</sub> = 1 6 0 A <sub>samp</sub>l<sub>e o</sub>f <sub>s</sub>i<sub>ze</sub> 100 i<sub>s</sub> t<sub>a</sub>k<sub>en eac</sub>h d<sub>a an</sub>d <sub>ana</sub>l<sub>yze</sub>d"
+    },
+    {
+      "type": "text",
+      "value": "i) Wh<sub>a</sub>t i<sub>s</sub> th<sub>e pro</sub>b<sub>a</sub>bilit th<sub>a</sub>t <sub>a s</sub>hift i<sub>n</sub> th<sub>e rocess avera e</sub> t<sub>o n</sub> = 20 0 <sub>w</sub>ill b<sub>e</sub> d<sub>e</sub>t<sub>ec</sub>t<sub>e</sub>d <sub>on</sub> th<sub>e</sub> fi<sub>rs</sub>t d<sub>a</sub> f<sub>o</sub>ll<sub>ow</sub>i<sub>ng</sub> th<sub>e s</sub>hift? Wh<sub>a</sub>t i<sub>s</sub> th<sub>e</sub> <sub>ro</sub>b<sub>a</sub>bilit th<sub>a</sub>t th<sub>e s</sub>hift <sub>w</sub>ill b<sub>e</sub> d<sub>e</sub>t<sub>ec</sub>t<sub>e</sub>d b <sub>a</sub>t l<sub>eas</sub>t th<sub>e en</sub>d <sub>o</sub>fth<sub>e</sub> thi<sub>r</sub>d d<sub>ay</sub>?"
+    },
+    {
+      "type": "text",
+      "value": "ii) Fi<sub>n</sub>d th<sub>e sma</sub>ll<sub>es</sub>t <sub>samp</sub>l<sub>e s</sub>i<sub>ze</sub> th<sub>a</sub>t <sub>w</sub>ill <sub>g</sub>i<sub>ve a pos</sub>iti<sub>ve</sub> l<sub>ower con</sub>t<sub>ro</sub>l li<sub>m</sub>it <sub>.</sub>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

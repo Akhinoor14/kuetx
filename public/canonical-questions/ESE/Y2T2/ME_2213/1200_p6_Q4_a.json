@@ -1,0 +1,54 @@
+{
+  "id": "1200_p6_Q4(a)",
+  "course": {
+    "code": "ME 2213",
+    "title": "Dynamics and Kinematics of Machineries",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\2nd_Year_2nd_Term_2019_1200.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The load P is connected to a double pulley by one of the two inextensible cables as shown.The motion of the pulley is controlled by cable C, which has a constant acceleration of 225 mm $/ s ^ { 2 }$ and an initial velocity of 300 mm/s both directed to right. Acceleration of D is also 225 mm/s². Determine —"
+    },
+    {
+      "type": "text",
+      "value": "(i) the number of revolutions executed by the pulley in 2 sec."
+    },
+    {
+      "type": "text",
+      "value": "(ii) the velocity and change in position of the load B after 2 sec."
+    },
+    {
+      "type": "text",
+      "value": "(iii) the acceleration of point D on the rim of inner pulley at $\\mathfrak { t } = 0$ sec."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_3c0e4ea5c00eb8f8425c2b95050a33db616b80e7fa98aa73a4807759dca249b8.jpg",
+      "_source_path": "images/3c0e4ea5c00eb8f8425c2b95050a33db616b80e7fa98aa73a4807759dca249b8.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

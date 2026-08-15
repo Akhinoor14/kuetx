@@ -1,0 +1,50 @@
+{
+  "id": "1205_p4_Q5(b)",
+  "course": {
+    "code": "EE 3113",
+    "title": "Power System Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\3rd_Year_1st_Term_2022_1205.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Show that the equivalent impedance of a transformer in per unit referred to the LV and HV side is 10 same."
+    },
+    {
+      "type": "text",
+      "value": "5tc). Draw an impedance diagram for the electric power system shown in figure. Showing all impedances in per unit on a 100 MVA base. Choose 20kV as the voltage base for generator. The three-phase power and line-line ratings are given below."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8834bbe09386cfd016551919cd1bfab11bc84f1caa99b06d4d0ec23ae44c0d32.jpg",
+      "_source_path": "images/8834bbe09386cfd016551919cd1bfab11bc84f1caa99b06d4d0ec23ae44c0d32.jpg"
+    },
+    {
+      "type": "text",
+      "value": "6ta). Why are isolators not opened on load? Describe with the aid of neat sketch the construction and 14 working of a Tirril regulator, for voltge control in power system."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

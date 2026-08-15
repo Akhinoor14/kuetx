@@ -1,0 +1,45 @@
+{
+  "id": "738_p3_Q2(c)",
+  "course": {
+    "code": "IPE 3115",
+    "title": "Engineering Economy",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\3rd_Year_1st_Term_2016_738.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Austin Utilities is planning to install solar panels to provide some of the electricity for its ground water desalting plant The project would be done in two phases. The first phase will cost \\$ 4 million in year 1 and \\$ 5 million in year 2. This investment will result in energy savings (phase 2) of \\$ 540,000 in year 3, \\$546,000 in year 4, and amounts increasing by \\$6000 each year through year 10. Let $\\mathrm { I } = 1 0 \\%$ per year."
+    },
+    {
+      "type": "text",
+      "value": "i) What is the future worth of the savings?"
+    },
+    {
+      "type": "text",
+      "value": "ii) Is the cost of the solar project justified by the savings?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

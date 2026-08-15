@@ -1,0 +1,42 @@
+{
+  "id": "1105_Q2(c)",
+  "course": {
+    "code": "EEE 1119",
+    "title": "Basic Electrical Engineering",
+    "department": "Department of Leather Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2021\\1st_Year_1st_Term_2021_1105.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine ${ \\bf V } _ { 0 }$ and I in the circuit of the figure."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_c555de8d553aae0517fd1af9943a5871a9963624ff9364e602c3c6a96d2725aa.jpg",
+      "_source_path": "images/c555de8d553aae0517fd1af9943a5871a9963624ff9364e602c3c6a96d2725aa.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2021"
+}

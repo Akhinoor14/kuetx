@@ -1,0 +1,42 @@
+{
+  "id": "1190_p1_Q3(d)",
+  "course": {
+    "code": "EE 1213",
+    "title": "Electrical Circuits and Electronics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\1st_Year_2nd_Term_2019_1190.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Prove that, the effictive value of sinusoidal voltage is 70. 7% of peak voltage. Find the average and RMS values for the following waveform. Also, calculate the form factor."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_41036c2b0aa5acc5517f76efa4bdc5194cecdd3d9432907e34df748bb1a480ad.jpg",
+      "_source_path": "images/41036c2b0aa5acc5517f76efa4bdc5194cecdd3d9432907e34df748bb1a480ad.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2019"
+}

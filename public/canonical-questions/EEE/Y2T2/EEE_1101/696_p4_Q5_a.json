@@ -1,0 +1,41 @@
+{
+  "id": "696_p4_Q5(a)",
+  "course": {
+    "code": "EEE 1101",
+    "title": "Electrical Circuits I",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\2nd_Year_2nd_Term_2018_696.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define gate function. What is the utility of gate function? Plot the following (15) sinusoidal functions approximately to scale and also find their Laplace transform."
+    },
+    {
+      "type": "text",
+      "value": "(i) $( t - t _ { 0 } )$ (ii) $\\omega ( t - t _ { 0 } ) u ( t )$ (iii) $u ( t - t _ { 0 } )$ (iv) $\\cos \\omega ( t - { t _ { 0 } } ) u ( t - { t _ { 0 } } ) .$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

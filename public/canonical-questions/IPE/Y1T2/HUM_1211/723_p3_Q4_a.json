@@ -1,0 +1,65 @@
+{
+  "id": "723_p3_Q4(a)",
+  "course": {
+    "code": "HUM 1211",
+    "title": "Professional English",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\1st_Year_2nd_Term_2015_723.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make sentences with the following structures using the words given in brackets."
+    },
+    {
+      "type": "text",
+      "value": "i) Subject + Linking Verb + Adjective Complement. (Feel as verb)"
+    },
+    {
+      "type": "text",
+      "value": "ii) How + Subj. + Verb + Object + Verb + Adj. Complement. (complete and is as verb)"
+    },
+    {
+      "type": "text",
+      "value": "iii) Subj + Verb + As + Adj. + As + Subj. (is as verb)"
+    },
+    {
+      "type": "text",
+      "value": "iv) Subj + Verb + Noun Complement + Relative Pronoun + Verb + Adv. Of Place. (is and teach as verb),"
+    },
+    {
+      "type": "text",
+      "value": "v) If + Subj. + Verb + Object, Subj. + Verb + Adv. Of Place. (perform and succeed in life)"
+    },
+    {
+      "type": "text",
+      "value": "vi) Subj. + Verb + So + Adj. Complement + That + Subj. + Verb + Object. (is and honor as verb)"
+    },
+    {
+      "type": "text",
+      "value": "vii) Subj. + Verb + Neither + Noun Complement + Nor + Noun Complement. (is as verb)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
+}

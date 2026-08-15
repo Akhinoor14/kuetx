@@ -1,0 +1,67 @@
+{
+  "id": "1199_p5_Q7(a)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Programming",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\2nd_Year_1st_Term_2023_1199.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Write MATLAB code for solving the following series for calculating exponential value given by:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\ne ^ { x } = 1 + x + \\frac { \\mathrm { x } ^ { 2 } } { 2 ! } + \\frac { \\mathrm { x } ^ { 3 } } { 3 ! } + \\cdots\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Use for loop to calculate $e ^ { 1 . 5 }$ using first 20 terms of the series above."
+    },
+    {
+      "type": "text",
+      "value": "7(b ). Write down the output of the following codes:"
+    },
+    {
+      "type": "text",
+      "value": "<sub>8(a).</sub> Define i. Local variable, ii. Global variable, iii. Function. Also write how \"Hl line\" and 08 \"help text lines\" work in a function file."
+    },
+    {
+      "type": "text",
+      "value": "<sub>8(b).</sub> Define local and global variables with MATLAB examples. Write an anonymous 13 MATLAB function for the following math fonction:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\ny ( x ) = 0 . 6 x ^ { 3 } e ^ { - 0 . 4 7 x } + 1 . 5 x ^ { 2 } e ^ { - 0 . 6 x }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "The <sub>input</sub> to the function is x and the output is y. Write the function such that x can be a vector (use element by element operations)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "688_p2_Q5(b)",
+  "course": {
+    "code": "EEE 3211",
+    "title": "Power System I",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2016\\1st_Year_2nd_Term_2016_688.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the incident and reflected component of power, $\\mathrm { p } _ { \\mathrm { i } }$ and $\\mathrm { p } _ { \\mathrm { r } } .$ , respectively, for the (12) following network."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b59f9c75f84618c07c22fc2a6e307a9429f41652cad9f76c4c19b72b9772f72b.jpg",
+      "_source_path": "images/b59f9c75f84618c07c22fc2a6e307a9429f41652cad9f76c4c19b72b9772f72b.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

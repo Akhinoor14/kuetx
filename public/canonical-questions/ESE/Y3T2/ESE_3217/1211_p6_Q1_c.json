@@ -1,0 +1,42 @@
+{
+  "id": "1211_p6_Q1(c)",
+  "course": {
+    "code": "ESE 3217",
+    "title": "Instrumentation and Control",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\3rd_Year_2nd_Term_2022_1211.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Consider a stirred-tank heating system shown in figure. The liquid inlet stream consists of a single component with a mass flow rate Wi and inlet temperature Ti. The tank contents are agitated and heated using an electrical heater that provides a heating rate of Q. Develop a dynamic model that describe the temperature of the component. Also, draw the control volume of the system."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_32bb15939739ac8db9ce7c4a1c7aa6ddf1697c649a270aa62f5e8d5f55fe74f6.jpg",
+      "_source_path": "images/32bb15939739ac8db9ce7c4a1c7aa6ddf1697c649a270aa62f5e8d5f55fe74f6.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

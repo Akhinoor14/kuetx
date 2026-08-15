@@ -1,0 +1,37 @@
+{
+  "id": "732_Q1(d)",
+  "course": {
+    "code": "IPE 2207",
+    "title": "Probability and Statistical Analysis",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\2nd_Year_2nd_Term_2015_732.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "At a certain university 20% of the men and 4% of the women are over 6feet tall<sub>.</sub> F<sub>ur</sub>th<sub>ermore</sub> 40% <sub>o</sub>f th<sub>e s</sub>t<sub>u</sub>d<sub>en</sub>t<sub>s are women.</sub> I f <sub>a s</sub>t<sub>u</sub>d<sub>en</sub>t i<sub>s ran</sub>d<sub>om</sub>l<sub>y se</sub>l<sub>ec</sub>t<sub>e</sub>d <sub>an</sub>d i<sub>s</sub> <sub>o</sub>b<sub>serve</sub>d t<sub>o</sub> b<sub>e over</sub> 6 f<sub>ee</sub>t t<sub>a</sub>ll <sub>w</sub>h<sub>a</sub>t i<sub>s</sub> th<sub>e pro</sub>b<sub>a</sub>bilit<sub>y</sub> th<sub>a</sub>t th<sub>e s</sub>t<sub>u</sub>d<sub>en</sub>t i<sub>s a woman</sub>?<sub>'</sub>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

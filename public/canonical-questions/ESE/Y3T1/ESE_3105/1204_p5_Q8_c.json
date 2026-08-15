@@ -1,0 +1,46 @@
+{
+  "id": "1204_p5_Q8(c)",
+  "course": {
+    "code": "ESE 3105",
+    "title": "Heat Transfer and Mass Transfer",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\3rd_Year_1st_Term_2021_1204.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Pressurized hydrogen gas is stored at 358 Kin a 4.8 m outer diameter spherical container made of nickel shown in figure. The shell of the container is 6 cm thick. The molar concentration of hydrogen in the nickel at the inner surface is determined to be 0.087 kmol/m3• The concentration of hydrogen in the nickel at the outer surface is negligible. Determine the mass flow rate of hydrogen by diffusion through the nickel container."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b31adfa9d28f1db81d0e666228c5069c0e1b9ae587d136f8ec199fe171f31200.jpg",
+      "_source_path": "images/b31adfa9d28f1db81d0e666228c5069c0e1b9ae587d136f8ec199fe171f31200.jpg"
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY Department of Energy Science and Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

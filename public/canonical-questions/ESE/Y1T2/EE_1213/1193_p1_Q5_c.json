@@ -1,0 +1,37 @@
+{
+  "id": "1193_p1_Q5(c)",
+  "course": {
+    "code": "EE 1213",
+    "title": "Electrical Circuits and Electronics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\1st_Year_2nd_Term_2022_1193.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Find the conductivity of a $\\mathsf { 1 } c m ^ { 3 }$ pure silicon crystal. Determine is the conductivity when the crystal is doped with arsenic if the doping is 1 part per $b i l l i o n ( p p b )$ .Given that, atomic concentration in silicon is $5 \\times 1 0 ^ { \\dot { 2 } 2 } c m ^ { - 3 } , n _ { i } = 1 \\times \\dot { 1 } 0 ^ { 1 0 } c m ^ { - 3 }$ $\\mu _ { e } = 1 3 5 0 c m ^ { 2 } v ^ { - 1 } s ^ { - 1 }$ , and $\\mu _ { h } = 4 5 0 c m ^ { 2 } v ^ { - 1 } s ^ { - 1 }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2022"
+}

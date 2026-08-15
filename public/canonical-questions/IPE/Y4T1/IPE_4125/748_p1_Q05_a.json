@@ -1,0 +1,37 @@
+{
+  "id": "748_p1_Q05(a)",
+  "course": {
+    "code": "IPE 4125",
+    "title": "Machine Tools",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\4th_Year_1st_Term_2016_748.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "05(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "B<sub>r</sub>i<sub>e</sub>fl<sub>y</sub> d<sub>escr</sub>ib<sub>e</sub> th<sub>e</sub> diff<sub>eren</sub>t t<sub>ypes o</sub>f<sub>con</sub>t<sub>ro</sub>l t<sub>ec</sub>h<sub>n</sub>i<sub>ques use</sub>d i<sub>n</sub> i<sub>n</sub>f<sub>orma</sub>ti<sub>on sys</sub>t<sub>em.</sub> 1 5   \n( b ) Wh<sub>a</sub>t i<sub>s mean</sub>t b<sub>y</sub> EDI? D<sub>raw a</sub> fl<sub>ow</sub> di<sub>agram</sub> t<sub>o s</sub>h<sub>ow</sub> th<sub>e s</sub>t<sub>eps</sub> t<sub>o</sub> b<sub>e</sub> f<sub>o</sub>ll<sub>owe</sub>d f<sub>rom</sub> EDI<sub>.</sub> 1 0   \n-"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2016"
+}

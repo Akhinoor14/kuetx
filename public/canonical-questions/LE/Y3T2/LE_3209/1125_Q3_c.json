@@ -1,0 +1,42 @@
+{
+  "id": "1125_Q3(c)",
+  "course": {
+    "code": "LE 3209",
+    "title": "Leather Products Engineering II",
+    "department": "Department of Leather Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2021\\3rd_Year_2nd_Term_2021_1125.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 4 m long curved gate is located in the side of a reservoir containing water. Determine 15 the magnitude of the horizontal and vertical components of the force of the water on the ·gate."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_044e9f6424553bbeb68fe309e72fc4a2fc454a86c669a5a01c1e04dc86d95318.jpg",
+      "_source_path": "images/044e9f6424553bbeb68fe309e72fc4a2fc454a86c669a5a01c1e04dc86d95318.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2021"
+}

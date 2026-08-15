@@ -1,0 +1,45 @@
+{
+  "id": "1112_p1_Q4(a)",
+  "course": {
+    "code": "HUM 2119",
+    "title": "Accounting and Industrial Law",
+    "department": "Department of Leather Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2019\\2nd_Year_1st_Term_2019_1112.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The adjusted trial balance for Pioneer Advertising Agency is presented. Prepare a statement of 35 Comprehensive Income, Owner's Equity Statement and Financial Position as on October 31, 2018 (One month):"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>Account Titles</td><td>Debit (Taka) Credit (Taka) 15,000</td></tr><tr><td>Cash Accounts Receivable Advertising Supplies Prepaid Insurance Office Equipment Accumulated Depreciation-Equipment Notes payable Accounts Payable Unearned Revenue Salaries Payable</td><td>200 1,000 550 5,000 40 5,300 2000 800 1,200 50 10,000 10,600</td></tr><tr><td>Interest Payable Owner&#x27;s Capital Owner&#x27;s Withdrawn Service Revenue</td><td>500 5,200</td></tr><tr><td>Salaries Expense Advertising Supplies Expense</td><td>1,500 900</td></tr><tr><td>Rent Expense Insurance Expense Interest Expense</td><td>50 50 40</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

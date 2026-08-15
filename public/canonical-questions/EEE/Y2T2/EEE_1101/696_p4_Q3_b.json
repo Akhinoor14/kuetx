@@ -1,0 +1,42 @@
+{
+  "id": "696_p4_Q3(b)",
+  "course": {
+    "code": "EEE 1101",
+    "title": "Electrical Circuits I",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\2nd_Year_2nd_Term_2018_696.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the Fourier series expansion and sketch the frequency spectrum of the (15) following periodic waveform, where $f ( \\theta ) = 1 0 $ sin $\\theta + 3$ sin 3θ."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b052f2d316fa229a0562c58f3adff45b6b5f19670c78b6ba4cc2f9239ece7561.jpg",
+      "_source_path": "images/b052f2d316fa229a0562c58f3adff45b6b5f19670c78b6ba4cc2f9239ece7561.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "1114_Q4(b)",
+  "course": {
+    "code": "CH 2119",
+    "title": "Physical Chemistry",
+    "department": "Department of Leather Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2021\\2nd_Year_1st_Term_2021_1114.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is meant by equivalent conductance at infinite dilution? How does Kohlrausch law help in determination of equivalent conductance of weak electrolyte at infinite dilution?"
+    },
+    {
+      "type": "text",
+      "value": "<sub>4(c)</sub> What are the basic characteristics of a solution? How do solutions differ from compounds?"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

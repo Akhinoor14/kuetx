@@ -1,0 +1,49 @@
+{
+  "id": "886_p6_Q7(c)",
+  "course": {
+    "code": "EE 1213",
+    "title": "Electrical Circuits and Electronics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2017\\1st_Year_2nd_Term_2017_886.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". A Si p - n junction with cross sectional area $A = 1 0 ^ { - 1 4 } c m ^ { 2 }$ is formed with $N _ { \\alpha } =$ 15 $1 0 ^ { 1 7 } c m ^ { - 3 }$ and $\\tilde { N _ { d } } ^ { \\mathrm { ~ \\tiny ~ \\hat { ~ } { ~ } } } = 1 0 ^ { 1 5 } \\ c m ^ { - 3 }$ at 300 K. Calculate –"
+    },
+    {
+      "type": "text",
+      "value": "(i)Contact potential $V _ { 0 }$"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Current with forward bias of 0.5 V Assume that the $\\mu _ { n } = 1 3 0 0 \\ c m ^ { 2 } / V s$ and $\\mu _ { p } = 4 5 0 \\ c m ^ { 2 } / V s$ in the n-side, and $\\mu _ { n } =$ 700 $c m ^ { 2 } / V s$ and $\\mu _ { p } = 2 0 0 c m ^ { 2 } / V s$ in the p-side. $\\tau _ { n } \\approx 0 . 1 \\mu s$ and $\\tau _ { p } \\approx 1 0 ~ \\mu s$ . Also Calculate –"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Current at reverse bias of -0.5 V"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

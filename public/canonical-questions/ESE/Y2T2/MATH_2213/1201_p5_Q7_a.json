@@ -1,0 +1,41 @@
+{
+  "id": "1201_p5_Q7(a)",
+  "course": {
+    "code": "MATH 2213",
+    "title": "Complex Variables and Fourier Analysis",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\2nd_Year_2nd_Term_2021_1201.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ".Analyse harmonically the data given below and express y in Fourier series upto the second13 harmonic."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>X</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1> $\\pi / 3$ </td><td rowspan=1 colspan=1>2π/3</td><td rowspan=1 colspan=1>π</td><td rowspan=1 colspan=1> $4 \\pi / 3$ </td><td rowspan=1 colspan=1> $5 \\pi / 3$ </td><td rowspan=1 colspan=1>2π</td></tr><tr><td rowspan=1 colspan=1>y</td><td rowspan=1 colspan=1>1.0</td><td rowspan=1 colspan=1>1.4</td><td rowspan=1 colspan=1>1.9</td><td rowspan=1 colspan=1>1.7</td><td rowspan=1 colspan=1>1.5</td><td rowspan=1 colspan=1>1.2</td><td rowspan=1 colspan=1>1.0</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

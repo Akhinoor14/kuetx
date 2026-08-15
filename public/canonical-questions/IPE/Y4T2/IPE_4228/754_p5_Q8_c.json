@@ -1,0 +1,37 @@
+{
+  "id": "754_p5_Q8(c)",
+  "course": {
+    "code": "IPE 4228",
+    "title": "CAM and Robotics Sessional",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\4th_Year_2nd_Term_2016_754.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Given the world coordinates for a TRL:R robot as $x = 3 0 0$ mm, $y = 3 5 0$ mm, z = 10 400 mmand $\\alpha = 4 5 ^ { \\circ }$ and given that the links have values $L _ { 0 } = 0 , L _ { 1 } = 3 2 5$ mm, $\\lambda _ { 3 }$ has a range from 300 to and $L _ { 4 } = 2 5$ Determine the joint angles , $\\theta _ { 2 } , \\lambda _ { 3 }$ and $\\theta _ { 4 }$ ."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2016"
+}

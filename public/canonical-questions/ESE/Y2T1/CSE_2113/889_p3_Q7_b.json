@@ -1,0 +1,37 @@
+{
+  "id": "889_p3_Q7(b)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Programming",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2018\\2nd_Year_1st_Term_2018_889.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Write a script to plot the function $\\begin{array} { r } { f ( x ) \\stackrel { \\cdot } {  } \\frac { x ^ { 2 } - 5 x - 1 2 } { x ^ { 2 } - x - 6 } } \\end{array}$ in the domain $- 1 \\leq x \\leq 7$ .Notice that the function has a vertical asymptote at $x = 3$ . Plot the function by creating two vectors for the domain of x. The first vector (name it x1) includes elements from -1 to 2.9, and the second vector (name it x2) includes elements from 3.1 to 7. For each x vector create a y vector (name them y1 and y2) with the corresponding values of y according to the function. To plot the function make two curves in the same plot (yl vs. x1, and y2 vs. x2). Format the plot such that the y-axis ranges from -20 to 20."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

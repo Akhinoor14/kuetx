@@ -1,0 +1,58 @@
+{
+  "id": "1130_Q7(c)",
+  "course": {
+    "code": "LE 4109",
+    "title": "Leather Products Engineering III",
+    "department": "Department of Leather Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2021\\4th_Year_1st_Term_2021_1130.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A flexible manufacturing system (FMS) is being planned. It has a ladder layout as picture in Fig. It uses a rail guided vehicle (RGV) system to move parts between situations in the layout. All work parts are loaded into the system at station 1, move to 1 of three processing stations (2, 3 or 4) and then brought back to station 1 for unloading. Once loaded on to its RGV, each workpart stays on board the vehicle throughout its time the FMS. Load and unload times at staion 1 are each 1.0 min. Processing time are: 5.0 min at station 2; 7.0 min at station 3; and 9 min at station 4. Hourly production of parts through the system is : 7 parts through station 2; 6 parts through station 3; and 5 parts through station 4. Now determine-"
+    },
+    {
+      "type": "text",
+      "value": "(i) Develop the from-to chart for trips and distances;"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Develop the network diagram"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Determine the number of rail guided vehicle that are needed to meet the requiremnts of the flexible manufacturing system, if vehicle speed=60 m/min and the anticipated traffic factor=0.85. assume reliability= 100%"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_acdbedb1d94892595ad86ab2bcd11505eeb9ff4d6552aa8a05fb71fb4efbb28f.jpg",
+      "_source_path": "images/acdbedb1d94892595ad86ab2bcd11505eeb9ff4d6552aa8a05fb71fb4efbb28f.jpg"
+    },
+    {
+      "type": "text",
+      "value": "7("
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2021"
+}

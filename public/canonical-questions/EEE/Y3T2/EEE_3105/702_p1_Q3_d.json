@@ -1,0 +1,64 @@
+{
+  "id": "702_p1_Q3(d)",
+  "course": {
+    "code": "EEE 3105",
+    "title": "Control Systems",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2017\\3rd_Year_2nd_Term_2017_702.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the system is represented in state variable form"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { c } { \\dot { x } = A x + B u } \\\\ { y = C x + D u } \\end{array}\\tag{10}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Where,"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nA = \\left[ { \\begin{array} { c c c } { 0 } & { 1 } & { 0 } \\\\ { 0 } & { 0 } & { 1 } \\\\ { - k } & { - k } & { - k } \\end{array} } \\right] , \\qquad B = \\left[ { \\begin{array} { c } { 0 } \\\\ { 0 } \\\\ { 1 } \\end{array} } \\right]\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nC = [ 1 0 0 ] , \\qquad D = [ 0 ] .\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Determine the transfer function and find the value of $\\mathbf { \\nabla } ^ { \\epsilon } k ^ { , }$ for which the system is stable."
+    },
+    {
+      "type": "text",
+      "value": "Section B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

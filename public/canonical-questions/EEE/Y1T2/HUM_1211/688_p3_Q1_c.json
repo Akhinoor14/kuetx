@@ -1,0 +1,61 @@
+{
+  "id": "688_p3_Q1(c)",
+  "course": {
+    "code": "HUM 1211",
+    "title": "Financial Account and Economic Analysis",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2016\\1st_Year_2nd_Term_2016_688.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve the following problems: (20)"
+    },
+    {
+      "type": "text",
+      "value": "There are 10000 identical individuals in the market for commodity X, each with a demand function is given by $Q _ { d x } = 1 2 - 2 P _ { x }$ and 1000 identical producers of commodity X, each with a supply function is given by $Q _ { s x } = 2 0 P _ { x }$"
+    },
+    {
+      "type": "text",
+      "value": "(i) Obtain equilibrium price and quantity."
+    },
+    {
+      "type": "text",
+      "value": "Now, if the government decides to collect a sales tax of \\$2 per unit sold from each of the 1000 sellers of commodity X,"
+    },
+    {
+      "type": "text",
+      "value": "(ii) What effect does this have on the equilibrium price and quantity?"
+    },
+    {
+      "type": "text",
+      "value": "(iii)Who actually pays the tax?"
+    },
+    {
+      "type": "text",
+      "value": "(iv)What is the amount of taxes collected by the government?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

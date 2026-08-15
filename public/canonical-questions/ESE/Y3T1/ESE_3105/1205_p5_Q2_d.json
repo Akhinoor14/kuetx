@@ -1,0 +1,37 @@
+{
+  "id": "1205_p5_Q2(d)",
+  "course": {
+    "code": "ESE 3105",
+    "title": "Heat Transfer and Mass Transfer",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\3rd_Year_1st_Term_2022_1205.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ".A horizontal venturimeter with inlet and throat diamters 30 cm and 15 cm, repectively. is used to measure the flow of water. The reading of differential manometer connected to the inlet and the throat is 20 em of mercury. Determine the rate of flow. Take ${ \\mathsf { C } } _ { \\mathrm { d } } = \\ 0 . 9 8 .$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

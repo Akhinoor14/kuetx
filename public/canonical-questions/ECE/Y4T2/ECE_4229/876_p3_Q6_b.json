@@ -1,0 +1,41 @@
+{
+  "id": "876_p3_Q6(b)",
+  "course": {
+    "code": "ECE 4229",
+    "title": "Electronic Packaging and Materials",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2015\\4th_Year_2nd_Term_2015_876.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "The City Park was started on September 01, 2015 by Kazi. The following events (25) transactions occurred during September: 2015 September-1 Invested cash TK 200,000 in business. 2015 September-3 Purchased land costing TK 150,000 in cash. 2015 September-5 Incurred advertising expense TK 3,000 on cash. 2015 September-7 Paid salaries to employees TK 12,000. 2015 September-10 Hired a manager for the park at salary of TK 25,000 per month effective October 1. 2015 September-12 Paid TK 1,800 for six month insurance policy. 2015 September-13 Received TK 10,500 in cash for entrance fees. 2015 September-14 Withdraw TK 3,000 cash for personal use. 2015 September-20 Šold 200 coupon books for TK 25 each in cash. 2015 September-25 Received TK 8,500 in cash for entrance fees. 2015 September-29 Paid TK 3,000 on account for advertising incurred in September 5 2015 September-30 Stationary goods purchase in cash for office TK 1,000."
+    },
+    {
+      "type": "text",
+      "value": "Required: Journalize above the transactions."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2015"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "1192_p4_Q2(c)",
+  "course": {
+    "code": "ESE 1205",
+    "title": "Thermodynamics for Energy Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\1st_Year_2nd_Term_2021_1192.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Following figure showns a turbine drives pump that provides water to a mixing chamber located at 25 m height than the pump. Steady state operating data for the turbine and pump are labeled on the figure. Heat transfer from the water to its surroundings occurs at a rate of 2 kW. For the turbine, heat transfer with the surroundings and potential energy effects are negligible. Kinetic energy effects at all numbered states can be ignored. Determine: (i) the power required by the pump in kW to supply the water to the inlet of the mixing chamber."
+    },
+    {
+      "type": "text",
+      "value": "(ii) the mass flow rate of steam in kg/s that flows through the turbine."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_fae60c7289af517a44ee525029078b5a8e6f5e8c52927a61795bdc6cc9d5fcf9.jpg",
+      "_source_path": "images/fae60c7289af517a44ee525029078b5a8e6f5e8c52927a61795bdc6cc9d5fcf9.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

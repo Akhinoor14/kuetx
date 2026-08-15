@@ -1,0 +1,42 @@
+{
+  "id": "727_p5_Q4(b)",
+  "course": {
+    "code": "ME 2111",
+    "title": "Engineering Mechanics and Theory of Machines",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\2nd_Year_1st_Term_2015_727.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Determine the force Q 17 required to move the body towards left."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8df89d659d90193149d24d39c97638285bc570cbde5a5a7e3f3b4e4e3e879d43.jpg",
+      "_source_path": "images/8df89d659d90193149d24d39c97638285bc570cbde5a5a7e3f3b4e4e3e879d43.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2015"
+}

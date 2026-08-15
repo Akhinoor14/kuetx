@@ -1,0 +1,45 @@
+{
+  "id": "743_p2_Q2(c)",
+  "course": {
+    "code": "IPE 3205",
+    "title": "Product Design -II",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\3rd_Year_2nd_Term_2015_743.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Pe cico com an filled its water bottle A uafina at one liter of water In order to 1 5 t<sub>es</sub>t -th<sub>e a</sub>lit fill<sub>e</sub>d <sub>a am</sub> l <sub>o</sub>f 5 b<sub>o</sub>ttl<sub>es were</sub> t<sub>a</sub>k<sub>en ran</sub>d <sub>m</sub>l <sub>over</sub> th<sub>e</sub> l<sub>as</sub>t t<sub>wo</sub> d<sub>ays</sub> Th<sub>e</sub> r<sub>esu</sub>lt<sub>s a</sub>r<sub>e g</sub>i<sub>ven</sub> in th<sub>e</sub> f<sub>o</sub>ll<sub>ow</sub>i<sub>n</sub> t<sub>a</sub>bl<sub>e</sub>"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>Sample No.</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr><tr><td>1</td><td>990</td><td>985</td><td>1005</td><td>992</td><td>987</td></tr><tr><td>2</td><td>990</td><td>985</td><td>980</td><td>990</td><td>990</td></tr><tr><td>3</td><td>985</td><td>995</td><td>990</td><td>995</td><td>995</td></tr><tr><td>4</td><td>990</td><td>990</td><td>990</td><td>995</td><td>995</td></tr><tr><td>5</td><td>995</td><td>995</td><td>1000</td><td>1005</td><td>985</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "C<sub>ons</sub>t<sub>ruc</sub>t <sub>a con</sub>t<sub>ro</sub>l <sub>c</sub>h<sub>ar</sub>t <sub>an</sub>d <sub>c</sub>h<sub>ec</sub>k <sub>w</sub>h<sub>e</sub>th<sub>er</sub> th<sub>e process</sub> i<sub>n con</sub>t<sub>ro</sub>l?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2015"
+}

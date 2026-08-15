@@ -1,0 +1,42 @@
+{
+  "id": "729_p4_Q08(b)",
+  "course": {
+    "code": "CSE 2111",
+    "title": "Data Structures and Algorithms",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\2nd_Year_1st_Term_2018_729.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "08(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Demonstrate the link representation of the following tree. 13"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_180a396651384b7ba4bb2aa9c7cedc05eb544b7229cf464adf189a3e4d3f40dd.jpg",
+      "_source_path": "images/180a396651384b7ba4bb2aa9c7cedc05eb544b7229cf464adf189a3e4d3f40dd.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "728_p2_Q6(b)",
+  "course": {
+    "code": "HUM-2111",
+    "title": "Financial, Cost and Management Accounting",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\2nd_Year_1st_Term_2017_728.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Differentiate between direct materials and indirect materials."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=2>From the following particulars of Jamuna Mills Ltd. For the month of February, 2017:</td></tr><tr><td rowspan=1 colspan=1>February 01</td><td rowspan=1 colspan=1>Opening inventory 1,500 units @ TK 10.00 each;</td></tr><tr><td rowspan=1 colspan=1>February 04</td><td rowspan=1 colspan=1>Purchased 1,200 units @ TK 9.00 each;</td></tr><tr><td rowspan=1 colspan=1>February 08</td><td rowspan=1 colspan=1>Purchased 1,800 units @ TK 11.00 each;</td></tr><tr><td rowspan=1 colspan=1>February 12</td><td rowspan=1 colspan=1>Issued 2,200 units</td></tr><tr><td rowspan=1 colspan=1>February 16</td><td rowspan=1 colspan=1>Purchased 2,700 units @ TK 8.00 each;</td></tr><tr><td rowspan=1 colspan=1>February 21</td><td rowspan=1 colspan=1>Issued 3,000 units</td></tr><tr><td rowspan=1 colspan=1>February 24</td><td rowspan=1 colspan=1>Return from production 500 units issued on February 12;</td></tr><tr><td rowspan=1 colspan=1>February 26</td><td rowspan=1 colspan=1>Purchased 2,100 units @ TK 12.00 each;</td></tr><tr><td rowspan=1 colspan=1>February 28</td><td rowspan=1 colspan=1>Issued 1,700 units.</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

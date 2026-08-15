@@ -1,0 +1,37 @@
+{
+  "id": "1215_p6_Q4(b)",
+  "course": {
+    "code": "ESE 4125",
+    "title": "Safety and Environmental Aspects of Energy Projects",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\4th_Year_1st_Term_2022_1215.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Consider a design concept that feeds hydrogen sulfide (H2S) from a cylinder to a processing unit. At this stage of design, the analyst knows only that this materials will be used in the process, noting more. The analyst recognizes that H2S has toxic and flammable properties, and the analyst indentifes the potential release of H2S as a hazardous situation. Considering the situation do a prelimninary hazard analysis(PHA)."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

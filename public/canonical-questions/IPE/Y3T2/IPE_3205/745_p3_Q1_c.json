@@ -1,0 +1,49 @@
+{
+  "id": "745_p3_Q1(c)",
+  "course": {
+    "code": "IPE 3205",
+    "title": "Product Design -II",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\3rd_Year_2nd_Term_2017_745.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Alom Co. Ltd. Plans to set up a new aluminum-products plant and has selected three sites 15 with the following characteristics ( for projected 75 percent capacity utilization equal to 300,000 tons/year):"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Site</td><td rowspan=1 colspan=1>Annual fixed costs (million)</td><td rowspan=1 colspan=1>Variable costs/ton</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>8.2</td><td rowspan=1 colspan=1>$452</td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>$290</td></tr><tr><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>7.5</td><td rowspan=1 colspan=1>$530</td></tr></table>"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=2 colspan=1>Relative subjective factors</td><td rowspan=1 colspan=3>Rating, Rij</td><td rowspan=2 colspan=1>Relative iinportanceIndex</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>C</td></tr><tr><td rowspan=1 colspan=1>Housing</td><td rowspan=1 colspan=1>0.25</td><td rowspan=1 colspan=1>0.50</td><td rowspan=1 colspan=1>0.25</td><td rowspan=1 colspan=1>0.50</td></tr><tr><td rowspan=1 colspan=1>Community attitudes</td><td rowspan=1 colspan=1>0.25</td><td rowspan=1 colspan=1>0.25</td><td rowspan=1 colspan=1>0.50</td><td rowspan=1 colspan=1>0.25</td></tr><tr><td rowspan=1 colspan=1>Services</td><td rowspan=1 colspan=1>0.50</td><td rowspan=1 colspan=1>0.25</td><td rowspan=1 colspan=1>0.25</td><td rowspan=1 colspan=1>0.25</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Determine the optimum location site if objective factors weigh twice as much as subjective factors. Also prepare a diagram showing how the location preference changes for different values ofk."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

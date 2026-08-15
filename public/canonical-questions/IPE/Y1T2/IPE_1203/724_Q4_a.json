@@ -1,0 +1,65 @@
+{
+  "id": "724_Q4(a)",
+  "course": {
+    "code": "IPE 1203",
+    "title": "Engineering Materials",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\1st_Year_2nd_Term_2017_724.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Com<sub>p</sub>lete the sentences with subordinate clauses as directed"
+    },
+    {
+      "type": "text",
+      "value": "i) Walk slowly <sub>. . . . . . . .</sub> ( adverb clause o f purpose)"
+    },
+    {
+      "type": "text",
+      "value": "ii) <sub>. . . . . . . .</sub> the<sub>y</sub> said nothing (adverb clause ofconcession)"
+    },
+    {
+      "type": "text",
+      "value": "iii) Strike <sub>. . . . . . . .</sub> <sub>,</sub> (adverb claus e o f time)"
+    },
+    {
+      "type": "text",
+      "value": "iv) My horse <sub>. . . . . . . .</sub> is an Arab (adj ective clause)"
+    },
+    {
+      "type": "text",
+      "value": "The reason <sub>. . . . . . . .</sub> is unknown (adjective clause)"
+    },
+    {
+      "type": "text",
+      "value": "vi) <sub>. . . . . . .</sub> is a mystery (noun claus"
+    },
+    {
+      "type": "text",
+      "value": "vii) I know nothing <sub>. . . . . . . . . . . .</sub> (noun claus"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "718_p3_Q3(b)",
+  "course": {
+    "code": "MATH 1111",
+    "title": "Mathematics - I",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\1st_Year_1st_Term_2016_718.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "1f $\\begin{array} { r } { f ( x , y ) = \\frac { ( x ^ { 2 } + y ^ { 2 } ) ^ { p } } { 2 p ( 2 p - 1 ) } + . x \\varnothing \\big ( ^ { \\mathcal { Y } } / x \\big ) + \\ \\psi \\big ( ^ { \\mathcal { Y } } / x \\big ) } \\end{array}$ then using Euler's theorem on homogeneous function, show that $\\begin{array} { r } { x ^ { 2 } \\frac { \\partial ^ { 2 } f } { \\partial x ^ { 2 } } + ~ 2 x y \\frac { \\partial ^ { 2 } f } { \\partial x \\partial y } + y ^ { 2 } \\frac { \\partial ^ { 2 } f } { \\partial y ^ { 2 } } = ( x ^ { 2 } + y ^ { 2 } ) ^ { p } \\mathrm { , } } \\end{array}$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2016"
+}

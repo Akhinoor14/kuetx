@@ -1,0 +1,45 @@
+{
+  "id": "1104_Q6(b)",
+  "course": {
+    "code": "EEE 1119",
+    "title": "Basic Electrical Engineering",
+    "department": "Department of Leather Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2020\\1st_Year_1st_Term_2020_1104.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write down two basic differences and two applications of"
+    },
+    {
+      "type": "text",
+      "value": "(i) Synchronous motor and induction motor (ii) Stepper motor and servo motor."
+    },
+    {
+      "type": "text",
+      "value": "-6("
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2020"
+}

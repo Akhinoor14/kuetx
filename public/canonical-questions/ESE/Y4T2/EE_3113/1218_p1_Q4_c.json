@@ -1,0 +1,46 @@
+{
+  "id": "1218_p1_Q4(c)",
+  "course": {
+    "code": "EE 3113",
+    "title": "Power System Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2020\\4th_Year_2nd_Term_2020_1218.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". A direct methanol fuel cell uses methanol as fuel. Where, temperature is 08 $3 0 ^ { \\circ } \\mathrm { C }$ and pressure is 100 kPa. Calculate: (i) $\\Delta h _ { r x n } ^ { 0 }$ (ii) $\\Delta s _ { r x n } ^ { 0 }$ and (iii) $\\Delta g _ { r x n } ^ { 0 }$"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nC H _ { 3 } O H + \\mathrm { \\mathrm { \\ell } } ^ { 3 } / _ { 2 } O _ { 2 }  C O _ { 2 } + 2 H _ { 2 } O ( l i q )\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>ChemicSpecies</td><td rowspan=1 colspan=1> $\\Delta h _ { f } ^ { 0 }$ (kJ/mol)</td><td rowspan=1 colspan=1> $\\Delta s _ { f } ^ { 0 }$ (J/mol.K)</td></tr><tr><td rowspan=1 colspan=1> $\\mathrm { C H } _ { 3 } \\mathrm { O H }$ </td><td rowspan=1 colspan=1>-200.95</td><td rowspan=1 colspan=1>239.83</td></tr><tr><td rowspan=1 colspan=1> $O _ { 2 }$ </td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>205.14</td></tr><tr><td rowspan=1 colspan=1> $\\mathbf { C O } _ { 2 }$ </td><td rowspan=1 colspan=1>-393.51</td><td rowspan=1 colspan=1>213.8</td></tr><tr><td rowspan=1 colspan=1> $\\mathrm { H } _ { 2 } \\mathrm { O } \\left( \\mathrm { l i q } \\right)$ </td><td rowspan=1 colspan=1>-285.83</td><td rowspan=1 colspan=1>69.95</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2020"
+}

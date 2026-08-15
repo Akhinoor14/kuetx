@@ -1,0 +1,53 @@
+{
+  "id": "741_p4_Q2(c)",
+  "course": {
+    "code": "IPE 3115",
+    "title": "Engineering Economy",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2019\\3rd_Year_1st_Term_2019_741.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the cash flows shown use an annual worth comparison and an interest rate of 10% per year."
+    },
+    {
+      "type": "text",
+      "value": "(i) Determine the alternative that is economically best"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Determine the first cost required for each of the two alternatives not selected in (i), so the all alternatives are equally acceptable."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td></td><td>X</td><td>Y</td><td>Z</td></tr><tr><td>First Cost, Tk</td><td>-90,000</td><td>-400,000</td><td>-650,000</td></tr><tr><td>Annual cost, Tk/ year</td><td>-40,000</td><td>-20,000</td><td>-13,000</td></tr><tr><td>Overhaul every 10 years, Tk</td><td></td><td></td><td>-80,000</td></tr><tr><td>Salvage value, Tk</td><td>7,000</td><td>25,000</td><td>200,000</td></tr><tr><td>Life, years</td><td>3</td><td>10</td><td>8</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

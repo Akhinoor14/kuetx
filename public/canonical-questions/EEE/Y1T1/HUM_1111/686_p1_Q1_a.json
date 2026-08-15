@@ -1,0 +1,77 @@
+{
+  "id": "686_p1_Q1(a)",
+  "course": {
+    "code": "HUM 1111",
+    "title": "Technical English",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2017\\1st_Year_1st_Term_2017_686.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make sentences with the following structures using the words given in brackets:"
+    },
+    {
+      "type": "text",
+      "value": "(14)"
+    },
+    {
+      "type": "text",
+      "value": "i. Subject + Intransitive verb + Adverbial of time (run as verb)."
+    },
+    {
+      "type": "text",
+      "value": "ii. Subject + Linking verb + Adjective complement (keep as verb)."
+    },
+    {
+      "type": "text",
+      "value": "iii. Subject + Linking verb + Noun complement (appoint as verb)."
+    },
+    {
+      "type": "text",
+      "value": "iv. Subject + Be + Adverbial complement (use any Be verb)."
+    },
+    {
+      "type": "text",
+      "value": "v. Subject + Transitive verb + Indirect object + Direct object (offer as verb)."
+    },
+    {
+      "type": "text",
+      "value": "vi. Subject + Transitive verb + Object + Noun complement (call as verb)."
+    },
+    {
+      "type": "text",
+      "value": "vii. There + Verb + Subject + Adverb of place (live as verb)."
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "text",
+      "value": "Bridge (as verb), Back (as adverb), Sport (as noun adjective)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2017"
+}

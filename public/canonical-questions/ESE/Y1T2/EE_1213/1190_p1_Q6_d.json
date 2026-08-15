@@ -1,0 +1,37 @@
+{
+  "id": "1190_p1_Q6(d)",
+  "course": {
+    "code": "EE 1213",
+    "title": "Electrical Circuits and Electronics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\1st_Year_2nd_Term_2019_1190.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Calculate the built-in potential for an abrupt Si $p ^ { + } n$ junction diode at a temperature $2 7 \\ \\textdegree C$ having donor doping concentration in n side and acceptor doping concentration in p side are $1 0 ^ { 1 6 } \\ : C m ^ { - 3 }$ and $5 \\times 1 0 ^ { 1 8 } \\ : C m ^ { - 3 }$ , respectively."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2019"
+}

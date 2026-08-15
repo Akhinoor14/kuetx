@@ -1,0 +1,42 @@
+{
+  "id": "893_p1_Q3(d)",
+  "course": {
+    "code": "EE 3113",
+    "title": "Power System Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\3rd_Year_1st_Term_2019_893.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". One circuit of a single-phase transmission on line is composed of three solid 0.25 cm radius wires. The return circuit is composed of two 0.5 cm radius wires.The arrangment of conductors is shown in figure. Find the inductance due to the current of each side of the line and the inductance of the complite line in hences per meter."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e4ba6cb89ad6a4751e3e36795806358f8ae28b72d4cb9fcc83fe32fd325825be.jpg",
+      "_source_path": "images/e4ba6cb89ad6a4751e3e36795806358f8ae28b72d4cb9fcc83fe32fd325825be.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

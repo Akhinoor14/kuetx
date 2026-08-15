@@ -1,0 +1,85 @@
+{
+  "id": "730_p4_Q2",
+  "course": {
+    "code": "HUM-2111",
+    "title": "Financial, Cost and Management Accounting",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2019\\2nd_Year_1st_Term_2019_730.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2",
+  "numbering_source": "regex",
+  "marks": 4,
+  "content": [
+    {
+      "type": "text",
+      "value": "On April 1, 2018, Mr. Haque established HAQUE TRAVEL AGENCY. The following 35 transactions were completed during the month:"
+    },
+    {
+      "type": "text",
+      "value": "2018, April -1 Invested Tk. 1. 00,000 cash to start the agency."
+    },
+    {
+      "type": "text",
+      "value": "2018, April -2 Paid Tk. 4,000 cash for April office rent."
+    },
+    {
+      "type": "text",
+      "value": "2018, April -3 Purchased office equipment for Tk. 25,000 cash."
+    },
+    {
+      "type": "text",
+      "value": "2018, April- 4 Incurred the Tk. 3,000 of advertising cost in the Daily Ittefaq on account."
+    },
+    {
+      "type": "text",
+      "value": "2018, April -5 Paid Tk. 6,000 cash for office supplies."
+    },
+    {
+      "type": "text",
+      "value": "2018, April- 6 Earned Tk. 75,000 for services rendered Tk. 10,000 cash is received from customers and the balance of Tk. 65,000 is billed to customers on account."
+    },
+    {
+      "type": "text",
+      "value": "2018, April -7 Withdraw Tk. 2,000 cash for personal use."
+    },
+    {
+      "type": "text",
+      "value": "2018, April -8 Paid Daily Ittefaq amount due in transaction (4)."
+    },
+    {
+      "type": "text",
+      "value": "2018, April -9Paid employees salaries Tk. 22,000."
+    },
+    {
+      "type": "text",
+      "value": "2018, April -10 Received Tk. 50,000 in cash from customers who have previously been billed in transaction (6)."
+    },
+    {
+      "type": "text",
+      "value": "Instructions: i) Prepare a tabular analysis of the transactions using the following column headings: Cash; Account Receivable; Supplies; Office Equipment; Account Payable; Mr. Haque Capital."
+    },
+    {
+      "type": "text",
+      "value": "ii) Journalise above the transactions in the book ofMr. Haque."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

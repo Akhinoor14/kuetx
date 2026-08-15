@@ -1,0 +1,42 @@
+{
+  "id": "1193_p1_Q2(b)",
+  "course": {
+    "code": "EE 1213",
+    "title": "Electrical Circuits and Electronics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\1st_Year_2nd_Term_2022_1193.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": ". State the Superposition theorem. Calculate the voltage across 10Ω and current through 4Ω of the following network using Superposition theorem."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e3e5735f74c7beb3690fb4b8e9ace1a69f1dba404a4af878a4f5d83d1f667c89.jpg",
+      "_source_path": "images/e3e5735f74c7beb3690fb4b8e9ace1a69f1dba404a4af878a4f5d83d1f667c89.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2022"
+}

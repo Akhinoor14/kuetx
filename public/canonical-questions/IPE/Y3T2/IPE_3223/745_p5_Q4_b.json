@@ -1,0 +1,53 @@
+{
+  "id": "745_p5_Q4(b)",
+  "course": {
+    "code": "IPE 3223",
+    "title": "Material Handling and Maintenance Management",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\3rd_Year_2nd_Term_2017_745.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A manufacturinġ company wishes to store a unit on $3 6 ^ { / / } \\times 4 8 ^ { / / } \\times 2 4 ^ { / / }$ pallet having a 13 weight of 3000 pounds and 75 single cycles per hour. The total storage is 2000 unit loads. The height of the building is 80 ft and the rack support are needed 6 inches. Determine the followings:"
+    },
+    {
+      "type": "text",
+      "value": "i) The no. of stacks."
+    },
+    {
+      "type": "text",
+      "value": "ii) The no. of cranes needed."
+    },
+    {
+      "type": "text",
+      "value": "iii)The no. of bays required."
+    },
+    {
+      "type": "text",
+      "value": "iv)The storage dimensions."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

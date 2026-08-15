@@ -1,0 +1,37 @@
+{
+  "id": "733_Q5(c)",
+  "course": {
+    "code": "IPE 2207",
+    "title": "Probability and Statistical Analysis",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\2nd_Year_2nd_Term_2016_733.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Heat is generated at a constant rate of $\\mathrm { g } _ { 0 } { = } 4 { \\times } 1 0 ^ { 8 } \\mathrm { w } / \\mathrm { m } ^ { 3 } \\mathrm { i r }$ a copper rod of radius ${ \\mathfrak { r } } { = } 0 . 5$ cm and the thermal conductivity $\\scriptstyle \\mathrm { k } = 3 8 6 \\ \\mathrm { w } / \\ ( \\mathfrak { m } . ^ { 0 } \\mathsf { c } )$ . The rod is cooled by convection from its cylindrical surface into an ambient at $3 0 ^ { \\circ } \\mathsf { c }$ with a heat transfer coefficient h= 2000 w/ (m. $^ { 0 } \\mathsf { c } )$ . Determine the surface temperature of the rod"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

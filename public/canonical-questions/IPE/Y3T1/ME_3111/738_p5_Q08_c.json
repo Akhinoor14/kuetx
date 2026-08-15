@@ -1,0 +1,37 @@
+{
+  "id": "738_p5_Q08(c)",
+  "course": {
+    "code": "ME 3111",
+    "title": "Fluid Mechanics and Machinery",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\3rd_Year_1st_Term_2016_738.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "08(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A single acting reciprocating pump has a plunger of 80 mm diameter and a stroke 15   \nof length 150 mm. It takes its supply of water from a sump 3 m below the pump   \nthrough a pipe 4.5 m long and 30 mm diameter. It delivers water to a tank 12 m   \nabove the pump through a pipe 25 mm diameter and 15 m long. If separation   \noccurs at 78.48 kN/m<sup>2</sup> below atmospheric pressure, find the maximum speed at   \nwhich the pump may be operated without separation. Assume the plunger to have   \nsimple harmonic motion."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

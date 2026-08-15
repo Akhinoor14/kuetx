@@ -1,0 +1,42 @@
+{
+  "id": "1201_p6_Q2(b)",
+  "course": {
+    "code": "ME 2213",
+    "title": "Dynamics and Kinematics of Machineries",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\2nd_Year_2nd_Term_2021_1201.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Two wires AC and BC are tied at C to a sphere which revolves at a constant speed v in the horizontal circle shown. Determine the range of the allowable values of v if the tension in either of the wire is not to exceed 40 N."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_cd8e0166c9f2fe4078c9655b091e284f2a2745ccec3af7809504ba6e4d704a24.jpg",
+      "_source_path": "images/cd8e0166c9f2fe4078c9655b091e284f2a2745ccec3af7809504ba6e4d704a24.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

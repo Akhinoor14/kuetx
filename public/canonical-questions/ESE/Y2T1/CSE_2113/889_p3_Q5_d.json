@@ -1,0 +1,57 @@
+{
+  "id": "889_p3_Q5(d)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Programming",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2018\\2nd_Year_1st_Term_2018_889.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Which of the following function definitions are erroneous? (i) a = fun(x) (ii) function a = fun(x y z) a = sin(x); $\\mathbf { a } = \\mathbf { x } + \\mathbf { y } + \\mathbf { z } ;$ endfunction endfunction"
+    },
+    {
+      "type": "text",
+      "value": "(iii) function fun() printf(\"Hello World\\n\"); end"
+    },
+    {
+      "type": "text",
+      "value": "(v) function [a, b] = fun(x) a = sin(x); endfunction"
+    },
+    {
+      "type": "text",
+      "value": "(iv) # my sine function function a = fun(x) # Usage: a = fun(x) a = sin(x); endfunction"
+    },
+    {
+      "type": "text",
+      "value": "(vi) function a = fun(x, y) b = sqrt(x); $\\mathsf { c } = \\mathsf { s q r t } ( \\mathsf { y } ) ^ { * } \\mathsf { b } ;$ end"
+    },
+    {
+      "type": "text",
+      "value": "."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

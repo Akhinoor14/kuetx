@@ -1,0 +1,37 @@
+{
+  "id": "741_p4_Q7(c)",
+  "course": {
+    "code": "IPE 3115",
+    "title": "Engineering Economy",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2019\\3rd_Year_1st_Term_2019_741.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Samsung Electronics is trying to reduce supply chain risk by making more responsibly make-buy decision through improved cost estimation. A high-use component (expected usage is 5000 units per year) can be purchased for Tk 25 per unit with delivery promised within a week. Alternatively, Samsung can make the component in-house and have it readily available at a cost of Tk 5 per unit, if equipment costing Tk 150,000 is purchased. Labor and other operating costs are estimated to be Tk35,000 per year over the study period of 5 years. Salvage is estimated at 10% of first cost and i=12% per year. Neglect the element of availability (i) to determine the breakeven quantity and (ii) to recommend making or buying at the expected usage level."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

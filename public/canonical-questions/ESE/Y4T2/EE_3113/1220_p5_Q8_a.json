@@ -1,0 +1,53 @@
+{
+  "id": "1220_p5_Q8(a)",
+  "course": {
+    "code": "EE 3113",
+    "title": "Power System Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\4th_Year_2nd_Term_2022_1220.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Define over motoring. Explain different types of motor speed control systems."
+    },
+    {
+      "type": "text",
+      "value": "<sub>8(b).</sub> I low lo select the capacity of diesel generator? Discuss the basic features or an energy 08 efficient diesel generator."
+    },
+    {
+      "type": "text",
+      "value": "<sub>8(c).</sub> I low docs efficiency loss occur in a motor due to unbalance voltage? I low to reduce this 10 loss? l-xplain."
+    },
+    {
+      "type": "text",
+      "value": "<sub>8(d).</sub> Mention different star labelling of energy efficient indication motors."
+    },
+    {
+      "type": "text",
+      "value": "-----End----"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2022"
+}

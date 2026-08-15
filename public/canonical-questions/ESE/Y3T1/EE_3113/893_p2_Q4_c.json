@@ -1,0 +1,46 @@
+{
+  "id": "893_p2_Q4(c)",
+  "course": {
+    "code": "EE 3113",
+    "title": "Power System Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\3rd_Year_1st_Term_2019_893.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A counter flow, concentric tube heat exchanger is used to cool the lubricating oil for a large industrial gas turbine engine. The flow rate of cooling water through inner diameter tube $( D _ { i } = 2 5 m m ) \\mathrm { i } s 0 . 2 k g / s ,$ which the flow rate of oil through the outer annulus $( D _ { 0 } = 4 5 m m )$ is 0.1 kg/s. The oil and water enter at temperature at 100°C and 30°C respectively. How long must the tube be made if the outlet temperature oil is to be 60°C. Data for oil : $C _ { p } ^ { ^ { \\bullet } } = 2 1 3 1 J / k g , \\mu = 3 . 2 5 \\times 1 0 ^ { - 2 } N . S / m ^ { 2 } , K = 0 . 1 3 8 W / m . k$ and Data for water: $C _ { p } = 4 1 7 8 J / k g , \\mu = 7 2 5 \\times 1 0 ^ { - 6 } N . 5 / m ^ { 2 } , K =$"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n0 . 6 2 5 W / m . k , P _ { t } = 4 . 8 5\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Section -B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

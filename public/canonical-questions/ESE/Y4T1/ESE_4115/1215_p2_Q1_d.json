@@ -1,0 +1,37 @@
+{
+  "id": "1215_p2_Q1(d)",
+  "course": {
+    "code": "ESE 4115",
+    "title": "Power Plant Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\4th_Year_1st_Term_2022_1215.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". A power station has a daily load cycle as follows: 11   \n300 MW for 8 hours; 150 MW for 6 hours; 130 MW for 3 hours; 100 MW for 7 hours. If   \nthe power station is equipped with 2 sets of 200 MW each, calculate (i) daily load factor,   \n(ii) plant capacity factor, and (iii) daily requirement of fuel if the calorific value of the   \nfuel were 10,000 kcal/kg and the average heat rate of station were 25,000 kcal/kWh."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

@@ -1,0 +1,49 @@
+{
+  "id": "1199_p2_Q8(a)",
+  "course": {
+    "code": "MATH 2113",
+    "title": "Linear Algebra and Vector Analysis",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\2nd_Year_1st_Term_2023_1199.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". lf R is the region bounded by the circles $x ^ { 2 } + y ^ { 2 } = 4 a n d x ^ { 2 } + y ^ { 2 } = 9$ above the $\\mathrm { x y - }$ plane. find the value of $\\iint _ { R } \\sqrt { ( x ^ { 2 } + y ^ { 2 } ) }$ dxdy, using the Jacobian Transformation."
+    },
+    {
+      "type": "text",
+      "value": "<sup>8(b).</sup> Evaluate $\\oint _ { C } { \\bigl ( } x y + y ^ { 2 } { \\bigr ) } d x + x ^ { 2 } d y$ by using Green's Theorem, where C is the closed curve of the region bounded by $y = x$ and $y = x ^ { 2 }$"
+    },
+    {
+      "type": "text",
+      "value": "8( C). Verify the divergence theorem for $\\boldsymbol { \\hat { A } } = 4 x \\boldsymbol { \\hat { \\imath } } - 2 y ^ { 2 } \\boldsymbol { \\hat { \\jmath } } + z ^ { 2 } \\boldsymbol { \\hat { k } }$ taken over the region bounded by $x ^ { 2 } + y ^ { 2 } = 4 , z = 0$ , and $z = 3$"
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY Department of Energy Science and Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

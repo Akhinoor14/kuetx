@@ -1,0 +1,37 @@
+{
+  "id": "758_p7_Q8(b)",
+  "course": {
+    "code": "ME 2213",
+    "title": "Mechanics of Solids",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\Backlog_2018_758.pdf",
+    "source_page": null,
+    "paper_index": 7
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "A double row riveted lap joint forms the grith seam of a boiler 5 ft in diameter. Pitch of the rivets is 3.25 in, diameter of the rivet holes is $1 1 / 1 6 i n ,$ , thickness of the plate is $7 / 1 6 i n$ . Find the strength of a repeating section, the efficiency, and maximum pressure. Use $q = 8 8 0 0 p s ;$ $\\sigma _ { b } = 1 9 \\ : k s i , \\sigma _ { t } = 1 1 \\ : k s i$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Special Backlog Examination, 2018"
+}

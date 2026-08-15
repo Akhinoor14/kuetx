@@ -1,0 +1,42 @@
+{
+  "id": "1214_p2_Q8(d)",
+  "course": {
+    "code": "ESE 4115",
+    "title": "Power Plant Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\4th_Year_1st_Term_2021_1214.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". For the duct system as shown in figure, determine the dimensions AB, BC, CD and DE 14   \nof the rectangular ducts with aspect ratio 3:1 assuming friction rate of 0.1 mm H2O/m   \nlength duct."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0492004fb07a18bce25db34a28cd825c36066a03dd890a9c866d93d9cf5f9d67.jpg",
+      "_source_path": "images/0492004fb07a18bce25db34a28cd825c36066a03dd890a9c866d93d9cf5f9d67.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2021"
+}

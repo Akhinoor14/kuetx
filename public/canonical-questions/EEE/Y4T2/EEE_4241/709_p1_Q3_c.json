@@ -1,0 +1,53 @@
+{
+  "id": "709_p1_Q3(c)",
+  "course": {
+    "code": "EEE 4241",
+    "title": "Power System Protection",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2017\\4th_Year_2nd_Term_2017_709.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 200 kV long X-mission line has an impedance of (2+j8) Ω. Suggest suitable (14) distance relays for its protection and determine the setting of the relays for all the zones given that"
+    },
+    {
+      "type": "text",
+      "value": "(i) Zone-I covers 80% of the line length"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Zone-II covers 150% of the line length"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Zone-III covers 225% of the line length"
+    },
+    {
+      "type": "text",
+      "value": "Assume a fault resistance of 2 Ω while deciding setting and a suitable characteristics angle of the distance relay suggested by you. Given that CT ratio = 1000/1 A and PT ratio = 220 kV/110 V."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2017"
+}

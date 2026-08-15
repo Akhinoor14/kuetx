@@ -1,0 +1,41 @@
+{
+  "id": "728_p2_Q7(b)",
+  "course": {
+    "code": "HUM-2111",
+    "title": "Financial, Cost and Management Accounting",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\2nd_Year_1st_Term_2017_728.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Following information for three office assistants of Provati Enterprise:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Particulars</td><td rowspan=1 colspan=3>Name of employees</td></tr><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Kamal</td><td rowspan=1 colspan=1>Bahar</td><td rowspan=1 colspan=1>Habib</td></tr><tr><td rowspan=1 colspan=1>Basic salaries(TK)</td><td rowspan=1 colspan=1>15,000</td><td rowspan=1 colspan=1>12,000</td><td rowspan=1 colspan=1>10,000</td></tr><tr><td rowspan=1 colspan=1>House rent (% of basic salary)</td><td rowspan=1 colspan=1>45%</td><td rowspan=1 colspan=1>45%</td><td rowspan=1 colspan=1>45%</td></tr><tr><td rowspan=1 colspan=1>Medical allowance(TK)</td><td rowspan=1 colspan=1>1,500</td><td rowspan=1 colspan=1>1,500</td><td rowspan=1 colspan=1>1,500</td></tr><tr><td rowspan=1 colspan=1>Dearness allowance (% of basic salary)</td><td rowspan=1 colspan=1>20%</td><td rowspan=1 colspan=1>20%</td><td rowspan=1 colspan=1>20%</td></tr><tr><td rowspan=1 colspan=1>Conveyance allowance (TK)</td><td rowspan=1 colspan=1>600</td><td rowspan=1 colspan=1>600</td><td rowspan=1 colspan=1>600</td></tr><tr><td rowspan=1 colspan=1>Subscription to joint life policy</td><td rowspan=1 colspan=1>2%</td><td rowspan=1 colspan=1>2%</td><td rowspan=1 colspan=1>2%</td></tr><tr><td rowspan=1 colspan=1>Subscription to welfare fund</td><td rowspan=1 colspan=1>1%</td><td rowspan=1 colspan=1>1%</td><td rowspan=1 colspan=1>1%</td></tr><tr><td rowspan=1 colspan=1>Employees contribution to provident fund (% ofbasic salary)</td><td rowspan=1 colspan=1>10%</td><td rowspan=1 colspan=1>10%</td><td rowspan=1 colspan=1>10%</td></tr><tr><td rowspan=1 colspan=1>Overtime (hours)</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>25</td><td rowspan=1 colspan=1>30</td></tr><tr><td rowspan=1 colspan=1>Deduction of advance against provident fund (TK)</td><td rowspan=1 colspan=1>700</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>500</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

@@ -1,0 +1,49 @@
+{
+  "id": "1203_p4_Q4(c)",
+  "course": {
+    "code": "ESE 3105",
+    "title": "Heat Transfer and Mass Transfer",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2020\\3rd_Year_1st_Term_2020_1203.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Carbon dioxide $( \\mathrm { C O } _ { 2 } )$ flows a cross-sectional area duct such as a nozzle shown in <sub>figure</sub> at a mass flow rate of 3.00 kg/s. The carbon dioxide enters the duct at a pressure of 1400 kPa and $2 0 0 ^ { \\circ } \\mathrm { C }$ with a low velocity, and it expands in the nozzle to an exit of 200 kPa. The duct is designed so that the now can be approximated as Determine the density, velocity, now area and Mach number at the location of the duct where the fluid pressure is 1200 kPa."
+    },
+    {
+      "type": "text",
+      "value": "For $\\mathrm { C O _ { 2 } } \\colon \\mathsf { c } _ { \\mathsf { p } } = 0 . 8 4 6 \\mathrm { ~ k J } / \\mathrm { k g } . \\mathrm { K } , \\mathrm { ~ k } = 1 . 2 8 9 , \\mathrm { ~ R } = 0 . 1 8 8 9 \\mathrm { ~ k J } / \\mathrm { k g } . \\mathrm { K }$"
+    },
+    {
+      "type": "text",
+      "value": "<sub>5(a).</sub> What do you understand by Fouling factor? Briefly discuss about it."
+    },
+    {
+      "type": "text",
+      "value": "<sub>5(b).</sub> Air is flowing through a duct and a normal shock wave is formed at a certain cross-section. The Mach number, pressure and temperature are 2.2, 106 bar and $1 6 \\%$ <sub>respectively.</sub> Calculate the Mach number, pressure and temperature immediately downstream of the shock wave. Take ${ \\mathrm { k } } = 1 . 4 { \\mathrm { . } }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2020"
+}

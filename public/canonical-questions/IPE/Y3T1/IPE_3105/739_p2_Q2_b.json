@@ -1,0 +1,37 @@
+{
+  "id": "739_p2_Q2(b)",
+  "course": {
+    "code": "IPE 3105",
+    "title": "Product Design -I",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\3rd_Year_1st_Term_2017_739.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "E uivalent ma<sup>i</sup>ntenance costs <sup>f</sup>or manufacturin ex losion- roof ressure sw<sup>i</sup>tc<sup>h</sup>es are d t b \\$ 100 000 i I d i b 4% h th h 5 Wh t i th<sub>e resen</sub>t <sub>wor</sub>th <sub>o</sub>fth<sub>e ma</sub>i<sub>n</sub>t<sub>enance cos</sub>t<sub>s a</sub>t <sub>an</sub> i<sub>n</sub>t<sub>eres</sub>t <sub>ra</sub>t<sub>e o</sub>f 10% <sub>er ear com oun</sub>d<sub>e</sub>d <sub>q</sub>uarter<sup>l</sup><sub>y</sub><sup>?</sup>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

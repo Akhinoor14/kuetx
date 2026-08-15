@@ -1,0 +1,42 @@
+{
+  "id": "758_p7_Q1(b)",
+  "course": {
+    "code": "ME 2213",
+    "title": "Mechanics of Solids",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\Backlog_2018_758.pdf",
+    "source_page": null,
+    "paper_index": 7
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ", at a temperature of $\\cdot - 2 0 ^ { \\circ } \\mathbb { C } ,$ the gap Δ= 2.5mm. Find the temperature at which the compressive stress in the bar will be 35 MP. Use $\\alpha = 1 8 . 0 \\times 1 0 ^ { - 6 } m / m ^ { \\circ } \\mathrm { C }$ and E=80 GPa."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f93d3dec6b18f42754bafd3240c9e8cf2aae501e7e994b543a6244e6f54eee2d.jpg",
+      "_source_path": "images/f93d3dec6b18f42754bafd3240c9e8cf2aae501e7e994b543a6244e6f54eee2d.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Special Backlog Examination, 2018"
+}

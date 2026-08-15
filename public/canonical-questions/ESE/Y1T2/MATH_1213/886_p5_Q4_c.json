@@ -1,0 +1,41 @@
+{
+  "id": "886_p5_Q4(c)",
+  "course": {
+    "code": "MATH 1213",
+    "title": "Differential Equation and Co-ordinate Geometry",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2017\\1st_Year_2nd_Term_2017_886.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": ". A generator having e.m.f 100 volts is connected in series with a 10 ohm resistor and an inductor of 2 henries. If the switch is closed at a time $t \\approx 0$ , determine the current at time $t > 0$"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

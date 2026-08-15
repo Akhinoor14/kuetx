@@ -1,0 +1,58 @@
+{
+  "id": "690_p4_Q5(a)",
+  "course": {
+    "code": "EEE 4247",
+    "title": "Renewable Energy",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\1st_Year_2nd_Term_2018_690.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "The switch in the RL circuit in the following figure Q8(a) is closed at time (15) $t = 0$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_6ea977092e142fc3e819ec13635b7daf200ccca903ee548358ea5c4458cb341b.jpg",
+      "_source_path": "images/6ea977092e142fc3e819ec13635b7daf200ccca903ee548358ea5c4458cb341b.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(i) How will the current flow as a function of time."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Find the value of ݅ that corresponds to $t = 3 \\frac { L } { R }$ and show that it is about 95% of the steady state value of ݅(ݐ ( obtained in question (i)."
+    },
+    {
+      "type": "text",
+      "value": "<sup>(b)</sup> Suppose $L = 1 0$ henrys, $R = 1 0$ ohms, $\\begin{array} { r } { C = \\frac { 1 } { 5 0 0 } } \\end{array}$ farads, $E = 1 0 0$ volts, $q ( 0 ) = 1 0$ and ,coulombs $q ^ { \\prime } ( 0 ) = i ( 0 ) = 0$ . Formulate and then solve the initial value problem that models the given RLC circuit. Interpret your results."
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

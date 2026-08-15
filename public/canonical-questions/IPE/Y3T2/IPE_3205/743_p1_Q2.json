@@ -1,0 +1,50 @@
+{
+  "id": "743_p1_Q2",
+  "course": {
+    "code": "IPE 3205",
+    "title": "Product Design -II",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\3rd_Year_2nd_Term_2015_743.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A machine part of uniform thickness $t = \\frac { b } { 2 . 5 }$ is shaped as shown in figure 2, and machined all over form AISI C1020, as rolled. The design is limited to a life of $1 0 ^ { 6 }$ cycles for a load repeated from 1750 to 3500 lb. Let d = b. Determine:"
+    },
+    {
+      "type": "text",
+      "value": "i) For a design factor of 1.8 (soderberg) what should be the dimensions of the part?"
+    },
+    {
+      "type": "text",
+      "value": "ii)What is the maximum tensile stress in the part as designed?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_30ef6f7308a08452663ed3687d6c5ff18dcc334c3fc87d866b8ec04ec482907c.jpg",
+      "_source_path": "images/30ef6f7308a08452663ed3687d6c5ff18dcc334c3fc87d866b8ec04ec482907c.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2015"
+}

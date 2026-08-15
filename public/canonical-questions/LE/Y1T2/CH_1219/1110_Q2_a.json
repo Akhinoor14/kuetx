@@ -1,0 +1,65 @@
+{
+  "id": "1110_Q2(a)",
+  "course": {
+    "code": "CH 1219",
+    "title": "Organic Chemistry",
+    "department": "Department of Leather Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2022\\1st_Year_2nd_Term_2022_1110.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Transform the following sentences as asked in tie brackets."
+    },
+    {
+      "type": "text",
+      "value": "i. We call Rana what his father named. (Simple)"
+    },
+    {
+      "type": "text",
+      "value": "ii. Reza, who studies hard, is a doctor. (Simple)"
+    },
+    {
+      "type": "text",
+      "value": "iii. As Mamun is lazy, he can't succeed in life. (Simple)"
+    },
+    {
+      "type": "text",
+      "value": "iv. Shova works hard to cut a good figure in exam. (Complex)"
+    },
+    {
+      "type": "text",
+      "value": "v. Kamal reads not only a novel but also a poem. (Simple)"
+    },
+    {
+      "type": "text",
+      "value": "vi. Nomen completed the duty as the authority suggested him. (Simple)"
+    },
+    {
+      "type": "text",
+      "value": "vii, Abir is as disciplined as other students. (Comparative)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2022"
+}

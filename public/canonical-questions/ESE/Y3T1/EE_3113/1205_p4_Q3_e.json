@@ -1,0 +1,37 @@
+{
+  "id": "1205_p4_Q3(e)",
+  "course": {
+    "code": "EE 3113",
+    "title": "Power System Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\3rd_Year_1st_Term_2022_1205.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(e)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". An overhead transmission line conductor having a parabolic configuration weighs 1.925 kg per metre of length. The area of X-section of the conduetor is 2-2 em² and the ultimate strength is 8000 kg/em2. The supports are 600 m apart having 15 m difference of levels. Calculate the sag from the taller of the two supports which must be allowed so that the factor of safety shall be 5. Assume that ice load is 1 kg per metre run and there is no wind pressure."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

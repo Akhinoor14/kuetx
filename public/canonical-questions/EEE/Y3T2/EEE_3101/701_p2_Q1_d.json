@@ -1,0 +1,37 @@
+{
+  "id": "701_p2_Q1(d)",
+  "course": {
+    "code": "EEE 3101",
+    "title": "Signals and Linear Systems",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2016\\3rd_Year_2nd_Term_2016_701.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": "The interaction energy between Na and Cl ions in the NaCl crystal can be written (09) as $\\begin{array} { r } { E ( r ) = - \\frac { 4 . 0 3 \\times 1 0 ^ { - 2 8 } } { r } + \\frac { 6 . 9 7 \\times 1 0 ^ { - 9 6 } } { r ^ { 8 } } , } \\end{array}$ where the energy is given in joules per ion pair and inter ionic separation is in meters. Calculate the binding energy and the equilibrium ionic separation in the crystal; include the energy involved in electron transfer from Cl to Na ."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

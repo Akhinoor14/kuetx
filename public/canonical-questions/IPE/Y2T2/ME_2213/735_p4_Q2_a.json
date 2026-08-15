@@ -1,0 +1,42 @@
+{
+  "id": "735_p4_Q2(a)",
+  "course": {
+    "code": "ME 2213",
+    "title": "Mechanics of Solids",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\2nd_Year_2nd_Term_2018_735.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". If W=80KN. Compute the temperature change that will cause the stress in the steel rod to be 55 MPa. Assume the coefficient of linear expansion are 11.7 µm/(m . °C) for steel and 18.9 µm/(m . °C) for bronze."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_34711b950707245733ae52b70fdfa72d74e30d1b61d9d0d534ab1270bdd08759.jpg",
+      "_source_path": "images/34711b950707245733ae52b70fdfa72d74e30d1b61d9d0d534ab1270bdd08759.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

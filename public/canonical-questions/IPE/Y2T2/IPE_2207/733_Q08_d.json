@@ -1,0 +1,61 @@
+{
+  "id": "733_Q08(d)",
+  "course": {
+    "code": "IPE 2207",
+    "title": "Probability and Statistical Analysis",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\2nd_Year_2nd_Term_2016_733.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "08(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "-Why \"Habitual fact\" is so vital for human beings? 07"
+    },
+    {
+      "type": "text",
+      "value": "Khulna Universit<sub>y</sub> of En<sub>g</sub>in<sub>ee</sub>rin<sub>g</sub> & T<sub>ec</sub>hn<sub>o</sub>l<sub>ogy</sub> De<sub>p</sub>artment of Industrial E<sub>ng</sub>i<sub>neer</sub>i<sub>ng</sub> and Mana<sub>g</sub>ement B Sc E<sub>ng</sub>i<sub>neer</sub>i<sub>ng</sub> l 1 <sup>1</sup>dYear2ndTerm 20 1 6"
+    },
+    {
+      "type": "text",
+      "value": "EEE 22 1 1 El<sub>ec</sub>t<sub>ron</sub>i<sub>cs</sub>"
+    },
+    {
+      "type": "text",
+      "value": "F<sub>u</sub>ll M<sub>ar</sub>k<sub>s :</sub> 2 1 0"
+    },
+    {
+      "type": "text",
+      "value": "Ti<sub>me :</sub> 3 h<sub>rs</sub>"
+    },
+    {
+      "type": "text",
+      "value": "N<sub>.</sub> B : i) Answer any THREE questions from each section in separate scripts<sub>.</sub> ii) Fi<sub>g</sub>ures in the ri<sub>g</sub>ht mar<sub>g</sub>in indicatefull marks<sub>.</sub> <sub>iii)</sub> A<sub>ssume</sub> <sub>reasona</sub>bl<sub>e</sub> d<sub>ata</sub> if <sub>missing</sub> <sub>any.</sub>"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-A"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

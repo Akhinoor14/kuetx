@@ -1,0 +1,57 @@
+{
+  "id": "690_p2_Q6(c)",
+  "course": {
+    "code": "EEE 3211",
+    "title": "Power System I",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\1st_Year_2nd_Term_2018_690.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 16,
+  "content": [
+    {
+      "type": "text",
+      "value": "Design a normalized low-pass Chebysher model to meet the following (16) specifications:"
+    },
+    {
+      "type": "text",
+      "value": "(i) ${ \\mathrm { R } } _ { \\mathrm { L } } = 1 \\ { \\Omega } ;$"
+    },
+    {
+      "type": "text",
+      "value": "(ii) $\\mathrm { { \\omega _ { c } } = 1 \\ r p s ; }$"
+    },
+    {
+      "type": "text",
+      "value": "(iii) The ripple specification is 20 $0 \\mathbf { g } _ { 1 0 } \\frac { p e a k \\ : m a g n i t u d e } { v a l l y \\ : m a g n i t u d e } = 1 \\ : d B$"
+    },
+    {
+      "type": "text",
+      "value": "(iv) Slope of the dB gain curve is to be  40 dB per decade at frequencies much higher than cutoff;"
+    },
+    {
+      "type": "text",
+      "value": "(v) G(j0) must be unity."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

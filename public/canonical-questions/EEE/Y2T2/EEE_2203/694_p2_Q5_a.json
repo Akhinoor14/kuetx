@@ -1,0 +1,50 @@
+{
+  "id": "694_p2_Q5(a)",
+  "course": {
+    "code": "EEE 2203",
+    "title": "Electronics III",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2016\\2nd_Year_2nd_Term_2016_694.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "What do you mean by FET? What are the important differences between"
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    },
+    {
+      "type": "text",
+      "value": "(i) FET and BJT, (ii) JFET and MOSFET"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n( \\mathrm { i i i } ) \\mathrm { D \\mathrm { - } M O S F E T \\ a n d \\ E \\mathrm { - } M O S F E T }\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

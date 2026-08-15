@@ -1,0 +1,37 @@
+{
+  "id": "1200_p5_Q7(b)",
+  "course": {
+    "code": "MATH 2213",
+    "title": "Complex Variables and Fourier Analysis",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\2nd_Year_2nd_Term_2019_1200.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The temperature distribution in a bar of length π, which is perfectly insulated at the ends $\\mathbf { x } = 0$ and ${ \\mathrm {  ~ x ~ } } = \\pi$ is governed by the partial differential equation $\\begin{array} { r } { \\frac { \\partial u } { \\partial t } = \\frac { \\partial ^ { 2 } u } { \\partial x ^ { 2 } } . } \\end{array}$ Assuming the initial temperature distribution as $u ( x , 0 ) = \\cos 3 x$ , find the temperature distribution at any instant of time."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

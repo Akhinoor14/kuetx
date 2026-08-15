@@ -1,0 +1,50 @@
+{
+  "id": "1203_p4_Q5(c)",
+  "course": {
+    "code": "ESE 3105",
+    "title": "Heat Transfer and Mass Transfer",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2020\\3rd_Year_1st_Term_2020_1203.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". A counter flow double tube heat exchanger is used to heat water from $2 0 ^ { \\circ } \\mathrm { C }$ to $8 0 ^ { \\circ } C$ at a mass flow rate of 1.2 kg/s. The heating is to be accomplished by geothermal water available at $1 6 0 ^ { \\circ } \\mathrm { C }$ at a mass flow rate of $2 \\mathrm { \\ k g / s } .$ The inner tube is thin-walled and has a diameter of 1.5 cm. If the overall heat transfer coefficient of the heat exchanger is 640 $\\mathrm { W } / \\mathrm { m } ^ { 2 } . \\mathrm { K } .$ determine the length of the heat exchanger required to achieve the desired heating."
+    },
+    {
+      "type": "text",
+      "value": "<sub>6(a).</sub> Show that the general expression of effectiveness for parallel flow heat exchanger is given by:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\varepsilon = \\frac { 1 - e ^ { - \\displaystyle \\frac { U _ { o } A _ { o } } { C _ { m i n } } \\left( 1 + \\frac { C _ { m i n } } { C _ { m a x } } \\right) } } { 1 + \\displaystyle \\frac { C _ { m i n } } { C _ { m a x } } }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "The symbols have their usual meaning."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2020"
+}

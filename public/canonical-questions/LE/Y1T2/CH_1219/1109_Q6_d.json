@@ -1,0 +1,53 @@
+{
+  "id": "1109_Q6(d)",
+  "course": {
+    "code": "CH 1219",
+    "title": "Organic Chemistry",
+    "department": "Department of Leather Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2021\\1st_Year_2nd_Term_2021_1109.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is the value of $a , b , c ,$ d, and e after executing the following statemeuts line by 10 line?"
+    },
+    {
+      "type": "text",
+      "value": "int $\\mathfrak { a } = 2 0 , \\mathfrak { b } = 1 0 , \\mathfrak { e } = | \\mathfrak { H } _ { 3 }$"
+    },
+    {
+      "type": "text",
+      "value": "int $\\mathsf { c } = \\mathsf { + + a - b } \\mathsf { ; }$"
+    },
+    {
+      "type": "text",
+      "value": "int $d = b ^ { + + } + e _ { i } ^ { . }$"
+    },
+    {
+      "type": "text",
+      "value": "Printf $( \\therefore a = 0 \\% a ) , b = 0 \\% c = 4 . 5 \\% 5 d = 4 0 \\% 5 0 d , e = 0 \\% a 2 . 5 \\% 5 0 d , e = 1 . 5 \\%$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

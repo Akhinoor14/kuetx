@@ -1,0 +1,41 @@
+{
+  "id": "887_p6_Q1(a)",
+  "course": {
+    "code": "HUM 1213",
+    "title": "Technical English",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2018\\1st_Year_2nd_Term_2018_887.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Frame Wh questions from the underlined parts of the following answers. mu 14"
+    },
+    {
+      "type": "text",
+      "value": "(i) Dhaka is famous for mosque. (ii) He earns 40 thousand taka per month. (iii) Bangla is our mother tongue. (iv) We achieved our freedom in 1971. (v) A lion was very proud of his strength. (vi) I got down from a train at Khulna station. 4 (vii) I heard the girl singing."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

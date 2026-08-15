@@ -1,0 +1,37 @@
+{
+  "id": "1220_p4_Q6(c)",
+  "course": {
+    "code": "ESE 4213",
+    "title": "Nuclear Power Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\4th_Year_2nd_Term_2022_1220.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Describe the gas-cooled fast reactor with proper diagram. 10   \n<sub>6(d).</sub> Discuss the different features of European pressurized water reactor (EPR). 08   \n<sub>7(a).</sub> How can Generation IV nuclear reactor designs such as molten salt reactors or high 12   \ntemperature gas-cooled reactors address the challenges of waste management and fuel   \nefficiency while ensuring enhancement safety compared to conventional reactor types?   \n<sub>7(b).</sub> What will happen in a nuclear power plant if reactor coolant pump does not properly 10   \nwork?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2022"
+}

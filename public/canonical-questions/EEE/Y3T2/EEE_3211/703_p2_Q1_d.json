@@ -1,0 +1,42 @@
+{
+  "id": "703_p2_Q1(d)",
+  "course": {
+    "code": "EEE 3211",
+    "title": "Power System I",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\3rd_Year_2nd_Term_2018_703.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the GMR of the each of the conductors shown in Fig Q1(c) in terms of the (10) radius r of an individual strand."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_5b99ae162c68a51215557bcbf9c03b5185e204aed2b9a510821f8ce399a4f9e8.jpg",
+      "_source_path": "images/5b99ae162c68a51215557bcbf9c03b5185e204aed2b9a510821f8ce399a4f9e8.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

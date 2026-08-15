@@ -1,0 +1,79 @@
+{
+  "id": "889_p3_Q2(b)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Programming",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2018\\2nd_Year_1st_Term_2018_889.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Find and explain errors, and give corrections of the following Octave codes:"
+    },
+    {
+      "type": "text",
+      "value": "(i)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nA = \\{ 2 , 4 , 5 , 6 , 4 , 6 \\} ;\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nB = \\{ 1 ; 4 ; 5 ; 7 ; 8 ; 9 \\} ;\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\pmb { C } } = { \\pmb { A } } + { \\pmb { B } } ;\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "(ii)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nv a r 1 = 1 0 \\colon 9 \\colon 1 0 0\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nv a r 2 = 1 ; 1 1 ;\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "addResult = var1 + var2;"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nm u l t i R e s u l t s = v a r 1 * v a r 2\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

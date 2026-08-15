@@ -1,0 +1,37 @@
+{
+  "id": "1206_p4_Q2(b)",
+  "course": {
+    "code": "EE 3113",
+    "title": "Power System Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\3rd_Year_1st_Term_2023_1206.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". llclium following steadily in a nozzle experience a normal shock at a Mach number of Ma = 2.5. If the pressure and temperature of Helium arc 6 l.64 kPa and 262. l 5 K, respectively, upstream of the shock, calculate the pressure , temperature , velocity . Mach number and stagnation pressure downstream of the shock. For Ilclium use k = 1.667 and R = 2.0769 kJ/kg.K"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

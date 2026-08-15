@@ -1,0 +1,42 @@
+{
+  "id": "758_p7_Q6(b)",
+  "course": {
+    "code": "ME 2213",
+    "title": "Mechanics of Solids",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\Backlog_2018_758.pdf",
+    "source_page": null,
+    "paper_index": 7
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Determine the normal and shearing stress on (i) the principle planes, (ii) the plane of maximum in plane sharing stress and (iii) the planes whose normal are at $+ 3 6 . 8 ^ { \\circ }$ and $+ 1 2 6 . 8 ^ { \\circ }$ with the axis. Also show the results of the part (i) and part (ii) on complete sketches of differential elements."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e4293ea0fdd87c3261238e1f2089aa5963e43ce2591827f6cebb924ae2e2bee8.jpg",
+      "_source_path": "images/e4293ea0fdd87c3261238e1f2089aa5963e43ce2591827f6cebb924ae2e2bee8.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Special Backlog Examination, 2018"
+}

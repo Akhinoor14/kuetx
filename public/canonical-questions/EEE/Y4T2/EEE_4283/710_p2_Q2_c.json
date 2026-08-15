@@ -1,0 +1,37 @@
+{
+  "id": "710_p2_Q2(c)",
+  "course": {
+    "code": "EEE 4283",
+    "title": "Radar and Satellite Communication",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\4th_Year_2nd_Term_2018_710.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A glass fiber exhibits material dispersion given by $| \\lambda ^ { 2 } ( d n _ { 1 } ) / d \\lambda ^ { 2 } |$ of 0.025. Determine the material dispersion parameter at a wavelength of 1550 nm, and estimate the rms pulse broadening per kilometer for a good LED source with an rms spectral width of 20 nm at this wavelength."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2018"
+}

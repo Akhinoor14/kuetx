@@ -1,0 +1,41 @@
+{
+  "id": "729_p6_Q08(c)",
+  "course": {
+    "code": "HUM-2111",
+    "title": "Financial, Cost and Management Accounting",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\2nd_Year_1st_Term_2018_729.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "08(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "From the following ledger balances of M/S Progati & Co. Prepare a trial balance 22 as on December 31, 2017:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td colspan=\"1\" rowspan=\"1\"></td><td colspan=\"1\" rowspan=\"1\">Amount (TK.)</td><td colspan=\"1\" rowspan=\"1\"></td><td colspan=\"1\" rowspan=\"1\">Amount (TK.)</td></tr><tr><td colspan=\"1\" rowspan=\"1\">Cash.....</td><td colspan=\"1\" rowspan=\"1\">60,000</td><td colspan=\"1\" rowspan=\"1\">Discount.....</td><td colspan=\"1\" rowspan=\"1\">7,100</td></tr><tr><td colspan=\"1\" rowspan=\"1\">Account receivable</td><td colspan=\"1\" rowspan=\"1\">38,000</td><td colspan=\"1\" rowspan=\"1\">Insurance</td><td colspan=\"1\" rowspan=\"1\">3,000</td></tr><tr><td colspan=\"1\" rowspan=\"1\">Furniture.......</td><td colspan=\"1\" rowspan=\"1\">55,000</td><td colspan=\"1\" rowspan=\"1\">Opening stock......</td><td colspan=\"1\" rowspan=\"1\">12,000</td></tr><tr><td colspan=\"1\" rowspan=\"1\">Machinery.......</td><td colspan=\"1\" rowspan=\"1\">2,00,000</td><td colspan=\"1\" rowspan=\"1\">Notes receivable....</td><td colspan=\"1\" rowspan=\"1\">30,000</td></tr><tr><td colspan=\"1\" rowspan=\"1\">Building.....</td><td colspan=\"1\" rowspan=\"1\">1,00,000</td><td colspan=\"1\" rowspan=\"1\"></td><td colspan=\"1\" rowspan=\"1\"></td></tr><tr><td colspan=\"1\" rowspan=\"1\">Account payable</td><td colspan=\"1\" rowspan=\"1\">95,000</td><td colspan=\"1\" rowspan=\"1\">Irrecoverable debts...</td><td colspan=\"1\" rowspan=\"1\">5,000</td></tr><tr><td colspan=\"1\" rowspan=\"1\">Capital......</td><td colspan=\"1\" rowspan=\"1\">3,00,000</td><td colspan=\"1\" rowspan=\"1\">Carriage inward</td><td colspan=\"1\" rowspan=\"1\">6,300</td></tr><tr><td colspan=\"1\" rowspan=\"1\">Drawings.......</td><td colspan=\"1\" rowspan=\"1\">35,000</td><td colspan=\"1\" rowspan=\"1\">Bad debts reserve</td><td colspan=\"1\" rowspan=\"1\">15,000</td></tr><tr><td colspan=\"1\" rowspan=\"1\">Purchases......</td><td colspan=\"1\" rowspan=\"1\">3,10,000</td><td colspan=\"1\" rowspan=\"1\">Wages.....</td><td colspan=\"1\" rowspan=\"1\">27,700</td></tr><tr><td colspan=\"1\" rowspan=\"1\">Sales..</td><td colspan=\"1\" rowspan=\"1\">4,75,000</td><td colspan=\"1\" rowspan=\"1\">Notes payable</td><td colspan=\"1\" rowspan=\"1\">48,000</td></tr><tr><td colspan=\"1\" rowspan=\"1\">Sales return.....</td><td colspan=\"1\" rowspan=\"1\">3,500</td><td colspan=\"1\" rowspan=\"1\">Bank charges....</td><td colspan=\"1\" rowspan=\"1\">2,000</td></tr><tr><td colspan=\"1\" rowspan=\"1\">Purchases return...</td><td colspan=\"1\" rowspan=\"1\">2,900</td><td colspan=\"1\" rowspan=\"1\">Advertisement exp.</td><td colspan=\"1\" rowspan=\"1\">8,300</td></tr><tr><td colspan=\"1\" rowspan=\"1\">Salaries.......</td><td colspan=\"1\" rowspan=\"1\">33,000</td><td colspan=\"1\" rowspan=\"1\">Closing stock</td><td colspan=\"1\" rowspan=\"1\">10,000</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

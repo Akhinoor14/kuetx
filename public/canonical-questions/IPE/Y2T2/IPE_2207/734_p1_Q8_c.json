@@ -1,0 +1,45 @@
+{
+  "id": "734_p1_Q8(c)",
+  "course": {
+    "code": "IPE 2207",
+    "title": "Probability and Statistical Analysis",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\2nd_Year_2nd_Term_2017_734.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write down the limitations of chi-square distribution. The safety direction of Honda USA took sample at random from company record of minor work related accidents and classified according to the time of the accident took place."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Time</td><td rowspan=1 colspan=1>No. of accident</td><td rowspan=1 colspan=1>Time</td><td rowspan=1 colspan=1>No. of accident</td></tr><tr><td rowspan=1 colspan=1>8 to 9 A.M.</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>1 to 2 P.M.</td><td rowspan=1 colspan=1>7</td></tr><tr><td rowspan=1 colspan=1>9 to 10 A.M.</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>2 to 3 P.M.</td><td rowspan=1 colspan=1>8</td></tr><tr><td rowspan=1 colspan=1>10 to 11 A.M.</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>3 to 4 P.M.</td><td rowspan=1 colspan=1>19</td></tr><tr><td rowspan=1 colspan=1>11 to 12 P.M.</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>4 to 5 P.M.</td><td rowspan=1 colspan=1>6</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Using 0.01 level of significance, determine the accidents are evenly distributed throughout the day. Write brief explanation of your conclusion."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

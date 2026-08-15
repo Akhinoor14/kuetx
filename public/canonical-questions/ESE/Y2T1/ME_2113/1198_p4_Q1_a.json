@@ -1,0 +1,42 @@
+{
+  "id": "1198_p4_Q1(a)",
+  "course": {
+    "code": "ME 2113",
+    "title": "Statics and Solid Mechanics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\2nd_Year_1st_Term_2022_1198.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Two cables are tied together at C and loaded as shown in the figure. Determine the tension in AC and BC."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e37a061ad827bcb5b0795cba428137998732cfb19cbbe2c861192c7c7022579c.jpg",
+      "_source_path": "images/e37a061ad827bcb5b0795cba428137998732cfb19cbbe2c861192c7c7022579c.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

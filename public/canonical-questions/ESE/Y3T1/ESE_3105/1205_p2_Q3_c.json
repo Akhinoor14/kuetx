@@ -1,0 +1,42 @@
+{
+  "id": "1205_p2_Q3(c)",
+  "course": {
+    "code": "ESE 3105",
+    "title": "Heat Transfer and Mass Transfer",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\3rd_Year_1st_Term_2022_1205.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". In a prduction facility 3m thick large brass plates $\\mathrm { \\Delta } \\mathrm { \\left( K = 1 1 0 ~ W / ( m . K ) , ~ \\rho = 8 5 3 0 ~ k g / m ^ { 3 } , \\right. }$ $\\mathrm { C p } = 3 8 0 \\mathrm { \\ : } ] / ( \\mathrm { k g . K } )$ ,and $\\alpha = 3 3 . 9 \\times 1 0 ^ { - 6 } \\ \\mathrm { m } ^ { 2 } / \\mathrm { } s )$ that are initially at a uniform temperature of $2 5 ^ { \\circ } \\mathrm { C }$ are heated by passing them through an oven maintained at $7 0 0 ^ { \\circ } \\mathrm { C } .$ The plates remain in the oven for a period of 10 min. Taking the convection heat tranfer coefficient to be $h = 8 0 W / ( m ^ { 2 } . K )$ , determine the surface temperature of the plates when they come out of the oven."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_897954197913e7baeb515ab286d818997f56f45526a65a0975fe6869db47820b.jpg",
+      "_source_path": "images/897954197913e7baeb515ab286d818997f56f45526a65a0975fe6869db47820b.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

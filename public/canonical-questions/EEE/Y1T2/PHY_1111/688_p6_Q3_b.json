@@ -1,0 +1,59 @@
+{
+  "id": "688_p6_Q3(b)",
+  "course": {
+    "code": "PHY 1111",
+    "title": "Physics",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2016\\1st_Year_2nd_Term_2016_688.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider a particle of mass “m” is contained in a 1-D box of with “a”. The potential energy is given by"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nV ( x ) = \\left\\{ { \\begin{array} { l l } { 0 \\quad } & { 0 \\leq x \\leq a } \\\\ { \\infty } & { 0 { \\mathrm { t h e r w i s e } } } \\end{array} } \\right.\\tag{12+3}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_2c66af70cf559d7b0bf77b00670fc54682fe70aad9eec3fbe3f8cf08438a7257.jpg",
+      "_source_path": "images/2c66af70cf559d7b0bf77b00670fc54682fe70aad9eec3fbe3f8cf08438a7257.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(i) Solve the Schrodinger equation for this particle and hence show that the normalized solution have the form"
+    },
+    {
+      "type": "text",
+      "value": "$\\begin{array} { r } { \\Psi _ { n } ( x ) = \\sqrt { \\frac { 2 } { a } } \\sin \\left( \\frac { n \\pi x } { a } \\right) . } \\end{array}$ , where “n” is an integer."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Sketch the wave function for the case n=1, 2 and 3."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

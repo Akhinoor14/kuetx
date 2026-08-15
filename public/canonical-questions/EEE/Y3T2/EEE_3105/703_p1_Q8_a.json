@@ -1,0 +1,47 @@
+{
+  "id": "703_p1_Q8(a)",
+  "course": {
+    "code": "EEE 3105",
+    "title": "Control Systems",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\3rd_Year_2nd_Term_2018_703.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider a unity feedback system with open loop transfer function (20) $G { \\bigl ( } s { \\bigr ) } = { \\frac { 4 } { s { \\bigl ( } s + 2 { \\bigr ) } } }$ . Design a lead compensator so that the following requirements"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nk _ { \\nu } = 2 0 \\sec ^ { - 1 }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { i n } = 5 0 ^ { \\circ } \\mathrm { i i i } )\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

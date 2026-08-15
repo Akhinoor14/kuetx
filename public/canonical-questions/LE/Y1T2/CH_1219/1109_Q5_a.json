@@ -1,0 +1,41 @@
+{
+  "id": "1109_Q5(a)",
+  "course": {
+    "code": "CH 1219",
+    "title": "Organic Chemistry",
+    "department": "Department of Leather Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2021\\1st_Year_2nd_Term_2021_1109.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is the basic difference between keyword and identifier? Find identifiers and 13 keywords from the following program:"
+    },
+    {
+      "type": "text",
+      "value": "#include<Stdio.h>   \nVoid MAX (int Val1, int Val2)   \n{ if (Val1 > Val2) { 11 printf (“%d”, Val1); } else { printf (“%d”, Val2); }   \n$\\begin{array} { r } { \\underset { \\mathbf { \\{ \\begin{array} { l } { \\mathbf { i } } \\\\ { \\mathbf { \\{ \\bar { \\Phi } } } \\end{array}  } } } { \\vdots }  \\end{array}$ main () int a, b; Scanf (“%d%d\", &a, &b); MAX (a,b); return 0;   \n}"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1206_p5_Q3(b)",
+  "course": {
+    "code": "ESE 3105",
+    "title": "Heat Transfer and Mass Transfer",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\3rd_Year_1st_Term_2023_1206.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". J\\. motor body is 400 mm in outside diameter and 250 mm long. Its surface temperature should not exceed $6 2 ^ { \\circ } \\mathrm { C }$ when dissipating 350 W. Longitudinal fins of 18 mm thickness and J8 mm height are proposed. The convective coefficient is 42 $\\mathrm { W / m } ^ { 2 \\circ } \\mathrm { C } .$ ow, determine the number of fins required. Atmospheric temperature is $3 5 ^ { \\circ } \\mathrm { C }$ and thermal conductivity is 40 $W / { \\mathrm { m } } ^ { \\circ } \\mathrm { C } .$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

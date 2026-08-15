@@ -1,0 +1,54 @@
+{
+  "id": "1211_p6_Q3(c)",
+  "course": {
+    "code": "ESE 3217",
+    "title": "Instrumentation and Control",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\3rd_Year_2nd_Term_2022_1211.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Consider the third order linear time invarient system described by the following 14 differential equation:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\frac { d ^ { 3 } y } { d t ^ { 3 } } + 2 \\frac { d ^ { 2 } y } { d t ^ { 2 } } + 3 \\frac { d y } { d t } + 4 y = 2 u\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "i. Define three state variable $\\mathbf { X } _ { \\mathrm { 1 } } , \\mathbf { X } _ { 2 }$ and $\\mathrm { x } _ { 3 }$ based on the derivatives of the output y."
+    },
+    {
+      "type": "text",
+      "value": "ii.Express the state equation in the matrix form."
+    },
+    {
+      "type": "text",
+      "value": "iii. Write the output equation y in terms of the state variable."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

@@ -1,0 +1,49 @@
+{
+  "id": "743_p1_Q7(b)",
+  "course": {
+    "code": "IPE 3205",
+    "title": "Product Design -II",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\3rd_Year_2nd_Term_2015_743.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Babies are born in a state of the rate of one birth every 12 minutes. The time between birth follows exponential distribution. Find-"
+    },
+    {
+      "type": "text",
+      "value": "i) The average number of births per year"
+    },
+    {
+      "type": "text",
+      "value": "ii) The probability that no birth will occur in any one day."
+    },
+    {
+      "type": "text",
+      "value": "iii) The probability of issuing50 birth certificates in 3 hours, given that no certificates were issued during the first 2 hours of the 3 hours period."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2015"
+}

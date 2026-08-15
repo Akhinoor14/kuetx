@@ -1,0 +1,42 @@
+{
+  "id": "1199_p2_Q4(a)",
+  "course": {
+    "code": "MATH 2113",
+    "title": "Linear Algebra and Vector Analysis",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\2nd_Year_1st_Term_2023_1199.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Find a basis for the row space consisting entirely of row vectors from the following matrix"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\left[ { \\begin{array} { c c c c c } { 1 } & { - 2 } & { 0 } & { 0 } & { 3 } \\\\ { 2 } & { - 5 } & { - 3 } & { - 2 } & { 6 } \\\\ { 0 } & { 5 } & { 1 5 } & { 1 0 } & { 0 } \\\\ { 2 } & { 6 } & { 1 8 } & { 8 } & { 6 } \\end{array} } \\right]\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

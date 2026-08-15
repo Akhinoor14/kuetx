@@ -1,0 +1,45 @@
+{
+  "id": "1220_p2_Q8(d)",
+  "course": {
+    "code": "ESE 4219",
+    "title": "Energy Audit and Management",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\4th_Year_2nd_Term_2022_1220.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Use CUSUM technique to develop a table and calculate energy savings for first 6 months of 2023 for those energy savings measures implemented by a plant prior to January 2023. The average production for the period January-June 2023 is 1000 MT/month."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>2023- month</td><td rowspan=1 colspan=1>Actual specific energyconsumption kWh/MT</td><td rowspan=1 colspan=1>Predicted specific energyconsumption kWh/MT</td></tr><tr><td rowspan=1 colspan=1>January</td><td rowspan=1 colspan=1>1203</td><td rowspan=1 colspan=1>1121</td></tr><tr><td rowspan=1 colspan=1>February</td><td rowspan=1 colspan=1>1187</td><td rowspan=1 colspan=1>1278</td></tr><tr><td rowspan=1 colspan=1>March</td><td rowspan=1 colspan=1>1450</td><td rowspan=1 colspan=1>1550</td></tr><tr><td rowspan=1 colspan=1>April</td><td rowspan=1 colspan=1>1401</td><td rowspan=1 colspan=1>1571</td></tr><tr><td rowspan=1 colspan=1>May</td><td rowspan=1 colspan=1>1350</td><td rowspan=1 colspan=1>1284</td></tr><tr><td rowspan=1 colspan=1>June</td><td rowspan=1 colspan=1>1240</td><td rowspan=1 colspan=1>1233</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY Department of Energy Science and Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2022"
+}

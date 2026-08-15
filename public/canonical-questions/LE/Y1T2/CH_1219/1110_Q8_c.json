@@ -1,0 +1,105 @@
+{
+  "id": "1110_Q8(c)",
+  "course": {
+    "code": "CH 1219",
+    "title": "Organic Chemistry",
+    "department": "Department of Leather Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2022\\1st_Year_2nd_Term_2022_1110.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write down the industrial source of phenol using cumene as starting materials. 12"
+    },
+    {
+      "type": "text",
+      "value": "Department of Leather Engineering Khulna University of Engineering & Technology B. Sc. Engineering 1ª Year 2d Term Examination-2022"
+    },
+    {
+      "type": "text",
+      "value": "Hum 1219"
+    },
+    {
+      "type": "text",
+      "value": "English"
+    },
+    {
+      "type": "text",
+      "value": "Time: 3.0 Hours"
+    },
+    {
+      "type": "text",
+      "value": "Full Marks: 210"
+    },
+    {
+      "type": "text",
+      "value": "N.B. i) Answer any THREE questions from each section in separate scripts."
+    },
+    {
+      "type": "text",
+      "value": "ii) Figures in the right margin indicate full marks."
+    },
+    {
+      "type": "text",
+      "value": "iii) Assume reasonable data if any missing."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-A"
+    },
+    {
+      "type": "text",
+      "value": "I(a) Make sentence with the following structures using the words given in brackets."
+    },
+    {
+      "type": "text",
+      "value": "i. Subj. + Intransitive Verb + Adv. of Manner. (Study as verb)"
+    },
+    {
+      "type": "text",
+      "value": "ji. Subj. + Linking Verb + Adj. complement. (seem as verb)"
+    },
+    {
+      "type": "text",
+      "value": "jii. Since + Subj. + Verb + Adv. of Manner, subj. + Verb + Object. (Study and like as verb)"
+    },
+    {
+      "type": "text",
+      "value": "iv. Till + Subj. + verb + Adv. of Manner, Subj. + Verb + Obj. (Behave and Co-operate as Verb)"
+    },
+    {
+      "type": "text",
+      "value": "v. Subj. + Relative pronoun + Verb + Adv, of place + verb + Adj. complement. (Work and is as verb)"
+    },
+    {
+      "type": "text",
+      "value": "vi. Subj. + Verb + not only + Adj. complement + but also + Adj. complement. (is as verb)"
+    },
+    {
+      "type": "text",
+      "value": "vii. Subj. + Verb + Adv. of Manner, so + verb + Adv. of place. (study and progress as verb)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2022"
+}

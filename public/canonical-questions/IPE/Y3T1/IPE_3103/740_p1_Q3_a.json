@@ -1,0 +1,49 @@
+{
+  "id": "740_p1_Q3(a)",
+  "course": {
+    "code": "IPE 3103",
+    "title": "Engineering Metallurgy",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\3rd_Year_1st_Term_2018_740.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Lead melts at 6200℉ and tin melts at 4500F. They form a eutectic containing 62% tin at 620ºF. The maximum solid solubility of tin in lead at this temperature is 19%; of lead in tin, 3%. Assume the solubility of each at room temperature is 1%."
+    },
+    {
+      "type": "text",
+      "value": "(i) Draw the equilibrium diagram to scale on a piece of graph paper labeling all points, lines, and areas."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Describe the solidification of a 40% tin aloy. Sketch its microstructure at room temperature, giving the chemical composition and relative amounts of phases present."
+    },
+    {
+      "type": "text",
+      "value": "(iii) Draw the cooling curve for the above alloy."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

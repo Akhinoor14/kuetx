@@ -1,0 +1,42 @@
+{
+  "id": "1104_Q3(c)",
+  "course": {
+    "code": "EEE 1119",
+    "title": "Basic Electrical Engineering",
+    "department": "Department of Leather Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2020\\1st_Year_1st_Term_2020_1104.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The 60w light bulb in the following figure is rated at 120 volts. Calculate Vs to make the light 08 bulb operate at the rated conditions."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_efd2eb148123096a2eb98fca6d2c6232e53a0995c0ca37c3c0a961595d8537e3.jpg",
+      "_source_path": "images/efd2eb148123096a2eb98fca6d2c6232e53a0995c0ca37c3c0a961595d8537e3.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2020"
+}

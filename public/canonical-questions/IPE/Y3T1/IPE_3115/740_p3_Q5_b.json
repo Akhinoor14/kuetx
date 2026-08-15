@@ -1,0 +1,41 @@
+{
+  "id": "740_p3_Q5(b)",
+  "course": {
+    "code": "IPE 3115",
+    "title": "Engineering Economy",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\3rd_Year_1st_Term_2018_740.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The effectiveness measure E is the number of graduates from adult training programs. For the CERs shown, determine which independent programs should be selected; b = \\$500,000. CER = Cost Effectiveness Ratio."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Program</td><td rowspan=1 colspan=1>CER, $/graduate</td><td rowspan=1 colspan=1>Program cost, $</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>1203</td><td rowspan=1 colspan=1>305,000</td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>752</td><td rowspan=1 colspan=1>98,000</td></tr><tr><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>2010</td><td rowspan=1 colspan=1>126,000</td></tr><tr><td rowspan=1 colspan=1>D</td><td rowspan=1 colspan=1>1830</td><td rowspan=1 colspan=1>365,000</td></tr><tr><td rowspan=1 colspan=1>E</td><td rowspan=1 colspan=1>1050</td><td rowspan=1 colspan=1>150,000</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

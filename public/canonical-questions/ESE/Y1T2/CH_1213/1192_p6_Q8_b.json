@@ -1,0 +1,50 @@
+{
+  "id": "1192_p6_Q8(b)",
+  "course": {
+    "code": "CH 1213",
+    "title": "Chemistry II",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\1st_Year_2nd_Term_2021_1192.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The frequency of light that a molecule will absorb is given by:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r } { v = \\frac { 1 } { 2 \\pi } ( k / \\mu ) ^ { \\frac { 1 } { 2 } } ; v = f r e q u e n c y i n c m ^ { - 1 } , k = \\mathrm { f o r c e c o n s t a n t i n N / c m } , } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "µ = reduced mass in $K g$"
+    },
+    {
+      "type": "text",
+      "value": "Using this formula, explain why $C ^ { - 2 } D$ stretching frequency will be reduced compared to $C ^ { - 1 } H$ stretching?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

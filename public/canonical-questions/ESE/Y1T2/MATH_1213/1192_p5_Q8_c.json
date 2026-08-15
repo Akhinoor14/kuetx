@@ -1,0 +1,55 @@
+{
+  "id": "1192_p5_Q8(c)",
+  "course": {
+    "code": "MATH 1213",
+    "title": "Differential Equation and Co-ordinate Geometry",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\1st_Year_2nd_Term_2021_1192.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Solve the ODE using Laplace transform"
+    },
+    {
+      "type": "formula",
+      "value": "$$\ny ^ { \\prime \\prime } + y = f ( t ) , \\quad y ( 0 ) = 0 , \\qquad y ^ { \\prime } ( 0 ) = 0 \\ w h e r e\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nf ( t ) = \\left\\{ \\begin{array} { l l } { 1 , \\quad } & { 0 \\leq t < \\pi / _ { 2 } } \\\\ { \\sin t , \\quad } & { t \\geq \\pi / _ { 2 } } \\end{array} \\right.\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY"
+    },
+    {
+      "type": "text",
+      "value": "Department of Energy Science and Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "753_p5_Q10(c)",
+  "course": {
+    "code": "IPE 4228",
+    "title": "CAM and Robotics Sessional",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\4th_Year_2nd_Term_2015_753.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "10(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "In the following figure, the part requires milling on the periphery for smoothing. Make a 15   \npart program on a machine centre equipped with the ISO controller. Clearly show the set   \npoint and axes on the sketch of the part. All dimensions are in mm."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e58e18e598793e56a7cbc8f5be6d24303bc0dcf59cec1f363eebe886e5d9f10e.jpg",
+      "_source_path": "images/e58e18e598793e56a7cbc8f5be6d24303bc0dcf59cec1f363eebe886e5d9f10e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2015"
+}

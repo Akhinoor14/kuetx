@@ -1,0 +1,46 @@
+{
+  "id": "709_p5_Q2(d)",
+  "course": {
+    "code": "EEE 4269",
+    "title": "Photovoltaic System",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2017\\4th_Year_2nd_Term_2017_709.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The incremental fuel costs for two units of a plant are"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\lambda _ { 1 } = \\frac { \\mathrm { d } F _ { 1 } } { \\mathrm { d } P _ { 1 } } = 0 . 9 6 P _ { 1 } + 6 4 0 , \\quad \\lambda _ { 2 } = \\frac { \\mathrm { d } F _ { 2 } } { \\mathrm { d } P _ { 2 } } = 0 . 6 4 P _ { 2 } + 7 6 8 ,\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "where F is in Taka per hour (Tk/hr) and $P$ is in megawatts (MW). If both units operate at all times and maximum and minimum loads on each unit are 550 and 100 MW, respectively, find the savings in Tk/hr for economic dispatch of load between the units compared with their sharing the output equally when the total plant output is 600 MW and 1100 MW."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2017"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1205_p3_Q7(d)",
+  "course": {
+    "code": "EE 3113",
+    "title": "Power System Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\3rd_Year_1st_Term_2022_1205.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ".A fully mixed water storage tank contains 400 kg water, and has a UA product of 10 W/°C, and is located in a room that is at constant temperature of 16°C. The tank is examined in a 8 h period starting from 7 AM where $\\mathrm { Q } _ { \\mathrm { u } }$ is equal to 0, 8, 20, 28, 40, 55, 65, 55 MJ. The load is constant and equal to 10 MJ in first 2h, 14 MJ in the next 2h, 18 MJ in the next 2h, and 24 M the rest of the time. Find the final storage tank temperature if initial temperatures is 40℃."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

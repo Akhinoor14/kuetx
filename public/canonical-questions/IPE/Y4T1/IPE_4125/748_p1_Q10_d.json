@@ -1,0 +1,65 @@
+{
+  "id": "748_p1_Q10(d)",
+  "course": {
+    "code": "IPE 4125",
+    "title": "Machine Tools",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\4th_Year_1st_Term_2016_748.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "10(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Discuss the reasons of direct investment. 10"
+    },
+    {
+      "type": "text",
+      "value": "<sub>fhulna</sub> Uni<sub>v</sub>ersit<sub>y</sub> of En<sub>g</sub>ineerin<sub>g</sub> & Technolo<sub>gy</sub> De<sub>p</sub>artment of Ind<sub>u</sub>strial E<sub>ng</sub>i<sub>neer</sub>i<sub>ng</sub> and Mana<sub>g</sub>ement"
+    },
+    {
+      "type": "text",
+      "value": "B S<sub>c</sub> E<sub>n</sub> i<sub>neer</sub>i<sub>n</sub> <sup>4111</sup> Y<sub>ea</sub>r l <sup>'1</sup> T<sub>e</sub>rm E<sub>xa</sub>min<sub>a</sub>ti<sub>o</sub>n 20 1 6"
+    },
+    {
+      "type": "text",
+      "value": "IPE 4 1 09"
+    },
+    {
+      "type": "text",
+      "value": "M<sub>anagemen</sub>t Inf<sub>o</sub>rm<sub>a</sub>ti<sub>o</sub>n S<sub>ys</sub>t<sub>em</sub> An<sub>a</sub>l<sub>ys</sub>i<sub>s a</sub>nd D<sub>es</sub>i<sub>g</sub>n F<sub>u</sub>ll M<sub>ar</sub>k<sub>s :</sub> 2 1 0 Ti<sub>me :</sub> 3h<sub>rs</sub>"
+    },
+    {
+      "type": "text",
+      "value": "<sup>N</sup><sub>.</sub><sup>B</sup>: i) Answer an<sub>y</sub> THREE <sub>q</sub>uestionsfrom euclt section in se<sub>p</sub>arate scri<sub>p</sub>ts. ii) Fi<sub>g</sub>ures in th e ri<sub>g</sub>h t 11 1 1 1 1 <sup>'</sup><sub>g</sub>i1 1 iudica tefu l! 1 1 1 urk. 1·. iii) Assume reasonable data il 111i 1si11g an<sub>y</sub>"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-A"
+    },
+    {
+      "type": "text",
+      "value": "1 <sub>.</sub>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2016"
+}

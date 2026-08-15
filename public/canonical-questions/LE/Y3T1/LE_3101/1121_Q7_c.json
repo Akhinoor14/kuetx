@@ -1,0 +1,37 @@
+{
+  "id": "1121_Q7(c)",
+  "course": {
+    "code": "LE 3101",
+    "title": "Leather Manufacturing Technology IV",
+    "department": "Department of Leather Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2022\\3rd_Year_1st_Term_2022_1121.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A solution of any dye ${ } ^ { \\mathfrak { s } } \\mathrm { D } ^ { \\mathfrak { s } }$ has an absorbance at 480nm of 0.64 in a 0.5cm length cuvette. The straight line equation of the calibration for the dye is given as $\\mathrm { y } = 0 . 0 0 7 8 \\mathrm { x } + 0 . 0 0 1 2$ . Calculate the concentration of the dye. [Concentration of dye for standard solution was measured as mg/L)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

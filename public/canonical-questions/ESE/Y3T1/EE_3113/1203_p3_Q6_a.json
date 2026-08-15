@@ -1,0 +1,66 @@
+{
+  "id": "1203_p3_Q6(a)",
+  "course": {
+    "code": "EE 3113",
+    "title": "Power System Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2020\\3rd_Year_1st_Term_2020_1203.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The 3-phasc power and line-line ratings of the electric power system shown in figure: 14"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_cbbf8f58d99bdfbfc8796fcddb5719710eb46ac55b35fa26bdd0b2bb594eefb2.jpg",
+      "_source_path": "images/cbbf8f58d99bdfbfc8796fcddb5719710eb46ac55b35fa26bdd0b2bb594eefb2.jpg"
+    },
+    {
+      "type": "text",
+      "value": "${ \\cal { G } } _ { 1 }$ 60MYA 20 kV $X = 9 \\%$"
+    },
+    {
+      "type": "text",
+      "value": "$T _ { 1 } \\mathrm { { : } }$ 50 MYA 20/200 kV $X = 1 0 \\%$"
+    },
+    {
+      "type": "text",
+      "value": "Tz: 50 MY/\\ 200/20 kV $X = 1 0 \\%$"
+    },
+    {
+      "type": "text",
+      "value": "M: 43.2 MVA 18 kV $X = 8 \\%$"
+    },
+    {
+      "type": "text",
+      "value": "Line: 200 kV $\\mathrm { \\Delta } Z = 1 2 0 + j 2 0 0 { \\Omega }$"
+    },
+    {
+      "type": "text",
+      "value": "Draw an impedance diagram showing all impcndcnccs in per- unit on a I 00 MY/\\ base Choose 20 kV as the voltage base for generator."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2020"
+}

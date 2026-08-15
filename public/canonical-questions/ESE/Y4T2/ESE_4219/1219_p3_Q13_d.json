@@ -1,0 +1,41 @@
+{
+  "id": "1219_p3_Q13(d)",
+  "course": {
+    "code": "ESE 4219",
+    "title": "Energy Audit and Management",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\4th_Year_2nd_Term_2021_1219.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "13(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". What is meant by plant energy performance? An Energy Manager in a factory has collected 12 following data:"
+    },
+    {
+      "type": "text",
+      "value": "Reference year (2021) energy use = 27 million kcal; production factor (PP) for the current year (2022) = 0.92; current year's energy use= 24 million kcal. Calculate the plant energy performance (PEP) of the factory for the year 2022. State your inference."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2021"
+}

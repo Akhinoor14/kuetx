@@ -1,0 +1,42 @@
+{
+  "id": "730_p1_Q6(b)",
+  "course": {
+    "code": "ME 2111",
+    "title": "Engineering Mechanics and Theory of Machines",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2019\\2nd_Year_1st_Term_2019_730.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "and pulled with a force P of magnitude 18 N. Knowing $\\mu _ { s } \\mathrm { = } 0 . 2 0$ and $\\mu _ { k } { = } 0 . 1 5 ,$ , determine i) Whether or not the disk slides, ii) The angular acceleration of the disk and the acceleration of G."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_194d8655eebd2ed17e14c5dc7953a29258f52eae61c477a53e3736128721b86e.jpg",
+      "_source_path": "images/194d8655eebd2ed17e14c5dc7953a29258f52eae61c477a53e3736128721b86e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

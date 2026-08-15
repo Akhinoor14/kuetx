@@ -1,0 +1,37 @@
+{
+  "id": "893_p2_Q7(d)",
+  "course": {
+    "code": "EE 3113",
+    "title": "Power System Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\3rd_Year_1st_Term_2019_893.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "For an existing system, flow from a pump is measured to be 100 gpm. Maximum delivered pressure head is $1 0 0 f t H _ { 2 } O$ , and current power requirements are 8 h.p. at an impeller velocity of 875 rpm. Due to brewery expansion, a new, larger, heat exchanger is installed which increases the total system pressure head to $1 5 0 f t H _ { 2 } O$ . To what velocity must the pump impeller be increased in order to overcome the new higher system back pressure?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

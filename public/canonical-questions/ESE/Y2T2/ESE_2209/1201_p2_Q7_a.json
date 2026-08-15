@@ -1,0 +1,49 @@
+{
+  "id": "1201_p2_Q7(a)",
+  "course": {
+    "code": "ESE 2209",
+    "title": "Bio and Wind Energy Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\2nd_Year_2nd_Term_2021_1201.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Why anaerobic condition is maintained for biogas production? Suppose a house owner has 2 cows and 3 buffalos. Each cow and buffalo is producing dung 10 kg per day and 16 kg per day, respectively."
+    },
+    {
+      "type": "text",
+      "value": "i) By using the dung obtained from the above information in a biogas plant, how much energy can be produced per day?"
+    },
+    {
+      "type": "text",
+      "value": "ii) Suppose the house owner has four bulbs of 60 watt and two fans of 80 watt. Is it possible to supply the required electrical energy needed for running the bulbs and fans from the biogas plant if 60% of the energy is lost during the transmission?"
+    },
+    {
+      "type": "text",
+      "value": "[Gas production per kg of dung = 0.05 m3]"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

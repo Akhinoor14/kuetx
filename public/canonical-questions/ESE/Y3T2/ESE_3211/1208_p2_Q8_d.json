@@ -1,0 +1,41 @@
+{
+  "id": "1208_p2_Q8(d)",
+  "course": {
+    "code": "ESE 3211",
+    "title": "Coal Power Generation",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\3rd_Year_2nd_Term_2019_1208.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". A Parson's turbine consists of one row of fixed blades and one row of moving blades. The blade speed is 110 m/sec, mass of steam passing per second is 13.5 kg, steam velocity at exit from fixed blades is 144 m/sec, blade outlet angle is $2 0 ^ { \\circ } .$ Assume the efficiency of conversion of heat energy into kinetic energy in the moving blade channels as 0.92. Calculate the (i) power developed in the stage, (ii) stage efficiency and (iii) maximum efficiency."
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY Department of Energy Science and Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2019"
+}

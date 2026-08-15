@@ -1,0 +1,45 @@
+{
+  "id": "744_p1_Q2(c)",
+  "course": {
+    "code": "IPE 3205",
+    "title": "Product Design -II",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\3rd_Year_2nd_Term_2016_744.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Sam les of n=4 items are taken from a r at re ular intervals A normall 1 0 di<sub>s</sub>t<sub>r</sub>ib<sub>u</sub>t<sub>e</sub>d <sub>ua</sub>lit <sub>c</sub>h<sub>arac</sub>t<sub>er</sub>i<sub>s</sub>ti<sub>c</sub> i<sub>s measure</sub>d <sub>an</sub>d x <sub>an</sub>d <sub>s va</sub>l<sub>ues are ca</sub>l<sub>cu</sub>l<sub>a</sub>t<sub>e</sub>d f<sub>or</sub> each <sub>sa</sub>m<sub>p</sub>l<sub>e</sub> Aft<sub>e</sub>r 50 <sub>su</sub>b<sub>groups</sub> h<sub>ave</sub> b<sub>ee</sub>n <sub>ana</sub>l<sub>yze</sub>d <sub>we</sub> h<sub>ave</sub>"
+    },
+    {
+      "type": "text",
+      "value": "Lf� 1 Xi = 1 000 and Lf� 1 s; = n i) C<sub>om u</sub>t<sub>e</sub> th<sub>e con</sub>t<sub>ro</sub>l li<sub>m</sub>it f<sub>or xan</sub>d <sub>s con</sub>t<sub>ro</sub>l <sub>c</sub>h<sub>ar</sub>t<sub>s</sub> ii) As sume that all oints on both charts lot within the control limits Wh<sub>a</sub>t <sub>are</sub> th<sub>e na</sub>t<sub>ura</sub>l t<sub>o</sub>l<sub>erance</sub> li<sub>m</sub>it<sub>s o</sub>fth<sub>e rocess</sub>?"
+    },
+    {
+      "type": "text",
+      "value": "iii) <sup>I f</sup> the s ecification limits are <sup>1 9 ±</sup> 4 0 what are our conclusions <sub>re ar</sub>di<sub>n</sub> th<sub>e a</sub>bilit <sub>o</sub>f th<sub>e rocess</sub> t<sub>o ro</sub>d<sub>uce</sub> it<sub>ems con</sub>f<sub>orm</sub>i<sub>n</sub> t<sub>o</sub> <sub>spec</sub>ifi<sub>ca</sub>ti<sub>ons</sub>?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "694_p2_Q6(c)",
+  "course": {
+    "code": "EEE 2203",
+    "title": "Electronics III",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2016\\2nd_Year_2nd_Term_2016_694.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "Derive the expression of voltage gain for a source follower configuration. (08)"
+    },
+    {
+      "type": "text",
+      "value": "<sup>(d)</sup> Show that $\\begin{array} { r } { g _ { m } = g _ { m o } \\left[ 1 - \\frac { V _ { G S } } { V _ { p } } \\right] } \\end{array}$ , where the symbols have their usual meanings. (07)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

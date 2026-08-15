@@ -1,0 +1,42 @@
+{
+  "id": "702_p1_Q2(b)",
+  "course": {
+    "code": "EEE 3105",
+    "title": "Control Systems",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2017\\3rd_Year_2nd_Term_2017_702.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the unity feedback control system with a forward path transfer function𝐺(𝑠) = ${ \\frac { 1 6 } { s ( s + a ) } } .$ , design the value of $\" a \"$ to yield closed-loop step response that has 5% overshoot."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_acbcc9dcf979528c1465b98a74c744b4b37a4ededb4d13e9479d059ef4a554b7.jpg",
+      "_source_path": "images/acbcc9dcf979528c1465b98a74c744b4b37a4ededb4d13e9479d059ef4a554b7.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

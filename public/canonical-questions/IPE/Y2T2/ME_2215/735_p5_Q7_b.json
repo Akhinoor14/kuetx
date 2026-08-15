@@ -1,0 +1,42 @@
+{
+  "id": "735_p5_Q7(b)",
+  "course": {
+    "code": "ME 2215",
+    "title": "Thermal Engineering and Heat Transfer",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\2nd_Year_2nd_Term_2018_735.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The configuration of a furnace can be approximated as an equilateral triangular duct which is sufficiently long that the end effects are negligible. The hot wall is maintained at $T _ { 1 } = 9 0 0 K$ and has emissivity $\\varepsilon _ { 1 } = 0 . 8$ . The cold is maintained at $T _ { 2 } = 4 0 0 K$ and has emissivity $\\varepsilon _ { 2 } = 0 . 8$ . the third wall is reradiating zone, $\\dot { q } _ { 3 } = 0$ The accompanying sketch illustrates the configuration. Calculate the neat radiation heat flux leaving the hot wall."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_150d48e21a4bcbb54ded2ba0ea84971e3ece8baf0d8034eb221772ac0823c567.jpg",
+      "_source_path": "images/150d48e21a4bcbb54ded2ba0ea84971e3ece8baf0d8034eb221772ac0823c567.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

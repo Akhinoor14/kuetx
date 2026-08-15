@@ -1,0 +1,42 @@
+{
+  "id": "1198_p4_Q6(b)",
+  "course": {
+    "code": "ME 2113",
+    "title": "Statics and Solid Mechanics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\2nd_Year_1st_Term_2022_1198.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". As shown in figure, a homogeneous 50 kg rigid block is suspended by the three springs whose lower ends were originally at the same level. Each steel spring has 24 turns of 10 mm diameter wire on a mean diameter of 100 mm and G = 83 GPa. The bronze spring has 48 turns of 20 mm diameter wire on a mean diameter of 150 mm and $\\mathrm { G } = 4 2 \\mathrm { G P a }$ Compute maximum shearing stress in each spring."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_2bc3742bb2e7b7293ffad94feda4aeb5bcaa637834b88c37de827af57c859a34.jpg",
+      "_source_path": "images/2bc3742bb2e7b7293ffad94feda4aeb5bcaa637834b88c37de827af57c859a34.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

@@ -1,0 +1,51 @@
+{
+  "id": "889_p3_Q2(d)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Programming",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2018\\2nd_Year_1st_Term_2018_889.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The stress intensity factor k is predicts the stress state (stress intensity) near a crack tip. For a plate with a crack and loading shown in the figure, k is given by –"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_5e43505f8004e80bfc72267a0c6e15b992cab686395b1e516dbc36891f6c71ed.jpg",
+      "_source_path": "images/5e43505f8004e80bfc72267a0c6e15b992cab686395b1e516dbc36891f6c71ed.jpg"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nk = \\sigma \\sqrt { \\pi a } \\left[ \\frac { 1 - \\frac { a } { 2 b } + 0 . 3 2 6 \\left( \\frac { a } { b } \\right) ^ { 2 } } { \\sqrt { 1 - \\frac { a } { b } } } \\right]\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Write a Octave script to calculate the value of k with σ = 12000 psí, $h = 5 ~ i n$ $b = 4$ in, and $a = 1 . 5 ~ i n$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

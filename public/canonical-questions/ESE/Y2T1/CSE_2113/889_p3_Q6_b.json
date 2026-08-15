@@ -1,0 +1,75 @@
+{
+  "id": "889_p3_Q6(b)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Programming",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2018\\2nd_Year_1st_Term_2018_889.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Create the following matrix A -"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r } { A = \\left[ { \\begin{array} { c c c c c c c } { 3 6 } & { 3 4 } & { 3 2 } & { 3 0 } & { 2 8 } & { 2 6 } \\\\ { 2 4 } & { 2 2 } & { 2 0 } & { 1 8 } & { 1 6 } & { 1 4 } \\\\ { 1 2 } & { 1 0 } & { 8 } & { 6 } & { 4 } & { 2 } \\end{array} } \\right] } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "By writing one command and using the colon to address range of elements (do not type individual elements explicitly), use the matrix A to:"
+    },
+    {
+      "type": "text",
+      "value": "(i) Create a six-element row vector named ha that contains the elements of the second row of A."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Create a three-element column vector named hb that contains the elements of the sixth column of A."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Create a five-element row vector named hc that contains the first two elements of the third row of A and the last three element of the first row of A."
+    },
+    {
+      "type": "text",
+      "value": "The position as a function of time $( x ( t ) , y ( t ) )$ of a projectile fired with a speed of $v _ { 0 }$ at angle α is given by –"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nx ( t ) = { \\dot { v } } _ { 0 } \\cos ( \\alpha t ) a n d y ( t ) = v _ { 0 } \\sin ( \\alpha t ) - { \\frac { 1 } { 2 } } g t ^ { 2 }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "where $g = 9 . 8 1 m / s ^ { 2 }$ . The polar coordinate of the projectile at time t are $( r ( t ) , \\theta ( t ) )$ where $r ( t ) = \\sqrt { x ( t ) ^ { 2 } + y ( t ) ^ { 2 } }$ and $\\tan ( \\theta ) = y ( t ) / x ( t )$ . Consider the case where"
+    },
+    {
+      "type": "text",
+      "value": "$v _ { 0 } = 1 6 2$ m $\\mathbf { \\nabla } \\cdot / s$ and $\\alpha = 7 0 ^ { \\circ }$ . Write a script to determine $\\boldsymbol { r } ( t )$ and θ(t) for $t =$ $^ { 1 , 6 , 1 1 , ^ { * } , \\ , 3 1 }$ sec."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

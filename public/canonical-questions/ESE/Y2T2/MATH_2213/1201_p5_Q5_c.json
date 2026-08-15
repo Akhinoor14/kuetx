@@ -1,0 +1,42 @@
+{
+  "id": "1201_p5_Q5(c)",
+  "course": {
+    "code": "MATH 2213",
+    "title": "Complex Variables and Fourier Analysis",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\2nd_Year_2nd_Term_2021_1201.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Find the Fourier series of the periodic funetion f(t) represented by the curve shown in following figure."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_12ad95147476d9412766333043f4bbf05452833b2bb0b6fa8fa1359dca70d981.jpg",
+      "_source_path": "images/12ad95147476d9412766333043f4bbf05452833b2bb0b6fa8fa1359dca70d981.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

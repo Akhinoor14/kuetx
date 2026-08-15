@@ -1,0 +1,78 @@
+{
+  "id": "709_p4_Q7(c)",
+  "course": {
+    "code": "EEE 4181",
+    "title": "Microwave Engineering",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2017\\4th_Year_2nd_Term_2017_709.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A reflex Klystron operates under the following conditions:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { V } _ { 0 } { = } 6 0 0 \\mathrm { V }\\tag{15}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { L } = 1 \\mathrm { m m }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { R } _ { \\mathrm { s h } } = 1 5 { \\mathrm { k } } \\Omega\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\ne / _ { m } = 1 . 7 5 9 \\times 1 0 ^ { 1 1 } \\mathrm { ( M K S ~ s y s t e m ) }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { f } _ { \\mathrm { r } } { = } 9 \\mathrm { G H z } .\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "The tube is oscillating at f<sub>r</sub> at the peak of the n = 2 or $1 \\%$ mode. Assume that the transit time through the gap and beam loading can be neglected."
+    },
+    {
+      "type": "text",
+      "value": "(i) Find the value of the repeller voltage $\\mathrm { V _ { r } } .$"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Find the direct current necessary to give a microwave gap voltage of 200 V."
+    },
+    {
+      "type": "text",
+      "value": "(iii) What is the electronic efficiency under this condition?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2017"
+}

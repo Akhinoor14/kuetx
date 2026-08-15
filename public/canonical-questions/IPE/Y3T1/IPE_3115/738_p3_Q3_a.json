@@ -1,0 +1,37 @@
+{
+  "id": "738_p3_Q3(a)",
+  "course": {
+    "code": "IPE 3115",
+    "title": "Engineering Economy",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\3rd_Year_1st_Term_2016_738.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Two sites are currently under consideration for a bridge over a big river. The north site requires a suspension bridge. The south site has a much shorter span, allowing for a truss bridge, but it would require new road construction. The suspension bridge will cost \\$600 million with annual inspection and maintenance cost of \\$250,000. In addition, the concrete deck would have to be resurfaced every 11 years at a cost of \\$ 1,000,000. The truss bridge and approach roads are expected to cost \\$250 million and have annual maintenance costs of \\$200,000 for first 5 years and \\$205,000 in the subsequent year. This bridge would have to be painted every 3 years at a cost of \\$400,000. In addition, the bridge would have to be sandblasted every 10 years at a cost of \\$1,900,000. The cost of purchasing right-of-way is expected to be \\$20 million for the suspension bridge and \\$150 million for the truss bridge. Compare the alternatives on the bans of their capitalized cost if the interest rate is 6 % per year."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

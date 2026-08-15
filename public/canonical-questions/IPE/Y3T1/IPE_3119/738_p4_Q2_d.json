@@ -1,0 +1,57 @@
+{
+  "id": "738_p4_Q2(d)",
+  "course": {
+    "code": "IPE 3119",
+    "title": "Operations Management",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\3rd_Year_1st_Term_2016_738.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A text book publishing company has complied data on total annual sales of its business 15 texts for the preceding nine years:"
+    },
+    {
+      "type": "text",
+      "value": "Years: 1 2 3 4 5 6 7 8 9"
+    },
+    {
+      "type": "text",
+      "value": "Sales (000): 40.2 44.5 48.0 52.3 55.8 57.1 62.4 69.0 73.7"
+    },
+    {
+      "type": "text",
+      "value": "i) Using an appropriate model, forecast textbook sales for each of the next five years."
+    },
+    {
+      "type": "text",
+      "value": "ii) Prepare a control chart for the forecast using the original data. Use 2s limits."
+    },
+    {
+      "type": "text",
+      "value": "iii) Suppose actual sales for the next five years turn out as follows: Years: 10 11 12 13 14 Sales (000): 77.2 82.1 87.8 90.6 98.9 Is the forecast performing adequately? Explain."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

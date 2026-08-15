@@ -1,0 +1,52 @@
+{
+  "id": "1206_p1_Q7(c)",
+  "course": {
+    "code": "MATH 3113",
+    "title": "Statistics and Numerical Methods",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\3rd_Year_1st_Term_2023_1206.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Solve the following system of linear equations by using LU decomposition method."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n2 x + y + z = 5\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n3 x + 5 y + 2 z = 1 5\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n2 x + y + 4 z = 8\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

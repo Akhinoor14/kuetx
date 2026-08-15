@@ -1,0 +1,41 @@
+{
+  "id": "874_p2_Q6(a)",
+  "course": {
+    "code": "ECE 4139",
+    "title": "TV Engineering",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2019\\4th_Year_1st_Term_2019_874.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "What are meant by upward and downward transition rates of electrons? From the Boltzmann statistics prove that thespectraldensity, $P _ { _ f } = { \\frac { A _ { 2 1 } / B _ { 2 1 } } { [ ( g _ { 1 } B _ { _ { 1 2 } } / g _ { 2 } B _ { _ { 2 1 } } ) \\exp ( h f / K T ) ] - 1 } }$ where the symbols have their usual meanings."
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2019"
+}

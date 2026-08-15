@@ -1,0 +1,69 @@
+{
+  "id": "743_p2_Q08(d)",
+  "course": {
+    "code": "IPE 3205",
+    "title": "Product Design -II",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\3rd_Year_2nd_Term_2015_743.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "08(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Briefly discuss the clauses ISO 9000 QMS. 10"
+    },
+    {
+      "type": "text",
+      "value": "Khulna U<sub>n</sub>i<sub>vers</sub>it<sub>y</sub> of E<sub>ng</sub>i<sub>neer</sub>i<sub>ng</sub> & Technolo<sub>gy</sub> <sub>Department</sub> of Industrial En<sub>g</sub>in<sub>ee</sub>rin<sub>g</sub> and Mana<sub>g</sub>ement B S<sub>c En ineerin</sub> 3rd Y<sub>ear</sub> 2nd T<sub>erm</sub> E<sub>xam</sub>i<sub>na</sub>ti<sub>on</sub> 20 1 5"
+    },
+    {
+      "type": "text",
+      "value": "IPE 3223"
+    },
+    {
+      "type": "text",
+      "value": "M<sub>a</sub>t<sub>e</sub>ri<sub>a</sub>l H<sub>an</sub>dli<sub>ng a</sub>nd M<sub>a</sub>int<sub>e</sub>n<sub>a</sub>n<sub>ce</sub> M<sub>a</sub>n<sub>age</sub>m<sub>e</sub>nt"
+    },
+    {
+      "type": "text",
+      "value": "F<sub>u</sub>ll M<sub>ar</sub>k<sub>s :</sub> Zl O"
+    },
+    {
+      "type": "text",
+      "value": "Ti<sub>me :</sub> 3 h<sub>rs</sub>"
+    },
+    {
+      "type": "text",
+      "value": "N B i) <sup>A</sup>nswer an <sup>THREE</sup> uestionsfrom eac<sup>h</sup> sect<sup>i</sup>on <sup>i</sup>n separate scr<sup>i</sup>pts ii) Fi in the ri ht mar in indicatefull marks <sub>iii)</sub> A<sub>ssume reasona</sub>bl<sub>e</sub> d<sub>ata</sub> if <sub>missing any</sub>"
+    },
+    {
+      "type": "text",
+      "value": "SECTI ON-A"
+    },
+    {
+      "type": "text",
+      "value": "<sup>1</sup> ."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2015"
+}

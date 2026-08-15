@@ -1,0 +1,51 @@
+{
+  "id": "1105_Q1(a)",
+  "course": {
+    "code": "EEE 1119",
+    "title": "Basic Electrical Engineering",
+    "department": "Department of Leather Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2021\\1st_Year_1st_Term_2021_1105.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Deduce the equations for Delta to wye (∆-Y) conversion. Calculate the current ${ \\bar { \\mathrm { I } } } _ { 0 }$ in the circuit of the figure. I0"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_6e7647f831de5b3189bf16dae2832d5a4187b416d875c638337cbf77b81caa2b.jpg",
+      "_source_path": "images/6e7647f831de5b3189bf16dae2832d5a4187b416d875c638337cbf77b81caa2b.jpg"
+    },
+    {
+      "type": "text",
+      "value": "State Thevenin's theorem. By using this theorem, replace the network shown in figure with 12 reference to terminals A and B."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_2f9269f93a44ac9f6d700d91b313e6db3f470cbe098167a1d3f06b8183066a09.jpg",
+      "_source_path": "images/2f9269f93a44ac9f6d700d91b313e6db3f470cbe098167a1d3f06b8183066a09.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2021"
+}

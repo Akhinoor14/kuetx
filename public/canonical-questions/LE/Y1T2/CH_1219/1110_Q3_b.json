@@ -1,0 +1,61 @@
+{
+  "id": "1110_Q3(b)",
+  "course": {
+    "code": "CH 1219",
+    "title": "Organic Chemistry",
+    "department": "Department of Leather Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2022\\1st_Year_2nd_Term_2022_1110.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Complete the following sentences withı clauses as asked in brackets."
+    },
+    {
+      "type": "text",
+      "value": "i. is touching. (Noun clause)"
+    },
+    {
+      "type": "text",
+      "value": "ii. It is nice . (Noun clause)"
+    },
+    {
+      "type": "text",
+      "value": "iii., we can feel comfortable. (Adv. clause of condition)"
+    },
+    {
+      "type": "text",
+      "value": "iv. We are so lazy . (Adv. clause of cause and effect)."
+    },
+    {
+      "type": "text",
+      "value": ", he can't progress in life. (Adv. clause of concession)"
+    },
+    {
+      "type": "text",
+      "value": "vi. Rakib, is honest always. (Adj. clause)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2022"
+}

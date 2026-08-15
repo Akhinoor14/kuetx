@@ -1,0 +1,42 @@
+{
+  "id": "884_p4_Q1(c)",
+  "course": {
+    "code": "MATH 1113",
+    "title": "Differential and Integral Calculus",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\1st_Year_1st_Term_2019_884.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". What is meant by the continuity of a function at a point? Discuss the continuity of $f ( x )$ añd the existance of $f ^ { \\prime } ( x )$ at $x = 2$ where –"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nf ( x ) = \\left\\{ \\begin{array} { l l } { 4 x ^ { 2 } - 3 x } & { f o r ~ 1 < x < 2 } \\\\ { 3 x + 4 } & { f o r ~ x \\ge 2 } \\end{array} \\right.\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
+}

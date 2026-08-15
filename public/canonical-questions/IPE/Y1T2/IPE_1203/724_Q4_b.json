@@ -1,0 +1,61 @@
+{
+  "id": "724_Q4(b)",
+  "course": {
+    "code": "IPE 1203",
+    "title": "Engineering Materials",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\1st_Year_2nd_Term_2017_724.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Transform the following sentences as directed"
+    },
+    {
+      "type": "text",
+      "value": "i) Give me some food which I may eat<sub>.</sub> (simple)"
+    },
+    {
+      "type": "text",
+      "value": "ii) No one can tell me how this will end (affirmative)"
+    },
+    {
+      "type": "text",
+      "value": "iii) I returned home because ofmy illness <sub>.</sub> (complex)"
+    },
+    {
+      "type": "text",
+      "value": "iv) Rimi is les s clever than some other girls <sub>.</sub> (po sitive)"
+    },
+    {
+      "type": "text",
+      "value": "Ver<sub>y</sub> few countries are as rich as America<sub>.</sub> (comparative)"
+    },
+    {
+      "type": "text",
+      "value": "vi) One should keep on is promises <sub>.</sub> (pas sive)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

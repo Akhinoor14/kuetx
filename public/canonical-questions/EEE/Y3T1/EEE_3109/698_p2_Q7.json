@@ -1,0 +1,37 @@
+{
+  "id": "698_p2_Q7",
+  "course": {
+    "code": "EEE 3109",
+    "title": "Computational Methods in Electrical Engineering",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2017\\3rd_Year_1st_Term_2017_698.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ""
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

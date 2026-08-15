@@ -1,0 +1,37 @@
+{
+  "id": "1204_p4_Q3(d)",
+  "course": {
+    "code": "ESE 3105",
+    "title": "Heat Transfer and Mass Transfer",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\3rd_Year_1st_Term_2021_1204.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". J\\ single-stage centrifugal pump with impeller diametre of 50 cm rotates at 1800 rpm and lifts 4 m3 of water per second to a height of25 m with an efficiency of 70%. Find the number of stages and diameter of each impeller of a similar multistage pump to lift 5 m3 of water per second to a height of 180 m when rotating at 1300 rpm."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

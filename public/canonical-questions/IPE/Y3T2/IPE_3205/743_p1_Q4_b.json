@@ -1,0 +1,49 @@
+{
+  "id": "743_p1_Q4(b)",
+  "course": {
+    "code": "IPE 3205",
+    "title": "Product Design -II",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\3rd_Year_2nd_Term_2015_743.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "An Automobile dealer wishes to put four repairman to four different jobs. The dealer i:1s 15 estimated the number of man-hours that would be required for each job-man combine : .n, This is given in the following matrix form."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>Man Job</td><td>A B</td><td>C</td><td>D</td></tr><tr><td>1</td><td>5 3</td><td>2</td><td>8</td></tr><tr><td>2</td><td>7 9</td><td>2</td><td>6</td></tr><tr><td>3</td><td>6 4</td><td>5</td><td>7</td></tr><tr><td>4</td><td>5 7</td><td>7</td><td>8</td></tr></table>"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>=</td><td>1 2</td><td>3</td></tr><tr><td rowspan=\"3\">1 2 3</td><td>.0.3 0.6</td><td>0.1</td></tr><tr><td>0.1 0.6</td><td>0.3</td></tr><tr><td>0.05 0.4</td><td>0.55</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2015"
+}

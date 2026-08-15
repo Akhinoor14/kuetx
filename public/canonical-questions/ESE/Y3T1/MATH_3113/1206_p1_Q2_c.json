@@ -1,0 +1,37 @@
+{
+  "id": "1206_p1_Q2(c)",
+  "course": {
+    "code": "MATH 3113",
+    "title": "Statistics and Numerical Methods",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\3rd_Year_1st_Term_2023_1206.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". /\\. server has three data supply units-A, L3, and C- from which it receives 60%, 30%, anci l 0% of the data, respectively. It has been observed that 15% of the data from /\\., 20% form Band 5% form Care defective. Given that data is received by the server, calculate the probability that the data is both defective and originates form unit /\\.. Also, determine the ovcrcall probability of the data received by the server being defective."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

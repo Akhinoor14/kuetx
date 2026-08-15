@@ -1,0 +1,41 @@
+{
+  "id": "1194_p4_Q5(b)",
+  "course": {
+    "code": "MATH 1213",
+    "title": "Differential Equation and Co-ordinate Geometry",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\1st_Year_2nd_Term_2023_1194.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Discuss $\\left( y + { \\frac { \\mathbf { y } ^ { 3 } } { 3 } } + { \\frac { \\mathbf { x } ^ { 2 } } { 2 } } \\right) \\operatorname { d } \\mathbf { x } + { \\frac { 1 } { 4 } } ( \\mathbf { x } + \\mathbf { x } \\mathbf { y } ^ { 2 } ) \\operatorname { d } \\mathbf { y } = 0 { \\mathrm { ~ i s ~ e x a c t ~ o r ~ n o t . } }$"
+    },
+    {
+      "type": "text",
+      "value": "If it is not exact, then determine the general solution of it."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2023"
+}

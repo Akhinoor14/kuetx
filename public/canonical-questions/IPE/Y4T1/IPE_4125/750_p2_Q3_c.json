@@ -1,0 +1,49 @@
+{
+  "id": "750_p2_Q3(c)",
+  "course": {
+    "code": "IPE 4125",
+    "title": "Machine Tools",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\4th_Year_1st_Term_2018_750.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A machine tools retailer, demand for tools is 20,000 per month. Retailer incurs. a fixed order placement, transportation and receiving cost of \\$120 each time an order for tools is placed with the manufacturer. Retailer incurs a holding cost of 20 percent. The manufacturer uses the following marginal unit discount pricing schedule."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Order Quantity</td><td rowspan=1 colspan=1>Marginal Unit Price</td></tr><tr><td rowspan=1 colspan=1>0-8,000</td><td rowspan=1 colspan=1>$5.00</td></tr><tr><td rowspan=1 colspan=1>8,000-13,000</td><td rowspan=1 colspan=1>$4.95</td></tr><tr><td rowspan=1 colspan=1>Over 13,000</td><td rowspan=1 colspan=1>$4.92</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Evaluate the number of tools that retailer manager should order in each lot,"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2018"
+}

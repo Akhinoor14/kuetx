@@ -1,0 +1,42 @@
+{
+  "id": "694_p4_Q8(c)",
+  "course": {
+    "code": "EEE 1101",
+    "title": "Electrical Circuits I",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2016\\2nd_Year_2nd_Term_2016_694.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Determine the current in the last resistor, $R _ { 2 1 }$ <sub>ଵ</sub>."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e898fdb7a49db5fc80c6cf3363e2686cea0a88666a4ba129310794606a0f1d19.jpg",
+      "_source_path": "images/e898fdb7a49db5fc80c6cf3363e2686cea0a88666a4ba129310794606a0f1d19.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

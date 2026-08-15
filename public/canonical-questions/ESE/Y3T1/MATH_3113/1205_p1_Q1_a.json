@@ -1,0 +1,49 @@
+{
+  "id": "1205_p1_Q1(a)",
+  "course": {
+    "code": "MATH 3113",
+    "title": "Statistics and Numerical Methods",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\3rd_Year_1st_Term_2022_1205.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". An industry has two factories A and B, and the average daily production and standard deviations of the two factories as follows:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Factory</td><td rowspan=1 colspan=1>Average production</td><td rowspan=1 colspan=1>Standard deviation</td><td rowspan=1 colspan=1>No. of machinefor the production</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>40</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>100</td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>80</td><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>70</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "(i) In which factory is there greater variation in the distribution of daily production of machine?"
+    },
+    {
+      "type": "text",
+      "value": "(ii) What are the mean and standard deviation of production of all machines of that industry? (Using formula of combined mean and variance)."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

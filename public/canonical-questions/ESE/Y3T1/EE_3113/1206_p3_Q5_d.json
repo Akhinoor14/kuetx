@@ -1,0 +1,122 @@
+{
+  "id": "1206_p3_Q5(d)",
+  "course": {
+    "code": "EE 3113",
+    "title": "Power System Engineering",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\3rd_Year_1st_Term_2023_1206.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". What is the reason of transmission interconnection? What is the impact of cyber security on 08 the smart grid?"
+    },
+    {
+      "type": "text",
+      "value": "<sub>6(a).</sub> Discuss the importance of voltage control in the modern power system. Describe the on-load tap changing transformer method of voltage control."
+    },
+    {
+      "type": "text",
+      "value": "<sub>6(b).</sub> A load of 10,000 kW at a power factor of 0·8 lagging is supplied by a 3-phase line whose <sub>voltage</sub> has to be maintained at 33kV at each end. If the line resistance and reactance per are 5 ·n and 10 n <sub>respectively,</sub> calculate the capacity of the synchronous condenser to be installed for the purpose."
+    },
+    {
+      "type": "text",
+      "value": "<sub>6(c).</sub> <sub>Explain</sub> the significance of the five pins in a five-pin relay, including their respective functions."
+    },
+    {
+      "type": "text",
+      "value": "<sub>6(</sub> <sub>d).</sub> What is a sub-station? Name the factors that should be taken care of while designing and erecting a substation. What is the need of a sub-station in the power system?"
+    },
+    {
+      "type": "text",
+      "value": "<sub>7(a).</sub> <sub>Explain</sub> the concept of arc extinction in a circuit breakers and why it is important for the safe operation or electrical systems?"
+    },
+    {
+      "type": "text",
+      "value": "7(b ). Why $\\mathrm { S F } _ { 6 }$ CB is preferred? Explain the construction and principle of operation of Sulphur Hexafluoride $( \\mathrm { S F } _ { 6 } )$ circuit breakers."
+    },
+    {
+      "type": "text",
+      "value": "<sub>7(c).</sub> A 50 Hz, 11 kV, 3-phase alternator with earthed neutral has a reactance of 5 ohms per phase and is connected to a bus-bar through a circuit breaker. The distributed capacitance upto circuit breaker between phase and neutral in $0 { \\cdot } 0 1 \\ \\mu \\mathrm { F }$ . Determine (i) peak re-striking voltage across the contacts of the breaker (ii) frequency of oscillations <sub>(iii)</sub> the average rate of rise of re-striking voltage upto the first peak"
+    },
+    {
+      "type": "text",
+      "value": "<sub>7(d).</sub> <sub>Why</sub> do use C.T in the relay circuit? Discuss the different types of bus-bar arrangements."
+    },
+    {
+      "type": "text",
+      "value": "<sub>8(a).</sub> What is lighting arresters? How does a lighting arrester mitigate the risks associated with lighting strikes?"
+    },
+    {
+      "type": "text",
+      "value": "<sub>8(b).</sub> The one-line diagram or a 3-phase power system is shown in figure. Select a common base of I 00 MY!\\. and 22 kV on the generator side. Draw an impedance diagram with all <sub>impedances</sub> <sub>including</sub> the load impedance marked in per-unit. The manufacturer's data for each device is given as follow."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_888807b5b24acdfe3d8674de929c362950c043068676dc4d0dbd6de1b4dc1ca6.jpg",
+      "_source_path": "images/888807b5b24acdfe3d8674de929c362950c043068676dc4d0dbd6de1b4dc1ca6.jpg"
+    },
+    {
+      "type": "text",
+      "value": "G: 90 MV/\\. 22 kV $X = 1 8 \\%$"
+    },
+    {
+      "type": "text",
+      "value": "$T _ { 1 } \\colon$ 50MVA 22/220 kV $X = 1 0 \\%$"
+    },
+    {
+      "type": "text",
+      "value": "$T _ { 2 } \\mathrm { { : } }$ 40MVA 220/1 lkV $X = 6 . 0 \\%$"
+    },
+    {
+      "type": "text",
+      "value": "40MVA 22/110 kV $X = 6 . 4 \\%$"
+    },
+    {
+      "type": "text",
+      "value": "T4: 40MVA 110/llkV $X = 8 . 0 \\%$"
+    },
+    {
+      "type": "text",
+      "value": "M: 66.5 MVA 10.45 kV $X = 1 8 . 5 \\%$"
+    },
+    {
+      "type": "text",
+      "value": "The three <sub>phase</sub> load at bus 4 absorbs 57MV A, 0.6 power factor lagging at 10.45 kV line 1 and line 2 have reactances of 48.4 and 65.43 0, respectively."
+    },
+    {
+      "type": "text",
+      "value": "<sub>8(c).</sub> What do you mean by grounding or earthing? Explain it with an example. 07"
+    },
+    {
+      "type": "text",
+      "value": "<sub>8(d).</sub> Draw the key diagram of a typical 11 kV/400 V indoor sub-station. 05"
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY Department of Energy Science and Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

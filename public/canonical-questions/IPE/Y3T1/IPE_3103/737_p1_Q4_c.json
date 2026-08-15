@@ -1,0 +1,41 @@
+{
+  "id": "737_p1_Q4(c)",
+  "course": {
+    "code": "IPE 3103",
+    "title": "Engineering Metallurgy",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\3rd_Year_1st_Term_2015_737.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A atriotic rou of firefi hters is raisin mone to erect a ermanent (i e infinite lif monument in N<sub>ew</sub> Y<sub>or</sub>k <sub>c</sub>it t<sub>o</sub> h<sub>onor</sub> th<sub>ose</sub> kill<sub>e</sub>d i<sub>n</sub> th<sub>e</sub> li<sub>ne o</sub>f d<sub>u</sub>t Th<sub>e</sub> i<sub>n</sub>iti<sub>a</sub>l <sub>cos</sub>t <sub>o</sub>f th<sub>e monumen</sub>t <sub>w</sub>ill b<sub>e</sub> \\$ 1 5 0 000 and the annual maintenance will cost \\$5 000 There will be an additional on-time cost of \\$20 000 in 2 ears to add names of those who were missed i<sub>n</sub>iti<sub>a</sub>ll At an interest rate of 6% <sub>ear</sub> h<sub>ow muc</sub>h <sub>mone mus</sub>t th<sub>e ra</sub>i<sub>se now</sub> i<sub>n or</sub>d<sub>er</sub> t<sub>o cons</sub>t<sub>ruc</sub>t <sub>an</sub>d <sub>ma</sub>i<sub>n</sub>t<sub>a</sub>i<sub>n</sub> th<sub>e monumen</sub>t f<sub>orever</sub>?"
+    },
+    {
+      "type": "text",
+      "value": "SECTI ON -B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2015"
+}

@@ -1,0 +1,47 @@
+{
+  "id": "696_p5_Q6(b)",
+  "course": {
+    "code": "EEE 2203",
+    "title": "Electronics III",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\2nd_Year_2nd_Term_2018_696.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": ", draw the transfer curve and the (12) load line. From these, determine $\\mathrm { I _ { D Q } , V _ { G S Q } }$ , and $\\mathrm { \\Delta V _ { D S } }$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_9531e87adcacfc82fc6d1bb2098c6977b5ce656d11273a7364aff3049a5b78b4.jpg",
+      "_source_path": "images/9531e87adcacfc82fc6d1bb2098c6977b5ce656d11273a7364aff3049a5b78b4.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d9544acd75b641e6a21df69eed9014377d7a2089a2a3cbe3ebf97274d688b16b.jpg",
+      "_source_path": "images/d9544acd75b641e6a21df69eed9014377d7a2089a2a3cbe3ebf97274d688b16b.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

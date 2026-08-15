@@ -1,0 +1,41 @@
+{
+  "id": "739_p2_Q8(b)",
+  "course": {
+    "code": "IPE 3105",
+    "title": "Product Design -I",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2017\\3rd_Year_1st_Term_2017_739.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is the difference between disbeuefits and costs? Select the better oftwo ro osal to 1 5 i<sub>mprove s</sub>tr<sub>ee</sub>t <sub>sa</sub>f<sub>e</sub>t <sub>a</sub>nd li<sub>g</sub>hti<sub>ng</sub> in <sub>a co</sub>l<sub>o</sub>ni<sub>a</sub> in <sub>sou</sub>th <sub>ce</sub>ntr<sub>a</sub>l N<sub>ew</sub> M<sub>ex</sub>i<sub>co</sub> U<sub>se a</sub> B/C <sub>ana</sub>l<sub>ys</sub>i<sub>s</sub> and an int<sub>e</sub>r<sub>es</sub>t rat<sub>e o</sub>f 8% <sub>per year</sub>"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Proposal 1</td><td rowspan=1 colspan=1>Proposal 2</td></tr><tr><td rowspan=1 colspan=1>Initial, $</td><td rowspan=1 colspan=1>900.000</td><td rowspan=1 colspan=1>1,700,000</td></tr><tr><td rowspan=1 colspan=1>Annual M &amp; O cost, $, per year</td><td rowspan=1 colspan=1>120,000</td><td rowspan=1 colspan=1>60,000</td></tr><tr><td rowspan=1 colspan=1>Annual benefits, $, per year</td><td rowspan=1 colspan=1>530,000</td><td rowspan=1 colspan=1>650,000</td></tr><tr><td rowspan=1 colspan=1>Annual disbenefits, $, per year</td><td rowspan=1 colspan=1>300,000</td><td rowspan=1 colspan=1>195,000</td></tr><tr><td rowspan=1 colspan=1>Life, years</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>20</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

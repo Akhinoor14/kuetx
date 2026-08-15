@@ -1,0 +1,65 @@
+{
+  "id": "737_p1_Q08(d)",
+  "course": {
+    "code": "IPE 3103",
+    "title": "Engineering Metallurgy",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\3rd_Year_1st_Term_2015_737.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "08(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Identify the two general types of operations. What are their characteristics? 10"
+    },
+    {
+      "type": "text",
+      "value": "Khulna U<sub>n</sub>i<sub>vers</sub>it<sub>y</sub> of E<sub>ng</sub>i<sub>neer</sub>i<sub>ng</sub> & Technolo<sub>gy</sub> D<sub>ep</sub>artm<sub>e</sub>nt ofIndustrial En<sub>g</sub>in<sub>ee</sub>rin<sub>g</sub> and Mana<sub>g</sub>ement B <sub>.</sub> S<sub>c.</sub> E<sub>ng</sub>i<sub>neer</sub>i<sub>ng 3rd</sub> Y<sub>ea</sub>r 1 <sub>s</sub>t T<sub>e</sub>rm E<sub>xa</sub>min<sub>a</sub>ti<sub>o</sub>n 20 1 5"
+    },
+    {
+      "type": "text",
+      "value": "IPE 3 1 1 5 (Engineering Economy)"
+    },
+    {
+      "type": "text",
+      "value": "F<sub>u</sub>ll M<sub>ar</sub>k<sub>s :</sub> 2 1 0"
+    },
+    {
+      "type": "text",
+      "value": "Ti<sub>me :</sub> 3 h<sub>rs</sub>"
+    },
+    {
+      "type": "text",
+      "value": "N<sub>.</sub>B: i) Answer <sub>any</sub> THREE <sub>ques</sub>ti<sub>ons</sub>from each section in se<sub>p</sub>arate scri<sub>p</sub>ts. ii) Fi<sub>g</sub>ures in the ri<sub>g</sub>ht margin indicatefull marks"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-A"
+    },
+    {
+      "type": "text",
+      "value": "("
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2015"
+}

@@ -1,0 +1,73 @@
+{
+  "id": "1194_p5_Q13",
+  "course": {
+    "code": "HUM 1213",
+    "title": "Technical English",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\1st_Year_2nd_Term_2023_1194.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "13",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Sc. Engineering 1<sup>51</sup> Year 2nd Term Examination, 2023"
+    },
+    {
+      "type": "text",
+      "value": "Hum 1213"
+    },
+    {
+      "type": "text",
+      "value": "(Technical English)"
+    },
+    {
+      "type": "text",
+      "value": "Time: 3 Hours."
+    },
+    {
+      "type": "text",
+      "value": "Full Marks: 210"
+    },
+    {
+      "type": "text",
+      "value": "N.13. i) Answer any THREE questions from each section in separate scripts."
+    },
+    {
+      "type": "text",
+      "value": "ii) Figures in the right margin indicate full marks."
+    },
+    {
+      "type": "text",
+      "value": "iii) Assume reasonable data if any missing."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-A"
+    },
+    {
+      "type": "text",
+      "value": "I"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2023"
+}

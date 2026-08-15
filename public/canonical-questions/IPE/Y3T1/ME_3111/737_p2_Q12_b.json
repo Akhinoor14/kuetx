@@ -1,0 +1,45 @@
+{
+  "id": "737_p2_Q12(b)",
+  "course": {
+    "code": "ME 3111",
+    "title": "Fluid Mechanics and Machinery",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\3rd_Year_1st_Term_2015_737.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "12(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "P<sub>rove</sub> th<sub>a</sub>t th<sub>e max</sub>i<sub>mum e</sub>ffi<sub>c</sub>i<sub>ency o</sub>f <sub>pe</sub>lt<sub>on w</sub>h<sub>ee</sub>l $( \\eta _ { h } ) _ { \\mathrm { m a x } } = { \\frac { \\mathtt { 1 } } { 2 } } ( 1 \\cdot$ <sup>+</sup> kcosej where the symbols have th<sub>e</sub>i<sub>r</sub> <sub>usua</sub>l <sub>mean</sub>i<sub>ngs.</sub>"
+    },
+    {
+      "type": "text",
+      "value": "A <sub>p</sub>elton wheel is re<sub>q</sub>uired to work under a head of3 9 <sub>.</sub> 6 m and to develo<sub>p</sub> 74 <sub>.</sub> 605 kW ( 1 0 1 <sub>.</sub>4 h<sub>.p</sub>) at(c) 25 0 r p m Assum<sup>i</sup>ng an efficiency o<sup>f</sup> 80 percent and a co-e<sup>ffi</sup>c<sup>i</sup>ent o<sup>f</sup> velocity o<sup>f</sup> 0 9 8 <sup>fi</sup>nd t<sup>h</sup>e j et di<sub>ame</sub>t<sub>er</sub> th<sub>e</sub> di<sub>ame</sub>t<sub>er o</sub>fth<sub>e</sub> b<sub>uc</sub>k<sub>e</sub>t Th<sub>e s</sub>i<sub>ze o</sub>fth<sub>e</sub> b<sub>uc</sub>k<sub>e</sub>t <sub>an</sub>d th<sub>e num</sub>b<sub>er o</sub>fb<sub>uc</sub>k<sub>e</sub>t<sub>s requ</sub>i<sub>re</sub>d"
+    },
+    {
+      "type": "text",
+      "value": "What are the differences between Reaction and Im<sub>p</sub>ulse turbine?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2015"
+}

@@ -1,0 +1,57 @@
+{
+  "id": "702_p4_Q7(b)",
+  "course": {
+    "code": "EEE 3217",
+    "title": "Communication Engineering II",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2017\\3rd_Year_2nd_Term_2017_702.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ":"
+    },
+    {
+      "type": "text",
+      "value": "DATA SEGMENT   \nSTRING1 DB 99H,12H,56H,45H,36H   \nDATA ENDS   \nCODE SEGMENT   \nASSUME CS:CODE, DS:DATA"
+    },
+    {
+      "type": "text",
+      "value": "START: MOV AX, DATA MOV DS,AX MOV CH,04H"
+    },
+    {
+      "type": "text",
+      "value": "UP2: MOV CL,04H LEA SI,STRING1"
+    },
+    {
+      "type": "text",
+      "value": "UP1: MOV AL,[SI] MOV BL,[SI+1] CMP AL,BL JC DOWN MOV DL,[SI+1] XCHG [SI],DL MOV [SI+1],DL"
+    },
+    {
+      "type": "text",
+      "value": "DOWN: INC SI DEC CL JNZ UP1 DEC CH JNZ UP2 INT 3   \nCODE ENDS   \nEND START"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

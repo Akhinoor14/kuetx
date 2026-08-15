@@ -1,0 +1,37 @@
+{
+  "id": "710_p7_Q8(b)",
+  "course": {
+    "code": "EEE 4165",
+    "title": "Processing and Fabrication Technology",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\4th_Year_2nd_Term_2018_710.pdf",
+    "source_page": null,
+    "paper_index": 7
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Why image segmentation is useful? Write down the significant issues of region growing, also (12) write down its applications."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2018"
+}

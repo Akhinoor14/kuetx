@@ -1,0 +1,37 @@
+{
+  "id": "1139_Q1(e)",
+  "course": {
+    "code": "LE 1101",
+    "title": "Leather Manufacturing Technology I",
+    "department": "Department of Leather Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2021\\2nd_Year_Backlog_2021_1139.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "1(e)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Briefly discuss the effect of deacidification prior to dyeing and fat <sub>liquoring.</sub> 06"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2021"
+}

@@ -1,0 +1,54 @@
+{
+  "id": "889_p3_Q1(d)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Programming",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2018\\2nd_Year_1st_Term_2018_889.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The electric field intensity, E(z), due to a ring of radius R at any point z along the axis of the ring is given by"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_74f9dfaa8fa0b170811ff02c8424343b19f4c9b4a7f2535026d3a983e7681a3e.jpg",
+      "_source_path": "images/74f9dfaa8fa0b170811ff02c8424343b19f4c9b4a7f2535026d3a983e7681a3e.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Here, λ is the charge density, $\\epsilon _ { 0 } = 8 . 8 5 \\ \\times 1 0 ^ { - 1 . 2 }$ is the electric constant, and R is the radius of the ring. Consider the case where $\\lambda = 1 . 7 \\times 1 0 ^ { - 7 } C / m$ and $R = 6$ cm. Write an Octave program to,"
+    },
+    {
+      "type": "text",
+      "value": "(i)Determine E(z) at $z = 0 , 2 , 4 , 6 , 8 ,$ and 10 cm."
+    },
+    {
+      "type": "text",
+      "value": "(ii)  Determine the distance z where E is maximum. Do it by creating a vector z with elements ranging from 2 cm to 6 cm and spacing of 0.01 cm. Calculate E for each value of z and then find the maximum E and associated z with Octave's built-in function max."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

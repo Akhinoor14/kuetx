@@ -1,0 +1,50 @@
+{
+  "id": "1197_p5_Q8(d)",
+  "course": {
+    "code": "ME 2115",
+    "title": "Fluid Mechanics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\2nd_Year_1st_Term_2021_1197.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": ". A sharp flat plate with L = 50 cm and b = 3 mis parallel to a stream of velocity 2.5 mis. 15 Find the drag on one side of the plate, and the boundary thickness y at the trailing edge for the followings:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { ( i ) } \\ \\mathrm { a i r } \\ ( \\rho = 1 . 2 \\ \\mathrm { k g } / \\mathrm { m } ^ { 3 } , \\nu = 1 . 5 \\times 1 0 ^ { - 5 } \\ \\mathrm { m } ^ { 2 } / \\ s )\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "(ii) water at $2 0 ^ { \\circ } \\mathrm { C } ~ ( \\rho = 9 9 8 ~ \\mathrm { k g } / \\mathrm { m } ^ { 3 } , v = 1 . 0 0 5 \\times 1 0 ^ { - 6 } \\mathrm { m } ^ { 2 } / \\mathrm { s }$"
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY Department of Energy Science and Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

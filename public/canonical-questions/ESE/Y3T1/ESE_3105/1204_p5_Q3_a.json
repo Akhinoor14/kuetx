@@ -1,0 +1,64 @@
+{
+  "id": "1204_p5_Q3(a)",
+  "course": {
+    "code": "ESE 3105",
+    "title": "Heat Transfer and Mass Transfer",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\3rd_Year_1st_Term_2021_1204.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": ". A semi-infinite solid having an uniform initial temperature Ti (at time $\\mathfrak { t } = 0 )$ and then subjected to a constant temperature $\\mathrm { T } _ { \\mathrm { s } }$ at the boundary $\\textbf { x } = \\textbf { 0 }$ Obtain the folowing nondimensional temperature distribution equation when $\\mathrm { \\Delta t > 0 , }$ , by using similarity variable (TJ)."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\frac { T - T _ { s } } { T _ { i } - T _ { s } } = 1 - e r f c ( \\eta )\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "3(b ). Two semi-infinite solids A and B of constant thermophysical properties initially being at uniform temperature $\\mathrm { T _ { A , i } }$ and $\\mathrm { T _ { B , i } }$ are brought into perfect contact. Show that the steady state interface temperature of these two bodies in contact $\\mathrm { T _ { s } }$ can be given as:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { T } _ { s } = \\frac { \\mathrm { T } _ { \\mathrm { A , i } } + \\alpha \\mathrm { T } _ { \\mathrm { B , i } } } { 1 + \\alpha } ;\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\alpha = \\frac { \\sqrt { \\left( \\mathrm { k } \\rho \\ c _ { \\mathsf { p } } \\right) _ { \\mathrm { B } } } } { \\sqrt { \\left( \\mathrm { k } \\rho \\ c _ { \\mathsf { p } } \\right) _ { \\mathrm { A } } } }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Where the symbols have their usual meanings."
+    },
+    {
+      "type": "text",
+      "value": "3("
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

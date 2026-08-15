@@ -1,0 +1,65 @@
+{
+  "id": "1220_p2_Q4(c)",
+  "course": {
+    "code": "ESE 4219",
+    "title": "Energy Audit and Management",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\4th_Year_2nd_Term_2022_1220.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". An oil fired reheating furnace heats steel billets from 40 °c to 1220 °cat a furnace efficiency of 28%. The furnace operate for 4 700 hours per annum. The GCV of furnace oil is 10,000 kCal/kg and density is 0.94 g/litre. The cost of furnace oil is BDT 45/litre. The specific heat of billet is 0.12 kCal/kg <sup>0</sup>c."
+    },
+    {
+      "type": "text",
+      "value": "(i) Calculte the amount of energy needed to heat 12 tons of steel billets per hour."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Calculte litres of furnace oil fired per tons of steel billets."
+    },
+    {
+      "type": "text",
+      "value": "(iii) If the efficiency of furnace is improved from 28% to 30% by adopting ceramic fibre insulation, calculate hourly furnace oil cost saving."
+    },
+    {
+      "type": "text",
+      "value": "(iv) what is the simple payback period if the investement is BDT 20 lakhs."
+    },
+    {
+      "type": "text",
+      "value": "(v) How large could be the investment to improve the efficiency at an internal rate of 16% and per year over 6 years."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    },
+    {
+      "type": "text",
+      "value": "S(a). What is the purpose of material and energy balance? Distinguish between continuous process and batch process."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2022"
+}

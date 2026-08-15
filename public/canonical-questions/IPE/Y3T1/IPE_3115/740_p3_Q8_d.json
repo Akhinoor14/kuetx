@@ -1,0 +1,45 @@
+{
+  "id": "740_p3_Q8(d)",
+  "course": {
+    "code": "IPE 3115",
+    "title": "Engineering Economy",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\3rd_Year_1st_Term_2018_740.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": ". . An asset has a first cost of \\$45,000, a recovery period of 5 years, and a \\$3,000 salvage value. Use the switching procedure from DDB to SL depreciation, and calculate the present worth of depreciation at i = 18% per year."
+    },
+    {
+      "type": "text",
+      "value": "DDB, Double Decline Balance Depreciation"
+    },
+    {
+      "type": "text",
+      "value": "SL, Straight Line Depreciation."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

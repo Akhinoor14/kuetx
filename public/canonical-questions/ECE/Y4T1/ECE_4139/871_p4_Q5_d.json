@@ -1,0 +1,54 @@
+{
+  "id": "871_p4_Q5(d)",
+  "course": {
+    "code": "ECE 4139",
+    "title": "TV Engineering",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\4th_Year_1st_Term_2016_871.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": ", a packet of size 20 Mbits transmitted (12) through link with each link speed 2 Mbps. Calculate the total time required for transmit this file from sourcé to destination for,"
+    },
+    {
+      "type": "text",
+      "value": "i) without segmentation the file"
+    },
+    {
+      "type": "text",
+      "value": "ii)with 10,000 segmentation of that file."
+    },
+    {
+      "type": "text",
+      "value": "Packet Switch (PS)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_50e1bd40b18b51dc8eaed51cc3ea6e2260717c230641391f29c4f82745a23287.jpg",
+      "_source_path": "images/50e1bd40b18b51dc8eaed51cc3ea6e2260717c230641391f29c4f82745a23287.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2016"
+}

@@ -1,0 +1,52 @@
+{
+  "id": "690_p1_Q1(c)",
+  "course": {
+    "code": "EEE 4143",
+    "title": "High Voltage Engineering",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\1st_Year_2nd_Term_2018_690.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the circuit shown in Fig Q1(c), (i) Find the mathematical expression for the (15) transient behaviour of the voltage v<sub>l</sub> and current i<sub>l</sub> when switch is closed. (ii) Sketch the waveforms of $\\mathbf { V } _ { \\mathrm { I } }$ and i<sub>l</sub> ."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_fb2852f838fe40f88f144fc803249237659a574d4bf37b2a78fba5f8f5135bb0.jpg",
+      "_source_path": "images/fb2852f838fe40f88f144fc803249237659a574d4bf37b2a78fba5f8f5135bb0.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_fcb8e46b0c359a56257472d1b0ac04fd4ed8e5ecf0fe7a4db75c0160a858e63f.jpg",
+      "_source_path": "images/fcb8e46b0c359a56257472d1b0ac04fd4ed8e5ecf0fe7a4db75c0160a858e63f.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_08f2525a9b4c5c8daf7c2cd3fd8ae3569b60f5be6d186c59865f8dd5a137316e.jpg",
+      "_source_path": "images/08f2525a9b4c5c8daf7c2cd3fd8ae3569b60f5be6d186c59865f8dd5a137316e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

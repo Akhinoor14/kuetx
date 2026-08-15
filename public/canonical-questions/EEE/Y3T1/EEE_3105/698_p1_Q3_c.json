@@ -1,0 +1,42 @@
+{
+  "id": "698_p1_Q3(c)",
+  "course": {
+    "code": "EEE 3105",
+    "title": "Control Systems",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2017\\3rd_Year_1st_Term_2017_698.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "below to produce a 40 kHz (10) output frequency. Use a 120 mH inductor and op-amp with $V _ { c c } = \\pm 1 2 V$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_6045cf088c680b69adc422808cecd82bcc8057cad45bf21a5f552d8553e3853d.jpg",
+      "_source_path": "images/6045cf088c680b69adc422808cecd82bcc8057cad45bf21a5f552d8553e3853d.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

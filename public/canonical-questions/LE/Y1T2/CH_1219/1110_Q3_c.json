@@ -1,0 +1,61 @@
+{
+  "id": "1110_Q3(c)",
+  "course": {
+    "code": "CH 1219",
+    "title": "Organic Chemistry",
+    "department": "Department of Leather Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2022\\1st_Year_2nd_Term_2022_1110.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make sentence with the following modals as asked in brackets."
+    },
+    {
+      "type": "text",
+      "value": "i. Can. (To express allowance to somebody else)"
+    },
+    {
+      "type": "text",
+      "value": "ii. Can. (To express a polite request)"
+    },
+    {
+      "type": "text",
+      "value": "iii. Should. (To express propriety)"
+    },
+    {
+      "type": "text",
+      "value": "iv. Must + have + past participle of verb (To express a logical deduction)"
+    },
+    {
+      "type": "text",
+      "value": "v. Had better. (To express a duty at present)"
+    },
+    {
+      "type": "text",
+      "value": "vi. Would rather. (To express a preference)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2022"
+}

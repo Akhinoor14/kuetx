@@ -1,0 +1,37 @@
+{
+  "id": "732_Q7(b)",
+  "course": {
+    "code": "IPE 2207",
+    "title": "Probability and Statistical Analysis",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\2nd_Year_2nd_Term_2015_732.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ".A W14 × 90 section is to be used as a column with a length of 30 ft. The column supports an axial load of 65. kips and an eccentric load of 90 kips acting on the Y axis. Determine the maximum eccentricity of the 90 kip load using the maximum stress approach and the AISC specifications with $\\sigma _ { \\mathrm { y p } } = 5 0$ ksi and $\\mathrm { E } = 2 9 \\times 1 0 ^ { 6 }$ psi."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

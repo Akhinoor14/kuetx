@@ -1,0 +1,42 @@
+{
+  "id": "889_p4_Q2(c)",
+  "course": {
+    "code": "ME 2115",
+    "title": "Fluid Mechanics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2018\\2nd_Year_1st_Term_2018_889.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The water in a tank is pressurized by $\\mathsf { a i r } ,$ and the pressure is measured as shown in the 15 figure. The tank is located on a mountain at an altitude of 1400 m where atmospheric pressure is 85.6 kPa. Determine air pressure in the tank if $h _ { 1 } = 0 . 1 m , h _ { 2 } = 0 . 2 m ,$ and $\\bar { h } _ { 3 } = 0 . 3 5 m$ . Take the density of water, oil, and mercury to be 1000 $k g / m ^ { 3 }$ ,850 kg/ $m ^ { 3 }$ , and 13600 $k g / m ^ { 3 }$ , respectively."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_7cc979140c34ce685bffa45839b0f03a36e0937547be007a475d7fd9d99aea45.jpg",
+      "_source_path": "images/7cc979140c34ce685bffa45839b0f03a36e0937547be007a475d7fd9d99aea45.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

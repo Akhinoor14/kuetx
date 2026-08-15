@@ -1,0 +1,51 @@
+{
+  "id": "889_p2_Q1(b)",
+  "course": {
+    "code": "ME 2113",
+    "title": "Statics and Solid Mechanics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2018\\2nd_Year_1st_Term_2018_889.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Knowing that the tension in cable BC is 725 N, determine the resultant of the three forces exerted at point B of beam AB."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_fcdde1167eca44b08aa586cd92f0e09880ab51d1c64f970c19c8ffc266c18311.jpg",
+      "_source_path": "images/fcdde1167eca44b08aa586cd92f0e09880ab51d1c64f970c19c8ffc266c18311.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Two cables are tied together at C and loaded as shown. Knowing that P=500N and $\\tt { \\alpha } { = } 6 0 ^ { \\circ }$ , determine the tension in (i) cable AC, (ii) cable BC."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_15ec1159e5f69e22c3356ddc795c4909d328784a5844f8c85318e65f6666363d.jpg",
+      "_source_path": "images/15ec1159e5f69e22c3356ddc795c4909d328784a5844f8c85318e65f6666363d.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B. Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

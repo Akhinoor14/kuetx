@@ -1,0 +1,37 @@
+{
+  "id": "1195_p2_Q7(d)",
+  "course": {
+    "code": "EE 2113",
+    "title": "Electrical Machines",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2019\\2nd_Year_1st_Term_2019_1195.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". A 3-phase, slip-ring induction motor with star-connected rotor has an ninduced 3+5=8 e.m.f of 120V between slip-rings at standstill with nrmal voltage applied to the stator. The rotor wincing has a resistance per phase of 0.3 olun and standstill leakage reactance per phase of 1.5 ohm. Calculte, (i) rotor current/phase when running short-circuited with 4% slip and (ii) the slip and rotor current per phase when the rotor is developing maximum torque."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

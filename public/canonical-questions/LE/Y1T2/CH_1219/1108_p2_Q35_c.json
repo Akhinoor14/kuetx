@@ -1,0 +1,37 @@
+{
+  "id": "1108_p2_Q35(c)",
+  "course": {
+    "code": "CH 1219",
+    "title": "Organic Chemistry",
+    "department": "Department of Leather Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2019\\1st_Year_2nd_Term_2019_1108.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "35(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve $\\mathbf { x } ^ { 2 } \\mathbf { D } ^ { 2 } \\mathbf { y } - 3 \\mathbf { x } \\mathbf { D } \\mathbf { y } + 5 \\mathbf { y } = \\mathbf { x } ^ { 2 } \\sin ( \\log \\mathbf { x } )$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2019"
+}

@@ -1,0 +1,55 @@
+{
+  "id": "1204_p5_Q4(c)",
+  "course": {
+    "code": "ESE 3105",
+    "title": "Heat Transfer and Mass Transfer",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\3rd_Year_1st_Term_2021_1204.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Water is boiled at atmospheric pressure by a horizontal polished copper heating element of diameter 5 mm and emissivity of 0.05 immersed in water as shown in figure. If the surface temperature of the heating wire is $3 5 0 ^ { \\circ } \\mathrm { C } ,$ determine the rate of heat transfer from the wire to the water per unit length of the wire."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_4eead68bfa1fd1209937588f69e562c71bce67e857ead462a0cf3380498e61ee.jpg",
+      "_source_path": "images/4eead68bfa1fd1209937588f69e562c71bce67e857ead462a0cf3380498e61ee.jpg"
+    },
+    {
+      "type": "text",
+      "value": "[Following empirical correlations can be used]"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\dot { q } _ { \\mathrm { f i l m } } = C _ { \\mathrm { f i l m } } \\left[ \\frac { g k _ { \\nu } ^ { 3 } \\ : \\mathsf { p } _ { \\nu } \\ : ( \\mathsf { p } _ { l } - \\mathsf { p } _ { \\nu } ) [ h _ { f g } + 0 . 4 C _ { p \\nu } ( T _ { s } - T _ { \\mathrm { s a t } } ) } { \\mathsf { k } _ { \\nu } \\ : D ( T _ { s } - T _ { \\mathrm { s a t } } ) } \\right] ^ { 1 / 4 } ( T _ { s } - T _ { \\mathrm { s a t } } )\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

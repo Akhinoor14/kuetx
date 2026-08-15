@@ -1,0 +1,41 @@
+{
+  "id": "1203_p5_Q3(a)",
+  "course": {
+    "code": "ESE 3105",
+    "title": "Heat Transfer and Mass Transfer",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2020\\3rd_Year_1st_Term_2020_1203.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Air free saturated steam at $8 5 ^ { \\circ } \\mathrm { C }$ and 57.83 kPa condenses on the outer surface of225 horizontal tubes of 1.27 cm OD arranged in a 15 by 15 array. Tube surfaces arc maintained at a uniform temperature of $7 5 ^ { \\circ } \\mathrm { C }$ Calculate the total condensation rate per meter length of the tube bundle."
+    },
+    {
+      "type": "text",
+      "value": "[Given, the physical properties of water at $8 0 ^ { \\circ } \\mathrm { C }$ are: thermal conductivity = 0.668 $\\mathrm { W / m ^ { \\circ } C } .$ dynamic viscosity $= 0 . 3 5 5 \\times 1 0 ^ { - 3 }$ kg/m.s, density = 974 ${ \\mathrm { k g / m } } ^ { 3 }$ , latent heat of vaporization= 2309 kJ/kg]"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2020"
+}

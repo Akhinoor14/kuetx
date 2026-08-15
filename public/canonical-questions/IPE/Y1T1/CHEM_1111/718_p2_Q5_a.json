@@ -1,0 +1,41 @@
+{
+  "id": "718_p2_Q5(a)",
+  "course": {
+    "code": "CHEM 1111",
+    "title": "Chemistry",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2016\\1st_Year_1st_Term_2016_718.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Explain the idea of Real GDP and Nominal GDP Ex lain wh an econom <sup>'</sup> s income must e ual it<sub>s ex en</sub>dit<sub>ure</sub>"
+    },
+    {
+      "type": "text",
+      "value": "(b ) In year 20 I I . the economy produces I 000 units of <sub>p</sub>en that sell 5T K each<sub>.</sub> In <sub>y</sub>ear 20 1 2 the <sub>eco</sub>n<sub>o</sub>m r<sub>o</sub>d<sub>uces</sub> I 500 <sub>un</sub>it<sub>s</sub> or <sub>cn</sub> th <sub>u se</sub>ll or TK 6 <sub>eac</sub>h <sub>a</sub>nd in 20 1 3 th<sub>e econom ro</sub>d <sub>ces</sub> 2000 units of en that sell lor TK 7 each ear (Use 201 1 as the base ear) Calculate nominal GDP R<sub>ea</sub>l GDP <sub>an</sub>d th<sub>e</sub> GDP d<sub>c</sub>fl<sub>a</sub>t<sub>or</sub> U th<sub>a</sub>t <sub>ercen</sub>t<sub>a e</sub> d<sub>ocs eac</sub>h <sub>o</sub>f th<sub>ese</sub> th<sub>ree s</sub>t<sub>a</sub>ti<sub>s</sub>ti<sub>cs r</sub>i<sub>se</sub> f<sub>rom one ear</sub> t<sub>o</sub> th<sub>e nex</sub>t?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2016"
+}

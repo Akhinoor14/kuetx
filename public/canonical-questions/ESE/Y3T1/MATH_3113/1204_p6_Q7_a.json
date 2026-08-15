@@ -1,0 +1,69 @@
+{
+  "id": "1204_p6_Q7(a)",
+  "course": {
+    "code": "MATH 3113",
+    "title": "Statistics and Numerical Methods",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\3rd_Year_1st_Term_2021_1204.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Solve the following system of linear equation by using LU decomposition method."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n2 x + y + z = 5 , 3 x + 5 y + 2 z = 1 5 , 2 x + y + 4 z = 8\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "7(b ). Apply Gauss-Seidel iterative technique to solve the following linear system of equations: 13"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n2 7 x + 6 y - z = 8 5\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n6 x + 1 5 y + 2 z = 7 2\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nx + y + 5 4 z = 1 1 0\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "<sub>7(c).</sub> Determine the derivative of the function f (x) tabulated below at the point $x = 1 . 1 \\cdot$"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>x</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>1.2</td><td rowspan=1 colspan=1>1.4</td><td rowspan=1 colspan=1>1.6</td><td rowspan=1 colspan=1>1.8</td><td rowspan=1 colspan=1>2.0</td></tr><tr><td rowspan=1 colspan=1> $f ( x )$ </td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>0.128</td><td rowspan=1 colspan=1>0.5440</td><td rowspan=1 colspan=1>1.2960</td><td rowspan=1 colspan=1>2.4320</td><td rowspan=1 colspan=1>4.0000</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

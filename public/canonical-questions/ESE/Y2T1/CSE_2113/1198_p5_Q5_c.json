@@ -1,0 +1,63 @@
+{
+  "id": "1198_p5_Q5(c)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Programming",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\2nd_Year_1st_Term_2022_1198.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". A matrix is given as;"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nM = \\left[ { \\begin{array} { l l l } { 3 } & { 8 } & { 9 } \\\\ { - 5 } & { 0 } & { 1 1 } \\\\ { 5 } & { 2 } & { 4 } \\end{array} } \\right]\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "What will be the output of the following command?"
+    },
+    {
+      "type": "text",
+      "value": "i). a = M(:,length(M): − 1:1)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\ni i ) . \\ a _ { 1 } = M \\bigl ( f i n d \\left( M > 4 \\right) \\bigr )\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "iii). b = fliplr(flipud(M))"
+    },
+    {
+      "type": "text",
+      "value": "iv). c = cumsum(sum(M))"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

@@ -1,0 +1,57 @@
+{
+  "id": "740_p2_Q4(b)",
+  "course": {
+    "code": "IPE 3105",
+    "title": "Product Design -I",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2018\\3rd_Year_1st_Term_2018_740.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e825a812e619b6e1cc915b3e40d6cead6ce087fd846606256c7cfeed20bf69dc.jpg",
+      "_source_path": "images/e825a812e619b6e1cc915b3e40d6cead6ce087fd846606256c7cfeed20bf69dc.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_cce87004e494f91bfeaa44d24732c867e2f0db93d5f628615a8426b2c2cbbdaf.jpg",
+      "_source_path": "images/cce87004e494f91bfeaa44d24732c867e2f0db93d5f628615a8426b2c2cbbdaf.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_cc4c6aedb06cdf32c7d95b879ae5224c515bf10fc7f3f883be1f19de9ab83b46.jpg",
+      "_source_path": "images/cc4c6aedb06cdf32c7d95b879ae5224c515bf10fc7f3f883be1f19de9ab83b46.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_268bda5077c6c9330223e5944ac15de147e63f8d70413e9ec713407c639547a6.jpg",
+      "_source_path": "images/268bda5077c6c9330223e5944ac15de147e63f8d70413e9ec713407c639547a6.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

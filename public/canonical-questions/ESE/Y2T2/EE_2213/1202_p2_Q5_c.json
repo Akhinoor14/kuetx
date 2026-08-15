@@ -1,0 +1,46 @@
+{
+  "id": "1202_p2_Q5(c)",
+  "course": {
+    "code": "EE 2213",
+    "title": "Power Electronics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\2nd_Year_2nd_Term_2022_1202.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". What is meant by Jf'ET biasing? What arc the types or Jf-'ET biasing? 10"
+    },
+    {
+      "type": "text",
+      "value": "S(d). A JFET in following figure has values or $\\mathrm { V } _ { \\mathrm { G S ( o f f ) } } = - 8 \\mathrm { ~ V ~ }$ and $\\mathrm { I _ { D S S } } = 1 6 ~ \\mathrm { m A }$ . Determine the 08 values of $\\mathrm { V _ { G S } , }$ lo and $V _ { \\mathrm { D S } }$ for the circuit."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_3ab5232900b0cef2ef622350955e6f4af51ee665f341bac795dfd6d8125a9cfc.jpg",
+      "_source_path": "images/3ab5232900b0cef2ef622350955e6f4af51ee665f341bac795dfd6d8125a9cfc.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2022"
+}

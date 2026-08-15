@@ -1,0 +1,41 @@
+{
+  "id": "1188_p2_Q7(a)",
+  "course": {
+    "code": "MATH 1113",
+    "title": "Differential and Integral Calculus",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\1st_Year_1st_Term_2022_1188.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Define Gamma and Beta function. Write down the relationship between Gamma and Beta 13 function. Evaluate (i) $\\int _ { 0 } ^ { \\infty } e ^ { - x ^ { 2 } } d x$ (ii) $\\int _ { 0 } ^ { \\pi / 2 } { \\sqrt { \\tan \\theta } } d x$"
+    },
+    {
+      "type": "text",
+      "value": "<sup>7(b).</sup> Prove that, ${ \\sqrt { m } } { \\sqrt { m + { \\frac { 1 } { 2 } } } } = { \\frac { { \\sqrt { \\pi } } { \\sqrt { 2 m } } } { 2 ^ { ( 2 m - 1 ) } } }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2022"
+}

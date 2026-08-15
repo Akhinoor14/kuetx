@@ -1,0 +1,53 @@
+{
+  "id": "1131_Q4(d)",
+  "course": {
+    "code": "LE 4109",
+    "title": "Leather Products Engineering III",
+    "department": "Department of Leather Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2022\\4th_Year_1st_Term_2022_1131.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "List out the necessary properties of insole that keep in mind during insole designing. The 12 vertical GRF of a subject running with a sports shoe is given in figure. Estimate (i) Impact peak force (ii) vertical load rate, and (iii) Active peak force."
+    },
+    {
+      "type": "text",
+      "value": "S(a) Define industrial automation. What are the salient reasons behind automation? 08"
+    },
+    {
+      "type": "text",
+      "value": "S(b) Build a relationship between a category of production and diversification of products. 07"
+    },
+    {
+      "type": "text",
+      "value": "S(c) Draw a schematic diagram that represents the relation between automation and CIM. 12"
+    },
+    {
+      "type": "text",
+      "value": "S(d) How does industrial automation affect the demand equation? 08"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

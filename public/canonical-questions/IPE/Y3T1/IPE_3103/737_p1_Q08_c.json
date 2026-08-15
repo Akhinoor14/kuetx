@@ -1,0 +1,41 @@
+{
+  "id": "737_p1_Q08(c)",
+  "course": {
+    "code": "IPE 3103",
+    "title": "Engineering Metallurgy",
+    "department": "Department of Industrial Engineering and Management",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Industrial_Engineering_and_Management\\2015\\3rd_Year_1st_Term_2015_737.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "08(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the cash flow shown below calculate the equivalent uniform annual cost in <sub>y</sub>ears I through 5 and th<sub>e presen</sub>t <sub>wor</sub>th <sub>o</sub>fth<sub>e cas</sub>h fl<sub>ow</sub> A<sub>ssume</sub> th<sub>a</sub>t th<sub>e</sub> i<sub>n</sub>t<sub>eres</sub>t <sub>ra</sub>t<sub>e</sub> i<sub>s</sub> 12% <sub>er year</sub>"
+    },
+    {
+      "type": "text",
+      "value": "Y<sub>ear</sub> 1 2 3 4 5   \nCash flow<sub>,</sub> \\$ 5000 5400 5 800 6200 6600"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2015"
+}

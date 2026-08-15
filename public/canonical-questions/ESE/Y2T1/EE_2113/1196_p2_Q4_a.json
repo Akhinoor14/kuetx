@@ -1,0 +1,41 @@
+{
+  "id": "1196_p2_Q4(a)",
+  "course": {
+    "code": "EE 2113",
+    "title": "Electrical Machines",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2020\\2nd_Year_1st_Term_2020_1196.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Sketch the space curve whose position vector is (R cost 'i + R sin t j). I lence find unit 15 tangent vector $\\widehat { T }$ , Normal vector $\\widehat { N }$ and Binomial vector ${ \\hat { B } } .$ Where R is the sum of the last two digits of your class roll number. [Hints: Roll 1813005 then $R = 0 + 5 = 5$ Roll: 1813027 then $R = 2 + 7 = 9 1$"
+    },
+    {
+      "type": "text",
+      "value": "<sup>4(b).</sup> Test the nature of the vector point function $\\frac { G \\hat { r } } { r ^ { 2 } }$ (by using vector operator $\\mathbf { \\ddot { V } } )$ , where G is 15 15 constant and $\\overline { r }$ is the vector. Hence if possible, find the scalar potential function(/) such that $\\scriptstyle \\varnothing ( R , 0 , R ) = 1$ , where R is the sum of the last two digits of your class roll number. II lints: Roll 1813005 then $R = 0 + 5 = 5$ Roll: 1813027 then $R = 2 + 7 = 9 ]$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2020"
+}

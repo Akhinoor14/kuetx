@@ -1,0 +1,41 @@
+{
+  "id": "1194_p2_Q4(d)",
+  "course": {
+    "code": "CH 1213",
+    "title": "Chemistry II",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2023\\1st_Year_2nd_Term_2023_1194.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". In the photochemical reaction $A \\to B , 1 . 0 0 \\times 1 0 ^ { 5 }$ mole of B is formed as a result of the 06   \nabsorption of $6 . 0 0 \\times 1 0 ^ { 7 }$ ergs at 3600 <sub>A</sub>0. Calculate the quantum yield. (N =   \n$6 . 0 2 3 \\times 1 0 ^ { 2 3 } )$"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2023"
+}

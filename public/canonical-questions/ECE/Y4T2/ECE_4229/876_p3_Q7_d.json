@@ -1,0 +1,49 @@
+{
+  "id": "876_p3_Q7(d)",
+  "course": {
+    "code": "ECE 4229",
+    "title": "Electronic Packaging and Materials",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2015\\4th_Year_2nd_Term_2015_876.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "The employees worked in Account Section of Khulna Traders. Information relating (10) salaries for the month of June, 2015 as follows:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=3>Name of the employees</td></tr><tr><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>Raju</td><td rowspan=1 colspan=1>Rahi</td><td rowspan=1 colspan=1>Adi</td></tr><tr><td rowspan=1 colspan=1>Basic Salaries (TK)</td><td rowspan=1 colspan=1>23,000</td><td rowspan=1 colspan=1>18,000</td><td rowspan=1 colspan=1>15,000</td></tr><tr><td rowspan=1 colspan=1>House rent (% of basic salaries)</td><td rowspan=1 colspan=1>50%</td><td rowspan=1 colspan=1>50%</td><td rowspan=1 colspan=1>50%</td></tr><tr><td rowspan=1 colspan=1>City allowance (% of basic salaries)</td><td rowspan=1 colspan=1>20%</td><td rowspan=1 colspan=1>20%</td><td rowspan=1 colspan=1>20%</td></tr><tr><td rowspan=1 colspan=1>Medical allowance (TK)</td><td rowspan=1 colspan=1>1,000</td><td rowspan=1 colspan=1>1,000</td><td rowspan=1 colspan=1>1,000</td></tr><tr><td rowspan=1 colspan=1>Charge allowance (TK)</td><td rowspan=1 colspan=1>2,500</td><td rowspan=1 colspan=1>---</td><td rowspan=1 colspan=1>---</td></tr><tr><td rowspan=1 colspan=1>Overtime (Hours)</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>25</td><td rowspan=1 colspan=1>30</td></tr><tr><td rowspan=1 colspan=1>Employee contribute to providentfund</td><td rowspan=1 colspan=1>10%</td><td rowspan=1 colspan=1>10%</td><td rowspan=1 colspan=1>10%</td></tr><tr><td rowspan=1 colspan=1>Contribute to benevolent fund (TK)</td><td rowspan=1 colspan=1>200</td><td rowspan=1 colspan=1>100</td><td rowspan=1 colspan=1>100</td></tr><tr><td rowspan=1 colspan=1>Bonus</td><td rowspan=1 colspan=1>23,000</td><td rowspan=1 colspan=1>18,000</td><td rowspan=1 colspan=1>15,000</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "During the month, normal working hours were 200 hours. Overtime allowance double of the basic salaries per hour. Deduct from Mr. Raju for computer loan yearly TK 3,600 and house building loan deduct from Rahi's salary per month TK 500."
+    },
+    {
+      "type": "text",
+      "value": "Required: Prepare payroll sheet for the month of June, 2015."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2015"
+}

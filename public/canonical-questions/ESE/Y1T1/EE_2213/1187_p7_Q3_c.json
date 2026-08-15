@@ -1,0 +1,42 @@
+{
+  "id": "1187_p7_Q3(c)",
+  "course": {
+    "code": "EE 2213",
+    "title": "Power Electronics",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2021\\1st_Year_1st_Term_2021_1187.pdf",
+    "source_page": null,
+    "paper_index": 7
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Consider the circuit shown in figure 3(C I). The 33/11 kV transformer has an on-load 10 tap changer which maintains the load voltage at 11 kV. Calculate the percentage reduction in energy loss in the 33 kV line if load shifting shown in figure 3(C2) is managed. Ignor the 33/11 kV transformer losses."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_cf33f1ec7e31817a407afdc3aa3da8d8e3146bf44b6dff1d4da2b7afaf9e0d8d.jpg",
+      "_source_path": "images/cf33f1ec7e31817a407afdc3aa3da8d8e3146bf44b6dff1d4da2b7afaf9e0d8d.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2021"
+}

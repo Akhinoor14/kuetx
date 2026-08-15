@@ -1,0 +1,81 @@
+{
+  "id": "1186_p6_Q8",
+  "course": {
+    "code": "ESE 1101",
+    "title": "Fundamentals of Energy Resources",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2020\\1st_Year_1st_Term_2020_1186.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "8",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Sc. Engineering I st Year I st Term Examination, 2020"
+    },
+    {
+      "type": "text",
+      "value": "ESE 1101"
+    },
+    {
+      "type": "text",
+      "value": "(Fundamentals of Energy Resources)"
+    },
+    {
+      "type": "text",
+      "value": "Time: I I lour 30 Minutes."
+    },
+    {
+      "type": "text",
+      "value": "Full Marks: 120"
+    },
+    {
+      "type": "text",
+      "value": "N.B. i) Answer any TWO questions from each section."
+    },
+    {
+      "type": "text",
+      "value": "ii) Figures in the right margin indicate full marks."
+    },
+    {
+      "type": "text",
+      "value": "iii) Assume reasonable data if any missing."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-A"
+    },
+    {
+      "type": "text",
+      "value": "l(a). What is meant by energy resources? How do energy resources are IO classified globally? Explain in brief."
+    },
+    {
+      "type": "text",
+      "value": "l(b ). Differentiate between non-renewable and renewable energy sources. IO What are the adverse effects of using non-renewable energy sources?"
+    },
+    {
+      "type": "text",
+      "value": "1 ( c ). Distinguish between primary energy and secondary energy resources. Write a note on non-conventional energy resources."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2020"
+}

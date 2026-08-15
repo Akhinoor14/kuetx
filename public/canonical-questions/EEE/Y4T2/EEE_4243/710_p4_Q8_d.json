@@ -1,0 +1,42 @@
+{
+  "id": "710_p4_Q8(d)",
+  "course": {
+    "code": "EEE 4243",
+    "title": "Power System Operation and Control",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\4th_Year_2nd_Term_2018_710.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "of the stub from the generator end and"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_2057d67b3e7f5d1cb99094e3cbb75572a9b7eb424fa26d2ab6adf1ad9fc4d42c.jpg",
+      "_source_path": "images/2057d67b3e7f5d1cb99094e3cbb75572a9b7eb424fa26d2ab6adf1ad9fc4d42c.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2018"
+}

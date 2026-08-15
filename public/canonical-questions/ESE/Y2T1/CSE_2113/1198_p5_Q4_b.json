@@ -1,0 +1,54 @@
+{
+  "id": "1198_p5_Q4(b)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Programming",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\2nd_Year_1st_Term_2022_1198.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 4,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Define local and global variables with MATLAB examples. Write an anonymous MATLAB function for the following math function:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\ny ( x ) = 0 . 6 x ^ { 3 } e ^ { - 0 . 4 7 x } + 1 . 5 x ^ { 2 } e ^ { - 0 . 6 x }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "The input to the function is x and the output is y. Write the function such that x can be a vector (use element-by-element operations)"
+    },
+    {
+      "type": "text",
+      "value": "i) Use the function to calculate y(-2) and y(4)."
+    },
+    {
+      "type": "text",
+      "value": "ii) Use the function to calculate y(x) for $- 4 \\leq x \\leq 8$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

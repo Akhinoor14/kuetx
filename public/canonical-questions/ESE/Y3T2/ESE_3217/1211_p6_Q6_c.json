@@ -1,0 +1,73 @@
+{
+  "id": "1211_p6_Q6(c)",
+  "course": {
+    "code": "ESE 3217",
+    "title": "Instrumentation and Control",
+    "department": "Department of Energy Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Energy_Science_and_Engineering\\2022\\3rd_Year_2nd_Term_2022_1211.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Water is pumped from one tank to another through a piping system with a total pressure 13 drop of 150 psi. A control valve is provided in the piping loop to modulate the flow rates. Assume the key variables:"
+    },
+    {
+      "type": "text",
+      "value": "Fluid temperature = 70 °F"
+    },
+    {
+      "type": "text",
+      "value": "Design (maximum) flow rate = 160gpm"
+    },
+    {
+      "type": "text",
+      "value": "Operating flow rate = 110 gpm"
+    },
+    {
+      "type": "text",
+      "value": "Minimum flow rate = 25 gpm"
+    },
+    {
+      "type": "text",
+      "value": "Pipe diameter = 3 inches"
+    },
+    {
+      "type": "text",
+      "value": "Specific gravity = 1.0"
+    },
+    {
+      "type": "text",
+      "value": "Valve characteristics = globe valve, equal percentage"
+    },
+    {
+      "type": "text",
+      "value": "Now size the control valve based on the chart below:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Size</td><td rowspan=1 colspan=1>Cv @10% VT</td><td rowspan=1 colspan=1>Cv @25% VT</td><td rowspan=1 colspan=1>Cv @50% VT</td><td rowspan=1 colspan=1>Cv @75% VT</td><td rowspan=1 colspan=1>Cv @100% VT</td></tr><tr><td rowspan=1 colspan=1>11112</td><td rowspan=1 colspan=1>0.83</td><td rowspan=1 colspan=1>1.88</td><td rowspan=1 colspan=1>7.5</td><td rowspan=1 colspan=1>12.5</td><td rowspan=1 colspan=1>25</td></tr><tr><td rowspan=1 colspan=1>2″</td><td rowspan=1 colspan=1>1.33</td><td rowspan=1 colspan=1>3.00</td><td rowspan=1 colspan=1>12.0</td><td rowspan=1 colspan=1>20.0</td><td rowspan=1 colspan=1>40</td></tr><tr><td rowspan=1 colspan=1>112211</td><td rowspan=1 colspan=1>2.10</td><td rowspan=1 colspan=1>4.73</td><td rowspan=1 colspan=1>18.9</td><td rowspan=1 colspan=1>31.5</td><td rowspan=1 colspan=1>63</td></tr><tr><td rowspan=1 colspan=1>3″</td><td rowspan=1 colspan=1>3.33</td><td rowspan=1 colspan=1>7.5</td><td rowspan=1 colspan=1>30.0</td><td rowspan=1 colspan=1>50.0</td><td rowspan=1 colspan=1>100</td></tr><tr><td rowspan=1 colspan=1>4″</td><td rowspan=1 colspan=1>5.33</td><td rowspan=1 colspan=1>12.00</td><td rowspan=1 colspan=1>48.0</td><td rowspan=1 colspan=1>80.0</td><td rowspan=1 colspan=1>160</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

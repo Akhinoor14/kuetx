@@ -1,0 +1,47 @@
+{
+  "id": "690_p1_Q2(b)",
+  "course": {
+    "code": "EEE 4143",
+    "title": "High Voltage Engineering",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\1st_Year_2nd_Term_2018_690.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 16,
+  "content": [
+    {
+      "type": "text",
+      "value": "Obtain the Thevenin equivalent circuit for the circuit in Fig Q2(b) at terminal (16) $a - b$"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { V _ { b c } }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nX _ { L 1 } = ~ 5 \\Omega , X _ { L 2 } = ~ 5 \\Omega , X _ { M } = ~ 4 \\Omega\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

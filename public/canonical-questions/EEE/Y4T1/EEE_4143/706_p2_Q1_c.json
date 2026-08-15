@@ -1,0 +1,42 @@
+{
+  "id": "706_p2_Q1(c)",
+  "course": {
+    "code": "EEE 4143",
+    "title": "High Voltage Engineering",
+    "department": "Department of Electrical and Electronic Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electrical_and_Electronic_Engineering\\2018\\4th_Year_1st_Term_2018_706.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "The converter in Fig. Q3(c) has a load resistance $\\mathrm { R } = 0 . 2 5 \\Omega$ and input voltage (10) $\\mathrm { V _ { s } } = 5 5 0 \\mathrm { V } .$ The average load current $\\dot { \\mathbf { l } } _ { \\mathrm { a } } = 2 0 0 \\mathbf { A } ,$ and chopping frequency f = 250 Hz. Find the load inductance L which would limit the maximum load ripple current to 10% of i<sub>a</sub>. Use the average output voltage to calculate L."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a2d5a519d6c9aaaccda9b3cc08a4097d0e2347f88654cf2d6b63484a4f93e9cf.jpg",
+      "_source_path": "images/a2d5a519d6c9aaaccda9b3cc08a4097d0e2347f88654cf2d6b63484a4f93e9cf.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2018"
+}
