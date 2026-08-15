@@ -1,0 +1,37 @@
+{
+  "id": "1286_p2_Q3(c)",
+  "course": {
+    "code": "URP 4175",
+    "title": "Resettlement Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\4th_Year_1st_Term_2014_1286.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "What\\_are-the\\_key-features\\_of Acquisition and Requisition\\_of\\_Immovable\\_ Property (10) Ordinance, 1982? Write\\_down the major limitations of\\_that\\_ordinance regarding resettlement planning."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2014"
+}

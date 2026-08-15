@@ -1,0 +1,42 @@
+{
+  "id": "1271_p4_Q1(b)",
+  "course": {
+    "code": "CE 3107",
+    "title": "Elements of Solid Mechanics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2020\\3rd_Year_1st_Term_2020_1271.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "A member formed by connecting a steel bar to an aluminium bar is shown in the (11) following figure. Assume that the bars are prevented from buckling sidewise, calculate the magnitude of force P, that will cause the total length of the member to decrease by 0.25 mm. The values of elastic modulus for steel and aluminium are 210 GPa and 70 GPa, respectively."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_6075e6b3e4616d564286acf381251e1351925a33d5c435fa1972d0c981e6ed89.jpg",
+      "_source_path": "images/6075e6b3e4616d564286acf381251e1351925a33d5c435fa1972d0c981e6ed89.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2020"
+}

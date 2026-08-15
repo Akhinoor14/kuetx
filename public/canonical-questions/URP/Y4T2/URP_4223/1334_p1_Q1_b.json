@@ -1,0 +1,49 @@
+{
+  "id": "1334_p1_Q1(b)",
+  "course": {
+    "code": "URP 4223",
+    "title": "Urban and Regional Economics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\4th_Year_2nd_Term_2019_1334.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose a person have two iricome options (per month): to earn \\$ 75 US from home based freelancing and working at an office for \\$ 140 US (ignore time cost).If one way transportation to office costs \\$ 0.25 US/km at 5 km distance, and considering 25 days office days a month, explain his/her decision to accept employment between two options. Also explain, how will his/her decision change in the following conditions:"
+    },
+    {
+      "type": "text",
+      "value": "(i) Suppose the office offers transportation cost \\$ 30 US per month (ignore time cost);"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Suppose it takes 1 hr to reach office and time cost is \\$ 0.10 US/hr."
+    },
+    {
+      "type": "text",
+      "value": "(C) Why do large cities have higher incomes?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2019"
+}

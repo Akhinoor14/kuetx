@@ -1,0 +1,41 @@
+{
+  "id": "1263_p2_Q4(b)",
+  "course": {
+    "code": "URP 2291",
+    "title": "Statistics for Planners-II",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2021\\2nd_Year_2nd_Term_2021_1263.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "A coaching center claims that a short course of one month can significantly (12) improve the average marks in Mathematics course of class XII. A random sample of 12 students shows the following marks (out of 100) before and after one month coaching."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Student</td><td rowspan=1 colspan=1>Before</td><td rowspan=1 colspan=1>After</td><td rowspan=1 colspan=1>Student</td><td rowspan=1 colspan=1>Before</td><td rowspan=1 colspan=1>After</td></tr><tr><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>78</td><td rowspan=1 colspan=1>85</td><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>52</td><td rowspan=1 colspan=1>68</td></tr><tr><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>65</td><td rowspan=1 colspan=1>66</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>63</td><td rowspan=1 colspan=1>69</td></tr><tr><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>85</td><td rowspan=1 colspan=1>89</td><td rowspan=1 colspan=1>9</td><td rowspan=1 colspan=1>68</td><td rowspan=1 colspan=1>75</td></tr><tr><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>74</td><td rowspan=1 colspan=1>68</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>36</td><td rowspan=1 colspan=1>47</td></tr><tr><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>36</td><td rowspan=1 colspan=1>48</td><td rowspan=1 colspan=1>11</td><td rowspan=1 colspan=1>42</td><td rowspan=1 colspan=1>52</td></tr><tr><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>45</td><td rowspan=1 colspan=1>45</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>40</td><td rowspan=1 colspan=1>48</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

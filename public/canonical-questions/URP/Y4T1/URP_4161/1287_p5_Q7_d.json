@@ -1,0 +1,46 @@
+{
+  "id": "1287_p5_Q7(d)",
+  "course": {
+    "code": "URP 4161",
+    "title": "Project Planning and Management",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\4th_Year_1st_Term_2015_1287.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following decisions tree illustrates an inventment decision towards a new project.(10)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_1e9ae82b226ec0c8034d2b9acd813339a5225ea424f06e77c35344c190229992.jpg",
+      "_source_path": "images/1e9ae82b226ec0c8034d2b9acd813339a5225ea424f06e77c35344c190229992.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Calculate the optimal course of actions using this tree. Assume the discount rate is 12% and the project life is 20 years."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2015"
+}

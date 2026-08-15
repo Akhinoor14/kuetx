@@ -1,0 +1,41 @@
+{
+  "id": "1336_p5_Q6(c)",
+  "course": {
+    "code": "URP 4223",
+    "title": "Urban and Regional Economics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2021\\4th_Year_2nd_Term_2021_1336.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the basic employment and basic multiplier for “North” industrial sectors (15) according to the minimum requirement approach."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=2 colspan=1>Major Industrial Sectors</td><td rowspan=1 colspan=4>Employment</td></tr><tr><td rowspan=1 colspan=1>East</td><td rowspan=1 colspan=1>West</td><td rowspan=1 colspan=1>North</td><td rowspan=1 colspan=1>South</td></tr><tr><td rowspan=1 colspan=1>Wholesale trade</td><td rowspan=1 colspan=1>67,643</td><td rowspan=1 colspan=1>78,606</td><td rowspan=1 colspan=1>72,719</td><td rowspan=1 colspan=1>46,391</td></tr><tr><td rowspan=1 colspan=1>Retail trade</td><td rowspan=1 colspan=1>153,268</td><td rowspan=1 colspan=1>157,176</td><td rowspan=1 colspan=1>138,622</td><td rowspan=1 colspan=1>187,673</td></tr><tr><td rowspan=1 colspan=1>Finance and real estate</td><td rowspan=1 colspan=1>72,523</td><td rowspan=1 colspan=1>68,927</td><td rowspan=1 colspan=1>85,452</td><td rowspan=1 colspan=1>66,320</td></tr><tr><td rowspan=1 colspan=1>Services</td><td rowspan=1 colspan=1>239,308</td><td rowspan=1 colspan=1>365,064</td><td rowspan=1 colspan=1>266,781</td><td rowspan=1 colspan=1>311,783</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2021"
+}

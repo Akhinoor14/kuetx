@@ -1,0 +1,41 @@
+{
+  "id": "1296_p2_Q2(c)",
+  "course": {
+    "code": "URP 4223",
+    "title": "Urban and Regional Economics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\4th_Year_2nd_Term_2014_1296.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the HDl of Bangladesh from the given information: (10)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Component</td><td rowspan=1 colspan=1>Calculation</td><td rowspan=1 colspan=1>Minimum Value</td><td rowspan=1 colspan=1>Maximum Value</td></tr><tr><td rowspan=1 colspan=1>Life expectancy</td><td rowspan=1 colspan=1>Life expectancy atbirth</td><td rowspan=1 colspan=1>20 years</td><td rowspan=1 colspan=1>83.2 years</td></tr><tr><td rowspan=1 colspan=1>Knowledge</td><td rowspan=1 colspan=1>Literate          adultpopulation (15 yearsand above)</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>20.6 years</td></tr><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Combined     grossenrollment rates atprimary,secondaryand            tertiaryeducation</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>13.2 years</td></tr><tr><td rowspan=1 colspan=1>GDP</td><td rowspan=1 colspan=1>Logarithm ofGDPper    capita    (inUSD/PPP)</td><td rowspan=1 colspan=1>163</td><td rowspan=1 colspan=1>108.211</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2014"
+}

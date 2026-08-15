@@ -1,0 +1,57 @@
+{
+  "id": "1297_p1_Q4(c)",
+  "course": {
+    "code": "URP 4243",
+    "title": "Hazards and Disaster Management",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\4th_Year_2nd_Term_2015_1297.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write short notes on any three of the following issues:"
+    },
+    {
+      "type": "text",
+      "value": "(i) Root causes and dynamic pressure in vulnerability analysis."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Importance of Damage, Loss, and Need assessment (DLNA) in disaster recovery."
+    },
+    {
+      "type": "text",
+      "value": "(iii) Activities performed during search and rescue (SAR) operation"
+    },
+    {
+      "type": "text",
+      "value": "(iv) Emergency Operation Plan (EOP)"
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2015"
+}

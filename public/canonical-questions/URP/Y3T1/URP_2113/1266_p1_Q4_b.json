@@ -1,0 +1,42 @@
+{
+  "id": "1266_p1_Q4(b)",
+  "course": {
+    "code": "URP 2113",
+    "title": "Site and Area Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\3rd_Year_1st_Term_2014_1266.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A composite bar consists of an aluminium section rigidly fastened between a bronge section and a steel section as shown in figure below. Axial loads are applied at the positions indicated.: Determine the stress in each section."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_9eb83da3fdf6eeea3a28c87f25244301cd3a8f5cea302c8d641eb8c3f2f3fced.jpg",
+      "_source_path": "images/9eb83da3fdf6eeea3a28c87f25244301cd3a8f5cea302c8d641eb8c3f2f3fced.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2014"
+}

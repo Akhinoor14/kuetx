@@ -1,0 +1,37 @@
+{
+  "id": "1297_p1_Q5(c)",
+  "course": {
+    "code": "URP 4243",
+    "title": "Hazards and Disaster Management",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\4th_Year_2nd_Term_2015_1297.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "“Disaster may damage the image of a country and its standing in the eyes of (10)   \ninternational community”- what do you think about this statement? Justify your   \nanswer."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2015"
+}

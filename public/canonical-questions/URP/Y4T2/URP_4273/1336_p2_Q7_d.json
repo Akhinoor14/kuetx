@@ -1,0 +1,55 @@
+{
+  "id": "1336_p2_Q7(d)",
+  "course": {
+    "code": "URP 4273",
+    "title": "Urban Governance",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2021\\4th_Year_2nd_Term_2021_1336.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate and explain the UGI for the following data: (10)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathsf { E f f e c t i v e n e s s \\ s u b - i n d e x } = 0 . 5 4\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\bullet \\qquad \\mathsf { E q u i t y \\thinspace s u b - i n d e x } = 0 . 6 3\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Participation sub-index = 0.47"
+    },
+    {
+      "type": "text",
+      "value": "Accountability sub-index = 0.91"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2021"
+}

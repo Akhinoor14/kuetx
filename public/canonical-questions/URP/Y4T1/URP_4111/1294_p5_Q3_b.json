@@ -1,0 +1,70 @@
+{
+  "id": "1294_p5_Q3(b)",
+  "course": {
+    "code": "URP 4111",
+    "title": "Utility Services and Infrastructure Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2003,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2023\\4th_Year_1st_Term_2023_1294.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Design an air stripping water treatment column to remove 1,1,1-Trichloroethane (15) from the water, using the following information and figure:"
+    },
+    {
+      "type": "text",
+      "value": "• Use 2-in Intalox saddles for packing (area to volume ratio is 118 m1)."
+    },
+    {
+      "type": "text",
+      "value": "• Column diameter = 2 ft"
+    },
+    {
+      "type": "text",
+      "value": "• Liquid mass transfer coefficient = 16.5 cm/hr."
+    },
+    {
+      "type": "text",
+      "value": "• Air-to-water ratio = 65"
+    },
+    {
+      "type": "text",
+      "value": "• Henry's constant (dimensionless) = 0.464"
+    },
+    {
+      "type": "text",
+      "value": "• Also consider a safety factor (SF) = 20%."
+    },
+    {
+      "type": "text",
+      "value": "Water Inlet"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_4b0da884dc41360ebb7777c43afbab1c61c638cebb6f0924c0aa86d17133cf14.jpg",
+      "_source_path": "images/4b0da884dc41360ebb7777c43afbab1c61c638cebb6f0924c0aa86d17133cf14.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2023"
+}

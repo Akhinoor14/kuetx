@@ -1,0 +1,57 @@
+{
+  "id": "1287_p5_Q8",
+  "course": {
+    "code": "URP 4161",
+    "title": "Project Planning and Management",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\4th_Year_1st_Term_2015_1287.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "lb) Calculate IRR for the city road projects with the following data:"
+    },
+    {
+      "type": "text",
+      "value": "Lower discount rate = 11%"
+    },
+    {
+      "type": "text",
+      "value": "(08)"
+    },
+    {
+      "type": "text",
+      "value": "Higher discount rate = 16%"
+    },
+    {
+      "type": "text",
+      "value": "NPV at Lower discount rate = 1.947"
+    },
+    {
+      "type": "text",
+      "value": "NPV at higher discount rate = -0.37"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2015"
+}

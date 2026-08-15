@@ -1,0 +1,37 @@
+{
+  "id": "1276_p2_Q2(a)",
+  "course": {
+    "code": "URP 3223",
+    "title": "Regional Development Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\3rd_Year_2nd_Term_2014_1276.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 6,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is meant by SPRC concept? Explain with examples. (06)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2014"
+}

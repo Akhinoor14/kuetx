@@ -1,0 +1,42 @@
+{
+  "id": "1333_p1_Q4(b)",
+  "course": {
+    "code": "URP 4243",
+    "title": "Hazards and Disaster Management",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2018\\4th_Year_2nd_Term_2018_1333.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Explain hazard assessment approach'with e focus on the use of GIS. (11"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_78e9cb5e0d81f2fdfcb9b91fbe6e72c3261af1723831d486e6c2492c8c704192.jpg",
+      "_source_path": "images/78e9cb5e0d81f2fdfcb9b91fbe6e72c3261af1723831d486e6c2492c8c704192.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2018"
+}

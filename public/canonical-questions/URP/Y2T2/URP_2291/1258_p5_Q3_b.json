@@ -1,0 +1,49 @@
+{
+  "id": "1258_p5_Q3(b)",
+  "course": {
+    "code": "URP 2291",
+    "title": "Statistics for Planners-II",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\2nd_Year_2nd_Term_2016_1258.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 16,
+  "content": [
+    {
+      "type": "text",
+      "value": "A radio shop sells on average 200 radios per day, with a standard deviation of (16) 50 radios. After an expensive advertising campaign, the management will compute the average sales for the next 258 days to see whether an improvement has occurred. Assume that the daily sales of radios is normally distributed."
+    },
+    {
+      "type": "text",
+      "value": "(i) Write down the null and alternative hypothesis."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Test hypothesis at 5% level of significance if x = 126."
+    },
+    {
+      "type": "text",
+      "value": "(iii) How large must X be in order that the null hypothesis is rejected at 5% level of significance."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

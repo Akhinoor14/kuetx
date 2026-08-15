@@ -1,0 +1,37 @@
+{
+  "id": "1268_p2_Q7(d)",
+  "course": {
+    "code": "CE 3151",
+    "title": "Fundamentals of Transportation Engineering",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\3rd_Year_1st_Term_2016_1268.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "A valley curve is divided by descending grade of 1 in 30 meeting an (12) ascending grade of 1 in 25. Design the length of valley curve to fulfill both comfort condition and head light sight distance requirement for a design speed of 80 kmph. Assume allowable rate of change of centrifugal acceleration. C=0.6 m/sec³"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

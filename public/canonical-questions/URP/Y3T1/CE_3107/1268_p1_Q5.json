@@ -1,0 +1,59 @@
+{
+  "id": "1268_p1_Q5",
+  "course": {
+    "code": "CE 3107",
+    "title": "Elements of Solid Mechanics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\3rd_Year_1st_Term_2016_1268.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "a. Define – i) Transmissibility of Force, ii) Centroid, iii) Force, iii) Moment of (12) Inertia"
+    },
+    {
+      "type": "text",
+      "value": "b. Draw the free body diagram of each member of the following figure."
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_5484bbdcd955afdd45c37062a37b0e14953cd5630cef1c11da70df2e1cd812dc.jpg",
+      "_source_path": "images/5484bbdcd955afdd45c37062a37b0e14953cd5630cef1c11da70df2e1cd812dc.jpg"
+    },
+    {
+      "type": "text",
+      "value": "C. Find the value of F and θ of the following force system shown in figure below. (11) Also find the resultant."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_344bc4a10eac38c0200881c1133da690bfc0f85bae4449e26d5b2e6bcdb6eef0.jpg",
+      "_source_path": "images/344bc4a10eac38c0200881c1133da690bfc0f85bae4449e26d5b2e6bcdb6eef0.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

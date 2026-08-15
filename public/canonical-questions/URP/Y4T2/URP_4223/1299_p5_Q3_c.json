@@ -1,0 +1,45 @@
+{
+  "id": "1299_p5_Q3(c)",
+  "course": {
+    "code": "URP 4223",
+    "title": "Urban and Regional Economics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2017\\4th_Year_2nd_Term_2017_1299.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Using Riley's law, calculate the market area of the following cities. What is the (10) limitation of Riley's law explaining market area?"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Cities</td><td rowspan=1 colspan=1>Population</td><td rowspan=1 colspan=1>Distance from A</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>4,161</td><td rowspan=1 colspan=1>0</td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>4,674</td><td rowspan=1 colspan=1>29</td></tr><tr><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>4,864</td><td rowspan=1 colspan=1>36</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2017"
+}

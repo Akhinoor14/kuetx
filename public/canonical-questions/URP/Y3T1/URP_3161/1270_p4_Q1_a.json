@@ -1,0 +1,37 @@
+{
+  "id": "1270_p4_Q1(a)",
+  "course": {
+    "code": "URP 3161",
+    "title": "Housing and Real Estate Development Theory",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\3rd_Year_1st_Term_2019_1270.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "What do you mean by 'Housing Right'? Explain the five essential elements of (10) functional housing market"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

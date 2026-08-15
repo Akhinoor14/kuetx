@@ -1,0 +1,46 @@
+{
+  "id": "1289_p5_Q7(d)",
+  "course": {
+    "code": "URP 4141",
+    "title": "Environmental Planning and Management",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2018\\4th_Year_1st_Term_2018_1289.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A completely mixed lake receives two inflows: natural stream flow $0 . 1 ~ \\mathrm { m } ^ { 3 } / \\mathsf { s }$ wastewater discharge 0.024 m³/s and has a constant volume of $2 \\times 1 0 ^ { 6 } \\ m ^ { 3 }$ Provided that the wastewater has 10 mg/L NH₃-N and stream has 1 mg/L NH3- N."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_94f3778f41142273cc7598d5867a0aac9b0f5349e4bbab486cfd8eb849ba8397.jpg",
+      "_source_path": "images/94f3778f41142273cc7598d5867a0aac9b0f5349e4bbab486cfd8eb849ba8397.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Bacteria in the lake convert NH₃ to NO₃ by a process called nitrification. $- r _ { N } = k ^ { \\star }mathsf { C } _ { \\aleph } ,$ where k = a first-order rate constant = 0.03 day-1 and $\\complement _ { N } =$ concentration of ammonia-nitrogen mg/L. Find the lake and outflow NH₃-N Ammonia is very toxic to fish, 1 mg/L.NH3-N. Does the amount of natural nitrification in the lake allow wastewater discharge of 23 mg/L ammonia-N?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2018"
+}

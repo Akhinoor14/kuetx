@@ -1,0 +1,57 @@
+{
+  "id": "1266_p4_Q8(d)",
+  "course": {
+    "code": "URP 3161",
+    "title": "Housing and Real Estate Development Theory",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\3rd_Year_1st_Term_2014_1266.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "You have been asked to estimate the market value of an apartment complex (10) that is producing annual net operating income of \\$44,500. Four highly similar and competitive apartment properties within two blocks of the subject property have sold in the past three months. All four offer essentially the same amenities and services as the subject. All were open-market transactions with similar terms of sale. All were financed with 30-year fixed-rate mortgages using 70 percent debt and 30 percent equity. The sale prices and estimated first-year net operating incomes were as follows:"
+    },
+    {
+      "type": "text",
+      "value": "Comparable 1: Sale price \\$500,000; NOI \\$55,000"
+    },
+    {
+      "type": "text",
+      "value": "Comparable 2: Sale price \\$420,000; NOI \\$50,400"
+    },
+    {
+      "type": "text",
+      "value": "Comparable 3: Sale price \\$475,000; NOI \\$53,400"
+    },
+    {
+      "type": "text",
+      "value": "Comparable 4: Sale price \\$600,000; NOI \\$69,000"
+    },
+    {
+      "type": "text",
+      "value": "What is the indicated value of the property using direct capitalization?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2014"
+}

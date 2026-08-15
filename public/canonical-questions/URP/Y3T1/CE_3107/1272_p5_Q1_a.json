@@ -1,0 +1,42 @@
+{
+  "id": "1272_p5_Q1(a)",
+  "course": {
+    "code": "CE 3107",
+    "title": "Elements of Solid Mechanics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2021\\3rd_Year_1st_Term_2021_1272.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": 35,
+  "content": [
+    {
+      "type": "text",
+      "value": "Draw the axial force, shear force and bending moment diagram for the following (35) loaded beam. Also, write down the axial force, shear force and bending moment equations."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_cdd6f42159d6df3d9eff2c3eeffdaa36759b731547f936e24b1ef7623053f7d7.jpg",
+      "_source_path": "images/cdd6f42159d6df3d9eff2c3eeffdaa36759b731547f936e24b1ef7623053f7d7.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

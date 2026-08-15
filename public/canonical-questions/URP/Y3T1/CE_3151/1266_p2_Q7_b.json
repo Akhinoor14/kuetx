@@ -1,0 +1,37 @@
+{
+  "id": "1266_p2_Q7(b)",
+  "course": {
+    "code": "CE 3151",
+    "title": "Fundamentals of Transportation Engineering",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\3rd_Year_1st_Term_2014_1266.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Explain the four stages of transportation modelling. (10)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2014"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "1294_p2_Q1(c)",
+  "course": {
+    "code": "URP 4141",
+    "title": "Environmental Planning and Management",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2023\\4th_Year_1st_Term_2023_1294.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "The current albedo rate at top of atmosphere combined with the earth surface is approximately 0.29. If this were increased by 1.1%, what would be the amount of solar heat flux reaching on earth? Again there is currently about 1.29 W/m² heat surplus on earth. If ocean covers about 71% of the earth surface. how much excess heat in petawatts may be going into ocean and land surface. Consider ${ 1 } \\mathsf { P W } = \\mathsf { 1 0 } ^ { \\mathsf { 1 5 } }$ W and earth radius is 6378 km."
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2023"
+}

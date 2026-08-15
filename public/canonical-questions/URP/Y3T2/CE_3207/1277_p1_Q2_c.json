@@ -1,0 +1,41 @@
+{
+  "id": "1277_p1_Q2(c)",
+  "course": {
+    "code": "CE 3207",
+    "title": "Elements of Civil Engineering Structures",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\3rd_Year_2nd_Term_2015_1277.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "Describe linear and circular prestressing with example. A prestressed concrete rectangular beam 500 mm by 750 mm has a simple span of 7.30 m and is loaded by a uniform load of 45 kN/m including its own weight. The prestressing tendon is located as shown in figure and produces an effective prestress of 1620 kN. Compute fiber stresses in the concrete at the midspan section."
+    },
+    {
+      "type": "text",
+      "value": "(18)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2015"
+}

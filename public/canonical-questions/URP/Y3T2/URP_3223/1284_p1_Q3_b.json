@@ -1,0 +1,45 @@
+{
+  "id": "1284_p1_Q3(b)",
+  "course": {
+    "code": "URP 3223",
+    "title": "Regional Development Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2022\\3rd_Year_2nd_Term_2022_1284.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose the inter-industry flow of the product of two industries are given as (25) follows:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=2 colspan=1>ProductionSector</td><td rowspan=1 colspan=2>Consumption Sector</td><td rowspan=2 colspan=1>DomesticDemand</td><td rowspan=2 colspan=1>Total Output</td></tr><tr><td rowspan=1 colspan=1>X</td><td rowspan=1 colspan=1>Y</td></tr><tr><td rowspan=1 colspan=1>X</td><td rowspan=1 colspan=1>30</td><td rowspan=1 colspan=1>40</td><td rowspan=1 colspan=1>50</td><td rowspan=1 colspan=1>120</td></tr><tr><td rowspan=1 colspan=1>Y</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>30</td><td rowspan=1 colspan=1>60</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Determine the coefficient matrix and test Hawkin's-Simon conditions for the viability of the system. If the domestic demand changes to 80 and 40 units respectively, what should be the gross output of each sector in order to meet the new demands?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

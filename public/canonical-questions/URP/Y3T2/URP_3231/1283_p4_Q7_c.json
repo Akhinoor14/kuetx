@@ -1,0 +1,37 @@
+{
+  "id": "1283_p4_Q7(c)",
+  "course": {
+    "code": "URP 3231",
+    "title": "Transportation Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2021\\3rd_Year_2nd_Term_2021_1283.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the safe stopping sight distance for design speed of 80 km/h, for (10) (i) Two-way traffic on a two lane road. (ii) Two-way traffic on a single lane road. Assume, µ = 0.38 and reaction time = 2.5 sec."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2021"
+}

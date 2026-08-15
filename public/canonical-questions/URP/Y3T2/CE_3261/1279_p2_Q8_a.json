@@ -1,0 +1,57 @@
+{
+  "id": "1279_p2_Q8(a)",
+  "course": {
+    "code": "CE 3261",
+    "title": "Water Resources Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2017\\3rd_Year_2nd_Term_2017_1279.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "Differentiate between"
+    },
+    {
+      "type": "text",
+      "value": "(08)"
+    },
+    {
+      "type": "text",
+      "value": "(i) Base flow and Direct Runoff"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Aquifer and Aquiclude"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Specific Yield and Specific retention"
+    },
+    {
+      "type": "text",
+      "value": "(iv) Drawdown and Cone of depression"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

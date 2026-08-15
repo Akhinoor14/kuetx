@@ -1,0 +1,49 @@
+{
+  "id": "1286_p4_Q8(a)",
+  "course": {
+    "code": "URP 4161",
+    "title": "Project Planning and Management",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\4th_Year_1st_Term_2014_1286.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "A project has begun on 1st July, 2013 and was expected to be completed by (15) 31ªt December, 2014. The project is being reviewed on 30th September 2014, when the following information has been developed."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Budget cost for work scheduled</td><td rowspan=1 colspan=1>6,000,000</td><td rowspan=5 colspan=1>(iDD)</td></tr><tr><td rowspan=1 colspan=1>Budget cost for work performed</td><td rowspan=1 colspan=1>5,500,000</td></tr><tr><td rowspan=1 colspan=1>Actual cost of work performed</td><td rowspan=1 colspan=1>5,800,000</td></tr><tr><td rowspan=1 colspan=1>Budget cost for total work</td><td rowspan=1 colspan=1>10,000,000</td></tr><tr><td rowspan=1 colspan=1>Additional cost for completion</td><td rowspan=1 colspan=1>5,000,000</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "(i) Will the project be finished on time?"
+    },
+    {
+      "type": "text",
+      "value": "(ii)Money is spent efficiently-justify the statement."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2014"
+}

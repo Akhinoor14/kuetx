@@ -1,0 +1,54 @@
+{
+  "id": "1284_p4_Q5(c)",
+  "course": {
+    "code": "CE 3261",
+    "title": "Water Resources Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2022\\3rd_Year_2nd_Term_2022_1284.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "For a river the estimated flood of a two return periods are given below. Find out (13) the discharge of floods that have a return period of 300 years and 1000 years."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Return Period (Years)</td><td rowspan=1 colspan=1>Peak Flow (m³/s)</td></tr><tr><td rowspan=1 colspan=1>250</td><td rowspan=1 colspan=1>650</td></tr><tr><td rowspan=1 colspan=1>90</td><td rowspan=1 colspan=1>410</td></tr></table>"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_dc2e90c6755e3fd85d3f0219125aadbeac26d9f6e8b6601913b540a30627e29d.jpg",
+      "_source_path": "images/dc2e90c6755e3fd85d3f0219125aadbeac26d9f6e8b6601913b540a30627e29d.jpg"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td colspan=\"10\">North</td><td colspan=\"3\"></td><td rowspan=\"2\"></td></tr><tr><td>latitude </td><td>Jan</td><td>Feb</td><td>Mar</td><td>Apr</td><td>May</td><td>Jun ASE</td><td>Jul</td><td>Aug</td><td>Sep</td><td>0ct</td><td>Nov</td><td>Dec</td></tr><tr><td></td><td>14.5</td><td>150</td><td>15.2</td><td>14.7</td><td>13.9</td><td>13.4</td><td>13.5</td><td>14.2</td><td></td><td>14.9</td><td>15.0</td><td>14.614.3</td><td></td></tr><tr><td>10°</td><td>12.8</td><td>13.9</td><td>14.8</td><td>15.2</td><td>15.0</td><td>14.8</td><td>14.8</td><td></td><td>15:0</td><td>14.9</td><td>141</td><td>13.1</td><td>124</td></tr><tr><td>20°</td><td>10.8</td><td>12.3</td><td>13.9</td><td>15.2</td><td>15.7</td><td>15.8</td><td>15.7</td><td></td><td>15.3</td><td>14.4</td><td>12.9</td><td>11.2</td><td>10.3</td></tr><tr><td>30°</td><td>8.5</td><td>10.5</td><td>12.7</td><td>14.8</td><td>16.0</td><td>16.5</td><td>16.2</td><td></td><td>15.3</td><td>13.5</td><td>11.3</td><td>9.1</td><td>7.9</td></tr><tr><td></td><td>6.0</td><td>8.3</td><td>11.0</td><td>13.9</td><td>15.9</td><td>16.7</td><td>16.3</td><td></td><td>14.8</td><td>12.2</td><td>93</td><td>6.7</td><td>5.4</td></tr><tr><td>50°</td><td>3.6</td><td>59</td><td>9.1</td><td>127</td><td>15.4</td><td>16.7</td><td>16.1</td><td></td><td>13.9 BY</td><td>10.5</td><td>71</td><td></td><td>4.33.0</td></tr></table>"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>North latitude Jan</td><td></td><td>Feb</td><td>Mar</td><td>Apr</td><td>May</td><td>Jun</td><td>Jul</td><td>Aug</td><td>Sep</td><td>Oct</td><td>Nov</td><td>Dec</td></tr><tr><td>0°</td><td>12.1</td><td>121</td><td>12.1</td><td>121</td><td>12.1</td><td>121</td><td>12.1</td><td>121</td><td>12.1</td><td>12.1</td><td>12.1</td><td>12.1</td></tr><tr><td>10°</td><td>11.6</td><td>11.8</td><td>12.1</td><td>12.4</td><td>12.6</td><td>127</td><td>12.6</td><td>12.4</td><td>12.9</td><td>11.9</td><td>11.7</td><td>11.5</td></tr><tr><td>20°</td><td>11.1</td><td>I1.5</td><td>12.0</td><td>12.6</td><td>13.1</td><td>13.3</td><td>13.2</td><td>12.8</td><td>12.3</td><td>117</td><td>11.2</td><td>210.9</td></tr><tr><td>30°</td><td>10.4</td><td>11,1</td><td>12.0</td><td>12.9</td><td>13.7</td><td>14.1</td><td>13.9</td><td>13.2</td><td>12.4</td><td>115</td><td></td><td>10.610.2</td></tr><tr><td>40°</td><td>9.6</td><td>10.7</td><td>11.9</td><td>13:2</td><td>14.4</td><td>15.0</td><td>14.7</td><td>13.8</td><td>12.5</td><td>112</td><td>10.0</td><td>9.4</td></tr><tr><td>50°</td><td>8.6</td><td>101</td><td>11.8</td><td>13.8</td><td>15.4</td><td>16.4</td><td>16.0</td><td>14.5</td><td>12.7</td><td>10:8</td><td>9.1</td><td>81</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "1280_p2_Q6(d)",
+  "course": {
+    "code": "CE 3261",
+    "title": "Water Resources Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2018\\3rd_Year_2nd_Term_2018_1280.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "Flood frequency records on a river were collected from 1990 to 2006 and the (11) peak Q tabulated below: Estimate the magnitude of flood having frequency (i) 80 years (ii) 400 years by Gumbles Analytical method."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Year.</td><td rowspan=1 colspan=1>Q0 (m³/sec)</td><td rowspan=1 colspan=1>Year</td><td rowspan=1 colspan=1>Qp (m³/sec)</td></tr><tr><td rowspan=1 colspan=1>1990</td><td rowspan=1 colspan=1>3000</td><td rowspan=1 colspan=1>1997</td><td rowspan=1 colspan=1>3300</td></tr><tr><td rowspan=1 colspan=1>1991</td><td rowspan=1 colspan=1>4400</td><td rowspan=1 colspan=1>1998</td><td rowspan=1 colspan=1>6700</td></tr><tr><td rowspan=1 colspan=1>1992</td><td rowspan=1 colspan=1>6000</td><td rowspan=1 colspan=1>1999</td><td rowspan=1 colspan=1>5400</td></tr><tr><td rowspan=1 colspan=1>1993</td><td rowspan=1 colspan=1>3500</td><td rowspan=1 colspan=1>2000</td><td rowspan=1 colspan=1>4300</td></tr><tr><td rowspan=1 colspan=1>1994</td><td rowspan=1 colspan=1>2900</td><td rowspan=1 colspan=1>2001</td><td rowspan=1 colspan=1>3700</td></tr><tr><td rowspan=1 colspan=1>1995</td><td rowspan=1 colspan=1>4800</td><td rowspan=1 colspan=1>2002</td><td rowspan=1 colspan=1>4200</td></tr><tr><td rowspan=1 colspan=1>1996</td><td rowspan=1 colspan=1>3900</td><td rowspan=1 colspan=1>2003</td><td rowspan=1 colspan=1>9000</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

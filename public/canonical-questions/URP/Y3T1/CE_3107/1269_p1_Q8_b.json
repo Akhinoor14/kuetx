@@ -1,0 +1,42 @@
+{
+  "id": "1269_p1_Q8(b)",
+  "course": {
+    "code": "CE 3107",
+    "title": "Elements of Solid Mechanics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2017\\3rd_Year_1st_Term_2017_1269.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "In the following figure, what will be the value of 'W' if equilibrium exists? Assume the (15) pulleys are frictionless and weightless."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_dc87c604f9e5f6be8d5744c6d4eba825f65d5e6f0dde9a72949e6dec6a5edb6a.jpg",
+      "_source_path": "images/dc87c604f9e5f6be8d5744c6d4eba825f65d5e6f0dde9a72949e6dec6a5edb6a.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

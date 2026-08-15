@@ -1,0 +1,53 @@
+{
+  "id": "1287_p2_Q4(c)",
+  "course": {
+    "code": "URP 4171",
+    "title": "Legal Basis of Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\4th_Year_1st_Term_2015_1287.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write short-notes on the following issues (any two) (10)"
+    },
+    {
+      "type": "text",
+      "value": "i. Obsolete regulations of land acquisition"
+    },
+    {
+      "type": "text",
+      "value": "ii. Problems of minor act"
+    },
+    {
+      "type": "text",
+      "value": "iii. Direction regarding rehabilitation of affected people in “Private Housing Project Land Development Rule, 2004”"
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2015"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1284_p5_Q4(c)",
+  "course": {
+    "code": "CE 3207",
+    "title": "Elements of Civil Engineering Structures",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2022\\3rd_Year_2nd_Term_2022_1284.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Cantilever beam with a length of 9ft supports a uniformly varying load of 1.035 k/ft (15) and its own self weight as shown in the figure below. $\\mathfrak { f } _ { \\mathtt { c } } ^ { \\mathtt { \\prime } } = 3 0 0 0$ psi and $\\mathtt { f } _ { \\mathtt { y } } = 7 2 5 0 0$ psi. Design the beam and draw the x-section and long section of the beam."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

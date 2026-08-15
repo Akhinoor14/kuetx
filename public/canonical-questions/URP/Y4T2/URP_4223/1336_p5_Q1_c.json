@@ -1,0 +1,57 @@
+{
+  "id": "1336_p5_Q1(c)",
+  "course": {
+    "code": "URP 4223",
+    "title": "Urban and Regional Economics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2021\\4th_Year_2nd_Term_2021_1336.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is Comparative Advantage? Following table shows data about two (15) regions (South and North) and two products (Bread and Shirt). Calculate the opportunity cost for each region and product type with the following assumptions:"
+    },
+    {
+      "type": "text",
+      "value": "● Suppose that there are no scale economies in transportation."
+    },
+    {
+      "type": "text",
+      "value": "● Transport cost is independent of the volume shipped."
+    },
+    {
+      "type": "text",
+      "value": "● The two regions specialize only on two products"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Products</td><td rowspan=1 colspan=2>Output per hr/person</td><td rowspan=1 colspan=2>Opportunity Cost</td></tr><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>South</td><td rowspan=1 colspan=1>North</td><td rowspan=1 colspan=1>South</td><td rowspan=1 colspan=1>North</td></tr><tr><td rowspan=1 colspan=1>Bread</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>?</td><td rowspan=1 colspan=1>?</td></tr><tr><td rowspan=1 colspan=1>Shirt</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>?</td><td rowspan=1 colspan=1>?</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Also explain the regional implication if transport cost is reduced in case of bulk shipment."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2021"
+}

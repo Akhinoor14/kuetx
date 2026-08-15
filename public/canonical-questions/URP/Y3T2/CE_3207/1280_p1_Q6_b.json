@@ -1,0 +1,42 @@
+{
+  "id": "1280_p1_Q6(b)",
+  "course": {
+    "code": "CE 3207",
+    "title": "Elements of Civil Engineering Structures",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2018\\3rd_Year_2nd_Term_2018_1280.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 27,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the forces in the member $M _ { 2 } L _ { 3 } , M _ { 2 } U _ { 3 } , U _ { 3 } M _ { 3 } , U _ { 3 } U _ { 4 } , U _ { 4 } L _ { 4 }$ and $M _ { 5 } L _ { 5 }$ of the (27) following bridge truss. Given data: Truck load= 760 Ib/ft of the bridge, floor load= 940 Ib/ft of the brigde, Truss and bracing load= 3200 Ib/ft of the bridge."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b63eb08270cb1c50d85cefaff386c5d7edfa2098b4bb8ca57e7e7b3e5af4e5f4.jpg",
+      "_source_path": "images/b63eb08270cb1c50d85cefaff386c5d7edfa2098b4bb8ca57e7e7b3e5af4e5f4.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1279_p5_Q1(c)",
+  "course": {
+    "code": "URP 3294",
+    "title": "Research Methodology",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2017\\3rd_Year_2nd_Term_2017_1279.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Mr. Nitrogen discovers that 700 square feet of plywood scrap and 480 square feet of white pine scrap are in usable form for the construction of tables and book cases. It takes 16 square feet of plywood and 8 square feet of white pine to make a table, 12 square feet of plywood and 16 square feet of white pine are required to construct a book case. By selling the finished products to a local furniture store Mr. Nitrogen can realize a profit of TK. 250 on each table and TK. 200 ¿Jn each book case. Formulate the problem as a linear programming model to determine how ay he most profitably use the left over wood."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

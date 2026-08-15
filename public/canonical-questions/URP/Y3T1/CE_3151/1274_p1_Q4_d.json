@@ -1,0 +1,41 @@
+{
+  "id": "1274_p1_Q4(d)",
+  "course": {
+    "code": "CE 3151",
+    "title": "Fundamentals of Transportation Engineering",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2023\\3rd_Year_1st_Term_2023_1274.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is hierarchy of roads? Describe the different types of roadway capacity (10) according to O.K. Normann."
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

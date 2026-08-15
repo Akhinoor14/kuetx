@@ -1,0 +1,37 @@
+{
+  "id": "1281_p2_Q7(b)",
+  "course": {
+    "code": "URP 3223",
+    "title": "Regional Development Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\3rd_Year_2nd_Term_2019_1281.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "“Gravity model of human interaction is used to determine market boundary between two (12) centers\"- How? A and B are two regions, 50 km apart from each other, having population of 200,000 and 50,000 respectively. Identify the market boundary of the regions."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2019"
+}

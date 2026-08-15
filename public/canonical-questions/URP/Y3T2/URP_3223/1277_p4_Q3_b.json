@@ -1,0 +1,45 @@
+{
+  "id": "1277_p4_Q3(b)",
+  "course": {
+    "code": "URP 3223",
+    "title": "Regional Development Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\3rd_Year_2nd_Term_2015_1277.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose, a region experienced the following change in basic employments."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Year</td><td rowspan=1 colspan=1>Basic Employment</td></tr><tr><td rowspan=1 colspan=1>2010</td><td rowspan=1 colspan=1>15000</td></tr><tr><td rowspan=1 colspan=1>2015</td><td rowspan=1 colspan=1>35000</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Now, estimate the non-basic employment of this region in the year of 2015, when the value of basic multiplier is 1.5"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2015"
+}

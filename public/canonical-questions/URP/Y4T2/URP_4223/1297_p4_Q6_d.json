@@ -1,0 +1,41 @@
+{
+  "id": "1297_p4_Q6(d)",
+  "course": {
+    "code": "URP 4223",
+    "title": "Urban and Regional Economics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\4th_Year_2nd_Term_2015_1297.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose, you've just found a location (B) where the làurçost is lower than (07) that of the compromise location (A). Now, based on the following information what will be your decisior about shifting the location?"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Labour coefficient</td><td rowspan=1 colspan=1>Distance  from  A(km)</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>5000</td><td rowspan=1 colspan=1>0</td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>2500</td><td rowspan=1 colspan=1>10</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2015"
+}

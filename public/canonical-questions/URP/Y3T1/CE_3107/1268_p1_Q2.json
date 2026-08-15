@@ -1,0 +1,55 @@
+{
+  "id": "1268_p1_Q2",
+  "course": {
+    "code": "CE 3107",
+    "title": "Elements of Solid Mechanics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\3rd_Year_1st_Term_2016_1268.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "a. What is Poisson ratio? Explain with example."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8f269c9cf02615831bed77c61279b299c1706f4c1401542802ce76e73806a4db.jpg",
+      "_source_path": "images/8f269c9cf02615831bed77c61279b299c1706f4c1401542802ce76e73806a4db.jpg"
+    },
+    {
+      "type": "text",
+      "value": "b. Show that a uniform stress distribution can exist only if the resultant of the applied (10) loads passes through the centroid of the cross-section."
+    },
+    {
+      "type": "text",
+      "value": "C. For the truss shown in figure calculate the stresses in members $\\mathrm { C E , D E }$ and DF. (18) The cross-sectional area of each member is $1 . 8 \\ \\mathrm { i n } ^ { 2 }$ Indicate tension (T) or compression (C)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_9d38ad5093b3d10cb27407a60ecd616abcfaea277c6170ee07e28d075cc96a2c.jpg",
+      "_source_path": "images/9d38ad5093b3d10cb27407a60ecd616abcfaea277c6170ee07e28d075cc96a2c.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "1297_p4_Q6(c)",
+  "course": {
+    "code": "URP 4223",
+    "title": "Urban and Regional Economics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\4th_Year_2nd_Term_2015_1297.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose you have three sources of raw materials (A,B,C) and one market (D). (08) You can only choose two material sources and the market at a time. Based on the following informations what will be the possible arrangement of your material sources and market from your industry P. (Considering both imports and exports)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Point Specific weights forimport/export (ton)</td><td rowspan=1 colspan=2>Transporttariff/unit        ofweight /unit ofdistance (Tk.)</td><td rowspan=1 colspan=2>Distance from P(km)</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>100</td><td rowspan=1 colspan=2>50</td><td rowspan=1 colspan=2>350</td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>150</td><td rowspan=1 colspan=2>70</td><td rowspan=1 colspan=2>500</td></tr><tr><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>90</td><td rowspan=1 colspan=2>45</td><td rowspan=1 colspan=2>450</td></tr><tr><td rowspan=1 colspan=1>D</td><td rowspan=1 colspan=1>200</td><td rowspan=1 colspan=1>60</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>470</td><td rowspan=1 colspan=1></td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2015"
+}

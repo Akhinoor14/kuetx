@@ -1,0 +1,46 @@
+{
+  "id": "1288_p1_Q4(d)",
+  "course": {
+    "code": "URP 4000",
+    "title": "Project/Thesis",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\4th_Year_1st_Term_2016_1288.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "What do you mean byISO? Illustrate three ISO certification that relates to (12)   \nEnvironmental Management System."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b55f6b7d96b8d42975306b835f9524634379b9076d0e34bc2e2256fa19080336.jpg",
+      "_source_path": "images/b55f6b7d96b8d42975306b835f9524634379b9076d0e34bc2e2256fa19080336.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2016"
+}

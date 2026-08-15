@@ -1,0 +1,45 @@
+{
+  "id": "1269_p4_Q3",
+  "course": {
+    "code": "URP 3161",
+    "title": "Housing and Real Estate Development Theory",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2017\\3rd_Year_1st_Term_2017_1269.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "a. What are the major sources of sectoral housing in Bangladesh? Which sectoral (12) housing is the most important according to the National Housing Policy (present) of Bangladesh and why?"
+    },
+    {
+      "type": "text",
+      "value": "C. Explain the World Bank (WB) influenced decadal changes in the housing .(10) policies in Bangladesh. What is the present approach of the Bangladesh Government to the massive housing demand?"
+    },
+    {
+      "type": "text",
+      "value": "d. What was the WB condition for site and services? How and why Government (13) site-and-services failed and which component was most significant for the failure?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

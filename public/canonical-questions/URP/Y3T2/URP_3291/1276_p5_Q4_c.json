@@ -1,0 +1,49 @@
+{
+  "id": "1276_p5_Q4(c)",
+  "course": {
+    "code": "URP 3291",
+    "title": "Operations Research and Systems Analysis",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\3rd_Year_2nd_Term_2014_1276.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "Dr. STRONG is a dentist who schedules all her patients for 20 minutes (20) appointments. Some of the patients take more or less than 20 minutes depending on the type of dental work to be done. The following summary shows the various categories of work, their probabilities and the time actually needed to complete the work:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Category</td><td rowspan=1 colspan=1>Time Required (Min)</td><td rowspan=1 colspan=1>Probability of Category</td></tr><tr><td rowspan=1 colspan=1>Filling</td><td rowspan=1 colspan=1>30</td><td rowspan=1 colspan=1>0.30</td></tr><tr><td rowspan=1 colspan=1>Crown</td><td rowspan=1 colspan=1>40</td><td rowspan=1 colspan=1>0.15</td></tr><tr><td rowspan=1 colspan=1>Cleaning</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>0.10</td></tr><tr><td rowspan=1 colspan=1>Extraction</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>0.20</td></tr><tr><td rowspan=1 colspan=1>Check up</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>0.25</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Simuiate the dentist's clinic for three hours and determine the average waiting time for the patients. Assume that all the patients show up at the clinic at exactly their scheduled arrival time starting at 9.00 A.M. Use the following random numbers for handling the above problem:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>42</td><td rowspan=1 colspan=1>25</td><td rowspan=1 colspan=1>84</td><td rowspan=1 colspan=1>57</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>94</td><td rowspan=1 colspan=1>49</td><td rowspan=1 colspan=1>70</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2014"
+}

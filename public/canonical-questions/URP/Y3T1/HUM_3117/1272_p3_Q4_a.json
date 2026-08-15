@@ -1,0 +1,49 @@
+{
+  "id": "1272_p3_Q4(a)",
+  "course": {
+    "code": "HUM 3117",
+    "title": "Accounting and Auditing for Planners",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2021\\3rd_Year_1st_Term_2021_1272.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 35,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following ledger balances are obtained from the books of account of (35) Pioneer Consultant (Pvt) Ltd. for the year ended on June 30, 2020."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=4>Pioneer Consultant (Pvt.) Ltd.</td></tr><tr><td rowspan=1 colspan=4>Trial balance as on June 30, 2020</td></tr><tr><td rowspan=1 colspan=1>Accounts title</td><td rowspan=1 colspan=1>Debit (Taka)</td><td rowspan=1 colspan=1>Accounts title</td><td rowspan=1 colspan=1>Credit (Taka)</td></tr><tr><td rowspan=1 colspan=1>Cash</td><td rowspan=1 colspan=1>18,500</td><td rowspan=1 colspan=1>Loan payable</td><td rowspan=1 colspan=1>20,000</td></tr><tr><td rowspan=1 colspan=1>Bank</td><td rowspan=1 colspan=1>15,300</td><td rowspan=1 colspan=1>Accounts payable</td><td rowspan=1 colspan=1>13,500</td></tr><tr><td rowspan=1 colspan=1>Account receivable</td><td rowspan=1 colspan=1>17,000</td><td rowspan=1 colspan=1>Capital</td><td rowspan=1 colspan=1>42,000</td></tr><tr><td rowspan=1 colspan=1>Prepaid insurance</td><td rowspan=1 colspan=1>9,000</td><td rowspan=1 colspan=1>Service revenue</td><td rowspan=1 colspan=1>86,900</td></tr><tr><td rowspan=1 colspan=1>Supplies</td><td rowspan=1 colspan=1>12,500</td><td rowspan=1 colspan=1>Salaries payable</td><td rowspan=1 colspan=1>7,400</td></tr><tr><td rowspan=1 colspan=1>Building</td><td rowspan=1 colspan=1>71,000</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Drawings</td><td rowspan=1 colspan=1>4,000</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Utilities expenses</td><td rowspan=1 colspan=1>8,500</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Wages</td><td rowspan=1 colspan=1>5,300</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Interest</td><td rowspan=1 colspan=1>1,500</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Advertising expenses</td><td rowspan=1 colspan=1>7,200</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>1,69,800</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>1,69,800</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Other data:   \ni. Depreciation charged on buildings @10% per year.   \nii. Service provided but unbilled taka 5,200.   \niii. Interest accrued on loan payable @9%.   \niv. Insurance expired @500 per month.   \nV. Supplies expense of the year 8,500 taka.   \nvi. Bad debt calculated taka 3,500.   \nRequired:   \n1) A statement of comprehensive income.   \n2) A statement of owner's equity.   \n3) A statement of financial positions."
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

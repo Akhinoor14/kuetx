@@ -1,0 +1,45 @@
+{
+  "id": "1256_p5_Q2(a)",
+  "course": {
+    "code": "URP 2291",
+    "title": "Statistics for Planners-II",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\2nd_Year_2nd_Term_2014_1256.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following table gives the number of good and bad parts produced by each (17) of three shift in a factory:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Shift</td><td rowspan=1 colspan=1>Good</td><td rowspan=1 colspan=1>Bad</td></tr><tr><td rowspan=1 colspan=1>Day</td><td rowspan=1 colspan=1>900</td><td rowspan=1 colspan=1>130</td></tr><tr><td rowspan=1 colspan=1>Evening</td><td rowspan=1 colspan=1>700</td><td rowspan=1 colspan=1>170</td></tr><tr><td rowspan=1 colspan=1>Night</td><td rowspan=1 colspan=1>400</td><td rowspan=1 colspan=1>200</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Is there any association between the shift and the quality of parts produced? (use $x ^ { 2 }$ -test)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2014"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1276_p2_Q7(c)",
+  "course": {
+    "code": "URP 3223",
+    "title": "Regional Development Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\3rd_Year_2nd_Term_2014_1276.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "A tube well taps an artesian aquifer. Find its yield in litres per hour for a drawdown of (11) 3 m when the diameter of the well is 20 cm and the thickness of the aquifer is 30 m. Assume the co-efficient of permeability to be 35 m/day. If the diameter of the well is doubled find the percentage increase in the yield, the other condition remains same. Assume the radius of influence as 300 m in both cases."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2014"
+}

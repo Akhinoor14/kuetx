@@ -1,0 +1,85 @@
+{
+  "id": "1268_p3_Q2(a)",
+  "course": {
+    "code": "HUM 3117",
+    "title": "Accounting and Auditing for Planners",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\3rd_Year_1st_Term_2016_1268.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 28,
+  "content": [
+    {
+      "type": "text",
+      "value": "Affleck's repair shop was started on May 1 by B. Affleck. A summary of May (28) transactions is presented below:"
+    },
+    {
+      "type": "text",
+      "value": "2015 May 01 Invested \\$10,000 cash to start the repair shop."
+    },
+    {
+      "type": "text",
+      "value": "2015 May 02 Purchased equipment for \\$5,000 cash."
+    },
+    {
+      "type": "text",
+      "value": "2015 May 03 Paid \\$400 cash for May office rent."
+    },
+    {
+      "type": "text",
+      "value": "2015 May 04 Paid \\$500 cash for supplies."
+    },
+    {
+      "type": "text",
+      "value": "2015 May 05 Incurred \\$250 of advertising costs in the Beacon News on account."
+    },
+    {
+      "type": "text",
+      "value": "2015 May 06 Received \\$4,100 in cash from customers for repair ser vice"
+    },
+    {
+      "type": "text",
+      "value": "2015 May 07 Withdrew \\$ 500 for personal use."
+    },
+    {
+      "type": "text",
+      "value": "2015 May08Paid employee salaries \\$ 1000."
+    },
+    {
+      "type": "text",
+      "value": "2015 May 09 Paid utility bill \\$ 140."
+    },
+    {
+      "type": "text",
+      "value": "2015 May 10 Provided repair service on account to customers \\$850."
+    },
+    {
+      "type": "text",
+      "value": "2015 May 11 Collected cash of \\$120 for services billed in transaction (10)."
+    },
+    {
+      "type": "text",
+      "value": "Instruction: Journalize the above transactions in the book of B. Affleck."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

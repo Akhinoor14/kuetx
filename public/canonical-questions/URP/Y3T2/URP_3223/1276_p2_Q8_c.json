@@ -1,0 +1,50 @@
+{
+  "id": "1276_p2_Q8(c)",
+  "course": {
+    "code": "URP 3223",
+    "title": "Regional Development Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\3rd_Year_2nd_Term_2014_1276.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "The ordinates of a 2-hr unit hydrograph are given. By using the S-curve technique, (15) calculate the ordinates of a 4-hr unit hydrograph."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Time (hr)</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>14</td><td rowspan=1 colspan=1>16</td><td rowspan=1 colspan=1>18</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>22</td></tr><tr><td rowspan=1 colspan=1>2-hr unit $( m ^ { 3 } 1 \\mathsf { s } )$ </td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>25</td><td rowspan=1 colspan=1>100</td><td rowspan=1 colspan=1>160</td><td rowspan=1 colspan=1>190</td><td rowspan=1 colspan=1>170</td><td rowspan=1 colspan=1>110</td><td rowspan=1 colspan=1>70</td><td rowspan=1 colspan=1>30</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>0</td></tr></table>"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_5fe9dc3564d427c158b25cf2fae1d805766d7220ace4478f5ed2361b2a4480e3.jpg",
+      "_source_path": "images/5fe9dc3564d427c158b25cf2fae1d805766d7220ace4478f5ed2361b2a4480e3.jpg"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>P</td><td>G =0.0</td><td>G =0.1</td><td></td><td>G =0.2</td><td>G =0.3</td><td>G =0.4</td><td>G =0.5</td><td></td><td>G =0.6</td></tr><tr><td>0.9999</td><td>-3.7190?</td><td></td><td>-3.50703</td><td>-3.29921</td><td>-3.09631</td><td>-2.89907</td><td></td><td>-2.70836</td><td>-2.52507</td></tr><tr><td>0.9995</td><td>-3.29053</td><td></td><td>-3.12767</td><td>-2.96698</td><td>-2.80889</td><td>-2.65390</td><td></td><td>-2.50257</td><td>-2.35549</td></tr><tr><td>0.9990</td><td>-3.09023</td><td></td><td>-2.94834</td><td>-2.80786</td><td>-2.66915</td><td>-2.53261</td><td>-2.39867</td><td></td><td>-2.26780</td></tr><tr><td>0.9980</td><td>-2.87816</td><td></td><td>-2.75706</td><td>-2.63672</td><td>-2.51741</td><td>-2.39942</td><td>-2.28311</td><td></td><td>-2.16884</td></tr><tr><td>0.9950</td><td>-2.57583</td><td></td><td>-2.48187</td><td>-2.38795</td><td>-2.29423</td><td>-2.20092</td><td>-2.10825</td><td></td><td>-2.01644</td></tr><tr><td>0.9900</td><td>-2.32635</td><td></td><td>-2.25258</td><td>-2.17840</td><td>-2.10394</td><td>-2.02933</td><td>-1.95472</td><td></td><td>-1.88029</td></tr><tr><td>0.9800</td><td>-2.05375</td><td></td><td>-1.99973</td><td>-1.94499</td><td>-1.88959</td><td>-1.83361</td><td>-1.77716</td><td></td><td>-1.72033</td></tr><tr><td>0.9750</td><td>-1.95996</td><td></td><td>-1.91219</td><td>-1.86360</td><td>-1.81427</td><td>-1.76427</td><td></td><td>-1.71366</td><td>-1.66253</td></tr><tr><td>0.9600</td><td>-1.75069</td><td></td><td>-1.71580</td><td>-1.67999</td><td>-1.64324</td><td>-1.60574</td><td></td><td>-1.56740</td><td>-1.52830</td></tr><tr><td>0.9500</td><td>-1.64485</td><td></td><td>-1.61594</td><td>-1.58607</td><td>-1.55527</td><td>-1.52357</td><td>-1.49101</td><td></td><td>-1.45762</td></tr><tr><td>0.9000</td><td>-1.28155</td><td></td><td>-1.27037</td><td>-1.25824</td><td>-1.24516</td><td>-1.23114</td><td>-1.21618</td><td></td><td>-1.20028</td></tr><tr><td>0.8000</td><td>-0.84162</td><td></td><td>-0.84611</td><td>-0.84986</td><td>-0.85285</td><td>-0.85508</td><td>-0.85653</td><td></td><td>-0.85718</td></tr><tr><td>0.7000</td><td>-0.52440</td><td></td><td>-0.53624</td><td>-0.54757</td><td>-0.55839</td><td>-0.56867</td><td>-0.57840</td><td></td><td>-0.58757</td></tr><tr><td>0.6000</td><td>-0.25335</td><td></td><td>-0.26882</td><td>-0.28403</td><td>-0.29897</td><td>-0.31362</td><td>-0.32796</td><td></td><td>-0.34198</td></tr><tr><td>0.5704</td><td>-0.17733</td><td></td><td>-0.19339</td><td>-0.20925</td><td>-0.22492</td><td>-0.24037</td><td>-0.25558</td><td></td><td>-0.27047</td></tr><tr><td>0.5000</td><td>0.0</td><td></td><td>-0.01662</td><td>-0.03325</td><td>-0.04993</td><td>-0.06651</td><td>-0.08302</td><td></td><td>-0.09945</td></tr><tr><td>0.4296</td><td>0.17733</td><td></td><td>0.16111</td><td>0.14472</td><td>0.12820</td><td>0.11154</td><td></td><td>0.09478</td><td>0.07791</td></tr><tr><td>0.4000</td><td>0.25335</td><td></td><td>0.23763</td><td>0.22168</td><td>0.20552</td><td>0.18916</td><td></td><td>0.17261</td><td>0.15589</td></tr><tr><td>0.3000</td><td>0.52440</td><td></td><td>0.51207</td><td>0.49927</td><td>0.48600</td><td>0.47228</td><td></td><td>0.45812</td><td>0.44352</td></tr><tr><td>0.2000</td><td>0.84162</td><td></td><td>0.83639</td><td>0.83044</td><td>0.82377</td><td>0.81638</td><td></td><td>0.80829</td><td>0.79950</td></tr><tr><td>0.1000</td><td>1.28155</td><td></td><td>1.29178</td><td>1.30105</td><td>1.30936</td><td>1.31671</td><td></td><td>1.32309</td><td>1.32850</td></tr><tr><td>0.0500</td><td>1.64485</td><td></td><td>1.67279</td><td>1.69971</td><td>1.72562</td><td>1.75048</td><td></td><td>1.77428</td><td>1.79701</td></tr><tr><td>0.0400</td><td>1.75069</td><td></td><td>1.78462</td><td>1.81756</td><td>1.84949</td><td>1.88039</td><td></td><td>1.91022</td><td>1.93896</td></tr><tr><td>0.0250</td><td>1.05996</td><td></td><td>2.00688</td><td>2.05290</td><td>2.09795</td><td>2.14202</td><td></td><td>2.18505</td><td>2.22702</td></tr><tr><td>0.0200</td><td>2.05375</td><td></td><td>2.10697</td><td>2.15935</td><td>2.21081</td><td>2.26133</td><td></td><td>2.31084</td><td>2.35931</td></tr><tr><td>0.0100</td><td>?.32635</td><td></td><td>2.39961</td><td>2.47226</td><td>2.54421</td><td>2.61539</td><td></td><td>2.68572</td><td>2.75514</td></tr><tr><td>0.0050</td><td>2.57583</td><td></td><td>2.66965</td><td>2.76321</td><td>2.85636</td><td>2.94900</td><td></td><td>3.04102</td><td>3.13232</td></tr><tr><td>0.0020</td><td>2.87815</td><td></td><td>2.94978</td><td>3.12159</td><td>3.24371</td><td>3.36566</td><td></td><td>3.48737</td><td>3.60872</td></tr><tr><td>0.0010</td><td>3.09023</td><td></td><td>3.?3322</td><td>3.37703</td><td>3.52139</td><td>3.66608</td><td></td><td>3.81090</td><td>3.95567</td></tr><tr><td>0.0005</td><td>3.29053</td><td></td><td>3.45513</td><td>3.62113</td><td>3.78820</td><td>3.95605</td><td></td><td>4.12443</td><td>4.29311</td></tr><tr><td>0.0001</td><td>3.71902</td><td></td><td>3.93453</td><td>4.15301</td><td>4.37394</td><td>4.59687</td><td></td><td>4.82141</td><td>5.04718</td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2014"
+}

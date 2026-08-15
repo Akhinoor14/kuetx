@@ -1,0 +1,45 @@
+{
+  "id": "1271_p2_Q3(b)",
+  "course": {
+    "code": "URP 3121",
+    "title": "Rural Development Planning-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2020\\3rd_Year_1st_Term_2020_1271.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "“Elaborate the concept and indicators used in Physical Quality of Life Index (15) (PQLI) for poverty gap identification. Calculate PQLI for the following countries and explain the result."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=2 colspan=1>Country</td><td rowspan=1 colspan=1>Life expectancy atage one</td><td rowspan=1 colspan=1>Infant mortality</td><td rowspan=1 colspan=1>Literacy</td></tr><tr><td rowspan=1 colspan=1>Year</td><td rowspan=1 colspan=1>Per 1000 live birth</td><td rowspan=1 colspan=1>Percent</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>65</td><td rowspan=1 colspan=1>165</td><td rowspan=1 colspan=1>25</td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>71</td><td rowspan=1 colspan=1>41</td><td rowspan=1 colspan=1>36</td></tr><tr><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>66</td><td rowspan=1 colspan=1>83</td><td rowspan=1 colspan=1>85</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Section – B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2020"
+}

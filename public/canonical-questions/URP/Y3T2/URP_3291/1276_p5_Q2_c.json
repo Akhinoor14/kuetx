@@ -1,0 +1,46 @@
+{
+  "id": "1276_p5_Q2(c)",
+  "course": {
+    "code": "URP 3291",
+    "title": "Operations Research and Systems Analysis",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\3rd_Year_2nd_Term_2014_1276.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the Critical Path for the following network of a project."
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_119ea4f9850296b06adcc007706c3f5e7035549df8759b3135db0ada0ba87d8f.jpg",
+      "_source_path": "images/119ea4f9850296b06adcc007706c3f5e7035549df8759b3135db0ada0ba87d8f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2014"
+}

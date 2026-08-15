@@ -1,0 +1,46 @@
+{
+  "id": "1260_p5_Q4(c)",
+  "course": {
+    "code": "URP 2291",
+    "title": "Statistics for Planners-II",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2018\\2nd_Year_2nd_Term_2018_1260.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following results of the height (X) and weight (Y) of 1,000 managers are (10) given,"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r } { \\mathsf { \\overline { { M } } e a n i } \\left( \\mathsf { X } \\right) = 6 8 . 0 0 ^ { n } , \\mathsf { \\overline { { M } } e a n \\ ( Y ) } = 1 5 8 \\mathrm { \\ 1 b s , \\thinspace S t a n d a r d \\ D e v i a t i o n \\ ( X ) } = 2 . 5 0 ^ { n } } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Coefficient of correlation between X and Y = 0.6. Estimate from the above data the height of a manager whose weight is 200 Ibs."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

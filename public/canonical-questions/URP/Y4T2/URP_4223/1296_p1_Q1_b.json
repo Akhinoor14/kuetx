@@ -1,0 +1,53 @@
+{
+  "id": "1296_p1_Q1(b)",
+  "course": {
+    "code": "URP 4223",
+    "title": "Urban and Regional Economics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\4th_Year_2nd_Term_2014_1296.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is opportunity cost? Following table shows data abouttwo-régions (South (25) and North) and two products (Bread and Shirt). Calculate the opportunity cost for each region and product type with the following assumptions:"
+    },
+    {
+      "type": "text",
+      "value": "• Suppose that there are no scale economies in transportation."
+    },
+    {
+      "type": "text",
+      "value": "Transport cost per unit of shipped per mile is independent of the volume shipped."
+    },
+    {
+      "type": "text",
+      "value": "• The two regions specialises only on two products"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Products</td><td rowspan=1 colspan=2>Output per hr/person</td><td rowspan=1 colspan=2>Opportunity Cost</td></tr><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>South</td><td rowspan=1 colspan=1>North</td><td rowspan=1 colspan=1>South</td><td rowspan=1 colspan=1>North</td></tr><tr><td rowspan=1 colspan=1>Bread</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>?</td><td rowspan=1 colspan=1>?</td></tr><tr><td rowspan=1 colspan=1>Shirts</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>?</td><td rowspan=1 colspan=1>?</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2014"
+}

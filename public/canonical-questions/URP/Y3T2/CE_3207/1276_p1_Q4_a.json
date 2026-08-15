@@ -1,0 +1,51 @@
+{
+  "id": "1276_p1_Q4(a)",
+  "course": {
+    "code": "CE 3207",
+    "title": "Elements of Civil Engineering Structures",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\3rd_Year_2nd_Term_2014_1276.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the wind load at each floor level for the following 6-storied building as (17) shown in the figure below. Maximum wind velocity = 150 km/hr Pressure co-efficient = 1.50 URP Structural importance co-efficient = 1.00 Ronta: Exposure type-c Library"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e61d15fbbcfbb52a6a86ff9775e0fd7551a5646582e35f429f66959bd6b93ca5.jpg",
+      "_source_path": "images/e61d15fbbcfbb52a6a86ff9775e0fd7551a5646582e35f429f66959bd6b93ca5.jpg"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Height (m)</td><td rowspan=1 colspan=1> $C _ { \\mathsf { G } }$ </td><td rowspan=1 colspan=1> $\\complement _ { z }$ </td></tr><tr><td rowspan=1 colspan=1>0-4.5</td><td rowspan=1 colspan=1>1.15</td><td rowspan=1 colspan=1>1.20</td></tr><tr><td rowspan=1 colspan=1>6.0</td><td rowspan=1 colspan=1>1.14</td><td rowspan=1 colspan=1>1.26</td></tr><tr><td rowspan=1 colspan=1>9.0</td><td rowspan=1 colspan=1>1.12</td><td rowspan=1 colspan=1>1.37</td></tr><tr><td rowspan=1 colspan=1>12.0</td><td rowspan=1 colspan=1>1.11</td><td rowspan=1 colspan=1>1.45</td></tr><tr><td rowspan=1 colspan=1>15.0</td><td rowspan=1 colspan=1>1.10</td><td rowspan=1 colspan=1>1.52</td></tr><tr><td rowspan=1 colspan=1>18.0</td><td rowspan=1 colspan=1>1.09</td><td rowspan=1 colspan=1>1.57</td></tr></table>"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_bb4f025cbe1c27fb9221acd0f7525b0e6d28621a5d743ccb76d3d1632ca20aa7.jpg",
+      "_source_path": "images/bb4f025cbe1c27fb9221acd0f7525b0e6d28621a5d743ccb76d3d1632ca20aa7.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2014"
+}

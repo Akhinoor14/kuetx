@@ -1,0 +1,46 @@
+{
+  "id": "1287_p1_Q8(b)",
+  "course": {
+    "code": "URP 4141",
+    "title": "Environmental Planning and Management",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\4th_Year_1st_Term_2015_1287.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "What do you understand by environmental resource inventory (ERI)? (10) What Does an ERI Include?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0dd90798da0fb89631d4a086cd839ea14718991e17b91c9cfcd526e938e69aa9.jpg",
+      "_source_path": "images/0dd90798da0fb89631d4a086cd839ea14718991e17b91c9cfcd526e938e69aa9.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Write down a case study on drainage and environmental management (20 plan at municipality level in context of Bangladesh and find out the loopholes as per your thinking."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2015"
+}

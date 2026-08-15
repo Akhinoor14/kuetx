@@ -1,0 +1,46 @@
+{
+  "id": "1281_p4_Q2(c)",
+  "course": {
+    "code": "CE 3207",
+    "title": "Elements of Civil Engineering Structures",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\3rd_Year_2nd_Term_2019_1281.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the following member, calculate the top fiber and bottom fiber stress due to (15) prestress force of 1620 KN by the $1 ^ { s t }$ and $2 ^ { n d }$ concept at the mid section."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_6b2df33ad564b4c4234d02f05e89c6c0eeb964f9ef2c043d86b7f6ca25966271.jpg",
+      "_source_path": "images/6b2df33ad564b4c4234d02f05e89c6c0eeb964f9ef2c043d86b7f6ca25966271.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(20)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2019"
+}

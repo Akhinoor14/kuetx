@@ -1,0 +1,37 @@
+{
+  "id": "1268_p2_Q6(c)",
+  "course": {
+    "code": "CE 3151",
+    "title": "Fundamentals of Transportation Engineering",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\3rd_Year_1st_Term_2016_1268.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "The design speed of a highway is 80 kmph. There is a horizontal curve (11) of radius 140 km. Calculate the super elevation needed to.maintain this speed. If maximum super elevation of 1 in 15 is not to be exceeded, calculate to the maximum allowable speed on this horizontal curve."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

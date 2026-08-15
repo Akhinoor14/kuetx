@@ -1,0 +1,37 @@
+{
+  "id": "1268_p2_Q7(a)",
+  "course": {
+    "code": "CE 3151",
+    "title": "Fundamentals of Transportation Engineering",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\3rd_Year_1st_Term_2016_1268.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": "With the help of neat sketches, explain the methods of introducing (09) super elevation."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

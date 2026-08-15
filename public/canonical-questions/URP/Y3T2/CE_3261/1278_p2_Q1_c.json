@@ -1,0 +1,45 @@
+{
+  "id": "1278_p2_Q1(c)",
+  "course": {
+    "code": "CE 3261",
+    "title": "Water Resources Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\3rd_Year_2nd_Term_2016_1278.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "A catchment has six rain-gauge stations. In a year the annual rainfall recorded by the (12) gauges are as follows-"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Station</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>D</td><td rowspan=1 colspan=1>E</td><td rowspan=1 colspan=1>F</td></tr><tr><td rowspan=1 colspan=1>Rainfall (cm)</td><td rowspan=1 colspan=1>82.6</td><td rowspan=1 colspan=1>102.9</td><td rowspan=1 colspan=1>180.3</td><td rowspan=1 colspan=1>110.3</td><td rowspan=1 colspan=1>98.8</td><td rowspan=1 colspan=1>136.7</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "For a 10% error in the estimation of the mean rainfall, calculate the optimum number of stations in the catchment."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

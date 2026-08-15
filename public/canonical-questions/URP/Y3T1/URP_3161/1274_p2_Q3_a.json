@@ -1,0 +1,37 @@
+{
+  "id": "1274_p2_Q3(a)",
+  "course": {
+    "code": "URP 3161",
+    "title": "Housing and Real Estate Development Theory",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2023\\3rd_Year_1st_Term_2023_1274.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write a short note on the priorities of the National Housing Policy, 2016. In (18) reference the subsequent policy adopted by the Bangladesh government, explain why or why not this housing this policy will make a significant contribution in the housing supply in Bangladesh."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

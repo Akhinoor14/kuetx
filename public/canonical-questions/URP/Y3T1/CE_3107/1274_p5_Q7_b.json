@@ -1,0 +1,64 @@
+{
+  "id": "1274_p5_Q7(b)",
+  "course": {
+    "code": "CE 3107",
+    "title": "Elements of Solid Mechanics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2023\\3rd_Year_1st_Term_2023_1274.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 22,
+  "content": [
+    {
+      "type": "text",
+      "value": "Each of the concurrent force is in static equilibrium as shown:"
+    },
+    {
+      "type": "text",
+      "value": "(22)"
+    },
+    {
+      "type": "text",
+      "value": "(i) Construct the free body diagram of each problems."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Solve for the unknown forces to maintain static equilibrium."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_98dc4084511f82231dc9cae11762567b3161e143a05e4842686a88012a0ffcf5.jpg",
+      "_source_path": "images/98dc4084511f82231dc9cae11762567b3161e143a05e4842686a88012a0ffcf5.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a5a9127767bca253bb54177f686e2a982f573adb7ea1e76932253cbed9e120bb.jpg",
+      "_source_path": "images/a5a9127767bca253bb54177f686e2a982f573adb7ea1e76932253cbed9e120bb.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_c72faf4996badccf60c30daf1a80285bbce07e049e27c820a82a9105478c8b01.jpg",
+      "_source_path": "images/c72faf4996badccf60c30daf1a80285bbce07e049e27c820a82a9105478c8b01.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

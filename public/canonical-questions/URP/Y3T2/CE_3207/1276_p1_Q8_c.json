@@ -1,0 +1,47 @@
+{
+  "id": "1276_p1_Q8(c)",
+  "course": {
+    "code": "CE 3207",
+    "title": "Elements of Civil Engineering Structures",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\3rd_Year_2nd_Term_2014_1276.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 21,
+  "content": [
+    {
+      "type": "text",
+      "value": "Design web reinforcement for the beam as shown in figure below. Use $\\mathop { \\mathsf { f } _ { \\mathsf { c } } ^ { \\prime } } = 4$ (21) ksi and $t _ { y } = 4 0$ ksi."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f0ff433cad21f199afc4b70635bfe915668e7653cead4358ed57a5c30d4d85f1.jpg",
+      "_source_path": "images/f0ff433cad21f199afc4b70635bfe915668e7653cead4358ed57a5c30d4d85f1.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_cd4815b2d0af4ad4feab46114428c2883914cbc7ea5b636117301c55264d9b20.jpg",
+      "_source_path": "images/cd4815b2d0af4ad4feab46114428c2883914cbc7ea5b636117301c55264d9b20.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2014"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1278_p4_Q4(b)",
+  "course": {
+    "code": "URP 3223",
+    "title": "Regional Development Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\3rd_Year_2nd_Term_2016_1278.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "The South-East economy was dependent on two industries only: A, employing 5 (10) million people at the beginning of the periods and B, employing 3 million and both were growing faster than the national rate of approximately 6%, A at 8% and B at 11%, find out the shift component."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

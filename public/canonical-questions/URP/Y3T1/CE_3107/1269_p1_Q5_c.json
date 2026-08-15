@@ -1,0 +1,42 @@
+{
+  "id": "1269_p1_Q5(c)",
+  "course": {
+    "code": "CE 3107",
+    "title": "Elements of Solid Mechanics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2017\\3rd_Year_1st_Term_2017_1269.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Two spheres are at rest against smooth surfaces, as shown below. Sphere A weighs (14) 3000 Ib and sphere B weighs 500 Ib. Let F= 1000 Ib and $Q = 7 5 ^ { \\circ }$ , Find the reaction at C, D and E."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_4a3b9c829fb9ee6af489f0c795d3e01e3ca81366a6b8fd1db04072f68a55bd82.jpg",
+      "_source_path": "images/4a3b9c829fb9ee6af489f0c795d3e01e3ca81366a6b8fd1db04072f68a55bd82.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

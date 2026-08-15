@@ -1,0 +1,54 @@
+{
+  "id": "1256_p5_Q4(c)",
+  "course": {
+    "code": "URP 2291",
+    "title": "Statistics for Planners-II",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\2nd_Year_2nd_Term_2014_1256.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "The table gives:"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>x</td><td rowspan=1 colspan=1>15</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>28</td><td rowspan=1 colspan=1>32</td><td rowspan=1 colspan=1>40</td><td rowspan=1 colspan=1>42</td></tr><tr><td rowspan=1 colspan=1>Y</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>22</td><td rowspan=1 colspan=1>30</td><td rowspan=1 colspan=1>36</td><td rowspan=1 colspan=1>38</td><td rowspan=1 colspan=1>48</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ae3650c6fddbce75ab1b92ed4c937c360b40c9f884bc3503930c6e1936026be5.jpg",
+      "_source_path": "images/ae3650c6fddbce75ab1b92ed4c937c360b40c9f884bc3503930c6e1936026be5.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2014"
+}

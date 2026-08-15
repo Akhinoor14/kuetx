@@ -1,0 +1,49 @@
+{
+  "id": "1277_p1_Q4(a)",
+  "course": {
+    "code": "CE 3207",
+    "title": "Elements of Civil Engineering Structures",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\3rd_Year_2nd_Term_2015_1277.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "A concrete beam with a rectangular section 300 mm wide and 500 mm deep is prestressed by 2 post-tensioned cables of area 600 mm² each. Initially stressed to 1600 N/mm². The cables are located at a constant ecentricity of 100 mm throughout the length of the beam having a span of 10 m. The modulus of elasticity of steel and concrete is 210 and 38 kN/mm², respectively-"
+    },
+    {
+      "type": "text",
+      "value": "(20)"
+    },
+    {
+      "type": "text",
+      "value": "i. Neglecting all losses, find the deflection at the centre of span when it is supporting its own weight."
+    },
+    {
+      "type": "text",
+      "value": "ii. Allowing for 20% loss in prestress, find the final deflection at the centre of span when it carries an imposed load of 18 kN/m. $\\mathsf { D } _ { \\mathsf { c } } = 2 4 \\mathsf { k N } / \\mathsf { m } ^ { 3 }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2015"
+}

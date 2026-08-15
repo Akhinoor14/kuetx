@@ -1,0 +1,41 @@
+{
+  "id": "1270_p5_Q3(b)",
+  "course": {
+    "code": "URP 3121",
+    "title": "Rural Development Planning-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\3rd_Year_1st_Term_2019_1270.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine (i) Head Count Ratio (ii) Poverty Gap Index (iii) Squared Poverty (15) Gap Index for the following countries and expiain the results. Assume poverty line is 110000."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=5>Expenditure for each individuals in countries</td></tr><tr><td rowspan=1 colspan=1>X</td><td rowspan=1 colspan=1>30,000</td><td rowspan=1 colspan=1>11,5000</td><td rowspan=1 colspan=1>11,0000</td><td rowspan=1 colspan=1>90,000</td></tr><tr><td rowspan=1 colspan=1>Y</td><td rowspan=1 colspan=1>45,000</td><td rowspan=1 colspan=1>50,000</td><td rowspan=1 colspan=1>95,000</td><td rowspan=1 colspan=1>25,000</td></tr><tr><td rowspan=1 colspan=1>Z</td><td rowspan=1 colspan=1>15,0000</td><td rowspan=1 colspan=1>80,000</td><td rowspan=1 colspan=1>13,0000</td><td rowspan=1 colspan=1>15,0000</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

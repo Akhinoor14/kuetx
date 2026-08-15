@@ -1,0 +1,37 @@
+{
+  "id": "1270_p1_Q7(c)",
+  "course": {
+    "code": "CE 3107",
+    "title": "Elements of Solid Mechanics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\3rd_Year_1st_Term_2019_1270.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The lap joint shown in the following figure is fastened by four 3/8 in diameter rivets. (15 Calculate the maximum safe load F that can be applied if the shearing stress in the rivets is limited to 28 ksi and the bearing stress in the plate is limited to 36 ksi. Assume the applied load is uniformly distributed among the four rivets. Also determine the normal stress of the plate."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "1284_p3_Q8(b)",
+  "course": {
+    "code": "URP 3231",
+    "title": "Transportation Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2022\\3rd_Year_2nd_Term_2022_1284.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "A trip table (veh/hr) needs to be loaded on the network shown in figure. Find (20) the new link travel time using capacity restrained assignment. Assume capacity of each link to be 5750 veh/hr."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>ToFrom</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>5</td></tr><tr><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>475</td><td rowspan=1 colspan=1>570</td><td rowspan=1 colspan=1>665</td><td rowspan=1 colspan=1>285</td></tr><tr><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>380</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>285</td><td rowspan=1 colspan=1>570</td><td rowspan=1 colspan=1>760</td></tr><tr><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>855</td><td rowspan=1 colspan=1>380</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>190</td><td rowspan=1 colspan=1>475</td></tr><tr><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>760</td><td rowspan=1 colspan=1>665</td><td rowspan=1 colspan=1>855</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>285</td></tr><tr><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>285</td><td rowspan=1 colspan=1>380</td><td rowspan=1 colspan=1>475</td><td rowspan=1 colspan=1>570</td><td rowspan=1 colspan=1>0</td></tr></table>"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f906ce3a1536b5f15dcdff3a88c1cc208943af46113951043a58ff24bf30e0cd.jpg",
+      "_source_path": "images/f906ce3a1536b5f15dcdff3a88c1cc208943af46113951043a58ff24bf30e0cd.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

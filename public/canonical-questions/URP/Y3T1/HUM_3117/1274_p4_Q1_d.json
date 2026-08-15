@@ -1,0 +1,45 @@
+{
+  "id": "1274_p4_Q1(d)",
+  "course": {
+    "code": "HUM 3117",
+    "title": "Accounting and Auditing for Planners",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2023\\3rd_Year_1st_Term_2023_1274.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "How to determine “Debit\" and “Credit\" of account."
+    },
+    {
+      "type": "text",
+      "value": "2Firoz Kazi is a lawyer practicing in Dhaka Judge Court. He starts a sole proprietorship law firm in the name of Kazi Legal Services. During the first month of operation April 2023, Kazi engages in the following transactions."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>2023April 1</td><td rowspan=1 colspan=1>Kazi invested TK 2,00,000 cash to begin the firm.</td></tr><tr><td rowspan=1 colspan=1>April 2</td><td rowspan=1 colspan=1>Purchased office supplies on account at a cost of TK 2,500.</td></tr><tr><td rowspan=1 colspan=1>April 3</td><td rowspan=1 colspan=1>Furniture purchased for office use TK 60,000 in cash.</td></tr><tr><td rowspan=1 colspan=1>April 4</td><td rowspan=1 colspan=1>Deals a case for one client and received cash TK 9,000.</td></tr><tr><td rowspan=1 colspan=1>April 5</td><td rowspan=1 colspan=1>Cash paid to creditor transaction April-2.</td></tr><tr><td rowspan=1 colspan=1>April 6</td><td rowspan=1 colspan=1>Advertisement bill received but not paid TK 5,000.</td></tr><tr><td rowspan=1 colspan=1>April 7</td><td rowspan=1 colspan=1>Utility bill received and paid in cash TK 500.</td></tr><tr><td rowspan=1 colspan=1>April 9</td><td rowspan=1 colspan=1>Pay TK 1,000 cash from personal fund for a personal trip to Rajshahi.</td></tr><tr><td rowspan=1 colspan=1>April 10</td><td rowspan=1 colspan=1>Kazi withdraw cash of TK 2,500 for personal use from the firm.</td></tr><tr><td rowspan=1 colspan=1>April 12</td><td rowspan=1 colspan=1>Cash paid for advertisement bill transaction April-6</td></tr><tr><td rowspan=1 colspan=2>Required:(a) Prepare Journal(b) Prepare a tabular summary and show the effects on accounting equation.Kazi uses the chart of accounts: Cash + supplies + furniture = Accounts payable +Kazi Capital. Other revenue expense and income are: Advertisement expense,Utility expense, Fees earned account.</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "1284_p2_Q7(b)",
+  "course": {
+    "code": "URP 3291",
+    "title": "Operations Research and Systems Analysis",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2022\\3rd_Year_2nd_Term_2022_1284.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "An urn always contains 4 balls. The ball colors are red and blue. We can say that the State i,  = 0.1.2.3.4, if the urn contains i red balls. At each stage, a ball Randomly chosen and then replaced by new ball, which with a probability of 0.7 is the same color. and with a probability of 0.3 is the opposite color, as the ball it replaces. Find its transition probability matrix with detailed calculation."
+    },
+    {
+      "type": "text",
+      "value": "(18)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

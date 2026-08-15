@@ -1,0 +1,42 @@
+{
+  "id": "1274_p5_Q1(c)",
+  "course": {
+    "code": "CE 3107",
+    "title": "Elements of Solid Mechanics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2023\\3rd_Year_1st_Term_2023_1274.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "A rod is composed of an alumunium section rigidly attached between steel and bronze (11) sections, as shown in figure below. The cross sectional area of rod is 0.6 in² and 0.3 in²(steel). Determine the stress in each section."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f306942e9b609b9d166fbb06d1d832a3021f6620503a91ceb0b6682ac4291028.jpg",
+      "_source_path": "images/f306942e9b609b9d166fbb06d1d832a3021f6620503a91ceb0b6682ac4291028.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

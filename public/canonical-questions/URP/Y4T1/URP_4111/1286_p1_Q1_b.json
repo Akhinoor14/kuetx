@@ -1,0 +1,50 @@
+{
+  "id": "1286_p1_Q1(b)",
+  "course": {
+    "code": "URP 4111",
+    "title": "Utility Services and Infrastructure Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\4th_Year_1st_Term_2014_1286.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "Identify the shortcomings of Heuristic Models."
+    },
+    {
+      "type": "text",
+      "value": "(05)"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_546d86a2ddbe427a967feec8a9356ac347410e5c22220e42d00e6426ed9ee30e.jpg",
+      "_source_path": "images/546d86a2ddbe427a967feec8a9356ac347410e5c22220e42d00e6426ed9ee30e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2014"
+}

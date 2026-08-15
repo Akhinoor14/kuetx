@@ -1,0 +1,61 @@
+{
+  "id": "1284_p5_Q7(c)",
+  "course": {
+    "code": "CE 3207",
+    "title": "Elements of Civil Engineering Structures",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2022\\3rd_Year_2nd_Term_2022_1284.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the earthquake load at each floor level of a typical 6 storied hospital (15) building having equal height of 3.5m in Sylhet city."
+    },
+    {
+      "type": "text",
+      "value": "Floor area= 30m x 45m"
+    },
+    {
+      "type": "text",
+      "value": "Structural importance $_ { \\mathsf { C O - e f f i c i e n t } } = 1 . 0$"
+    },
+    {
+      "type": "text",
+      "value": "Response modification co-efficient =1.2"
+    },
+    {
+      "type": "text",
+      "value": "The building is located at seismic zone $\\scriptstyle ( z = 0 . 0 7 5 )$"
+    },
+    {
+      "type": "text",
+      "value": "Steel building frame $( \\mathsf { C } _ { \\mathsf { t } } = 0 . 0 8 3 )$"
+    },
+    {
+      "type": "text",
+      "value": "Seismic load (dead load) = 18000 KN/floor"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

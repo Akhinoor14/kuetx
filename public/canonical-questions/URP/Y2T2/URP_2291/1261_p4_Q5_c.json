@@ -1,0 +1,45 @@
+{
+  "id": "1261_p4_Q5(c)",
+  "course": {
+    "code": "URP 2291",
+    "title": "Statistics for Planners-II",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\2nd_Year_2nd_Term_2019_1261.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "A company gives on-the-job training to its salesmen which is followed by a test. (13) It is considering whether it should terminate the services of any salesman who does not do well in the test. The following data give the test scores and sales made by 9 (nine) salesmen during the last one year."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Test scores</td><td rowspan=1 colspan=1>14</td><td rowspan=1 colspan=1>19</td><td rowspan=1 colspan=1>24</td><td rowspan=1 colspan=1>21</td><td rowspan=1 colspan=1>26</td><td rowspan=1 colspan=1>22</td><td rowspan=1 colspan=1>15</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>19</td></tr><tr><td rowspan=1 colspan=1>Sales (BDT&#x27;000)</td><td rowspan=1 colspan=1>31</td><td rowspan=1 colspan=1>36</td><td rowspan=1 colspan=1>48</td><td rowspan=1 colspan=1>37</td><td rowspan=1 colspan=1>50</td><td rowspan=1 colspan=1>45</td><td rowspan=1 colspan=1>33</td><td rowspan=1 colspan=1>41</td><td rowspan=1 colspan=1>39</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Compute the coefficient of correlation between test scores and sales. Does it indicate that termination of the services of salesman with low test score is justified?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

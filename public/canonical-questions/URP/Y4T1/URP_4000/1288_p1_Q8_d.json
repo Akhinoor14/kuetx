@@ -1,0 +1,59 @@
+{
+  "id": "1288_p1_Q8(d)",
+  "course": {
+    "code": "URP 4000",
+    "title": "Project/Thesis",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\4th_Year_1st_Term_2016_1288.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "A completely mixed lake receives two inflows: natural stream flow 0.1 m3/s, (15) wastewater discharge 0.054 m3/s and has a constant volume of $2 \\times 1 0 ^ { 6 }$ m3. Provided that the wastewater has 20 mg/L NH3-N and stream has 1 mg/L NH3-N. Coattes"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_cf6e6d23426df6846b89ee29e621783d773b87125bd81b73ceb233236f0cb8dc.jpg",
+      "_source_path": "images/cf6e6d23426df6846b89ee29e621783d773b87125bd81b73ceb233236f0cb8dc.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Bacteria in the lake convert $N H _ { 3 }$ to $N O _ { 3 }$ by a process called nitrification."
+    },
+    {
+      "type": "text",
+      "value": "$- r _ { N } = k ^ { \\star } C _ { N }$ where $\\textsf { k } = a$ first-order rate constant $= 0 . 0 3 \\ d a y ^ { - 1 }$ and $C _ { N } =$ concentration of ammonia-nitrogen mg/L. Find the lake and outflow NH $H _ { 3 } - N$"
+    },
+    {
+      "type": "text",
+      "value": "Ammonia is very toxic to fish, 1 mg/L $N H _ { 3 } - N .$ Does the amount of natural nitrification in the lake allow wastewater discharge of 20 mg/L ammonia-N?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_7d577e89e87276fb2611b085b096bf796f9e774b9c55b1e6da702e4334ed6963.jpg",
+      "_source_path": "images/7d577e89e87276fb2611b085b096bf796f9e774b9c55b1e6da702e4334ed6963.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2016"
+}

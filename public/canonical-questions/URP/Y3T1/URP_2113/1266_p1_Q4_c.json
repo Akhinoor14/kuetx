@@ -1,0 +1,42 @@
+{
+  "id": "1266_p1_Q4(c)",
+  "course": {
+    "code": "URP 2113",
+    "title": "Site and Area Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\3rd_Year_1st_Term_2014_1266.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the largest weight 'W' that can be supported by the two wires shown in (15) below. The stress in either wire is not to exceed 30 ksi. The cross sectional areas of wires AB and AC are 0.4 in² and 0.5 in² respectively."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0073eb6cbb262be8f50d6f3bd3041b1c9bece9f8886fa4200b35b8551099f161.jpg",
+      "_source_path": "images/0073eb6cbb262be8f50d6f3bd3041b1c9bece9f8886fa4200b35b8551099f161.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2014"
+}

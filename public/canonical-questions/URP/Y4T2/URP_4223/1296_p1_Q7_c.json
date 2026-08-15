@@ -1,0 +1,54 @@
+{
+  "id": "1296_p1_Q7(c)",
+  "course": {
+    "code": "URP 4223",
+    "title": "Urban and Regional Economics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\4th_Year_2nd_Term_2014_1296.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following table shows different industry's employment of a region for a nation along with national growth rate (12.8%), industry sector's national growth rate and regional industry's growth rate."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Industry</td><td rowspan=1 colspan=1>RegionalEmployment(1993)</td><td rowspan=1 colspan=1>Industry&#x27;sNational GrowthRate (%)</td><td rowspan=1 colspan=1>RegionalIndustry&#x27;s GrowthRate (%)</td></tr><tr><td rowspan=1 colspan=1>Farm</td><td rowspan=1 colspan=1>7,951</td><td rowspan=1 colspan=1>-0.1</td><td rowspan=1 colspan=1>0.3</td></tr><tr><td rowspan=1 colspan=1>Manufacturing</td><td rowspan=1 colspan=1>58,516</td><td rowspan=1 colspan=1>4.6</td><td rowspan=1 colspan=1>4.6</td></tr><tr><td rowspan=1 colspan=1>Retail</td><td rowspan=1 colspan=1>44,752</td><td rowspan=1 colspan=1>13.8</td><td rowspan=1 colspan=1>12.5</td></tr><tr><td rowspan=1 colspan=1>Finance andReal Estate</td><td rowspan=1 colspan=1>16,193</td><td rowspan=1 colspan=1>16.5</td><td rowspan=1 colspan=1>14.5</td></tr><tr><td rowspan=1 colspan=1>Service</td><td rowspan=1 colspan=1>62,518</td><td rowspan=1 colspan=1>19.3</td><td rowspan=1 colspan=1>20.7</td></tr><tr><td rowspan=1 colspan=1>All other</td><td rowspan=1 colspan=1>63,533</td><td rowspan=1 colspan=1>9.7</td><td rowspan=1 colspan=1>10.0</td></tr></table>"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_05b57ead6d8ab89f0b2c140c0a9c185fade92b4ae26c558be40c34077fd88b92.jpg",
+      "_source_path": "images/05b57ead6d8ab89f0b2c140c0a9c185fade92b4ae26c558be40c34077fd88b92.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(i) Calculate national growth share (NS), regional growth share (RS) and (15) industry mix (IM) separately for each industry."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Find out the fast growing and declining industries. (05)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2014"
+}

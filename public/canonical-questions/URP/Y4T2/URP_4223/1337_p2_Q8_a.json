@@ -1,0 +1,41 @@
+{
+  "id": "1337_p2_Q8(a)",
+  "course": {
+    "code": "URP 4223",
+    "title": "Urban and Regional Economics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2022\\4th_Year_2nd_Term_2022_1337.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the shift share for Padma industry based on following data"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=2 colspan=1>Industry Category</td><td rowspan=1 colspan=2>Bangladesh Employment</td><td rowspan=1 colspan=2>Padma Industry</td></tr><tr><td rowspan=1 colspan=1>2023</td><td rowspan=1 colspan=1>2030</td><td rowspan=1 colspan=1>2023</td><td rowspan=1 colspan=1>2030</td></tr><tr><td rowspan=1 colspan=1>Base Commodities</td><td rowspan=1 colspan=1>635223</td><td rowspan=1 colspan=1>738,637</td><td rowspan=1 colspan=1>52688</td><td rowspan=1 colspan=1>56464</td></tr><tr><td rowspan=1 colspan=1>Construction</td><td rowspan=1 colspan=1>6,381,405</td><td rowspan=1 colspan=1>9,389,271</td><td rowspan=1 colspan=1>1352017</td><td rowspan=1 colspan=1>1453117</td></tr><tr><td rowspan=1 colspan=1>Manufacturing</td><td rowspan=1 colspan=1>14,123,022</td><td rowspan=1 colspan=1>15,197,159</td><td rowspan=1 colspan=1>4551946</td><td rowspan=1 colspan=1>4751946</td></tr><tr><td rowspan=1 colspan=1>Trade</td><td rowspan=1 colspan=1>20,731,685</td><td rowspan=1 colspan=1>23,931,685</td><td rowspan=1 colspan=1>4961294</td><td rowspan=1 colspan=1>5972294</td></tr><tr><td rowspan=1 colspan=1>Transportation</td><td rowspan=1 colspan=1>4,067,505</td><td rowspan=1 colspan=1>4,287,505</td><td rowspan=1 colspan=1>990551</td><td rowspan=1 colspan=1>997551</td></tr><tr><td rowspan=1 colspan=1>Service</td><td rowspan=1 colspan=1>27,914,922</td><td rowspan=1 colspan=1>29,914,922</td><td rowspan=1 colspan=1>6560181</td><td rowspan=1 colspan=1>7683181</td></tr><tr><td rowspan=1 colspan=1>Education and Health</td><td rowspan=1 colspan=1>16,248,798</td><td rowspan=1 colspan=1>18,258,798</td><td rowspan=1 colspan=1>4377429</td><td rowspan=1 colspan=1>4487329</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2022"
+}

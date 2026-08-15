@@ -1,0 +1,41 @@
+{
+  "id": "1258_p5_Q8(c)",
+  "course": {
+    "code": "URP 2291",
+    "title": "Statistics for Planners-II",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\2nd_Year_2nd_Term_2016_1258.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "Predict the population for the year 2020, 2030 and 2050 from the following (08) population by using incremental increasing method."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Year</td><td rowspan=1 colspan=1>1950</td><td rowspan=1 colspan=1>1960</td><td rowspan=1 colspan=1>1970</td><td rowspan=1 colspan=1>1980</td><td rowspan=1 colspan=1>1990</td><td rowspan=1 colspan=1>2000</td><td rowspan=1 colspan=1>2010</td></tr><tr><td rowspan=1 colspan=1>Population</td><td rowspan=1 colspan=1>85800</td><td rowspan=1 colspan=1>101500</td><td rowspan=1 colspan=1>120150</td><td rowspan=1 colspan=1>169200</td><td rowspan=1 colspan=1>200300</td><td rowspan=1 colspan=1>220000</td><td rowspan=1 colspan=1>26000</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

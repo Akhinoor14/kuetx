@@ -1,0 +1,37 @@
+{
+  "id": "1296_p3_Q8(a)",
+  "course": {
+    "code": "URP 4243",
+    "title": "Hazards and Disaster Management",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\4th_Year_2nd_Term_2014_1296.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "What services have been kept in SoD (Standing Orders on Disaster) for (05) disaster risk reduction?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2014"
+}

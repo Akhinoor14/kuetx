@@ -1,0 +1,37 @@
+{
+  "id": "1281_p4_Q4(c)",
+  "course": {
+    "code": "CE 3207",
+    "title": "Elements of Civil Engineering Structures",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\3rd_Year_2nd_Term_2019_1281.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A simply supported rectangular beam with a span of 18 ft supports a uniform live load (20 of 900 Ib/ft, dead load of 400 Ib/ft and a concentrated load of 500 Ib at the middle of the span. If $\\rho _ { \\circ } ^ { \\prime } = 4 0 0 0$ psi anıd $f _ { y } = 6 0 , 0 0 0 ~ \\mathsf { p s i }$ , determine the required cross-section and steel area. Also show the reinforcement detaiis."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2019"
+}

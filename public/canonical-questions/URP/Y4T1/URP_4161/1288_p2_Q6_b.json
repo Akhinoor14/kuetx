@@ -1,0 +1,61 @@
+{
+  "id": "1288_p2_Q6(b)",
+  "course": {
+    "code": "URP 4161",
+    "title": "Project Planning and Management",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\4th_Year_1st_Term_2016_1288.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Assume, you are evaluating a 5-year project involving software development. (10) You believe that the technological uncertainty associated with this industry leads to higher discount rates in future."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=\"2\">Discount Rates</td><td rowspan=\"2\"></td><td>14%</td><td>15%</td><td>16%</td><td></td><td>18%</td><td>20%</td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>Year</td><td>0</td><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr><tr><td>Cash Flow</td><td>12000</td><td></td><td>4000</td><td>5000</td><td>7000</td><td>6000</td><td>5000</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "If the above figure represents those discount rates, what will be the net present value of the cash flows?"
+    },
+    {
+      "type": "text",
+      "value": "At the time of his retirement, Mr. Jingo is given a choice between two (10) alternatives:"
+    },
+    {
+      "type": "text",
+      "value": "(i) An annual pension of Tk. 10,000 as long as he lives, and"
+    },
+    {
+      "type": "text",
+      "value": "(ii) A lump sum amount of Tk. 50,000."
+    },
+    {
+      "type": "text",
+      "value": "If he expects to live for 15 years and the interest/discount rate is 15%, which option appears more attractive?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2016"
+}

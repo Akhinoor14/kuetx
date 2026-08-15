@@ -1,0 +1,41 @@
+{
+  "id": "1281_p5_Q8(b)",
+  "course": {
+    "code": "CE 3261",
+    "title": "Water Resources Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\3rd_Year_2nd_Term_2019_1281.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Following are the ordinates of a storm hydrograph of a river draining a (15) catchment area of 423 km² due to a 6h isolated storm. Derive the ordinate of a 6-h unit hydrograph for the catchment."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Time from startof storm (h)</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>18</td><td rowspan=1 colspan=1>24</td><td rowspan=1 colspan=1>30</td><td rowspan=1 colspan=1>36</td><td rowspan=1 colspan=1>42</td><td rowspan=1 colspan=1>48</td></tr><tr><td rowspan=1 colspan=1>Discharge (m³/s)</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>30</td><td rowspan=1 colspan=1>87.5</td><td rowspan=1 colspan=1>115.5</td><td rowspan=1 colspan=1>102.5</td><td rowspan=1 colspan=1>85</td><td rowspan=1 colspan=1>71</td><td rowspan=1 colspan=1>59</td><td rowspan=1 colspan=1>47.5</td></tr><tr><td rowspan=1 colspan=1>Time from startof storm (h)</td><td rowspan=1 colspan=1>54</td><td rowspan=1 colspan=1>60</td><td rowspan=1 colspan=1>66</td><td rowspan=1 colspan=1>72</td><td rowspan=1 colspan=1>78</td><td rowspan=1 colspan=1>84</td><td rowspan=1 colspan=1>90</td><td rowspan=1 colspan=1>96</td><td rowspan=1 colspan=1>1</td></tr><tr><td rowspan=1 colspan=1>Discharge $( m ^ { 3 } / s )$ </td><td rowspan=1 colspan=1>39</td><td rowspan=1 colspan=1>31.5</td><td rowspan=1 colspan=1>26</td><td rowspan=1 colspan=1>21.5</td><td rowspan=1 colspan=1>17.5</td><td rowspan=1 colspan=1>15</td><td rowspan=1 colspan=1>12.5</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>11</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2019"
+}

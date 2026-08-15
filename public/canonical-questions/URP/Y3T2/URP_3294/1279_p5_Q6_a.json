@@ -1,0 +1,65 @@
+{
+  "id": "1279_p5_Q6(a)",
+  "course": {
+    "code": "URP 3294",
+    "title": "Research Methodology",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2017\\3rd_Year_2nd_Term_2017_1279.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define mixed strategy. What is the role of mixed strategy in solving a game?"
+    },
+    {
+      "type": "text",
+      "value": "() Find the saddle point of the following game."
+    },
+    {
+      "type": "text",
+      "value": "(07)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td colspan=\"3\">1</td><td>HI</td><td>Ⅲ</td><td>IV</td></tr><tr><td rowspan=\"5\">A</td><td>1</td><td>4</td><td>-4</td><td>-5</td><td>6</td></tr><tr><td>Il</td><td>-3</td><td>-4</td><td>-9</td><td>-2</td></tr><tr><td>il</td><td>6</td><td>7</td><td>-8</td><td>-9</td></tr><tr><td>IV</td><td>7</td><td>3</td><td>-9</td><td>5</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    },
+    {
+      "type": "text",
+      "value": "(:)Solve the following game graphically."
+    },
+    {
+      "type": "text",
+      "value": "(18)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td></td><td></td><td>1</td><td>Il</td><td>III</td><td>IV</td></tr><tr><td rowspan=\"2\">A</td><td>I</td><td>2</td><td>2</td><td>&#x27; 3</td><td>-1</td></tr><tr><td>II ，</td><td>4</td><td>3</td><td>2</td><td>6</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

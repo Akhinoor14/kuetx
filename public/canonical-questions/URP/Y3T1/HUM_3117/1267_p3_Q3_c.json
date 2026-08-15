@@ -1,0 +1,41 @@
+{
+  "id": "1267_p3_Q3(c)",
+  "course": {
+    "code": "HUM 3117",
+    "title": "Accounting and Auditing for Planners",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\3rd_Year_1st_Term_2015_1267.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Prepare a classified statement of Financial Position (Balance Sheet) as on October 31, 2010."
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2015"
+}

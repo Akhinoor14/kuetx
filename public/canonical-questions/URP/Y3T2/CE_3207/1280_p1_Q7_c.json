@@ -1,0 +1,56 @@
+{
+  "id": "1280_p1_Q7(c)",
+  "course": {
+    "code": "CE 3207",
+    "title": "Elements of Civil Engineering Structures",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2018\\3rd_Year_2nd_Term_2018_1280.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": "\\_ Find out determinacy and stability of the structures shown in following figure-"
+    },
+    {
+      "type": "text",
+      "value": "(09)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ca3f4e0eef05cca6188a30e7392c285983b49dd0d375453fb925b67a772a33ac.jpg",
+      "_source_path": "images/ca3f4e0eef05cca6188a30e7392c285983b49dd0d375453fb925b67a772a33ac.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_dbdd77edc0c8ce33116c0256e9864f155d93c98d8e86ddf5c4d4a0a0c5b134dd.jpg",
+      "_source_path": "images/dbdd77edc0c8ce33116c0256e9864f155d93c98d8e86ddf5c4d4a0a0c5b134dd.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_1c7be28c585f20b591eef2988b7ec4aeda13009f976b6990dbc541c45f73de48.jpg",
+      "_source_path": "images/1c7be28c585f20b591eef2988b7ec4aeda13009f976b6990dbc541c45f73de48.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

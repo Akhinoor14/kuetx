@@ -1,0 +1,46 @@
+{
+  "id": "1268_p1_Q6",
+  "course": {
+    "code": "CE 3107",
+    "title": "Elements of Solid Mechanics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\3rd_Year_1st_Term_2016_1268.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "a. Differentiate between collinear force system and concurrent force system. (05) b. A 5000lb sphere rests on a smooth plane inclined at an angle $\\theta = 4 5 ^ { \\circ }$ with the (15) horizontal and against a smooth vertical wall. What are the reactions at the contact surfaces A and B?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e45d7594e8a717d1961f8d4378ee4cca430d64311383cb64e1a982541a27608f.jpg",
+      "_source_path": "images/e45d7594e8a717d1961f8d4378ee4cca430d64311383cb64e1a982541a27608f.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

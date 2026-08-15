@@ -1,0 +1,41 @@
+{
+  "id": "1274_p4_Q8(c)",
+  "course": {
+    "code": "HUM 3117",
+    "title": "Accounting and Auditing for Planners",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2023\\3rd_Year_1st_Term_2023_1274.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate income tax payable for an individual assesse as per latest income tax act and (20)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Particulars</td><td rowspan=1 colspan=1>Amount (Tk)</td></tr><tr><td rowspan=1 colspan=1>Basic Salary</td><td rowspan=1 colspan=1>70,000/month</td></tr><tr><td rowspan=1 colspan=1>Special Pay</td><td rowspan=1 colspan=1>30,000 (total)</td></tr><tr><td rowspan=1 colspan=1>Dearness allowances</td><td rowspan=1 colspan=1>@ 10% of basic</td></tr><tr><td rowspan=1 colspan=1>House rent</td><td rowspan=1 colspan=1>@ 60% of basic</td></tr><tr><td rowspan=1 colspan=1>Medical allowance</td><td rowspan=1 colspan=1>1500/month</td></tr><tr><td rowspan=1 colspan=1>Festival allowances</td><td rowspan=1 colspan=1>140,000 (total)</td></tr><tr><td rowspan=1 colspan=1>Bengali new year allowance</td><td rowspan=1 colspan=1>14,000 (total)</td></tr><tr><td rowspan=1 colspan=1>Conveyance allowance</td><td rowspan=1 colspan=1>50,000 (total)</td></tr><tr><td rowspan=1 colspan=1>Overtime allowance</td><td rowspan=1 colspan=1>50,000 (total)</td></tr><tr><td rowspan=1 colspan=1>Bonus</td><td rowspan=1 colspan=1>80,000 (total)</td></tr><tr><td rowspan=1 colspan=1>Interest Earned: Provident fund</td><td rowspan=1 colspan=1>20,000 (total)</td></tr><tr><td rowspan=1 colspan=2>Deductions and Investments:</td></tr><tr><td rowspan=1 colspan=1>Contribution to provident fund</td><td rowspan=1 colspan=1>@10% of basic</td></tr><tr><td rowspan=1 colspan=1>Contribution to group insurance and benevolent fund</td><td rowspan=1 colspan=1>7,000</td></tr><tr><td rowspan=1 colspan=1>Life insurance premium</td><td rowspan=1 colspan=1>50,000</td></tr><tr><td rowspan=1 colspan=1>Deposit pension scheme</td><td rowspan=1 colspan=1>60,000</td></tr><tr><td rowspan=1 colspan=1>Contribution to Zakat fund</td><td rowspan=1 colspan=1>200,000</td></tr><tr><td rowspan=1 colspan=1>Investment in listed securities</td><td rowspan=1 colspan=1>500,000</td></tr><tr><td rowspan=1 colspan=1>Income tax deducted at source (Income Area: Dhaka CityCorporation)</td><td rowspan=1 colspan=1>84,000</td></tr><tr><td rowspan=1 colspan=2>Required: (i) Calculate total tax liability.(ii) Prepare a schedule 24-A (Income from Salary).(ii) Show calculations of allowable investment.</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

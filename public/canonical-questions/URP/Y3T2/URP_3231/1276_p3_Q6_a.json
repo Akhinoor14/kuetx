@@ -1,0 +1,58 @@
+{
+  "id": "1276_p3_Q6(a)",
+  "course": {
+    "code": "URP 3231",
+    "title": "Transportation Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\3rd_Year_2nd_Term_2014_1276.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "A small section of highway can be dealt with the three different ways: (i) it can be left as it is (do nothing), (ii) an embankment bridge combination can be used or (iii) a cutting tunnel combination can be provided. Using a suitable method, determine the best alternative with the highest financial advantage; at   \nmeannual interest rate of 7%."
+    },
+    {
+      "type": "text",
+      "value": "(25)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d9d6f6b56c79d2942f93c018a06103a7032a132ae8fdf40a922870eb2da2c19b.jpg",
+      "_source_path": "images/d9d6f6b56c79d2942f93c018a06103a7032a132ae8fdf40a922870eb2da2c19b.jpg"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Alternative</td><td rowspan=1 colspan=1>Life</td><td rowspan=1 colspan=1>Initial Cost</td><td rowspan=1 colspan=1>Maintenance</td></tr><tr><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>Perpetual</td><td rowspan=1 colspan=1>一</td><td rowspan=1 colspan=1>35000</td></tr><tr><td rowspan=2 colspan=1>2</td><td rowspan=1 colspan=1>Perpetual</td><td rowspan=1 colspan=1>170,000</td><td rowspan=1 colspan=1>1000/yr</td></tr><tr><td rowspan=1 colspan=1>50 years</td><td rowspan=1 colspan=1>200,000</td><td rowspan=1 colspan=1>2000/yr</td></tr><tr><td rowspan=2 colspan=1>3</td><td rowspan=1 colspan=1>Perpetual</td><td rowspan=1 colspan=1>75,000</td><td rowspan=1 colspan=1>700/yr</td></tr><tr><td rowspan=1 colspan=1>50 years</td><td rowspan=1 colspan=1>300,000</td><td rowspan=1 colspan=1>2000/yr</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Transportation and energy consumption."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2014"
+}

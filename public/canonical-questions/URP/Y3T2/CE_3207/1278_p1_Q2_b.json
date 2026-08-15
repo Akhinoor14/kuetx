@@ -1,0 +1,42 @@
+{
+  "id": "1278_p1_Q2(b)",
+  "course": {
+    "code": "CE 3207",
+    "title": "Elements of Civil Engineering Structures",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\3rd_Year_2nd_Term_2016_1278.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "Compute the external reactions and loads on the members FD, HG and BC as (25) shown in figure. Here, $F _ { 1 } = 2 0 0 0$ lb, $\\mathsf { F } _ { 2 } = 3 0 0 0$ lb, $\\ F _ { 3 } =$ 4000 lb and $F _ { 4 } = 5 0 0 0$ Ib."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b34186ee86232d2842c634aa0af558c9c7e5eea3eea7e553c4dab624ccb2d250.jpg",
+      "_source_path": "images/b34186ee86232d2842c634aa0af558c9c7e5eea3eea7e553c4dab624ccb2d250.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

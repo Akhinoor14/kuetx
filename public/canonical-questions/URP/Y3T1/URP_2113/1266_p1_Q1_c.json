@@ -1,0 +1,74 @@
+{
+  "id": "1266_p1_Q1(c)",
+  "course": {
+    "code": "URP 2113",
+    "title": "Site and Area Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\3rd_Year_1st_Term_2014_1266.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following observations were made during a tensile test on a mild steel specimen (15) 40 mm in diameter and 200 mm long."
+    },
+    {
+      "type": "text",
+      "value": "Elongation with 40 kN load (within proportional limit),"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\delta 1 = 0 . 0 3 0 4 \\mathrm { m m }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Yield load = 160 kN"
+    },
+    {
+      "type": "text",
+      "value": "Maximum load = 240 kN"
+    },
+    {
+      "type": "text",
+      "value": "Length of specimen at fracture = 247 mm"
+    },
+    {
+      "type": "text",
+      "value": "Determine: (i) Young's modulus of elasticity, E;"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Yield point stress, $\\mathbf { \\Delta } f _ { \\mathbf { y } } .$"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Ultimate stress, $\\boldsymbol { \\mathsf { f } } _ { \\mathsf { u l t } } ,$"
+    },
+    {
+      "type": "text",
+      "value": "(iv) Percentage elongation"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2014"
+}

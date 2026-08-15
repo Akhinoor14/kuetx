@@ -1,0 +1,65 @@
+{
+  "id": "1272_p3_Q2(b)",
+  "course": {
+    "code": "HUM 3117",
+    "title": "Accounting and Auditing for Planners",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2021\\3rd_Year_1st_Term_2021_1272.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "Journalize the following transaction in the book of Mr. Peter: (25)"
+    },
+    {
+      "type": "text",
+      "value": "June 1: Mr. Peter invested cash 1,00,000 and a building of taka 5,00,000 to start the business."
+    },
+    {
+      "type": "text",
+      "value": "June 5: Purchased and equipment of taka 50,000 on account making half of the amount down payment."
+    },
+    {
+      "type": "text",
+      "value": "June 10: Appointed and assistant whose salary will be 20,000 taka per month June 15: Made a pertial payment of taka 5,000 on the balance vote for equipment."
+    },
+    {
+      "type": "text",
+      "value": "June 16: Collected taka 30,000 from the clients by providing services."
+    },
+    {
+      "type": "text",
+      "value": "June 20: Billed clients with taka 20,000 for services provided."
+    },
+    {
+      "type": "text",
+      "value": "June 25: Paid utilities bill taka 10,000."
+    },
+    {
+      "type": "text",
+      "value": "June 30: Paid salary to the assistant for the month of June, taka 20,000."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

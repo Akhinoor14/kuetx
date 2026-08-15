@@ -1,0 +1,65 @@
+{
+  "id": "1274_p2_Q8(a)",
+  "course": {
+    "code": "URP 3161",
+    "title": "Housing and Real Estate Development Theory",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2023\\3rd_Year_1st_Term_2023_1274.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write short notes on any five of the following:"
+    },
+    {
+      "type": "text",
+      "value": "i. Nonmonetary effects of investment"
+    },
+    {
+      "type": "text",
+      "value": "ii. Property cycles"
+    },
+    {
+      "type": "text",
+      "value": "iii.Supply side of urban growth"
+    },
+    {
+      "type": "text",
+      "value": "iv.Economic Base Multiplier"
+    },
+    {
+      "type": "text",
+      "value": "v. Bid-Rent curves"
+    },
+    {
+      "type": "text",
+      "value": "vi.Reproduction and replacement cost"
+    },
+    {
+      "type": "text",
+      "value": "vii.Accrued depreciation"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

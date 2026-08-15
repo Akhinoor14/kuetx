@@ -1,0 +1,41 @@
+{
+  "id": "1336_p1_Q7",
+  "course": {
+    "code": "URP 4243",
+    "title": "Hazards and Disaster Management",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2021\\4th_Year_2nd_Term_2021_1336.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "On average, cyclones happen about 2 times a year in Bangladesh. The hardest hit regions are Dhaka, Khulna and Barisal. The most severe cyclone to make landfall in Bangladesh in the past 12 months was Sitrang. At least 9 people had died after Cyclone Sitrang slammed into Bangladesh’s southern coast, snapping communications and power links and destroying houses."
+    },
+    {
+      "type": "text",
+      "value": "Read the aforementioned statement and answer the following questions."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2021"
+}

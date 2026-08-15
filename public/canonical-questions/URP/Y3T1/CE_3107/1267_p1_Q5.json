@@ -1,0 +1,50 @@
+{
+  "id": "1267_p1_Q5",
+  "course": {
+    "code": "CE 3107",
+    "title": "Elements of Solid Mechanics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\3rd_Year_1st_Term_2015_1267.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "a. Define shear stress, shear strain and free body diagram. How free body diagram of a particle can be drawn? Explain."
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    },
+    {
+      "type": "text",
+      "value": "b. The length of the 3/32 in diameter steel wire CD has been adjusted so that with no load applied a gap of 1/16 inch exists between the end B of rigid beam ACB and contact point E. Knowing that $\\mathrm { E } = 2 9 \\times 1 0 ^ { 6 }$ psi, determine where a 50-lb block should be placed on the beam in order to cause contact between a B and E."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_00d94bec8f44b451814103d3cf011b4e5e6c2bf48a7568d7d83a78a6052f3b20.jpg",
+      "_source_path": "images/00d94bec8f44b451814103d3cf011b4e5e6c2bf48a7568d7d83a78a6052f3b20.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2015"
+}

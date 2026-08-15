@@ -1,0 +1,45 @@
+{
+  "id": "1337_p2_Q5(c)",
+  "course": {
+    "code": "URP 4223",
+    "title": "Urban and Regional Economics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2022\\4th_Year_2nd_Term_2022_1337.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "A major regional industry injects an extra \\$20,00,000 into a regional economy through (05) its expansion program, it will generate an extra income. If \\$2,00,000 of this extra income is lost to the government via taxes, \\$8,00,000 is saved and \\$5,00,000 is spent on goods and services imported into the region."
+    },
+    {
+      "type": "text",
+      "value": "i) Calculate regional multiplier."
+    },
+    {
+      "type": "text",
+      "value": "li) Interpret the result."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2022"
+}

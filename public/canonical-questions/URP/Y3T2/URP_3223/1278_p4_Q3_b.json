@@ -1,0 +1,49 @@
+{
+  "id": "1278_p4_Q3(b)",
+  "course": {
+    "code": "URP 3223",
+    "title": "Regional Development Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\3rd_Year_2nd_Term_2016_1278.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following table shows different industry's employment of a region for nation along(20) with national growth rate (13.6%), industry sector's national growth rate and regional industry's growth rate."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Industry</td><td rowspan=1 colspan=1>RegionalEmployment (1993)</td><td rowspan=1 colspan=1>Industry&#x27;s NationalGrowth Rate (%)</td><td rowspan=1 colspan=1>Regional Industry&#x27;sGrowth Rate (%)</td></tr><tr><td rowspan=1 colspan=1>Agriculture &amp; Fishing</td><td rowspan=1 colspan=1>79691</td><td rowspan=1 colspan=1>-0.30</td><td rowspan=1 colspan=1>0.40</td></tr><tr><td rowspan=1 colspan=1>Manufacturing</td><td rowspan=1 colspan=1>67643</td><td rowspan=1 colspan=1>2.84</td><td rowspan=1 colspan=1>3.65</td></tr><tr><td rowspan=1 colspan=1>Mining</td><td rowspan=1 colspan=1>53268</td><td rowspan=1 colspan=1>15.01</td><td rowspan=1 colspan=1>13.25</td></tr><tr><td rowspan=1 colspan=1>Finance &amp; Real Estate</td><td rowspan=1 colspan=1>72523</td><td rowspan=1 colspan=1>15.75</td><td rowspan=1 colspan=1>12.65</td></tr><tr><td rowspan=1 colspan=1>Service</td><td rowspan=1 colspan=1>38622</td><td rowspan=1 colspan=1>18.46</td><td rowspan=1 colspan=1>20.70</td></tr><tr><td rowspan=1 colspan=1>All others</td><td rowspan=1 colspan=1>78476</td><td rowspan=1 colspan=1>11.78</td><td rowspan=1 colspan=1>13.90</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "(i) Calculate National Growth Share (NS), Regional Growth Shift (RS) and Industry . Mix (IM) separately for each industry."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Find out the fast growing and declining industries, · ."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

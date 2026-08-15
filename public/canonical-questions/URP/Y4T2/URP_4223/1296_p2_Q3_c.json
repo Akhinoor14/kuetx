@@ -1,0 +1,41 @@
+{
+  "id": "1296_p2_Q3(c)",
+  "course": {
+    "code": "URP 4223",
+    "title": "Urban and Regional Economics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\4th_Year_2nd_Term_2014_1296.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is Lorenz curve? Prepare the following dataset for drawing a Lorenz (12) Curve."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Individual</td><td rowspan=1 colspan=1>Income</td></tr><tr><td rowspan=1 colspan=1>01</td><td rowspan=1 colspan=1>2,417</td></tr><tr><td rowspan=1 colspan=1>02</td><td rowspan=1 colspan=1>7,800</td></tr><tr><td rowspan=1 colspan=1>03</td><td rowspan=1 colspan=1>8,489</td></tr><tr><td rowspan=1 colspan=1>04</td><td rowspan=1 colspan=1>10,072</td></tr><tr><td rowspan=1 colspan=1>05</td><td rowspan=1 colspan=1>12,957</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2014"
+}

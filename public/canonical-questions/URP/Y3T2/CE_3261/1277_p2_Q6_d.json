@@ -1,0 +1,49 @@
+{
+  "id": "1277_p2_Q6(d)",
+  "course": {
+    "code": "CE 3261",
+    "title": "Water Resources Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\3rd_Year_2nd_Term_2015_1277.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "On the basis of isopluvial maps the 50 years 24 hr maximum rainfall at KUET is found to be 20 cm. Determine the probability of 24 hr rainfall of magnitude equal to or greater than 20 cm occurring at KUET."
+    },
+    {
+      "type": "text",
+      "value": "(i)At least once in 20 successive years"
+    },
+    {
+      "type": "text",
+      "value": "(ii)Two times in 20 successive years"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Once in 20 successive years."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2015"
+}

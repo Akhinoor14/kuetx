@@ -1,0 +1,42 @@
+{
+  "id": "1298_p4_Q4(a)",
+  "course": {
+    "code": "URP 4223",
+    "title": "Urban and Regional Economics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\4th_Year_2nd_Term_2016_1298.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Assume that bid rent determines land use of a city and services are provided evenly all over the region. (12) Because the city is developing (physically and population) very fast and the government tries to control land development between 6-8 km. Describe the land use scenario after 20 years."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d10f6c516ae0f876e9eadd1038f27d450213aa142afb6a37ce1260f9301b698b.jpg",
+      "_source_path": "images/d10f6c516ae0f876e9eadd1038f27d450213aa142afb6a37ce1260f9301b698b.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2016"
+}

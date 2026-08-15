@@ -1,0 +1,37 @@
+{
+  "id": "1333_p4_Q3(c)",
+  "course": {
+    "code": "URP 4273",
+    "title": "Urban Governance",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2018\\4th_Year_2nd_Term_2018_1333.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Neo-liberal governance system came up with the change of government's (10) roles and economic responsibilities' - what are these changes?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2018"
+}

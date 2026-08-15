@@ -1,0 +1,53 @@
+{
+  "id": "1281_p1_Q7(a)",
+  "course": {
+    "code": "URP 3231",
+    "title": "Transportation Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\3rd_Year_2nd_Term_2019_1281.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "Four Zones of Khulna City have the following productions and attractions: (20)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Zone</td><td rowspan=1 colspan=1>Production</td><td rowspan=1 colspan=1>Attraction</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>1000</td><td rowspan=1 colspan=1>3000</td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>2000</td><td rowspan=1 colspan=1>3000</td></tr><tr><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>3000</td><td rowspan=1 colspan=1>2000</td></tr><tr><td rowspan=1 colspan=1>D</td><td rowspan=1 colspan=1>4000</td><td rowspan=1 colspan=1>2000</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "The travel matrix is:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=2 colspan=1>Zone</td><td rowspan=1 colspan=4>Travel Time (min)</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>D</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>10</td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>12</td></tr><tr><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>2-</td><td rowspan=1 colspan=1>11</td></tr><tr><td rowspan=1 colspan=1>D</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>11</td><td rowspan=1 colspan=1>03</td></tr></table>"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Trave!Time(min)</td><td rowspan=1 colspan=1> $\\mathsf { F } _ { \\mathrm { i j } }$ </td><td rowspan=1 colspan=1>TravelTime(min)</td><td rowspan=1 colspan=1> $\\mathsf { F } _ { \\mathrm { i j } }$ </td></tr><tr><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>3.0</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>1.2</td></tr><tr><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>2.5</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>1.0</td></tr><tr><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>2.3</td><td rowspan=1 colspan=1>11</td><td rowspan=1 colspan=1>0.95</td></tr><tr><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>1.5</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>0.90</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2019"
+}

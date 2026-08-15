@@ -1,0 +1,41 @@
+{
+  "id": "1278_p2_Q3(c)",
+  "course": {
+    "code": "CE 3261",
+    "title": "Water Resources Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\3rd_Year_2nd_Term_2016_1278.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "Given the ordinates of a 4-h unit hydrograph as below derive the ordinates of a 12-h (18) unit hydrograph for the same catchment by S-curve method."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Time (h)   </td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>16</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>24</td><td rowspan=1 colspan=1>28</td><td rowspan=1 colspan=1>32</td><td rowspan=1 colspan=1>36</td><td rowspan=1 colspan=1>40</td><td rowspan=1 colspan=1>44</td></tr><tr><td rowspan=1 colspan=1>Ordinate of4-h UH</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>80</td><td rowspan=1 colspan=1>130</td><td rowspan=1 colspan=1>150</td><td rowspan=1 colspan=1>130</td><td rowspan=1 colspan=1>90</td><td rowspan=1 colspan=1>52</td><td rowspan=1 colspan=1>27</td><td rowspan=1 colspan=1>15</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>0</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

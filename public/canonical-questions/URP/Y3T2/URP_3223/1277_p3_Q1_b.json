@@ -1,0 +1,51 @@
+{
+  "id": "1277_p3_Q1(b)",
+  "course": {
+    "code": "URP 3223",
+    "title": "Regional Development Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\3rd_Year_2nd_Term_2015_1277.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 6,
+  "content": [
+    {
+      "type": "text",
+      "value": "and quality of transportation services”- explain this statement. (06) (06)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8eb296cf7895ae5b026c512ff1a0610fcda8d53333aaecf83902636db7c020e0.jpg",
+      "_source_path": "images/8eb296cf7895ae5b026c512ff1a0610fcda8d53333aaecf83902636db7c020e0.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_31b2805e3145ce3ef15cecb86ea7785f5cfbeb3f3e92e6df9203909cc8f2b984.jpg",
+      "_source_path": "images/31b2805e3145ce3ef15cecb86ea7785f5cfbeb3f3e92e6df9203909cc8f2b984.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Prepare production and attraction table by trip purposes of the given figure."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2015"
+}

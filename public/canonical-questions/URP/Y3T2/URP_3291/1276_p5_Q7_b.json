@@ -1,0 +1,51 @@
+{
+  "id": "1276_p5_Q7(b)",
+  "course": {
+    "code": "URP 3291",
+    "title": "Operations Research and Systems Analysis",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\3rd_Year_2nd_Term_2014_1276.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the 3-state system show in the following figure and the transition probabilities are also indicated there. Evaluate: (i) The limiting state probabilities associated with each state, and (ii) The average number of time intervals spent in each state if state 1 defined as an absorbing state."
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_800fa66445b8afbb7e4b29773969371d514bb5a8f75f8b15d0ae1c5951ba77fc.jpg",
+      "_source_path": "images/800fa66445b8afbb7e4b29773969371d514bb5a8f75f8b15d0ae1c5951ba77fc.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_cf1a8c5dcc2559b7309f9a03a413d7b1833b15107427d1d63a2450f5ece9c29b.jpg",
+      "_source_path": "images/cf1a8c5dcc2559b7309f9a03a413d7b1833b15107427d1d63a2450f5ece9c29b.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2014"
+}

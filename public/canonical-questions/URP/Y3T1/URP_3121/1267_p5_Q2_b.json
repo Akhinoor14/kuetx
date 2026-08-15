@@ -1,0 +1,41 @@
+{
+  "id": "1267_p5_Q2(b)",
+  "course": {
+    "code": "URP 3121",
+    "title": "Rural Development Planning-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\3rd_Year_1st_Term_2015_1267.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is Physical Quality of Life Index (PQLI)? Calculate PQLI for the following (13) information and explain the result."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Country</td><td rowspan=1 colspan=1>Life expectancyat age one(Year)</td><td rowspan=1 colspan=1>Infant mortality(Per 1000 livebirth)</td><td rowspan=1 colspan=1>Literacy(Percent)</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>51</td><td rowspan=1 colspan=1>200</td><td rowspan=1 colspan=1>20</td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>62</td><td rowspan=1 colspan=1>155</td><td rowspan=1 colspan=1>34</td></tr><tr><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>78</td><td rowspan=1 colspan=1>57</td><td rowspan=1 colspan=1>75</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2015"
+}

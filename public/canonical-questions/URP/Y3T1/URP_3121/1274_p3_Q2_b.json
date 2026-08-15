@@ -1,0 +1,41 @@
+{
+  "id": "1274_p3_Q2(b)",
+  "course": {
+    "code": "URP 3121",
+    "title": "Rural Development Planning-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2023\\3rd_Year_1st_Term_2023_1274.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine (i) Headcount Index (ii) Poverty Gap (PG) Index(iii) Squared (20) Poverty Gap (SPG) Index for the following countries and explain the results. Assume poverty line is 12000."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Country</td><td rowspan=1 colspan=6>Expenditures for each individual in countries</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>11500</td><td rowspan=1 colspan=1>9500</td><td rowspan=1 colspan=1>16800</td><td rowspan=1 colspan=1>13000</td><td rowspan=1 colspan=1>8000</td><td rowspan=1 colspan=1>17400</td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>16200</td><td rowspan=1 colspan=1>14000</td><td rowspan=1 colspan=1>9200</td><td rowspan=1 colspan=1>7000</td><td rowspan=1 colspan=1>11000</td><td rowspan=1 colspan=1>19100</td></tr><tr><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>6200</td><td rowspan=1 colspan=1>8500</td><td rowspan=1 colspan=1>9200</td><td rowspan=1 colspan=1>17500</td><td rowspan=1 colspan=1>13000</td><td rowspan=1 colspan=1>15500</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

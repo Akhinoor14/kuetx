@@ -1,0 +1,46 @@
+{
+  "id": "1256_p5_Q1(a)",
+  "course": {
+    "code": "URP 2291",
+    "title": "Statistics for Planners-II",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\2nd_Year_2nd_Term_2014_1256.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": 6,
+  "content": [
+    {
+      "type": "text",
+      "value": "State the role of time series analysis."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ea0b6027116e8b8ffdee03f588896dc8ec248e940a18119c9a605b55e0d021dd.jpg",
+      "_source_path": "images/ea0b6027116e8b8ffdee03f588896dc8ec248e940a18119c9a605b55e0d021dd.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(06)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2014"
+}

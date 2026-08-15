@@ -1,0 +1,41 @@
+{
+  "id": "1264_p5_Q3(c)",
+  "course": {
+    "code": "URP 2291",
+    "title": "Statistics for Planners-II",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2022\\2nd_Year_2nd_Term_2022_1264.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Out of 800 workers in a factory 300 are literates. 100 workers were screened out (10) due to inefficiency out of which 20 were literates. Test as to whether the efficiency of the worker is associated with education. Two-way frequency table showing observed frequency"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Efficient</td><td rowspan=1 colspan=1>Inefficient</td><td rowspan=1 colspan=1>Total</td></tr><tr><td rowspan=1 colspan=1>Literate</td><td rowspan=1 colspan=1>280</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>300</td></tr><tr><td rowspan=1 colspan=1>Illiterate</td><td rowspan=1 colspan=1>420</td><td rowspan=1 colspan=1>80</td><td rowspan=1 colspan=1>500</td></tr><tr><td rowspan=1 colspan=1>Total</td><td rowspan=1 colspan=1>700</td><td rowspan=1 colspan=1>100</td><td rowspan=1 colspan=1>800</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2022"
+}

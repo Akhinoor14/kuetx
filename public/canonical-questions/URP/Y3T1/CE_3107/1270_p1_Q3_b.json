@@ -1,0 +1,42 @@
+{
+  "id": "1270_p1_Q3(b)",
+  "course": {
+    "code": "CE 3107",
+    "title": "Elements of Solid Mechanics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\3rd_Year_1st_Term_2019_1270.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "An aluminum rod is rigidly attached between a steel rod and a bronze rod as shown in (12) figure bellow. Axial loads are applied at the positions indicated. Find the maximum value of P that will not exceed a stress in the steel of 140 MPa, in aluminum of 90 MPa, or in bronze of 100 MPa."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ef0cbaaf0146eff5479a375968685cbf6c58b7f5bd737f7137cb7db5e4a38e45.jpg",
+      "_source_path": "images/ef0cbaaf0146eff5479a375968685cbf6c58b7f5bd737f7137cb7db5e4a38e45.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

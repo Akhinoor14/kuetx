@@ -1,0 +1,45 @@
+{
+  "id": "1279_p4_Q2(b)",
+  "course": {
+    "code": "URP 3223",
+    "title": "Regional Development Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2017\\3rd_Year_2nd_Term_2017_1279.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the gravitational potential of a centre i from the following information, (08) where i is surrounded by the centers A, B & C."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Centre</td><td rowspan=1 colspan=1>Employment</td><td rowspan=1 colspan=1>Distance from i (m)</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>1000</td><td rowspan=1 colspan=1>100</td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>1500</td><td rowspan=1 colspan=1>95</td></tr><tr><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>2000</td><td rowspan=1 colspan=1>210</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Here, the value of k = 1.5"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

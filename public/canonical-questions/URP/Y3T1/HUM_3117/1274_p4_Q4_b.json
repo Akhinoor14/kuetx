@@ -1,0 +1,58 @@
+{
+  "id": "1274_p4_Q4(b)",
+  "course": {
+    "code": "HUM 3117",
+    "title": "Accounting and Auditing for Planners",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2023\\3rd_Year_1st_Term_2023_1274.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "Mr. Azad has a trading concern owned only by him. The ledger account balances at the end(20) of his accounting period ending June 30, 2023 are as follows:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Particulars</td><td rowspan=1 colspan=1>Taka</td><td rowspan=1 colspan=1>Particulars</td><td rowspan=1 colspan=1>Taka</td></tr><tr><td rowspan=1 colspan=1>Azad Capital</td><td rowspan=1 colspan=1>5,81,700</td><td rowspan=1 colspan=1>Cash</td><td rowspan=1 colspan=1>52,250</td></tr><tr><td rowspan=1 colspan=1>Azad Drawing</td><td rowspan=1 colspan=1>17,560</td><td rowspan=1 colspan=1>Accounts receivable</td><td rowspan=1 colspan=1>72,000</td></tr><tr><td rowspan=1 colspan=1>Sales</td><td rowspan=1 colspan=1>290,060</td><td rowspan=1 colspan=1>Notes receivable</td><td rowspan=1 colspan=1>52,000</td></tr><tr><td rowspan=1 colspan=1>Sales return</td><td rowspan=1 colspan=1>4,450</td><td rowspan=1 colspan=1>Allowance    for    doubtfulaccounts</td><td rowspan=1 colspan=1>1,186</td></tr><tr><td rowspan=1 colspan=1>Purchases</td><td rowspan=1 colspan=1>176,950</td><td rowspan=1 colspan=1>Opening inventory</td><td rowspan=1 colspan=1>25,000</td></tr><tr><td rowspan=1 colspan=1>Purchase return</td><td rowspan=1 colspan=1>21,154</td><td rowspan=1 colspan=1>Office supplies</td><td rowspan=1 colspan=1>640</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "(35)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d7cb6c7361ceede814f5f9e43c94a90e2cd09555c83582246b1d8ff2b40d0fe8.jpg",
+      "_source_path": "images/d7cb6c7361ceede814f5f9e43c94a90e2cd09555c83582246b1d8ff2b40d0fe8.jpg"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Repairs              andMaintenances</td><td rowspan=1 colspan=1>11,680</td><td rowspan=1 colspan=1>Land</td><td rowspan=1 colspan=1>1,59,560</td></tr><tr><td rowspan=1 colspan=1>Office Salaries</td><td rowspan=1 colspan=1>41,060</td><td rowspan=1 colspan=1>Building</td><td rowspan=1 colspan=1>1,97,120</td></tr><tr><td rowspan=1 colspan=1>Advertisement expense</td><td rowspan=1 colspan=1>11,500</td><td rowspan=1 colspan=1>Accumulated     depreciationbuilding</td><td rowspan=1 colspan=1>39,424</td></tr><tr><td rowspan=1 colspan=1>Travel expenses</td><td rowspan=1 colspan=1>900</td><td rowspan=1 colspan=1>Office furniture</td><td rowspan=1 colspan=1>91,080</td></tr><tr><td rowspan=1 colspan=1>Prepaid insurance</td><td rowspan=1 colspan=1>1,700</td><td rowspan=1 colspan=1>Accumulated     depreciationoffice furniture</td><td rowspan=1 colspan=1>22,770</td></tr><tr><td rowspan=1 colspan=1>Internet revenue</td><td rowspan=1 colspan=1>1,900</td><td rowspan=1 colspan=1>Accounts payable</td><td rowspan=1 colspan=1>71,168</td></tr><tr><td rowspan=1 colspan=1>Miscellaneous expense</td><td rowspan=1 colspan=1>650</td><td rowspan=1 colspan=1>Notes payable</td><td rowspan=1 colspan=1>31,778</td></tr><tr><td rowspan=1 colspan=4>Required: Prepare a Trial Balance as on 30 June 2023.</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "1277_p4_Q3(a)",
+  "course": {
+    "code": "URP 3223",
+    "title": "Regional Development Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\3rd_Year_2nd_Term_2015_1277.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "What do you mean by inter-regional trade multiplier?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_bc9e4632b28212b863c8fd5d7656692939e3e5a06ec2d4ccc1b250e612896993.jpg",
+      "_source_path": "images/bc9e4632b28212b863c8fd5d7656692939e3e5a06ec2d4ccc1b250e612896993.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(05)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2015"
+}

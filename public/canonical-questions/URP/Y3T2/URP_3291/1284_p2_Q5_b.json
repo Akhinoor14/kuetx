@@ -1,0 +1,37 @@
+{
+  "id": "1284_p2_Q5(b)",
+  "course": {
+    "code": "URP 3291",
+    "title": "Operations Research and Systems Analysis",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2022\\3rd_Year_2nd_Term_2022_1284.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A businessman has two independent investments A and B available to him but he lacks the capital to undertake both of them simultaneously and vice versa. The probability of success for A is 0.80 while for B is 0.50. Both investments require an initial capital outlay of \\$4000 and both return nothing if the venture is unsuccessful. Successful completion of A will return \\$3000 (over cost) and successful completion of B will return \\$5000 (over cost). Draw the decision tree and' determine the best strategy."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "1279_p5_Q8(b)",
+  "course": {
+    "code": "URP 3294",
+    "title": "Research Methodology",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2017\\3rd_Year_2nd_Term_2017_1279.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "A discrete process has the state diagram shown below. Find the probabilities of being in each of the three states after three steps using a tree diagram given that the process started in state 1. Determine the limiting state probabilities and the mean number of steps to enter state 3 if the process starts each time in state 2."
+    },
+    {
+      "type": "text",
+      "value": "(18)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a0ff343965731527ddd86cb3252046dbdb4039717f3782c41e8ea28378debdad.jpg",
+      "_source_path": "images/a0ff343965731527ddd86cb3252046dbdb4039717f3782c41e8ea28378debdad.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

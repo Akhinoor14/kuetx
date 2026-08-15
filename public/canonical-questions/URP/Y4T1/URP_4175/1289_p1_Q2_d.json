@@ -1,0 +1,42 @@
+{
+  "id": "1289_p1_Q2(d)",
+  "course": {
+    "code": "URP 4175",
+    "title": "Resettlement Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2018\\4th_Year_1st_Term_2018_1289.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suggest appropriate Resettlement/compensation for the following figure:(08)."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_5f0c0b0711ebd08bf69a2e6726ee628c424f5181b3cd7c278f072a6b4782b4aa.jpg",
+      "_source_path": "images/5f0c0b0711ebd08bf69a2e6726ee628c424f5181b3cd7c278f072a6b4782b4aa.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2018"
+}

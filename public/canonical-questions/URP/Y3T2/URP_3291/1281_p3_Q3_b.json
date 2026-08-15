@@ -1,0 +1,49 @@
+{
+  "id": "1281_p3_Q3(b)",
+  "course": {
+    "code": "URP 3291",
+    "title": "Operations Research and Systems Analysis",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\3rd_Year_2nd_Term_2019_1281.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following table contains information related to the major activities of a research. (15) Use the information to do the following:"
+    },
+    {
+      "type": "text",
+      "value": "(i) Draw a precedence diagram using AOA."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Determine the expected length of the project"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Activity</td><td rowspan=1 colspan=1>Precedes</td><td rowspan=1 colspan=1>ExpectedTime (Days)</td><td rowspan=1 colspan=1>Activity</td><td rowspan=1 colspan=1>Precedes</td><td rowspan=1 colspan=1>ExpectedTime (Days)</td></tr><tr><td rowspan=1 colspan=1>a</td><td rowspan=1 colspan=1>c,b</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>i</td><td rowspan=1 colspan=1>m</td><td rowspan=1 colspan=1>10</td></tr><tr><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>d</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>m</td><td rowspan=1 colspan=1>End</td><td rowspan=1 colspan=1>8</td></tr><tr><td rowspan=1 colspan=1>d</td><td rowspan=1 colspan=1>i-</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>g</td><td rowspan=1 colspan=1>h</td><td rowspan=1 colspan=1>1</td></tr><tr><td rowspan=1 colspan=1>b</td><td rowspan=1 colspan=1>i</td><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>h</td><td rowspan=1 colspan=1>k</td><td rowspan=1 colspan=1>2</td></tr><tr><td rowspan=1 colspan=1>e</td><td rowspan=1 colspan=1>f</td><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>K</td><td rowspan=1 colspan=1>End</td><td rowspan=1 colspan=1>17</td></tr><tr><td rowspan=1 colspan=1>f</td><td rowspan=1 colspan=1>m</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>f</td><td rowspan=1 colspan=1>m</td><td rowspan=1 colspan=1>6</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2019"
+}

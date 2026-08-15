@@ -1,0 +1,46 @@
+{
+  "id": "1294_p2_Q3(c)",
+  "course": {
+    "code": "URP 4141",
+    "title": "Environmental Planning and Management",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2023\\4th_Year_1st_Term_2023_1294.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose that a certain company now believes that the probability of a (15) favorable market exactly same as the probability of an unfavorable market. Thus, each state of nature has a 0.5 probability."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=2>State of Nature</td></tr><tr><td rowspan=1 colspan=1>Alternatives</td><td rowspan=1 colspan=1>Favorable market</td><td rowspan=1 colspan=1>Unfavorable market</td></tr><tr><td rowspan=1 colspan=1>Construct a large plant</td><td rowspan=1 colspan=1>1,80,000$</td><td rowspan=1 colspan=1>-1,60,000$</td></tr><tr><td rowspan=1 colspan=1>Construct a small plant</td><td rowspan=1 colspan=1>90,000$</td><td rowspan=1 colspan=1>-15,000$</td></tr><tr><td rowspan=1 colspan=1>Do nothing</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>0</td></tr><tr><td rowspan=1 colspan=1>Probability (0-1)</td><td rowspan=1 colspan=1>0.5</td><td rowspan=1 colspan=1>0.5</td></tr></table>"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a0fbd1c7cb458045c1a64062ba201dddb808530dde615d06b68b1cf86d0f22b2.jpg",
+      "_source_path": "images/a0fbd1c7cb458045c1a64062ba201dddb808530dde615d06b68b1cf86d0f22b2.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2023"
+}

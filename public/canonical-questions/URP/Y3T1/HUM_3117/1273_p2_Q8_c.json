@@ -1,0 +1,45 @@
+{
+  "id": "1273_p2_Q8(c)",
+  "course": {
+    "code": "HUM 3117",
+    "title": "Accounting and Auditing for Planners",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2022\\3rd_Year_1st_Term_2022_1273.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate income tax for an individual assesse as per assessment year 2022-23(20) and schedule 24-A of income tax:"
+    },
+    {
+      "type": "text",
+      "value": "Mr. Shakil has the following income, deductions, and investments for the assessment year 2022-23."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Particulars</td><td rowspan=1 colspan=1>Amount (Tk)</td></tr><tr><td rowspan=1 colspan=1>1.   Basic pay</td><td rowspan=1 colspan=1>600,000</td></tr><tr><td rowspan=1 colspan=1>I1.   House rent allowance</td><td rowspan=1 colspan=1>35% of basic</td></tr><tr><td rowspan=1 colspan=1>ⅢⅢ.   Medical allowance</td><td rowspan=1 colspan=1>1500/month</td></tr><tr><td rowspan=1 colspan=1>IV.   Interest on provident fund</td><td rowspan=1 colspan=1>10,500</td></tr><tr><td rowspan=1 colspan=1>V.   Festival allowance</td><td rowspan=1 colspan=1>100,000</td></tr><tr><td rowspan=1 colspan=1>VI.   Bengali new year allowance</td><td rowspan=1 colspan=1>10,000</td></tr><tr><td rowspan=1 colspan=1>VII.   Tax deducted at source</td><td rowspan=1 colspan=1>30,000</td></tr><tr><td rowspan=1 colspan=1>VIII.   Contribution to group insurance</td><td rowspan=1 colspan=1>4,800</td></tr><tr><td rowspan=1 colspan=1>IX.   Contribution to benevolent fund</td><td rowspan=1 colspan=1>1,800</td></tr><tr><td rowspan=1 colspan=1>X.   Contribution to provident fund</td><td rowspan=1 colspan=1>60,000</td></tr><tr><td rowspan=1 colspan=1>XI.   Overtime salary &amp; bonus</td><td rowspan=1 colspan=1>150,000</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

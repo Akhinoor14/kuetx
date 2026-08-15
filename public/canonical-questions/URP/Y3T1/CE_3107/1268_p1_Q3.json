@@ -1,0 +1,73 @@
+{
+  "id": "1268_p1_Q3",
+  "course": {
+    "code": "CE 3107",
+    "title": "Elements of Solid Mechanics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\3rd_Year_1st_Term_2016_1268.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "a. Define the following terms: i) Factor of safety, ii) Modulus of resilience, iii) (15) Modulus of toughness, iv) Strain hardening, v) Tangent modulus."
+    },
+    {
+      "type": "text",
+      "value": "b. Draw the stress-strain diagram of steel and explain its different features."
+    },
+    {
+      "type": "text",
+      "value": "(07)"
+    },
+    {
+      "type": "text",
+      "value": "c. Following observations were made during the tensile test of a mild steel specimen. (13). Diameter of the specimen=50mm"
+    },
+    {
+      "type": "text",
+      "value": "Length of the specimen=200mm"
+    },
+    {
+      "type": "text",
+      "value": "Extension under a load of $4 0 \\mathrm { K N } { = } 3 3 3 { \\times } 1 0 ^ { - 4 }$ mm (Within proportional limit)"
+    },
+    {
+      "type": "text",
+      "value": "Load at yield point=154.5 KN"
+    },
+    {
+      "type": "text",
+      "value": "Maximum load=270KN"
+    },
+    {
+      "type": "text",
+      "value": "Length of the specimen after fracture=252.4mm"
+    },
+    {
+      "type": "text",
+      "value": "Calculate the values of - i) E, ii) Yield point stress, iii) Ultimate stress and iv) Percentage elongation"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

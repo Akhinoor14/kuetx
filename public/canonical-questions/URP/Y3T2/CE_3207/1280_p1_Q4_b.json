@@ -1,0 +1,42 @@
+{
+  "id": "1280_p1_Q4(b)",
+  "course": {
+    "code": "CE 3207",
+    "title": "Elements of Civil Engineering Structures",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2018\\3rd_Year_2nd_Term_2018_1280.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 28,
+  "content": [
+    {
+      "type": "text",
+      "value": "A prestressed concrete rectangular beam 500 mm by 800 mm has a simple span of (28) 7.50 m and is loaded by a uniform load of 50 KN/m including its own weight. The prestressing tendon is located as shown and produces an effective prestress of 1620 KN. Compute the fiber stresses in the concrete at A and B."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d7102dc98c78549d2968767da99f8ebf0fd538741b0d8a382aba136fa50b1ec1.jpg",
+      "_source_path": "images/d7102dc98c78549d2968767da99f8ebf0fd538741b0d8a382aba136fa50b1ec1.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

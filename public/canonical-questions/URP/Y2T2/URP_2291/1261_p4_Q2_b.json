@@ -1,0 +1,61 @@
+{
+  "id": "1261_p4_Q2(b)",
+  "course": {
+    "code": "URP 2291",
+    "title": "Statistics for Planners-II",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\2nd_Year_2nd_Term_2019_1261.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 23,
+  "content": [
+    {
+      "type": "text",
+      "value": "A scientific study compares the income (normal) distribution of farmers in (23) Khulna and Sylhet district. It finds the following statistics:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>District</td><td>Khulna $ US</td><td>Sylhet $US</td></tr><tr><td>Data</td><td></td><td></td></tr><tr><td>Mean (x)</td><td>369.84</td><td>301.63</td></tr><tr><td>Standard Deviation (σ)</td><td>382.81</td><td>301.02</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Source: Alamgir et al. (2018)"
+    },
+    {
+      "type": "text",
+      "value": "Find the following:"
+    },
+    {
+      "type": "text",
+      "value": "What percent of Khulna farmers belong to 752.65-1135.45 \\$US income range?"
+    },
+    {
+      "type": "text",
+      "value": "\\- What is the two income range of Sylhet for 2σ?"
+    },
+    {
+      "type": "text",
+      "value": "-What is your inference from the income distributions of the two districts?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

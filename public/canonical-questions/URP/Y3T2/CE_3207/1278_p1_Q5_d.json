@@ -1,0 +1,37 @@
+{
+  "id": "1278_p1_Q5(d)",
+  "course": {
+    "code": "CE 3207",
+    "title": "Elements of Civil Engineering Structures",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\3rd_Year_2nd_Term_2016_1278.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "A simply supported rectangular beam with a span of 18 ft, supports a uniform live (15) load of 960 Plf and dead load of a wall weighing 350 Plf in addition to its own weight, with $f _ { \\circ } ^ { ' } = 3 0 0 0$ psi; and $\\mathfrak { f } _ { \\mathsf { y } } = 6 0 0 0 0$ psi. Determine the required steel area. Draw the x-section and long section of the beam."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

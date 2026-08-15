@@ -1,0 +1,37 @@
+{
+  "id": "1282_p2_Q2(a)",
+  "course": {
+    "code": "URP 3231",
+    "title": "Transportation Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2020\\3rd_Year_2nd_Term_2020_1282.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The COVID-19 pandemic has had a significant impact on people's travel mode choice behavior. Is this true in your neighborhood? If so, discuss the influential factors. If not, explain why?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2020"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "1282_p2_Q1(b)",
+  "course": {
+    "code": "URP 3231",
+    "title": "Transportation Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2020\\3rd_Year_2nd_Term_2020_1282.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "Assume, you are a KCC transportation planner and you have noticed that the (18) number of e-bike accidents in seven wards in relation to the number of road intersections is as follows:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>No. of e-bike accidents</td><td rowspan=1 colspan=1>27</td><td rowspan=1 colspan=1>57</td><td rowspan=1 colspan=1>63</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>110</td><td rowspan=1 colspan=1>60</td><td rowspan=1 colspan=1>18</td></tr><tr><td rowspan=1 colspan=1>No. of road intersections</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>11</td><td rowspan=1 colspan=1>15</td><td rowspan=1 colspan=1>9</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>16</td><td rowspan=1 colspan=1>12</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Set up a linear regression equation for e-bike accidents in terms of road intersections and also determine R²."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2020"
+}

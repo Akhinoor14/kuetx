@@ -1,0 +1,42 @@
+{
+  "id": "1270_p2_Q2(b)",
+  "course": {
+    "code": "CE 3151",
+    "title": "Fundamentals of Transportation Engineering",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\3rd_Year_1st_Term_2019_1270.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is traffic volume? Define the following terms: (i) AADT (ii) AAWT (iii) ADT (iv) AWT"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0f8ed410de8819634f8f0dc46a50470cab5b142789ffd4643be2437a7a63c4ea.jpg",
+      "_source_path": "images/0f8ed410de8819634f8f0dc46a50470cab5b142789ffd4643be2437a7a63c4ea.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

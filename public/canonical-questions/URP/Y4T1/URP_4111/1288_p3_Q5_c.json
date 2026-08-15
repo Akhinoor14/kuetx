@@ -1,0 +1,41 @@
+{
+  "id": "1288_p3_Q5(c)",
+  "course": {
+    "code": "URP 4111",
+    "title": "Utility Services and Infrastructure Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\4th_Year_1st_Term_2016_1288.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the size of storage tank required for a school with 100 students and (12) 10 staff, assuming average water consumption of 5 litres/day. Roof area = 250 m². Assume runoff coefficient of 0.9. The rainfall pattern in the area is given in the table."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Month</td><td rowspan=1 colspan=1>Rainfall (mm)</td><td rowspan=1 colspan=1>Month</td><td rowspan=1 colspan=1>Rainfall (mm)</td></tr><tr><td rowspan=1 colspan=1>Jan</td><td rowspan=1 colspan=1>120</td><td rowspan=1 colspan=1>Jul</td><td rowspan=1 colspan=1>45</td></tr><tr><td rowspan=1 colspan=1>Feb</td><td rowspan=1 colspan=1>90</td><td rowspan=1 colspan=1>Aug</td><td rowspan=1 colspan=1>15</td></tr><tr><td rowspan=1 colspan=1>Mar</td><td rowspan=1 colspan=1>70</td><td rowspan=1 colspan=1>Sep</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Apr</td><td rowspan=1 colspan=1>120</td><td rowspan=1 colspan=1>Oct</td><td rowspan=1 colspan=1>45</td></tr><tr><td rowspan=1 colspan=1>May</td><td rowspan=1 colspan=1>40</td><td rowspan=1 colspan=1>Nov</td><td rowspan=1 colspan=1>70</td></tr><tr><td rowspan=1 colspan=1>Jun</td><td rowspan=1 colspan=1>50</td><td rowspan=1 colspan=1>Dec</td><td rowspan=1 colspan=1>45</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2016"
+}

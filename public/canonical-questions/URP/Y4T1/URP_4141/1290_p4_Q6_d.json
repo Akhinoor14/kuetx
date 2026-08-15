@@ -1,0 +1,37 @@
+{
+  "id": "1290_p4_Q6(d)",
+  "course": {
+    "code": "URP 4141",
+    "title": "Environmental Planning and Management",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\4th_Year_1st_Term_2019_1290.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Briefly describe the guiding principles for Green Belt Development as a (10) protective measure against the environmental impact under Environmental Management Plan (EMP)."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2019"
+}

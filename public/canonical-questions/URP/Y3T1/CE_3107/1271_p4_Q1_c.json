@@ -1,0 +1,42 @@
+{
+  "id": "1271_p4_Q1(c)",
+  "course": {
+    "code": "CE 3107",
+    "title": "Elements of Solid Mechanics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2020\\3rd_Year_1st_Term_2020_1271.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the largest weight W that can be supported by the two wires shown in (11) the following figure. The stress in either wire is not to exceed 30 ksi. The crosssectional areas of the wires AB and AC are $0 . 4 \\mathrm { i n } ^ { 2 }$ and $0 . 5 \\mathrm { i n } ^ { 2 }$ respectively."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_78d8abfabffc152fc67e0137a75b6b2118a504f9a5745579178f0aeef768991c.jpg",
+      "_source_path": "images/78d8abfabffc152fc67e0137a75b6b2118a504f9a5745579178f0aeef768991c.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2020"
+}

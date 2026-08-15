@@ -1,0 +1,41 @@
+{
+  "id": "1281_p2_Q8(c)",
+  "course": {
+    "code": "URP 3223",
+    "title": "Regional Development Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\3rd_Year_2nd_Term_2019_1281.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": "Regional growth can be either turned into “convergence” or “divergence”- discuss such scenario (09) in regional planning with provision for intervention."
+    },
+    {
+      "type": "text",
+      "value": "iii)Export base theory"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2019"
+}

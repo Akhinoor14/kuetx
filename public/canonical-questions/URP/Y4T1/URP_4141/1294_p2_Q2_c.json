@@ -1,0 +1,37 @@
+{
+  "id": "1294_p2_Q2(c)",
+  "course": {
+    "code": "URP 4141",
+    "title": "Environmental Planning and Management",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2023\\4th_Year_1st_Term_2023_1294.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Temperature increase accelerate the air borne diseases. Consider a 100- (10) 120nm virus is travelling in air at temperature (T) 27ºC. If the drag coeeficient is $1 . 2 8 \\times 1 0 ^ { - 2 2 }$ Kg/s how much linear distance it will travel after half an hour? If temperature increase in summer by 4% that make the drag coefficient 1.28× 10-2² Kg/s, how much distance the virus will travel then at the same time? (Boltzmann constant =1.38 ×10-²3J/k)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2023"
+}

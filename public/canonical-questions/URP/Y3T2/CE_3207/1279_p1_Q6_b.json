@@ -1,0 +1,37 @@
+{
+  "id": "1279_p1_Q6(b)",
+  "course": {
+    "code": "CE 3207",
+    "title": "Elements of Civil Engineering Structures",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2017\\3rd_Year_2nd_Term_2017_1279.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "A slab of 5 ft width is to be designed to place over a canal of width 15 ft. Given dead (17) load is 100 psf including self weight and live load is 40 psf. Assume $\\mathfrak { f c } ^ { \\prime } = 5$ ksi and fy = 40 ksi. Use WSD method."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

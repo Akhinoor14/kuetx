@@ -1,0 +1,53 @@
+{
+  "id": "1296_p1_Q6(c)",
+  "course": {
+    "code": "URP 4223",
+    "title": "Urban and Regional Economics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\4th_Year_2nd_Term_2014_1296.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following table shows necessary information for industry i of a region for a nation."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Employment inIndustry i</td><td rowspan=1 colspan=1>TotalEmployment</td><td rowspan=1 colspan=1>Industry Share ofArea</td></tr><tr><td rowspan=1 colspan=1>Local Area</td><td rowspan=1 colspan=1>15</td><td rowspan=1 colspan=1>150</td><td rowspan=1 colspan=1>?</td></tr><tr><td rowspan=1 colspan=1>Local Area Share ofBase Area</td><td rowspan=1 colspan=1>?</td><td rowspan=1 colspan=1>?</td><td rowspan=1 colspan=1>N/A</td></tr><tr><td rowspan=1 colspan=1>Base Area</td><td rowspan=1 colspan=1>500</td><td rowspan=1 colspan=1>10,000</td><td rowspan=1 colspan=1>?</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "(i) Fill the blanks in the above table. (05)"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Calculate basic employment in local area for industry i (05)"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Calculate location quotient for industry i and decide whether it is self- (05) sufficient, deficit or surplus?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2014"
+}

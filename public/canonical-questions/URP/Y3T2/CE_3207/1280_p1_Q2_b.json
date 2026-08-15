@@ -1,0 +1,37 @@
+{
+  "id": "1280_p1_Q2(b)",
+  "course": {
+    "code": "CE 3207",
+    "title": "Elements of Civil Engineering Structures",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2018\\3rd_Year_2nd_Term_2018_1280.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "A beam of $1 5$ simple span carrying a uniformly distributed live load of 600 psf and a (25) concentrated load of 15000 Ib, 6 ft from the right support. It is limited in size of $1 0 ^ { \\prime \\prime } \\times 1 6 ^ { \\prime \\prime }$ What reinforcement must be used for $f _ { \\mathrm { c } } ^ { \\prime } = 4 0 0 0$ psi and $f _ { y } = 6 0 , 0 0 0$ psi? Design the beam considering self weight of the beam in calculation. Show reinforcement detailing."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

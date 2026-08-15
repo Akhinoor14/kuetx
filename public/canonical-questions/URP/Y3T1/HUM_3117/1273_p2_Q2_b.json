@@ -1,0 +1,41 @@
+{
+  "id": "1273_p2_Q2(b)",
+  "course": {
+    "code": "HUM 3117",
+    "title": "Accounting and Auditing for Planners",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2022\\3rd_Year_1st_Term_2022_1273.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "Mr. Zaman decides to open a computer programming service which names (25) Zaman IT on January 1, 2020. During the first month of operation, the following transactions occurred."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>2020January 1</td><td rowspan=1 colspan=1>Zaman invests TK 100,000 cash and equipment Tk 50,000.</td></tr><tr><td rowspan=1 colspan=1>January 2</td><td rowspan=1 colspan=1>Purchase computer equipment for cash Tk 20,000</td></tr><tr><td rowspan=1 colspan=1>January 3</td><td rowspan=1 colspan=1>Office supplies purchase on account Tk 16,000</td></tr><tr><td rowspan=1 colspan=1>January 5</td><td rowspan=1 colspan=1>Received cash Tk 12,000 for programming service provided.</td></tr><tr><td rowspan=1 colspan=1>January 6</td><td rowspan=1 colspan=1>Received a bill for Tk 25,000 from the “Daily News” foradvertising on account.</td></tr><tr><td rowspan=1 colspan=1>January 10</td><td rowspan=1 colspan=1>Provide Tk 35,000 for programming services for customers,cash Tk 15,000 is received from customers and the balanceof Tk 20,000 is billed on account.</td></tr><tr><td rowspan=1 colspan=1>January 15</td><td rowspan=1 colspan=1>Expenses paid in cash salaries Tk 6000, rent Tk 9000 andutilities Tk 2000.</td></tr><tr><td rowspan=1 colspan=1>January 17</td><td rowspan=1 colspan=1>PayTk 2500 daily needs advertising bill in cash.</td></tr><tr><td rowspan=1 colspan=1>January 20</td><td rowspan=1 colspan=1>The sum of Tk 6000 in cash is received from customers whohave previously been billed for services in transaction 10.</td></tr><tr><td rowspan=1 colspan=1>January 25</td><td rowspan=1 colspan=1>Paid Tk 10,000 in cash salary expense.</td></tr><tr><td rowspan=1 colspan=2>Required: Prepare Journal</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

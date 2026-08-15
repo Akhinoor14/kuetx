@@ -1,0 +1,42 @@
+{
+  "id": "1288_p2_Q5(c)",
+  "course": {
+    "code": "URP 4161",
+    "title": "Project Planning and Management",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\4th_Year_1st_Term_2016_1288.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose, you have the right to harvest a teak plantation for the next 20 years (10) over which you expect to get 100,000 cubic feet of teak per year. The current price per cubic feet of teak is tk. 500, but it is expected to increase at a rate of 8% per year. The discount rate is 15%. What is the present value of the teak that you can harvest from the teak forest?"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nP = 0 . 1 5 d = 0 . 0 8\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2016"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1292_p2_Q8(a)",
+  "course": {
+    "code": "URP 4141",
+    "title": "Environmental Planning and Management",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2021\\4th_Year_1st_Term_2021_1292.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "An industry produces 500 $m ^ { 3 } / \\mathsf { d a y }$ of organic waste with a ${ \\mathsf { B O D } } _ { 5 }$ of 537 g/l. If wastes with $B O D _ { 5 }$ less than 300 mg/l are covered by basic sewer charges through taxes or as part of the water bill, what bi-annual surcharge this industry would pay if the operating cost for removing ${ \\mathsf { B O D } } _ { 5 }$ is \\$0.25 per kg ${ \\mathsf { B O D } } _ { 5 }$ removed."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2021"
+}

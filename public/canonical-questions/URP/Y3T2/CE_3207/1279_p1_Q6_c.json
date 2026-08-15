@@ -1,0 +1,57 @@
+{
+  "id": "1279_p1_Q6(c)",
+  "course": {
+    "code": "CE 3207",
+    "title": "Elements of Civil Engineering Structures",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2017\\3rd_Year_2nd_Term_2017_1279.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "The SPT results at various depths in a soil are shown in table below. Determine the (17) allowable bearing capacity for a square footing of 2.5 m wide located at a depth of 1.0 m below the ground level. Neglect ground water effect. Assume $\\gamma = 2 0 \\ k \\mathsf { N } / \\mathsf { m } ^ { 3 }$"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Depth (m)</td><td rowspan=1 colspan=1>0.5</td><td rowspan=1 colspan=1>0.8</td><td rowspan=1 colspan=1>1.1</td><td rowspan=1 colspan=1>1.4</td><td rowspan=1 colspan=1>1.7</td><td rowspan=1 colspan=1>2.0</td></tr><tr><td rowspan=1 colspan=1>N - value</td><td rowspan=1 colspan=1>9</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>11</td><td rowspan=1 colspan=1>13</td><td rowspan=1 colspan=1>14</td><td rowspan=1 colspan=1>17</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "(: What is column? Show different types of columns with neat sketches."
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    },
+    {
+      "type": "text",
+      "value": "(b Design a square tied column for an axial load of 320 kips. Use $\\hat { \\mathsf { f } } _ { \\mathtt { c } } ^ { \\mathtt { \\prime } } = 4$ ksi and $\\mathsf { f } _ { \\mathsf { y } } = 5 0 ~ \\mathsf { k s i }$ Assume $\\rho _ { \\tt s } = 0 . 0 2$"
+    },
+    {
+      "type": "text",
+      "value": "(25)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

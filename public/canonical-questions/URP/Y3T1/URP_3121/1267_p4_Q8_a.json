@@ -1,0 +1,45 @@
+{
+  "id": "1267_p4_Q8(a)",
+  "course": {
+    "code": "URP 3121",
+    "title": "Rural Development Planning-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\3rd_Year_1st_Term_2015_1267.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "Data for five comparable income properties that sold recently are shown (05) below:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>Property</td><td>NOI</td></tr><tr><td>A BDT 57,800</td><td>Sale Price BDT 5,66,600</td></tr><tr><td>B</td><td>49,200 4,96,900</td></tr><tr><td>C</td><td>63,000 6,30,000</td></tr><tr><td>D</td><td>56,000 5,38,500</td></tr><tr><td>E</td><td>58,500</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Find out the overall cap rate (Ro)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2015"
+}

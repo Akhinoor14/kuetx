@@ -1,0 +1,45 @@
+{
+  "id": "1281_p3_Q1(b)",
+  "course": {
+    "code": "URP 3291",
+    "title": "Operations Research and Systems Analysis",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\3rd_Year_2nd_Term_2019_1281.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "An iron ore from 4 mines will be blended. The analysis of study has shown that, in order to obtain suitable tensile properties, minimum requirements must be met for 3 basic elements A, B, and C. Each of the 4 mines contains different amounts of the 3 elements. Formulate to find the least cost blend for one ton of iron ore."
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=2 colspan=1>BasicElements</td><td rowspan=1 colspan=1>Minimum</td><td rowspan=1 colspan=4>Composition from each mine Ib/ton</td></tr><tr><td rowspan=1 colspan=1>Requirement</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>4</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>2</td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>90</td><td rowspan=1 colspan=1>150</td><td rowspan=1 colspan=1>75</td><td rowspan=1 colspan=1>175</td></tr><tr><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>30</td><td rowspan=1 colspan=1>45</td><td rowspan=1 colspan=1>25</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>37</td></tr><tr><td rowspan=1 colspan=2>Cost/ ton from each mineL.E/ ton of ore</td><td rowspan=1 colspan=1>800</td><td rowspan=1 colspan=1>400</td><td rowspan=1 colspan=1>600</td><td rowspan=1 colspan=1>500</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2019"
+}

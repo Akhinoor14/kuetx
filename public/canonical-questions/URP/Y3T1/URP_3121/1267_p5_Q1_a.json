@@ -1,0 +1,46 @@
+{
+  "id": "1267_p5_Q1(a)",
+  "course": {
+    "code": "URP 3121",
+    "title": "Rural Development Planning-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\3rd_Year_1st_Term_2015_1267.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define rural development."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_69305a6013262db271598b304a417d8bc04ae3225cee9edcf2b0f48b6360b1f2.jpg",
+      "_source_path": "images/69305a6013262db271598b304a417d8bc04ae3225cee9edcf2b0f48b6360b1f2.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(05)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2015"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "1270_p1_Q4(a)",
+  "course": {
+    "code": "CE 3107",
+    "title": "Elements of Solid Mechanics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\3rd_Year_1st_Term_2019_1270.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the resultant of the forces shown in the following figure if F = 500 Ib."
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e2ec582b6b9145105e6f4da94b8670770bd7bcaedcafa7e664765a314caeba7b.jpg",
+      "_source_path": "images/e2ec582b6b9145105e6f4da94b8670770bd7bcaedcafa7e664765a314caeba7b.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

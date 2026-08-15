@@ -1,0 +1,37 @@
+{
+  "id": "1260_p5_Q7(b)",
+  "course": {
+    "code": "URP 2291",
+    "title": "Statistics for Planners-II",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2018\\2nd_Year_2nd_Term_2018_1260.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Prices of shares (in BDT) of a company on the different days in a month were (13) found to be: 66, 65, 69, 70, 69, 71, 70, 63, 64 and 68 Test whether the mean price of the shares in the month is 65."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

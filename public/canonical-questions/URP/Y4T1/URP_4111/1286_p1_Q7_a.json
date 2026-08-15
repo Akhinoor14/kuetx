@@ -1,0 +1,37 @@
+{
+  "id": "1286_p1_Q7(a)",
+  "course": {
+    "code": "URP 4111",
+    "title": "Utility Services and Infrastructure Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\4th_Year_1st_Term_2014_1286.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Explain the concept of Kaldor-Hicks Criterion in case of assessing the (12) economic evaluation of an infrastructure project."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2014"
+}

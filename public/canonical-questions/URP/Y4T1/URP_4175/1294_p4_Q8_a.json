@@ -1,0 +1,42 @@
+{
+  "id": "1294_p4_Q8(a)",
+  "course": {
+    "code": "URP 4175",
+    "title": "Resettlement Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2023\\4th_Year_1st_Term_2023_1294.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "What are the advantages and limitations of GRM? (10)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_df43773ff38175b20a90a9c66e5e4e68d320c03d814f244e8912016cab310b83.jpg",
+      "_source_path": "images/df43773ff38175b20a90a9c66e5e4e68d320c03d814f244e8912016cab310b83.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2023"
+}

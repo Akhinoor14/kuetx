@@ -1,0 +1,42 @@
+{
+  "id": "1283_p3_Q7(c)",
+  "course": {
+    "code": "CE 3107",
+    "title": "Elements of Solid Mechanics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2021\\3rd_Year_2nd_Term_2021_1283.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the reactions at support A and B for the following beam subjected to (12) the loading as shown in figure below."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a26b57d7b23f5010c580fc00b8bec6562e75e51e833208abc96172cf2cf45320.jpg",
+      "_source_path": "images/a26b57d7b23f5010c580fc00b8bec6562e75e51e833208abc96172cf2cf45320.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2021"
+}

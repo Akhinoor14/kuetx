@@ -1,0 +1,54 @@
+{
+  "id": "1268_p1_Q1",
+  "course": {
+    "code": "CE 3107",
+    "title": "Elements of Solid Mechanics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\3rd_Year_1st_Term_2016_1268.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "a. Define i) Shear Force, ii) Bending Moment, iii) Inflection Point, iv) Dangerous (12) Section."
+    },
+    {
+      "type": "text",
+      "value": "b. Show the relationship between load, shear and moment."
+    },
+    {
+      "type": "text",
+      "value": "(08)"
+    },
+    {
+      "type": "text",
+      "value": "C. Draw the shear and bending moment diagrams for the beam shown in figure (15) below-"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8536e9f07d97e755a8c00c89f7d66cda0cd8f7b51e443d38ccd576902037e3df.jpg",
+      "_source_path": "images/8536e9f07d97e755a8c00c89f7d66cda0cd8f7b51e443d38ccd576902037e3df.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

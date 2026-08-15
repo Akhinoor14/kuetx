@@ -1,0 +1,58 @@
+{
+  "id": "1274_p3_Q4(b)",
+  "course": {
+    "code": "URP 3121",
+    "title": "Rural Development Planning-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2023\\3rd_Year_1st_Term_2023_1274.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write short notes on the following:"
+    },
+    {
+      "type": "text",
+      "value": "i. Poverty line"
+    },
+    {
+      "type": "text",
+      "value": "ii. World Happiness Report"
+    },
+    {
+      "type": "text",
+      "value": "iii. Gini Coefficient"
+    },
+    {
+      "type": "text",
+      "value": "iv. Leading and Lagging indicator."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_50958a4d4c994fc14a7efe48fc4ef017eb2046f4512ac43209ef25d3ca5b4e96.jpg",
+      "_source_path": "images/50958a4d4c994fc14a7efe48fc4ef017eb2046f4512ac43209ef25d3ca5b4e96.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

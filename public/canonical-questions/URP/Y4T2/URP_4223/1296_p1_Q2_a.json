@@ -1,0 +1,37 @@
+{
+  "id": "1296_p1_Q2(a)",
+  "course": {
+    "code": "URP 4223",
+    "title": "Urban and Regional Economics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\4th_Year_2nd_Term_2014_1296.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Assume a city's geographic distribution of land use follows the bid-rent theory has three major land uses: commercial (0-2 km), residential (2-8 km) and agriculture (8 km \\~). Suppose the city authority decides not to extend the residential services up 6 km as part of a zoning policy. Explain how the zoning policy will affect/rearrange the land use distribution. Who will benefit and who will lose in such land use policy."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2014"
+}

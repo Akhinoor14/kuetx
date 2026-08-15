@@ -1,0 +1,37 @@
+{
+  "id": "1280_p2_Q5(d)",
+  "course": {
+    "code": "CE 3261",
+    "title": "Water Resources Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2018\\3rd_Year_2nd_Term_2018_1280.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A stream of 170 lit/sec was diverted from canal and 100 lit/sec were diverted to the field. An area of 1.10 hectare was irrigated in 1 day. The effective depth of root zone was 5.5 ft. depth of water penetration varied linearly from 5.5 ft. at the head and 1.10 m at the tail of field. Available moisture holding capacity of the soil is 20 cm/meter depth of soil. Determine no, Na, Ns and na-"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

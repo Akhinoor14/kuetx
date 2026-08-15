@@ -1,0 +1,53 @@
+{
+  "id": "1277_p4_Q4(c)",
+  "course": {
+    "code": "URP 3223",
+    "title": "Regional Development Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\3rd_Year_2nd_Term_2015_1277.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following table shows industry-wise employment data for the region A, B, (15) C&D."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=2 colspan=1>Major IndustrialSector</td><td rowspan=1 colspan=4>Employment of the region</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>D</td></tr><tr><td rowspan=1 colspan=1>Agriculture &amp; Fishing</td><td rowspan=1 colspan=1>8180</td><td rowspan=1 colspan=1>2526</td><td rowspan=1 colspan=1>7847</td><td rowspan=1 colspan=1>4078</td></tr><tr><td rowspan=1 colspan=1>Mining</td><td rowspan=1 colspan=1>449</td><td rowspan=1 colspan=1>139</td><td rowspan=1 colspan=1>697</td><td rowspan=1 colspan=1>1259</td></tr><tr><td rowspan=1 colspan=1>Construction</td><td rowspan=1 colspan=1>42000</td><td rowspan=1 colspan=1>34885</td><td rowspan=1 colspan=1>55146</td><td rowspan=1 colspan=1>28994</td></tr><tr><td rowspan=1 colspan=1>Manufacturing</td><td rowspan=1 colspan=1>117830</td><td rowspan=1 colspan=1>113441</td><td rowspan=1 colspan=1>179691</td><td rowspan=1 colspan=1>179362</td></tr><tr><td rowspan=1 colspan=1>Transportation</td><td rowspan=1 colspan=1>34675</td><td rowspan=1 colspan=1>71652</td><td rowspan=1 colspan=1>61430</td><td rowspan=1 colspan=1>57856</td></tr><tr><td rowspan=1 colspan=1>Wholesale Trade</td><td rowspan=1 colspan=1>46391</td><td rowspan=1 colspan=1>72719</td><td rowspan=1 colspan=1>67643</td><td rowspan=1 colspan=1>78606</td></tr><tr><td rowspan=1 colspan=1>Retail Trade</td><td rowspan=1 colspan=1>187673</td><td rowspan=1 colspan=1>138622</td><td rowspan=1 colspan=1>153268</td><td rowspan=1 colspan=1>157176</td></tr><tr><td rowspan=1 colspan=1>Finance &amp; Real Estate</td><td rowspan=1 colspan=1>66320</td><td rowspan=1 colspan=1>85452</td><td rowspan=1 colspan=1>72523</td><td rowspan=1 colspan=1>68927</td></tr><tr><td rowspan=1 colspan=1>Services</td><td rowspan=1 colspan=1>311783</td><td rowspan=1 colspan=1>266781</td><td rowspan=1 colspan=1>239308</td><td rowspan=1 colspan=1>365064</td></tr><tr><td rowspan=1 colspan=1>Non-classifiableEstablishments</td><td rowspan=1 colspan=1>748</td><td rowspan=1 colspan=1>805</td><td rowspan=1 colspan=1>2744</td><td rowspan=1 colspan=1>759</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Now calculate the followings using minimum requirement approach."
+    },
+    {
+      "type": "text",
+      "value": "i. The basic employment for region B"
+    },
+    {
+      "type": "text",
+      "value": "ii. The basic multiplier for region B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2015"
+}

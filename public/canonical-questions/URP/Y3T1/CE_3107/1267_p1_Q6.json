@@ -1,0 +1,46 @@
+{
+  "id": "1267_p1_Q6",
+  "course": {
+    "code": "CE 3107",
+    "title": "Elements of Solid Mechanics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\3rd_Year_1st_Term_2015_1267.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "a. A round bar of length L tapers uniformly from radius ${ \\bf r } _ { 1 }$ at one end to radius $\\boldsymbol { \\mathrm { r } } _ { 2 }$ at (15) the other. Show that extension produced by a tensile axial load P is $\\mathrm { P L } / 2 \\pi \\mathrm { E r } _ { 1 } ^ { 2 }$"
+    },
+    {
+      "type": "text",
+      "value": "b. A reinforced concrete foundation beam ABCD that supports a uniform load (20) intensity q lb/ft. Determine the maximum load intensity q if the shear force at point B and bending moment at E are 1800 lb and 2500 lb-ft respectively. Assume factor of safety for shear and bending moment are 2.5 and 3, respectively."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ed32f13e1a7600221da024ca2d456962911fddac15e6a3d56d13b78130e49272.jpg",
+      "_source_path": "images/ed32f13e1a7600221da024ca2d456962911fddac15e6a3d56d13b78130e49272.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2015"
+}

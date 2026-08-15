@@ -1,0 +1,37 @@
+{
+  "id": "1296_p4_Q7(d)",
+  "course": {
+    "code": "URP 4217",
+    "title": "Coastal and Special Zones Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\4th_Year_2nd_Term_2014_1296.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Waves having a wave period of 10 sec and wave height of 3 m break on a (10) quartz sand beach with median grain size (D50=.2mm). Assume a median grain size D50 corresponding to a density of 2650 kg/m³, k coefficient=0.23, k=1.0 and sediment falling velocity =0.03 m/sec for this problem. Calculate volumetric cross-shore sand transport rates in a beach with 3 percent beach slope and water depth of 5 m."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2014"
+}

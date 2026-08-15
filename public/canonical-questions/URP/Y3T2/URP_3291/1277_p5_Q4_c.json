@@ -1,0 +1,50 @@
+{
+  "id": "1277_p5_Q4(c)",
+  "course": {
+    "code": "URP 3291",
+    "title": "Operations Research and Systems Analysis",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\3rd_Year_2nd_Term_2015_1277.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "Process involves the production of a particular component which is then (20) installed into an end product. The following summary shows the production time of component and their probabilities."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Production Time (min)</td><td rowspan=1 colspan=1>Probability</td></tr><tr><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>0.15</td></tr><tr><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>0.35</td></tr><tr><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>0.20</td></tr><tr><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>0.15</td></tr><tr><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>0.15</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_7c35ad9e369a3f9dfb2519c2164eecceb4241b60980fe2903f6e144a6b2f930b.jpg",
+      "_source_path": "images/7c35ad9e369a3f9dfb2519c2164eecceb4241b60980fe2903f6e144a6b2f930b.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2015"
+}

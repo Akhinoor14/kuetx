@@ -1,0 +1,42 @@
+{
+  "id": "1286_p5_Q7(b)",
+  "course": {
+    "code": "URP 4141",
+    "title": "Environmental Planning and Management",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\4th_Year_1st_Term_2014_1286.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "List out the different methods of impact prediction."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e3932420a3b0d4efb3f45ba9dd8b5c2bd8c3ee659a10b1a95ec77e51bc1d28e2.jpg",
+      "_source_path": "images/e3932420a3b0d4efb3f45ba9dd8b5c2bd8c3ee659a10b1a95ec77e51bc1d28e2.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2014"
+}

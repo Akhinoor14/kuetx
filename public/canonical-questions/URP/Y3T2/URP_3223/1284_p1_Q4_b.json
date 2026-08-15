@@ -1,0 +1,46 @@
+{
+  "id": "1284_p1_Q4(b)",
+  "course": {
+    "code": "URP 3223",
+    "title": "Regional Development Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2022\\3rd_Year_2nd_Term_2022_1284.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is production function? A firm can produce a product based on the following production function:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nQ = 1 0 ~ K ^ { \\frac { 3 } { 4 } } , L ^ { \\frac { 1 } { 4 } }\\tag{10}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Calculate the average labor product when the firm employs 55 capital units and 19 labor units."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

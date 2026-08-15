@@ -1,0 +1,41 @@
+{
+  "id": "1272_p1_Q2(c)",
+  "course": {
+    "code": "URP 3121",
+    "title": "Rural Development Planning-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2021\\3rd_Year_1st_Term_2021_1272.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is the Gini-coefficient? From the following data compare the income (12) disparity level of Region A and Region B."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=2 colspan=1>Income (BDT)</td><td rowspan=1 colspan=1>Region A</td><td rowspan=1 colspan=1>Region B</td></tr><tr><td rowspan=1 colspan=1>No. of Person</td><td rowspan=1 colspan=1>No. of Person</td></tr><tr><td rowspan=1 colspan=1>1000</td><td rowspan=1 colspan=1>600</td><td rowspan=1 colspan=1>1500</td></tr><tr><td rowspan=1 colspan=1>1200</td><td rowspan=1 colspan=1>800</td><td rowspan=1 colspan=1>1000</td></tr><tr><td rowspan=1 colspan=1>1400</td><td rowspan=1 colspan=1>1200</td><td rowspan=1 colspan=1>900</td></tr><tr><td rowspan=1 colspan=1>1600</td><td rowspan=1 colspan=1>900</td><td rowspan=1 colspan=1>1100</td></tr><tr><td rowspan=1 colspan=1>2000</td><td rowspan=1 colspan=1>1000</td><td rowspan=1 colspan=1>300</td></tr><tr><td rowspan=1 colspan=1>2300</td><td rowspan=1 colspan=1>500</td><td rowspan=1 colspan=1>200</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

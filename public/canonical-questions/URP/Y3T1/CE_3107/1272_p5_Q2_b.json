@@ -1,0 +1,54 @@
+{
+  "id": "1272_p5_Q2(b)",
+  "course": {
+    "code": "CE 3107",
+    "title": "Elements of Solid Mechanics",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2021\\3rd_Year_1st_Term_2021_1272.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "A horizontal bar of negligible mas is hinged at point E and suspended at B and D (25) from bungy cords AB and CD. The cords AB and CD are connected to pin supports at A and C respectively. If you are hanging at point G with a mass of 60 kg"
+    },
+    {
+      "type": "text",
+      "value": "(i) What will be the deflection at point D?"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Determine the support reaction at E (ii) For bungy cord ÀB, determine the force, normal stress, normal strain and change in diameter."
+    },
+    {
+      "type": "text",
+      "value": "Assume the horizontal bar is rigid and $\\mathfrak { g } = 9 . 8 1 \\ \\mathsf { m } \\mathfrak { s } ^ { - 2 }$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_42d19453cf93f242226911efb22ffb034ee12cac774b40ce2670071b450c6129.jpg",
+      "_source_path": "images/42d19453cf93f242226911efb22ffb034ee12cac774b40ce2670071b450c6129.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

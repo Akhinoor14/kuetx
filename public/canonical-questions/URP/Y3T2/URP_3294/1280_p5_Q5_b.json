@@ -1,0 +1,65 @@
+{
+  "id": "1280_p5_Q5(b)",
+  "course": {
+    "code": "URP 3294",
+    "title": "Research Methodology",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2018\\3rd_Year_2nd_Term_2018_1280.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "An airline organization has one reservation clerk on duty in its local branch at any given time. The clerk handles information regarding passenger reservation and flight timings. Assume that the number of customers arriving during any given period is . poisson distribution with an arrival rate of eight per hour and that the reservation clerk can serve a customer in six minutes on an average, with an exponentially distributed service time."
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "text",
+      "value": "(i) What is the probability that the system is busy?"
+    },
+    {
+      "type": "text",
+      "value": "(ii) What is the average time a customer spends in the system?"
+    },
+    {
+      "type": "text",
+      "value": "(iii) What is the average length in the queue?"
+    },
+    {
+      "type": "text",
+      "value": "(iv) What is the expected number of customer in the system?"
+    },
+    {
+      "type": "text",
+      "value": "The time Barber Joe takes to give a haircut is exponential with a mean of 15 minutes. Because of his popularity, customers usually arrive at a rate much higher than Joe can handle i.e., 5 customers per hour which follows poisson distribution. Joe really will feel comfortable if the arrival rate is effective reduced to about 3 customers per hour. To accomplish this goai, he came up with the idea of providing limited seating in the waiting area so that newly arriving customers will go elsewhere when they discover that all the seats are taker. How many seats should Joe provide to accomplish his goal?"
+    },
+    {
+      "type": "text",
+      "value": "(13)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

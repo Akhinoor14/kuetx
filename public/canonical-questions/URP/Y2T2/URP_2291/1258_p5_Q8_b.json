@@ -1,0 +1,49 @@
+{
+  "id": "1258_p5_Q8(b)",
+  "course": {
+    "code": "URP 2291",
+    "title": "Statistics for Planners-II",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\2nd_Year_2nd_Term_2016_1258.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "The population of a city in consecutive years i.e. 2000, 2005 and 2010 are (11) 100 000: 200 000: and 350 000 resnoctivoly, Dotormine 100,000; 200,000; and 350,000 respectively. Determine"
+    },
+    {
+      "type": "text",
+      "value": "(i) Saturated population."
+    },
+    {
+      "type": "text",
+      "value": "(ii) The equation of logistic curve."
+    },
+    {
+      "type": "text",
+      "value": "(iii) The expected population in 2025."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

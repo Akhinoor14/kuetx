@@ -1,0 +1,41 @@
+{
+  "id": "1266_p5_Q4(a)",
+  "course": {
+    "code": "URP 3121",
+    "title": "Rural Development Planning-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\3rd_Year_1st_Term_2014_1266.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write short notes from the following (any five): (5x7=3!   \ni. Incidence of poverty and poverty line expenditure   \nii. Poverty line calorie intake and prevalence of malnutrition   \niii. Poverty gap and poverty trap   \niv. Price policy   \nV. Swanirvar (Self-reliance) Movement   \nvi. Recent interventions of the Government for agricultural   \ndevelopment of Bangladesh.   \nvii. Rural development initiatives by local NGOs."
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2014"
+}
