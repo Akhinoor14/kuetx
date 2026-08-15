@@ -1,0 +1,49 @@
+{
+  "id": "1016_p6_Q4(d)",
+  "course": {
+    "code": "ME 1105",
+    "title": "Thermal Engineering",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2023\\1st_Year_1st_Term_2023_1016.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A steam generator plant produces steam at 100 bar and 500°C. The feed water enters the economizer at l 60°C. The steam generation rate is 100,000 kg/h, and the boiler plant efficiency is 88%. Assuming saturated water enters the boiler and exits with a steam quality of 0.92, determine: (i) The fuel consumption rate in kg/h, given a calorific value of 21 MJ/kg; (ii) Equivalent evaporation from and at 100°C; (iii) The percentage of total heat absorbed in the economizer, evaporator and superheater."
+    },
+    {
+      "type": "text",
+      "value": "S(a) What is meant by the term 'fuel'? Explain the different types of solid fuel mentioning their 11 calorific values."
+    },
+    {
+      "type": "text",
+      "value": "S(b) What is meant by HCV and LCV? Explain briefly the method used to determine the higher 12 calorific value of the liquid fuel."
+    },
+    {
+      "type": "text",
+      "value": "S(c) A bomb calorimeter is used to determine the calorific value of a sample of coal and the 12 following results are obtained: Mass of coal burnt= 1 gm, Mass of water in calorimeter= 2.6 kg, Water equivalent of the apparatus = 0.75 kg, Initial temperature of water = 18°C, Max. observed temperature of water= 22°C, Cooling correction= +0.0 I 7°C. If the fuel contains 4% of hydrogen, calculate its lower calorific value of the fuel."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2023"
+}

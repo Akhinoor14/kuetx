@@ -1,0 +1,42 @@
+{
+  "id": "1157_p3_Q8(b)",
+  "course": {
+    "code": "ME 2127",
+    "title": "Solid Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2019\\2nd_Year_1st_Term_2019_1157.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the moment of inertia of the area as shown in Figure–8(b) with respect to x and  (15) y-axis."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_14963be61ab000acb80767db1e3183c2d52732a777a094360018cda7936c2065.jpg",
+      "_source_path": "images/14963be61ab000acb80767db1e3183c2d52732a777a094360018cda7936c2065.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

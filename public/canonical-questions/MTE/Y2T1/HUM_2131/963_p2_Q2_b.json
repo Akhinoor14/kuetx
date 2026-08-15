@@ -1,0 +1,78 @@
+{
+  "id": "963_p2_Q2(b)",
+  "course": {
+    "code": "HUM 2131",
+    "title": "Engineering Economics and Accounting",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2020\\2nd_Year_1st_Term_2020_963.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The “Karim Brothers\" is a publisher of romance novels. The corporation hired an economist to determine the demand for its product. After months of hard work the economist informed the company that the demand for the firm's novel is given by the following equation:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nQ _ { x } = 1 2 0 0 0 - 5 0 0 0 P _ { x } + 5 I + 5 0 0 P _ { c }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Where,"
+    },
+    {
+      "type": "text",
+      "value": "$Q _ { x }$ is the demand for Karim Brothers' novels."
+    },
+    {
+      "type": "text",
+      "value": "$P _ { x }$ is the price charged for Karim's novel."
+    },
+    {
+      "type": "text",
+      "value": "I is the income per-capita."
+    },
+    {
+      "type": "text",
+      "value": "$P _ { c }$ is the price from competing publisher."
+    },
+    {
+      "type": "text",
+      "value": "Assume the initial value of $P _ { x } ,$ I and $P _ { c }$ are \\$6, \\$1200 and \\$7 respectively. Using the above information the manager wanted to determine-"
+    },
+    {
+      "type": "text",
+      "value": "i. What effect a price increased would have on total revenues."
+    },
+    {
+      "type": "text",
+      "value": "ii. Evaluate how sale of the novel would change during a period of rising incomes."
+    },
+    {
+      "type": "text",
+      "value": "iii. Assess the probable impact if competing publishers would raise their prices."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2020"
+}

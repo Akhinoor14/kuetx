@@ -1,0 +1,37 @@
+{
+  "id": "1342_p1_Q2(b)",
+  "course": {
+    "code": "ME 4105",
+    "title": "Applied Thermodynamics",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2024\\4th_Year_1st_Term_2024_1342.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Show that the efficiency of rocket propulsion can be expressed as $\\eta _ { \\mathrm { r o c k e t } } = 2 \\sigma / ( 1 + \\sigma ^ { 2 } )$ where the symbols have their usual meanings."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2024"
+}

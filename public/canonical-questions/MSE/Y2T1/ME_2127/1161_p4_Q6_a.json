@@ -1,0 +1,55 @@
+{
+  "id": "1161_p4_Q6(a)",
+  "course": {
+    "code": "ME 2127",
+    "title": "Solid Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2023\\2nd_Year_1st_Term_2023_1161.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "by direct integration."
+    },
+    {
+      "type": "text",
+      "value": "(17)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f1feac551a58957f0cd0477212323d9e7316364f6b3ea5cb44a0ef97f28ff903.jpg",
+      "_source_path": "images/f1feac551a58957f0cd0477212323d9e7316364f6b3ea5cb44a0ef97f28ff903.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f9100e5c4999cd34a5f02a2331354c1806d4731cb0dee7ccc01a51271a48f533.jpg",
+      "_source_path": "images/f9100e5c4999cd34a5f02a2331354c1806d4731cb0dee7ccc01a51271a48f533.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(18)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

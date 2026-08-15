@@ -1,0 +1,42 @@
+{
+  "id": "1038_p3_Q5(b)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\2nd_Year_2nd_Term_2021_1038.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the restrained beam shown in figure, compute end moments and maximum E/8."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a5eb7660d29588926d629f10c4aa179cb550cee9431c2697b6394df01f3121f2.jpg",
+      "_source_path": "images/a5eb7660d29588926d629f10c4aa179cb550cee9431c2697b6394df01f3121f2.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

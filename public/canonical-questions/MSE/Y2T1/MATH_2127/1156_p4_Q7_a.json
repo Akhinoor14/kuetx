@@ -1,0 +1,46 @@
+{
+  "id": "1156_p4_Q7(a)",
+  "course": {
+    "code": "MATH 2127",
+    "title": "Vector Analysis and Linear Algebra",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2018\\2nd_Year_1st_Term_2018_1156.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define subspace. Let S and T be the subspaces defined below. Find the basis and dimension of S ∩ T, where"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r l } & { S = \\{ ( \\mathbf { x } , \\mathbf { y } , \\mathbf { z } , \\mathbf { t } ) \\colon \\mathbf { y } + \\mathbf { z } + \\mathbf { t } = 0 \\} } \\\\ & { \\mathrm { T } = \\{ ( \\mathbf { x } , \\mathbf { y } , \\mathbf { z } , \\mathbf { t } ) \\colon \\mathbf { x } + \\mathbf { y } = 0 , \\mathbf { z } = 2 \\mathbf { t } \\} } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "CBY If $\\mathsf { M } = { \\binom { 1 } { 2 } } \\ \\mathsf { \\Gamma } _ { 3 } ^ { 4 } )$ , then find all eigeņvalues of M and the corresponding eigenvectors. Also evaluate an invertible matrix P such that $\\mathbf { p } ^ { \\mathbf { - } 1 } \\mathbf { M } \\mathbf { P }$ is diagonal."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

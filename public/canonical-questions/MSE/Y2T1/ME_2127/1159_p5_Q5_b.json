@@ -1,0 +1,42 @@
+{
+  "id": "1159_p5_Q5(b)",
+  "course": {
+    "code": "ME 2127",
+    "title": "Solid Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\2nd_Year_1st_Term_2021_1159.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The beam carries a uniformly distributed load w over the entire length. Determine w if $\\sigma _ { t } \\leq 4 0$ MPa and $\\sigma _ { c } \\le 8 0$ MPa."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_604cc28e8b945153034d450dcf20631cc90f28f4c65d199989667600a4a6fa8e.jpg",
+      "_source_path": "images/604cc28e8b945153034d450dcf20631cc90f28f4c65d199989667600a4a6fa8e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

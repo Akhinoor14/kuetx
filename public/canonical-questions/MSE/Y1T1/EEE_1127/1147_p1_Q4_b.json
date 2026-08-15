@@ -1,0 +1,45 @@
+{
+  "id": "1147_p1_Q4(b)",
+  "course": {
+    "code": "EEE 1127",
+    "title": "Electrical Engineering Fundamentals",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\1st_Year_1st_Term_2021_1147.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "Express these sinusoidal as phases:"
+    },
+    {
+      "type": "text",
+      "value": "(08)"
+    },
+    {
+      "type": "text",
+      "value": "$v = 7 c o s ( 2 t + 4 0 ^ { \\circ } ) \\& i = - 4 \\mathrm { s i n } ( 1 0 t + 1 0 ^ { \\circ } )$ . Also, find the resultant $P = V i$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2021"
+}

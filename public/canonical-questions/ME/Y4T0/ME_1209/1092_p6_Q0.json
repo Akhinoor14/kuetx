@@ -1,0 +1,42 @@
+{
+  "id": "1092_p6_Q0",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\4th_Year_Backlog_2018_1092.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "0",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Rod $ { \\mathrm { \\ddot { A } B } }$ can slide freely along the floor and the inclined plane. Denoting by $\\nu _ { A }$ the velocity of point A, derive an expression for (i) the angular velocity of the rod, and (ii) the velocity of end B. 1 人."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_14e84c22ab4801aa97a4ff26d0626ad82c2da72e9a3713b13cbfeb0de7a5dff3.jpg",
+      "_source_path": "images/14e84c22ab4801aa97a4ff26d0626ad82c2da72e9a3713b13cbfeb0de7a5dff3.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Backlog Examination, 2018"
+}

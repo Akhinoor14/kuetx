@@ -1,0 +1,65 @@
+{
+  "id": "960_p3_Q2(a)",
+  "course": {
+    "code": "HUM 1231",
+    "title": "Technical and Communicative English",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\1st_Year_2nd_Term_2022_960.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Transform the following sentences as asked in brackets."
+    },
+    {
+      "type": "text",
+      "value": "i. Liza, who is a banker, works sincerely in office. (Simple)"
+    },
+    {
+      "type": "text",
+      "value": "ii. Soma walking everyday at morning is healthy. (Complex)"
+    },
+    {
+      "type": "text",
+      "value": "iii. What you recite sweetly is nice to enjoy. (Simple)"
+    },
+    {
+      "type": "text",
+      "value": "iv. He cannot exercise regularly because of his laziness. (Complex)"
+    },
+    {
+      "type": "text",
+      "value": "v. In spite of being punctual he is unfortunate in life. (Complex)"
+    },
+    {
+      "type": "text",
+      "value": "vi. Besides living peacefully, he helps the poor. (Compound)"
+    },
+    {
+      "type": "text",
+      "value": "vii. Habib is the most hardworking boy in the village. (Positive)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2022"
+}

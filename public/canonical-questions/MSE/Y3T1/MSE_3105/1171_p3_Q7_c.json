@@ -1,0 +1,50 @@
+{
+  "id": "1171_p3_Q7(c)",
+  "course": {
+    "code": "MSE 3105",
+    "title": "Welding and Materials Joining Processes",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2023\\3rd_Year_1st_Term_2023_1171.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "]. He does not know why."
+    },
+    {
+      "type": "text",
+      "value": "(i) As the lead engineer, explain to him why the hardness drops during welding, by analyzing what happens at locations 1-4with thermal cycles and phase diagram."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Propose a solution to increase the hardness using post-weld artificial aging and explain how it will affect the locations 1-4. Draw the final expected hardness profile vs. location."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e73e0624851fbd4678fdd6fa37d2bb351fdd08f35444ded95d43fcc25a05050c.jpg",
+      "_source_path": "images/e73e0624851fbd4678fdd6fa37d2bb351fdd08f35444ded95d43fcc25a05050c.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

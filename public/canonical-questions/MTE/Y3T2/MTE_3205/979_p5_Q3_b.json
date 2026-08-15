@@ -1,0 +1,42 @@
+{
+  "id": "979_p5_Q3(b)",
+  "course": {
+    "code": "MTE 3205",
+    "title": "Robotics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\3rd_Year_2nd_Term_2022_979.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The arm with three degree of freedom is shown in the following figure. All three joints are revolute and the axis of joint 1 is not parallel to the other two. There is a twist of 90° between axis 1 and 2. Derive the kinematic equation for $\\overset { B } { W } T$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_5a998c905df843ddc6ab83393951559a9228d1de1ba8650420555c82c0462a9d.jpg",
+      "_source_path": "images/5a998c905df843ddc6ab83393951559a9228d1de1ba8650420555c82c0462a9d.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

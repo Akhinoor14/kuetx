@@ -1,0 +1,51 @@
+{
+  "id": "1080_p3_Q4(b)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\2nd_Year_Backlog_2018_1080.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A beam carries a concentrated load W and a total uniformly distributed load of 4W as 18 shown in figure. What safe value of W can be applied if $\\sigma _ { \\mathsf { c } } \\leq 1 0 0$ MPa and $\\sigma _ { \\mathrm { t } } \\leq 6 0$ MPa? Can a greater load be applied if the section is inverted? Explain."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e28382e8f496d83faf9f15f94037052c2540b7dfec2a82eaa627522bb414b805.jpg",
+      "_source_path": "images/e28382e8f496d83faf9f15f94037052c2540b7dfec2a82eaa627522bb414b805.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_1f01cabf48c38d12db87a276a5df9f278a206f41801362c4d1c6ec1c8301da44.jpg",
+      "_source_path": "images/1f01cabf48c38d12db87a276a5df9f278a206f41801362c4d1c6ec1c8301da44.jpg"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2018"
+}

@@ -1,0 +1,58 @@
+{
+  "id": "1077_p4_Q1(a)",
+  "course": {
+    "code": "MATH 1105",
+    "title": "Mathematics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\1st_Year_Backlog_2022_1077.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define continuity of a function. Discuss the continuity and differentiability at $x = 0$ 15 of the function:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nf ( x ) = \\left\\{ \\begin{array} { c c c } { { 1 } } \\\\ { { 1 + s i n x } } \\\\ { { } } \\\\ { { 2 + \\left( x - \\displaystyle \\frac { \\pi } { 2 } \\right) ^ { 2 } } } \\end{array} \\right.\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "when $x < 0$"
+    },
+    {
+      "type": "text",
+      "value": "when $0 \\leq x \\leq \\pi / 2$"
+    },
+    {
+      "type": "text",
+      "value": "when rr/2 � x"
+    },
+    {
+      "type": "text",
+      "value": "l(b) Find $\\frac { d y } { d x }$ , where $y = x c o s ^ { - 1 } x + ( s i n x ) ^ { l n x } .$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2022"
+}

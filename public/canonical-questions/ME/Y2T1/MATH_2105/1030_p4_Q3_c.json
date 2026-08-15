@@ -1,0 +1,46 @@
+{
+  "id": "1030_p4_Q3(c)",
+  "course": {
+    "code": "MATH 2105",
+    "title": "Mathematics III",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\2nd_Year_1st_Term_2021_1030.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Test the linear dependency of the following $2 \\times 2$ matrices over R:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nA = { \\left[ \\begin{array} { l l } { 1 } & { - 5 } \\\\ { - 4 } & { 2 } \\end{array} \\right] } , \\qquad B = { \\left[ \\begin{array} { l l } { 1 } & { 1 } \\\\ { - 1 } & { 5 } \\end{array} \\right] } , \\qquad C = { \\left[ \\begin{array} { l l } { 2 } & { - 4 } \\\\ { - 5 } & { 7 } \\end{array} \\right] } , { \\mathrm { a n d } } \\qquad D = { \\left[ \\begin{array} { l l } { 1 } & { - 7 } \\\\ { - 5 } & { 1 } \\end{array} \\right] }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "and find a linear combination of them, if possible."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

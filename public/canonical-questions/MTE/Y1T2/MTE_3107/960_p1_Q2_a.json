@@ -1,0 +1,37 @@
+{
+  "id": "960_p1_Q2(a)",
+  "course": {
+    "code": "MTE 3107",
+    "title": "Data Structure and Algorithm",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\1st_Year_2nd_Term_2022_960.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write down the pseudocode and detailed algorithm to input electricity unit charges and 12   \ncalculate total electricity bill according to given conditions:   \nFor first 50 units, Tk 2.00/unit   \nFor next 100 units, Tk 2.50/unit   \nFor next 100 units, Tk 3.00/unit   \nFor unit above 250 units, Tk 4.00/unit   \nAn additional surcharge of 20% is added to the bill."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2022"
+}

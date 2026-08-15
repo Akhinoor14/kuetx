@@ -1,0 +1,42 @@
+{
+  "id": "964_p5_Q5(d)",
+  "course": {
+    "code": "ME 2131",
+    "title": "Engineering Mechanics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\2nd_Year_1st_Term_2021_964.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The rotation of rod OA about O is defined by the rotation $\\theta = 2 t ^ { 2 }$ , where θ is expressed in 18 radians and t in seconds. Collar B slides along the rod in such a way that its distance from O is $r = 6 0 t ^ { 2 } - 2 0 t ^ { 3 }$ , where r is expressed in inches and t in seconds. When $t = 1 s$ determine i) the velocity of the collar, ii) the total acceleration of the collar, iii) the acceleration of the collar relative to the rod."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a8fbb81df25d5d188de0409ecacaef0a6cc635fd337b928e264de377d514c0f4.jpg",
+      "_source_path": "images/a8fbb81df25d5d188de0409ecacaef0a6cc635fd337b928e264de377d514c0f4.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1168_p2_Q2(b)",
+  "course": {
+    "code": "MSE 3103",
+    "title": "Materials Manufacturing Processes",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2020\\3rd_Year_1st_Term_2020_1168.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Deduce an expression for the determination of core print length X of a core having diameter (12) D and length L. A hollow steel component of having 20mm inner diameter and 40mm length to be cast. Determine the length of the core print. Given: Steel density 7.8 g/cm³, core density 1.67g/cm³, core compressive strength 2.5 g/cm²."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2020"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "1148_p1_Q2(a)",
+  "course": {
+    "code": "MATH 1127",
+    "title": "Differential and Integral Calculus",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2022\\1st_Year_1st_Term_2022_1148.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "State Leibnitz's theorem and use it to prove $( 1 - x ^ { 2 } ) y _ { 9 } = 1 5 x y _ { 8 }$ 2"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { w h e r e } , y = \\cos ( 7 c o s ^ { - 1 } x ) .\\tag{12}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2022"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1085_p2_Q2(b)",
+  "course": {
+    "code": "ME 1105",
+    "title": "Thermal Engineering",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\3rd_Year_Backlog_2018_1085.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A brass plate (K = 115 W/mK) of thickness 6 cm is subjected to a constant uniform heat flux 10 $\\mathrm { { k W / m ^ { 2 } } }$ at the boundary surface at ${ \\bf x } \\ = \\ 0 .$ Heat is dissipated by convection from the other boundary surface into a fluid at a temperature of 90°C with a convective heat transfer coefficient of 400 $\\mathrm { W / m } ^ { 2 } \\mathrm { K }$ Calculate the surface temperatures of the slab."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year Backlog Examination, 2018"
+}

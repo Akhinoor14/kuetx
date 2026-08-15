@@ -1,0 +1,47 @@
+{
+  "id": "969_p2_Q8(a)",
+  "course": {
+    "code": "EE2231",
+    "title": "Signals and Linear Systems",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\2nd_Year_2nd_Term_2021_969.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A rectangular voltage pulse of unit height and duration T is applied to a series R-C 12 combination at t=0. Determine the voltage across the capacitor C as a function of time. The R-C circuit and voltage pulse are shown below."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_2126127a47aca8e5fa055e5e882885344e959b51ae442a8e3708e3dea6de4bab.jpg",
+      "_source_path": "images/2126127a47aca8e5fa055e5e882885344e959b51ae442a8e3708e3dea6de4bab.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_9ac52bd7f9562e214bff52139a58345c1a514534a45ba0f5e29ec6ed6e4abf1d.jpg",
+      "_source_path": "images/9ac52bd7f9562e214bff52139a58345c1a514534a45ba0f5e29ec6ed6e4abf1d.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

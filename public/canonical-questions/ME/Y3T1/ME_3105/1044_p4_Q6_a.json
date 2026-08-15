@@ -1,0 +1,51 @@
+{
+  "id": "1044_p4_Q6(a)",
+  "course": {
+    "code": "ME 3105",
+    "title": "Heat Transfer I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\3rd_Year_1st_Term_2021_1044.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The deflection y in a simply supported beam with a uniform load q and a tensile axial 18 load T (as shown in figure) is given by"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\frac { d ^ { 2 } y } { d x ^ { 2 } } - \\frac { T y } { E I } = \\frac { q x ( L - x ) } { 2 E I }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "where $T = 7 2 0 { \\mathrm { N } } , q = 5 4 0 { \\mathrm { N } } / { \\mathrm { m } } , E = 3 0 { \\mathrm { M P a } } , I = 1 2 0 { \\mathrm { m } } ^ { 4 } { \\mathrm { a n d } } L = 7 5 { \\mathrm { c m } } .$ Find the deflection of the beam at $x = 5 0 \\mathrm { ~ m ~ }$ . Use a step size of $\\Delta x = 2 5$ cm and approximate the derivatives by central divided difference approximation."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_6090828b424a2fd21cd48c096ad5d36205b34eb371a4f84c39886df184e72e29.jpg",
+      "_source_path": "images/6090828b424a2fd21cd48c096ad5d36205b34eb371a4f84c39886df184e72e29.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

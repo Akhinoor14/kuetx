@@ -1,0 +1,45 @@
+{
+  "id": "1041_p4_Q3(c)",
+  "course": {
+    "code": "ME 3105",
+    "title": "Heat Transfer I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2017\\3rd_Year_1st_Term_2017_1041.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A particular gear is expected to fail according to the exponential distribution at a rate of 0.0015 15 failures per hour of operation. Compute –"
+    },
+    {
+      "type": "text",
+      "value": "(i) The mean life for a gear and"
+    },
+    {
+      "type": "text",
+      "value": "(i) The number of gears out of 50 which can be expected to be replaced prior to 500 hours."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "1044_p3_Q8(a)",
+  "course": {
+    "code": "ME 3117",
+    "title": "Machine Design I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\3rd_Year_1st_Term_2021_1044.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A AISI 1045 CD steel shaft has a diameter of $1 { \\frac { 3 } { 8 } }$ inch. The shaft rotates at 800 rev/min and transmits 45 hp through a gear. Find an appropriate key for the gear with a factor of safety of 1.8."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f4cc5028b3138dc18301267b8ab804d05c1c3f53456b956a2b4a2e62f168f642.jpg",
+      "_source_path": "images/f4cc5028b3138dc18301267b8ab804d05c1c3f53456b956a2b4a2e62f168f642.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

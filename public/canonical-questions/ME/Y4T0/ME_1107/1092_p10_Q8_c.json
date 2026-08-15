@@ -1,0 +1,37 @@
+{
+  "id": "1092_p10_Q8(c)",
+  "course": {
+    "code": "ME 1107",
+    "title": "Manufacturing Process",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\4th_Year_Backlog_2018_1092.pdf",
+    "source_page": null,
+    "paper_index": 10
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What factors are essential to be considered in designing of a duct system? 0)€"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Backlog Examination, 2018"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "1075_p2_Q5(c)",
+  "course": {
+    "code": "HUM 1205",
+    "title": "Economics & Accounting",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\1st_Year_Backlog_2020_1075.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Briefly describe the steps of accounting cycle. 1 O   \n6 On l st July 2021 Mr. Hafiz started a business with cash TK 300,000 and furniture worth 35   \n50,000. Other transactions are as follows:   \nJuly 2 Deposited cash into bank TK 100,000   \nJuly 3 Office rent paid by cheque TK 15,000   \nJuly 4 An advertisement bill received but not yet paid TK 3,000   \nJuly 5 Hired an office assistant for the month of salary TK 10,000   \nJuly 6 Advertisement bill paid by cheque (transaction July 4)   \nJuly 8 Office supplies purchased by cheque TK 5000   \nJuly 9 Furniture purchased for office use TK 50,000   \nJuly IO Utility bill received but unpaid TK 1500   \nJuly I I Cash withdrawn from Bank for office use TK 20,000"
+    },
+    {
+      "type": "text",
+      "value": "Required: Journalize above the transaction in the book of Mr. Hafiz."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2020"
+}

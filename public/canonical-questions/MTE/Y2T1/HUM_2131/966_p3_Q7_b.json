@@ -1,0 +1,97 @@
+{
+  "id": "966_p3_Q7(b)",
+  "course": {
+    "code": "HUM 2131",
+    "title": "Engineering Economics and Accounting",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2023\\2nd_Year_1st_Term_2023_966.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "ABM Industries Inc. had the following cost records for the year ending December 31, 20 2022:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Items</td><td rowspan=1 colspan=1>$</td><td rowspan=1 colspan=1>Items</td><td rowspan=1 colspan=1>S</td></tr><tr><td rowspan=1 colspan=1>Raw materials, 1/1/22</td><td rowspan=1 colspan=1>30,000</td><td rowspan=1 colspan=1>Property Taxes, Factory</td><td rowspan=1 colspan=1>6000</td></tr><tr><td rowspan=1 colspan=1>Raw materials, 31/12/22</td><td rowspan=1 colspan=1>20,000</td><td rowspan=1 colspan=1>Sales Revenue</td><td rowspan=1 colspan=1>15,00,000</td></tr><tr><td rowspan=1 colspan=1>Work in progress, 1/1/22</td><td rowspan=1 colspan=1>80,000</td><td rowspan=1 colspan=1>Delivery Expenses</td><td rowspan=1 colspan=1>100,000</td></tr><tr><td rowspan=1 colspan=1>Work in progress, 31/12/22</td><td rowspan=1 colspan=1>50,000</td><td rowspan=1 colspan=1>Sales Commission</td><td rowspan=1 colspan=1>150,000</td></tr><tr><td rowspan=1 colspan=1>Finished goods, 1/1/22</td><td rowspan=1 colspan=1>110,000</td><td rowspan=1 colspan=1>Administrative Expenses</td><td rowspan=1 colspan=1>300,000</td></tr><tr><td rowspan=1 colspan=1>Finished goods, 31/12/22</td><td rowspan=1 colspan=1>120,000</td><td rowspan=1 colspan=1>Indirect Labor</td><td rowspan=1 colspan=1>105,000</td></tr><tr><td rowspan=1 colspan=1>Direct labor</td><td rowspan=1 colspan=1>350,000</td><td rowspan=1 colspan=1>Factory Rent</td><td rowspan=1 colspan=1>40,000</td></tr><tr><td rowspan=1 colspan=1>Factory Manager&#x27;s Salary</td><td rowspan=1 colspan=1>35,000</td><td rowspan=1 colspan=1>Factory Utilities</td><td rowspan=1 colspan=1>65,000</td></tr><tr><td rowspan=1 colspan=1>Insurance Factory</td><td rowspan=1 colspan=1>14,000</td><td rowspan=1 colspan=1>Depreciation Factory Building</td><td rowspan=1 colspan=1>24,000</td></tr><tr><td rowspan=1 colspan=1>Raw materials purchase</td><td rowspan=1 colspan=1>205,000</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Required:"
+    },
+    {
+      "type": "text",
+      "value": "i. Prepare a cost sheet for ABM Industries Inc."
+    },
+    {
+      "type": "text",
+      "value": "ii. Prepare an income statement for ABM Industries Inc. for the year ended 2022"
+    },
+    {
+      "type": "text",
+      "value": "The following trail balance and adjustments are related to “A. Qasem & Co.\" as of 31 December 2023."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Name of accounts</td><td rowspan=1 colspan=1>Debit Tk.</td><td rowspan=1 colspan=1>Credit Tk.</td></tr><tr><td rowspan=1 colspan=1>Premises</td><td rowspan=1 colspan=1>121,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Capital and drawings</td><td rowspan=1 colspan=1>48,000</td><td rowspan=1 colspan=1>330,000</td></tr><tr><td rowspan=1 colspan=1>Office equipment</td><td rowspan=1 colspan=1>220,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Audit fees</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>870,500</td></tr><tr><td rowspan=1 colspan=1>Office rent</td><td rowspan=1 colspan=1>270,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Utilities expenses</td><td rowspan=1 colspan=1>8500</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Cash in hand</td><td rowspan=1 colspan=1>30,4000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Advertisement</td><td rowspan=1 colspan=1>30,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Investment (Saving certificate)</td><td rowspan=1 colspan=1>200,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Dividend received</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>42,500</td></tr><tr><td rowspan=1 colspan=1>Conveyance</td><td rowspan=1 colspan=1>3600</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Advanced audit fees</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>60,000</td></tr><tr><td rowspan=1 colspan=1>Insurance expenses</td><td rowspan=1 colspan=1>6500</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Salary and wages</td><td rowspan=1 colspan=1>65000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Bank deposit</td><td rowspan=1 colspan=1>300,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>13,03,000</td><td rowspan=1 colspan=1>13,03,000</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Adjustment:"
+    },
+    {
+      "type": "text",
+      "value": "i) Audit of accounts is completed of an organization, of which bill 55,000 tk not yet received."
+    },
+    {
+      "type": "text",
+      "value": "ii) Office rent is due for three months."
+    },
+    {
+      "type": "text",
+      "value": "iii) Charge depreciation @10% on office equipment."
+    },
+    {
+      "type": "text",
+      "value": "Required:"
+    },
+    {
+      "type": "text",
+      "value": "Prepare"
+    },
+    {
+      "type": "text",
+      "value": "i) Statement of comprehensive income"
+    },
+    {
+      "type": "text",
+      "value": "ii) Statement of owner's equity"
+    },
+    {
+      "type": "text",
+      "value": "iii) Statement of financial position"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

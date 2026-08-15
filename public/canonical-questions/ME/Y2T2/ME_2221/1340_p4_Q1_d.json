@@ -1,0 +1,37 @@
+{
+  "id": "1340_p4_Q1(d)",
+  "course": {
+    "code": "ME 2221",
+    "title": "Computer Programming",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2024\\2nd_Year_2nd_Term_2024_1340.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write True or False for the following statements and justify your answers. 10   \n(i) An array in C can store elements of different data types.   \n(ii) A function in C can return more than one value directly.   \n(iii) The conditional operator can be nested inside another conditional operator.   \n(iv) In C, the expressions ++i and i++ always produce the same results in an   \nexpression.   \n(v) The expression !(x>0) is true when x is negative."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2024"
+}

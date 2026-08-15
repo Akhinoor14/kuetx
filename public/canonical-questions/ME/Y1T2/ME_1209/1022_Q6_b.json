@@ -1,0 +1,42 @@
+{
+  "id": "1022_Q6(b)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\1st_Year_2nd_Term_2020_1022.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine by direct integration the mass moment of inertia and the radius of gyration of the right circular cone with respect to the z-axis, assuming a uniform density and a mass m."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_7df7f3fd5653bab29f5913974ba02a94fdc03bc5944ec8af3bc78a54a9066504.jpg",
+      "_source_path": "images/7df7f3fd5653bab29f5913974ba02a94fdc03bc5944ec8af3bc78a54a9066504.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Special Examination (COVID-19), 2020"
+}

@@ -1,0 +1,50 @@
+{
+  "id": "1043_p1_Q3(c)",
+  "course": {
+    "code": "ME 3105",
+    "title": "Heat Transfer I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\3rd_Year_1st_Term_2020_1043.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Derive an expression for the nodal equation of node (m, n) as shown in figure under steady- 16 state condition."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ed6ae3ea08f4b07d2a6a708af99cbfebcd29c9ceeac6330b2e8fdf2680591db3.jpg",
+      "_source_path": "images/ed6ae3ea08f4b07d2a6a708af99cbfebcd29c9ceeac6330b2e8fdf2680591db3.jpg"
+    },
+    {
+      "type": "text",
+      "value": "asdfghh"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Online Examination, 2020"
+}

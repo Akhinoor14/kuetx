@@ -1,0 +1,61 @@
+{
+  "id": "1015_p1_Q3(c)",
+  "course": {
+    "code": "HUM 1105",
+    "title": "English",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\1st_Year_1st_Term_2022_1015.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make use of the following modals in sentences as asked in brackets. 12"
+    },
+    {
+      "type": "text",
+      "value": "i. Could. (To express a past ability)"
+    },
+    {
+      "type": "text",
+      "value": "ii. Must. (To express certainty)"
+    },
+    {
+      "type": "text",
+      "value": "iii. Must+ have+ past participle of verb. (To express guess logically)"
+    },
+    {
+      "type": "text",
+      "value": "rv. Should. (To express propriety)"
+    },
+    {
+      "type": "text",
+      "value": "v. Should+ have+ past particle of verb. (To express a past action not discharged)"
+    },
+    {
+      "type": "text",
+      "value": "vi. Would. (to express a past irregular habit)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2022"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "1153_p4_Q7(b)",
+  "course": {
+    "code": "PH 1227",
+    "title": "Magnetism and Nuclear Physics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\1st_Year_2nd_Term_2021_1153.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 6,
+  "content": [
+    {
+      "type": "text",
+      "value": "What are the name of the following types of radioactive decay? Give one example of each types (06) of decay."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n( i ) ~ _ { 0 } ^ { 1 } n  { \\frac { 1 } { 1 } } p + e { \\cdot } , ~ ( i i ) ~ _ { 1 } ^ { 1 } p + e { \\cdot }  { \\frac { 1 } { 0 } } n , ~ ( i i ) ~ _ { 1 } ^ { 1 } p  { \\frac { 1 } { 0 } } n + e ^ { + } .\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

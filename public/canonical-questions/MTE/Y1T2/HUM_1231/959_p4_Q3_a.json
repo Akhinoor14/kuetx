@@ -1,0 +1,65 @@
+{
+  "id": "959_p4_Q3(a)",
+  "course": {
+    "code": "HUM 1231",
+    "title": "Technical and Communicative English",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\1st_Year_2nd_Term_2021_959.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make wh question with the underlined words of the following sentences. 14"
+    },
+    {
+      "type": "text",
+      "value": "i.Shila read a book."
+    },
+    {
+      "type": "text",
+      "value": "ii. Bipu reads a book to enrich her knowledge."
+    },
+    {
+      "type": "text",
+      "value": "iii.Sabuj is five feet and six inches tall."
+    },
+    {
+      "type": "text",
+      "value": "iv.Habib runs his car at high speed."
+    },
+    {
+      "type": "text",
+      "value": "v. The pond is ten feet deep."
+    },
+    {
+      "type": "text",
+      "value": "vi.He comes in class from hall every day."
+    },
+    {
+      "type": "text",
+      "value": "vii. Liza has been living in this town for ten years."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1014_Q7(b)",
+  "course": {
+    "code": "MATH 1105",
+    "title": "Mathematics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\1st_Year_1st_Term_2021_1014.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the reduction formula for $\\int c o \\mathbf { s } e c ^ { n } x$ dx and hence find the value of $\\int c o s e c ^ { 3 } { x } d { x }$ 12"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2021"
+}

@@ -1,0 +1,57 @@
+{
+  "id": "1013_p1_Q4(a)",
+  "course": {
+    "code": "HUM 1105",
+    "title": "English",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\1st_Year_1st_Term_2020_1013.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "Read the following passage carefully and answer the questions that follow."
+    },
+    {
+      "type": "text",
+      "value": "We are human beings in the world only with the sense, which differentiates enlightenment from darkness. Enlightenment, separated from darkness, opens our eyes on things - which are welfare for human beings. Anything or concept, loving and liveable for humans, can exist in the world. It is possible in the time - they love one another and search knowledge. Jibanananda Das, a modem Bengali poet, says ··�'51m���������/�c��<f7Yf/15!� � � <f7Yf\"- (� � 'WI'). Contrary darkness, born from the void of enlightenement, destroys humanity. It is a sworn and so fatal enemy for humans. It imagines to create all barriers to the development of life. Human beings in darkness, not possible to call human beings, behave the life of a beast. Das again says, '<!l� � � �� <f7Yf 1lt-f �/�.�<IT��. ��<IT� 15!� '111:RT/ � '<3 �����1'(��1119<!l<l><!l�<!l��). Howcanwemove to the life of enlightenment? Let's read the life of thoughts in life and surroundings. We should comprehend life and the surroundings, where it moves, know ourselves, search the reason why we are in the world, etc. For the purpose let's study books - a storehouse of knowledge."
+    },
+    {
+      "type": "text",
+      "value": "Questions:"
+    },
+    {
+      "type": "text",
+      "value": "i) What is enlightenment?"
+    },
+    {
+      "type": "text",
+      "value": "ii) What is darkness?"
+    },
+    {
+      "type": "text",
+      "value": "iii) How can we reach enlightenment?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2020"
+}

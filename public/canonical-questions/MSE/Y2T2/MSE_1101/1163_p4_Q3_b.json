@@ -1,0 +1,45 @@
+{
+  "id": "1163_p4_Q3(b)",
+  "course": {
+    "code": "MSE 1101",
+    "title": "Introduction to Materials Science and Engineering",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2018\\2nd_Year_2nd_Term_2018_1163.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "The population of a town in the decennial census was as givėn below. Estimate the population (15) for the year 1985."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Year</td><td rowspan=1 colspan=1>1970</td><td rowspan=1 colspan=1>1980</td><td rowspan=1 colspan=1>1990</td><td rowspan=1 colspan=1>2000</td><td rowspan=1 colspan=1>2010</td></tr><tr><td rowspan=1 colspan=1>Population (in million)</td><td rowspan=1 colspan=1>70</td><td rowspan=1 colspan=1>90</td><td rowspan=1 colspan=1>120</td><td rowspan=1 colspan=1>140</td><td rowspan=1 colspan=1>160</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Q"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

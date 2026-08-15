@@ -1,0 +1,37 @@
+{
+  "id": "1101_p4_Q2(c)",
+  "course": {
+    "code": "ME 3117",
+    "title": "Machine Design I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\Backlog_2021_1101.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A conveyor is designed to deliver hot casting from the shake out of a fitting shop. The casting has a diameter of 600 mm, height of 260 mm and a piece weight G = 180 kg. The conveyor capacity z is 300 pieces per hour. The factor allowing for irregular feed of the casting to the conveyor is k' = 2. Calculate the theoreticai capacity, conveyor speed and running meter."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Special Backlog Examination, 2021"
+}

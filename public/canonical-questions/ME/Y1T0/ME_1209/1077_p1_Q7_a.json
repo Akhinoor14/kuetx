@@ -1,0 +1,42 @@
+{
+  "id": "1077_p1_Q7(a)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\1st_Year_Backlog_2022_1077.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the horizontal force P required to start the 400 kg wedge moving to the left. The angle of friction is $2 0 ^ { \\circ }$ at all surfaces of contact."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_baab3e006fd7332489d63c691c1a9eb99f9cb02ce5cade06bb8be41dfa7e247a.jpg",
+      "_source_path": "images/baab3e006fd7332489d63c691c1a9eb99f9cb02ce5cade06bb8be41dfa7e247a.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2022"
+}

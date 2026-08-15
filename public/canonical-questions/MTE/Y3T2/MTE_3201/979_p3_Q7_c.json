@@ -1,0 +1,37 @@
+{
+  "id": "979_p3_Q7(c)",
+  "course": {
+    "code": "MTE 3201",
+    "title": "Power Electronics and Drives",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\3rd_Year_2nd_Term_2022_979.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A single phase half bridge inverter has a resistive load of R = 2.4 Ω and the dc input voltage is $\\mathrm { V } _ { \\mathrm { S } } = 4 8$ V. Determine (i) the rms output voltage at fundamental frequency Vo1, (ii) the output power, $\\mathrm { { P } _ { 0 } , }$ (iii) the average and peak currents of each transistor, (iv) the peak reverse blocking voltage VBr of each transistor, (v) the average supply current, Is, (vi) the THD, (vii) The DF, and (viii) the HF and LOH."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

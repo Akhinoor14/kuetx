@@ -1,0 +1,53 @@
+{
+  "id": "1178_p1_Q6(a)",
+  "course": {
+    "code": "MSE 4101",
+    "title": "Modern Iron and Steel Making",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2022\\4th_Year_1st_Term_2022_1178.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the total interfacial area of metal droplets in the slag-metal emulsion at steady state(10) decarburization period of a BOF blow. Do the calculation for 1 ton of liquid steel in the bath."
+    },
+    {
+      "type": "text",
+      "value": "Assume: (i) The emulsion contains 7% of bath metal as droplets."
+    },
+    {
+      "type": "text",
+      "value": "(ii) The droplets of metal are spherical."
+    },
+    {
+      "type": "text",
+      "value": "(iii) The size distribution of the droplets are as follows:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Diameter (d), mm</td><td rowspan=1 colspan=1>0.2</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>10</td></tr><tr><td rowspan=1 colspan=1>Fraction of total number (N) of droplets</td><td rowspan=1 colspan=1>0.05</td><td rowspan=1 colspan=1>0.2</td><td rowspan=1 colspan=1>0.5</td><td rowspan=1 colspan=1>0.2</td><td rowspan=1 colspan=1>0.05</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

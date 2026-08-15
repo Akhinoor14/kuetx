@@ -1,0 +1,42 @@
+{
+  "id": "1026_p3_Q5(c)",
+  "course": {
+    "code": "ME 2113",
+    "title": "Fluid Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2017\\2nd_Year_1st_Term_2017_1026.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Water from a stationary nozzle strikes a flat plate as shown. The water leaves the nozzle at 15 m/sec; the nozzle area is 0.01 m². Assuming the water is directed ${ \\bf { \\dot { m } } } ^ { 2 } .$ normal to the plate and flows along the plate, determine the horizontal force needed by a person to hold it in place. Adopt integral approach to solve the problem."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_3ec59f83eb913e7e63713301ca17482ef3b090094700ac5cece0ec6e6f02b5f7.jpg",
+      "_source_path": "images/3ec59f83eb913e7e63713301ca17482ef3b090094700ac5cece0ec6e6f02b5f7.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

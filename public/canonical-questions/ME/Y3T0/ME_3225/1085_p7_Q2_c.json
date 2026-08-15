@@ -1,0 +1,37 @@
+{
+  "id": "1085_p7_Q2(c)",
+  "course": {
+    "code": "ME 3225",
+    "title": "Measurement and Industrial Instrumentation",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\3rd_Year_Backlog_2018_1085.pdf",
+    "source_page": null,
+    "paper_index": 7
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The radius of a convex arc on a segmental gauge was measured by using a surface plate. two rollers, and a micrometer. If the rollers wère 20 mm in diameter and the measurement over them was 194.13 mm, calculate the radius. If the accuracy of measurement was ±0.01 mm, determine the possible error in the calculated value of the radius."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year Backlog Examination, 2018"
+}

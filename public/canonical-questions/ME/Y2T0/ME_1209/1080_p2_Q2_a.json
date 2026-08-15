@@ -1,0 +1,64 @@
+{
+  "id": "1080_p2_Q2(a)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\2nd_Year_Backlog_2018_1080.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "A satellite describes an elliptic orbit about a planet. Denoting by $\\mathbf { r _ { 0 } }$ and ri the distances corresponding, respectively, to the perigee and apogee of the orbit, show that the curvature of the orbit at each of these two points can be expressed as $\\frac { 1 } { \\rho } = \\frac { 1 } { 2 } \\Bigg ( \\frac { 1 } { r _ { o } } + \\frac { 1 } { r _ { \\uparrow } } \\Bigg )$ 9\\~"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8ef3c9cfe86f5871a3dba4ad77aafefd229aa6c88d8ee40e56df6b887cbd6fd7.jpg",
+      "_source_path": "images/8ef3c9cfe86f5871a3dba4ad77aafefd229aa6c88d8ee40e56df6b887cbd6fd7.jpg"
+    },
+    {
+      "type": "text",
+      "value": "A bag is gently pushed off the top of a wall at A and swings in a vertical plane at the end of a rope of length L. (i) For any position B of the bag, determine the tangential component of its acceleration and obtain its velocity by integration, (ii) determine the value of θ for which the rope will break, knowing that it can withstand a maximum tension equal to 2.25 times the weight of the bag."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_4d1f7b143b33f58edfc8d054d71e5c807c9655de97f359255c4f712428ef83bf.jpg",
+      "_source_path": "images/4d1f7b143b33f58edfc8d054d71e5c807c9655de97f359255c4f712428ef83bf.jpg"
+    },
+    {
+      "type": "text",
+      "value": "A 50 gm bullet is fired with a horizontal velocity of 500 m/sec into a 4 kg wooden block which is at rest on a frictionless, horizontal surface. Determine- (i) the final velocity of the block. (ii) the ratio of the final kinetic energy of the block and bullet to the initial kinetic energy of the bullet."
+    },
+    {
+      "type": "text",
+      "value": "A 600 g collar C may slide along a horizontal, semicircular rod ABD. The spring CE has an undeformed length of 250 mm and a spring constant of 135 N/m. Knowing that the collar is released from rest at A and neglecting friction, determine the speed of the collar (i) at B, (ii) at D. Δ-"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_98e4559244a00531c7bfd2b9c05088049b293b61ea609de203d94b51b9032a5e.jpg",
+      "_source_path": "images/98e4559244a00531c7bfd2b9c05088049b293b61ea609de203d94b51b9032a5e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2018"
+}

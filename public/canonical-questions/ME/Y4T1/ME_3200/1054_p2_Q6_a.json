@@ -1,0 +1,45 @@
+{
+  "id": "1054_p2_Q6(a)",
+  "course": {
+    "code": "ME 3200",
+    "title": "Mechanical Engineering Project",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2017\\4th_Year_1st_Term_2017_1054.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Explain the following terms:"
+    },
+    {
+      "type": "text",
+      "value": "(i) decision under risk (ii) decision under uncertainty"
+    },
+    {
+      "type": "text",
+      "value": "<sub>6(b)</sub> What is the problem with minimax criterion? How does savage minimax regret criterion overcome it? Explain with example."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2017"
+}

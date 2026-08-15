@@ -1,0 +1,58 @@
+{
+  "id": "970_p2_Q8(a)",
+  "course": {
+    "code": "EE2231",
+    "title": "Signals and Linear Systems",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\2nd_Year_2nd_Term_2022_970.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the s-domain eircuit shown below, find"
+    },
+    {
+      "type": "text",
+      "value": "(i) The transfer function, $H ( s ) = { \\frac { V _ { 0 } } { v _ { i } } }$"
+    },
+    {
+      "type": "text",
+      "value": "(ii) The impulse response"
+    },
+    {
+      "type": "text",
+      "value": "(iii) The response when $v _ { i } ( t ) = u ( t )$ volt"
+    },
+    {
+      "type": "text",
+      "value": "(iv) The response when $v _ { i } ( t ) = 8 c o s 2 t$ volt"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_69eb132b67eaf6ddefe0f7a8b1d0a3109a729edbac1f73ad1381eab2d11f371e.jpg",
+      "_source_path": "images/69eb132b67eaf6ddefe0f7a8b1d0a3109a729edbac1f73ad1381eab2d11f371e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2022"
+}

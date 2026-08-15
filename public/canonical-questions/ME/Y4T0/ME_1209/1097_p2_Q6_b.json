@@ -1,0 +1,42 @@
+{
+  "id": "1097_p2_Q6(b)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2016\\Backlog_2016_1097.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A concentrated load 300 N is supported as shown. Determine the equations of the elastic curve between each change of load point and the maximum deflection in the beam. : 300 N"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a59d21a75e999eba3df572d9ef990ef0976d7d48e0d158ce2af43127dc354166.jpg",
+      "_source_path": "images/a59d21a75e999eba3df572d9ef990ef0976d7d48e0d158ce2af43127dc354166.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Special Backlog Examination, 2016"
+}

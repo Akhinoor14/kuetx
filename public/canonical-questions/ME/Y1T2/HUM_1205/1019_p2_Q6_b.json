@@ -1,0 +1,81 @@
+{
+  "id": "1019_p2_Q6(b)",
+  "course": {
+    "code": "HUM 1205",
+    "title": "Economics & Accounting",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2015\\1st_Year_2nd_Term_2015_1019.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Mr. Ripon started his own delivery service. Selim deliveries on June ol 2015. The following 25 transactions occurred during the month of June."
+    },
+    {
+      "type": "text",
+      "value": "June - 01 Tk. 2.00,000 invested by Selim."
+    },
+    {
+      "type": "text",
+      "value": "\" 02 Purchased a deliver van costing Tk. 1,00,000 in which Tk. 50,000 in cash and the balance on account."
+    },
+    {
+      "type": "text",
+      "value": "\" 05 purchased office supplies for cash Tk. 5,000"
+    },
+    {
+      "type": "text",
+      "value": "\" 06 purchased and office equipment costing Tk.6,000"
+    },
+    {
+      "type": "text",
+      "value": "\" 08 Borrowed Tk. 30,000 from Sonali bank."
+    },
+    {
+      "type": "text",
+      "value": "\" 10 Received cash Tk. 3,000."
+    },
+    {
+      "type": "text",
+      "value": "\" 15 Performed delivery services to Mr. X Tk. 4,000"
+    },
+    {
+      "type": "text",
+      "value": "\" 20 Received cash from Mr. X."
+    },
+    {
+      "type": "text",
+      "value": "\" 27 Utility bill received Tk. 250 for this month."
+    },
+    {
+      "type": "text",
+      "value": "\" 29 Employees salaries paid in cash Tk. 7,000."
+    },
+    {
+      "type": "text",
+      "value": "Required: Journalise above the transactions in the book of Mr. Ripon."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
+}

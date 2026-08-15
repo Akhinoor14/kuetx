@@ -1,0 +1,42 @@
+{
+  "id": "1038_p3_Q2(b)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\2nd_Year_2nd_Term_2021_1038.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A rigid bar, pinned at 0, is supported by two identical springs as shown in figure. Each spring consists of 20 turns of 18 mm wire having a mean diameter of 175 mm. determine the maximum load W that may be supported if the shearing stress in the springs is limited to 140 MP a."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_266561e4fe407736f760d88f4aef287d6857bdaef14d63d4eb4750941a318291.jpg",
+      "_source_path": "images/266561e4fe407736f760d88f4aef287d6857bdaef14d63d4eb4750941a318291.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

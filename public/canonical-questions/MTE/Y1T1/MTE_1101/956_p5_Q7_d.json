@@ -1,0 +1,42 @@
+{
+  "id": "956_p5_Q7(d)",
+  "course": {
+    "code": "MTE 1101",
+    "title": "Mechatronic Systems",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2023\\1st_Year_1st_Term_2023_956.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Drive an equation describing how the room temperature will change with time for thermal system shown in figure consisting of an electric fire in a room. Assume the fire emits heat at the rate, q1 and room loses heat at the rate, q2. The air in the room is at a uniform temperature, T and there is no heat storage in the walls of the room."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_2ff73a6b08fb0a173372545a4ff3146c571ac72e9e16add84db099e0380a93b8.jpg",
+      "_source_path": "images/2ff73a6b08fb0a173372545a4ff3146c571ac72e9e16add84db099e0380a93b8.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2023"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "1041_p2_Q7(b)",
+  "course": {
+    "code": "ME 3105",
+    "title": "Heat Transfer I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2017\\3rd_Year_1st_Term_2017_1041.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the radiation shape factors $\\mathbb { F } _ { 1 - 2 }$ for the situations shown below (dimensions are in cm). 1"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e5000d3b2a748fc05b14ca04a86da8df5e6fbd5f2e916febd415dd17b935cacb.jpg",
+      "_source_path": "images/e5000d3b2a748fc05b14ca04a86da8df5e6fbd5f2e916febd415dd17b935cacb.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

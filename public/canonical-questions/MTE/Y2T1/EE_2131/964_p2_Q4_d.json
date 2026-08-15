@@ -1,0 +1,41 @@
+{
+  "id": "964_p2_Q4(d)",
+  "course": {
+    "code": "EE 2131",
+    "title": "Electronics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\2nd_Year_1st_Term_2021_964.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "With a neat sketch, explain the operational principle of Colpitt's oscillator. Also determine 12 the operating frequency and feedback fraction if the values of tank circuit components are $\\mathrm { C } _ { 1 } = 0 . 0 0 1 \\ \\mu \\mathrm { F } , \\mathrm { C } _ { 2 } = 0 . 0 1 \\ \\mu \\mathrm { F } , \\mathrm { a n d } \\ \\mathrm { L } = 1 5 \\mu \\mathrm { H } .$"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

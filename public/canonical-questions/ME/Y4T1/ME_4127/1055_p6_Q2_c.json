@@ -1,0 +1,45 @@
+{
+  "id": "1055_p6_Q2(c)",
+  "course": {
+    "code": "ME 4127",
+    "title": "Operations Management",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\4th_Year_1st_Term_2018_1055.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "KUET authority wants to purchase a lathe machine and advertizes in a newspaper. Two 19 companies bid for the proposal and these are follows:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Company X</td><td rowspan=1 colspan=1>CompanyY</td></tr><tr><td rowspan=1 colspan=1>Initial cost of the machine</td><td rowspan=1 colspan=1>$10,000</td><td rowspan=1 colspan=1>$12,000</td></tr><tr><td rowspan=1 colspan=1>Yearly operating cost</td><td rowspan=1 colspan=1>$1,000</td><td rowspan=1 colspan=1>$700</td></tr><tr><td rowspan=1 colspan=1>Economic life of the machine</td><td rowspan=1 colspan=1>5 years</td><td rowspan=1 colspan=1>7 years</td></tr><tr><td rowspan=1 colspan=1>Salvage value after economic life</td><td rowspan=1 colspan=1>$500</td><td rowspan=1 colspan=1>$400</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Consider the rate of annual interest 12 percent, which lathe machine should be purchased by KUET authority?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2018"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "1036_p4_Q2(a)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2019\\2nd_Year_2nd_Term_2019_1036.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "At $2 0 ^ { \\circ } C ,$ there is a gap!),,= 0.2 mm between the lower end of the bronze bar and the rigid slab supported by two steel bars as shown in figure. Neglecting the mass of the slab, determine the stress in each rod when the temperature of the assembly is increased to $1 0 0 ^ { \\circ } \\mathrm { C }$ For the bronze rod, A= 600 mm2, E = 83 GPa and $\\alpha = 1 8 . 9 ~ \\mu \\mathrm { m / ( m ^ { \\circ } C ) }$ . For each steel rod, $\\mathbf { A } = 4 0 0 \\ \\mathrm { m m } ^ { 2 }$ E = 200 GPa and a = 11. 7 µrn/(m°C)."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e15153518af974cc47b1bb00c0040dd84b04f891cba3d0113d7666b8e3ebbb4d.jpg",
+      "_source_path": "images/e15153518af974cc47b1bb00c0040dd84b04f891cba3d0113d7666b8e3ebbb4d.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

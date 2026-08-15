@@ -1,0 +1,45 @@
+{
+  "id": "1036_p3_Q1(b)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2019\\2nd_Year_2nd_Term_2019_1036.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What are meant by Reynolds number and hydraulic diameter? Also discuss their significance in fluid flow problems."
+    },
+    {
+      "type": "text",
+      "value": "l(c) Show that the velocity profile in fully developed laminar flow in a pipe is parabolic. Also demonstrate that the velocity is maximum at the centerline and minimum at the pipe wall."
+    },
+    {
+      "type": "text",
+      "value": "l(d) Water flow at a steady mean velocity of 1.5 m/sec through a 50 mm diameter pipe sloping upward at 45° to the horizontal. At a section some distance downstream of the inlet the pressure is 700 kPa and at a section 30 m further along the pipe, the pressure is 462 kPa. Determine the average shear stress at the wall of the pipe."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

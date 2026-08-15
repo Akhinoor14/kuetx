@@ -1,0 +1,54 @@
+{
+  "id": "1097_p2_Q8(b)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2016\\Backlog_2016_1097.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the largest load P that can be supported by the circular steel bracket as 17 shown, if the normal stress on section A-B is limited to 80 MPa."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a0c9e3083f974b9a804b952bed66738930e6be810c2f691e477bb45166eba050.jpg",
+      "_source_path": "images/a0c9e3083f974b9a804b952bed66738930e6be810c2f691e477bb45166eba050.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Section A-B dia = 100 mm"
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY"
+    },
+    {
+      "type": "text",
+      "value": "Department of Mechanical Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Special Backlog Examination, 2016"
+}

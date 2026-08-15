@@ -1,0 +1,41 @@
+{
+  "id": "1088_p2_Q8(c)",
+  "course": {
+    "code": "ME 3105",
+    "title": "Heat Transfer I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\3rd_Year_Backlog_2022_1088.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Two coaxial cylinders of radii $r _ { 1 } = 6$ cm and $r _ { 2 } = 2 0$ cm are maintained at $\\begin{array} { r l } { T _ { 1 } = } & { { } 1 5 } \\end{array}$ 1200 K and $T _ { 2 } = 4 5 0 \\mathrm { ~ K ~ }$ respectively. The emissivity for the surfaces are $\\varepsilon _ { 1 } =$ 0.7 and $\\varepsilon _ { 2 } = 0 . 9 $ respectively."
+    },
+    {
+      "type": "text",
+      "value": "i) Calculate the radiation exchange between them per meter length of the cylinder. ii) Calculate the heat transfer rate if a radiation shield of $r _ { 3 } = 1 0$ cm having emissivity $\\varepsilon _ { 3 } = 0 . 1$ is placed between them."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year Backlog Examination, 2022"
+}

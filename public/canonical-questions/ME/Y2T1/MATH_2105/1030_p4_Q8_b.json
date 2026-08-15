@@ -1,0 +1,37 @@
+{
+  "id": "1030_p4_Q8(b)",
+  "course": {
+    "code": "MATH 2105",
+    "title": "Mathematics III",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\2nd_Year_1st_Term_2021_1030.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Evaluate $\\iiint _ { V } { \\bar { F } } . d { \\bar { V } }$ , where $\\bar { F } = ( 2 x ^ { 2 } - 3 z ) \\hat { \\mathrm { i } } - 2 x y \\hat { \\mathrm { j } } - 4 x \\hat { \\mathrm { k } }$ and V is the closed region 12 bounded by the planes $x = 0 , y = 0 , z = 0 { \\mathrm { ~ a n d ~ } } x + 2 y + z = 4$ using divergence theorem."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

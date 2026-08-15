@@ -1,0 +1,42 @@
+{
+  "id": "1075_p1_Q1(a)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\1st_Year_Backlog_2020_1075.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A crate is to be supported by the rope and pulley arrangement as shown in figure. Determine the magnitude and direction of the force F which should be exerted on the free end of the rope."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_4739ea29adcd9873fd6710a6e0416167c65d34a21e1aa460cf09327703b42dcb.jpg",
+      "_source_path": "images/4739ea29adcd9873fd6710a6e0416167c65d34a21e1aa460cf09327703b42dcb.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2020"
+}

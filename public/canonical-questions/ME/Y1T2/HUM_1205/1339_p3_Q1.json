@@ -1,0 +1,57 @@
+{
+  "id": "1339_p3_Q1",
+  "course": {
+    "code": "HUM 1205",
+    "title": "Economics & Accounting",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2024\\1st_Year_2nd_Term_2024_1339.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following table and answer the questions below:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Price($ per bushel)</td><td rowspan=1 colspan=1>Demand for wheat(millions bushel)</td><td rowspan=1 colspan=1>Supply of wheat(millions bushel)</td></tr><tr><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>35</td><td rowspan=1 colspan=1>15</td></tr><tr><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>25</td><td rowspan=1 colspan=1>17</td></tr><tr><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>20</td></tr><tr><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>25</td></tr><tr><td rowspan=1 colspan=1>9</td><td rowspan=1 colspan=1>02</td><td rowspan=1 colspan=1>27</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "i)Define market equilibrium. Find out equilibrium price and quantity."
+    },
+    {
+      "type": "text",
+      "value": "ii) What is price ceiling? If the government fixed a price ceiling of wheat per bushel at \\$8, will there be surplus or shortage in the market?"
+    },
+    {
+      "type": "text",
+      "value": "iii) What is floor price? If the floor price is\\$5, explain the market conditions with the help of diagram."
+    },
+    {
+      "type": "text",
+      "value": "iv)Explain the factors that affect the demand curve to shift."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2024"
+}

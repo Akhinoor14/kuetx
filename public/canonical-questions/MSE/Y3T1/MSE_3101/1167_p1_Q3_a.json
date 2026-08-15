@@ -1,0 +1,46 @@
+{
+  "id": "1167_p1_Q3(a)",
+  "course": {
+    "code": "MSE 3101",
+    "title": "Transport Phenomena in Materials",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2019\\3rd_Year_1st_Term_2019_1167.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "A hollow cylinder has inner radius r1 and outer radius r2 and length H, has a constant thermal (18) $\\boldsymbol { r } _ { 1 }$ $r _ { 2 }$ conductivity k. If the inner surface is kept at temperature T1 and outer surface at T2, show $T _ { 1 }$ $T _ { 2 }$ that the total heat transfer rate Q through the cylinder is given by-"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { \\ Q } { = } \\frac { T _ { 1 } { - } T _ { 2 } } { R } \\mathrm { W }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Where, the thermal resistance R of the cylinder $\\mathrm { i s - R } { = } \\frac { \\mathrm { I n } ( \\frac { r _ { 2 } } { r _ { 1 } } ) } { 2 \\pi H k }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

@@ -1,0 +1,53 @@
+{
+  "id": "1159_p1_Q4",
+  "course": {
+    "code": "HUM 2127",
+    "title": "Accounting and Economics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\2nd_Year_1st_Term_2021_1159.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4",
+  "numbering_source": "regex",
+  "marks": 35,
+  "content": [
+    {
+      "type": "text",
+      "value": "From the book of Nabila Company, the following trial balance has been prepared on 31ª (35) December 2021."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Account Titles</td><td rowspan=1 colspan=1>Debit (Taka)</td><td rowspan=1 colspan=1>Credit (Taka)</td></tr><tr><td rowspan=1 colspan=1>Capital</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>500,000</td></tr><tr><td rowspan=1 colspan=1>Machine</td><td rowspan=1 colspan=1>800000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Sales</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>1770,000</td></tr><tr><td rowspan=1 colspan=1>Purchase</td><td rowspan=1 colspan=1>600000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Sales return and purchase return</td><td rowspan=1 colspan=1>20,000</td><td rowspan=1 colspan=1>24500</td></tr><tr><td rowspan=1 colspan=1>Stock 1-1-2021</td><td rowspan=1 colspan=1>300000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Advertisement expense</td><td rowspan=1 colspan=1>18,000</td><td rowspan=1 colspan=1></td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Page 1 of 2"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Account Titles</td><td rowspan=1 colspan=1>Debit (Taka)</td><td rowspan=1 colspan=1>Credit (Taka)</td></tr><tr><td rowspan=1 colspan=1>Utility expense</td><td rowspan=1 colspan=1>4250</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Accounts reccivable</td><td rowspan=1 colspan=1>450,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Accounts payable</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>250,000</td></tr><tr><td rowspan=1 colspan=1>Salaries</td><td rowspan=1 colspan=1>167000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Transportation in</td><td rowspan=1 colspan=1>19500</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Allowance for doubtful debts</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>5250</td></tr><tr><td rowspan=1 colspan=1>Bad debts expense</td><td rowspan=1 colspan=1>2000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Rent expense</td><td rowspan=1 colspan=1>100,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Cash in hand</td><td rowspan=1 colspan=1>9000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Cash in bank</td><td rowspan=1 colspan=1>60,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>2549750</td><td rowspan=1 colspan=1>2549750</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "The following adjustments are required:"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

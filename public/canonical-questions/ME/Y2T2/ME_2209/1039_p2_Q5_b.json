@@ -1,0 +1,42 @@
+{
+  "id": "1039_p2_Q5(b)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\2nd_Year_2nd_Term_2022_1039.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the velocity of point C of the spool shown. Assume the spool does not slip on the platform P."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d5b18165372f2f3d0f2201a622cb50d55bfd6b18363d4e0b3b3355d619d63967.jpg",
+      "_source_path": "images/d5b18165372f2f3d0f2201a622cb50d55bfd6b18363d4e0b3b3355d619d63967.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2022"
+}

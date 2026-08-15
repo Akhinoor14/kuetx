@@ -1,0 +1,41 @@
+{
+  "id": "1083_p1_Q1(c)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\2nd_Year_Backlog_2022_1083.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Explain how viscosity of fluid varies with temperature and pressure."
+    },
+    {
+      "type": "text",
+      "value": "l(d) A rectangular plate 35 cm by 55 cm and weighing 28 N slides down 39° inclined surface at 10 a uniform velocity of 2.3 m/sec. If the uniform gap 1.5 mm between the plate and inclined surface is filled with oil, determine the viscosity of the oil."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2022"
+}

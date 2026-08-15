@@ -1,0 +1,42 @@
+{
+  "id": "952_p2_Q5(c)",
+  "course": {
+    "code": "EE 1131",
+    "title": "Electrical Circuits",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2019\\1st_Year_1st_Term_2019_952.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Also draw the vector diagram for the circuit."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_07c0f0751241885fe1e9096c4b0d0c18a799bf190638b7b27c63f604c77ef4ef.jpg",
+      "_source_path": "images/07c0f0751241885fe1e9096c4b0d0c18a799bf190638b7b27c63f604c77ef4ef.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
+}

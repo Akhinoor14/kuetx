@@ -1,0 +1,42 @@
+{
+  "id": "1146_p4_Q2(a)",
+  "course": {
+    "code": "EEE 1127",
+    "title": "Electrical Engineering Fundamentals",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2020\\1st_Year_1st_Term_2020_1146.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define form factor, r.m.s value. Find the (i) average value (ii) r.m.s values (iii) form factor of (10) the following waveforms over one full cycle."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e5378f2341f335eb8266e176c1bb875fcb0c108c446f2df48f84e479062c6e91.jpg",
+      "_source_path": "images/e5378f2341f335eb8266e176c1bb875fcb0c108c446f2df48f84e479062c6e91.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2020"
+}

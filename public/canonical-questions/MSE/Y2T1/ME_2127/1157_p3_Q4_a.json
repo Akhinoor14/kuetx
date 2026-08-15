@@ -1,0 +1,46 @@
+{
+  "id": "1157_p3_Q4(a)",
+  "course": {
+    "code": "ME 2127",
+    "title": "Solid Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2019\\2nd_Year_1st_Term_2019_1157.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write the shear and moment equations for the cantilever beam carrying the uniformly varying load and concentrated load as shown in Figure-4(a). Also sketch the shear and moment diagrams."
+    },
+    {
+      "type": "text",
+      "value": "(17)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8eaf0de49760fd02def59e7fb5b210ee7646e1e4a7a4ac00c6e6c4a94fa7f372.jpg",
+      "_source_path": "images/8eaf0de49760fd02def59e7fb5b210ee7646e1e4a7a4ac00c6e6c4a94fa7f372.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

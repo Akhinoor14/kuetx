@@ -1,0 +1,65 @@
+{
+  "id": "961_p2_Q4(a)",
+  "course": {
+    "code": "HUM 1231",
+    "title": "Technical and Communicative English",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2023\\1st_Year_2nd_Term_2023_961.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Correct the following sentences:"
+    },
+    {
+      "type": "text",
+      "value": "i. A water needs to be pure for drinking."
+    },
+    {
+      "type": "text",
+      "value": "ii. V.C. will inaugurate the ceremony."
+    },
+    {
+      "type": "text",
+      "value": "iii. This pen cost me fifty money."
+    },
+    {
+      "type": "text",
+      "value": "iv. The prisoner was put in iron."
+    },
+    {
+      "type": "text",
+      "value": "v. Cattles are grazing in the field."
+    },
+    {
+      "type": "text",
+      "value": "vi. Many a men attended in the meeting."
+    },
+    {
+      "type": "text",
+      "value": "vii. The machineries is out of order."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2023"
+}

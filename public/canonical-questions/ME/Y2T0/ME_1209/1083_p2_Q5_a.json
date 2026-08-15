@@ -1,0 +1,42 @@
+{
+  "id": "1083_p2_Q5(a)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\2nd_Year_Backlog_2022_1083.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A beam carries a concentrated load Wand a total uniformly distributed load 4W as shown. 18 What safe value of W can be applied if $\\sigma _ { c } \\le 1 2 0$ MPa and $\\sigma _ { t } \\leq 7 5 \\mathrm { { M P a ? } }$ Can a greater load be applied if the section is inverted? Explain."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_c920acbd84a63e3e086a916ac0e846f5c7f4fdabc3fa2eea36dfcecdc14d76ca.jpg",
+      "_source_path": "images/c920acbd84a63e3e086a916ac0e846f5c7f4fdabc3fa2eea36dfcecdc14d76ca.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2022"
+}

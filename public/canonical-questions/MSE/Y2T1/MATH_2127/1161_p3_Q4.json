@@ -1,0 +1,49 @@
+{
+  "id": "1161_p3_Q4",
+  "course": {
+    "code": "MATH 2127",
+    "title": "Vector Analysis and Linear Algebra",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2023\\2nd_Year_1st_Term_2023_1161.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4",
+  "numbering_source": "regex",
+  "marks": 35,
+  "content": [
+    {
+      "type": "text",
+      "value": "co2 The following particulars are extracted from the book of “Mona Super Shop\" relating to the year (35) ended December 31, 2023:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Account Titles</td><td rowspan=1 colspan=1>Debit(Tk.)</td><td rowspan=1 colspan=1>Credit(TK.)</td></tr><tr><td rowspan=1 colspan=1>Sales</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>18,00,000</td></tr><tr><td rowspan=1 colspan=1>Cash</td><td rowspan=1 colspan=1>70,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Accounts Payable</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>100,000</td></tr><tr><td rowspan=1 colspan=1>Accounts receivable</td><td rowspan=1 colspan=1>150,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Sales and purchase returns</td><td rowspan=1 colspan=1>50,000</td><td rowspan=1 colspan=1>25,000</td></tr><tr><td rowspan=1 colspan=1>Stock (1-1-2023)</td><td rowspan=1 colspan=1>100,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Capital and drawings</td><td rowspan=1 colspan=1>100,000</td><td rowspan=1 colspan=1>15,00,000</td></tr><tr><td rowspan=1 colspan=1>Carriage inward</td><td rowspan=1 colspan=1>40,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Administrative Expenses</td><td rowspan=1 colspan=1>250,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Wages</td><td rowspan=1 colspan=1>200,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Insurance</td><td rowspan=1 colspan=1>30,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Premises</td><td rowspan=1 colspan=1>12,00,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Equipment</td><td rowspan=1 colspan=1>200,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Allowance for Bad Debt</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>15,000</td></tr><tr><td rowspan=1 colspan=1>Purchases</td><td rowspan=1 colspan=1>950,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Selling and Distribution Expenses</td><td rowspan=1 colspan=1>100,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Total=</td><td rowspan=1 colspan=1>34,40,000</td><td rowspan=1 colspan=1>34,40,000</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Section B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY Three questions from this section in answer script B)   \n5. co1"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

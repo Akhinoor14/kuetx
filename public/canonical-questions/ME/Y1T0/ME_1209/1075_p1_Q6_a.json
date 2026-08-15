@@ -1,0 +1,42 @@
+{
+  "id": "1075_p1_Q6(a)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\1st_Year_Backlog_2020_1075.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A brass collar of length 50 mm is mounted on an aluminum rod of length 80 mm. Locate 17 the center of gravity of the composite body. (Density of brass is 8470 $\\mathrm { k g / m } ^ { 3 }$ and density of aluminum is 2800 kg/rrr')."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f45320992dc77d0243b87a8d3c7ebff682ebf1a6229eea1f5d41e2d212401171.jpg",
+      "_source_path": "images/f45320992dc77d0243b87a8d3c7ebff682ebf1a6229eea1f5d41e2d212401171.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2020"
+}

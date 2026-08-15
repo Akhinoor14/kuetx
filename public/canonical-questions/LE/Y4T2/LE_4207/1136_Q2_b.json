@@ -1,0 +1,53 @@
+{
+  "id": "1136_Q2(b)",
+  "course": {
+    "code": "LE 4207",
+    "title": "Dyeing and Finishing II",
+    "department": "Department of Leather Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2021\\4th_Year_2nd_Term_2021_1136.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Actual demands of a footwear company for the last 10 years are shown in Table."
+    },
+    {
+      "type": "text",
+      "value": "(i) Calculate demand forecast for the year of 2017 using three periods weighted moving average method."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Calculate exponential smoothing forecast for the year of 2022 assuming forecast for the year of 2017 using a= 0.2, and"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Calculate the MAD error of the exponential smoothing forecast for the period of 2017-2021."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=4>Table</td></tr><tr><td rowspan=1 colspan=1>Year</td><td rowspan=1 colspan=1>Actual demand</td><td rowspan=1 colspan=1>Year</td><td rowspan=1 colspan=1>Actual demand</td></tr><tr><td rowspan=1 colspan=1>2012</td><td rowspan=1 colspan=1>1600</td><td rowspan=1 colspan=1>2017</td><td rowspan=1 colspan=1>2300</td></tr><tr><td rowspan=1 colspan=1>2013</td><td rowspan=1 colspan=1>1800</td><td rowspan=1 colspan=1>2018</td><td rowspan=1 colspan=1>2100</td></tr><tr><td rowspan=1 colspan=1>2014</td><td rowspan=1 colspan=1>2000</td><td rowspan=1 colspan=1>2019</td><td rowspan=1 colspan=1>1900</td></tr><tr><td rowspan=1 colspan=1>2015</td><td rowspan=1 colspan=1>1600</td><td rowspan=1 colspan=1>2020</td><td rowspan=1 colspan=1>2200</td></tr><tr><td rowspan=1 colspan=1>2016</td><td rowspan=1 colspan=1>2200</td><td rowspan=1 colspan=1>2021</td><td rowspan=1 colspan=1>2400</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2021"
+}

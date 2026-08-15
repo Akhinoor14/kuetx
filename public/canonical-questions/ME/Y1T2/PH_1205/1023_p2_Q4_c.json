@@ -1,0 +1,41 @@
+{
+  "id": "1023_p2_Q4(c)",
+  "course": {
+    "code": "PH 1205",
+    "title": "Physics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\1st_Year_2nd_Term_2021_1023.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The half life of $\\ L _ { 9 2 } U ^ { 2 3 8 } : 1 \\ L _ { 5 } 4 . 5 \\times 1 0 ^ { 9 }$ years. What percentage of $9 2 U ^ { 2 3 8 }$ that existed $1 0 ^ { 1 0 }$ 10 years ago still survives? What is the average life of $9 2 U ^ { 2 3 8 } ?$"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

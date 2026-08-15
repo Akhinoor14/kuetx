@@ -1,0 +1,41 @@
+{
+  "id": "1163_p5_Q5(b)",
+  "course": {
+    "code": "PH 2227",
+    "title": "Basic Quantum Mechanics and Solid State Physics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2018\\2nd_Year_2nd_Term_2018_1163.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Derive the vibrational modes of a diatomic linear lattice Name the different branches of the dispersion relation curve. What is the difference betweenthie two branches?"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

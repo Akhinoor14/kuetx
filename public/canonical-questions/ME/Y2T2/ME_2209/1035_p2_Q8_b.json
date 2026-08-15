@@ -1,0 +1,50 @@
+{
+  "id": "1035_p2_Q8(b)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\2nd_Year_2nd_Term_2018_1035.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "A plate is lapped over and welded to a guşset plate as shown in figure."
+    },
+    {
+      "type": "text",
+      "value": "(i) Determine the size of the fillet welds to be specified using τ = 145 MPa through the throats of the welds."
+    },
+    {
+      "type": "text",
+      "value": "(ii) What maximum value of P can be applied vertically downward, if 8 mm welds are used?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0c4bc708b875a29da474b833e0da6b403fbd88377bfe6690bd6a44bc2fab1bb6.jpg",
+      "_source_path": "images/0c4bc708b875a29da474b833e0da6b403fbd88377bfe6690bd6a44bc2fab1bb6.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

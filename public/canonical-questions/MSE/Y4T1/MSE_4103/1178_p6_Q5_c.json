@@ -1,0 +1,53 @@
+{
+  "id": "1178_p6_Q5(c)",
+  "course": {
+    "code": "MSE 4103",
+    "title": "Engineering Alloys and Materials Selection",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2022\\4th_Year_1st_Term_2022_1178.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "It is sometimes suggested that architects live in the past; that in the $2 1 ^ { \\mathrm { s t } }$ century they should be building with fiberglass, aluminum alloys and stainless steel. Consider the possibility of replacing wooden or concrete column show in figure $6 ( \\mathsf { c } )$ of a building with AA 6061 aluminum alloys or AISI 304 stainless steel. The table below summarizes the needs."
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Function</td><td rowspan=1 colspan=1>Column</td></tr><tr><td rowspan=3 colspan=1>Constraints</td><td rowspan=1 colspan=1>Must not fail by compressive crushing</td></tr><tr><td rowspan=1 colspan=1>Must not buckle</td></tr><tr><td rowspan=1 colspan=1>Height H and compressive load F specified</td></tr><tr><td rowspan=1 colspan=1>Objective</td><td rowspan=1 colspan=1>Minimize material cost C</td></tr><tr><td rowspan=2 colspan=1>Free variables</td><td rowspan=1 colspan=1>Diameter D</td></tr><tr><td rowspan=1 colspan=1>Choice of Material</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Data for the four candidates for the column are listed below. Use these to identify the best candidate material when $\\mathrm { F } { = } 1 0 ^ { 5 } \\mathrm { N }$ and H=3m."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Material</td><td rowspan=1 colspan=1>Density,ρ(kg/m³)</td><td rowspan=1 colspan=1>Unit-cost, $C _ { \\mathrm { m } } ( \\$ 123,459 )$ </td><td rowspan=1 colspan=1>Modulus,M(MPa)</td><td rowspan=1 colspan=1>Compressivestrength,Γc(MPa)</td></tr><tr><td rowspan=1 colspan=1>Wood</td><td rowspan=1 colspan=1>700</td><td rowspan=1 colspan=1>0.50</td><td rowspan=1 colspan=1>10,000</td><td rowspan=1 colspan=1>25</td></tr><tr><td rowspan=1 colspan=1>PouredConcrete</td><td rowspan=1 colspan=1>2300</td><td rowspan=1 colspan=1>0.08</td><td rowspan=1 colspan=1>20,000</td><td rowspan=1 colspan=1>13</td></tr><tr><td rowspan=1 colspan=1>AA 6061-T6Al-alloy</td><td rowspan=1 colspan=1>2700</td><td rowspan=1 colspan=1>4.45</td><td rowspan=1 colspan=1>69,000</td><td rowspan=1 colspan=1>155</td></tr><tr><td rowspan=1 colspan=1>AISI 304stainless steel</td><td rowspan=1 colspan=1>7850</td><td rowspan=1 colspan=1>1.00</td><td rowspan=1 colspan=1>200,000</td><td rowspan=1 colspan=1>250</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

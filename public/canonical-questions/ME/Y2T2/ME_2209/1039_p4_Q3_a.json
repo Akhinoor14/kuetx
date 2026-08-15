@@ -1,0 +1,73 @@
+{
+  "id": "1039_p4_Q3(a)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\2nd_Year_2nd_Term_2022_1039.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The shaft in the figure consists of a 90 mm diameter aluminum segment that is rigidly joined to a 60 mm diameter steel segment. The ends of the shaft are attached to rigid supports. Calculate the maximum shear stress developed in each segment when the torque T = 80 N .m is applied. Use G = 28 GPa for aluminum and G = 80 GPa for steel."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_55a04de3379a359838cc92c3228678eeeec7b0551270e58253e8f335b168e3ca.jpg",
+      "_source_path": "images/55a04de3379a359838cc92c3228678eeeec7b0551270e58253e8f335b168e3ca.jpg"
+    },
+    {
+      "type": "text",
+      "value": "<sub>3(b)</sub> A rigid bar, hinged at one end, is supported by two identical springs as shown. Each spring consists of 20 turns of 12 mm wire having a mean diameter of 200 mm. Compute the maximum shearing stress in the spring. Neglect the mass of the rigid.bar."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_50241d3a12787f59089d56ab85490d6fc8308a6d16cfe19833795cb0974c3add.jpg",
+      "_source_path": "images/50241d3a12787f59089d56ab85490d6fc8308a6d16cfe19833795cb0974c3add.jpg"
+    },
+    {
+      "type": "text",
+      "value": "<sub>4(a)</sub> The <sub>lap</sub> <sub>joint</sub> shown in figure is fastened by four rivets of 30 mm diameter. Find the maximum 18 load P that can be applied if the working stress are 0.2 kN/mm<sup>2</sup> for shear in the rivet and 0.25 <sub>kN/mm</sub>2 for bearing in the plate. Assume that the applied load is distributed evenly among the four rivets and neglect friction between the plates."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_187b57b2f78452194fb3c11491629052d0662088a73086789458e184ba9b2b64.jpg",
+      "_source_path": "images/187b57b2f78452194fb3c11491629052d0662088a73086789458e184ba9b2b64.jpg"
+    },
+    {
+      "type": "text",
+      "value": "<sub>4(b)</sub> A <sub>plate</sub> is attached to the frame of a machine by two side fillet welds as shown. Determine the size of the welds to resist a load of 45 kN. Assume that the allowable shearing stress through the throat of the weld is 145 MPa."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0d3213d5432fb734ffe5b66c4270c09e1d38b8ff2823a4d913e434caeb9e4169.jpg",
+      "_source_path": "images/0d3213d5432fb734ffe5b66c4270c09e1d38b8ff2823a4d913e434caeb9e4169.jpg"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2022"
+}

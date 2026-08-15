@@ -1,0 +1,42 @@
+{
+  "id": "966_p5_Q8(a)",
+  "course": {
+    "code": "ME 2131",
+    "title": "Engineering Mechanics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2023\\2nd_Year_1st_Term_2023_966.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The magnitude and direction of the velocities of two identical frictionless balls before they 17 strike each other are shown in the following figure. Assuming e = 0.90, determine the magnitude and direction of the velocity of each ball after the impact."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_21089f601df78146f9c325b358b14b0613badb706eeebc7f1630313bc09bd9ec.jpg",
+      "_source_path": "images/21089f601df78146f9c325b358b14b0613badb706eeebc7f1630313bc09bd9ec.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

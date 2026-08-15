@@ -1,0 +1,45 @@
+{
+  "id": "1179_p3_Q8(c)",
+  "course": {
+    "code": "MSE 4105",
+    "title": "Polymer and Composite Materials",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2023\\4th_Year_1st_Term_2023_1179.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose you are a lead engineer in a ceramic manufacturing company. The (15) company wants your help in producing ceramic matrix composites (CMC) with SiC matrix and SiC fibers. They currently have a large stock of preceramic polymer 'polycarbosilanes' which they want to use."
+    },
+    {
+      "type": "text",
+      "value": "(i) Justify which fabrication method you will choose. With neat sketches, explain the manufacturing steps of that method."
+    },
+    {
+      "type": "text",
+      "value": "(ii) The company has a future plan to stop using any preceramic polymer. They also don't want to use any kind of liquid infiltration. Which method will you suggest to them for future production? Explain the details of your chosen method with diagram. Also, point out two benefits for the new process."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2023"
+}

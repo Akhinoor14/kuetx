@@ -1,0 +1,42 @@
+{
+  "id": "1153_p1_Q8(b)",
+  "course": {
+    "code": "ME 1227",
+    "title": "Engineering Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\1st_Year_2nd_Term_2021_1153.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "Arm AB has a constant angular velocity of 15 rad/sec counterclockwise. At the instant when (17) $\\scriptstyle \\theta = 9 0 ^ { 0 } .$ , determine the acceleration (i) of collar D, (ii) of the midpoint G of bar BD."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_23e5d2d55d0ad75fefa90f44aed358fa1efc82723434034eb3c0d9ddb35ae159.jpg",
+      "_source_path": "images/23e5d2d55d0ad75fefa90f44aed358fa1efc82723434034eb3c0d9ddb35ae159.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

@@ -1,0 +1,49 @@
+{
+  "id": "1338_p4_Q5(c)",
+  "course": {
+    "code": "ME 1105",
+    "title": "Thermal Engineering",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2025,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2025\\1st_Year_1st_Term_2025_1338.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the combustion of fuel, write down the equations of combustion by mass for the followings:"
+    },
+    {
+      "type": "text",
+      "value": "i) Complete combustion of carbon (C) to carbon dioxide (CO2);"
+    },
+    {
+      "type": "text",
+      "value": "Burning of sulphur (S) to sulphur dioxide (SO2), and"
+    },
+    {
+      "type": "text",
+      "value": "iii)Burning of marsh gas (CH4)."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2025"
+}

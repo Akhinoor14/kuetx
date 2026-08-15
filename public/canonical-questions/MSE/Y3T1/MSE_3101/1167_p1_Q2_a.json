@@ -1,0 +1,37 @@
+{
+  "id": "1167_p1_Q2(a)",
+  "course": {
+    "code": "MSE 3101",
+    "title": "Transport Phenomena in Materials",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2019\\3rd_Year_1st_Term_2019_1167.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". A fluid aț temperature $T _ { \\infty 1 }$ with heat transfer coefficient $\\pmb { h } _ { 1 }$ flows over the surface at $\\mathbf { x } { = } 0 ,$ , and another fluid at temperature $T _ { \\infty 2 }$ with a heat transfer coefficient $\\pmb { h } _ { 2 }$ flows over the surface at x=L of the plate. Develop an expression for the heat flow Q through an area A of the plate. . Calculate that heat transfer rate through, $\\mathbf { A } \\mathbf { = } \\mathbf { \\dot { l } } m ^ { 2 }$ of the slab for $T _ { \\infty 1 } { = } 1 3 0 \\ \\mathrm { ^ { \\circ } C } , T _ { \\infty 2 } { = } 3 0 \\ \\mathrm { ^ { \\circ } C } ,$ $h _ { 1 } { = } 2 5 0 \\ \\mathrm { W } / ( m ^ { 2 } . ^ { \\circ } \\mathrm { C } )$ and h₂= 500 W/(m². °C), L= 4 cm, k = 20 W/ (m. C)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

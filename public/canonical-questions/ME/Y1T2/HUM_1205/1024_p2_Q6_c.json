@@ -1,0 +1,41 @@
+{
+  "id": "1024_p2_Q6(c)",
+  "course": {
+    "code": "HUM 1205",
+    "title": "Economics & Accounting",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\1st_Year_2nd_Term_2022_1024.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "From the following ledger balances of Bayerische Motoren Werke (BMW) AG, 20 prepare a trial balance as on 30th June, 2023:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>Name</td><td>€</td><td>Name</td><td>€</td></tr><tr><td>Share capital</td><td>150,000</td><td>Purchases</td><td>45,000</td></tr><tr><td>Furniture</td><td>50,000</td><td>Debtors</td><td>30,000</td></tr><tr><td>Goodwill</td><td>30,000</td><td>Salaries</td><td>5,000</td></tr><tr><td>Return Outward</td><td>5,000</td><td>Creditors</td><td>20,000</td></tr><tr><td>General Reserve</td><td>25,000</td><td>Unearned Service Revenue</td><td>3,000</td></tr><tr><td>Cash in hand (01-07-22)</td><td>6,000</td><td>Bad Debt</td><td>10,000</td></tr><tr><td>Rent Income</td><td>5,000</td><td>Bank O/D</td><td>2,000</td></tr><tr><td>Inventory (01-07-22)</td><td>30,000</td><td>Cash in hand (30-06-23)</td><td>10,000</td></tr><tr><td>Allowance for bad debt</td><td>3,000</td><td>Insurance Premium</td><td>8,000</td></tr><tr><td>Inventory(30-06-23)</td><td>35,000</td><td>Accumulated Depreciation</td><td>5,000</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2022"
+}

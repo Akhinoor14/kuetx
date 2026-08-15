@@ -1,0 +1,42 @@
+{
+  "id": "1030_p4_Q3(b)",
+  "course": {
+    "code": "MATH 2105",
+    "title": "Mathematics III",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\2nd_Year_1st_Term_2021_1030.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Form a system of equations and find the general flow pattern for the network flow shown in 13 the figure below. Assuming that the flows are all nonnegative, what is the smallest possible value of $x _ { 4 }$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_03235c5feb6485d7135059e0329005bd280d4cb1a9c3ad140c4e90953d16fa89.jpg",
+      "_source_path": "images/03235c5feb6485d7135059e0329005bd280d4cb1a9c3ad140c4e90953d16fa89.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

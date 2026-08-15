@@ -1,0 +1,114 @@
+{
+  "id": "979_p2_Q4(a)",
+  "course": {
+    "code": "ME 3231",
+    "title": "Solid Mechanics and Machine Design",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\3rd_Year_2nd_Term_2022_979.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "A solid steel shaft is loaded as shown in the following figure. Using $\\mathrm {  ~ G ~ } = 8 3 \\mathrm {  ~ G P A } ,$ Determine the required diameter of the shaft if the shearing stress is limited to 60 MPa and the angle of rotation at the free end is not to exceed 4 deg."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a048b09b29dc5e9e7855792930e7e4c65b7041131d10c5120d3fd670b9acaebd.jpg",
+      "_source_path": "images/a048b09b29dc5e9e7855792930e7e4c65b7041131d10c5120d3fd670b9acaebd.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Using Mohr's circle, determine the stresses acting on an element inclined at an angle θ = 25°. (i) The principle stresses, (ii) The maximum shear stresses (consider only the in plane stresses and show all results on sketches of properly oriented elements)."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b7df305dedf1308d4bb13b93a080ace7b8595b42106c41286a5b02c775d1524a.jpg",
+      "_source_path": "images/b7df305dedf1308d4bb13b93a080ace7b8595b42106c41286a5b02c775d1524a.jpg"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    },
+    {
+      "type": "text",
+      "value": "A single-threaded steel worm rotates at 1725 rev/min, meshing with a 56-tooth worm gear transmitting 1 hp to the output shaft. The pitch diameter of the worm is 1.50. The tangential diametral pitch of the gear is 8 teeth per inch and the normal pressure angle is $2 0 ^ { \\circ }$ The ambient temperature is $\\mathsf { 7 0 ^ { \\circ } F }$ , the application factor is 1.25, the design factor is 1, the gear face is 0.5 in, the lateral case area is $8 5 0 \\mathrm { i n } ^ { 2 }$ , and the gear is sand-cast bronze."
+    },
+    {
+      "type": "text",
+      "value": "(i)Determine and evaluate the geometric properties of the gears."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Determine the transmitted gear forces and the mesh efficiency."
+    },
+    {
+      "type": "text",
+      "value": "(iii) Estimate the lubricant sump temperature, assuming no fan on worm shaft."
+    },
+    {
+      "type": "text",
+      "value": "The figure shows a 500-mm-diameter brake drum with four internally expanding shoes rotating clockwise. Each of the hinge pins A and B supports a pair of shoes. The actuating mechanism is to be arranged to produce the same force F on each shoe. The face width of the shoes is 70 mm. The material used permits a coefficient of friction of 0.30 and a maximum pressure of 1240 kPa."
+    },
+    {
+      "type": "text",
+      "value": "(i) Determine the maximum actuating force."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Estimate the brake capacity."
+    },
+    {
+      "type": "text",
+      "value": "(iii) Noting that rotation may be in either direction, estimate the hinge-pin reactions."
+    },
+    {
+      "type": "text",
+      "value": "All dimensions are in"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_7b5a64ed749b74498127d72136538c52e8916d462462c8b92493d91027c3c691.jpg",
+      "_source_path": "images/7b5a64ed749b74498127d72136538c52e8916d462462c8b92493d91027c3c691.jpg"
+    },
+    {
+      "type": "text",
+      "value": "An angular contact, inner ring rotating, 02 series ball bearing is required for an application in which the life requirement is 40 Kh at 520 rev/ min. The design radial load is 725 lbf. The application factor is 1.4. The reliability goal is 0.90. Find the multiple of rating life xp required and the catalog rating C1o. Choose a bearing and estimate the existing reliability in service."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_83bce921e248263da14cf253958528ca3b130aa724745432d250e0b6fde7210b.jpg",
+      "_source_path": "images/83bce921e248263da14cf253958528ca3b130aa724745432d250e0b6fde7210b.jpg"
+    },
+    {
+      "type": "text",
+      "value": "A shaft is to be designed to support the spur pinion and helical gear shown in the following figure on two bearings spaced 700 mm center-to-center. Bearing A is a cylindrical roller and is to take only radial load; bearing B is to take the thrust load of 900 N produced by the helical gear and its share of the radial load. The bearing at B can be a ball bearing. The radial loads of both gears are in the same plane, and are 2.7 kN for the pinion and 900 N for the gear. The shaft speed is 1200 rev/min. Design the shaft."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_6f1c173028e0cd1ab655de40bc4d0ee03c6ddd910f3e52f914493088dee57f83.jpg",
+      "_source_path": "images/6f1c173028e0cd1ab655de40bc4d0ee03c6ddd910f3e52f914493088dee57f83.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

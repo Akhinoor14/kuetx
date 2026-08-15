@@ -1,0 +1,42 @@
+{
+  "id": "1039_p2_Q7(b)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\2nd_Year_2nd_Term_2022_1039.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The 6 kg slender rod AB is welded to the 3 kg uniform disk which rotates about a pivot at A. 18 A spring of constant k = 80 N/m is attached to the disk and is unstretched when the rod AB is horizontal. Knowing that the assembly is released from rest in the position shown, determine its angular velocity after it has rotated through 90° ."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_6ad5a6908fbbd6c2787b0fab4c53862d96189a5795c439a0633b03d3f7792178.jpg",
+      "_source_path": "images/6ad5a6908fbbd6c2787b0fab4c53862d96189a5795c439a0633b03d3f7792178.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2022"
+}

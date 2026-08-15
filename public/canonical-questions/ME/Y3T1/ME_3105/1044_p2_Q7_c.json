@@ -1,0 +1,42 @@
+{
+  "id": "1044_p2_Q7(c)",
+  "course": {
+    "code": "ME 3105",
+    "title": "Heat Transfer I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\3rd_Year_1st_Term_2021_1044.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose an architect wants to evaluate the percentage of day light entering through a store 15 window $\\boldsymbol { A } _ { 1 }$ that impinges on the floor area A4 located relative to A as shown in figure. Evaluate the view factor $F _ { 1 - 4 }$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_981abf0c467b5ae053b8f8446792eaa367cbf864635515df6e27b508291894e6.jpg",
+      "_source_path": "images/981abf0c467b5ae053b8f8446792eaa367cbf864635515df6e27b508291894e6.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

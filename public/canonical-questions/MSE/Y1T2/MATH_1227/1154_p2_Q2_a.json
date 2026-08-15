@@ -1,0 +1,52 @@
+{
+  "id": "1154_p2_Q2(a)",
+  "course": {
+    "code": "MATH 1227",
+    "title": "Differential Equations and Geometry",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2023\\1st_Year_2nd_Term_2023_1154.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the general solution of the differential equation $( x + 2 y - 3 ) \\mathrm { d } x -$ (13) (2x + y - 3)dy = 0."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\mathrm { ( b ) } } \\quad \\mathrm { S o l v e } ( y - x y ^ { 2 } ) \\mathrm { d } x - ( x + x ^ { 2 } y ) \\mathrm { d } y = 0 .\\tag{11}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n( \\mathbf { c } ) \\quad \\operatorname { S o l v e } x \\mathrm { d } y - \\{ y + x y ^ { 3 } ( 1 + \\ln x ) \\} \\mathrm { d } x = 0 .\\tag{11}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r } { ( D ^ { 2 } - 6 D + 9 ) y = \\frac { e ^ { 3 x } } { x ^ { 2 } } , \\mathrm { w h e r e } D = \\frac { \\mathrm { d } } { \\mathrm { d } x } . } \\end{array}\\tag{12}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2023"
+}

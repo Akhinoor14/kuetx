@@ -1,0 +1,46 @@
+{
+  "id": "1080_p3_Q8(b)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\2nd_Year_Backlog_2018_1080.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the riveted connection as shown in figure, determine the allowable load P if the 18 shearing stress in the 25 mm rivets is limited to 140 MPa."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_da949f2b1fd6795758f3121eb94210bdc154f09d49b29c14573cb4f88906a0cd.jpg",
+      "_source_path": "images/da949f2b1fd6795758f3121eb94210bdc154f09d49b29c14573cb4f88906a0cd.jpg"
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY Department of Mechanical Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2018"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1039_p1_Q3(b)",
+  "course": {
+    "code": "ME 2221",
+    "title": "Computer Programming",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\2nd_Year_2nd_Term_2022_1039.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write a program to calculate the salaries of three employees A, Band C given that A worked for $t _ { 1 }$ hours, B worked for $t _ { 2 }$ hours and C worked for $t _ { 3 }$ hours. Basic salary is TK 1000 for all employees, house rent is 50% of basic pay and medical allowance is TK 600 for all employees and A will get TK 10 bonus for every hour he worked more than B and B will get TK 5 bonus for every hour he worked more than C. Total salary is equal to sum of basic pay, house allowance, medical allowance and bonus. Assume $t _ { 1 } > t _ { 2 } > t _ { 3 }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2022"
+}

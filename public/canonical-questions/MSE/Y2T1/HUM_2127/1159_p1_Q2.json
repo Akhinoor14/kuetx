@@ -1,0 +1,81 @@
+{
+  "id": "1159_p1_Q2",
+  "course": {
+    "code": "HUM 2127",
+    "title": "Accounting and Economics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\2nd_Year_1st_Term_2021_1159.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Mahim open his law office on July 1, 2020. During the first month of operations, the following (15+20) transactions occurred:"
+    },
+    {
+      "type": "text",
+      "value": "2020, July-1 Mahim invested Tk 300,000 in cash in the law practice."
+    },
+    {
+      "type": "text",
+      "value": "2020, July-2 Paid Tk 8,000 for July rent on office space in cash."
+    },
+    {
+      "type": "text",
+      "value": "2020. July-3 Purchased equipment in cash Tk 50,000."
+    },
+    {
+      "type": "text",
+      "value": "2020. Julv-4 Performed legal services to clients for cash Tk 15,000."
+    },
+    {
+      "type": "text",
+      "value": "2020.July-5 Cash deposited into bank Tk 70,000."
+    },
+    {
+      "type": "text",
+      "value": "2020.July-6 Performed legal services for client on account Tk 20,000."
+    },
+    {
+      "type": "text",
+      "value": "2020, July-7 Advertisement bill received but not yet paid Tk 5,000."
+    },
+    {
+      "type": "text",
+      "value": "2020, July-8 Paid advertisement bill by cheque transaction July-7."
+    },
+    {
+      "type": "text",
+      "value": "2020, July-9 Purchase supplies on account Tk 7,000."
+    },
+    {
+      "type": "text",
+      "value": "2020, July-10 Utility bill paid by cheque Tk 2,500."
+    },
+    {
+      "type": "text",
+      "value": "Required:"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

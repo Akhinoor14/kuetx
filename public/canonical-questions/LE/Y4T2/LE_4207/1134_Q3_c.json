@@ -1,0 +1,49 @@
+{
+  "id": "1134_Q3(c)",
+  "course": {
+    "code": "LE 4207",
+    "title": "Dyeing and Finishing II",
+    "department": "Department of Leather Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2019\\4th_Year_2nd_Term_2019_1134.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is coefficient of correlation? Descrioe the exponential smoothing method of forecasting l I with an example,"
+    },
+    {
+      "type": "text",
+      "value": "the firm think that sales of the last logically be related to the amount of spent on footwear production. 1f ::i relationship does exist. published government and footwear industry forecasts of anticipated footwear production levels can be used as on additional sales predictor. First a check is made to confirm that the footwear level forecasts are relatively accurate. Next the national figures are broken down to confirm to the firms marketing areas. The records o monthly footwear production volume and last sales for corresponding months are collected and tabulated in the following table. Where footwear volume is in Tk.. I 00 millions units and lasts sales arc in Tk. I 0000 units."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Month</td><td rowspan=1 colspan=1>Lasts sales  104</td><td rowspan=1 colspan=1>Footwear manufacturing volume × 108</td></tr><tr><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>07.5</td><td rowspan=1 colspan=1>02.0</td></tr><tr><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>10.0</td><td rowspan=1 colspan=1>02.5</td></tr><tr><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>09.0</td><td rowspan=1 colspan=1>02.0</td></tr><tr><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>10.5</td><td rowspan=1 colspan=1>03.0</td></tr><tr><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>11.5</td><td rowspan=1 colspan=1>03.5</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Find out: (i) ls it worthy to consider the correlation between sales of lasts and footwear volume? (ii) ff projected footwear volume for the next month is TI(. 300,000.000. What would be sales of volumes cf the lasts in Tk.?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2019"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "1083_p2_Q8(b)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\2nd_Year_Backlog_2022_1083.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 18 mm plate is lapped over and secured as shown by transverse fillet welds on the inside 18 and outside to form a penstock 2.0 m in diameter. Determine the safe internal pressure, assuming allowable stresses of $\\sigma _ { t } = 1 5 0$ MPa for the plate and $\\tau = 1 3 0$ MPa through the throats of the welds. Use the maximum size of welds permitted."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_55217d8f33c0fd5722dd6c66b62a04f983e85b6203f1dd1e325fed881588b7b5.jpg",
+      "_source_path": "images/55217d8f33c0fd5722dd6c66b62a04f983e85b6203f1dd1e325fed881588b7b5.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2022"
+}

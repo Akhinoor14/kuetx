@@ -1,0 +1,37 @@
+{
+  "id": "954_p2_Q4(b)",
+  "course": {
+    "code": "EE 1131",
+    "title": "Electrical Circuits",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\1st_Year_1st_Term_2021_954.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A magnetic circuit with a uniform cross-sectional area of 6 cm² consists of a steel ring with a mean magnetic length of 80 cm and an air gap of 2 mm. The magnetizing winding has 540 ampere-turns. Estimate the magnetic flux produced in the gap. The relevant points on the magnetization curve of cast steel are: B(Wb/m²): 0.12 0.14 0.16 0.18 0.20 H(AT/m): 200 230 260 290 320."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2021"
+}

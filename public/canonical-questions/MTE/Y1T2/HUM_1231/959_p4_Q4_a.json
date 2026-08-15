@@ -1,0 +1,65 @@
+{
+  "id": "959_p4_Q4(a)",
+  "course": {
+    "code": "HUM 1231",
+    "title": "Technical and Communicative English",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\1st_Year_2nd_Term_2021_959.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Correct the following sentences."
+    },
+    {
+      "type": "text",
+      "value": "i. Rupsha express will arrive at Khulna at 8.30 pm"
+    },
+    {
+      "type": "text",
+      "value": "ii.He got the poem by the heart."
+    },
+    {
+      "type": "text",
+      "value": "iii. Since he tries heart and soul, he can't succeed in life."
+    },
+    {
+      "type": "text",
+      "value": "iv.I and you must your work."
+    },
+    {
+      "type": "text",
+      "value": "v.My all books are lost."
+    },
+    {
+      "type": "text",
+      "value": "vi.Ruba, works in London who, is doctor a."
+    },
+    {
+      "type": "text",
+      "value": "vii.This is a faithful report."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

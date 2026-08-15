@@ -1,0 +1,47 @@
+{
+  "id": "1340_p1_Q7(a)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2024\\2nd_Year_2nd_Term_2024_1340.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "If the cord at B suddenly fails, determine the horizontal and vertical components of the 10 initial reaction at the pin A, and the angular acceleration of the 120 kg beam."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_57d0047b41e810550f61d0501cdcff665d36263cd4720b4fbf5c6a4d42e6856c.jpg",
+      "_source_path": "images/57d0047b41e810550f61d0501cdcff665d36263cd4720b4fbf5c6a4d42e6856c.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_386d4c667502240241dcae9a7edecc4e7cc69e6f7c46bf2010f6ad5759e89e64.jpg",
+      "_source_path": "images/386d4c667502240241dcae9a7edecc4e7cc69e6f7c46bf2010f6ad5759e89e64.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2024"
+}

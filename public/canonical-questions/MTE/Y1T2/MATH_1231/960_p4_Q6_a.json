@@ -1,0 +1,42 @@
+{
+  "id": "960_p4_Q6(a)",
+  "course": {
+    "code": "MATH 1231",
+    "title": "Vector, Matrix and Ordinary Differential Equation",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\1st_Year_2nd_Term_2022_960.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the particular solution of the differential equation"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r } { \\frac { d y } { d x } + y c o t x = 2 x + x ^ { 2 } c o t x \\ ( x \\neq 0 ) \\mathrm { g i v e n \\ t h a t } y = 0 \\mathrm { ~ w h e n ~ } x = \\frac { \\pi } { 2 } . } \\end{array}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2022"
+}

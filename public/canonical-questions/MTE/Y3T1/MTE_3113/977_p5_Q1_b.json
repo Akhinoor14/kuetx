@@ -1,0 +1,41 @@
+{
+  "id": "977_p5_Q1(b)",
+  "course": {
+    "code": "MTE 3113",
+    "title": "Numerical Analysis and Statistics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2023\\3rd_Year_1st_Term_2023_977.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The population of a country in the decennial census were as follows. Estimate the 11 population for the year 1925."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Year</td><td rowspan=1 colspan=1>1891</td><td rowspan=1 colspan=1>1901</td><td rowspan=1 colspan=1>1911</td><td rowspan=1 colspan=1>1921</td><td rowspan=1 colspan=1>1931</td></tr><tr><td rowspan=1 colspan=1>Population (in thousand)</td><td rowspan=1 colspan=1>46</td><td rowspan=1 colspan=1>66</td><td rowspan=1 colspan=1>81</td><td rowspan=1 colspan=1>93</td><td rowspan=1 colspan=1>101</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "964_p5_Q1(b)",
+  "course": {
+    "code": "ME 2131",
+    "title": "Engineering Mechanics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\2nd_Year_1st_Term_2021_964.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A container is supported by three cables as shown. Determine the weight W of the 18 container, knowing that the tension in cable AB is 500 N."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_39bc96bb76e1f54357303cf699c20fc73141f3dce055c6a4ab17cd65baa08ec3.jpg",
+      "_source_path": "images/39bc96bb76e1f54357303cf699c20fc73141f3dce055c6a4ab17cd65baa08ec3.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

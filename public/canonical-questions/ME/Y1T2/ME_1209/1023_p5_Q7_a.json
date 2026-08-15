@@ -1,0 +1,42 @@
+{
+  "id": "1023_p5_Q7(a)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\1st_Year_2nd_Term_2021_1023.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The coefficient of friction are $\\mu _ { s } = 0 . 3 0$ and $\\mu _ { k } = 0 . 2 5$ between all surfaces of contact. Knowing that P = 950 N, determine (i) the resultant of the friction forces exerted on the block D if block C is restrained as shown, and (ii) the friction force exerted by the ground on block D if cable AB is cut."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0d0b19306ea1bb5ac1ac3b717a51359cbde2ed08612d728d8e428df26aaf982f.jpg",
+      "_source_path": "images/0d0b19306ea1bb5ac1ac3b717a51359cbde2ed08612d728d8e428df26aaf982f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

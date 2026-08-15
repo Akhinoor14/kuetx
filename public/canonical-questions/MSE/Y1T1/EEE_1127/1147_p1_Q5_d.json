@@ -1,0 +1,37 @@
+{
+  "id": "1147_p1_Q5(d)",
+  "course": {
+    "code": "EEE 1127",
+    "title": "Electrical Engineering Fundamentals",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\1st_Year_1st_Term_2021_1147.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A short shunt DC generator supplies 250V at 100A current in a load. The generator has armature, series-field, and shunt-field resistances are 0.05Ω, 0.3Ω and 200 Ω respectively. If brush contact drop and armature reaction drop is 1.0V per brush and 3V respectively, find out the generated voltage of generator."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2021"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "1340_p1_Q6(a)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2024\\2nd_Year_2nd_Term_2024_1340.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Rod AB rotates counterclockwise with a constant angular velocity $\\omega = 3 \\ \\mathrm { r a d } / s$ 15 Determine the velocity and acceleration of point C located on the double collar when $\\theta = 4 5 ^ { \\circ }$ The collar consists of two pin-connected slider blocks, whichare constrained to move along the circular path and the rod AB."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_62ad02775d69e0dc908c16d9a182a7194146067cd0337232163cea7a45f9ed98.jpg",
+      "_source_path": "images/62ad02775d69e0dc908c16d9a182a7194146067cd0337232163cea7a45f9ed98.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2024"
+}

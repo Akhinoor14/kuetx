@@ -1,0 +1,46 @@
+{
+  "id": "1034_p2_Q3(a)",
+  "course": {
+    "code": "MATH 2205",
+    "title": "Mathematics IV",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2017\\2nd_Year_2nd_Term_2017_1034.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find a differential equation with the following relation,"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\frac { x ^ { 2 } } { a ^ { 2 } } + \\frac { y ^ { 2 } } { b ^ { 2 } } + \\frac { z ^ { 2 } } { c ^ { 2 } } = 1 .\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Also find out the order and degree for the differential equation."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

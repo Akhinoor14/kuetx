@@ -1,0 +1,42 @@
+{
+  "id": "1092_p6_Q3(b)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\4th_Year_Backlog_2018_1092.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A spring is used to stop a 50 kg package which is moving down a $2 0 ^ { \\circ }$ incline. The spring has a constant ${ \\tt K } = 3 0$ kN/m and is held by cables so that it is initially compressed 50 mm. Knowing that the velocity of the package is 2 m/sec when it is 8 m from the spring and neglecting friction, determine· the maximum additional deformation of the spring in bringing the package to rest."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_69ab792756994ee6cef582514506b01f95a0754e99a052ab96a586881668a999.jpg",
+      "_source_path": "images/69ab792756994ee6cef582514506b01f95a0754e99a052ab96a586881668a999.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Backlog Examination, 2018"
+}

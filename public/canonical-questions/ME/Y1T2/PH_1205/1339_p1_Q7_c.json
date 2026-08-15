@@ -1,0 +1,46 @@
+{
+  "id": "1339_p1_Q7(c)",
+  "course": {
+    "code": "PH 1205",
+    "title": "Physics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2024\\1st_Year_2nd_Term_2024_1339.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "According to Einstein's model, the average energy of an oscillator is"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r } { \\overline { { E } } = \\frac { 1 } { 2 } h \\upsilon + \\frac { h \\upsilon } { e ^ { h \\upsilon } / k _ { B } T _ { - 1 } } \\ . } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Now obtain an expression for lattice heat capacity for a crystal of N number of atoms. Discuss the success and failure of this model."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2024"
+}

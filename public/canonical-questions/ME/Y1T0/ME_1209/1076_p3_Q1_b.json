@@ -1,0 +1,60 @@
+{
+  "id": "1076_p3_Q1(b)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\1st_Year_Backlog_2021_1076.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The collar A may slide freely on the horizontal frictionless rod. The spring attached to the collar has a constant of 10 N/cm and is undeformed when the collar is directly below support B. Determine the magnitude of the force P required to maintain equilibrium."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_cdeecddff0e1bcf2a573e9fc95699c51c9a0777b933a69bc08d7147dca5fcd5d.jpg",
+      "_source_path": "images/cdeecddff0e1bcf2a573e9fc95699c51c9a0777b933a69bc08d7147dca5fcd5d.jpg"
+    },
+    {
+      "type": "text",
+      "value": "l(c) In Fig. let $\\mathrm { m _ { A } } = 1 0 0 0$ kg, $m _ { \\mathrm { B } } = 2 6 0$ kg, $\\mathrm { m c } = 2 5 0 0 \\mathrm { k g } ,$ and force R = 38 kN. Neglecting friction at all surfaces, find the force Q on the top of the wedge and the reactions at the supports. Assume the reaction at A has two components."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_c4bc36812410840db0e570029b183df2ca1c3d70d22a7981fec2804477d65507.jpg",
+      "_source_path": "images/c4bc36812410840db0e570029b183df2ca1c3d70d22a7981fec2804477d65507.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Three cables are connected at D, where a 16 kN force is applied as shown. Determine the tension in each cable."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_c6f81f7e71cc29452635fbdca422c356b9672df75014ecf12a40085841c2de7d.jpg",
+      "_source_path": "images/c6f81f7e71cc29452635fbdca422c356b9672df75014ecf12a40085841c2de7d.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2021"
+}

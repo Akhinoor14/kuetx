@@ -1,0 +1,42 @@
+{
+  "id": "1026_p2_Q3(b)",
+  "course": {
+    "code": "EE 2105",
+    "title": "Electronics",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2017\\2nd_Year_1st_Term_2017_1026.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is meant by stability factor? Deduce its general expfession and hence show 13 that the stability factor of the following amplifier is unity."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_470bcfb9ba5da5b75b45dcea0ffa9cc0d7f5ee7aa567c8030a8c9c39600f336c.jpg",
+      "_source_path": "images/470bcfb9ba5da5b75b45dcea0ffa9cc0d7f5ee7aa567c8030a8c9c39600f336c.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

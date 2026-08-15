@@ -1,0 +1,73 @@
+{
+  "id": "1012_p3_Q4(c)",
+  "course": {
+    "code": "HUM 1105",
+    "title": "English",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2019\\1st_Year_1st_Term_2019_1012.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define Transitive verb, Intransitive verb and Infinitive with two examples for each of the definitions."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    },
+    {
+      "type": "text",
+      "value": "S(a) Read the following sentence carefully and answer the questions that follow."
+    },
+    {
+      "type": "text",
+      "value": "Only government organizations can't cover the whole spectrum of a country· s development idea. A government organization plays a limited range of direction for development, of which the large scale comes with the help of the N. G. Os along the co-operation of peoples of a country. A government organization initiates the birth of a concept of development and the N. G. Os nurture it until it becomes a full grown shape, but N. G. Os are to run according to the rule of the country. An instance will clarify the importance of the role of the . G. Os in a country in contrast to government's organizations. Poverty elimination marks a heart stricken concern in a country. Different types of govt. financial institution - Banks, Insurances, projects, etc. are not absolutely able to eradicate it. In this case N. G. Os reach the root level of society, create awareness among the peoples about the causes of poverty and the ways they can get rid of it. So. government organizations are not fully capable of removing it. Thus. social development. human development, educational development. etc. recognize the complementary role of the N. G. Os. Different organs of a government endeavor to develop a society. Peoples representatives, law enforcing agencies. local administration. etc. work as spokesman of a government in this regard. Inspire of such effort a society can't involve in the complete stream of development until N. G. Os participate in the elimination of social ignorance. Only a society then enlightens itself being away from darkness. Here lies the role ofN. G. Os."
+    },
+    {
+      "type": "text",
+      "value": "Questions:"
+    },
+    {
+      "type": "text",
+      "value": "i) Why should we recognize the role ofN. G. Os in a country?"
+    },
+    {
+      "type": "text",
+      "value": "ii) What does a government organization do at the beginning of a program? What is the result?"
+    },
+    {
+      "type": "text",
+      "value": "iii) How do you reflect the role of N. G. Os with an instance?"
+    },
+    {
+      "type": "text",
+      "value": "iv) How do N. G. Os contribute to the complete development of a society? And why?"
+    },
+    {
+      "type": "text",
+      "value": "S(b) Make a precis of the above written passage (Q. S(a)) with a suitable title."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
+}

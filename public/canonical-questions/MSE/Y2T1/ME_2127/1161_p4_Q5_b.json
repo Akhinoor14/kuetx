@@ -1,0 +1,41 @@
+{
+  "id": "1161_p4_Q5(b)",
+  "course": {
+    "code": "ME 2127",
+    "title": "Solid Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2023\\2nd_Year_1st_Term_2023_1161.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "Using AISC column specifications, determine the safe axial loads on a $\\mathrm { W } 3 6 0 \\times 1 2 2$ section used as a column under the following conditions: (i) hinged ends and a length of 9m; (ii) built in ends and an unsupported length of 10 m; (ii) built-in ends and a length of 10m braced at the midpoint. Use $\\sigma _ { y p } { = } 3 8 0 \\mathrm { M P a }$ and E=200 GPa. (Use Table B-2: Properties of Wide-Flange Section.)"
+    },
+    {
+      "type": "text",
+      "value": "(18)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

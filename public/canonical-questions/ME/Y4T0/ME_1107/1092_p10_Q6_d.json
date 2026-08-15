@@ -1,0 +1,37 @@
+{
+  "id": "1092_p10_Q6(d)",
+  "course": {
+    "code": "ME 1107",
+    "title": "Manufacturing Process",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\4th_Year_Backlog_2018_1092.pdf",
+    "source_page": null,
+    "paper_index": 10
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "An air handling unit of an air conditioning plant supplies a total of 4000 cmm of dry air which comprises by weight 25% fresh air at 36°C DBT and 24°C WBT and 75% recirculated air at 23°C DBT and 50% RH. The air leaves the cooling coil at 12°C saturated state. Determine the cooling load and room heat gain."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Backlog Examination, 2018"
+}

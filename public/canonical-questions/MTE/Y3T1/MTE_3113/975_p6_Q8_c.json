@@ -1,0 +1,41 @@
+{
+  "id": "975_p6_Q8(c)",
+  "course": {
+    "code": "MTE 3113",
+    "title": "Numerical Analysis and Statistics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\3rd_Year_1st_Term_2021_975.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Table II shows the daily wage distribution in a certain factory. Draw a 2D pie chart of the frequency distribution and then calculate i) mean, ii) mode, iii) median, iv) standard deviation, and v) coefficient of mean distribution."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Daily wage (tk)</td><td rowspan=1 colspan=1>No. of employees</td></tr><tr><td rowspan=1 colspan=1>70-90</td><td rowspan=1 colspan=1>17</td></tr><tr><td rowspan=1 colspan=1>90-110</td><td rowspan=1 colspan=1>23</td></tr><tr><td rowspan=1 colspan=1>110-130</td><td rowspan=1 colspan=1>42</td></tr><tr><td rowspan=1 colspan=1>130-150</td><td rowspan=1 colspan=1>102</td></tr><tr><td rowspan=1 colspan=1>150-170</td><td rowspan=1 colspan=1>78</td></tr><tr><td rowspan=1 colspan=1>170-190</td><td rowspan=1 colspan=1>52</td></tr><tr><td rowspan=1 colspan=1>190-210</td><td rowspan=1 colspan=1>26</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

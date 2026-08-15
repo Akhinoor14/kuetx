@@ -1,0 +1,42 @@
+{
+  "id": "966_p5_Q4(a)",
+  "course": {
+    "code": "ME 2131",
+    "title": "Engineering Mechanics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2023\\2nd_Year_1st_Term_2023_966.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "The wind loads of 4500 N, 9000 N, and 4500 N are assumed to act on the pin joints of 17 the roof truss as shown in the following figure. In order to allow for expansion, the support of G is on rollers. The 20 kN vertical load is applied to it. Find the external reactions and the forces on members BC, BH, and AH."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e213303fcca7cc196869b9811ed3a74610723d5beabc7e3c653dcdcea41fb81e.jpg",
+      "_source_path": "images/e213303fcca7cc196869b9811ed3a74610723d5beabc7e3c653dcdcea41fb81e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

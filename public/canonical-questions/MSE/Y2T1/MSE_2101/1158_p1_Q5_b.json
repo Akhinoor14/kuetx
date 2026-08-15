@@ -1,0 +1,45 @@
+{
+  "id": "1158_p1_Q5(b)",
+  "course": {
+    "code": "MSE 2101",
+    "title": "Crystallography",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2020\\2nd_Year_1st_Term_2020_1158.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "For BCC iron, the lattice parameter of iron is 0.2866 nm. Suppose a monochromatic (10) radiation having wave length of 0.179 nm is used and the order of reflection is l. Then calculate:"
+    },
+    {
+      "type": "text",
+      "value": "(i) The inter-planar spacing"
+    },
+    {
+      "type": "text",
+      "value": "(ii)The diffraction angle for the (220) set of planes."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2020"
+}

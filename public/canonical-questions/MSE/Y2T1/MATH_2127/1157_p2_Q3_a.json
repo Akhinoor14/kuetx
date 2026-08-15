@@ -1,0 +1,41 @@
+{
+  "id": "1157_p2_Q3(a)",
+  "course": {
+    "code": "MATH 2127",
+    "title": "Vector Analysis and Linear Algebra",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2019\\2nd_Year_1st_Term_2019_1157.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Evaluate $\\iint _ { s ^ { \\underline { { A } } } \\cdot \\underline { { n } } ^ { d S } }$ over the surface S of the region bounded by the cylinder $x ^ { 2 } + z ^ { 2 } = 9$ $x = 0 , y = 0 , z = 0 { \\mathrm { ~ a n d ~ } } y = 8 , { \\mathrm { i f ~ } } \\underline { { A } } = 6 z \\underline { { i } } + ( 2 x + y ) \\underline { { j } } - x \\underline { { k } } .$"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

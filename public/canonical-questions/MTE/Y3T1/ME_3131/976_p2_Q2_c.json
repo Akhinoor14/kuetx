@@ -1,0 +1,42 @@
+{
+  "id": "976_p2_Q2(c)",
+  "course": {
+    "code": "ME 3131",
+    "title": "Fluid Mechanics and Machinery",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\3rd_Year_1st_Term_2022_976.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A wooden cylinder (SG=0.6) of 1m diameter and 0.8m long, floats in oil (SG=0.85). Would this cylinder be stable if placed to float with its axis vertical as shown in figure."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_5a1696013213346fb72e2ccd28d22c823c9438c4fe5f738c078d240758531db4.jpg",
+      "_source_path": "images/5a1696013213346fb72e2ccd28d22c823c9438c4fe5f738c078d240758531db4.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

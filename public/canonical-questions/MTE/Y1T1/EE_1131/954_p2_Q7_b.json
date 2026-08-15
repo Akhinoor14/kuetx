@@ -1,0 +1,42 @@
+{
+  "id": "954_p2_Q7(b)",
+  "course": {
+    "code": "EE 1131",
+    "title": "Electrical Circuits",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\1st_Year_1st_Term_2021_954.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "In the circuit shown in figure $\\mathrm { C } = 2 5 . 2 ~ \\mu \\mathrm { F }$ When supplied from an AC source, it takes 0.4A. If the voltage across different points are as shown in figure, find (i) the values of r and L, (ii) applied voltage, and its frequency, (iii) power factor of the circuit and active power."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_31faf1083daffa4c776a38d7470bbf7ed6471560df6243d09d5f28e54b140831.jpg",
+      "_source_path": "images/31faf1083daffa4c776a38d7470bbf7ed6471560df6243d09d5f28e54b140831.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2021"
+}

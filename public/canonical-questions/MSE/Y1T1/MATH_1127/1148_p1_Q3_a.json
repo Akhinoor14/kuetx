@@ -1,0 +1,42 @@
+{
+  "id": "1148_p1_Q3(a)",
+  "course": {
+    "code": "MATH 1127",
+    "title": "Differential and Integral Calculus",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2022\\1st_Year_1st_Term_2022_1148.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "$\\operatorname { I f } l x + m y = 1$ touch the curve $( a x ) ^ { n } + ( b y ) ^ { n } = 1$ , then show that"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n( { \\frac { l } { a } } ) ^ { \\frac { n } { n - 1 } } + \\left( { \\frac { m } { b } } \\right) ^ { \\frac { n } { n - 1 } } = 1 .\\tag{12}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2022"
+}

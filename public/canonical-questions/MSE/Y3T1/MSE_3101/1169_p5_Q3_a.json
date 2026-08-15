@@ -1,0 +1,45 @@
+{
+  "id": "1169_p5_Q3(a)",
+  "course": {
+    "code": "MSE 3101",
+    "title": "Transport Phenomena in Materials",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\3rd_Year_1st_Term_2021_1169.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The inner and outer surfaces of the pipe are maintained at average temperatures of $T _ { 1 } = 1 5 0 ^ { \\circ } \\mathrm { C }$ and $T _ { 2 } = 6 0 ^ { \\circ } \\mathrm { C } ,$ , respectively. Obtain a general relation for the temperature distribution inside the pipe under steady conditions and determine the rate of heat loss from the steam through the pipe."
+    },
+    {
+      "type": "text",
+      "value": "(18)"
+    },
+    {
+      "type": "text",
+      "value": "(17)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

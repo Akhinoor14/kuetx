@@ -1,0 +1,56 @@
+{
+  "id": "1057_p2_Q2(b)",
+  "course": {
+    "code": "PH 1205",
+    "title": "Physics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\4th_Year_1st_Term_2020_1057.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The NACA 4412 airfoil has a mean camber line given by-·"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\frac { z } { c } = \\left\\{ \\begin{array} { l } { \\displaystyle 0 . 2 5 \\left[ 0 . 8 \\frac { x } { c } - \\left( \\frac { x } { c } \\right) ^ { 2 } \\right] } \\\\ { \\displaystyle 0 . 1 1 1 \\left[ 0 . 2 + 0 . 8 \\frac { x } { c } - \\left( \\frac { x } { c } \\right) ^ { 2 } \\right] } \\end{array} \\right.\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nf o r 0 \\leq \\frac { x } { c } \\leq 0 . 4\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nf o r \\ 0 . 4 \\leq \\ \\frac { x } { c } \\leq 1\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Using thin-airfoil theory, calculate -(i) zero lift angle of attack, $\\mathbf { \\Gamma } \\propto \\mathbf { } _ { \\mathrm { L = 0 } } \\mathrm { ~ ( i i ) }$ lift coefficient when $\\alpha = 3 ^ { \\circ }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Online Examination, 2020"
+}

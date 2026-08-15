@@ -1,0 +1,46 @@
+{
+  "id": "1092_p6_Q8(b)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\4th_Year_Backlog_2018_1092.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 2 kg sphere, moving horizontally to the right with an initial velocity of 5 m/sec, strikes the lower end of an 8 kg rigid rod AB. The rod is suspended from à hinge at A and is initially at rest. Knowing that the coefficient of restitution between the rod and the sphere is 0.80, determine the angular velocity of the rod and the velocity of the sphere immediately after the impact."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f1a0c07aaf04acc5160b49c087aac34543fdd3b8bfddcb375a89f87745152799.jpg",
+      "_source_path": "images/f1a0c07aaf04acc5160b49c087aac34543fdd3b8bfddcb375a89f87745152799.jpg"
+    },
+    {
+      "type": "text",
+      "value": "KHULNAUNIVERSITY OFENGINEERING & TECHNOLOGY Department of Mechanical Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Backlog Examination, 2018"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "1168_p1_Q4(a)",
+  "course": {
+    "code": "MSE 3101",
+    "title": "Transport Phenomena in Materials",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2020\\3rd_Year_1st_Term_2020_1168.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Species A is evaporating from a flat surface into species B. Assume that the concentration profile for species A in the concentration boundary layer is of the form $C _ { A } ( y ) = D y ^ { 2 } + E y +$ F, where D, E and F are constants at any x-location and y- is measured along a normal from the surface. Develop an expression for the mass transfer convection coefficient $h _ { m }$ in terms of these constants, the concentration of A in the free stream $\\mathcal { C } _ { A , \\alpha }$ and the mass diffusivity $D _ { A B }$"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2020"
+}

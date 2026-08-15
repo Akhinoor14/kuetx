@@ -1,0 +1,42 @@
+{
+  "id": "1340_p1_Q8(c)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2024\\2nd_Year_2nd_Term_2024_1340.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": "The pendulum consists of a 15 kg solid ball, and neglected the weight of the rod. If it is 16 released from rest when $\\theta _ { 1 } = 9 0 ^ { \\circ }$ , determine the angle $\\theta _ { 2 }$ after the ball strikes the wall, rebounds, and the pendulum swings up to the point of momentary rest. Take $e = 0 . 6$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_09f2307a148b6ea7caec03e550be64b4c89d235802a29b24cc02bcf2e7b971db.jpg",
+      "_source_path": "images/09f2307a148b6ea7caec03e550be64b4c89d235802a29b24cc02bcf2e7b971db.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2024"
+}

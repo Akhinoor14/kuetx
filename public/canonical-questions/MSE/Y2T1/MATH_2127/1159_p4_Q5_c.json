@@ -1,0 +1,41 @@
+{
+  "id": "1159_p4_Q5(c)",
+  "course": {
+    "code": "MATH 2127",
+    "title": "Vector Analysis and Linear Algebra",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\2nd_Year_1st_Term_2021_1159.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Does inverse exist for all matrices? Test whether the following matrix is invertible or not. If (13) possible, find inverse of the following matrix using elementary transform: $\\left[ { \\begin{array} { l l l } { 1 } & { 2 0 } & { 2 } \\\\ { 2 } & { - 1 } & { 3 } \\\\ { 4 } & { 1 } & { 8 } \\end{array} } \\right]$"
+    },
+    {
+      "type": "text",
+      "value": "Q"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

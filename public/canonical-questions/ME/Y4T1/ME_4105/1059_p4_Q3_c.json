@@ -1,0 +1,45 @@
+{
+  "id": "1059_p4_Q3(c)",
+  "course": {
+    "code": "ME 4105",
+    "title": "Applied Thermodynamics",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\4th_Year_1st_Term_2022_1059.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Steam issues from the nozzles of a de Laval turbine with a velocity of 920 m/sec. The nozzle angle is 20°, the mean diameter of the blade is 26 cm and speed of rotation is 20,000 rpm. The mass flow through the turbine nozzles and blading is 0.2 kg of steam per second. If the friction loss in the blade channels is 34% of the kinetic energy corresponding to the relative velocity at \\_inlet to the blades, draw the velocity diagram an? calculate the followings:"
+    },
+    {
+      "type": "text",
+      "value": "(i) Velocity of whirl, (ii) Tangential and axial forces on blades,"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Work done on the. blades,. · and \\_(iv) Blade efficiency."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

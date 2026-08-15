@@ -1,0 +1,54 @@
+{
+  "id": "964_p6_Q2(c)",
+  "course": {
+    "code": "MTE 2105",
+    "title": "Sensors and Instrumentation",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\2nd_Year_1st_Term_2021_964.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "In a deflection type Wheatstone bridge arrangement shown in figure, the resistances of 09 various arms are P=1000 Ω, Q=100 Ω, R=2005 Ω, and S=200 Ω. The battery has an emf of 5 V. The voltmeter used to the arrangement has span 0 V to 5 V, sensitivity of 20000 Ω/V and resolution of 1 mV."
+    },
+    {
+      "type": "text",
+      "value": "i) What will be the voltage difference between point a and b?"
+    },
+    {
+      "type": "text",
+      "value": "ii) What will be the voltmeter reading?"
+    },
+    {
+      "type": "text",
+      "value": "iii) How the bridge can be balanced?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ac0ef48a4770029a4651af188db99b0169d5947e1d8b04b8066c58d9a3f38b25.jpg",
+      "_source_path": "images/ac0ef48a4770029a4651af188db99b0169d5947e1d8b04b8066c58d9a3f38b25.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

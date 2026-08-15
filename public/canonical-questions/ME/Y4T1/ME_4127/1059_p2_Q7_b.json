@@ -1,0 +1,45 @@
+{
+  "id": "1059_p2_Q7(b)",
+  "course": {
+    "code": "ME 4127",
+    "title": "Operations Management",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\4th_Year_1st_Term_2022_1059.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The number of housing units built quarterly in Khulna city is as shown below:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=4>Quarter</td></tr><tr><td rowspan=1 colspan=1>Year</td><td rowspan=1 colspan=1>Q1</td><td rowspan=1 colspan=1>Q₂</td><td rowspan=1 colspan=1>Q3</td><td rowspan=1 colspan=1>Q4</td></tr><tr><td rowspan=1 colspan=1>2011</td><td rowspan=1 colspan=1>50</td><td rowspan=1 colspan=1>95</td><td rowspan=1 colspan=1>80</td><td rowspan=1 colspan=1>60</td></tr><tr><td rowspan=1 colspan=1>2012</td><td rowspan=1 colspan=1>55</td><td rowspan=1 colspan=1>90</td><td rowspan=1 colspan=1>85</td><td rowspan=1 colspan=1>70</td></tr><tr><td rowspan=1 colspan=1>2013</td><td rowspan=1 colspan=1>60</td><td rowspan=1 colspan=1>105</td><td rowspan=1 colspan=1>100</td><td rowspan=1 colspan=1>85</td></tr><tr><td rowspan=1 colspan=1>2014</td><td rowspan=1 colspan=1>55</td><td rowspan=1 colspan=1>110</td><td rowspan=1 colspan=1>95</td><td rowspan=1 colspan=1>100</td></tr><tr><td rowspan=1 colspan=1>2015</td><td rowspan=1 colspan=1>65</td><td rowspan=1 colspan=1>120</td><td rowspan=1 colspan=1>110</td><td rowspan=1 colspan=1>90</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "(i) Obtain a least square trend line and calculate the standard error of the estimate. (ii) Using the regression line above, obtain a forecast for the year 2016 and specify a 95% confidence level."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

@@ -1,0 +1,49 @@
+{
+  "id": "1182_p2_Q6(b)",
+  "course": {
+    "code": "MSE 4211",
+    "title": "Professional Ethics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\4th_Year_2nd_Term_2021_1182.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "In the past, engineering societies have generally portrayed participation by engineers in unions and collective bargaining in engineering as unprofessional and disloyal to employers. Critics reply that such generalized prohibitions reflect the excessive degree to which engineering is still dominated by corporations' interests. What options might be pursued, and would they still involve \"collective coercive action\"?"
+    },
+    {
+      "type": "text",
+      "value": "(18)"
+    },
+    {
+      "type": "text",
+      "value": "\"Managers at a mining and refinery operation have consistently kept wages below industrywide levels. They have also sacrificed worker safety to save costs by not installing special structural reinforcements in the mines, and they have made no effort to control excessive pollution of the work environment. As a result, the operation has reaped larger-than-average profits. Management has been approached both by individuals and by representatives of employee groups about raising wages and taking the steps necessary to ensure worker safety, but to no avail. A nonviolent strike is called, and the metallurgical engineers support it for reasons of worker safety and public health.\""
+    },
+    {
+      "type": "text",
+      "value": "("
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2021"
+}

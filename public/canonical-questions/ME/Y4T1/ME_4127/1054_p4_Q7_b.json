@@ -1,0 +1,50 @@
+{
+  "id": "1054_p4_Q7(b)",
+  "course": {
+    "code": "ME 4127",
+    "title": "Operations Management",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2017\\4th_Year_1st_Term_2017_1054.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The WALTON Hi-tech industries received the following price .schedule \"for an engine valve from its supplier."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\operatorname* { P r } i c e / v a l v e \\quad b = \\left\\{ 1 2 0 ~ T K \\quad i f ~ Q < 4 0 0 \\right.\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Annual demand of engine valve is 2000 and ordering cost is\\*�OO TK per order and holding cost is 20% of the unit cost. What is the best purchase quantity?"
+    },
+    {
+      "type": "text",
+      "value": "8("
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2017"
+}

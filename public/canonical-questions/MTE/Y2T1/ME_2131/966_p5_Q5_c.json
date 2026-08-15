@@ -1,0 +1,42 @@
+{
+  "id": "966_p5_Q5(c)",
+  "course": {
+    "code": "ME 2131",
+    "title": "Engineering Mechanics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2023\\2nd_Year_1st_Term_2023_966.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A player throws a ball with an initial velocity of 16 m/s from point A located 1.5 m above the floor. Knowing that the ceiling of the gymnasium is 6 m high, determine the highest point B at which the ball can strike the wall 18 m away."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_20a1bb8a0875dd4bc442be79edad8dbf98f55bf9afe2ab7736c9a09dcbda4591.jpg",
+      "_source_path": "images/20a1bb8a0875dd4bc442be79edad8dbf98f55bf9afe2ab7736c9a09dcbda4591.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

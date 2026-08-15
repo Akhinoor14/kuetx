@@ -1,0 +1,45 @@
+{
+  "id": "1077_p6_Q4(d)",
+  "course": {
+    "code": "ME 1105",
+    "title": "Thermal Engineering",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\1st_Year_Backlog_2022_1077.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A boiler plant consists of an economiser, a boiler and a superheater. Feed water leaves the economiser at 85°C and leave the boiler drum with 95% quality at 15 bar. The same gets superheated to 250°C in the superheater. If the feed water of 34°C supplied to the economiser at the rate of 10 kg of coal fired, calculate-"
+    },
+    {
+      "type": "text",
+      "value": "(i) The efficiency of the plant assuming calorific value of coal is 32.6x 103 kJ/kg, and (ii) the percentage of total heat absorbed by the economiser, boiler and superheater."
+    },
+    {
+      "type": "text",
+      "value": "8("
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2022"
+}

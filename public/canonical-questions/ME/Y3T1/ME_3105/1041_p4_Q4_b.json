@@ -1,0 +1,53 @@
+{
+  "id": "1041_p4_Q4(b)",
+  "course": {
+    "code": "ME 3105",
+    "title": "Heat Transfer I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2017\\3rd_Year_1st_Term_2017_1041.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The time between the arrival of SMS in your mobile phone is exponentially distributed with a 15 mean of two hours."
+    },
+    {
+      "type": "text",
+      "value": "(i) What is the probability that you do not receive a message during a two hour period?"
+    },
+    {
+      "type": "text",
+      "value": "(ii) If you have not had a message in the last four hours, what is the probability that you wil receive a message within next two hours?"
+    },
+    {
+      "type": "text",
+      "value": "(iii) What is the expected time between your fifth and sixth message?"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

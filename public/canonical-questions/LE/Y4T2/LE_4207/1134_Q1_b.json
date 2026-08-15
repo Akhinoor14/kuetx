@@ -1,0 +1,41 @@
+{
+  "id": "1134_Q1(b)",
+  "course": {
+    "code": "LE 4207",
+    "title": "Dyeing and Finishing II",
+    "department": "Department of Leather Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2019\\4th_Year_2nd_Term_2019_1134.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose you arc an entrepreneur going to establish Sundarban footwear ltd. near Khulna with IO an initial production target of 3000 pairs of shoes with five varieties per month; which production system and plant layout you should follow and why?"
+    },
+    {
+      "type": "text",
+      "value": "l(c) State the law of return to scale. Discuss the stages of production based on law of return to scale 15 with suitable example."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2019"
+}

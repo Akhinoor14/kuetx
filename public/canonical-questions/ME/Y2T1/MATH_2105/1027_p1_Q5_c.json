@@ -1,0 +1,41 @@
+{
+  "id": "1027_p1_Q5(c)",
+  "course": {
+    "code": "MATH 2105",
+    "title": "Mathematics III",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2019\\2nd_Year_1st_Term_2019_1027.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is the necessary condition of a matrix to be in invertable? If possible find $\\mathrm { A } ^ { - 1 }$ and 17 $\\mathrm { B } ^ { - 1 }$ where $A = \\left[ { \\begin{array} { r l r l r l } { { 7 } } & { { } } & { - 3 } & { { } } & { - 3 } \\\\ { - 1 } & { { } } & { 1 } & { { } } & { 0 } \\\\ { - 1 } & { { } } & { 0 } & { { } } & { 1 } \\end{array} } \\right] { \\mathrm { ~ , ~ } } B = \\left[ { \\begin{array} { r l r l r l } { 1 } & { { } } & { 2 } \\\\ { 2 } & { { } } & { 4 } \\end{array} } \\right] .$"
+    },
+    {
+      "type": "text",
+      "value": "If $\\operatorname { A X } = \\operatorname { H }$ where $\\mathrm { H } = [ 1 , 1 , 1 ] ^ { \\prime }$ , then.find the solution ofthe system of linear equations $\\mathrm { A X } = \\mathrm { H }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

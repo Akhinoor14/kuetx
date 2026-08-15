@@ -1,0 +1,51 @@
+{
+  "id": "1152_p4_Q1(b)",
+  "course": {
+    "code": "ME 1227",
+    "title": "Engineering Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2020\\1st_Year_2nd_Term_2020_1152.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 16,
+  "content": [
+    {
+      "type": "text",
+      "value": "If cable AB is subjected to a tension of 850N, determine the tension in cables AC and AD. (16) Shown in Fig. 1 (b )."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_bf0db8a3b1b85c925caf0e592a6c0f0580a858fc5b7b0b852795d294d230bab7.jpg",
+      "_source_path": "images/bf0db8a3b1b85c925caf0e592a6c0f0580a858fc5b7b0b852795d294d230bab7.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_20a393e5ec0d9a9da42ed7d446586433f9773f31ae2b6d27c332aa5efd43f1ca.jpg",
+      "_source_path": "images/20a393e5ec0d9a9da42ed7d446586433f9773f31ae2b6d27c332aa5efd43f1ca.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Q"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2020"
+}

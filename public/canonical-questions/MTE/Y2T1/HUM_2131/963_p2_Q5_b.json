@@ -1,0 +1,61 @@
+{
+  "id": "963_p2_Q5(b)",
+  "course": {
+    "code": "HUM 2131",
+    "title": "Engineering Economics and Accounting",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2020\\2nd_Year_1st_Term_2020_963.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "John started a delivery service in January, 2020 and following transactions 20 occurred:"
+    },
+    {
+      "type": "text",
+      "value": "January 1: John invented cash tk. 50,000 and furniture oftk. 30,000 to start the business."
+    },
+    {
+      "type": "text",
+      "value": "Jan 5: Purchased an equipment for tk. 20,000. Cash of tk. 12,000 was paid and a note was signed for remaining cost."
+    },
+    {
+      "type": "text",
+      "value": "Jan 10: Revenue earned but not yet collected tk. 5,000."
+    },
+    {
+      "type": "text",
+      "value": "Jan 18: Paid tk. 3,000 cash on balance owed for equipment purchased on Jan 5."
+    },
+    {
+      "type": "text",
+      "value": "Jan 25: Cash received tk. 8,000 by delivering service."
+    },
+    {
+      "type": "text",
+      "value": "Required: Record above transactions in journal."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2020"
+}

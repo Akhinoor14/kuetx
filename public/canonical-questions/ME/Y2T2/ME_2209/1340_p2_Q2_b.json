@@ -1,0 +1,51 @@
+{
+  "id": "1340_p2_Q2(b)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2024\\2nd_Year_2nd_Term_2024_1340.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "A rigid horizontal bar of negligible mass is connected to two rods as shown in the figure. If the system is initially stress-free, calculate the temperature change that will cause a tensile stress of 90 MPa in the brass rod. Assume that both rods are subjected to a change in temperature."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_7072cfed2296f5097b515c7dd0796f2c07c04bf39936978a1f3d2da280172280.jpg",
+      "_source_path": "images/7072cfed2296f5097b515c7dd0796f2c07c04bf39936978a1f3d2da280172280.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Draw shear and moment diagrams for the beam loaded as shown in the figure. Give18 numerical values at all changes of loading positions and at all points of zero shear."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_3284935c6c9b6a55c7204a574b430154bcb63bdc1bf972c22ed4849cd9990fc7.jpg",
+      "_source_path": "images/3284935c6c9b6a55c7204a574b430154bcb63bdc1bf972c22ed4849cd9990fc7.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2024"
+}

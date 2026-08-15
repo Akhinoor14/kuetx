@@ -1,0 +1,42 @@
+{
+  "id": "1161_p1_Q2(c)",
+  "course": {
+    "code": "MSE 2101",
+    "title": "Crystallography",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2023\\2nd_Year_1st_Term_2023_1161.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_faebd164ad6bf69236a95d7d3279dc9bf46d1624f7d6946afbd7349ce25deb6e.jpg",
+      "_source_path": "images/faebd164ad6bf69236a95d7d3279dc9bf46d1624f7d6946afbd7349ce25deb6e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1171_p1_Q5(c)",
+  "course": {
+    "code": "MSE 3101",
+    "title": "Transport Phenomena in Materials",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2023\\3rd_Year_1st_Term_2023_1171.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Water flows at a velocity 1 m/s over a flat plate of length 0.6 m. The water temperature is (15) 350K. In the laminar and turbulent regions, local convection coefficient are described by, $h _ { l a m } ( x ) = C _ { l a m } x ^ { - 0 . 5 } ; h _ { t u r b } ( x ) = C _ { t u r b } x ^ { - 0 . 2 }$ , where x has unit of m. $\\mathrm { A t } ~ 3 5 0 \\mathrm { K } , ~ C _ { l a m } =$ $4 7 7 \\mathrm { W / m ^ { 1 . 5 } K } ; \\quad C _ { t u r b } = 3 6 0 0 \\mathrm { W / m ^ { 1 . 8 } K } , \\quad \\rho = \\mathrm { ~ 9 7 4 ~ k g / m ^ { 3 } } , \\quad \\mu = 3 6 5 \\times 1 0 ^ { - 6 } \\mathrm { ~ N . } s / \\mathrm { m ^ { 2 } }$ Determine the average convection coefficient over the entire plate."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

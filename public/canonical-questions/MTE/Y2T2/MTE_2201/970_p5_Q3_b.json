@@ -1,0 +1,42 @@
+{
+  "id": "970_p5_Q3(b)",
+  "course": {
+    "code": "MTE 2201",
+    "title": "Control Systems",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\2nd_Year_2nd_Term_2022_970.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Derive the system equations and find the value of ${ \\bf X } _ { 2 } ( { \\bf s } ) / \\mathrm { F } ( { \\bf s } )$ for the system shown below."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_433d651988c408a5be9d21f2c8eb5a48a2ef97cd442dc736bce5c7d89cab95c8.jpg",
+      "_source_path": "images/433d651988c408a5be9d21f2c8eb5a48a2ef97cd442dc736bce5c7d89cab95c8.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2022"
+}

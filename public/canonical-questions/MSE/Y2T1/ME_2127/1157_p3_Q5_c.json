@@ -1,0 +1,56 @@
+{
+  "id": "1157_p3_Q5(c)",
+  "course": {
+    "code": "ME 2127",
+    "title": "Solid Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2019\\2nd_Year_1st_Term_2019_1157.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the máximum tensile and compressive flexure stress for the cantilever beam as shown in Figure-5(c)."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_2be676c5c73c2a9bcc1c612c5b48546d7e24fc69c5b9dfb82a3d14708c31e20e.jpg",
+      "_source_path": "images/2be676c5c73c2a9bcc1c612c5b48546d7e24fc69c5b9dfb82a3d14708c31e20e.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f05e59f2dc62a2e87a05848c32efbb2230dd7771c7550e48636939b2d37e7b98.jpg",
+      "_source_path": "images/f05e59f2dc62a2e87a05848c32efbb2230dd7771c7550e48636939b2d37e7b98.jpg"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nI _ { N , A } = 1 0 0 \\times 1 0 ^ { 6 } m m ^ { 4 }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Q"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

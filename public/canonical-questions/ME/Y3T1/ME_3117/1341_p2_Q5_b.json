@@ -1,0 +1,79 @@
+{
+  "id": "1341_p2_Q5(b)",
+  "course": {
+    "code": "ME 3117",
+    "title": "Machine Design I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2024\\3rd_Year_1st_Term_2024_1341.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "is cantilevered at one end. The cross-section of the bar is shown in the figure. The bar is 0.8 m long and supports a completely reversing transverse load at the other end of ±2 kN. The material is AISI 1080 hot-rolled steel. If the bar must support this load for 12000 cycles with a factor of safety of 1.8, what dimension should the rectangular cross-section have? Neglect any stress concentrations at the support end."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_45ddb4cc317273559151436f67a371013e313b5eea22fcdd8eb8a36a2d8c3c8c.jpg",
+      "_source_path": "images/45ddb4cc317273559151436f67a371013e313b5eea22fcdd8eb8a36a2d8c3c8c.jpg"
+    },
+    {
+      "type": "text",
+      "value": "A bar of steel has the minimum properties $S _ { e } = 4 0$ kpsi, $S _ { y } = 6 0$ kpsi, and $S _ { u t } =$ 80 kpsi. The bar is subjected to a steady torsional stress of 15 kpsi and an alternating bending stress of 25 kpsi. Find the factor of safety guarding against a static failure, and either the factor of safety guarding against a fatigue failure or the expected life of the part. For the fatigue analysis use:"
+    },
+    {
+      "type": "text",
+      "value": "(i) Modified Goodman criterion."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Gerber criterion."
+    },
+    {
+      "type": "text",
+      "value": "(iii)ASME-elliptic criterion."
+    },
+    {
+      "type": "text",
+      "value": "7 Consider a simply supported shaft as shown in the figure with a 30 mm diameter and 20 m span between bearings, carrying two gears weighing 15 kgf and 25 kgf."
+    },
+    {
+      "type": "text",
+      "value": "(i) Find the influence coefficients"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Estimate the first critical speed using Rayleigh's equation, Dunkerley's equation, and superposition."
+    },
+    {
+      "type": "text",
+      "value": "(iii)Compare and discuss the results found in part (ii)."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f2346bb43e07a5f0f7511e2bd846174199fecbf1bb9649e346f0f00f74f52dea.jpg",
+      "_source_path": "images/f2346bb43e07a5f0f7511e2bd846174199fecbf1bb9649e346f0f00f74f52dea.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2024"
+}

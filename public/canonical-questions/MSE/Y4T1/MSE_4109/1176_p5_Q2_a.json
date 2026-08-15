@@ -1,0 +1,46 @@
+{
+  "id": "1176_p5_Q2(a)",
+  "course": {
+    "code": "MSE 4109",
+    "title": "Electronic, Magnetic and Optical Properties of Materials",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2020\\4th_Year_1st_Term_2020_1176.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ", when $\\begin{array} { r } { \\mathbf { E } { < } \\mathbf { V } _ { 0 , } } \\end{array}$ \"there is a non zero probability of finding the particle in the region x>0, where classically, the particle has no chance of ever reaching\"-Explain."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r l } { V ( x _ { 0 } ) = 0 , x < 0 } & { \\overbrace { R _ { \\mathrm { e f f } } ^ { 2 } / \\mathrm { e n f } h ^ { 2 } } ^ { \\infty \\overbrace { \\phi } ^ { \\mathrm { i n } } \\overbrace { \\phi } ^ { \\mathrm { v } ( \\mathbf { x } ) } } } \\\\ { V ( x _ { 0 } ) = V _ { 0 } , \\ R \\times \\infty } & { \\underbrace { \\int _ { \\mathrm { n e a t h } } ^ { \\infty } \\overbrace { \\mathrm { e n v e r } } ^ { \\infty } } _ { \\int _ { \\mathrm { n e a t h } } ^ { \\infty } \\mathrm { e n v e r } } } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "fig."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2020"
+}

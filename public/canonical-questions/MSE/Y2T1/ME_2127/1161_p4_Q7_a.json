@@ -1,0 +1,47 @@
+{
+  "id": "1161_p4_Q7(a)",
+  "course": {
+    "code": "ME 2127",
+    "title": "Solid Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2023\\2nd_Year_1st_Term_2023_1161.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "and state if the members are in tension or compression."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_74042f40f2eaa3030077bb28676d8f3da631b65a57baf29566cfe8ab25f8ede0.jpg",
+      "_source_path": "images/74042f40f2eaa3030077bb28676d8f3da631b65a57baf29566cfe8ab25f8ede0.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e6b4284fc1f514549171a4c2344562c8d8add2a6cac16e0af04671de2289f830.jpg",
+      "_source_path": "images/e6b4284fc1f514549171a4c2344562c8d8add2a6cac16e0af04671de2289f830.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

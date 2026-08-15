@@ -1,0 +1,41 @@
+{
+  "id": "976_p6_Q4(b)",
+  "course": {
+    "code": "MTE 3113",
+    "title": "Numerical Analysis and Statistics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\3rd_Year_1st_Term_2022_976.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Estimate the r.m.s. value of $f ( x ) = s i n x - l o g x + e ^ { x }$ starting from 0.2 to 1.4 using (i) Trapezoidal, (ii) Simpson's 1/3 and iii) Simpson's 3/8 rules. Also, compare them with the true value. Use no less than 8 equal divisions of the interval."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

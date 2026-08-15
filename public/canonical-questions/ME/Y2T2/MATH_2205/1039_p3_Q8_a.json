@@ -1,0 +1,37 @@
+{
+  "id": "1039_p3_Q8(a)",
+  "course": {
+    "code": "MATH 2205",
+    "title": "Mathematics IV",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\2nd_Year_2nd_Term_2022_1039.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A rectangular plate is bounded $0 < x < \\alpha , 0 < y < b$ . The sides of the plate $u ( 0 , y )$ , 17 $u ( a , y ) , u ( x , b )$ are kept at zero degree temperature. The temperature of the side $\\begin{array} { r } { u ( x , 0 ) = \\mathrm { s i n } \\frac { n \\pi x } { \\alpha } } \\end{array}$ . Determine the temperature at any point of the plate in the steady-state."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2022"
+}

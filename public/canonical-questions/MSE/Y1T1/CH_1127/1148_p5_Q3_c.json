@@ -1,0 +1,50 @@
+{
+  "id": "1148_p5_Q3(c)",
+  "course": {
+    "code": "CH 1127",
+    "title": "Inorganic and Physical Chemistry",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2022\\1st_Year_1st_Term_2022_1148.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is Salt bridge and why it is used?"
+    },
+    {
+      "type": "text",
+      "value": "(08)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { ( d ) ~ T h e ~ e q u i l i b r i u m ~ c o n s t a n t ~ f o r ~ t h e ~ r e a c t i o n ~ S r ( s ) + M n ^ { 2 + } ( a q )  S r ^ { 2 + } ( a q ) + M n ( s ) ~ i s ~ 2 . 6 9 \\times 1 0 ^ { 1 2 } }\\tag{09}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "at $2 5 \\textdegree$ Calculate $E ^ { ^ { \\circ } }$ for a cell made up for ${ \\sf S r } / { \\sf S r } ^ { 2 + }$ and $\\mathbf { M g / M g ^ { 2 + } }$ half cells."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2022"
+}

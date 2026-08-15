@@ -1,0 +1,82 @@
+{
+  "id": "1042_p3_Q2(e)",
+  "course": {
+    "code": "ME 3119",
+    "title": "Statistics & Quality Control",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\3rd_Year_1st_Term_2018_1042.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(e)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Management suspeets thai some of the machines are in violation of accepted standards of the product. 20 machines are under suspicion but all cannot be inspected. Suppose that 3 of the machines are in violation."
+    },
+    {
+      "type": "text",
+      "value": "(i) What is the probability that inspectiou of 5 machines finds no violation?"
+    },
+    {
+      "type": "text",
+      "value": "(ii)What is the probability that plan above will find 2 violations?"
+    },
+    {
+      "type": "text",
+      "value": "Explain Poisson distribution with properties and example."
+    },
+    {
+      "type": "text",
+      "value": "In a certain industrial facility accidents occur in frequently. It is known that the probability of an 12 accident on any given day is 0.005 and accidents are independent of each other."
+    },
+    {
+      "type": "text",
+      "value": "(i) What is the probability that in any given period of 400 days there will be an accident on each day?"
+    },
+    {
+      "type": "text",
+      "value": "(ii) What is the probability that there are at most 3 days with an accident?"
+    },
+    {
+      "type": "text",
+      "value": "A certain washing maehine is characterized by the following density funetion:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nf ( x ) = { \\left\\{ \\begin{array} { l l } { 1 } \\\\ { 4 } \\\\ { \\qquad 0 , \\qquad { \\mathrm { e l s e w h e r e } } } \\end{array} \\right. } y \\geq 0\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "This is an exponential with $\\mu = 4$ years. The machine is considered a bargain if it is unlikely to require a major repair before the $6 ^ { \\mathfrak { a } \\mathfrak { b } }$ year."
+    },
+    {
+      "type": "text",
+      "value": "(i) What is the probability P $( \\mathrm { y } > 6 ) ?$"
+    },
+    {
+      "type": "text",
+      "value": "(ii)What is the probability that major repair occurs in the first year?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

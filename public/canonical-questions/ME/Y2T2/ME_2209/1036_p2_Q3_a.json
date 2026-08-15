@@ -1,0 +1,42 @@
+{
+  "id": "1036_p2_Q3(a)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2019\\2nd_Year_2nd_Term_2019_1036.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "The roller-coaster track shown is contained in a vertical plane. The position of the track between A and B is straight and horizontal, while the position to the left of A and to the right of B have radii of curvature as indicated. A car is travelling at a speed of 72 km/hr when the brakes are suddenly applied, causing the wheels of the car to slide on the track (µk = 0.25). Determine the initial acceleration of the car if the brakes are applied as the car (i) has almost reached A, (ii) is travelling between A and B, (iii) has just passed B."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_c2cca9d5806b18d3c7b5fd22696ce4980d328676f1b0f2daca2d8edad9dc522c.jpg",
+      "_source_path": "images/c2cca9d5806b18d3c7b5fd22696ce4980d328676f1b0f2daca2d8edad9dc522c.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

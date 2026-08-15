@@ -1,0 +1,54 @@
+{
+  "id": "1085_p3_Q3(b)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\3rd_Year_Backlog_2018_1085.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "An epicyclic gear trin is shown in figure. The number of teeth on A and B are 80 and 200. Determine the speed of the arm P, (i) if A rotates at 100 rpm clockwise and B at 500 rpm counter-clockwise. (ii) if A rotates at 100 rpm clóckwise and B is stationary."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_3c093e7a9a86fbe8ecb6898d1086cc453152ac04d68e2f7cf6f1ed434e7c4f0c.jpg",
+      "_source_path": "images/3c093e7a9a86fbe8ecb6898d1086cc453152ac04d68e2f7cf6f1ed434e7c4f0c.jpg"
+    },
+    {
+      "type": "text",
+      "value": "What is meant by static and dynamic balancing in machinery? Why is balancing necessary for rotors of high speed engines?"
+    },
+    {
+      "type": "text",
+      "value": "Four masses A, B, C and D carried by a rotating shaft at radii 80 mm, 100 mm. 160 mm and 120 mm respectively are completely balanced. Masses B. C and D are 8 kg, 4 kg and 3 kg respectively. Determine the mass A, and the relative angular position of the four masses if the planes are spaced 500 mm apart."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year Backlog Examination, 2018"
+}

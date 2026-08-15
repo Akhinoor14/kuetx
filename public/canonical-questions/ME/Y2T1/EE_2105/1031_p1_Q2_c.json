@@ -1,0 +1,42 @@
+{
+  "id": "1031_p1_Q2(c)",
+  "course": {
+    "code": "EE 2105",
+    "title": "Electronics",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\2nd_Year_1st_Term_2022_1031.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "For an n-p-n transistor, show that"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\left( i \\right) \\beta = \\frac { \\alpha } { 1 - \\alpha } \\qquad \\left( i i \\right) I _ { C } = \\frac { \\alpha } { 1 - \\alpha } I _ { B } + \\frac { I _ { C B O } } { 1 - \\alpha } \\quad a n d \\quad \\left( i i i \\right) S = \\frac { \\beta + 1 } { 1 - \\beta } \\frac { d I _ { B } } { d I _ { C } }\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

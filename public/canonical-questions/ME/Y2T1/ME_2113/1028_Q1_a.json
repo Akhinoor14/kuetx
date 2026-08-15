@@ -1,0 +1,37 @@
+{
+  "id": "1028_Q1(a)",
+  "course": {
+    "code": "ME 2113",
+    "title": "Fluid Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\2nd_Year_1st_Term_2020_1028.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Explain no-slip boundary condition, vapor pressure and Bingham plastic."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Examination (Online), 2020"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "1157_p4_Q4",
+  "course": {
+    "code": "MSE 2103",
+    "title": "Thermodynamics of Materials",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2019\\2nd_Year_1st_Term_2019_1157.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The unadjusted trail balance of Nupur Company as of December 31, 2009 follows:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>Name of Accounts</td><td>Debit (tk.)</td><td>Credit (tk.)</td></tr><tr><td>Cash</td><td>11,000</td><td></td></tr><tr><td>Supplies</td><td>4,500</td><td></td></tr><tr><td>Equipment</td><td>1,50,000</td><td></td></tr><tr><td>Accumulated depreciation-equipment</td><td></td><td>15,000 24,000</td></tr><tr><td>Unearned membership fees Notes Payable</td><td></td><td>50,000</td></tr><tr><td>Capital</td><td></td><td>58,250</td></tr><tr><td>Withdrawals</td><td>30,000</td><td></td></tr><tr><td>Fees received</td><td></td><td>90,000</td></tr><tr><td>Salary expenses</td><td>38,000</td><td></td></tr><tr><td></td><td></td><td></td></tr><tr><td>Interest expenses</td><td>3,750</td><td></td></tr><tr><td>Total</td><td>2,37,250</td><td>2,37,250</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Additional data:"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

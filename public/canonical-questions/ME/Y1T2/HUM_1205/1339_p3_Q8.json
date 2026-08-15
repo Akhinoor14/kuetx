@@ -1,0 +1,81 @@
+{
+  "id": "1339_p3_Q8",
+  "course": {
+    "code": "HUM 1205",
+    "title": "Economics & Accounting",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2024\\1st_Year_2nd_Term_2024_1339.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "\"Titan Mechanical Supplies Ltd.\" is a medium-sized distributor of industrial machine parts, bearing, hydraulic fitting, power-transmission components, and workshop tools. The company purchases mechanical components from local manufacturer and imports specialty parts for resale to factories, repair shops and construction firms. The following trial, balance was extracted from the company's ledger after posting all routine transactions for the year:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Account Titles</td><td rowspan=1 colspan=1>Debit Tk.</td><td rowspan=1 colspan=1>Credit Tk.</td></tr><tr><td rowspan=1 colspan=1>Sales (Industrial components)</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>18,00,000</td></tr><tr><td rowspan=1 colspan=1>Cash in Hand</td><td rowspan=1 colspan=1>70,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Account Payable</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>1,00,000</td></tr><tr><td rowspan=1 colspan=1>Account Receivable</td><td rowspan=1 colspan=1>1,50,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Purchase &amp; Sales Returns</td><td rowspan=1 colspan=1>50,000</td><td rowspan=1 colspan=1>25,000</td></tr><tr><td rowspan=1 colspan=1>Opening Inventory</td><td rowspan=1 colspan=1>1,00,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Capital &amp; Drawings</td><td rowspan=1 colspan=1>1,00,000</td><td rowspan=1 colspan=1>150,00,000</td></tr><tr><td rowspan=1 colspan=1>Carriage Inward</td><td rowspan=1 colspan=1>40,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Administrative Expenses</td><td rowspan=1 colspan=1>2,50,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Wages (Warehouse &amp; Machine Handling Staff)</td><td rowspan=1 colspan=1>2,00,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Insurance</td><td rowspan=1 colspan=1>30,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Premises</td><td rowspan=1 colspan=1>12,00,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Equipment</td><td rowspan=1 colspan=1>2,00,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Allowance for bad debt</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>15,000</td></tr><tr><td rowspan=1 colspan=1>Purchases-Industrial Components</td><td rowspan=1 colspan=1>9,50,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Selling &amp; Distribution Expenses</td><td rowspan=1 colspan=1>1,00,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Total</td><td rowspan=1 colspan=1>3,44,00,000</td><td rowspan=1 colspan=1>3,44,00,000</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Other information:"
+    },
+    {
+      "type": "text",
+      "value": "i) Closing Inventory is Tk. 80,000."
+    },
+    {
+      "type": "text",
+      "value": "ii) Tk. 10,000 of the wages related to the next accounting period."
+    },
+    {
+      "type": "text",
+      "value": "iii)Tk. 20,000 accrued for administrative expenses during 2024."
+    },
+    {
+      "type": "text",
+      "value": "iv) The firm maintains an allowance for bad debt @ 12% of account receivable due to credit risk from small engineering workshops."
+    },
+    {
+      "type": "text",
+      "value": "v)Charge depreciation on equipment @ 20%."
+    },
+    {
+      "type": "text",
+      "value": "Required: Prepare-"
+    },
+    {
+      "type": "text",
+      "value": "(i) A statement of Comprehensive Income."
+    },
+    {
+      "type": "text",
+      "value": "(ii) A statement of Owner's Equity."
+    },
+    {
+      "type": "text",
+      "value": "(ii)A statement of Financial Position."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2024"
+}

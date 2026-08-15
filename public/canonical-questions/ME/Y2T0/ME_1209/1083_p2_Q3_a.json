@@ -1,0 +1,42 @@
+{
+  "id": "1083_p2_Q3(a)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\2nd_Year_Backlog_2022_1083.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The compound shaft is attached to rigid supports as shown. For the bronze segment AB, the 17 diameter is 80 mm, $\\tau \\leq 6 5 \\mathrm { M P a } .$ and $G = 4 0 \\mathrm { G P a }$ . For the steel segment BC, the diameter is 56 mm, $\\tau \\leq 8 4 \\mathrm { M P a } ,$ and G = 86 GPa. Compute the maximum torque T that can be applied."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_adbc62cb7fa201252434825f8e25b974d4b3f481dd3625478fc80ef04bc66143.jpg",
+      "_source_path": "images/adbc62cb7fa201252434825f8e25b974d4b3f481dd3625478fc80ef04bc66143.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2022"
+}

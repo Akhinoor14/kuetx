@@ -1,0 +1,41 @@
+{
+  "id": "1012_p2_Q3(c)",
+  "course": {
+    "code": "MATH 1105",
+    "title": "Mathematics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2019\\1st_Year_1st_Term_2019_1012.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define subtangent and subnormal. Show that at any point of the curve $y ^ { 2 } = 4 a x $ the subnormal is constant and subtangent varies as the abscissa of the point of contact."
+    },
+    {
+      "type": "text",
+      "value": "4(a} Find the maxima and minima $\\circ \\mathrm { f } \\frac { 4 } { x } + \\frac { 3 6 } { y } \\mathrm { w h e n } x + y = 4$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
+}

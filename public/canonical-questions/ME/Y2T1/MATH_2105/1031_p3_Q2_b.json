@@ -1,0 +1,41 @@
+{
+  "id": "1031_p3_Q2(b)",
+  "course": {
+    "code": "MATH 2105",
+    "title": "Mathematics III",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\2nd_Year_1st_Term_2022_1031.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "For what value(s) of k, the homogeneous linear system $- 5 x - 6 y + 4 z = 0$ -8x - 7y + 9z = 0 -6x + y + kz = 0"
+    },
+    {
+      "type": "text",
+      "value": "will passes non-trivial solution? Find the non-trivial solution with the obtained value(s) of k."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

@@ -1,0 +1,50 @@
+{
+  "id": "1038_p2_Q4(c)",
+  "course": {
+    "code": "MATH 2205",
+    "title": "Mathematics IV",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\2nd_Year_2nd_Term_2021_1038.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve the initial value problem"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\frac { d ^ { 2 } y } { d t ^ { 2 } } } + y = e ^ { - 2 t } \\sin t , y ( 0 ) = y ^ { \\prime } ( 0 ) = 0\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "by the help of Laplace transform."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

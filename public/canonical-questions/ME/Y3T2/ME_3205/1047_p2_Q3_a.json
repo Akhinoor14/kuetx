@@ -1,0 +1,37 @@
+{
+  "id": "1047_p2_Q3(a)",
+  "course": {
+    "code": "ME 3205",
+    "title": "Heat Transfer II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\3rd_Year_2nd_Term_2018_1047.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A lubricating oil of viscosity μ and thermal conductivity k is contained in the clearance $L$ between the journal and the bearing, which can be regarded as two parallel plates. Let $u _ { 1 }$ be the velocity of the upper plate while the lower plate is considered stationary. Heat is generated in the oil layer during rotation as a result of viscous-energy dissipation. Develop expressions for the temperature distribution in thefluid for the lower plate is maintained at a temperature $T _ { o }$ and the upper plate at a temperature $T _ { l }$ with $T _ { \\mathit { l } } > T _ { o }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

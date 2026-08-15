@@ -1,0 +1,37 @@
+{
+  "id": "954_p1_Q4(a)",
+  "course": {
+    "code": "CH 1131",
+    "title": "Chemistry",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\1st_Year_1st_Term_2021_954.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "“A Nucleus outside the stability band will decay by a mechanism that brings its N/Z ratio12   \ninto the stable region\" – Explain the term with N vs Z graph."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2021"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "960_p4_Q2(a)",
+  "course": {
+    "code": "MATH 1231",
+    "title": "Vector, Matrix and Ordinary Differential Equation",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\1st_Year_2nd_Term_2022_960.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the work done in moving a particle once around a circle C in the xy-plane, if the cirele has center at the origin and radius 3 and if the force field is given by ${ \\vec { F } } =$ $( 2 x - y + z ) \\hat { \\imath } + ( x + y - z ^ { 2 } ) \\hat { \\jmath } + ( 3 x - 2 y + 4 z ) \\hat { k } .$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2022"
+}

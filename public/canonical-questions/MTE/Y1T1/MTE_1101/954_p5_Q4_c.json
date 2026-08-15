@@ -1,0 +1,41 @@
+{
+  "id": "954_p5_Q4(c)",
+  "course": {
+    "code": "MTE 1101",
+    "title": "Mechatronic Systems",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\1st_Year_1st_Term_2021_954.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A single strain gauge having a resistance of 120Ω is mounted on a steel cantilever beam at a distance of 0.15m from the free end. An unknown force F applied at the free end produces a deflection of 12.7 mm of the free end. The chance in gauge resistance is found to be 0.152Ω . the beam is 0.25m long and has a width of 20 mm. The Young Modulus for steel is 200 GN/m². Calculate the gauge factor."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2021"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "1039_p2_Q3(b)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\2nd_Year_2nd_Term_2022_1039.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 10 kg package is projected up a $2 5 ^ { \\circ }$ incline with an initial velocity of 7 .5 m/sec. Knowing that the coefficient of kinetic friction between the package and the incline is 0.20, determine (i) the maximum distance x that the package will move up the incline, (ii) the velocity of the package as it returns to its original position, (iii) the total amount of energy dissipated due to friction."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e519599444f426b0543a98c30620602dc36e9fc414d722b4238dac3f891c13b6.jpg",
+      "_source_path": "images/e519599444f426b0543a98c30620602dc36e9fc414d722b4238dac3f891c13b6.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2022"
+}

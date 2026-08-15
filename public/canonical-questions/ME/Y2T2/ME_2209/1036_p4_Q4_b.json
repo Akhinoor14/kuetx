@@ -1,0 +1,46 @@
+{
+  "id": "1036_p4_Q4(b)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2019\\2nd_Year_2nd_Term_2019_1036.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A beam carries a concentrated load Vv and a total uniformly distributed load of 4W as 18 shown in figure. What safe load W can be applied if $\\sigma _ { \\mathsf { c } } \\leq 1 1 0$ MP a and $\\begin{array} { r } { \\sigma _ { \\mathrm { t } } \\leq 6 5 \\mathrm { M P a } ? } \\end{array}$ Can a grater load be applied if the section is inverted? Explain."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_31ac8269473abac898af5e9f9457e4a9e683625af3dc0d259ad214935679fa6a.jpg",
+      "_source_path": "images/31ac8269473abac898af5e9f9457e4a9e683625af3dc0d259ad214935679fa6a.jpg"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

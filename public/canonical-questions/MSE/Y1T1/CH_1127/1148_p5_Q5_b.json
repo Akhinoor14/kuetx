@@ -1,0 +1,47 @@
+{
+  "id": "1148_p5_Q5(b)",
+  "course": {
+    "code": "CH 1127",
+    "title": "Inorganic and Physical Chemistry",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2022\\1st_Year_1st_Term_2022_1148.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is ideal solution? Draw a diagram for the change of vapour pressure of a (12)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { i ) \\ p o s i t i v e l y \\ d e v i a t e d \\ n o n - i d e a l { \\ s o l u t i o n } \\ w i t h \\ c o m p o s i t i o n }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { i i ) n e g a t i v e l y d e v i a t e d n o n - i d e a l s o l u t i o n w i t h c o m p o s i t i o n . }\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2022"
+}

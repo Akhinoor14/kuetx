@@ -1,0 +1,41 @@
+{
+  "id": "1077_p4_Q1(c)",
+  "course": {
+    "code": "MATH 1105",
+    "title": "Mathematics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\1st_Year_Backlog_2022_1077.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "<sup>r-:</sup> d db I h <sub>1·111</sub> a an sucn t at $\\begin{array} { l } { \\operatorname* { l i m } _ { x \\to 0 } \\frac { x ( 1 + a c o s x ) - b s i n x } { x ^ { 3 } } = 1 } \\end{array}$ r-: d I I l f 1· <sub>exists.</sub> <sub>1·111</sub> <sub>a</sub> <sub>so</sub> the <sub>va</sub> ue o <sub>111111.</sub> 10"
+    },
+    {
+      "type": "text",
+      "value": "<sup>2(a)</sup> State Lcibnitzs theorem. $\\mathrm { I f } y = e ^ { c o s ^ { - 1 } x }$ then find the relation connecting $y _ { n } , y _ { n } ,$ 12 and $y _ { n + 2 }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2022"
+}

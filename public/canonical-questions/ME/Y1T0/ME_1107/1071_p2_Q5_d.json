@@ -1,0 +1,45 @@
+{
+  "id": "1071_p2_Q5(d)",
+  "course": {
+    "code": "ME 1107",
+    "title": "Manufacturing Process",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2016\\1st_Year_Backlog_2016_1071.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "· During an orthogonal cutting operation the following data was observed:"
+    },
+    {
+      "type": "text",
+      "value": "Cutting force = 130 kg; Feed force = 40 kg; Rake angle = 10°; Feed = 0.3 mm/rev; Width of cut = 2.4 mm; Chip thickness = 0.4 mm; Cutting speed = 125 m/min. Determine the following:"
+    },
+    {
+      "type": "text",
+      "value": "(i) Chip thickness ratio, (ii) shear angle"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2016"
+}

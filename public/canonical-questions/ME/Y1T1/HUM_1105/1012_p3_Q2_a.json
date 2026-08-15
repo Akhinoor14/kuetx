@@ -1,0 +1,69 @@
+{
+  "id": "1012_p3_Q2(a)",
+  "course": {
+    "code": "HUM 1105",
+    "title": "English",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2019\\1st_Year_1st_Term_2019_1012.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Put in the correct form of verbs:"
+    },
+    {
+      "type": "text",
+      "value": "i) It was long since I (see) her last."
+    },
+    {
+      "type": "text",
+      "value": "ii) He went away (leave) us behind."
+    },
+    {
+      "type": "text",
+      "value": "iii) We (live) in London when the war started."
+    },
+    {
+      "type": "text",
+      "value": "iv) Have you ever (be) to London?"
+    },
+    {
+      "type": "text",
+      "value": "v) Go on (write)."
+    },
+    {
+      "type": "text",
+      "value": "vi) I feel like (sleep)."
+    },
+    {
+      "type": "text",
+      "value": "vii) When was the book (buy)?"
+    },
+    {
+      "type": "text",
+      "value": "2("
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
+}

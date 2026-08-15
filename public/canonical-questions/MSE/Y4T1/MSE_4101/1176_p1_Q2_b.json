@@ -1,0 +1,41 @@
+{
+  "id": "1176_p1_Q2(b)",
+  "course": {
+    "code": "MSE 4101",
+    "title": "Modern Iron and Steel Making",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2020\\4th_Year_1st_Term_2020_1176.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Mini blast furnace and electro thermal process are two established processes of producing (14) liquid pig iron in small quantities. Out of these two processes which one do you think most suitable for Bangladesh? Justify your answer and explain how liquid iron can be produced by your proposed process."
+    },
+    {
+      "type": "text",
+      "value": "Q"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2020"
+}

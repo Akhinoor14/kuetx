@@ -1,0 +1,57 @@
+{
+  "id": "966_p2_Q3(b)",
+  "course": {
+    "code": "EE 2131",
+    "title": "Electronics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2023\\2nd_Year_1st_Term_2023_966.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Draw the output waveforms of the following networks shown in the following figure. 15 Consider Si diode with $\\mathrm { V } _ { \\mathrm { k } } { = } 0 . 7 \\ : \\mathrm { V }$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ecb92cc851976110cf43c67cb522aa0b506a97e79336b2665c37d409622993fc.jpg",
+      "_source_path": "images/ecb92cc851976110cf43c67cb522aa0b506a97e79336b2665c37d409622993fc.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_480882604b14bffc344bb304063e17d2761f633c67719a7c6d9a2671c1a33f4f.jpg",
+      "_source_path": "images/480882604b14bffc344bb304063e17d2761f633c67719a7c6d9a2671c1a33f4f.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_367a612ed7562f5d195dc618942f2cb9e6e8129825b9b0775a884c2826571a91.jpg",
+      "_source_path": "images/367a612ed7562f5d195dc618942f2cb9e6e8129825b9b0775a884c2826571a91.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_02676b0ee01a2d4788b6962a0043a6ae0746b650230ecee7166fc1636ab84ee1.jpg",
+      "_source_path": "images/02676b0ee01a2d4788b6962a0043a6ae0746b650230ecee7166fc1636ab84ee1.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

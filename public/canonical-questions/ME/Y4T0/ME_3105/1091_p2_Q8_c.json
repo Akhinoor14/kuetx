@@ -1,0 +1,42 @@
+{
+  "id": "1091_p2_Q8(c)",
+  "course": {
+    "code": "ME 3105",
+    "title": "Heat Transfer I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2017\\4th_Year_Backlog_2017_1091.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the duct system shown in figure, determine the dimensions of the rectangular ducts 20 AB, BC, CD and DE with aspect ratio 3:1 assuming friction rate of 0.1 mm $\\mathrm { H } _ { 2 } \\mathrm { \\bar { O } } / \\mathrm { m }$ length duct. A...31-"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_15c299e29c930b5218c60496abbe175f8576b86be463f82e00bba089fff26213.jpg",
+      "_source_path": "images/15c299e29c930b5218c60496abbe175f8576b86be463f82e00bba089fff26213.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Backlog Examination, 2017"
+}

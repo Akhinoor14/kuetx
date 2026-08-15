@@ -1,0 +1,53 @@
+{
+  "id": "1039_p1_Q3(c)",
+  "course": {
+    "code": "ME 2221",
+    "title": "Computer Programming",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\2nd_Year_2nd_Term_2022_1039.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write a program using switch statement to print one of the following messages:"
+    },
+    {
+      "type": "text",
+      "value": "(i) The hot water"
+    },
+    {
+      "type": "text",
+      "value": "(ii) The water is cold"
+    },
+    {
+      "type": "text",
+      "value": "(iii) The water is luke-warm"
+    },
+    {
+      "type": "text",
+      "value": "Assume any information you may require."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2022"
+}

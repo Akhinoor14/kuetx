@@ -1,0 +1,42 @@
+{
+  "id": "979_p5_Q7(c)",
+  "course": {
+    "code": "MTE 3205",
+    "title": "Robotics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\3rd_Year_2nd_Term_2022_979.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the following system with a PD controller we wish to have a stiffness of 1600 N/m and damping coefficient of 6 N.s/m. What is the natural frequency of the controlled system? Find the stiffness, k and damping coefficient, b of the original system. Consider, mass, m = 1 kg."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f17b42b05693d45ce30ad425868064699642326377a861ff5a2d0b6297dace0f.jpg",
+      "_source_path": "images/f17b42b05693d45ce30ad425868064699642326377a861ff5a2d0b6297dace0f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

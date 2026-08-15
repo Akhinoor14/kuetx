@@ -1,0 +1,46 @@
+{
+  "id": "1154_p2_Q1(b)",
+  "course": {
+    "code": "MATH 1227",
+    "title": "Differential Equations and Geometry",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2023\\1st_Year_2nd_Term_2023_1154.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Obtain the differential equation associated with the primitive $y = A e ^ { 2 x } + B e ^ { x } +$ (10) C, where A, B and C are arbitrary constants."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\mathrm { ( c ) } } \\quad { \\mathrm { S o l v e ~ t h e ~ i n i t i a l ~ v a l u e ~ p r o b l e m ~ } } x { \\mathrm { s i n } } y { \\mathrm { d } } x + ( x ^ { 2 } + 1 ) { \\mathrm { c o s } } y { \\mathrm { d } } y = 0 , y ( 1 ) = { \\frac { \\pi } { \\eta } } .\\tag{10}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "("
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2023"
+}

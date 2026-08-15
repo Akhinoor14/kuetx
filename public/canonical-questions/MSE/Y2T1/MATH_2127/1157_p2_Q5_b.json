@@ -1,0 +1,42 @@
+{
+  "id": "1157_p2_Q5(b)",
+  "course": {
+    "code": "MATH 2127",
+    "title": "Vector Analysis and Linear Algebra",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2019\\2nd_Year_1st_Term_2019_1157.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define symmetric and skew symmetric matrix. Express the following matrix as the sum of symmetric and skew symmetric matrices."
+    },
+    {
+      "type": "formula",
+      "value": "$$\nA = { \\left[ \\begin{array} { l l l } { 1 } & { 4 } & { 5 } \\\\ { 8 } & { 5 } & { 3 } \\\\ { 0 } & { 6 } & { - 2 } \\end{array} \\right] }\\tag{10}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

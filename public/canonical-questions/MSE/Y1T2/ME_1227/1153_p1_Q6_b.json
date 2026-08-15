@@ -1,0 +1,42 @@
+{
+  "id": "1153_p1_Q6(b)",
+  "course": {
+    "code": "ME 1227",
+    "title": "Engineering Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\1st_Year_2nd_Term_2021_1153.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "A satellite is lunched in a direction parallel to the earth's surface with a velocity of 36900 (18) km/hr from an altitude of 500 km.Determine (i) the maximum altitude reached by the satellite, (ii) the periodic time of the satellite."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ac9b2b59d8ee8fa0898709f5b44b2fb5575fbeecaf2eacbc2df4c2f1df9b2565.jpg",
+      "_source_path": "images/ac9b2b59d8ee8fa0898709f5b44b2fb5575fbeecaf2eacbc2df4c2f1df9b2565.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

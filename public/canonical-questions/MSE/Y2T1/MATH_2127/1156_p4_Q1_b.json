@@ -1,0 +1,45 @@
+{
+  "id": "1156_p4_Q1(b)",
+  "course": {
+    "code": "MATH 2127",
+    "title": "Vector Analysis and Linear Algebra",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2018\\2nd_Year_1st_Term_2018_1156.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Motion of a satellite is described by $\\frac { \\mathrm { d } ^ { 2 } \\underline { { \\boldsymbol { \\Gamma } } } } { \\mathrm { d } \\mathbf { t } ^ { 2 } } + 2 \\frac { \\mathrm { d } \\underline { { \\boldsymbol { \\Gamma } } } } { \\mathrm { d } \\mathbf { t } } + 5 \\underline { { \\boldsymbol { \\Gamma } } } = \\underline { { \\boldsymbol { 0 } } } .$ Determine the position of it for any (12) time t."
+    },
+    {
+      "type": "text",
+      "value": "() Find the angle between the surfaces $\\scriptstyle \\mathbf { x } ^ { 2 } + \\mathbf { y } ^ { 2 } + \\mathbf { z } ^ { 2 } = 9$ and $\\scriptstyle \\mathbf { z } = \\mathbf { x } ^ { 2 } + \\mathbf { y } ^ { 2 } \\cdot 3$ at the point $( 2 , - 1 , 2 )$ (13)"
+    },
+    {
+      "type": "text",
+      "value": "Q"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

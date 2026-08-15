@@ -1,0 +1,46 @@
+{
+  "id": "963_p4_Q4(b)",
+  "course": {
+    "code": "ME 2131",
+    "title": "Engineering Mechanics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2020\\2nd_Year_1st_Term_2020_963.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 2 kg collar is attached to a spring and slides without friction in a vertical plane along the curved rod ABC (figure shown below). The spring is undeformed when the collar is at C and its stiffness constant is 600 N/m. If the collar is released at A with no initial velocity, determine its velocity"
+    },
+    {
+      "type": "text",
+      "value": "ii) as it reaches C"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_494724e283d7ccab1c432d75ae50c45174efd0f9c38c859c9e4cf918c8f4359e.jpg",
+      "_source_path": "images/494724e283d7ccab1c432d75ae50c45174efd0f9c38c859c9e4cf918c8f4359e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2020"
+}

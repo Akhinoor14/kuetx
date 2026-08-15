@@ -1,0 +1,45 @@
+{
+  "id": "1137_Q7(c)",
+  "course": {
+    "code": "LE 4207",
+    "title": "Dyeing and Finishing II",
+    "department": "Department of Leather Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2022\\4th_Year_2nd_Term_2022_1137.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define critical path of a project. The fabrication process of a wallet is scheduled in a way that it 25 can take 23 minutes to fabricate. The following parameters are associated with the process:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Activity</td><td rowspan=1 colspan=1> $\\underline { { \\mathbf { o } _ { \\mathbf { T } } } }$ </td><td rowspan=1 colspan=1> $\\underline { { \\mathbf { M } _ { \\mathrm { T } } } }$ </td><td rowspan=1 colspan=1> $\\underline { { \\mathbf { P } _ { \\mathtt { T } } } }$ </td><td rowspan=1 colspan=1>Predecessors</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>14</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>16</td><td rowspan=1 colspan=1>A</td></tr><tr><td rowspan=1 colspan=1>D</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>A</td></tr><tr><td rowspan=1 colspan=1>E</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>16</td><td rowspan=1 colspan=1>C,B</td></tr><tr><td rowspan=1 colspan=1>F</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>C,D</td></tr><tr><td rowspan=1 colspan=1>G</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>18</td><td rowspan=1 colspan=1>D, E</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Draw the network diagram and find (i) expected time of activities, variances, and slacks (ii) CPM (iii) Z-score to remark on probable fabrication time."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2022"
+}

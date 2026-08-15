@@ -1,0 +1,37 @@
+{
+  "id": "1154_p3_Q5(c)",
+  "course": {
+    "code": "PH 1227",
+    "title": "Magnetism and Nuclear Physics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2023\\1st_Year_2nd_Term_2023_1154.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Assuming the energy released per fission of $\\mathrm { U } ^ { 2 3 5 }$ is 200 MeV. Determine the rate (10) in $\\mathrm { K g }$ per year at which fission should occur in a nuclear reactor in order to operate at a power level of I watt."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2023"
+}

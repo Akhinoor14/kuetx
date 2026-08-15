@@ -1,0 +1,45 @@
+{
+  "id": "1092_p9_Q8(b)",
+  "course": {
+    "code": "ME 3121",
+    "title": "Numerical Computation for Mechanical Engineers",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\4th_Year_Backlog_2018_1092.pdf",
+    "source_page": null,
+    "paper_index": 9
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve the equation $\\mathfrak { u } _ { \\mathrm { x x } } + \\mathfrak { u } _ { \\mathfrak { Y } ^ { \\mathrm { y } } } = 0$ in the domain of figure below by Jacobi method 18 for the given boundary conditions to find out the values at four nodal positions (up to five iterations). on on"
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY ÓF ENGINEERING & TECHNOLOGY"
+    },
+    {
+      "type": "text",
+      "value": "Department of Mechanical Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Backlog Examination, 2018"
+}

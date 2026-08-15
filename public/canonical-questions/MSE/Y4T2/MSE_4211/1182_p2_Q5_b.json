@@ -1,0 +1,45 @@
+{
+  "id": "1182_p2_Q5(b)",
+  "course": {
+    "code": "MSE 4211",
+    "title": "Professional Ethics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\4th_Year_2nd_Term_2021_1182.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Can utilitarianism provide a moral justification for engineers who work for tobacco companies, for example, in designing cigarette making machinery?"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "text",
+      "value": "In your answer take account of the following facts (and others you may be aware of). Bangladesh Cancer Society in association with Dhaka University, American Cancer Society and Cancer Research UK conducted the study on 10,000 families in all districts of the country in between July 2017 and April 2018. According to the study, tobacco usage causes 1,00,961 deaths every year in Bangladesh, which is more than the combined deaths caused by alcohol and drug abuse, car accidents, homicide, suicide, and acquired immunodeficiency syndrome (AIDS) and second-hand smoke causes 24,757 deaths. Besides, over 70 lakh people - age 30 and above - suffer from various types of diseases related to tobacco usage. Cigarette companies do much good by providing jobs, through taxes, and through philanthropy. Most new users of cigarettes in Bangladesh are teenagers (younger than eighteen years of age)."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2021"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "1170_p1_Q2(b)",
+  "course": {
+    "code": "MSE 3101",
+    "title": "Transport Phenomena in Materials",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2022\\3rd_Year_1st_Term_2022_1170.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "the rate of heat conduction through the wall under steady conditions."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b4753ebd038bc18abe751d34daa515e18ab570a9bf85cadec9c76e5f5377a02d.jpg",
+      "_source_path": "images/b4753ebd038bc18abe751d34daa515e18ab570a9bf85cadec9c76e5f5377a02d.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

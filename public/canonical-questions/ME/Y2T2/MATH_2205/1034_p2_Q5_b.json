@@ -1,0 +1,41 @@
+{
+  "id": "1034_p2_Q5(b)",
+  "course": {
+    "code": "MATH 2205",
+    "title": "Mathematics IV",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2017\\2nd_Year_2nd_Term_2017_1034.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define Legendre differential equation."
+    },
+    {
+      "type": "text",
+      "value": "Show that ${ \\frac { 1 + z } { z { \\sqrt { 1 - 2 x z + z ^ { 2 } } } } } - { \\frac { 1 } { z } } = \\sum _ { n = 0 } ^ { \\infty } { \\bigl ( } P _ { n } + P _ { n + 1 } { \\bigr ) } z ^ { n }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

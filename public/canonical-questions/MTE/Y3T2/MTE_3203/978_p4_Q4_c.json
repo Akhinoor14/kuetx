@@ -1,0 +1,45 @@
+{
+  "id": "978_p4_Q4(c)",
+  "course": {
+    "code": "MTE 3203",
+    "title": "Hydraulic and Pneumatic Control",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\3rd_Year_2nd_Term_2021_978.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A double acting cylinder is hooked up in a regenerative circuit. The relief valve setting is 105 bar. The piston area is 130 cm² and the rod area is 65 cm2. If the pump flow is 0.0016 m³/s, find the cylinder speed and load-carrying capacity for the"
+    },
+    {
+      "type": "text",
+      "value": "(i) Extending stroke and"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Retracting stroke."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2021"
+}

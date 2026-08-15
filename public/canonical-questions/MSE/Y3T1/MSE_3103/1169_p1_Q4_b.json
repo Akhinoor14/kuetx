@@ -1,0 +1,61 @@
+{
+  "id": "1169_p1_Q4(b)",
+  "course": {
+    "code": "MSE 3103",
+    "title": "Materials Manufacturing Processes",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\3rd_Year_1st_Term_2021_1169.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "A thin-wall cylindrical casting of 60 mm diameter (inner), 8 mm thickness and 170 mm (25) length is to be cast using cast iron in greensand mould. Determine the followings-"
+    },
+    {
+      "type": "text",
+      "value": "i) Using 20% longer than solidification time, calculate the pouring time required for the casting. The mould constant in Chvorinov's rule is 1.85 s/mm²."
+    },
+    {
+      "type": "text",
+      "value": "ii) Using 50 mm high-pouring basin, calculate the effective metal head pressure developed in the gating system. List all assumptions you have made"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Calculate the choke area of the gating system. Use 7.0 g/cc for liquid metal density and 0.90 for discharge coefficient."
+    },
+    {
+      "type": "text",
+      "value": "(iv) Calculate sprue top and bottom areas, runner area and gate area of the gating system. Use critical velocity = 500 mm/s for this gating system with suitable gating ratio. Also use a safety factor of 30% to oversize the sprue top area."
+    },
+    {
+      "type": "text",
+      "value": "Section B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in answer script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "976_p4_Q3(c)",
+  "course": {
+    "code": "MTE 3105",
+    "title": "Linear Integrated Circuits and Digital Systems",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\3rd_Year_1st_Term_2022_976.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Mention the three basic differences between active and passive filter. Design an active $2 ^ { \\mathrm { n d } }$ order low-pass Butterworth filter with a DC gain of 5 and a corner frequency of 500 Hz. Assume necessary data."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

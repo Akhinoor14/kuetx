@@ -1,0 +1,46 @@
+{
+  "id": "1158_p4_Q4(b)",
+  "course": {
+    "code": "ME 2127",
+    "title": "Solid Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2020\\2nd_Year_1st_Term_2020_1158.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "( 18) below. Each aluminum rod has an area of800mm2, E = 70GPa and allowable stress is 70MPa. The copper rod has an area of 1100mm2, E = 120GPa and the allowable stress is 140MPa. Determine the largest weight W which can be supported."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e8cb4ec006902315df54f7245a46ccf6ea659e611f7b51e827bad71596d1dc29.jpg",
+      "_source_path": "images/e8cb4ec006902315df54f7245a46ccf6ea659e611f7b51e827bad71596d1dc29.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Q"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2020"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "1075_p1_Q8(a)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\1st_Year_Backlog_2020_1075.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Compute lx and $\\mathrm { I _ { y } }$ for the shaded area as shown in figure. Also calculate the polar moment 18 of inertia with respect to the origin."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_3b84df2fcc9d043ff28852c78863793b8d513d80c0adb665d635583d7ecf403d.jpg",
+      "_source_path": "images/3b84df2fcc9d043ff28852c78863793b8d513d80c0adb665d635583d7ecf403d.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2020"
+}

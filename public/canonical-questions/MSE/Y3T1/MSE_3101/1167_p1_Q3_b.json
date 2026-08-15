@@ -1,0 +1,49 @@
+{
+  "id": "1167_p1_Q3(b)",
+  "course": {
+    "code": "MSE 3101",
+    "title": "Transport Phenomena in Materials",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2019\\3rd_Year_1st_Term_2019_1167.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "An industrial ·furnace is made of fireclay brick of thickness 0.25m and thermal conductivity 1 W/ (m. °C). The outside surface. is to be insulated with a material of thermal conductivity 0.05 W/ (m. °C). Determine the thickness of the insulation layer in order to limit the heat loss"
+    },
+    {
+      "type": "text",
+      "value": "(17)"
+    },
+    {
+      "type": "text",
+      "value": "from the furnace wall to 1000 $\\mathbf { W } / \\mathbf { \\nabla } m ^ { 2 } .$ , when the inside surface of the wall is at $1 0 3 0 ^ { \\circ } \\dot { \\mathbf { C } }$ and the outside surface at $3 0 ~ \\mathsf { \\circ } _ { \\mathbf { C } }$"
+    },
+    {
+      "type": "text",
+      "value": "Q"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

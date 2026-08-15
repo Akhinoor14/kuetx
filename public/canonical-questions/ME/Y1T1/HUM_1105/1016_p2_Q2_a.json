@@ -1,0 +1,37 @@
+{
+  "id": "1016_p2_Q2(a)",
+  "course": {
+    "code": "HUM 1105",
+    "title": "English",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2023\\1st_Year_1st_Term_2023_1016.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Transform the following sentences as per instruction. (i) Being a cripple, he cannot ride a horse. (Compound) (ii) His silence proves his guilt. (Complex) (iii) Does he know the consequences ifhe refuse? (Simple) (iv) He is rich but honest. (Complex) (v) Everybody longs for happiness. (Interrogative) (vi) Old fools surpass all the other fools in folly. (Negative) (vii) If you are not Bangladeshi you cannot be admitted. (Simple)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2023"
+}

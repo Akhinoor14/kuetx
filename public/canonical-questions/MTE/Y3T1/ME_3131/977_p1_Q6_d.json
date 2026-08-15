@@ -1,0 +1,37 @@
+{
+  "id": "977_p1_Q6(d)",
+  "course": {
+    "code": "ME 3131",
+    "title": "Fluid Mechanics and Machinery",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2023\\3rd_Year_1st_Term_2023_977.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A triangular notch is applied to measure the flow rate through a canal whose maximum capacity is 1.4 m³/sec. for a flow rate of 6 liter/s, the depth of water over the notch becomes 0.15 m. Determine the top width and depth of the notch assuming Cd=0.85."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

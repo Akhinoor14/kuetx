@@ -1,0 +1,54 @@
+{
+  "id": "1085_p4_Q3",
+  "course": {
+    "code": "ME 3117",
+    "title": "Machine Design I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\3rd_Year_Backlog_2018_1085.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Assume reasonable data if any missing."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-A"
+    },
+    {
+      "type": "text",
+      "value": "A lever keyed to a shaft is L = 15 in. long and has a rectangular cross section of h = 3t. A 2000 lb load is gradually applied and reversed at the end as shown; the material is AISI C1020, as rolled. Design for both ultimate and yield strengths. (i) What should be the dimensions of a section at a = 13 in.? (ii) at b = 4 in.? (iii) What should be the size where the load is applied?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_36992850aaaa17c05763801f5f3895c15062f76a6ccdfb1c5a84a8f3addf1dc5.jpg",
+      "_source_path": "images/36992850aaaa17c05763801f5f3895c15062f76a6ccdfb1c5a84a8f3addf1dc5.jpg"
+    },
+    {
+      "type": "text",
+      "value": "A cantilever beam as shown is to be subjected tò à revêrsing load of 3000 lb. Let the radius of the fillet be $r = 1 / 8$ in. and the material is cold rolled SAE 1015. Determine the dimensions t, h (b = 1."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year Backlog Examination, 2018"
+}

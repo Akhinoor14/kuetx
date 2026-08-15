@@ -1,0 +1,42 @@
+{
+  "id": "1036_p4_Q7(b)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2019\\2nd_Year_2nd_Term_2019_1036.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the support moments and reactions for the beam as shown in figure."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_4682ee83748c0d75317ee0fef3b5b6dde9aaa89208b926ba00fb16c0e91be21f.jpg",
+      "_source_path": "images/4682ee83748c0d75317ee0fef3b5b6dde9aaa89208b926ba00fb16c0e91be21f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

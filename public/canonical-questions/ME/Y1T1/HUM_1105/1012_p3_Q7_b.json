@@ -1,0 +1,37 @@
+{
+  "id": "1012_p3_Q7(b)",
+  "course": {
+    "code": "HUM 1105",
+    "title": "English",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2019\\1st_Year_1st_Term_2019_1012.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Prepare a CV along with a job application.   \n8 '\\ \\, -' ! l ;;l B f �. dd :) O WdOS!l! OU O U B U i\\ o uo O Jl l! 8 J O lJ O M! U ?J :   \n! ( Q f 5 W: p 8 UU 13 J Up8sq·   \n! ! ( H O ll 8Sl\\. un p [l l8 ! lU d TO 3l- ll1 :) 8 O J d a tn oust u"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
+}

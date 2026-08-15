@@ -1,0 +1,57 @@
+{
+  "id": "965_p2_Q1(d)",
+  "course": {
+    "code": "EE 2131",
+    "title": "Electronics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\2nd_Year_1st_Term_2022_965.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine $v _ { 0 }$ (waveform) of the following networks. Consider Si diode with $V _ { k } = 0 . 7 V .$ 10"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_da1d23b0f9d5565fc544f1e5816f0fd5c2122d15799175603d563948920cb4f2.jpg",
+      "_source_path": "images/da1d23b0f9d5565fc544f1e5816f0fd5c2122d15799175603d563948920cb4f2.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_fceb0f21dbb13b0e18b234d1d32185422f04563871d64c5a2a2a5f9aaf083bcf.jpg",
+      "_source_path": "images/fceb0f21dbb13b0e18b234d1d32185422f04563871d64c5a2a2a5f9aaf083bcf.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a0569f9cd30c262eb0294118f54032862f8b78077b248a81e824ae88b25a2386.jpg",
+      "_source_path": "images/a0569f9cd30c262eb0294118f54032862f8b78077b248a81e824ae88b25a2386.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0e25251c1e47cb7af141dba3494e109477b637564b1647112c6a698fe59bb0ce.jpg",
+      "_source_path": "images/0e25251c1e47cb7af141dba3494e109477b637564b1647112c6a698fe59bb0ce.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

@@ -1,0 +1,53 @@
+{
+  "id": "1147_p2_Q4(b)",
+  "course": {
+    "code": "MSE 1101",
+    "title": "Introduction to Materials Science and Engineering",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\1st_Year_1st_Term_2021_1147.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Table"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>Yield Material Strength (MPa)</td><td>Tensile Strain Fracture Strength (MPa) at Fracture Strength (MPa)</td></tr><tr><td></td><td>Modulus (GPa)</td></tr><tr><td>A 310 340</td><td>0.23 265 210 0.40</td></tr><tr><td>105 150</td><td>B 100 120</td></tr><tr><td>415 550 0.15</td><td>500 310</td></tr><tr><td>C D 700 850</td><td>0.14 720 210</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "(i)Which will experience the greatest percentage reduction in area? Why?"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Which is the strongest? Why?"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Which is the stiffest? Why?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2021"
+}

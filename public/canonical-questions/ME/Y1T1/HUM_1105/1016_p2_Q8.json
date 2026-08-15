@@ -1,0 +1,73 @@
+{
+  "id": "1016_p2_Q8",
+  "course": {
+    "code": "HUM 1105",
+    "title": "English",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2023\\1st_Year_1st_Term_2023_1016.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Sc. Engineering I st year I st Term Examination, 2023"
+    },
+    {
+      "type": "text",
+      "value": "Hum 1105"
+    },
+    {
+      "type": "text",
+      "value": "(English)"
+    },
+    {
+      "type": "text",
+      "value": "Time: 3 Hours"
+    },
+    {
+      "type": "text",
+      "value": "Total Marks: 210"
+    },
+    {
+      "type": "text",
+      "value": "N.B.: <sub>i)</sub> Answer any THREE questions from each section in separate scripts. ii) Figures in the right margin indicate full marks."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-A"
+    },
+    {
+      "type": "text",
+      "value": "I <sub>(a)</sub> Make sentence with the following structures using the words given in brackets. (i) Subj.,+ modifier,+ Intransitive Verb+ Adv. of Manner. (Sleep as verb) (ii) Subj.,+ Transitive Verb+ Object. (Prepare as verb) <sub>(iii)</sub> <sub>Why+</sub> Subj.,+ Verb,+ Adv. of place+ Verb+ Adj. Complement. (Go and is as verb) <sub>(iv)</sub> Before+ <sub>Subj.+</sub> Verb.+ Adv. of place, Subj.+ Verb+ Adv. of place. (Come and attend as verb) <sub>(v)</sub> <sub>Subj.+</sub> Verb+ Obj.+ as+ Subj.+ Verb+ Obj. (Perform and teach as verb) (vi) If+ Subj.+ Verb+ Obj., Subj.+ Verb+ Obj. (Read and learn as verb) <sub>(vii)</sub> <sub>Subj.+</sub> Verb+ not only+ Adv. of place+ but also+ Adv. of place. (Work as verb)"
+    },
+    {
+      "type": "text",
+      "value": "l(b) <sub>Change</sub> the following words as asked in brackets and use the changed forms in sentence. 12 <sub>Chastity</sub> <sub>(into</sub> <sub>adj.),</sub> Month (into adj.), Elegancy (into adj.), Divert (into noun) Conception (into verb), Fortification (into verb)."
+    },
+    {
+      "type": "text",
+      "value": "I <sub>(c)</sub> Make new words with the following suffix, prefix and use them in sentence: Hypo-, Be-, -ion, -al, -ance, Fore-."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2023"
+}

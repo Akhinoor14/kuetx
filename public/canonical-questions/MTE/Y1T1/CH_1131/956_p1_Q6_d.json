@@ -1,0 +1,37 @@
+{
+  "id": "956_p1_Q6(d)",
+  "course": {
+    "code": "CH 1131",
+    "title": "Chemistry",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2023\\1st_Year_1st_Term_2023_956.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the reaction 09   \n$N _ { 2 } ( g ) + 3 H _ { 2 } ( g )  2 N H _ { 3 } ( g )$   \n$\\mathrm { K } _ { \\mathsf { p } } \\mathrm { i } \\mathrm { s } 4 . 3 \\times 1 0 ^ { - 4 } a t 3 7 5 ^ { \\circ } C$ Calculate $\\mathrm { K _ { c } }$ for the reaction."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2023"
+}

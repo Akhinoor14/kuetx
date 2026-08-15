@@ -1,0 +1,51 @@
+{
+  "id": "1092_p2_Q3(b)",
+  "course": {
+    "code": "EE 1205",
+    "title": "Electrical Engineering & Electrical Machines",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\4th_Year_Backlog_2018_1092.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Find the rms and average value of the following wave. Also find the crest factor."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d728abb5c2c2b0b26a908ed5ef3e8cc0cc63bcfa9e62844b0a53cf065bb78a87.jpg",
+      "_source_path": "images/d728abb5c2c2b0b26a908ed5ef3e8cc0cc63bcfa9e62844b0a53cf065bb78a87.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Find all possible roots-"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\ P \\frac { \\sqrt { 1 0 \\angle 4 5 ^ { 0 } . 5 e ^ { \\ j 6 0 } \\left( - 4 . 0 4 7 - j 2 . 9 4 \\right) } } { 1 - j 1 . 7 3 2 }\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Backlog Examination, 2018"
+}

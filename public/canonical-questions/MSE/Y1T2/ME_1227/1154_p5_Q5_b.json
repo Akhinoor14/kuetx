@@ -1,0 +1,42 @@
+{
+  "id": "1154_p5_Q5(b)",
+  "course": {
+    "code": "ME 1227",
+    "title": "Engineering Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2023\\1st_Year_2nd_Term_2023_1154.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Milk is poured into a glass of height 140 mm and inside diameter 66 mm. If the (14) initial velocity of the milk is 1.2 mis at an angle of $4 0 ^ { \\circ }$ with the horizontal, determine the range of values of height h for which the milk will enter the glass."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_353ad36c95e2bf798ca48b4a0babd886179024c986623a98c7c0790f9358cfed.jpg",
+      "_source_path": "images/353ad36c95e2bf798ca48b4a0babd886179024c986623a98c7c0790f9358cfed.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2023"
+}

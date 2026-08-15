@@ -1,0 +1,46 @@
+{
+  "id": "1041_p2_Q8(c)",
+  "course": {
+    "code": "ME 3105",
+    "title": "Heat Transfer I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2017\\3rd_Year_1st_Term_2017_1041.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Two aligned, parallel square plates 0.6m by 0.6m are separated by L = 0.3m as shown. Plate 1 is maintained at $\\bar { \\mathrm { T } } _ { \\mathrm { l } } = \\bar { \\mathrm { l 0 0 0 } } \\mathrm { k }$ and has an emissivity $\\mathfrak { E } _ { 1 } = 0 . 7 0$ . Plate 2 is maintained at $\\mathrm { T } _ { 2 } = 5 0 0 \\mathrm { K }$ and has an emissivity $\\mathtt { E } _ { 2 } = 0 . 5 0$ : The plates are exposed through the opening between them into an ambient regarded as black medium at $\\Upsilon _ { \\infty } = 3 0 0 \\bar { \\kappa }$ Sketch the radiation network for the two surfaces and the ambient. Calculate the. heat transfer between the plates and heat loss to the ambient."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_bdd2efc89b87bd7312b24ef49dcbb9e3fd85df855e24f5d0acb94703ff1c3ec2.jpg",
+      "_source_path": "images/bdd2efc89b87bd7312b24ef49dcbb9e3fd85df855e24f5d0acb94703ff1c3ec2.jpg"
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY Department of Mechaničal Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

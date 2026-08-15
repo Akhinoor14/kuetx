@@ -1,0 +1,37 @@
+{
+  "id": "979_p2_Q3(c)",
+  "course": {
+    "code": "ME 3231",
+    "title": "Solid Mechanics and Machine Design",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\3rd_Year_2nd_Term_2022_979.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the sharing stress (i) at the junction between the two pieces of wood, (ii) at 50 mm below the top of the cross section as shown in fig. 3. Given that the neutral axis is 34 mm from the top and IN $_ { / \\mathrm { A } } = 1 0 . 5 7 \\times 1 0 ^ { 6 }$ mm⁴."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

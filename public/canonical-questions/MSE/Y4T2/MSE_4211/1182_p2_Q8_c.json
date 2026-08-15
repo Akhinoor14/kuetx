@@ -1,0 +1,37 @@
+{
+  "id": "1182_p2_Q8(c)",
+  "course": {
+    "code": "MSE 4211",
+    "title": "Professional Ethics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\4th_Year_2nd_Term_2021_1182.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "Henry is in a position to influence the selection of suppliers for the large volume of equipment (18) that his firm purchases each year. At Christmas time, he usually receives small tokens from several salesman, ranging from inexpensive ballpoint pens to a bottle of liquor. This year, however, one salesman sends an expensive briefcase stamped with Henry's initials. Should Henry accept the gift? Should he take any further course of action? Justify your answer."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2021"
+}

@@ -1,0 +1,82 @@
+{
+  "id": "1156_p1_Q8(b)",
+  "course": {
+    "code": "ME 2127",
+    "title": "Solid Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2018\\2nd_Year_1st_Term_2018_1156.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "] with respect to x and y (18) axis."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_9c0636c18adb910dc55cc0f4cd88408fb8207e7d129d3800aaa6fe71e552d033.jpg",
+      "_source_path": "images/9c0636c18adb910dc55cc0f4cd88408fb8207e7d129d3800aaa6fe71e552d033.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_240fcaa0ead4a9fe7d65e39dc74c3e8df57ca0bd78b8d1776d27565e16e4980c.jpg",
+      "_source_path": "images/240fcaa0ead4a9fe7d65e39dc74c3e8df57ca0bd78b8d1776d27565e16e4980c.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d8f9396f274cf9ebaf71ac0cd3c9861209ba019099439a3ae9ce07acdbf354e3.jpg",
+      "_source_path": "images/d8f9396f274cf9ebaf71ac0cd3c9861209ba019099439a3ae9ce07acdbf354e3.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ec6a21e700ee3e4c7c202b596fecd5993207be1aae2c995395960d8b888dd8cb.jpg",
+      "_source_path": "images/ec6a21e700ee3e4c7c202b596fecd5993207be1aae2c995395960d8b888dd8cb.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_7cf4be645cb7e2d0e8229c5d5b42c06d2e73cb83994c1df4fea50a530bc87a14.jpg",
+      "_source_path": "images/7cf4be645cb7e2d0e8229c5d5b42c06d2e73cb83994c1df4fea50a530bc87a14.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_74f8a90ee36ee229875585420fe7f7756259fc30ad649521a8457b7130ace719.jpg",
+      "_source_path": "images/74f8a90ee36ee229875585420fe7f7756259fc30ad649521a8457b7130ace719.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_bf2e6e432b7f9b7fcd82abed52e462873b299f9fd307ddca2e4d1ff32e280126.jpg",
+      "_source_path": "images/bf2e6e432b7f9b7fcd82abed52e462873b299f9fd307ddca2e4d1ff32e280126.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_eb6ab214752ac7773a087081d656dfccfdfe09e630e3ff332b813c1cd04f8514.jpg",
+      "_source_path": "images/eb6ab214752ac7773a087081d656dfccfdfe09e630e3ff332b813c1cd04f8514.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_c0dd4de1ae1d7c4e45b40a1e6ddfcf88e57c241a1ecd7a36d0eb2caf608fc28e.jpg",
+      "_source_path": "images/c0dd4de1ae1d7c4e45b40a1e6ddfcf88e57c241a1ecd7a36d0eb2caf608fc28e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

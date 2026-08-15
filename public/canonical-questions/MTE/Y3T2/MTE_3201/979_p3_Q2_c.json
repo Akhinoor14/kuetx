@@ -1,0 +1,42 @@
+{
+  "id": "979_p3_Q2(c)",
+  "course": {
+    "code": "MTE 3201",
+    "title": "Power Electronics and Drives",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\3rd_Year_2nd_Term_2022_979.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The SCR of the following figure has gate trigger voltage $\\mathrm { V } _ { \\mathrm { T } } = 0 . 7 \\ : \\mathrm { V } ,$ gate trigger current Iπ = 7 mA, and holding current $\\mathrm { I _ { H } } = 6 \\mathrm { m A } .$ (i) What is the output voltage when SCR is off? (ii) What is the input voltage that trigger the SCR? (iii) If $\\mathsf { V } _ { \\mathsf { C C } }$ is decreased until SCR opens, what is the value of $\\bar { \\mathsf { V } } \\mathsf { c c } ?$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_763b47af0d050db7e7257a9bc08825ed54df5de5e1a71eed8e54c1e80de1b9e3.jpg",
+      "_source_path": "images/763b47af0d050db7e7257a9bc08825ed54df5de5e1a71eed8e54c1e80de1b9e3.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "976_p6_Q6(c)",
+  "course": {
+    "code": "MTE 3113",
+    "title": "Numerical Analysis and Statistics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\3rd_Year_1st_Term_2022_976.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define skewness and kurtosis. Find coefficient of skewness and kurtosis from the frequency distribution of following table showing the age of 102 workers in a factory. Also, comment on the shape of data distribution."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Age</td><td rowspan=1 colspan=1>No of workers</td></tr><tr><td rowspan=1 colspan=1>20-29</td><td rowspan=1 colspan=1>12</td></tr><tr><td rowspan=1 colspan=1>30-39</td><td rowspan=1 colspan=1>35</td></tr><tr><td rowspan=1 colspan=1>40-49</td><td rowspan=1 colspan=1>5</td></tr><tr><td rowspan=1 colspan=1>50-59</td><td rowspan=1 colspan=1>7</td></tr><tr><td rowspan=1 colspan=1>60-69</td><td rowspan=1 colspan=1>15</td></tr><tr><td rowspan=1 colspan=1>70-79</td><td rowspan=1 colspan=1>26</td></tr><tr><td rowspan=1 colspan=1>80-89</td><td rowspan=1 colspan=1>2</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

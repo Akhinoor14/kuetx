@@ -1,0 +1,53 @@
+{
+  "id": "1042_p3_Q4(c)",
+  "course": {
+    "code": "ME 3119",
+    "title": "Statistics & Quality Control",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\3rd_Year_1st_Term_2018_1042.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A normal distribution was fit to a flow data in litres/second -"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Flow (L/s)</td><td rowspan=1 colspan=1>7.65</td><td rowspan=1 colspan=1>7.95</td><td rowspan=1 colspan=1>8.25</td><td rowspan=1 colspan=1>8.55</td><td rowspan=1 colspan=1>8.85</td><td rowspan=1 colspan=1>9.15</td></tr><tr><td rowspan=1 colspan=1>Frequency</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>21</td><td rowspan=1 colspan=1>35</td><td rowspan=1 colspan=1>15</td><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>1</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Test the hypothesis, $H _ { \\mathfrak { s } } .$ Flow has a normal distribution;"
+    },
+    {
+      "type": "text",
+      "value": "$\\mathbb { H } _ { ! } \\colon$ Flow does not have a normal distribution."
+    },
+    {
+      "type": "text",
+      "value": "SECTION- B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

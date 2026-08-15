@@ -1,0 +1,42 @@
+{
+  "id": "965_p5_Q1(b)",
+  "course": {
+    "code": "ME 2131",
+    "title": "Engineering Mechanics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\2nd_Year_1st_Term_2022_965.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 12-m pole supports a horizontal cable CD and is held by a ball and socket at A and two cables BE and BF. Knowing that the tension in cable CD is 14-kN andassuming that CD is parallel to the x-axis, determine the tension in cables BE and BF and the reaction at A."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_6b8c9b5fa9060016ff0403aaaabed6866e95e4776c09c45faa001b93d1448368.jpg",
+      "_source_path": "images/6b8c9b5fa9060016ff0403aaaabed6866e95e4776c09c45faa001b93d1448368.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

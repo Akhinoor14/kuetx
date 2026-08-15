@@ -1,0 +1,42 @@
+{
+  "id": "1044_p2_Q2(c)",
+  "course": {
+    "code": "ME 3105",
+    "title": "Heat Transfer I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\3rd_Year_1st_Term_2021_1044.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "To defog the rare window of an automobile, a very thin transparent heating element is attached to the inner surface of the window. A uniform heat flux of 1300 $\\mathrm { W } / \\mathrm { m } ^ { 2 }$ is provided to the heating element for defogging a rear window with thickness of 5 mm. The interior temperature of the automobile is $2 2 ^ { \\circ } \\mathrm { C }$ and convection heat transfer coefficient is 15 $\\mathrm { w } / \\mathrm { m } ^ { 2 } . \\dot { \\mathrm { K } } .$ The outside ambient temperature $\\mathrm { i } s - 5 ^ { \\circ } \\mathrm { C }$ and convection heat transfer coefficient is 100 $\\mathrm { W } / \\mathrm { m } ^ { 2 } . \\mathrm { K } .$ If the thermal conductivity of the window is $1 . 2 ~ \\mathrm { W / m } . \\mathrm { K } .$ determine the inner surface temperature of the window."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r l } & { \\mathrm { H e a t i n g \\ e l e m e n t } \\frac { \\hat { \\qquad } } { 2 } . } \\\\ & { \\dot { q } _ { h } = 1 3 0 0 \\mathrm { W / m } ^ { 2 } \\left[ \\begin{array} { l } { \\mathrm { R e a r \\ { \\ w i o w } } } \\\\ { \\cdot } \\\\ { \\cdot } \\\\ { \\mathrm { I n s i d e \\ a i r , \\ 2 2 ^ { \\circ } C } } \\end{array} \\right] \\cdot \\left[ \\begin{array} { l } { \\mathrm { O u t s i d e a i r , } - 5 ^ { \\circ } C } \\\\ { \\phantom { \\cdot } h _ { o } = 1 0 0 \\mathrm { W / m } ^ { 2 } . \\mathrm { K } } \\end{array} \\right] } \\\\ & { \\quad h _ { i } = 1 5 \\mathrm { W / m } ^ { 2 } . \\mathrm { K } \\frac { \\hat { \\qquad } } { \\left| \\begin{array} { l l l } { \\mathrm { \\qquad } } & { \\quad } \\\\ { \\mathrm { \\qquad } } & { \\quad } \\end{array} \\right| } } \\end{array}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

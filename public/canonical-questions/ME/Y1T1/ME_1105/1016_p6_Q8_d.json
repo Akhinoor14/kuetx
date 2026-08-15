@@ -1,0 +1,41 @@
+{
+  "id": "1016_p6_Q8(d)",
+  "course": {
+    "code": "ME 1105",
+    "title": "Thermal Engineering",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2023\\1st_Year_1st_Term_2023_1016.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A vapour compression refrigeration uses R-12 as a refrigerant and the liquid evaporates in 13 the evaporator at -l 5°C. The temperature of this refrigerant at the delivery from the compressor is 15°C when the vapour is condensed at I 0°C. Refrigerant leaves the evaporator before being saturated. Find the coefficient of performance if (i) there is no undercooling, and (ii) the liquid is cooled by 5°C before expansion by throttling. Take specific heat for the saturated vapour as 0.64 kJ/kg K and for liquid as 0.94 kJ/kg K. Also, compare the COPs of two systems and provide the reason for the higher COP in one compared to another. The properties of the refrigerant are given in the table below."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=2 colspan=1>Temperature in °C</td><td rowspan=1 colspan=2>Enthalpy in kJ/kg</td><td rowspan=1 colspan=2>Entropy in kJ/kg K</td></tr><tr><td rowspan=1 colspan=1>Liquid</td><td rowspan=1 colspan=1>Vapour</td><td rowspan=1 colspan=1>Liquid</td><td rowspan=1 colspan=1>Vapour</td></tr><tr><td rowspan=1 colspan=1>-15</td><td rowspan=1 colspan=1>22.3</td><td rowspan=1 colspan=1>180.88</td><td rowspan=1 colspan=1>0.0904</td><td rowspan=1 colspan=1>0.7051</td></tr><tr><td rowspan=1 colspan=1>+10</td><td rowspan=1 colspan=1>45.4</td><td rowspan=1 colspan=1>191.76</td><td rowspan=1 colspan=1>0.1750</td><td rowspan=1 colspan=1>0.6921</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2023"
+}

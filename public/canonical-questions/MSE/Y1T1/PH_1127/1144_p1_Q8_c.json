@@ -1,0 +1,37 @@
+{
+  "id": "1144_p1_Q8(c)",
+  "course": {
+    "code": "PH 1127",
+    "title": "Optics and Waves",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2018\\1st_Year_1st_Term_2018_1144.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A solution of an optically active solute produces a rotation of 20º of the plane of polarization in a path length of 10 cm when the concentration is 20 gm/liter. What is the concentration in a solution which produces a rotation of $3 0 ^ { \\circ }$ in a path length of 5 cm?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
+}

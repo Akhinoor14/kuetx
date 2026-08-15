@@ -1,0 +1,41 @@
+{
+  "id": "1077_p4_Q2(c)",
+  "course": {
+    "code": "MATH 1105",
+    "title": "Mathematics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\1st_Year_Backlog_2022_1077.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Examine the validity of Lagrange's mean value theorem for the function $\\textstyle f ( x ) = { \\frac { 1 } { x } }$ 111 11 the interval I\"- I, I]."
+    },
+    {
+      "type": "text",
+      "value": "J(a) Expand $\\cos ^ { 2 }$ x in powers of $( x - \\pi / 4 )$ in a finite Taylor's series with the remainder 12 in Lagrange's form."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2022"
+}

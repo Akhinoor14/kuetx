@@ -1,0 +1,61 @@
+{
+  "id": "1033_p2_Q4(b)",
+  "course": {
+    "code": "ME 2221",
+    "title": "Computer Programming",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2016\\2nd_Year_2nd_Term_2016_1033.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write a C program using 2D array to compute and print the following information from 18 the data table, which shows the value of sales of three items by four sales persons."
+    },
+    {
+      "type": "text",
+      "value": "(i) Total value of sales by each person,"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Total value of each item sold,"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Grand total of sales."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Item 1</td><td rowspan=1 colspan=1>Item 2</td><td rowspan=1 colspan=1>Item 3</td></tr><tr><td rowspan=1 colspan=1>Person 1</td><td rowspan=1 colspan=1>310</td><td rowspan=1 colspan=1>275</td><td rowspan=1 colspan=1>365</td></tr><tr><td rowspan=1 colspan=1>Person 2</td><td rowspan=1 colspan=1>210</td><td rowspan=1 colspan=1>190</td><td rowspan=1 colspan=1>325</td></tr><tr><td rowspan=1 colspan=1>Person 3</td><td rowspan=1 colspan=1>405</td><td rowspan=1 colspan=1>235</td><td rowspan=1 colspan=1>240</td></tr><tr><td rowspan=1 colspan=1>Person 4</td><td rowspan=1 colspan=1>260</td><td rowspan=1 colspan=1>300</td><td rowspan=1 colspan=1>380</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": ") From a list of 1000 names, five character each, find how many are ‘KARIM’ using C program."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

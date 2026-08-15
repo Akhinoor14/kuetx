@@ -1,0 +1,42 @@
+{
+  "id": "1083_p2_Q3(b)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\2nd_Year_Backlog_2022_1083.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A rigid plate of negligible mass rests on the central spring as shown which is 15 mm higher than the symmetrically located outer springs. Each of the outer springs consists of 15 turns of 12 mm wire on a mean diameter of 80 mm. The central spring has 20 turns of 25 mm wire on a mean diameter of 120 mm. If a load $p = 1 0$ kN is applied to the plate, determine the maximum shearing stress in each spring. Assume $G = 8 3 \\mathrm { G P a }$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_672130d74bc3bc9a911f27e27865aeae713bdc2742981cf1b47414c65497cd8d.jpg",
+      "_source_path": "images/672130d74bc3bc9a911f27e27865aeae713bdc2742981cf1b47414c65497cd8d.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2022"
+}

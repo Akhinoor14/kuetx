@@ -1,0 +1,50 @@
+{
+  "id": "1158_p3_Q4(b)",
+  "course": {
+    "code": "MATH 2127",
+    "title": "Vector Analysis and Linear Algebra",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2020\\2nd_Year_1st_Term_2020_1158.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Test the nature of the vector point function $\\frac { G \\vec { r } } { r ^ { 2 } }$ (by using vector operator $\\cdot \\overrightarrow { v } )$ , where G is a constant and $\\vec { r }$ is the position vector. Hence find the scalar potential function $\\phi$ such that $\\phi ( R , 0 , R ) = 1$ , where R is the sum of the last two digits of your class roll number. (See Hints)"
+    },
+    {
+      "type": "text",
+      "value": "[Hints: Roll 1827005, then R=0+5=5 and"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { R o l l ~ 1 8 2 7 0 2 9 , t h e n } \\ R \\mathrm { = } 2 + 9 \\mathrm { = } 1 1 ]\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Q"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2020"
+}

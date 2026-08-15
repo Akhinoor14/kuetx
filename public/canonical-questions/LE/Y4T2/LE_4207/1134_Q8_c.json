@@ -1,0 +1,45 @@
+{
+  "id": "1134_Q8(c)",
+  "course": {
+    "code": "LE 4207",
+    "title": "Dyeing and Finishing II",
+    "department": "Department of Leather Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2019\\4th_Year_2nd_Term_2019_1134.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The fabrication precess of n jacket are scheduled i.n the followi ug table:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Activity</td><td rowspan=1 colspan=1> $O _ { i }$ </td><td rowspan=1 colspan=1> $\\mathbf { M } _ { \\mathrm { T } }$ </td><td rowspan=1 colspan=1> $\\mathrm { p } _ { \\mathrm { r } }$ </td><td rowspan=1 colspan=1>Predecessor</td></tr><tr><td rowspan=1 colspan=1> $\\mathrm { \\AA }$ </td><td rowspan=1 colspan=1>02</td><td rowspan=1 colspan=1>08</td><td rowspan=1 colspan=1> $1 4$ </td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>04</td><td rowspan=1 colspan=1>04</td><td rowspan=1 colspan=1>04</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>05</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>16</td><td rowspan=1 colspan=1>A</td></tr><tr><td rowspan=1 colspan=1>D</td><td rowspan=1 colspan=1>06</td><td rowspan=1 colspan=1>08</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>A</td></tr><tr><td rowspan=1 colspan=1>E</td><td rowspan=1 colspan=1>08</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>16</td><td rowspan=1 colspan=1>C,B</td></tr><tr><td rowspan=1 colspan=1>F</td><td rowspan=1 colspan=1>01</td><td rowspan=1 colspan=1>01</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>C,B</td></tr><tr><td rowspan=1 colspan=1>G</td><td rowspan=1 colspan=1>06</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>18</td><td rowspan=1 colspan=1>D,E</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Find: (i) The network (ii) All expected times (iii) Slacks and Variances (iv) Tile critical path."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2019"
+}

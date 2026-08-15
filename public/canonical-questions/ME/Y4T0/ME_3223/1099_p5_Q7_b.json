@@ -1,0 +1,37 @@
+{
+  "id": "1099_p5_Q7(b)",
+  "course": {
+    "code": "ME 3223",
+    "title": "Power Plant Engineering",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2019\\Backlog_2019_1099.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A building has following calculated cooling load: 22   \nRSH gain= 310 kW   \nRLH gain= 100 kW   \nThe space is maintained at the following conditions:   \nRoom DBT = 25°C   \nRoomRH=50%   \nOutdoor air is at 28°C and 50% RH and 10% by mass of air supplied to the <sub>building</sub> is   \noutdoor air. If the air supplied to the space is not to be at a temperature lower than l 8°C,   \ncalculate:   \n(i) Minimum amount of air supplied to space in m3 Is,   \n(ii) State and volume flow rate of air entering the cooling coil, and   \n(iii) Capacity, ADP, BPF, and SHF at the cooling coil."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Special Backlog Examination, 2019"
+}

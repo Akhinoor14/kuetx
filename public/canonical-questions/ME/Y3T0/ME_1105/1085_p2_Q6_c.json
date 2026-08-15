@@ -1,0 +1,37 @@
+{
+  "id": "1085_p2_Q6(c)",
+  "course": {
+    "code": "ME 1105",
+    "title": "Thermal Engineering",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\3rd_Year_Backlog_2018_1085.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider an enclosure consisting of two parallel infinite opaque plates. Surface 1 and 2 are gray and kept at uniform temperature ${ \\boldsymbol { \\mathsf { T } } } _ { 1 }$ and $\\mathrm { T } _ { 2 }$ with emissivities $\\mathfrak { E } _ { \\mathrm { : } }$ and ε2 reflectivity $\\rho _ { 1 }$ an ρ2 respectively. Develop an expression for radiation exchange between the surfaces."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year Backlog Examination, 2018"
+}

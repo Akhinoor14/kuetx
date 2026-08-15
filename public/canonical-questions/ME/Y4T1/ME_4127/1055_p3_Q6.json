@@ -1,0 +1,53 @@
+{
+  "id": "1055_p3_Q6",
+  "course": {
+    "code": "ME 4127",
+    "title": "Operations Management",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\4th_Year_1st_Term_2018_1055.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6",
+  "numbering_source": "regex",
+  "marks": 35,
+  "content": [
+    {
+      "type": "text",
+      "value": "Mr. Farid has to decide whether or not to drill a well on his farm. In this village, only 40% of the wells drilled were successful at 69m of depth. Some of the farmers who did not get water at 69m, drill further up to 85m, but only 20% struck water at 85m. Cost of drilling is Tk. 16 per meter. Mr. Farid estimated that he would pay Tk. 18,000 during a 5 years period in the present value terms, if he continues to buy water from the neighbor rather than go for the well which would have a life of 5 years. Mr. Farid has three decisions to make."
+    },
+    {
+      "type": "text",
+      "value": "(i) Should he drill up to 69m,"
+    },
+    {
+      "type": "text",
+      "value": "(ii) If no water is found at 69m, should he drill up to 85 m? and"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Should he continue to buy water from his neighbor?"
+    },
+    {
+      "type": "text",
+      "value": "Draw up an appropriate decision tree and determine his optimal decision."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2018"
+}

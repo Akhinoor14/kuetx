@@ -1,0 +1,42 @@
+{
+  "id": "1073_p2_Q7(b)",
+  "course": {
+    "code": "MATH 1105",
+    "title": "Mathematics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\1st_Year_Backlog_2018_1073.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Evaluate:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\operatorname* { l i m } _ { n \\to \\infty } \\Big [ \\frac { n + 2 } { n ^ { 2 } + 1 } + \\frac { n + 4 } { n ^ { 2 } + 4 } + \\frac { n + 6 } { n ^ { 2 } + 9 } + \\cdots \\cdots \\cdots \\cdots \\cdots \\cdots + \\frac { n + 2 n } { n ^ { 2 } + n ^ { 2 } } \\Big ] .\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2018"
+}

@@ -1,0 +1,65 @@
+{
+  "id": "1016_p2_Q3(a)",
+  "course": {
+    "code": "HUM 1105",
+    "title": "English",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2023\\1st_Year_1st_Term_2023_1016.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make WH question with the underlined word/words of the following sentences:"
+    },
+    {
+      "type": "text",
+      "value": "(ii) We met V. C. to discuss the issue of ethics in students."
+    },
+    {
+      "type": "text",
+      "value": "(iii) He travelling at a speed of 60 mph."
+    },
+    {
+      "type": "text",
+      "value": "(iv) The nearest town is ten miles away."
+    },
+    {
+      "type": "text",
+      "value": "(v) The works of K. Nazrul are revolutionary in nature."
+    },
+    {
+      "type": "text",
+      "value": "(vi) The building is 20 feet high and IO feet wide."
+    },
+    {
+      "type": "text",
+      "value": "(vii) He has been living peacefully in this village for ten years."
+    },
+    {
+      "type": "text",
+      "value": "Complete the following sentences with clauses as asked in brackets. (i) touches our depth of heart. (Noun clause) (ii) In , we can understand very easily. (Noun clause) (iii) , he could sing well. (Adv. clause of condition) (iv) , he can't expend hugely. (Adv. clause of reason) (v) Rani, , is brilliant. (Adj. clause) (vi) Shoma studies sincerely (Adv. clause of purpose)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2023"
+}

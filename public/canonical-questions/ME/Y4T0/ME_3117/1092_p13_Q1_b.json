@@ -1,0 +1,41 @@
+{
+  "id": "1092_p13_Q1(b)",
+  "course": {
+    "code": "ME 3117",
+    "title": "Machine Design I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\4th_Year_Backlog_2018_1092.pdf",
+    "source_page": null,
+    "paper_index": 13
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A single acting reciprocating pump has a piston diameter of 0.15 m and a crank radius of 0.30 m, the delivery is 0.10 m in diameter and 30 m long. The water is lifted 20 m above thie center of the pump. Find the maximum speed at which the pump can be run so that no cavitation takes place during the delivery stroke and the power requirement for the pump. Assume $\\mathrm { H } _ { \\mathrm { a t m } } \\ \\stackrel { = } { = } \\ 1 0 . 3$ m of water and separation occurs at 2.6 m of water absolute."
+    },
+    {
+      "type": "text",
+      "value": "ta) Deseribe the principle of centrifugal punp for lifting water."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Backlog Examination, 2018"
+}

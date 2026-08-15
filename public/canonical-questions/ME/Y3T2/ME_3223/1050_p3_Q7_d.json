@@ -1,0 +1,45 @@
+{
+  "id": "1050_p3_Q7(d)",
+  "course": {
+    "code": "ME 3223",
+    "title": "Power Plant Engineering",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\3rd_Year_2nd_Term_2022_1050.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A boiler is equipment with a chimney of32m height. The flue gases which pass through 11 the chimney are at temperature of 290°C, whereas the atmospheric temperature is 22°C. If the air flow through the combustion chamber is 18 kg/kg of fuel brunt, find:"
+    },
+    {
+      "type": "text",
+      "value": "(i) The theoretical draught produced in mm of water and in height of hot gases column, and"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Velocity of flue gases passing through the chimney, if 50% of theoretical draught is lost in friction at the grate and passage."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

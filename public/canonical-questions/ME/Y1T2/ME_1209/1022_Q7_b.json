@@ -1,0 +1,42 @@
+{
+  "id": "1022_Q7(b)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\1st_Year_2nd_Term_2020_1022.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The 10 kg block is attached to link AB and rests on a conveyor belt which is moving to the left. Knowing that the coefficients of friction between the block and the belt are $\\mu _ { s } = 0 . 3$ and $\\mu _ { k } = 0 . 2 5$ and neglecting the weight of the link, determine (i) the force in link AB, (ii) the horizontal force P which should be applied to the belt to maintain its motion."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_757f7219c0344d806383367abbeefe43f8d39c778f39486b062499cfbb5b9454.jpg",
+      "_source_path": "images/757f7219c0344d806383367abbeefe43f8d39c778f39486b062499cfbb5b9454.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Special Examination (COVID-19), 2020"
+}

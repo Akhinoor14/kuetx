@@ -1,0 +1,41 @@
+{
+  "id": "965_p4_Q5(a)",
+  "course": {
+    "code": "MATH 2131",
+    "title": "Fourier Analysis and Laplace Transform",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\2nd_Year_1st_Term_2022_965.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define periodic and aperiodic signals. Check whether each of the following signals is 10 periodic or not. If a signal is periodic, find its fundamental period."
+    },
+    {
+      "type": "text",
+      "value": "i) $x _ { 1 } ( t ) = 2 \\cos ( 1 0 t + 1 ) - \\sin ( 4 t - 1 )$ ii) $x _ { 2 } ( t ) = s \\mathrm { i n } ^ { 2 } t + \\cos t$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "1082_p4_Q1(c)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\2nd_Year_Backlog_2021_1082.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A rigid beam with negligible mass as shown in figure is pinned at one end and supported by two rods. The beam was initially horizontal before the load P was applied. Find vertical movement of P, if P = 100 kN."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ccc8423c90876ba6a1423228bb6d59555c781501a09664afc09f9792d19b9e62.jpg",
+      "_source_path": "images/ccc8423c90876ba6a1423228bb6d59555c781501a09664afc09f9792d19b9e62.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2021"
+}

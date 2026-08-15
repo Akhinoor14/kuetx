@@ -1,0 +1,37 @@
+{
+  "id": "1339_p1_Q8(b)",
+  "course": {
+    "code": "PH 1205",
+    "title": "Physics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2024\\1st_Year_2nd_Term_2024_1339.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Show that the average kinetic energy of a free electron is 3/5 Ef, where Ef is Fermi energy 10 $E _ { f } ,$ $E _ { f }$ 10 and average speed is 3/4 $\\nu _ { f }$ , where vf is the velocity of electron at Fermi surface."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2024"
+}

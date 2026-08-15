@@ -1,0 +1,73 @@
+{
+  "id": "1150_p5_Q4(c)",
+  "course": {
+    "code": "HUM 1227",
+    "title": "Technical English",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2017\\1st_Year_2nd_Term_2017_1150.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Supply a suitable word to fill in the gaps."
+    },
+    {
+      "type": "text",
+      "value": "(i) They are .. on a picnic."
+    },
+    {
+      "type": "text",
+      "value": "(ii) What.......you do on holidays?"
+    },
+    {
+      "type": "text",
+      "value": "(ii) He is fond of.......cricket."
+    },
+    {
+      "type": "text",
+      "value": "(iv) He took...........his coat when he entered his house."
+    },
+    {
+      "type": "text",
+      "value": "(v) Which one of the pens .......yours?"
+    },
+    {
+      "type": "text",
+      "value": "(vi) The ladder on ............. I was standing was about to fall."
+    },
+    {
+      "type": "text",
+      "value": "Section B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in answer script B)"
+    },
+    {
+      "type": "text",
+      "value": "Q"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

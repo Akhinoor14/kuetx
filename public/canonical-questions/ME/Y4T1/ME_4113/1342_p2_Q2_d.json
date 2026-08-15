@@ -1,0 +1,37 @@
+{
+  "id": "1342_p2_Q2(d)",
+  "course": {
+    "code": "ME 4113",
+    "title": "Fluid Machinery",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2024\\4th_Year_1st_Term_2024_1342.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A centrifugal pump lifts water against a static head of 40 m, of which 4 m is suction lift. The suction and delivery pipes are both 150 mm in diameter, the head loss in the suction pipe is 2.3 m and in the delivery pipe, 7.4 m. The impeller is 420 mm in diameter and 25 mm width at the mouth; it revolves at 1200 rpm and its effective vane angle at exit is 35°. If $\\eta _ { \\mathrm { { m a n o } } } = 8 2 \\%$ and $\\eta _ { \\mathrm { o } } = 7 2 \\%$ , determine the power required to drive the pump."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2024"
+}

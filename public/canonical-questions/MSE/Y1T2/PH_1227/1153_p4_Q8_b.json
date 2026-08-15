@@ -1,0 +1,37 @@
+{
+  "id": "1153_p4_Q8(b)",
+  "course": {
+    "code": "PH 1227",
+    "title": "Magnetism and Nuclear Physics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\1st_Year_2nd_Term_2021_1153.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 6,
+  "content": [
+    {
+      "type": "text",
+      "value": "For any given radioactive element at the end of one half-life $N _ { 0 } / 4$ radioactive element remain(06) unchanged. Then after four half-life how many radioactive element remain unchanged? Show also graphically."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

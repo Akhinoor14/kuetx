@@ -1,0 +1,41 @@
+{
+  "id": "1182_p2_Q7(a)",
+  "course": {
+    "code": "MSE 4211",
+    "title": "Professional Ethics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\4th_Year_2nd_Term_2021_1182.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "On January 28, 1986, the Space Shuttle Challenger was destroyed in a disastrous fire shortly after liftoff. All passengers aboard the vehicle were killed. A presidential commission was formed to investigate the cause of the accident and found that the 0-ring seals had failed, and, furthermore, that the seals had been recognized as a potential hazard for several years prior to the disaster. Roger Boisjoly an engineer of Morton Thiokol, discovered about the 0-ring malfunction. Then he presented the problem to higher authorities. Roger consulted colleague about the problem, then ran some test and, gave final presentation and recommendation not to launch. But Morton Thiokol overrule Roger's recommendation not to launch. After the accident, Boisjoly gave testimony before the Presidential Commission on the Space Shuttle Challenger accident. Boisjoly's testimony raises the issue of whistleblowing and the extent of the legitimacy of loyalty of an engineer to the organization in which he or she is employed. Morton Thiokol blamed Boisjoly and argued, he seeped confidential information. As a result, Boisjoly and other engineers who testified to commission were demoted."
+    },
+    {
+      "type": "text",
+      "value": "Had Boisjoly violated the obligation ofloyalty to his firm? Was his whistleblowingjustified? Defend your answer."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2021"
+}

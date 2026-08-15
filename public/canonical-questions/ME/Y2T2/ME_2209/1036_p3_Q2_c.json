@@ -1,0 +1,37 @@
+{
+  "id": "1036_p3_Q2(c)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2019\\2nd_Year_2nd_Term_2019_1036.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Water at 20°C (p = 998 kg/m3 and $\\mu = 1 5 . 4 0 \\times 1 0 ^ { - 4 }$ kg/m.s) is flowing steadily through a 3 mm diameter and 9 m long horizontal pipe at an average velocity of 1.1 rn/sec. Determine: (i) the head loss, (ii) the pressure drop, and (iii) the pumping power required to overcome this pressure drop."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

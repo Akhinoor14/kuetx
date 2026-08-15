@@ -1,0 +1,45 @@
+{
+  "id": "1087_Q4(d)",
+  "course": {
+    "code": "ME 3223",
+    "title": "Power Plant Engineering",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\3rd_Year_Backlog_2021_1087.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What arc the advantages of C/1. DU reactor? 05"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    },
+    {
+      "type": "text",
+      "value": "S(a) What arc the essential equipments or steam power plant? Discuss the pipe network or the IO   \nplant.   \nS(b) Briefly describe the various steps involved in coal handling of a steam power plant. IO   \nS(c) Describe a ball and race mill for pulverize coal with neat sketch. 07   \nS(d) What is fluidized bed combustion (FBC)? State the advantages or FBC system. 08"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year Backlog Examination, 2021"
+}

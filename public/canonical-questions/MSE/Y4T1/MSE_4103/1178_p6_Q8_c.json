@@ -1,0 +1,45 @@
+{
+  "id": "1178_p6_Q8(c)",
+  "course": {
+    "code": "MSE 4103",
+    "title": "Engineering Alloys and Materials Selection",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2022\\4th_Year_1st_Term_2022_1178.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "devise hybrids to fill the holes, with the following applications in (15) mind:"
+    },
+    {
+      "type": "text",
+      "value": "(i) Sheet steel (as used in car body panel, for instance) is prone to lightly damped flexural vibrations. Devise a hybrid sheet that combines the high stiffness, E, of steel with high loss coefficient, n."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Devise a hybrid with low modulus E and low loss coefficient, n."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

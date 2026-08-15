@@ -1,0 +1,37 @@
+{
+  "id": "1092_p5_Q2(a)",
+  "course": {
+    "code": "MATH 1105",
+    "title": "Mathematics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\4th_Year_Backlog_2018_1092.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write down the complex form of Fourier series. Find a Fourier series of the function f (x) = cosαx in the interval −π ≤ x ≤ π, α ≠ 0, ± 1, ± 2 ..... Also, prove that sin $x = x \\left( 1 - \\frac { x ^ { 2 } } { \\pi ^ { 2 } } \\right) \\left( 1 - \\frac { x ^ { 2 } } { 4 \\pi ^ { 2 } } \\right)$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Backlog Examination, 2018"
+}

@@ -1,0 +1,49 @@
+{
+  "id": "1064_p2_Q4(b)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2015\\4th_Year_2nd_Term_2015_1064.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is Thoma's cavitation factor? Discuss its importance, 08"
+    },
+    {
+      "type": "text",
+      "value": "<sup>4</sup>(c) A model Francis turbine 1/4th of full size, develops 3.5 kW at 400 rpm under a head of l .8m. Find the speed and power of full size turbine operating under a head of 8m if;"
+    },
+    {
+      "type": "text",
+      "value": "(i) The efficiency of the model and full size turbine are same and (ii) The efficiency of the model is 75% of the full size considering the scale effect."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2015"
+}

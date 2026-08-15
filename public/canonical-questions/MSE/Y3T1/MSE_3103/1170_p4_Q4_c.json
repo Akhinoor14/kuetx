@@ -1,0 +1,49 @@
+{
+  "id": "1170_p4_Q4(c)",
+  "course": {
+    "code": "MSE 3103",
+    "title": "Materials Manufacturing Processes",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2022\\3rd_Year_1st_Term_2022_1170.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the carbon-equivalent of the following steels and comment on heating rate and (10) sensitivity."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>AISI-SAE</td><td rowspan=1 colspan=1>%C</td><td rowspan=1 colspan=1>% Mn</td><td rowspan=1 colspan=1>% Si</td><td rowspan=1 colspan=1>% Cr</td><td rowspan=1 colspan=1>% Mo</td></tr><tr><td rowspan=1 colspan=1>1095</td><td rowspan=1 colspan=1>0.9</td><td rowspan=1 colspan=1>0.3</td><td rowspan=1 colspan=1>-</td><td rowspan=1 colspan=1>-</td><td rowspan=1 colspan=1>-</td></tr><tr><td rowspan=1 colspan=1>4140</td><td rowspan=1 colspan=1>0.4</td><td rowspan=1 colspan=1>0.8</td><td rowspan=1 colspan=1>0.3</td><td rowspan=1 colspan=1>0.8</td><td rowspan=1 colspan=1>0.2</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Section B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in answer script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

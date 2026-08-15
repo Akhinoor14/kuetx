@@ -1,0 +1,47 @@
+{
+  "id": "1179_p4_Q3(c)",
+  "course": {
+    "code": "MSE 4107",
+    "title": "Computational Materials Science",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2023\\4th_Year_1st_Term_2023_1179.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "and differentiate between the Rules, using the Figures Q3(c) (i) and (ii)."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_09cd7b9516a0c979aabd02834ac12ebeee9599493b3fbffd4b5bfbccfb37c9fe.jpg",
+      "_source_path": "images/09cd7b9516a0c979aabd02834ac12ebeee9599493b3fbffd4b5bfbccfb37c9fe.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b2bf38eb9191d7ce8ddc6382c375c294dfd4583873fa1e9de7327ce9fc9659e5.jpg",
+      "_source_path": "images/b2bf38eb9191d7ce8ddc6382c375c294dfd4583873fa1e9de7327ce9fc9659e5.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2023"
+}

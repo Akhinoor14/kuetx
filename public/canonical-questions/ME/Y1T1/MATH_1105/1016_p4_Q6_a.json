@@ -1,0 +1,37 @@
+{
+  "id": "1016_p4_Q6(a)",
+  "course": {
+    "code": "MATH 1105",
+    "title": "Mathematics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2023\\1st_Year_1st_Term_2023_1016.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Prove that $\\textstyle { \\int _ { 0 } ^ { a } f ( x ) d x = \\int _ { 0 } ^ { a } f ( a - x ) d x }$ . Apply this formula to <sup>th</sup> tprove a $\\begin{array} { r } { \\int _ { 0 } ^ { \\pi / 2 } \\frac { d x } { ( a ^ { 2 } c o s ^ { 2 } x + b ^ { 2 } s i n ^ { 2 } x ) ^ { 2 } } = \\frac { \\pi } { 4 } \\frac { a ^ { 2 } + b ^ { 2 } } { a ^ { 3 } b ^ { 3 } } . } \\end{array}$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2023"
+}

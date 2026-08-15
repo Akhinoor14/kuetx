@@ -1,0 +1,42 @@
+{
+  "id": "1083_p2_Q6(a)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\2nd_Year_Backlog_2022_1083.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A timber beam AD, 120 mm thick by 340 mm high and loaded as shown is pinned at its lower 17 end and supported by a horizontal cable CE. Determine the maximum compressive stress in the beam."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_fcdb245cb533fd194a721b65b07173f522de3904d1b798f2aa4bb47b1d80893e.jpg",
+      "_source_path": "images/fcdb245cb533fd194a721b65b07173f522de3904d1b798f2aa4bb47b1d80893e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2022"
+}

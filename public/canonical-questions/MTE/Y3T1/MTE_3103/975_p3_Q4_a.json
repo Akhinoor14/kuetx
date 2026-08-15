@@ -1,0 +1,37 @@
+{
+  "id": "975_p3_Q4(a)",
+  "course": {
+    "code": "MTE 3103",
+    "title": "Microprocessor, Microcontroller and Interfacing",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\3rd_Year_1st_Term_2021_975.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The pharmaceutical logistics and supply chain process involve the movement of Astrazeneca's COVID-19 vaccine from Dhaka to Khulna. When these productes are exposed to incorrect temperature, the effect of decomposition can occur. This may lead to a ruined medication that can lead toxicity. The vaccine needs to be kept at a range between 2 to 8°C. You have given some simple components like AVR32, LM35, and LCD display, etc. As a mechatronics engineer your task is to design a high precision temperature monitoring system to continuously measure the safety of the drugs and send the data to a remote computer with a suitable message e.g.\"The current temperature is 4℃\"."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

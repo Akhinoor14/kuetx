@@ -1,0 +1,46 @@
+{
+  "id": "1182_p4_Q3(c)",
+  "course": {
+    "code": "EEE 4227",
+    "title": "Semiconductor Materials and Devices",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\4th_Year_2nd_Term_2021_1182.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": ". (15)"
+    },
+    {
+      "type": "text",
+      "value": "(i) 18q and $\\scriptstyle I _ { c Q }$ (ii) $V _ { C E Q }$ (iii) $\\pmb { V _ { B } }$ and $\\boldsymbol { v _ { c } }$ (iv) $V _ { B C }$ ."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b45a53a4da389411d711b680b866adf11190c69d8242104f03f4f42481133112.jpg",
+      "_source_path": "images/b45a53a4da389411d711b680b866adf11190c69d8242104f03f4f42481133112.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2021"
+}

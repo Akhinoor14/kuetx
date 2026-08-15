@@ -1,0 +1,42 @@
+{
+  "id": "1038_p3_Q6(b)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\2nd_Year_2nd_Term_2021_1038.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "The state of stress at a point is the result of two separate actions: one produces the pure shear of 30 MPa shown in Fig. (i) and other produces the pure shear of 40 MPa shown in Fig. (ii). Find the resultant stress by rotating the state of stress in Fig. (ii) to coincide with that in Fig. (i) so that the stresses can be superimposed and added directly. After that determine the principal stresses and principal planes for the combined state of stress. Show all results on complete sketches of differential elements."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_834f5247dccaa3e55f9fae4709511617360fb38a8b1913baac84854bf43b76f9.jpg",
+      "_source_path": "images/834f5247dccaa3e55f9fae4709511617360fb38a8b1913baac84854bf43b76f9.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

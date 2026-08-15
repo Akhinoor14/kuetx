@@ -1,0 +1,45 @@
+{
+  "id": "976_p6_Q8(c)",
+  "course": {
+    "code": "MTE 3113",
+    "title": "Numerical Analysis and Statistics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\3rd_Year_1st_Term_2022_976.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "A study shows that some companies violate federal population regulations with regard to 14 dumping a particular product. 20 firms are under suspicion but all can't be inspected. Suppose, 3 of the firms are in violation."
+    },
+    {
+      "type": "text",
+      "value": "i) What is the probability that inspection of 5 firms find no violation?"
+    },
+    {
+      "type": "text",
+      "value": "ii) What is the probability that the plan above will find 2 violations?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

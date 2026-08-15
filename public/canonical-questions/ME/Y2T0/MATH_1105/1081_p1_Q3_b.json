@@ -1,0 +1,37 @@
+{
+  "id": "1081_p1_Q3(b)",
+  "course": {
+    "code": "MATH 1105",
+    "title": "Mathematics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\2nd_Year_Backlog_2020_1081.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Let $\\vec { \\nu } _ { 1 } = \\left[ \\begin{array} { l } { 1 } \\\\ { 2 } \\\\ { 3 } \\end{array} \\right] , \\vec { \\nu } _ { 2 } = \\left[ \\begin{array} { l } { 4 } \\\\ { 5 } \\\\ { 6 } \\end{array} \\right] , \\vec { \\nu } _ { 3 } = \\left[ \\begin{array} { l } { 2 } \\\\ { 1 } \\\\ { 0 } \\end{array} \\right]$ .Determine if the set $\\left\\{ \\vec { \\nu } _ { 1 } , \\ \\vec { \\nu } _ { 2 } , \\ \\vec { \\nu } _ { 3 } \\right\\}$ is linearly independent. If 12 possible, find a linear dependence relation among $\\vec { \\nu } _ { 1 } , \\vec { \\nu } _ { 2 } , \\vec { \\nu } _ { 3 }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2020"
+}

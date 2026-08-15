@@ -1,0 +1,42 @@
+{
+  "id": "1026_p2_Q1(c)",
+  "course": {
+    "code": "EE 2105",
+    "title": "Electronics",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2017\\2nd_Year_1st_Term_2017_1026.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the current I in the circuit shown in figure below. Assume the diodes to be of silicon and forward resistance of diodes to be zero."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_5aa6d709ad23b07944b9ec16003ed35948d8090273443d0c09ac4577922cb013.jpg",
+      "_source_path": "images/5aa6d709ad23b07944b9ec16003ed35948d8090273443d0c09ac4577922cb013.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

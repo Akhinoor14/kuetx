@@ -1,0 +1,58 @@
+{
+  "id": "1176_p4_Q5(b)",
+  "course": {
+    "code": "MSE 4107",
+    "title": "Computational Materials Science",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2020\\4th_Year_1st_Term_2020_1176.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider a one-dimensional harmonic oscillator of mass, m, that follows Hooke's law, $F = - k x .$ (15) in an isolated system (E=const). Then Newton's second law becomes the second-order ordinary differential equation,"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\boldsymbol { a } ( t ) = - \\frac { k } { m } \\boldsymbol { x } ( t )\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Let us assume that the spring is fixed at one side and is an ideal spring with zero mass and spring constant k. Given the oscillation frequency of $\\begin{array} { r } { \\omega = \\sqrt { \\frac { k } { m } } = 2 } \\end{array}$ and initial conditions $x _ { o } = 4 . 5$ and $v _ { o } = 0$ , find the following:"
+    },
+    {
+      "type": "text",
+      "value": "(i) Write down the potential expression for the system."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Numerical solution for ball positions with time by taking the first two terms in the Taylor series expansions (the Euler methods) with $\\varDelta t = 0 . 2$ for 5 timesteps."
+    },
+    {
+      "type": "text",
+      "value": "Q"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2020"
+}

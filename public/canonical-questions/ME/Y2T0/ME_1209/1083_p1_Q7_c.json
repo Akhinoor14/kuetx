@@ -1,0 +1,110 @@
+{
+  "id": "1083_p1_Q7(c)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\2nd_Year_Backlog_2022_1083.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Derive the expression to measure the flow rate by a trapezoidal notch. 15"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nc _ { d } = 0 . 0 5\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "KllULNA UNIVERSITY OF ENGINEERING & Tl�CHNOLOGY Department of Mechanical Engineering B. Sc. Engineering 2nd Year Backlog Examination, :'.022"
+    },
+    {
+      "type": "text",
+      "value": "ME 2213 (Fluid Mechanics II)"
+    },
+    {
+      "type": "text",
+      "value": "Time: 3 Hours"
+    },
+    {
+      "type": "text",
+      "value": "Full Marks: 210"
+    },
+    {
+      "type": "text",
+      "value": "N.[L <sub>i)</sub> Answer any THREE questions from each section in separate scripts. ii) Figures in the right margin indicate full marks. iii) Assume reasonable data if any missing."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-A"
+    },
+    {
+      "type": "text",
+      "value": "1 <sub>(a)</sub> State laws of fluid friction for both laminar and turbulent flows on the basis of experimental observations."
+    },
+    {
+      "type": "text",
+      "value": "<sub>l(b)</sub> <sub>Explain</sub> <sub>major</sub> and minor losses for fluid flows through a pipe. Also, show that the head loss in <sub>pipes</sub> due to friction may be expressed in terms of velocity head for a given pipe geometry."
+    },
+    {
+      "type": "text",
+      "value": "<sub>l(c)</sub> A <sub>pipe</sub> of 50 mm diameter is 6 m long and the velocity of flow water in the pipe is 2..4 mis. 1 What loss of head and the corresponding power would be saved if the: central 2 m length of <sub>pipe</sub> was <sub>replaced</sub> by 75 mm diameter pipe, the change of section being sudden? Take f = 0.04 for the pipes of both diameters."
+    },
+    {
+      "type": "text",
+      "value": "<sub>2(a)</sub> Derive the <sub>expressions</sub> of wall shear stress for incompressible laminar flow between two co- 17 axial cylinders."
+    },
+    {
+      "type": "text",
+      "value": "<sub>2(b)</sub> Oil of viscosity 0.15 Pa.s and specific gravity 0. 90, flows through a horizontal pipe of 25 18 mm diameter. If the pressure drop per meter length of pipe is 15 kPa, determine-"
+    },
+    {
+      "type": "text",
+      "value": "(i) the rate of flow in m<sup>3</sup>/min,"
+    },
+    {
+      "type": "text",
+      "value": "(ii) the shear stress at the pipe wall,"
+    },
+    {
+      "type": "text",
+      "value": "(iii) the Reynold's number of the flow, and"
+    },
+    {
+      "type": "text",
+      "value": "(iv) the power required per 50 m length of pipe to maintain the flow."
+    },
+    {
+      "type": "text",
+      "value": "<sub>3(a)</sub> Prove 1J1at the maximum velocity of a laminar flow between lw) para I kl stationary flat plates 20 is equal to 1.5 times the average velocity of the flow."
+    },
+    {
+      "type": "text",
+      "value": "<sub>3(b)</sub> Two parallel plates kept at 0.15 m apart have laminar flow of oil between them with a 15 maximum velocity of 2.5 m/s. Calculate the discharge per unit width, the shear stress at the plates and the pressure difference between two points 25 m apart. Take $\\mu = 2 . 4 5 \\mathrm { N } . \\mathrm { s } / \\mathrm { m } ^ { 2 }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2022"
+}

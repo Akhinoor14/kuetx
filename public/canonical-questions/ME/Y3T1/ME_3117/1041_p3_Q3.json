@@ -1,0 +1,37 @@
+{
+  "id": "1041_p3_Q3",
+  "course": {
+    "code": "ME 3117",
+    "title": "Machine Design I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2017\\3rd_Year_1st_Term_2017_1041.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A compressor of size, $1 0 \\times 1 8$ in $_ { \\cdot , \\cdot 1 0 }$ studs, UNC; made of C1118, as rolled; gas pressure is 185.3 psig. The initial tension in the bolts, assumed to be equally loaded, is such that a cylinder pressure of 285.3 psig is required for the joint to be on the opening. Let $\\dot { \\mathrm { D e } } = 2 \\mathrm { D }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

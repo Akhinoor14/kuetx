@@ -1,0 +1,53 @@
+{
+  "id": "1054_p1_Q3(c)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2017\\4th_Year_1st_Term_2017_1054.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Describe the working principle of governing system for an <sub>Impulse</sub> turbine."
+    },
+    {
+      "type": "text",
+      "value": "<sup>4(a)</sup> Show that in a pelton wheel maximum efficiency is possible, if the jet <sub>velocity</sub> is 15 twice the bucket velocity."
+    },
+    {
+      "type": "text",
+      "value": "<sup>4(b)</sup> A pelton wheel develops 5520 kW under a head of 240 mat an overall <sub>efficiency</sub> of 80% when revolving at a speed of 200 rpm. Find the unit <sub>discharge,</sub> unit <sub>power</sub> and unit speed. If the head on the same turbine fall during the summer season to 150 m, find the discharge, power and speed for this head."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    },
+    {
+      "type": "text",
+      "value": "<sup>5(a)</sup> What are the conditions that required to form a doublet? Deduce the <sub>expressions</sub> <sub>18</sub> for stream function and velocity potential for a doublet."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2017"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "965_p5_Q5(a)",
+  "course": {
+    "code": "ME 2131",
+    "title": "Engineering Mechanics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\2nd_Year_1st_Term_2022_965.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "An automobile at rest is passed by a truck travelling at a constant speed of 54 km/h. The automobile starts and accelerates for 10s at a constant rate until it reaches a speed of 90 km/h. If the automobile then maintains a constant speed of 90 km/h, determine when and where will it overtake the truck, assuming that the automobile starts (i) just as the truck passes, (ii) 3s after the truck has passed it."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

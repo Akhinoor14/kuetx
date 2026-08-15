@@ -1,0 +1,51 @@
+{
+  "id": "1159_p5_Q1(b)",
+  "course": {
+    "code": "ME 2127",
+    "title": "Solid Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\2nd_Year_1st_Term_2021_1159.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "."
+    },
+    {
+      "type": "text",
+      "value": "P1 = 6 kN, P2 = 9 kN, P3 = 12 kN"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_08a651c260cb458d3a3edcd1618c676215dbc67d744ef023440bd82a0c481e64.jpg",
+      "_source_path": "images/08a651c260cb458d3a3edcd1618c676215dbc67d744ef023440bd82a0c481e64.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_81f4739f94dcddaf5f5b28e7f9b7e946c1eea2ad717c6783a852177baabea4fb.jpg",
+      "_source_path": "images/81f4739f94dcddaf5f5b28e7f9b7e946c1eea2ad717c6783a852177baabea4fb.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

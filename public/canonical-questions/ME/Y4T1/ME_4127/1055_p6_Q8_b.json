@@ -1,0 +1,54 @@
+{
+  "id": "1055_p6_Q8(b)",
+  "course": {
+    "code": "ME 4127",
+    "title": "Operations Management",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\4th_Year_1st_Term_2018_1055.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "A manufacturer of a toy requires the parts as shown in the accompanying product tree."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_2fa1b8d100c52ccead60fb20ffff146318b71d3d38c6d859d3734f961bee9b3d.jpg",
+      "_source_path": "images/2fa1b8d100c52ccead60fb20ffff146318b71d3d38c6d859d3734f961bee9b3d.jpg"
+    },
+    {
+      "type": "text",
+      "value": "The master production schedule for the next 8 weeks calls for 120 toys in week-3, 200 in week-5, 140 in week-6 and 390 in week-8. The lot size, lead times and initial inventory are as shown below:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Part Name</td><td rowspan=1 colspan=1>Lot Size</td><td rowspan=1 colspan=1>LeadTime(Week) 2</td><td rowspan=1 colspan=1>InitialInventory</td></tr><tr><td rowspan=1 colspan=1>Base plate</td><td rowspan=1 colspan=1>600</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>300</td></tr><tr><td rowspan=1 colspan=1>Connecting rod</td><td rowspan=1 colspan=1>1000</td><td rowspan=1 colspan=1>1.</td><td rowspan=1 colspan=1>500</td></tr><tr><td rowspan=1 colspan=1>Bolt</td><td rowspan=1 colspan=1>1500</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>800</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Determine the material requirements planning schedule for the parts."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2018"
+}

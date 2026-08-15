@@ -1,0 +1,42 @@
+{
+  "id": "965_p5_Q8(a)",
+  "course": {
+    "code": "ME 2131",
+    "title": "Engineering Mechanics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\2nd_Year_1st_Term_2022_965.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 30 lb slender rod AB is 5 ft long and is pivoted about a point O which is 1 ft from end B. The other end is pressed against a spring of constant k = 1800 lb/in until the spring is compressed 1 in. The rod is then in a horizontal position. If the rod is released from this position, determine its angular velocity and the reaction at the pivot O as the rod passes through a vertical position."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_db44525d7202a1f26b960af51e097077ce2f9b945f69f5a6850b8f89671e49e7.jpg",
+      "_source_path": "images/db44525d7202a1f26b960af51e097077ce2f9b945f69f5a6850b8f89671e49e7.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

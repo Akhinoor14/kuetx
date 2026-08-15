@@ -1,0 +1,49 @@
+{
+  "id": "1182_p2_Q5(a)",
+  "course": {
+    "code": "MSE 4211",
+    "title": "Professional Ethics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\4th_Year_2nd_Term_2021_1182.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "David Parkinson is a member of the Madison County Solid Waste Management Planning Committee (SWMPC). State law requires that one of the committee members be a solid waste expert, David's area of specialization. SWMPC is considering recommending a specific plot of land in a sparsely populated area of Madison County for a needed public landfill. However, next to this site is a large tract of land that a group of wealthy Madison County residents wish to purchase in order to develop a private golf course surrounded by luxurious homes. Although small, this group is highly organized and it has managed to gather support from other wealthy residents in the county, including several who wield considerable political power."
+    },
+    {
+      "type": "text",
+      "value": "Informally recognized as the Fairway Coalition, this influential group has bombarded the local media with expensive ads in its public campaign against the proposed landfill site, advocating instead a site that borders on one the least affiuent areas of Madison City. The basic argument is that a landfill at the site SWMPC is considering will destroy one of Madison County's most beautiful areas. Although as many as 8000 of Madison City's 100,000 residents live within walking distance of the site proposed by the Fairway Coalition, they lack the political organization and financial means to mount significant opposition."
+    },
+    {
+      "type": "text",
+      "value": "SWMPC is now meeting to discuss the respective merits of the two landfill sites. Members of the committee turn to David for his views on the controversy."
+    },
+    {
+      "type": "text",
+      "value": "How can David solve this problem? Analyze from the point of view of utilitarianism and respect for persons."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2021"
+}

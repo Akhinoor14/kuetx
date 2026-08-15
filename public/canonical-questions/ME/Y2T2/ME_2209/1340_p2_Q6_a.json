@@ -1,0 +1,46 @@
+{
+  "id": "1340_p2_Q6(a)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2024\\2nd_Year_2nd_Term_2024_1340.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A shaft composed of segments AC, CD, and DB is fastened to rigid supports and loaded as shown in the figure. For bronze, G = 35 GPa; for aluminum, $G = 2 8$ GPa, and for steel, G = 83 GPa. Determine the maximum shearing stress developed in each segment."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_857f4ca18915f1651dffb411a6e79e96c8aee8a78554a728a5be20f9c4bc717c.jpg",
+      "_source_path": "images/857f4ca18915f1651dffb411a6e79e96c8aee8a78554a728a5be20f9c4bc717c.jpg"
+    },
+    {
+      "type": "text",
+      "value": ") Select the lightest W shape that will act as a column8 m long with hinged ends and support an axial load of 270 kN with a factor of safety of 2.5. Assume that the proportional limit is200 MPa and E=200 GPa."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2024"
+}

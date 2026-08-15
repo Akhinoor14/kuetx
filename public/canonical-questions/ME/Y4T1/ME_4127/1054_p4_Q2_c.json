@@ -1,0 +1,45 @@
+{
+  "id": "1054_p4_Q2(c)",
+  "course": {
+    "code": "ME 4127",
+    "title": "Operations Management",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2017\\4th_Year_1st_Term_2017_1054.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "KUET authority wants to purchase a lathe machine and advertizes in a newspaper. Two res 1 or e proposa an ese are as o ows:compan bid fi th I d th f 11"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>Company X</td><td rowspan=1 colspan=1>Company Y</td></tr><tr><td rowspan=1 colspan=1>Initial cost</td><td rowspan=1 colspan=1>TK 100,000</td><td rowspan=1 colspan=1>TK 95,000</td></tr><tr><td rowspan=1 colspan=1>Operative costs year 1</td><td rowspan=1 colspan=1>TK 8,500</td><td rowspan=1 colspan=1>TK 9,000</td></tr><tr><td rowspan=1 colspan=1>Operative costs year 2</td><td rowspan=1 colspan=1>TK 7,500</td><td rowspan=1 colspan=1>TK 7,700</td></tr><tr><td rowspan=1 colspan=1>Salvage value</td><td rowspan=1 colspan=1>TK 20,000</td><td rowspan=1 colspan=1>TK 18,000</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "<sup>'</sup>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2017"
+}

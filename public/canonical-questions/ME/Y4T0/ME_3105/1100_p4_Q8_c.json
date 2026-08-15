@@ -1,0 +1,54 @@
+{
+  "id": "1100_p4_Q8(c)",
+  "course": {
+    "code": "ME 3105",
+    "title": "Heat Transfer I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\Backlog_2020_1100.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "For an air duct system as shown in figure: (i) Determine the dimensions of AB, BC and CD using equal friction method assuming the friction rate of 0.07 mm H2O/m length of the duct. (ii) Calculate the total and static pressures at point A. Assume free exit at each outlet. Losses are given by:"
+    },
+    {
+      "type": "text",
+      "value": "For elbow: 0.25 $\\mathrm { P } _ { \\mathrm { v } 2 }$"
+    },
+    {
+      "type": "text",
+      "value": "For branch: 0.2 $\\mathrm { P } _ { \\mathbf { v } 2 } +$ Elbow loss"
+    },
+    {
+      "type": "text",
+      "value": "For straight through section: 0.25 x Difference of velocity pressure."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_3cb388072fcb5afc52abfd6fb35d5d9208d19c19a8dc0ee117432deec1283b1e.jpg",
+      "_source_path": "images/3cb388072fcb5afc52abfd6fb35d5d9208d19c19a8dc0ee117432deec1283b1e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Special Backlog Examination, 2020"
+}

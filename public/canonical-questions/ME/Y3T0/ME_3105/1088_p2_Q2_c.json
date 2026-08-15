@@ -1,0 +1,37 @@
+{
+  "id": "1088_p2_Q2(c)",
+  "course": {
+    "code": "ME 3105",
+    "title": "Heat Transfer I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\3rd_Year_Backlog_2022_1088.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 0.6 m thick furnace wall $[ k = 2 \\mathrm { \\ W / ( m ^ { \\circ } C ) } ]$ is to be insulated with a material $[ k =$ 0.05 $\\mathrm { W } / ( \\mathrm { m } ^ { 0 } \\mathrm { C } ) ]$ . The temperature inside the furnace is $1 1 0 0 ^ { 0 } \\mathrm { C } .$ If the heat loss should not exceed 500 $\\mathrm { W } / \\mathrm { m } ^ { 2 }$ for the outer surface temperature of $6 0 ^ { 0 } \\mathrm { C } ,$ what thickness of insulation is required?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year Backlog Examination, 2022"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "1092_p8_Q5(b)",
+  "course": {
+    "code": "ME 1105",
+    "title": "Thermal Engineering",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\4th_Year_Backlog_2018_1092.pdf",
+    "source_page": null,
+    "paper_index": 8
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A rectangular aluminum bar 6 cm by 3 cm $( \\mathrm { k } = 2 0 0 ~ \\mathrm { W / c m { \\cdot } ^ { \\circ } C , ~ C _ { n } = 8 9 0 ~ \\mathrm { J / k g \\cdot } ^ { \\circ } C } .$ $\\scriptstyle \\rho = 2 7 0 0 \\mathrm { k g } / \\mathrm { m } ^ { 3 }$ and $\\alpha { = } 8 . 4 { \\times } 1 0 ^ { - 5 } ~ \\mathrm { ~ m } ^ { 2 } / \\mathrm { s } )$ is initially at a uniform temperature $\\mathrm { T } _ { \\mathrm { i } } = 1 7 5 ^ { \\circ } \\mathrm { C } .$ Suddenly the surfaces are subjected to convective cooling with a hcat transfer coefficient $\\mathrm { l n } = 2 5 0 ~ \\mathrm { W / m ^ { 2 } { \\cdot } ^ { \\circ } C }$ in an ambient at $T _ { \\infty } = 2 5 ^ { \\circ } C$ as shown in figure. Determine the center temperature $\\mathrm { T } _ { \\mathfrak { o } }$ of the bar t = 1 minute after the start of the cooling."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_01175b50aa0246fe37eb6d8722933d35edf0be962764220e17b036fc28f4f09b.jpg",
+      "_source_path": "images/01175b50aa0246fe37eb6d8722933d35edf0be962764220e17b036fc28f4f09b.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Backlog Examination, 2018"
+}

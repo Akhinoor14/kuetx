@@ -1,0 +1,37 @@
+{
+  "id": "1048_Q5(d)",
+  "course": {
+    "code": "ME 3223",
+    "title": "Power Plant Engineering",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2019\\3rd_Year_2nd_Term_2019_1048.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following data pertain to a hydro-electric power plant: 14   \nAvailable head= 150 m, catchment area= 2200 sq.km, annual average rainfall =   \n150 cm, turbine efficiency = 85%, generator efficiency =90%, percolation and   \nevaporation losses =16%. Determine the power developed and suggest the type of   \nturbine to be used if the runner speed is kept below 240 rpm.   \n6("
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2019"
+}

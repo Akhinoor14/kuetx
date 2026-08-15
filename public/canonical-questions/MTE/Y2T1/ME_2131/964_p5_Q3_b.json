@@ -1,0 +1,42 @@
+{
+  "id": "964_p5_Q3(b)",
+  "course": {
+    "code": "ME 2131",
+    "title": "Engineering Mechanics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\2nd_Year_1st_Term_2021_964.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Two $1 0 ^ { \\circ }$ wedges of negligible weight are used to move and position the 163 kg block. 18 Knowing that the coefficient of static friction at all surfaces of contact is 0.25, determine the smallest force P that-should be applied as shown to one of the wedges."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_3bdfe15de53a71de583df07094adc8cfbb9af48002127cb15264740366eaf8bc.jpg",
+      "_source_path": "images/3bdfe15de53a71de583df07094adc8cfbb9af48002127cb15264740366eaf8bc.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

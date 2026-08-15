@@ -1,0 +1,51 @@
+{
+  "id": "959_p1_Q5(c)",
+  "course": {
+    "code": "PH 1231",
+    "title": "Physics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\1st_Year_2nd_Term_2021_959.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The force and displacement of a simple dynamic system undergoing sinusoidal excitation is given by the following equations"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nF = 1 0 \\ : S i n \\ : ( \\frac { \\vec { u } t } { 1 0 } ) \\ : N\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\ny = 0 . 1 0 5 i n ( \\frac { \\vec { u } t } { 1 0 } - \\frac { \\vec { u } } { 3 } ) m\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Calculate the work done by the excitation force in i) 20s and ii) 120s."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

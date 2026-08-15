@@ -1,0 +1,49 @@
+{
+  "id": "1165_p5_Q4(b)",
+  "course": {
+    "code": "MATH 2227",
+    "title": "Statistics, Fourier Series and Numerical Analysis",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\2nd_Year_2nd_Term_2021_1165.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "The frequency distribution are given below:"
+    },
+    {
+      "type": "text",
+      "value": "(17)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Class</td><td rowspan=1 colspan=1>40-50</td><td rowspan=1 colspan=1>50-60</td><td rowspan=1 colspan=1>60-70</td><td rowspan=1 colspan=1>70-80</td></tr><tr><td rowspan=1 colspan=1>Frequency</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>15</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>5</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Calculate the first four moments about (origin) $\\cdot _ { 0 } \\cdot$ from the above table. Also find skewness and comment on the result."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

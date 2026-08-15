@@ -1,0 +1,77 @@
+{
+  "id": "1134_Q8(d)",
+  "course": {
+    "code": "LE 4207",
+    "title": "Dyeing and Finishing II",
+    "department": "Department of Leather Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2019\\4th_Year_2nd_Term_2019_1134.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write down the advantages and disadvantages of entering a family business. 07"
+    },
+    {
+      "type": "text",
+      "value": "Department of Leather Engineering Khulna University of Engineering & Technology B. Sc. Engineering 4lh Year 2°ct Term Examination-2019"
+    },
+    {
+      "type": "text",
+      "value": "Production & Quality Control"
+    },
+    {
+      "type": "text",
+      "value": "LE 4217"
+    },
+    {
+      "type": "text",
+      "value": "Time: 3 Hours."
+    },
+    {
+      "type": "text",
+      "value": "Full Marks: 210"
+    },
+    {
+      "type": "text",
+      "value": "N.B. i) Answer any THREE questions from each section in separate scripts."
+    },
+    {
+      "type": "text",
+      "value": "ii) Figures in the right margin indicate full marks."
+    },
+    {
+      "type": "text",
+      "value": "iii) Assume reasonable data if any missing."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-A"
+    },
+    {
+      "type": "text",
+      "value": "l(a) Draw the schematic view of producrion system. Write short notes on production elements. IO"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2019"
+}

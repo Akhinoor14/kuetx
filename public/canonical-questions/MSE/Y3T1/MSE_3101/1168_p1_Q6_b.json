@@ -1,0 +1,50 @@
+{
+  "id": "1168_p1_Q6(b)",
+  "course": {
+    "code": "MSE 3101",
+    "title": "Transport Phenomena in Materials",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2020\\3rd_Year_1st_Term_2020_1168.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "."
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d89b21ff62e18e6e3b3133d5812e89e0e638e9d19b5f8792c068939d2c82d828.jpg",
+      "_source_path": "images/d89b21ff62e18e6e3b3133d5812e89e0e638e9d19b5f8792c068939d2c82d828.jpg"
+    },
+    {
+      "type": "text",
+      "value": "What is the intensity associated with emission in each of the three directions? What are the solid angles subtended by the three surfaces when viewed from $A _ { 1 } .$ What is the rate of which radiation emitted by $A _ { 1 }$ is intercepted by the three surfaces?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2020"
+}

@@ -1,0 +1,65 @@
+{
+  "id": "1075_p3_Q4(a)",
+  "course": {
+    "code": "HUM 1105",
+    "title": "English",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\1st_Year_Backlog_2020_1075.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make sentences using the following Modals as directed."
+    },
+    {
+      "type": "text",
+      "value": "I. Be to (To express command)"
+    },
+    {
+      "type": "text",
+      "value": "II. Be to (To express arrangement)"
+    },
+    {
+      "type": "text",
+      "value": "111. Be going to (To express plan)"
+    },
+    {
+      "type": "text",
+      "value": "IV. Be going to (To express strong possibility)"
+    },
+    {
+      "type": "text",
+      "value": "v. Should (To express duty in the past)"
+    },
+    {
+      "type": "text",
+      "value": "VI. Ought to (To express duty)"
+    },
+    {
+      "type": "text",
+      "value": "Vil. Need (To express unnecessary action)."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2020"
+}

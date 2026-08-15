@@ -1,0 +1,37 @@
+{
+  "id": "1044_p5_Q3(b)",
+  "course": {
+    "code": "ME 3119",
+    "title": "Statistics & Quality Control",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\3rd_Year_1st_Term_2021_1044.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "In an industrial process the diameter of a ball bearing is an important component 15 part. The buyer sets specification on the diameter to be $3 . 0 \\pm 0 . 0 1$ cm. The implication is that in the process the diameter of a ball bearing has a normal distribution with mean $\\mu = 3 . 0$ and standard deviation $\\sigma = 0 . 0 0 5$ . On average, how many manufactured ball bearings will be scrapped?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

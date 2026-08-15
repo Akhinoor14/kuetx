@@ -1,0 +1,101 @@
+{
+  "id": "1157_p4_Q8(c)",
+  "course": {
+    "code": "MSE 2103",
+    "title": "Thermodynamics of Materials",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2019\\2nd_Year_1st_Term_2019_1157.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Deduce a relation showing the dependence of equilibrium constant for any chemical reaction (10) on temperature."
+    },
+    {
+      "type": "text",
+      "value": "Table 1: Thermodynamics State Functions Expressed in Terms of the Independent variables Temperature and Pressure"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nV = V ( T , P )\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { d } V = V \\alpha \\mathrm { d } T - V \\beta \\mathrm { d } P\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nS = S ( T , P )\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { d } S = \\frac { C _ { P } } { T } \\mathrm { d } T - V \\alpha \\mathrm { d } P\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nU = U ( T , P )\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { d } U = ( C _ { P } - P V \\alpha ) \\mathrm { d } T + V ( p \\beta - T \\alpha ) \\mathrm { d } P\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nH = H ( T , P )\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { d } H = C _ { p } \\mathrm { d } T + V ( 1 - T \\alpha ) \\mathrm { d } P\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nF = F ( T , P )\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { d } F = - ( S + P V \\alpha ) \\mathrm { d } T + P V \\beta \\mathrm { d } P\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nG \\doteq G ( T , P )\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { d } G { \\overset { \\cdot } { = } } - S \\mathrm { d } T + V \\mathrm { d } P\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "1036_p2_Q2(a)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2019\\2nd_Year_2nd_Term_2019_1036.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 12 kg block B rests as shown on the upper surface of 30 kg wedge A. Neglecting friction, determine- (i) the acceleration of A, (ii) the acceleration of B relative to A, immediately after the system is released from rest."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d78c0b1681d223980aeffe475cf7e3b38eab7b04ed7cdda54c65f270df452b5a.jpg",
+      "_source_path": "images/d78c0b1681d223980aeffe475cf7e3b38eab7b04ed7cdda54c65f270df452b5a.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

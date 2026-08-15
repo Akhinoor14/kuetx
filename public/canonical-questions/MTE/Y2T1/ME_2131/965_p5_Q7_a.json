@@ -1,0 +1,42 @@
+{
+  "id": "965_p5_Q7(a)",
+  "course": {
+    "code": "ME 2131",
+    "title": "Engineering Mechanics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\2nd_Year_1st_Term_2022_965.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "A pulley and two loads are connected by inextensible cords as shown. Load A has a constant acceleration of 300 mm/s²and an initial velocity of 240 mm/s, both directed upward. $/ \\mathsf { s } ^ { 2 }$ Determine (i) the number of revolutions executed by the pulley in 3s, (ii) the velocity and position of load B after 3s, and (iii) the acceleration of point D on the rim of the pulley at t=0."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_3524e35eb8206335ddb8d4d132c78e01ba722caffe8e59d8b25022090529e11e.jpg",
+      "_source_path": "images/3524e35eb8206335ddb8d4d132c78e01ba722caffe8e59d8b25022090529e11e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

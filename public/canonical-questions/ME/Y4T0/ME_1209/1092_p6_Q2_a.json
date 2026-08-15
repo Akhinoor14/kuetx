@@ -1,0 +1,42 @@
+{
+  "id": "1092_p6_Q2(a)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\4th_Year_Backlog_2018_1092.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The rotation of rod OA about O is defined by the relation $\\theta = t ^ { 3 } – 5 t ,$ where θ is expressed in radians and t inseconds. Collar B slides along the rod is such a way that its distance from O is $r = 2 0 ~ t ^ { 3 } - 5 5 ~ t ^ { 2 } ,$ where r is expressed in meters and t in seconds. When t = 1.5 sec; determine- (i) the velocity of the collar, (ii) the total acceleration of the collar, and (iii) the acceleration of the collar relative to the rod."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0a2c68aee6b6bebaaae84f4c370fd4608eec86d8029780f7de439cf4c15b4628.jpg",
+      "_source_path": "images/0a2c68aee6b6bebaaae84f4c370fd4608eec86d8029780f7de439cf4c15b4628.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Backlog Examination, 2018"
+}

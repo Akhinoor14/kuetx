@@ -1,0 +1,50 @@
+{
+  "id": "1030_p2_Q1(a)",
+  "course": {
+    "code": "ME 2113",
+    "title": "Fluid Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\2nd_Year_1st_Term_2021_1030.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Show graphically the characteristics of various fluids and explain the behavior of Thixotropic fluid."
+    },
+    {
+      "type": "text",
+      "value": "l(b) What is surface tension? What is its cause? Why is the surface tension also called surface energy?"
+    },
+    {
+      "type": "text",
+      "value": "l(c) A frustum-shaped body is rotating at a constant angular speed of 200 rad/sin a container filled with SAE 1 OW oil at $2 0 ^ { \\circ } \\mathrm { C } \\left( \\mu = 0 . 1 \\mathrm { P a } . s \\right)$ , as shown in the figure. If the thickness of the oil film on all sides is 1.2 mm, determine the power required to maintain this motion. Also, determine the reduction in the required power input when the oil temperature rises to $8 0 ^ { \\circ } \\mathrm { C } \\left( \\mu = 0 . 0 0 7 8 \\mathrm { P a } . s \\right)$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_3fb20a766c024cc790041e1ff1b257a600cca8c9a0591264416a95921dd9e423.jpg",
+      "_source_path": "images/3fb20a766c024cc790041e1ff1b257a600cca8c9a0591264416a95921dd9e423.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

@@ -1,0 +1,51 @@
+{
+  "id": "1075_p1_Q2(a)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\1st_Year_Backlog_2020_1075.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "A IO m boom has a fixed end A as shown in figure, and is subjected to its I 00 kg weight and to the 140 N force which makes an angle 150°, 74° and 116° with the x, y and z axis respectively. Find out the force and couple at A equivalent to the given force system."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_98ab0734eeb5913df9cabc449bdf55d8ae497e06f10e5cbfcc00f58b29fb8233.jpg",
+      "_source_path": "images/98ab0734eeb5913df9cabc449bdf55d8ae497e06f10e5cbfcc00f58b29fb8233.jpg"
+    },
+    {
+      "type": "text",
+      "value": "In addition to the 15.6 kN force shown in figure, a force Q is applied at D in a direction parallel to the y-axis. Determine the required magnitude and sense of Q if the tension in cable CD is zero."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_62cb57f0c6baab7a5dc538969730589bb4c6d4a05c913a5c9348ee0344311659.jpg",
+      "_source_path": "images/62cb57f0c6baab7a5dc538969730589bb4c6d4a05c913a5c9348ee0344311659.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2020"
+}

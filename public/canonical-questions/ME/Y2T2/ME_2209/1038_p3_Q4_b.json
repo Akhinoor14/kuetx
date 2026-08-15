@@ -1,0 +1,42 @@
+{
+  "id": "1038_p3_Q4(b)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\2nd_Year_2nd_Term_2021_1038.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "The T section shown in figure is the cross-section of a beam formed by joining two rectangular pieces of wood together. The beam is subjected to a maximum shearing force of 60 kN. Show that the NA is 34 mm from the top and the $I _ { N A } = 1 0 . 5 7 \\times 1 0 ^ { 6 }$ mm\". Using these values, determine the shearing stress (i) at the neutral axis and (ii) at the junction between the two pieces of wood."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ab5d4a1201d0e8d14d6a4592b62847d6d073c6ee1b21d5cf412140b3f34c0494.jpg",
+      "_source_path": "images/ab5d4a1201d0e8d14d6a4592b62847d6d073c6ee1b21d5cf412140b3f34c0494.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "1035_p2_Q1(a)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\2nd_Year_2nd_Term_2018_1035.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Compute the shearing stress in the pin at B for the member supported as shown in figure. The pin diameter is 20 mm"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_748c1f43dfddda06f522119b68f06f8417b6032ced020a10f8c1acc9ac66bc63.jpg",
+      "_source_path": "images/748c1f43dfddda06f522119b68f06f8417b6032ced020a10f8c1acc9ac66bc63.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

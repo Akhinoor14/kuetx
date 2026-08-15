@@ -1,0 +1,61 @@
+{
+  "id": "966_p3_Q5(a)",
+  "course": {
+    "code": "HUM 2131",
+    "title": "Engineering Economics and Accounting",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2023\\2nd_Year_1st_Term_2023_966.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Jon Snow is confused about how accounting information flows through the accounting system. He believes the flow of information is as follows:"
+    },
+    {
+      "type": "text",
+      "value": "i. Debit and credit posted to ledger."
+    },
+    {
+      "type": "text",
+      "value": "ii. Business transactions occur."
+    },
+    {
+      "type": "text",
+      "value": "iii. Information entered in the journal."
+    },
+    {
+      "type": "text",
+      "value": "iv.Financial statements are prepared."
+    },
+    {
+      "type": "text",
+      "value": "v. Trial balance is prepared."
+    },
+    {
+      "type": "text",
+      "value": "Is Jon correct? If not, indicate to Jon the proper flow of the information."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

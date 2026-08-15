@@ -1,0 +1,46 @@
+{
+  "id": "963_p4_Q3(a)",
+  "course": {
+    "code": "ME 2131",
+    "title": "Engineering Mechanics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2020\\2nd_Year_1st_Term_2020_963.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine by direct integration the mass moment of inertia and the radius of gyration with respect to X-axis of the paraboloid shown in the figure below, assuming that it has"
+    },
+    {
+      "type": "text",
+      "value": "a uniform density and a mass m."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e6750a087d7998c67edc78f8e4aaf36fac1d448351c497ba8c3e82278c96ecce.jpg",
+      "_source_path": "images/e6750a087d7998c67edc78f8e4aaf36fac1d448351c497ba8c3e82278c96ecce.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2020"
+}

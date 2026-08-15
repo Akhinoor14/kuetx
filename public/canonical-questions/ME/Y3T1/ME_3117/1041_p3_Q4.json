@@ -1,0 +1,41 @@
+{
+  "id": "1041_p3_Q4",
+  "course": {
+    "code": "ME 3117",
+    "title": "Machine Design I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2017\\3rd_Year_1st_Term_2017_1041.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A coil spring is to be used for the front spring of an automobile. The spring is to have a rate of 4 ${ \\mathfrak { l b } } / { \\mathrm { i n . } } ,$ an inside diameter of $4 ^ { 3 } / \\textcircled { 6 4 }$ in., and a free length of 14/ in., with squared and ground ends. The material is to be oil tempered chrome-vanadium steel. Decide upon the diameter of wire and the number of free coils for a design load on $\\mathrm { F } = 2 5 0 0$ lb. Be sure ‘solid stress’ is all right. How much is the pitch angle?"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

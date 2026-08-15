@@ -1,0 +1,42 @@
+{
+  "id": "1088_p2_Q4(a)",
+  "course": {
+    "code": "ME 3105",
+    "title": "Heat Transfer I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\3rd_Year_Backlog_2022_1088.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Derive an expression for the nodal equation of node $( m , n )$ for the insulated comer 17 under steady state condition."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_fb352e675c33ccaee21fd98b37ffb0d9f48030c3ca78917b3b359e76da631344.jpg",
+      "_source_path": "images/fb352e675c33ccaee21fd98b37ffb0d9f48030c3ca78917b3b359e76da631344.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year Backlog Examination, 2022"
+}

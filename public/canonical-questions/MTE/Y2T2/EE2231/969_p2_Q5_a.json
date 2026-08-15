@@ -1,0 +1,42 @@
+{
+  "id": "969_p2_Q5(a)",
+  "course": {
+    "code": "EE2231",
+    "title": "Signals and Linear Systems",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\2nd_Year_2nd_Term_2021_969.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define Fourier series and Fourier transform mathematically. Determine the Fourier series expansion and frequency spectrum of the following periodic waveform."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e5447752ba2be61be461e658897ff6801371d6f27f907383ad3ca97bd0af4b2f.jpg",
+      "_source_path": "images/e5447752ba2be61be461e658897ff6801371d6f27f907383ad3ca97bd0af4b2f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

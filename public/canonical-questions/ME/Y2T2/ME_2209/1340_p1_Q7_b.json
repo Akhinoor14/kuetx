@@ -1,0 +1,42 @@
+{
+  "id": "1340_p1_Q7(b)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2024\\2nd_Year_2nd_Term_2024_1340.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The disk of mass m and radius r rolls without slipping on the circular p termine the normal force which the path exists on the disk and disk's angular accereration if at the instant shown the disk has an angular velocity ω."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e94949f46ca5269b6a1ab5b55ab2bffe8612b1fc4c60d93cea6fd79aac8fba34.jpg",
+      "_source_path": "images/e94949f46ca5269b6a1ab5b55ab2bffe8612b1fc4c60d93cea6fd79aac8fba34.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2024"
+}

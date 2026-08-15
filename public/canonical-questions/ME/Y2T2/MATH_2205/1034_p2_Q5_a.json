@@ -1,0 +1,37 @@
+{
+  "id": "1034_p2_Q5(a)",
+  "course": {
+    "code": "MATH 2205",
+    "title": "Mathematics IV",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2017\\2nd_Year_2nd_Term_2017_1034.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Prove that $P _ { n } \\left( x \\right) = \\frac { 1 } { 2 ^ { n } n ! } \\frac { d ^ { n } } { d x ^ { n } } \\left( x ^ { 2 } - 1 \\right) ^ { n }$ . Also find the value of $\\dot { P } _ { 3 } \\left( x \\right)$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

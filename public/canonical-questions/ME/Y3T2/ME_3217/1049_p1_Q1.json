@@ -1,0 +1,37 @@
+{
+  "id": "1049_p1_Q1",
+  "course": {
+    "code": "ME 3217",
+    "title": "Machine Design II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\3rd_Year_2nd_Term_2021_1049.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A countershaft is supported by two tapered roller bearings using an indirect mounting. The radial bearing loads are 2240 N for the left-hand bearing and 4380 N for the right hand bearing. An axial load of 800 N is carried by the left bearing. The shaft rotates at 400 rev/min and is to have a desired life of 40 kh. Use an application factor of 1.4 and a combined reliability goal of 0.90. Using an initial $K = 1 . 5 ,$ find the required radial rating for each bearing. Select the bearings using suitable figure."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2021"
+}

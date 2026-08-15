@@ -1,0 +1,41 @@
+{
+  "id": "1340_p3_Q8(c)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2024\\2nd_Year_2nd_Term_2024_1340.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Air enters a 27 m long 50 mm diameter adiabatic duct at $v _ { 1 } = 9 0 \\mathrm { m } / s , T _ { 1 } = 4 5 0 \\mathrm { f }$ and $P _ { 1 } = 2 0 0 ~ \\mathrm { k P a }$ . The average friction factor of the duct is estimated to be 0.025. Determine the Mach number at the duct exit and flowrate of the air. Also ,find the additional duct length, ∆L must be added downstream of the existing duct so that the flow reaches sonic conditions at the new exit."
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY Department of Mechanical Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2024"
+}

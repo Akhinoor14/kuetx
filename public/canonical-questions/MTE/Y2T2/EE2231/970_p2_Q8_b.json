@@ -1,0 +1,50 @@
+{
+  "id": "970_p2_Q8(b)",
+  "course": {
+    "code": "EE2231",
+    "title": "Signals and Linear Systems",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\2nd_Year_2nd_Term_2022_970.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "A Laplace transform of a function is given below:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nF ( s ) = A \\frac { ( s + \\alpha ) s i n \\theta + \\beta c o s \\theta } { ( s + \\alpha ) ^ { 2 } + \\beta ^ { 2 } }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Find the values of f(t) and its slope at $t = 0 +$"
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY Department of Mechatronics Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2022"
+}

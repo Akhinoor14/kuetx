@@ -1,0 +1,49 @@
+{
+  "id": "1338_p4_Q4(c)",
+  "course": {
+    "code": "ME 1105",
+    "title": "Thermal Engineering",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2025,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2025\\1st_Year_1st_Term_2025_1338.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "I ne Iolowing aata were optained from a boiler trial: Generation of steam = 4500 kg/hr, coal used = 570 kg/hr, calorific value of coal = 32000 kJ/kg, steam pressure = 15 bar, temperature of feed water entering the economizer = 25°C, temperature of water entering the boiler = 120°C, dryness fraction of steam entering the superheater = 0.93, temperature of steam from the superheater = 312°C. Determine"
+    },
+    {
+      "type": "text",
+      "value": "i) Equivalent evaporation;"
+    },
+    {
+      "type": "text",
+      "value": "Overall efficiency of the plant;"
+    },
+    {
+      "type": "text",
+      "value": "iii) Percentage of the available heat utilized in the boiler, economizer and superheater, respectively."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2025"
+}

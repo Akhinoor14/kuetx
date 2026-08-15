@@ -1,0 +1,45 @@
+{
+  "id": "954_p5_Q3(c)",
+  "course": {
+    "code": "MTE 1101",
+    "title": "Mechatronic Systems",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\1st_Year_1st_Term_2021_954.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The output of a LVDT is connected to a 4V voltmeter through an amplifier whose amplification factor is 500. An output of 1.8 mV appears across the terminals of LVDT when the core moves through a distance 0.6 mm. If the millivoltmeter scale has 100 divisions and the scale can be read to / of a division, calculate:"
+    },
+    {
+      "type": "text",
+      "value": "(i) The sensitivity of LVDT."
+    },
+    {
+      "type": "text",
+      "value": "(ii) The resolution of the instrument in mm."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2021"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "1157_p3_Q6(b)",
+  "course": {
+    "code": "ME 2127",
+    "title": "Solid Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2019\\2nd_Year_1st_Term_2019_1157.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "A cylinder weighs 400 kg and is lifted by a pair of tongs as shown in Figure-6(b). Determine (17) the forces exerted at D and C on the tong BCD."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b38edc010446b54c96690de983955623116bc3ee934316d71bb76f5d5858c33a.jpg",
+      "_source_path": "images/b38edc010446b54c96690de983955623116bc3ee934316d71bb76f5d5858c33a.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Q"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

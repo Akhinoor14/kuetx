@@ -1,0 +1,55 @@
+{
+  "id": "1036_p2_Q2",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2019\\2nd_Year_2nd_Term_2019_1036.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "5 kg collar is attached to a spring and slides without friction in a vertical frame along the curved rod ABC. The spring is undeformed when the collar is at C and its constant is 600 Nim. If the collar is released at A with no initial velocity, determine its velocity (i) as it passes through B, and (ii) as it reaches at C."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_59f10055e41c358d258759f045831625b1fca4980c64800ac585a41e38c387b1.jpg",
+      "_source_path": "images/59f10055e41c358d258759f045831625b1fca4980c64800ac585a41e38c387b1.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Distinguish between impulse and impact. For direct central impact show that in case of perfectly elastic impact the energy of the system is conserved."
+    },
+    {
+      "type": "text",
+      "value": "The magnitude and direction of the velocities of two identical frictionless balls before they strike each other are as shown. Assuming $e = 0 . 9 0 ,$ determine the magnitude and direction of the velocity of each ball after the impact."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_c3e4c252513c335af40f80bbbcdebf140464da657608a49d1c8a531abbe0915f.jpg",
+      "_source_path": "images/c3e4c252513c335af40f80bbbcdebf140464da657608a49d1c8a531abbe0915f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

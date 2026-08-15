@@ -1,0 +1,42 @@
+{
+  "id": "968_p4_Q3(b)",
+  "course": {
+    "code": "MTE 2201",
+    "title": "Control Systems",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2020\\2nd_Year_2nd_Term_2020_968.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the poles and zeros of the system:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\frac { \\mathrm { d } ^ { 2 } \\mathrm { y } } { \\mathrm { d t } ^ { 2 } } } + { \\frac { 5 \\mathrm { d } \\mathrm { y } } { \\mathrm { d t } } } + 6 \\mathrm { y } = { \\frac { 5 \\mathrm { d u } } { \\mathrm { d t } } }\\tag{07}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2020"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "954_p5_Q5(b)",
+  "course": {
+    "code": "MTE 1101",
+    "title": "Mechatronic Systems",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\1st_Year_1st_Term_2021_954.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Why are linearized system models important? The rate of flow of liquid q through an orifice is given by"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nq = C _ { d } A \\sqrt { \\frac { 2 ( P _ { 1 } - P _ { 2 } ) } { \\rho } }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "where, $C _ { d } , A , \\rho$ and $( P _ { I } - P _ { 2 } )$ are discharge coefficient, cross-sectional area, fluid density and pressure difference respectively. Now linearize the above system equation for an operating point $\\mathrm { P } = \\mathrm { P } _ { 0 1 } - \\mathrm { P } _ { 0 2 }$ when all possible variables can change."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2021"
+}

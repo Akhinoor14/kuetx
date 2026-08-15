@@ -1,0 +1,42 @@
+{
+  "id": "1154_p5_Q7(a)",
+  "course": {
+    "code": "ME 1227",
+    "title": "Engineering Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2023\\1st_Year_2nd_Term_2023_1154.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "Small wheels have been attached to the ends of rod AB and roll freely along the (17) surfaces shown. Knowing that wheel A moves to the left with a constant velocity of 1.5 mis, determine - (i) angular velocity of the rod, (ii) the velocity of end B of the rod."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_9dd747dd7692f0897c0fdfb9115334f0d3d0dcaade46c3d09effb8452ae99e52.jpg",
+      "_source_path": "images/9dd747dd7692f0897c0fdfb9115334f0d3d0dcaade46c3d09effb8452ae99e52.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2023"
+}

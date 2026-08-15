@@ -1,0 +1,42 @@
+{
+  "id": "1148_p1_Q1(a)",
+  "course": {
+    "code": "MATH 1127",
+    "title": "Differential and Integral Calculus",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2022\\1st_Year_1st_Term_2022_1148.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define continuous function at a point. Discuss the continuity and differentiability at the point $\\scriptstyle x = 0$ of the function,"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array}{c} f ( x ) = { \\left\\{ x ^ { 2 } c o s \\left( { \\frac { 1 } { x } } \\right) ; \\ \\right.} & { x \\neq 0 } \\\\ { 0 ; \\ } & { x = 0 } \\end{array}   .\\tag{14}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2022"
+}

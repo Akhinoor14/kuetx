@@ -1,0 +1,47 @@
+{
+  "id": "978_p2_Q2(a)",
+  "course": {
+    "code": "ME 3231",
+    "title": "Solid Mechanics and Machine Design",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\3rd_Year_2nd_Term_2021_978.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A shaft composed of segment AC, CD, and DB is fastened to rigid supports and loaded as shown in the following figure. For bronze, G = 35 GPa; Aluminum, G = 28 GPa, and for steel, G = 83 GPa. Determine the maximum shearing stress developed in each segment."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { T _ { { C } } = 3 0 0 \\ N m \\qquad \\mathrm { T _ { { D } } = 7 0 0 \\ N m } }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d51c15ed8cee9297e284f6faff62a22e04802c6b179fdf04758381a88edeff51.jpg",
+      "_source_path": "images/d51c15ed8cee9297e284f6faff62a22e04802c6b179fdf04758381a88edeff51.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2021"
+}

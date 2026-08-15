@@ -1,0 +1,42 @@
+{
+  "id": "1170_p3_Q2(a)",
+  "course": {
+    "code": "MSE 3105",
+    "title": "Welding and Materials Joining Processes",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2022\\3rd_Year_1st_Term_2022_1170.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ", draw the diagram of desired welds."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ac39739d7d404a57a71a596b5c457a2e14e52e5fa0cde8726fb7db650e1f10a5.jpg",
+      "_source_path": "images/ac39739d7d404a57a71a596b5c457a2e14e52e5fa0cde8726fb7db650e1f10a5.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

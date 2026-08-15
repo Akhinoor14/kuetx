@@ -1,0 +1,42 @@
+{
+  "id": "979_p5_Q4(a)",
+  "course": {
+    "code": "MTE 3205",
+    "title": "Robotics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\3rd_Year_2nd_Term_2022_979.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A two-link manipulator with rotational joints is shown in the following figure. Derive the velocity equation of the tip of the arm as a function of joint rates. Give the answer in two forms- in terms of frame {C} and also in terms of frame {A}. Find the Jacobians in both cases and mention the points of singularity."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b96e692f4dab1cd29d535a3ecb48a9d73e0c0928d58d2e4d87bdae1cb8b6af70.jpg",
+      "_source_path": "images/b96e692f4dab1cd29d535a3ecb48a9d73e0c0928d58d2e4d87bdae1cb8b6af70.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

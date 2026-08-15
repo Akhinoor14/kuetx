@@ -1,0 +1,42 @@
+{
+  "id": "1080_p3_Q2(a)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\2nd_Year_Backlog_2018_1080.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The rigid platform as shown in figure has negligible mass and rests on two steel bars, each 250.00 mm long. The center bar is aluminum, and 249.90 mm long. Compute the stress in the aluminum bar after the center load P = 400 kN has been applied. For each stcel bar, the area is 1200 mm² and E = 200 GPa. For the aluminum bar, the area is 2400 mm² and E = 70 GPa."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_bd885fc07302fc09e9b2d0a6a78bff594744750f93d74da1e987182be4c5b1ca.jpg",
+      "_source_path": "images/bd885fc07302fc09e9b2d0a6a78bff594744750f93d74da1e987182be4c5b1ca.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2018"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "968_p4_Q6(b)",
+  "course": {
+    "code": "MTE 2201",
+    "title": "Control Systems",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2020\\2nd_Year_2nd_Term_2020_968.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The 14 performance criteria are settling time 2 sec. What is the response to the unit-step reference input?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_912da85f9a133c5055ce920101981d267770c7659c7244e7e03f07930ca0c79b.jpg",
+      "_source_path": "images/912da85f9a133c5055ce920101981d267770c7659c7244e7e03f07930ca0c79b.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2020"
+}

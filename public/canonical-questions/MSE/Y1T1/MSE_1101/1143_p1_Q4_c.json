@@ -1,0 +1,45 @@
+{
+  "id": "1143_p1_Q4(c)",
+  "course": {
+    "code": "MSE 1101",
+    "title": "Introduction to Materials Science and Engineering",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2017\\1st_Year_1st_Term_2017_1143.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "A copper wire 15 m long is cooled from $4 0 { } ^ { \\circ } \\mathrm { C } \\mathrm { \\ t } 0 \\mathrm { \\ } { \\cdot } 9 { } ^ { \\circ } \\mathrm { C } ,$ how much change in length (8) will it experience? [The coefficient of thermal expansion is $1 6 . 5 { \\times } 1 0 ^ { - 6 } ( ^ { \\circ } { \\bf C } ) ^ { - 1 } ]$"
+    },
+    {
+      "type": "text",
+      "value": "Section B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2017"
+}

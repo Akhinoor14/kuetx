@@ -1,0 +1,60 @@
+{
+  "id": "1082_p4_Q2(b)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\2nd_Year_Backlog_2021_1082.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 6,
+  "content": [
+    {
+      "type": "text",
+      "value": "A rigid horizontal bar of negligible mass is connected to two rods as shown in figure. If the system is initially stress free, calculate the temperature change that will cause a tensile stress of 100 MPa in the brass rod. Assume that both rods are subjected to the change in temperature."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_4d272656370cdccea37fbc60a8a7f021134a64a3ef87b7642bf3aea1672c60dd.jpg",
+      "_source_path": "images/4d272656370cdccea37fbc60a8a7f021134a64a3ef87b7642bf3aea1672c60dd.jpg"
+    },
+    {
+      "type": "text",
+      "value": "A rigid bar, hinged at one end is supported by two identical springs as shown in figure. Each spring consists of 25 turns of 15 mm wire having a mean diameter of 200 mm. Compute the maximum shearing stress in the springs. Neglect the mass of the rigid bar."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0e27fa8334fc25ad3f23aa87f3940f24bd81b791c1c4644128267960773302c0.jpg",
+      "_source_path": "images/0e27fa8334fc25ad3f23aa87f3940f24bd81b791c1c4644128267960773302c0.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Without writing shear and moment equations, draw shear and moment diagrams for the beam as shown in figure. Give numerical values at all change of loading positions and at all points of zero shear. 20.1N.40.1N"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d1c66489af18912de4aaace0d2b0f9391e0cd93c63f7ea631079956793a8ec6a.jpg",
+      "_source_path": "images/d1c66489af18912de4aaace0d2b0f9391e0cd93c63f7ea631079956793a8ec6a.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2021"
+}

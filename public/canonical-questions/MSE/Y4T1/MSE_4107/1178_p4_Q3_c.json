@@ -1,0 +1,45 @@
+{
+  "id": "1178_p4_Q3(c)",
+  "course": {
+    "code": "MSE 4107",
+    "title": "Computational Materials Science",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2022\\4th_Year_1st_Term_2022_1178.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "For a cellular automation, the data is represented as below: 000 001 010 011 100 101 110 111"
+    },
+    {
+      "type": "text",
+      "value": "(02+11)"
+    },
+    {
+      "type": "text",
+      "value": "The above data corresponds to the generation of a specific \"Rule\". Identify the \"Rule\" and show how this “Rule\" can be achieved."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

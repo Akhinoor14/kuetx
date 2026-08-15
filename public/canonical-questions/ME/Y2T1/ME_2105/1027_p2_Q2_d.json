@@ -1,0 +1,37 @@
+{
+  "id": "1027_p2_Q2(d)",
+  "course": {
+    "code": "ME 2105",
+    "title": "Thermodynamics",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2019\\2nd_Year_1st_Term_2019_1027.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Steam is flowing through a horizontal nozzle. At the inlet to the nozzle, the enthalpy of the fluid passing is 3500 kJ/kg and the velocity is 50 m/sec. At exit, the enthalpy is 2775 kJ/kg. If the loss from the nozzle is 4.5 kJ/kg, then find the velocity of the fluid at exit from the nozzle. If the inlet area is 0.15 m<sup>2</sup> and the specific volume of steam at inlet is 0.18 m<sup>3</sup>/kg, find the mass flow rate."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

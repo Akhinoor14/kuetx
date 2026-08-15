@@ -1,0 +1,49 @@
+{
+  "id": "1042_p3_Q8(c)",
+  "course": {
+    "code": "ME 3119",
+    "title": "Statistics & Quality Control",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\3rd_Year_1st_Term_2018_1042.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A double sampling plan with ${ \\mathfrak { n } } _ { 1 } = 5 0 , { \\mathfrak { c } } _ { 1 } = 2 , { \\mathfrak { n } } _ { 2 } = 1 0 0 , { \\mathfrak { c } } _ { 2 } = 4$ and N = 1000. Compute the 17 following if the lot contains 4% defective items."
+    },
+    {
+      "type": "text",
+      "value": "(i) Probability of acceptance after the first sampling."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Probability of going for second sampling."
+    },
+    {
+      "type": "text",
+      "value": "(iii) Total probability of acceptance."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

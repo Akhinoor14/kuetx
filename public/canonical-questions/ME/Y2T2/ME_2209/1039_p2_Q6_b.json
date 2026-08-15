@@ -1,0 +1,42 @@
+{
+  "id": "1039_p2_Q6(b)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\2nd_Year_2nd_Term_2022_1039.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 60 cm x 80 cm rectangular plate weighing 35 kg is suspended from two pins A and B. If 18 the pin B is suddenly removed, determine (i) the angular acceleration of the plate and (ii) the component of reaction at pin A, immediately after pin B is removed."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_926c8ff95abddfe11732c083ff94642088dde69d5d44c813f80cc37e01a9f5ba.jpg",
+      "_source_path": "images/926c8ff95abddfe11732c083ff94642088dde69d5d44c813f80cc37e01a9f5ba.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2022"
+}

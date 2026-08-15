@@ -1,0 +1,65 @@
+{
+  "id": "1147_p2_Q4(c)",
+  "course": {
+    "code": "MSE 1101",
+    "title": "Introduction to Materials Science and Engineering",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\1st_Year_1st_Term_2021_1147.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "from the tensile stress-strain behavior for the brass specimen shown in figure, (20) determine the following:"
+    },
+    {
+      "type": "text",
+      "value": "The modulus of elasticity"
+    },
+    {
+      "type": "text",
+      "value": "(ii) The yield strength at a strain offset of 0.002"
+    },
+    {
+      "type": "text",
+      "value": "(iii) The maximum load that can be sustained by a cylindrical specimen having an original diameter of 12.8 mm (0.505 in.)"
+    },
+    {
+      "type": "text",
+      "value": "(iv) The change in length of a specimen originally 250 mm (10 in.) long that is subjected to a tensile stress of 345 MPa (50,000 psi)."
+    },
+    {
+      "type": "text",
+      "value": "Section B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in answer script B)"
+    },
+    {
+      "type": "text",
+      "value": "Q"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2021"
+}

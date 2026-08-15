@@ -1,0 +1,45 @@
+{
+  "id": "1151_p4_Q6(b)",
+  "course": {
+    "code": "ME 1227",
+    "title": "Engineering Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2018\\1st_Year_2nd_Term_2018_1151.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "is defined by the relations $\\mathrm { r } { = } \\mathrm { t } ^ { 2 } { \\cdot } ^ { 1 } \\big / _ { 3 } \\mathrm { t } ^ { 3 }$ and $\\mathsf { \\pmb { \\theta } } \\mathrm { = } 2 \\mathrm { \\pmb { t } } ^ { 2 } .$ 2, where r is expressed in meter, t in second and θ in radians. If the particle has a mass of 2 kg and moves in a horizontal plane, determine the radial and transverse components of the force acting on the particle when (i) t = 0 and (ii) t = 1 sec."
+    },
+    {
+      "type": "text",
+      "value": "(18)"
+    },
+    {
+      "type": "text",
+      "value": "Q"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

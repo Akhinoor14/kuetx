@@ -1,0 +1,42 @@
+{
+  "id": "1044_p4_Q7(a)",
+  "course": {
+    "code": "ME 3105",
+    "title": "Heat Transfer I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\3rd_Year_1st_Term_2021_1044.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write the importance of Eigen value and Eigen vector. Also find the largest Eigen 15 value and corresponding Eigen vectors of the following matrix."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\left[ { \\begin{array} { l l l } { 1 } & { 6 } & { 1 } \\\\ { 1 } & { 2 } & { 0 } \\\\ { 0 } & { 0 } & { 3 } \\end{array} } \\right]\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

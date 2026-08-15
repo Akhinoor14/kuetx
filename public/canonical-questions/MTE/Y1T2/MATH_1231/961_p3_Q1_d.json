@@ -1,0 +1,37 @@
+{
+  "id": "961_p3_Q1(d)",
+  "course": {
+    "code": "MATH 1231",
+    "title": "Vector, Matrix and Ordinary Differential Equation",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2023\\1st_Year_2nd_Term_2023_961.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "If $\\varphi = 2 x y z ^ { 2 } , \\vec { F } = x y \\hat { \\imath } - z \\hat { \\jmath } + x ^ { 2 } \\hat { k }$ and C is the curve $x = t ^ { 2 } , y = 2 t , z = t ^ { 3 } \\mathrm { f r o m } t =$ 0 to t = 1. Evaluate the line integral (i) $\\int _ { c }$ φd and (ii) $\\int _ { c } \\vec { F } \\times d \\vec { p }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2023"
+}

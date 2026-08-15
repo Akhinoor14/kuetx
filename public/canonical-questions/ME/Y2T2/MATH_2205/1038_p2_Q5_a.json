@@ -1,0 +1,46 @@
+{
+  "id": "1038_p2_Q5(a)",
+  "course": {
+    "code": "MATH 2205",
+    "title": "Mathematics IV",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\2nd_Year_2nd_Term_2021_1038.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write down the Legendre differential equation. From the Rodrigue's formula"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { P } _ { n } ( x ) = { \\frac { 1 } { 2 ^ { n } n ! } } { \\frac { d ^ { n } } { d x ^ { n } } } ( x ^ { 2 } - 1 ) ^ { n }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "find the values of $\\mathsf { P } _ { 0 } ( x ) , \\mathsf { P } _ { 1 } ( x ) , \\mathsf { P } _ { 2 } ( x ) , \\mathsf { P } _ { 3 } ( x )$ and roughly sketch their graphs."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

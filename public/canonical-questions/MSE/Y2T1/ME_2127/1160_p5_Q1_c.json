@@ -1,0 +1,47 @@
+{
+  "id": "1160_p5_Q1(c)",
+  "course": {
+    "code": "ME 2127",
+    "title": "Solid Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2022\\2nd_Year_1st_Term_2022_1160.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The pin (15) diameter is 20 mm. Assume double shear for the pin at B."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f211e3031c5d257744cef798850f60cc60cd3291ee6d927352220baf330567b7.jpg",
+      "_source_path": "images/f211e3031c5d257744cef798850f60cc60cd3291ee6d927352220baf330567b7.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_32e11cc6c46d81733655ef5e5b4a642899ca8853c448f4e2237ad9e7c9527a93.jpg",
+      "_source_path": "images/32e11cc6c46d81733655ef5e5b4a642899ca8853c448f4e2237ad9e7c9527a93.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

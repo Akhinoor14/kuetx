@@ -1,0 +1,41 @@
+{
+  "id": "1027_p1_Q2(b)",
+  "course": {
+    "code": "MATH 2105",
+    "title": "Mathematics III",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2019\\2nd_Year_1st_Term_2019_1027.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the value of the constant a and b such that the surface $a x ^ { 2 } - b y z = ( a + 2 ) x { \\mathrm { w i l l } }$ be orthogonal to the surface $4 x ^ { 2 } y + z ^ { 3 } = 4$ at the point ( 1, -1, 2)."
+    },
+    {
+      "type": "text",
+      "value": "<sup>2(c)</sup> Evaluate $\\nabla r ^ { n }$ Hence find the value of $\\nabla r ^ { 4 }$ where $\\bar { r }$ is the position vector. Also, find the value of $\\nabla r ^ { 4 }$ at the point ( 1, -1, 2)."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

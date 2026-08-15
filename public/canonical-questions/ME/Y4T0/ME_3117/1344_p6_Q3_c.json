@@ -1,0 +1,37 @@
+{
+  "id": "1344_p6_Q3(c)",
+  "course": {
+    "code": "ME 3117",
+    "title": "Machine Design I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2023\\Backlog_2023_1344.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A horizontal screw is designed to convey molding sand of a bulk weight Y = 1.8 13   \nton/m³; required capacity, Q = 50 ton/hr; Conveying run length, L = 25 m. Calculate   \nthe main parameters: µ, D, N, Mg, S, q and P of the conveyor with usual meaning.   \nAssume any data if required."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Special Backlog Examination, 2023"
+}

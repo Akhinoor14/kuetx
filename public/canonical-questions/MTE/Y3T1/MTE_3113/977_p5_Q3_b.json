@@ -1,0 +1,41 @@
+{
+  "id": "977_p5_Q3(b)",
+  "course": {
+    "code": "MTE 3113",
+    "title": "Numerical Analysis and Statistics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2023\\3rd_Year_1st_Term_2023_977.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following table gives the angular displacements θ(rad) at different intervals of time (sec). Calculate the angular velocity and angular acceleration at instant $t = 0 . 0 6$ sec."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>t</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>0.02</td><td rowspan=1 colspan=1>0.04</td><td rowspan=1 colspan=1>0.06</td><td rowspan=1 colspan=1>0.08</td><td rowspan=1 colspan=1>0.10</td><td rowspan=1 colspan=1>0.12</td></tr><tr><td rowspan=1 colspan=1>θ</td><td rowspan=1 colspan=1>0.052</td><td rowspan=1 colspan=1>0.105</td><td rowspan=1 colspan=1>0.168</td><td rowspan=1 colspan=1>0.242</td><td rowspan=1 colspan=1>0.327</td><td rowspan=1 colspan=1>0.408</td><td rowspan=1 colspan=1>0.489</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

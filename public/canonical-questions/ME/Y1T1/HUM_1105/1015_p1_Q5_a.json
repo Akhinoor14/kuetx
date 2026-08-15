@@ -1,0 +1,37 @@
+{
+  "id": "1015_p1_Q5(a)",
+  "course": {
+    "code": "HUM 1105",
+    "title": "English",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\1st_Year_1st_Term_2022_1015.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "\"A principal fruit of friendship\", Francis Bacon wrote in his timeless meditation on the subject, \"is the ease and discharge of the fullness and swellings of the heart, which passions of all kinds do cause and induce.\" For Thoreau, friendship was one of life's great rewards. But in today's cultural landscape of muddled relationships scattered across various platforms for connecting, amidst constant debates about whether our Facebook \"friendships\" are making us more or less happy, it pays to consider what friendship actually is. That's precisely what CUNY philosophy professor Massimo Pigliucci explores in Answers for Aristotle: How Science and Philosophy Can Lead Us to A More Meaningful Life (public library), which also gave us this provocative read on the science of what we call 'intuition'."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2022"
+}

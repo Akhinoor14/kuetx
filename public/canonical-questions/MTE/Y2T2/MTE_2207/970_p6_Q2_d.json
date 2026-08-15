@@ -1,0 +1,37 @@
+{
+  "id": "970_p6_Q2(d)",
+  "course": {
+    "code": "MTE 2207",
+    "title": "Electro-Mechanical Systems",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\2nd_Year_2nd_Term_2022_970.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "In a long shunt compound generator, the terminal voltage is 230 V when generator delivers 150 A. Determine (i) induced emf (ii) total power generated and (iii) distribution of this power. Given that, shunt field, series field, diverter and armature resistance are 92 Ω, 0.015 Ω, 0.03Ω and 0.032Ω, respectively"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2022"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1048_Q2(d)",
+  "course": {
+    "code": "ME 3223",
+    "title": "Power Plant Engineering",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2019\\3rd_Year_2nd_Term_2019_1048.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A power plant of 500 MW installed capacity has the following particulars: 12   \nCapacity cost= Tk 30,000/kW installed;   \nInterest and depreciation= 12% ;   \nAnnual load factor= 65%;   \nAnnual capacity factor= 58%;   \nAnnual operating cost = Tk 500 x 10<sup>6;</sup>   \nEnergy consumed by power plant auxiliaries = 6%.   \nCalculate:   \n(i) The cost of power generation per kWh, and   \n(ii) The reserve capacity."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2019"
+}

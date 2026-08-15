@@ -1,0 +1,42 @@
+{
+  "id": "1092_p6_Q6(b)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\4th_Year_Backlog_2018_1092.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A rectangular plate of 35 kg mass is suspended from two pins A and B. If pin B is suddenly removed, determine- (i) the angular acceleration of the plate, and (ii) the component of reaction at pin A, immediately after pin has been removed."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a339c4b574fe380c7c7afcebf5d6d5a9ef28e230e22e700dc5c04c744909fa8f.jpg",
+      "_source_path": "images/a339c4b574fe380c7c7afcebf5d6d5a9ef28e230e22e700dc5c04c744909fa8f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Backlog Examination, 2018"
+}

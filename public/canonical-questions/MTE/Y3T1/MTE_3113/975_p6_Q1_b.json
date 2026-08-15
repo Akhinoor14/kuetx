@@ -1,0 +1,46 @@
+{
+  "id": "975_p6_Q1(b)",
+  "course": {
+    "code": "MTE 3113",
+    "title": "Numerical Analysis and Statistics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\3rd_Year_1st_Term_2021_975.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Use Secant method to find the root of the following function:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nf ( x ) = { \\frac { 6 6 7 . 3 8 } { x } } ( 1 - e ^ { - 0 . 1 4 6 8 4 3 x } ) - 4 0\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Stopping criterion is $\\varepsilon _ { s } = 0 . 5 \\%$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

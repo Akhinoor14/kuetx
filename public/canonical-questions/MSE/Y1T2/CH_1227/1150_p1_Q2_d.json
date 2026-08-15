@@ -1,0 +1,70 @@
+{
+  "id": "1150_p1_Q2(d)",
+  "course": {
+    "code": "CH 1227",
+    "title": "Organic Chemistry",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2017\\1st_Year_2nd_Term_2017_1150.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write the name of the following compounds: (05)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b0ef435dedd4a71c4f61a6c93fac51a19b921d243199408a34c461c12b396b92.jpg",
+      "_source_path": "images/b0ef435dedd4a71c4f61a6c93fac51a19b921d243199408a34c461c12b396b92.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(ii)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_3b5722ebcf1a92c531450268a519cc983fc339af36f005a0398de8302b7c7a08.jpg",
+      "_source_path": "images/3b5722ebcf1a92c531450268a519cc983fc339af36f005a0398de8302b7c7a08.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_5bea2c6970c0cb494687a63d6d592a190c1c87da8e1096ad0d1df547f38dd3c5.jpg",
+      "_source_path": "images/5bea2c6970c0cb494687a63d6d592a190c1c87da8e1096ad0d1df547f38dd3c5.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_9a0e6e7fde29c9d8682974bf17309f382a27830daf7c306a4ae9828a372294cb.jpg",
+      "_source_path": "images/9a0e6e7fde29c9d8682974bf17309f382a27830daf7c306a4ae9828a372294cb.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_678c15a7d58e8546ae7a469649d029089a08137c1b8ff0116be4b4ea630ce789.jpg",
+      "_source_path": "images/678c15a7d58e8546ae7a469649d029089a08137c1b8ff0116be4b4ea630ce789.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Q"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

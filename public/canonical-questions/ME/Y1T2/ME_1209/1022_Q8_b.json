@@ -1,0 +1,42 @@
+{
+  "id": "1022_Q8(b)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\1st_Year_2nd_Term_2020_1022.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "Assuming that the pressure between the surface of contact is uniform, show that the 18 magnitude M of the couple required to overcome frictional resistance for the conical <sup>h</sup> pivots own is, $\\begin{array} { r } { M = \\frac { 2 } { 3 } \\frac { \\mu _ { k } P } { s i n \\theta } . \\frac { R _ { 2 } ^ { 3 } - R _ { 1 } ^ { 3 } } { R _ { 2 } ^ { 2 } - R _ { 1 } ^ { 2 } } } \\end{array}$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_bb684eeb72c7c7e2e3340c65c0dbfeee73ced8f1edf98316b137fed92d278326.jpg",
+      "_source_path": "images/bb684eeb72c7c7e2e3340c65c0dbfeee73ced8f1edf98316b137fed92d278326.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Special Examination (COVID-19), 2020"
+}

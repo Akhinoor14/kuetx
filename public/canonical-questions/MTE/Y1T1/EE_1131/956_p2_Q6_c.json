@@ -1,0 +1,49 @@
+{
+  "id": "956_p2_Q6(c)",
+  "course": {
+    "code": "EE 1131",
+    "title": "Electrical Circuits",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2023\\1st_Year_1st_Term_2023_956.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "$R = 1 0 \\Omega$ and $L = 0 . 0 5$ henry are connected in series and energized by a 25 – cycle 12 sinusoidal voltage. The maximum value of which is 150 volts"
+    },
+    {
+      "type": "text",
+      "value": "(i)Find the complete impedance expression for the RL branch."
+    },
+    {
+      "type": "text",
+      "value": "(ii)Write the expression for the supply voltage given $v = 7 5$ at $t = 0$"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Write the expression for current as a function of time."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2023"
+}

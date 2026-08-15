@@ -1,0 +1,37 @@
+{
+  "id": "1030_p1_Q6(d)",
+  "course": {
+    "code": "ME 2105",
+    "title": "Thermodynamics",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\2nd_Year_1st_Term_2021_1030.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "In a single heater regenerative cycle the steam enters the turbine at 30 bar, $4 5 0 \\%$ and the exhaust pressure is 0.10 bar. The feed water heater is a direct-contact type which operates at 5 bar. Calculate (i) the efficiency and the stream rate of the cycle, and (ii) the increase in mean temperature of the heat addition, efficiency and steam rate, as compared to the Rankine cycle without regeneration. Neglect the pump work."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

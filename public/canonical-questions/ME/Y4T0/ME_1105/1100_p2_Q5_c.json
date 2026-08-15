@@ -1,0 +1,37 @@
+{
+  "id": "1100_p2_Q5(c)",
+  "course": {
+    "code": "ME 1105",
+    "title": "Thermal Engineering",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\Backlog_2020_1100.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Following data were recorded from a test on a single cylinder 4-stroke IC engine: cylinder bore = 150 mm, engine stroke = 250 mm, area of the indicator diagram = 450 mm2, length of indicator diagram = 50 mm, indicating spring rating = 1.2 mm, engine speed = 4200 rpm, brake torque = 217 N.m, fuel consumption = 2.95 kg/hr, calorific value of fuel = 44000 KJ/kg, cooling water flow rate = 0.068 kg/sec, cooling water temperature rise = 45 K, specific heat of cooling water = 4.1868 KJ/kgK. Calculate- (i) mechanical efficiency; (ii) brake thermal efficiency; (iii) specific fuel consumption; (iv) draw hp and energy balance in kW."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Special Backlog Examination, 2020"
+}

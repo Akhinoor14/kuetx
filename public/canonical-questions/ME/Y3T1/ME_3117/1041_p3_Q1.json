@@ -1,0 +1,37 @@
+{
+  "id": "1041_p3_Q1",
+  "course": {
+    "code": "ME 3117",
+    "title": "Machine Design I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2017\\3rd_Year_1st_Term_2017_1041.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A bar is subjected to loads $\\mathrm { F } _ { 1 } = 2 0 0 0$ lb and $\\mathrm { F } _ { 2 } = \\cdot 3 0 0 0$ lb as shown in Fig. The cross section of the bar is defined by ${ \\mathrm { h } } = 3 { \\mathrm { b } } ;$ and the factor of safety based on ultimate strength, $\\mathrm { ~ N ~ } = 3 . 5$ . Determine the dimensions ‘h’ and $\\cdot _ { \\mathbf { b } } ,$ if the bar is made of"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

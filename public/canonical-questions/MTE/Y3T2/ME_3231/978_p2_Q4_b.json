@@ -1,0 +1,54 @@
+{
+  "id": "978_p2_Q4(b)",
+  "course": {
+    "code": "ME 3231",
+    "title": "Solid Mechanics and Machine Design",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\3rd_Year_2nd_Term_2021_978.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "If an element is subjected to the state of stress as shown in the following figure, find the principle stresses. Also compute the stress components on a plane $3 0 ^ { 0 }$ counter-clockwise from the x-face."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8a160a0263d300835ac774d6563942e1e3ef22d7015ecf87962e50fbd093a610.jpg",
+      "_source_path": "images/8a160a0263d300835ac774d6563942e1e3ef22d7015ecf87962e50fbd093a610.jpg"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    },
+    {
+      "type": "text",
+      "value": "An uncrowned straight bevel pinion has 30 teeth, a diametral pitch of 6 and a transmission accuracy number of 7. The driven gear has 90 teeth. Both are made of AISI 4140 Grade-2 steel. The shaft angle is 90º. The face width is $1 . 2 5 \"$ pinion speed 900 rpm and the normal pressure angle is $2 0 ^ { 0 } .$ The pinion is mounted outboard of its bearing and the bearings of the gear straddle it. Determine the power rating based on AGMA bending strength for life goal $1 0 ^ { 9 }$ revolutions with 0.99 reliability. Use factor of safety 2."
+    },
+    {
+      "type": "text",
+      "value": "An angular-contact, inner ring rotating, 02-series ball bearing is required for an application in which the life requirement is 40 Kh at 520 rev/min. The design radial load is 725 lbf. The application factor is 1.4. The reliability goal is 0.90. Find the multiple of rating life xD required and the catalog rating C1o with which to enter Table 11-2. Choose a bearing and estimate the existing reliability in service."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2021"
+}

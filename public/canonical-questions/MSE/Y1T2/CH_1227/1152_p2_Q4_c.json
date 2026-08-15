@@ -1,0 +1,62 @@
+{
+  "id": "1152_p2_Q4(c)",
+  "course": {
+    "code": "CH 1227",
+    "title": "Organic Chemistry",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2020\\1st_Year_2nd_Term_2020_1152.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "The IR spectrum of an organic compound is given below"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_1bc6c6d2c6af910185926d0b9892463b7c480fb484b9b9fc63b8632191691226.jpg",
+      "_source_path": "images/1bc6c6d2c6af910185926d0b9892463b7c480fb484b9b9fc63b8632191691226.jpg"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Functional group</td><td rowspan=1 colspan=1>wavenumber (cm&#x27;)</td></tr><tr><td rowspan=1 colspan=1> $S D ^ { 3 }$ C-H str</td><td rowspan=1 colspan=1>~2800-3000</td></tr><tr><td rowspan=1 colspan=1> $\\overline { { s p ^ { 2 } } }$ C-H str</td><td rowspan=1 colspan=1>~3000-3100</td></tr><tr><td rowspan=1 colspan=1>sp C-H str</td><td rowspan=1 colspan=1>~3300</td></tr><tr><td rowspan=1 colspan=1>O-H str</td><td rowspan=1 colspan=1>~3300-3600</td></tr><tr><td rowspan=1 colspan=1>C-O single bond</td><td rowspan=1 colspan=1>~1240</td></tr><tr><td rowspan=1 colspan=1>aldehyde C-H str</td><td rowspan=1 colspan=1>~2700,-2800</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "(i) What type of compound represent the above spectrum?"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Is it saturated or unsaturated?"
+    },
+    {
+      "type": "text",
+      "value": "Q"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2020"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1145_p4_Q7(d)",
+  "course": {
+    "code": "CH 1127",
+    "title": "Inorganic and Physical Chemistry",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2019\\1st_Year_1st_Term_2019_1145.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "15 mL of $\\mathrm { H } _ { 2 } \\mathrm { S O } _ { 4 }$ is dissolved in 200 mL of H2O. Calculate the strength of the solution in (07)   \nmolarity. [The density of ${ \\bf H } _ { 2 } { \\bf S O _ { 4 } }$ and H2O are 1.98 and 0.9987 gm per mL respectively]   \nQ"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
+}

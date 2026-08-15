@@ -1,0 +1,56 @@
+{
+  "id": "1044_p3_Q1(b)",
+  "course": {
+    "code": "ME 3117",
+    "title": "Machine Design I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\3rd_Year_1st_Term_2021_1044.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "An aluminum alloy cylindrical roller with diameter 25 mm and length 50 mm rolls on the inside of a cast iron ring having an inner radius of 100 mm, which is 50 mm thick. Find the maximum contact force F that can be used if the shear stress is not to exceed of 28 MPa."
+    },
+    {
+      "type": "text",
+      "value": "2 A ductile hot rolled steel bar has a minimum yield strength in tension and compression of 350 MPa. Using the appropriate failure theories, determine the factors of safety for the following plane stress states:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r l r } { \\mathrm { i ) } \\quad } & { { } } & { \\sigma _ { x } = 9 0 \\mathrm { \\ M P a } , \\sigma _ { y } = - 7 0 \\mathrm { \\ M P a } , \\tau _ { x y } = - 4 0 \\mathrm { \\ M P a } } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\sigma _ { x } = 1 2 0 ~ \\mathrm { M P a } , \\tau _ { x y } = - 8 5 ~ \\mathrm { M P a }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\sigma _ { x } = - 5 0 \\ \\mathrm { M P a } , \\sigma _ { y } = 2 0 \\mathrm { M P a } , \\tau _ { x y } = - 2 0 \\ \\mathrm { M P a }\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

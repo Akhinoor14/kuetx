@@ -1,0 +1,42 @@
+{
+  "id": "1340_p2_Q2(a)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2024\\2nd_Year_2nd_Term_2024_1340.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The rigid bars AB and CD shown in the figure are supported by pins at A and C and the two rods. Determine the maximum force P that can be applied as shown if its vertical movement is limited to 5 mm. Neglect the weights of all members."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_da5418f78cd9c49aa25b316e3f5ca454e7369576a5c3656dfe04d9aef9cec70b.jpg",
+      "_source_path": "images/da5418f78cd9c49aa25b316e3f5ca454e7369576a5c3656dfe04d9aef9cec70b.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2024"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "963_p4_Q5(a)",
+  "course": {
+    "code": "ME 2131",
+    "title": "Engineering Mechanics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2020\\2nd_Year_1st_Term_2020_963.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": 16,
+  "content": [
+    {
+      "type": "text",
+      "value": "A pulley and two loads are connected by inextensible cords as shown in figure below. Load A has a constant acceleration of 300 $\\mathrm { m m } / \\mathrm { s } ^ { 2 }$ and an initial velocity of $2 4 0 \\mathrm { m s ^ { - 1 } }$ , both directed upward. Determine: i) The number of revolutions executed by the pulley in 3 sec ii) The velocity and position of load B after 3 sec iii) The acceleration of point D on the rim of the pulley at t=0"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e4a7f50f82ba024f771b2657d001d26b2319f7a6523fbe2f9ddc5adcbb8d552f.jpg",
+      "_source_path": "images/e4a7f50f82ba024f771b2657d001d26b2319f7a6523fbe2f9ddc5adcbb8d552f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2020"
+}

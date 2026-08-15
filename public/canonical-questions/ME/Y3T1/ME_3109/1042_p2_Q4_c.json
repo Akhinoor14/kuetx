@@ -1,0 +1,41 @@
+{
+  "id": "1042_p2_Q4(c)",
+  "course": {
+    "code": "ME 3109",
+    "title": "Engineering Mechanics III",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\3rd_Year_1st_Term_2018_1042.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "A two cylinder uncoupled locomotive has inside cylinders 0.6m apart. The radius of each crank is 300 mm and are at right angles. The revolving mass per cylinder is 250 kg and reciprocating mass per cylinder is 300 kg. The whole of revolving and two-third of the reciprocating masses are to be balanced and the balancing masses are placed in the planes of rotation of the driving wheels, at a radius of 0.8 m. The driving wheels are 2m in diameter and 1.5m apart. If the speed of the engine is 80 km/hr; find the hammer blow, maximum variation of tractive effort and maximum swaying couple."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "1042_p2_Q6(c)",
+  "course": {
+    "code": "ME 3109",
+    "title": "Engineering Mechanics III",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\3rd_Year_1st_Term_2018_1042.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the expression for the natural frequency of the system as shown in figure. The tub disks are keyed to a common shaft and have a combined mass moment of inertia about their centre of oscillation O and ${ \\bf { j } } _ { 0 } .$ It is assumed that the cord attached to W does not stretch and is always in tension. F11"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e3d1986c64b64ff473cb145009cf7306bbbc258ca5406b99be47bb2ef90305d1.jpg",
+      "_source_path": "images/e3d1986c64b64ff473cb145009cf7306bbbc258ca5406b99be47bb2ef90305d1.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

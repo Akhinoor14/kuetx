@@ -1,0 +1,42 @@
+{
+  "id": "966_p5_Q3(a)",
+  "course": {
+    "code": "ME 2131",
+    "title": "Engineering Mechanics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2023\\2nd_Year_1st_Term_2023_966.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The position of machine block B is adjusted by moving wedge A. Knowing that the coefficient of static friction is 0.35 between all surfaces of contact, determine the force P required (i) to raise block B and (ii) to lower block B."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d7a95859a49a5ebd835b842762fb072074aa8acdb46989869b37769ebfa92678.jpg",
+      "_source_path": "images/d7a95859a49a5ebd835b842762fb072074aa8acdb46989869b37769ebfa92678.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

@@ -1,0 +1,47 @@
+{
+  "id": "968_p1_Q2(c)",
+  "course": {
+    "code": "EE2231",
+    "title": "Signals and Linear Systems",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2020\\2nd_Year_2nd_Term_2020_968.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Determine power and energy of v(t) where, 10 $\\mathsf { v } ( \\mathrm { t } ) = 3 \\mathrm { x } ( - ( 1 / 2 ) ( \\mathrm { t } + 1 ) )$ . Also draw v(t)."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_9d0484a0141bdf785fd8cf273f55dd98ae24fa29c2b32bb263e59106f3c46b30.jpg",
+      "_source_path": "images/9d0484a0141bdf785fd8cf273f55dd98ae24fa29c2b32bb263e59106f3c46b30.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b67ee61089a703215b5ded4c0e24c37497b0970f8b31c08edb6fa3cd0c1c8fc4.jpg",
+      "_source_path": "images/b67ee61089a703215b5ded4c0e24c37497b0970f8b31c08edb6fa3cd0c1c8fc4.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2020"
+}

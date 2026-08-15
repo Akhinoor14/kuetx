@@ -1,0 +1,42 @@
+{
+  "id": "1023_p5_Q1(c)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\1st_Year_2nd_Term_2021_1023.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Two spheres are at rest against smooth surfaces as shown in figure. Sphere A weighs 1250 kg and sphere B weighs 165 kg. Let the horizontal force F is 4100 N and $\\theta = 6 5 ^ { \\circ }$ . Find the reaction at C, D and E."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_133cb7cc84831c446cc796c8ecf9b31999d16aeebed9e67872f6d43f5e756be7.jpg",
+      "_source_path": "images/133cb7cc84831c446cc796c8ecf9b31999d16aeebed9e67872f6d43f5e756be7.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

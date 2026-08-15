@@ -1,0 +1,41 @@
+{
+  "id": "1160_p4_Q2(b)",
+  "course": {
+    "code": "HUM 2127",
+    "title": "Accounting and Economics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2022\\2nd_Year_1st_Term_2022_1160.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "Following are the ledger balances of Argon company, preapare a trial balance as on December (25) 31,2022."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>Account titles</td><td>Tk.</td></tr><tr><td>Cash</td><td>45000</td></tr><tr><td>Capital</td><td>35000</td></tr><tr><td>Supplies</td><td>13500</td></tr><tr><td>Sales</td><td>29000</td></tr><tr><td>Supplies expense</td><td>2000</td></tr><tr><td>Tax payable</td><td>20500</td></tr><tr><td>Bills receivable</td><td>25000</td></tr><tr><td>Unearned revenue</td><td>14000</td></tr><tr><td>Prepaid insurance</td><td>2000</td></tr><tr><td>Salaries and wages paid</td><td>8000</td></tr><tr><td>Drawing</td><td>3000</td></tr><tr><td>Equipment</td><td>20000</td></tr><tr><td>Accumulated depreciation</td><td>6000</td></tr><tr><td>Allowance for bad debt</td><td>14000</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "1075_p1_Q4(b)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\1st_Year_Backlog_2020_1075.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "A pipe weighs 35 kg/m and is supported every 10 m by a small frame: a typical frame is shown in figure. Knowing that $\\theta = 3 5 ^ { \\circ }$ , determine the components of the reactions and the components of the force exerted at Bon member BC."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_40836bafbae5f16f7bc8d29a5b27487ddf363e1e165f2a1bac8c96b8bf7b6575.jpg",
+      "_source_path": "images/40836bafbae5f16f7bc8d29a5b27487ddf363e1e165f2a1bac8c96b8bf7b6575.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2020"
+}

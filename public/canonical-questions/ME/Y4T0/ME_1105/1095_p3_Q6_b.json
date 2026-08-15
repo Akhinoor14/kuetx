@@ -1,0 +1,49 @@
+{
+  "id": "1095_p3_Q6(b)",
+  "course": {
+    "code": "ME 1105",
+    "title": "Thermal Engineering",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\4th_Year_Backlog_2021_1095.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "/\\ person has two independent investments /\\ and B available to him. but he can undertake only one at a lime due to certain constraints. He can choose \"A'' first and then <sub>stop</sub> or i r ''A'' is successful then take \"13'' or vice versa. The probability of success or \"A\" is 0.6, while for .. Ir' it is 0.4. Both investments require an initial capital only TK. l 0,000 and both return nothing if the venture is unsuccessful. Successful completion of \"A\" will return TK. 20,000 ( over cost) and successful completion of \"B\" will return TK. 24,000 (over cost)."
+    },
+    {
+      "type": "text",
+      "value": "(i) Draw and properly label the decision tree"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Evaluate the decision tree and"
+    },
+    {
+      "type": "text",
+      "value": "(iii)Detcnnine the optimal policy."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Backlog Examination, 2021"
+}

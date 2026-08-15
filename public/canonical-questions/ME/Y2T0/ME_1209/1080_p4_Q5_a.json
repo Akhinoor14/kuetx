@@ -1,0 +1,49 @@
+{
+  "id": "1080_p4_Q5(a)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\2nd_Year_Backlog_2018_1080.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define the terms: displacement thickness, momentum thickness, and energy thickness. 09"
+    },
+    {
+      "type": "text",
+      "value": "S(b)Define boundary layer and explain the fundamental causes of its existence."
+    },
+    {
+      "type": "text",
+      "value": "5te) For the velocity profile, $\\frac { u } { U } = \\sin \\left( \\frac { \\pi } { 2 } \\frac { y } { \\delta } \\right)$ , calculate-"
+    },
+    {
+      "type": "text",
+      "value": "(i) Momentum thickness, (ii) Displacement thickness, and (iii) Energy thickness."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2018"
+}

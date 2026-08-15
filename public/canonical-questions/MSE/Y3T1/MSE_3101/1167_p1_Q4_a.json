@@ -1,0 +1,53 @@
+{
+  "id": "1167_p1_Q4(a)",
+  "course": {
+    "code": "MSE 3101",
+    "title": "Transport Phenomena in Materials",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2019\\3rd_Year_1st_Term_2019_1167.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 5cm thick iron plate [k=60 W/ (m.C), $C _ { p } = 4 6 0 \\mathrm { J } / ( \\mathrm { k g . ~ ^ { \\circ } C } ) , \\mathrm { ~ \\ p } = \\mathrm { 7 } 8 5 0 \\mathrm { ~ \\ k g } / m ^ { 3 }$ and $\\mathfrak { a } { = } . 1 . 6 \\times 1 0 ^ { - 5 } m ^ { 2 } / \\mathrm { s } ]$ is initially at $2 2 5 \\mathrm { \\circ C } .$ Suddenly, both surfaces are exposed to an ambient at ${ 2 5 ~ \\mathsf { \\circ } } _ { \\mathrm { C } }$ with a heat transfer coefficient 500 $\\mathbf { W } / \\left( \\mathbf { m } ^ { 2 } ; { \\mathbf { \\vec { C } } } \\right)$"
+    },
+    {
+      "type": "text",
+      "value": "(18)"
+    },
+    {
+      "type": "text",
+      "value": "(i) Calculate the center temperature 2 minutes after the start of cooling."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Calculate the temperature at a depth 1 cm from surface 2 minutes after the start of cooling."
+    },
+    {
+      "type": "text",
+      "value": "(iii) Calculate the energy removed from the plate per square meter during this time. [use the charts in fig: 4 if necessary]"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

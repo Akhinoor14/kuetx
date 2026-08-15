@@ -1,0 +1,54 @@
+{
+  "id": "1157_p3_Q2(a)",
+  "course": {
+    "code": "ME 2127",
+    "title": "Solid Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2019\\2nd_Year_1st_Term_2019_1157.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "A rigid block of mass M is supported by three symmetrically spaced rods as shown, in Figure-2(a). Each copper rod has an area of 900 mm², E=120 GPa and the allowable stress is 70 MPa. The steel rod has an area of 1200 mm², E= 200 GPa and the allowable stress is 140 MPa. Determine the largest mass M which can be supported."
+    },
+    {
+      "type": "text",
+      "value": "(17)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_1a56d4879b8f846a952462017c45d54f5f1c71008b07455c494890a020c66607.jpg",
+      "_source_path": "images/1a56d4879b8f846a952462017c45d54f5f1c71008b07455c494890a020c66607.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Figure-2(a)"
+    },
+    {
+      "type": "text",
+      "value": "(18)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

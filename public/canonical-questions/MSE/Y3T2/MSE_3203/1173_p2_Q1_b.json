@@ -1,0 +1,57 @@
+{
+  "id": "1173_p2_Q1(b)",
+  "course": {
+    "code": "MSE 3203",
+    "title": "Ceramics and Glass Engineering",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2020\\3rd_Year_2nd_Term_2020_1173.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write down the defect equations for any Two of the following:"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "text",
+      "value": "(i) Incorporation of CaO in $Z \\tau 0 _ { 2 } .$"
+    },
+    {
+      "type": "text",
+      "value": "(ii)Formation of Schottky defects in $\\mathtt { C u 2 O }$"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Dissolution of ${ \\tt S c } _ { 2 } { \\tt O } _ { 3 }$ in $\\mathrm { C a T i O _ { 3 } }$ during synthesis, assuming Sc enters on Ti sites."
+    },
+    {
+      "type": "text",
+      "value": "(iv)Frenkel defect in an $\\mathbf { A B O _ { 3 } }$ compound."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2020"
+}

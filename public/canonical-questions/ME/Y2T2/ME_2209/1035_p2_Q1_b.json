@@ -1,0 +1,60 @@
+{
+  "id": "1035_p2_Q1(b)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\2nd_Year_2nd_Term_2018_1035.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "A hole is to be punched out of a plate having a shearing strength of 275 MPa as shown in figure. The compressive stress in the punch is limited to 50 MPa. (i) Compute the maximum thickness of the plate in which a hole 65 mm in diameter can be punched. (ii)·If the plate is 6.5 mm thick, determine the diameter of the smallest hole that can be punched."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_329f3f508c29d95e5827e9acb4271dac73b736c08de6eba20b441e2c97665ce6.jpg",
+      "_source_path": "images/329f3f508c29d95e5827e9acb4271dac73b736c08de6eba20b441e2c97665ce6.jpg"
+    },
+    {
+      "type": "text",
+      "value": "The rigid bars AB and CD shown in figure are supported bypins at A and C and the two rods. Determine the maximum force P that can be applied as shown; if its vertical movement is limited to 5 mm. Neglect the weight of all members."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_adcf3a5eed7e1be95dec3b408c3c57119a5d17294af7ff8bece93af9697ba555.jpg",
+      "_source_path": "images/adcf3a5eed7e1be95dec3b408c3c57119a5d17294af7ff8bece93af9697ba555.jpg"
+    },
+    {
+      "type": "text",
+      "value": "The rigid bar ABC is pinned·B and attached to the two vertical rods as shown. Initially the bar is horizontal and the. ve a! rods are stress free. Determine the stress in the aluminum rod if the temperature of th eel rod I decreased by $4 0 ^ { \\circ } \\mathrm { C } .$ Neglect the weight of the bar ABC."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_744e2f0f49b52df6a3ece12616c45f89b15428b7d214226d5ca156861988c86f.jpg",
+      "_source_path": "images/744e2f0f49b52df6a3ece12616c45f89b15428b7d214226d5ca156861988c86f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

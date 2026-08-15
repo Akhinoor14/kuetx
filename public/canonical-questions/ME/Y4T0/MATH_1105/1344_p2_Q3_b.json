@@ -1,0 +1,37 @@
+{
+  "id": "1344_p2_Q3(b)",
+  "course": {
+    "code": "MATH 1105",
+    "title": "Mathematics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2023\\Backlog_2023_1344.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The heat flow in a rod of length 10 cm of homogeneous material is governed by the partial differential equation $u _ { t } = 4 u _ { x x }$ . The ends of the rod are kept at $0 \\%$ and the initial temperature $\\begin{array} { r } { u ( x , 0 ) = 5 0 \\ s i n \\left( \\frac { \\pi x } { 1 0 } \\right) } \\end{array}$ . Find the temperature distribution $\\boldsymbol { u } ( \\boldsymbol { x } , t )$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Special Backlog Examination, 2023"
+}

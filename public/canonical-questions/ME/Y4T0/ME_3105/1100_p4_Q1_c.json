@@ -1,0 +1,37 @@
+{
+  "id": "1100_p4_Q1(c)",
+  "course": {
+    "code": "ME 3105",
+    "title": "Heat Transfer I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\Backlog_2020_1100.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A CO2 refrigerating plant fitted with an expansion valve, works between the pressure limits of 54.81 bar and 20.93 bar. The vapor is compressed isentropically and leaves the compressor cylinder at 32ºC. The condensation takes place at 18°C in the condenser and there is no undercooling of the liquid. Determine the theoretical coefficient of performance and the power required to drive the compressor."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Special Backlog Examination, 2020"
+}

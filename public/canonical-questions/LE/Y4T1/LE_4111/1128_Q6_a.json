@@ -1,0 +1,37 @@
+{
+  "id": "1128_Q6(a)",
+  "course": {
+    "code": "LE 4111",
+    "title": "Footwear Engineering III",
+    "department": "Department of Leather Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Leather_Engineering\\2019\\4th_Year_1st_Term_2019_1128.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "How can utize the Cr shaving/splitting as gelatin and poultry feed? 08   \n6(5) State the environmental model of a safe dispesal of tannery solid waste as landfill with proper figure. 10   \nS(c) Briefly discuss dhe process of waste water (WW) treatrauni for tannery vaste. 08"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2019"
+}

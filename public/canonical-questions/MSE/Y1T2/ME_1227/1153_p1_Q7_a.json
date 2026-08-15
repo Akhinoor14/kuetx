@@ -1,0 +1,42 @@
+{
+  "id": "1153_p1_Q7(a)",
+  "course": {
+    "code": "ME 1227",
+    "title": "Engineering Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\1st_Year_2nd_Term_2021_1153.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 500 gm collar can slide without friction on the curved rod BC in a horizontal plane. (17) Knowing that the undeformed length of the spring is 80 mm and k=400 kN/m. Determine (i) the velocity that the collar should be given at A to reach B with zero velocity, (ii) the velocity of the collar when it eventually reaches C."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f0f722942c4f1cdda341c651aa90e2bfc8791745aaf222a8f69c9e3fd4827096.jpg",
+      "_source_path": "images/f0f722942c4f1cdda341c651aa90e2bfc8791745aaf222a8f69c9e3fd4827096.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

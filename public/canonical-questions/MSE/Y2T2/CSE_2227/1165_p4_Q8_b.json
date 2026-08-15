@@ -1,0 +1,41 @@
+{
+  "id": "1165_p4_Q8(b)",
+  "course": {
+    "code": "CSE 2227",
+    "title": "Programing Techniques",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\2nd_Year_2nd_Term_2021_1165.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define a structure data type called time\\_struct' containing three members integer hour, integer (12) minute, and integer second. Write a program in C to add two times using the structure data type time\\_struct' and display the output in the following form:"
+    },
+    {
+      "type": "text",
+      "value": "hour: minute : second"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

@@ -1,0 +1,56 @@
+{
+  "id": "1044_p4_Q4(b)",
+  "course": {
+    "code": "ME 3105",
+    "title": "Heat Transfer I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\3rd_Year_1st_Term_2021_1044.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve the following equations any iterative method."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n2 x + 6 y - z = 8 5\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n6 x + 1 5 y + 2 z = 7 2\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nx + y + 5 4 z = 1 1 0\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

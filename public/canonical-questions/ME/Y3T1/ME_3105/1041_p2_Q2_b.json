@@ -1,0 +1,42 @@
+{
+  "id": "1041_p2_Q2(b)",
+  "course": {
+    "code": "ME 3105",
+    "title": "Heat Transfer I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2017\\3rd_Year_1st_Term_2017_1041.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the heat transfer per unit area through the composite wall as shown in figure. 20 Assume one-dimensional heat flow."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_6c84d2647f2181198275640ff4aa395bbdb3046eb294c9cd4a1e1137d7ed2de1.jpg",
+      "_source_path": "images/6c84d2647f2181198275640ff4aa395bbdb3046eb294c9cd4a1e1137d7ed2de1.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

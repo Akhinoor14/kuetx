@@ -1,0 +1,42 @@
+{
+  "id": "1075_p1_Q7(b)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\1st_Year_Backlog_2020_1075.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A band brake is used to control the speed of a flywheel as shown. The coefficients of 18 friction are $\\mu _ { \\mathrm { s } } = 0 . 3 0$ and $\\mu _ { \\mathrm { k } } = 0 . 2 5$ . What couple should be applied to the flywheel to keep it rotating counter clockwise at a constant speed when $\\mathrm { P } = 5 0 \\ : \\mathrm { N }$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_07330983336dfb2269b5aecd543ed4f8a6a712b1e4d4b2a204bac14a351c682e.jpg",
+      "_source_path": "images/07330983336dfb2269b5aecd543ed4f8a6a712b1e4d4b2a204bac14a351c682e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2020"
+}

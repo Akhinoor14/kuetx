@@ -1,0 +1,37 @@
+{
+  "id": "975_p2_Q5(b)",
+  "course": {
+    "code": "ME 3131",
+    "title": "Fluid Mechanics and Machinery",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\3rd_Year_1st_Term_2021_975.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Pressure drops over a 30 m long and 1 cm diameter horizontal pipe transporting water at $2 0 ^ { \\circ } \\mathrm { C } .$ The pressure drop between the two ends is measured to be 2 kPa. Assume a laminar flow and viscosity is $\\mathrm { i } 0 ^ { - 3 } \\mathrm { N } { - } \\mathrm { s } { - } \\mathrm { m } ^ { - 2 }$ . Determine i) the maximum velocity of water in the pipe and ii) Reynolds number"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

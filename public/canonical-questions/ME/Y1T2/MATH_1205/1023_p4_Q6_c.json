@@ -1,0 +1,37 @@
+{
+  "id": "1023_p4_Q6(c)",
+  "course": {
+    "code": "MATH 1205",
+    "title": "Mathematics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\1st_Year_2nd_Term_2021_1023.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A tank initially contains 35 gallons of fresh water. Brine, containing 3 pounds of 13 water, flows into the tank at the rate of 3.5 gallons per minute, and the mixture is kept uniform stirring, and runs out at the same rate. How long time will it take to increase the quantity of salt in the tank from 35 to 55 pounds?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

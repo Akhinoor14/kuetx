@@ -1,0 +1,42 @@
+{
+  "id": "1083_p2_Q1(b)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\2nd_Year_Backlog_2022_1083.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The assembly in the figure consists of a light rigid bar AB, pinned at 0, that is attached to the steel and aluminum rods. In the position shown, bar AB is horizontal and there is a gap, $\\Delta = 6$ mm, between the lower end of the steel rod and its pin support at C. Compute the stress in the aluminum rod when the lower end of the steed rod is attached to its support."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_c50084d3ed6fe1d28da3443e4d2e5e32f6216cc54159faf99066c8163d62fb4f.jpg",
+      "_source_path": "images/c50084d3ed6fe1d28da3443e4d2e5e32f6216cc54159faf99066c8163d62fb4f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2022"
+}

@@ -1,0 +1,55 @@
+{
+  "id": "1340_p2_Q4(b)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2024\\2nd_Year_2nd_Term_2024_1340.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "A simply supported beam of length L carries a uniformly distributed load of 6 kN/m and has the cross-section shown in the figure. Find L to cause a maximum flexural stress of 16 MPa. What maximum shearing stress is then developed?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a7ced46fbff52934602033bc125deb29a61556e475fe9eabb85a1002253f9b18.jpg",
+      "_source_path": "images/a7ced46fbff52934602033bc125deb29a61556e475fe9eabb85a1002253f9b18.jpg"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    },
+    {
+      "type": "text",
+      "value": "Determine the maximum value of EIy for the cantilever beam loaded as shown in the figure.Take the origin at the wall."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0274f0541c7ebb2f3bc512b48a82faa7b564a34f20df6d07f019228fe38d5726.jpg",
+      "_source_path": "images/0274f0541c7ebb2f3bc512b48a82faa7b564a34f20df6d07f019228fe38d5726.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2024"
+}

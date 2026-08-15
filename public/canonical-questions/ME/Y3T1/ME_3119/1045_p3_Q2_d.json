@@ -1,0 +1,37 @@
+{
+  "id": "1045_p3_Q2(d)",
+  "course": {
+    "code": "ME 3119",
+    "title": "Statistics & Quality Control",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\3rd_Year_1st_Term_2022_1045.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A manufacturing plant produces light bulbs. The probability of a bulb being defective is 5%. A sample of 10 bulbs is selected at random from the production line. What is the probability that exactly 2 of the bulbs are defective given that the sample contains at least one defective bulb?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

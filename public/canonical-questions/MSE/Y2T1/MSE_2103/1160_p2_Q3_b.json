@@ -1,0 +1,42 @@
+{
+  "id": "1160_p2_Q3(b)",
+  "course": {
+    "code": "MSE 2103",
+    "title": "Thermodynamics of Materials",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2022\\2nd_Year_1st_Term_2022_1160.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "One mole of copper initially at 700K and one atmosphere is contained in a thermally insulated jacket. The system is compressed reversibly to a pressure of 10000 atmospheres. Compute the change in temperature for this reversible adiabatic process."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { G i v e n , V = 7 . 0 9 ~ c c / m o l } , \\alpha = 5 1 \\times 1 0 ^ { - 6 } \\mathrm { K } ^ { - 1 } , C _ { p } = 2 2 . 6 + 5 . 6 \\times 1 0 ^ { - 3 } T ~ \\mathrm { J / m o l } . \\mathrm { K } .\\tag{10}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

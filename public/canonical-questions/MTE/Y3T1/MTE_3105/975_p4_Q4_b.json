@@ -1,0 +1,37 @@
+{
+  "id": "975_p4_Q4(b)",
+  "course": {
+    "code": "MTE 3105",
+    "title": "Linear Integrated Circuits and Digital Systems",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\3rd_Year_1st_Term_2021_975.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 4-bit R-2R D/A converter is constructed to control the speed of a small DC motor using the output of a digital logic circuit. If the logic circuit uses 10 V CMOS devices, calculate the analogue output voltage from the D/A converter when the input code is hexadecimal number \"B”. Also determine the resolution of the D/A converter."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

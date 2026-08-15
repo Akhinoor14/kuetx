@@ -1,0 +1,46 @@
+{
+  "id": "1036_p2_Q8(b)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2019\\2nd_Year_2nd_Term_2019_1036.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "A sphere of mass m is dropped onto the end of a slender rod BD oflength L and the mass of 2 kg. The rod is attached to a pin support at C which is located at a distance $c = \\mathrm { L } / 4$ from the end B. Denoting by $\\nu _ { 1 , }$ the velocity of the sphere just before it strikes the rod and assuming perfectly elastic impact, determine immediately after impact (i) the velocity of the sphere, (ii) the angular velocity of the rod."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_4745da4e1442e83c77149f77b33828dc2315d9d43d319e2883cf45dc4db8ab0a.jpg",
+      "_source_path": "images/4745da4e1442e83c77149f77b33828dc2315d9d43d319e2883cf45dc4db8ab0a.jpg"
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY Department of Mechanical Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

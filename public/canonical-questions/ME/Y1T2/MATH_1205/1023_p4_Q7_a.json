@@ -1,0 +1,42 @@
+{
+  "id": "1023_p4_Q7(a)",
+  "course": {
+    "code": "MATH 1205",
+    "title": "Mathematics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\1st_Year_2nd_Term_2021_1023.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve the differential equation $( D ^ { 3 } - D ^ { 2 } + 3 D + 5 ) y = x ^ { 2 } + e ^ { x } c o s 2 x$ using the 13 undetermined coefficient method."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n7 ( \\mathsf { b } ) \\quad \\mathrm { S o l v e } \\colon ( D ^ { 2 } - 4 D - 4 ) y = 8 ( x ^ { 2 } + e ^ { 2 x } + s i n 2 x .\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

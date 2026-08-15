@@ -1,0 +1,61 @@
+{
+  "id": "1015_p1_Q2(b)",
+  "course": {
+    "code": "HUM 1105",
+    "title": "English",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\1st_Year_1st_Term_2022_1015.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Rewrite the following sentences with the right form of verbs."
+    },
+    {
+      "type": "text",
+      "value": "i. Luna should have (lie) down on the coach."
+    },
+    {
+      "type": "text",
+      "value": "ii. You can see him (do) his homework."
+    },
+    {
+      "type": "text",
+      "value": "iii. He never (lend) his hand to the poor."
+    },
+    {
+      "type": "text",
+      "value": "IV. His tears rose as he was (tear) between home and abroad."
+    },
+    {
+      "type": "text",
+      "value": "v. Columbus (be) a destroyer of American native people."
+    },
+    {
+      "type": "text",
+      "value": "vi. I could have (lie), but I decided not to."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2022"
+}

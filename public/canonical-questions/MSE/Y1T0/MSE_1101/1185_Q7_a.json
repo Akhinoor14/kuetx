@@ -1,0 +1,51 @@
+{
+  "id": "1185_Q7(a)",
+  "course": {
+    "code": "MSE 1101",
+    "title": "Introduction to Materials Science and Engineering",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2020\\1st_Year_Backlog_2020_1185.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The steady state temperature distribution in a thin, flat, rectangular plate of boundaries $\\scriptstyle x = 0 , x = a , y = 0$ and $y = b$ is modeled by the differential equation"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\frac { \\delta ^ { 2 } u } { \\delta x ^ { 2 } } + \\frac { \\delta ^ { 2 } u } { \\delta y ^ { 2 } } = 0 ; 0 < x < a , 0 < y < b .\\tag{25}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Determine the temperature $u ( x , y )$ subject to the boundary conditions:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nu ( 0 , y ) = u ( a , y ) = 0 ; ~ 0 < y < b { \\mathrm { ~ a n d ~ } } u ( x , 0 ) = f ( x ) , ~ u ( x , a ) = g ( x ) ; ~ 0 < x < a\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2020"
+}

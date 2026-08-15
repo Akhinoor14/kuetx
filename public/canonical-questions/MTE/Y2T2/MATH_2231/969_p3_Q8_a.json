@@ -1,0 +1,42 @@
+{
+  "id": "969_p3_Q8(a)",
+  "course": {
+    "code": "MATH 2231",
+    "title": "Complex Variables and Harmonic Analysis",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\2nd_Year_2nd_Term_2021_969.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Explain spherical harmonic by solving the Laplace equation in spherical form"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\frac { \\partial ^ { 2 } u } { \\partial r ^ { 2 } } } + { \\frac { 2 } { r } } { \\frac { \\partial u } { \\partial r } } + { \\frac { 1 } { r ^ { 2 } } } \\left( { \\frac { \\partial ^ { 2 } u } { \\partial \\theta ^ { 2 } } } + c o t \\theta { \\frac { \\partial u } { \\partial \\theta } } + c o s e c ^ { 2 } \\theta { \\frac { \\partial ^ { 2 } u } { \\partial \\phi ^ { 2 } } } \\right) = 0\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

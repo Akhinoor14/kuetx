@@ -1,0 +1,64 @@
+{
+  "id": "1085_p2_Q3(c)",
+  "course": {
+    "code": "ME 1105",
+    "title": "Thermal Engineering",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\3rd_Year_Backlog_2018_1085.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "Circular disk fins of constant thickness are attached on a 2.5 cm OD tube with a spacing of 100 fins per 1m length of tube. Fins are made of aluminum, $\\mathrm { K } = 1 6 0$ $\\mathrm { \\dot { W } / { m } } . ^ { \\circ } \\mathrm { \\dot { C } } ,$ thickness t =1 mm, and length L = 1 cm. The tube wall is maintained at $\\uparrow _ { 1 } = 1 7 0 ^ { \\circ } C$ , and heat is dissipated by convection into the ambient air at $\\mathrm { T } _ { \\infty } = 3 0 { } ^ { \\circ } \\mathrm { C }$ with a heat transfer coefficient $\\dot { \\mathrm { ~  ~ h ~ } } = ~ 2 0 0 ~ \\mathrm { W / m . ^ { \\circ } C }$ The radiation effects are considered negligible. Calculate (i) the heat loss to the ambient air per 1m length of the tube: (ii) compare this heat loss with that if there were no fins on the tube."
+    },
+    {
+      "type": "text",
+      "value": "Derive an expression of temperature distribution $\\operatorname { T } ( \\mathbf { x } , \\mathbf { y } )$ for a rectangular plate for the boundary condition as shown."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a0d5329b7af136b5a66c7ac36a701ab296ed95ac1304ebfb89c590193552f99c.jpg",
+      "_source_path": "images/a0d5329b7af136b5a66c7ac36a701ab296ed95ac1304ebfb89c590193552f99c.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Calculate the temperatures at point 1, 2, 3 and 4 using the finite difference technique."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathtt { T } = 4 0 0 ^ { \\circ } \\mathrm { C }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_608f044f746419078803aa29bda2e8351a148c87eb9861ec227f5aeb5d7f721e.jpg",
+      "_source_path": "images/608f044f746419078803aa29bda2e8351a148c87eb9861ec227f5aeb5d7f721e.jpg"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year Backlog Examination, 2018"
+}

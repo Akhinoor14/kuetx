@@ -1,0 +1,37 @@
+{
+  "id": "1154_p2_Q6(a)",
+  "course": {
+    "code": "MATH 1227",
+    "title": "Differential Equations and Geometry",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2023\\1st_Year_2nd_Term_2023_1154.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "$\\textstyle { \\frac { x - 1 } { 2 } } = { \\frac { y + 2 } { - 3 } } = { \\frac { z - 4 } { 5 } }$ and $2 x + 3 y + 4 z - 4 = 0 = x + y -$ $z + 7$ are coplanar or not. If possible find the equation of the plane containing them."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2023"
+}

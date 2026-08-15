@@ -1,0 +1,42 @@
+{
+  "id": "1153_p1_Q5(b)",
+  "course": {
+    "code": "ME 1227",
+    "title": "Engineering Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\1st_Year_2nd_Term_2021_1153.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The rotation of the 1.2m arm OA about O is defined by the relation $\\theta = 0 . 1 5 t ^ { 2 } ,$ where θ is expressed in radians and t in seconds. Collar B slides along the arm in such a way that its distance from O is $r = 1 . 2 - 0 . 1 2 t ^ { 2 }$ , where r is expressed in meters and t in seconds. After the arm OA has rotated through 300, determine (i) the total velocity of the collar, (ii) the total $3 0 ^ { 0 }$ acceleration of the collar (iii) the relative acceleration of the collar with respect to the arm."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_439967fe88de06b6193d3042415820a1fb2431d38cc6bfab1e638fed025b4da0.jpg",
+      "_source_path": "images/439967fe88de06b6193d3042415820a1fb2431d38cc6bfab1e638fed025b4da0.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

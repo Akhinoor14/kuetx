@@ -1,0 +1,37 @@
+{
+  "id": "1031_p4_Q5(d)",
+  "course": {
+    "code": "ME 2105",
+    "title": "Thermodynamics",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\2nd_Year_1st_Term_2022_1031.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A reheat cycle using steam, works between pressure of 130 bar and 0.05 bar. The steam is supplied at $4 5 0 \\%$ on entry to the turbine and after expansion to a dryness fraction of 0.95, it is reheated to $4 0 0 ^ { \\circ } \\mathrm { C }$ before completing its expansion to the condenser pressure. Find the reheat pressure and cycle efficiency assuming isentropic expansion in the turbines and feed pump."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

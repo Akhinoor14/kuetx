@@ -1,0 +1,37 @@
+{
+  "id": "976_p2_Q7(c)",
+  "course": {
+    "code": "ME 3131",
+    "title": "Fluid Mechanics and Machinery",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\3rd_Year_1st_Term_2022_976.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A single-acting reciprocating pump runs at 60 rpm. The diameter of the plunger is 0.15m, 15   \nand crank radius is 0.15m. The suction pipe is 0.1m in diameter and 5m long. Calculate   \nthe maximum permissible value of suction lift Hs if the separation takes place at 2.6m of   \nwater absolute."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

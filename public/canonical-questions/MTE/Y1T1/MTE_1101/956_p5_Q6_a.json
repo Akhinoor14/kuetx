@@ -1,0 +1,42 @@
+{
+  "id": "956_p5_Q6(a)",
+  "course": {
+    "code": "MTE 1101",
+    "title": "Mechatronic Systems",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2023\\1st_Year_1st_Term_2023_956.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Drive the differential equation for a motor driving a load through a gear system as given in the following figure, which relates the angular displacement of the load with time."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_eb3221c85b9a5f400848c7e741c97b1e8b756ae4368fcb0e5786d12ceebcf248.jpg",
+      "_source_path": "images/eb3221c85b9a5f400848c7e741c97b1e8b756ae4368fcb0e5786d12ceebcf248.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2023"
+}

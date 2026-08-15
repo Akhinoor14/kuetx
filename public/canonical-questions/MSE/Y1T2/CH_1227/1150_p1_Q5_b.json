@@ -1,0 +1,55 @@
+{
+  "id": "1150_p1_Q5(b)",
+  "course": {
+    "code": "CH 1227",
+    "title": "Organic Chemistry",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2017\\1st_Year_2nd_Term_2017_1150.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "How will you distinguish the following compound with the help of IR spectroscopy (05)"
+    },
+    {
+      "type": "text",
+      "value": "(i)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_42a6d10727c3f4fef60197e55b240616e0d0398ba612c667daacbfb007e66da0.jpg",
+      "_source_path": "images/42a6d10727c3f4fef60197e55b240616e0d0398ba612c667daacbfb007e66da0.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(ii)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b9d0f17f4247bbf66aed19a78c39cfe8d0313e654a87c68536303830647bd19d.jpg",
+      "_source_path": "images/b9d0f17f4247bbf66aed19a78c39cfe8d0313e654a87c68536303830647bd19d.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

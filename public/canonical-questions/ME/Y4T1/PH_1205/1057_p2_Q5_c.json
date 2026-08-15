@@ -1,0 +1,45 @@
+{
+  "id": "1057_p2_Q5(c)",
+  "course": {
+    "code": "PH 1205",
+    "title": "Physics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\4th_Year_1st_Term_2020_1057.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "For NACA 4-degit series, the lift coefficient for three airfoil sections in incompressible flow are given in the table below:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Airfoil section</td><td rowspan=1 colspan=1> $a = 4 ^ { \\circ }$ </td><td rowspan=1 colspan=1> $\\alpha = 5 ^ { \\circ }$ </td></tr><tr><td rowspan=1 colspan=1>NACA 3412</td><td rowspan=1 colspan=1> $c _ { 1 } = 0 . 8 4$ </td><td rowspan=1 colspan=1> $\\mathbf { c } _ { 1 } = \\mathbf { \\ } 0 . 9 6$ </td></tr><tr><td rowspan=1 colspan=1>NACA 4412</td><td rowspan=1 colspan=1> $\\mathrm { c } _ { 1 } = \\ 0 . 9 6$ </td><td rowspan=1 colspan=1> $\\mathbf { c } _ { 1 } = \\ 1 . 0 8$ </td></tr><tr><td rowspan=1 colspan=1>NACA 4415</td><td rowspan=1 colspan=1> $c _ { 1 } = 0 . 9 9$ </td><td rowspan=1 colspan=1> $\\mathsf { c } _ { 1 } = \\mathsf { 1 } . 1 1$ </td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Consider NACA 3412 airfoil is set to $4 ^ { \\circ }$ incidence flying at $\\mathrm { M } _ { \\infty } = 0 . 6$ What is the airfoil section for the equivalent wing in an incompressible flow? Also determine the lift coefficient in actual compressible flow at 0.6. Now verify the lift coefficient for the same NACA airfoil using the data table provided above."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Online Examination, 2020"
+}

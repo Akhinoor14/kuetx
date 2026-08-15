@@ -1,0 +1,42 @@
+{
+  "id": "966_p5_Q2(b)",
+  "course": {
+    "code": "ME 2131",
+    "title": "Engineering Mechanics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2023\\2nd_Year_1st_Term_2023_966.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the location of the centroid of the composite body shown in the following figure when h = 2b."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8fb06dee7967b81921361b6a879df1dbcb6e788ce7072d9175290b15fb2f2442.jpg",
+      "_source_path": "images/8fb06dee7967b81921361b6a879df1dbcb6e788ce7072d9175290b15fb2f2442.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

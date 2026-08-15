@@ -1,0 +1,41 @@
+{
+  "id": "969_p5_Q7(a)",
+  "course": {
+    "code": "MTE 2201",
+    "title": "Control Systems",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\2nd_Year_2nd_Term_2021_969.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A regulator system has a plant $\\begin{array} { r } { \\frac { Y ( s ) } { U ( s ) } = \\frac { 1 0 } { ( s + 1 ) ( s + 2 ) ( s + 3 ) } } \\end{array}$"
+    },
+    {
+      "type": "text",
+      "value": "By the use of state-feedback control $u = - K \\underline { { { X } } }$ it is desired to place the closed-loop poles at $s = - 2 \\pm 2 \\sqrt { 3 i } , s = - 1$ . Determine the state-feedback gain matrix K."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

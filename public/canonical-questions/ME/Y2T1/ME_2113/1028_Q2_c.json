@@ -1,0 +1,42 @@
+{
+  "id": "1028_Q2(c)",
+  "course": {
+    "code": "ME 2113",
+    "title": "Fluid Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\2nd_Year_1st_Term_2020_1028.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The U-tube in the figure has 1 cm ID and contains mercury. If 20 $\\mathrm { c m } ^ { 3 }$ of water is poured 08 into the right hand leg, what will the free surface height in each leg be after the sloshing has died down?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_3f2b1fe0fe0da3abb942082d38121fb993092ef91b7b6c50958d1cdb8261ae2f.jpg",
+      "_source_path": "images/3f2b1fe0fe0da3abb942082d38121fb993092ef91b7b6c50958d1cdb8261ae2f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Examination (Online), 2020"
+}

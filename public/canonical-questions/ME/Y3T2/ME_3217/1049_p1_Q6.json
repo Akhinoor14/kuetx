@@ -1,0 +1,37 @@
+{
+  "id": "1049_p1_Q6",
+  "course": {
+    "code": "ME 3217",
+    "title": "Machine Design II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\3rd_Year_2nd_Term_2021_1049.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Design a cylindrical worm-gear mesh to connect an electric motor to a lifting mechanism. The motor speed is 1200 rpm and velocity ration is to be 20: 1. The output power requirement is 25 hp. The shaft axes are $9 0 ^ { \\circ }$ to each other. An overload factor $K _ { 0 } = 1 . 2 5$ is appropriate for 90°f ambient temperature. The motor case area is 1200 in2 and externally cooled by a fan. A design factor of 1.2 is to be included to address other unquantifiable risks."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2021"
+}

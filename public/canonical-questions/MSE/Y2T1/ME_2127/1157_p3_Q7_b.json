@@ -1,0 +1,46 @@
+{
+  "id": "1157_p3_Q7(b)",
+  "course": {
+    "code": "ME 2127",
+    "title": "Solid Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2019\\2nd_Year_1st_Term_2019_1157.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "A cone and a cylinder of the same radius ${ \\bf \\dot { a } } ^ { \\prime }$ and height $\\mathbf { \\omega } ^ { \\bullet } \\mathbf { h } ^ { \\bullet }$ are attached as shown in (17) Figure-7(b). Determine the location of the centroid of the composite body."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ad8b19010770b1c8b952c983a4588528d3584d99e55c92fdf2771578697c6803.jpg",
+      "_source_path": "images/ad8b19010770b1c8b952c983a4588528d3584d99e55c92fdf2771578697c6803.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Q"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "970_p4_Q1(d)",
+  "course": {
+    "code": "ME 2231",
+    "title": "Thermodynamics and Heat Transfer",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\2nd_Year_2nd_Term_2022_970.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The internal energy of a gas is given by the equation: u = 3.65PV + 8u, where u is given in kJ/kg, P is in kPa, and V is in m³/kg. A system composed of 8kg of this substance expands from an initial pressure of 7 bar and a volume of 0.25 m³ to a final pressure of 1.0 bar in a process in which pressure and volume are related by PVl.55 = constant. Find Q, ∆U and W for the process, if the expression is quasi-static."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2022"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "1181_p5_Q6",
+  "course": {
+    "code": "HUM 4227",
+    "title": "Project Management and Entrepreneurship",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2020\\4th_Year_2nd_Term_2020_1181.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "6",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "From the following Trial Balance of ABC Traders, prepare a statement of comprehensive income statement of owner's equity and a statement of financial position as on $3 1 ^ { \\mathrm { s t } }$ December, 2020 (Considering the adjustments):"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=3>ABC TRADERSTRIAL BALANCEAs on 31st December 2020</td></tr><tr><td rowspan=1 colspan=1>Account Titles</td><td rowspan=1 colspan=1>Debit (Tk)</td><td rowspan=1 colspan=1>Credit (Tk)</td></tr><tr><td rowspan=1 colspan=1>Capital......</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>5,00,000</td></tr><tr><td rowspan=1 colspan=1>Accounts Receivable</td><td rowspan=1 colspan=1>40,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Accounts Payable</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>20,000</td></tr><tr><td rowspan=1 colspan=1>Salaries expenses</td><td rowspan=1 colspan=1>30,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Prepaid Insurance</td><td rowspan=1 colspan=1>3000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Rent expenses</td><td rowspan=1 colspan=1>60,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Utilities expenses</td><td rowspan=1 colspan=1>2000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Gross Profit</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>1,80,000</td></tr><tr><td rowspan=1 colspan=1>Repair expense</td><td rowspan=1 colspan=1>1000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Equipment</td><td rowspan=1 colspan=1>5,69,200</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Accumulated depreciationEquipment</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>5000</td></tr><tr><td rowspan=1 colspan=1>Bad debts expense</td><td rowspan=1 colspan=1>800</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Provision for doubtfuldebts</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>1000</td></tr><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>7,06,000</td><td rowspan=1 colspan=1>7,06,000</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Additional information: (i) salaries unpaid Tk. 6000 for the period; (ii) Insurance expense expired per month Tk. 200. (iii) Rent expense per month Tk. 4000. (iv) Make allowance for doubtful debts on accounts receivable@ 3%."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2020"
+}

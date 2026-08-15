@@ -1,0 +1,42 @@
+{
+  "id": "964_p5_Q7(b)",
+  "course": {
+    "code": "ME 2131",
+    "title": "Engineering Mechanics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\2nd_Year_1st_Term_2021_964.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Two 500 mm rods are pin-connected at D as shown. Knowing that B moves to the left with 17 a constant velocity of 360 mm/s, determine at the instant shown i) the angular velocity of each rod and ii) the velocity of E."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_70ff03625648764ba393763f3a0ece0bb76537988378631186116a54aa4d1397.jpg",
+      "_source_path": "images/70ff03625648764ba393763f3a0ece0bb76537988378631186116a54aa4d1397.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

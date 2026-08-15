@@ -1,0 +1,46 @@
+{
+  "id": "1147_p1_Q2(b)",
+  "course": {
+    "code": "EEE 1127",
+    "title": "Electrical Engineering Fundamentals",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\1st_Year_1st_Term_2021_1147.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Use mesh analysis to find $\\mathrm { V _ { a b } }$ and $\\mathrm { i } _ { 0 }$ in the circuit of Fig.Q2(b)."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_5f80f089c6e839e78212f2ac1927866320c5cbb9a0445580b31297b47152aeeb.jpg",
+      "_source_path": "images/5f80f089c6e839e78212f2ac1927866320c5cbb9a0445580b31297b47152aeeb.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2021"
+}

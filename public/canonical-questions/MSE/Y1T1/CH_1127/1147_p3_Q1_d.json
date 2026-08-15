@@ -1,0 +1,69 @@
+{
+  "id": "1147_p3_Q1(d)",
+  "course": {
+    "code": "CH 1127",
+    "title": "Inorganic and Physical Chemistry",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\1st_Year_1st_Term_2021_1147.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "Use the following data to calculate the lattice energy of calcium oxide. You must write all (07) thermochemical equations for the steps of the cycle"
+    },
+    {
+      "type": "text",
+      "value": "The enthalpy of formation of CaO(s) = -636 kJ/mole"
+    },
+    {
+      "type": "text",
+      "value": "The enthalpy of sublimation of Ca = +192 kJ/mole"
+    },
+    {
+      "type": "text",
+      "value": "1st ionization energy of Ca = +590kJ/mole"
+    },
+    {
+      "type": "text",
+      "value": "2ⁿd ionization energy of Ca = +1145kJ/mole"
+    },
+    {
+      "type": "text",
+      "value": "The enthalpy of dissociation of O2 = +494 kJ/mole"
+    },
+    {
+      "type": "text",
+      "value": "1st electron affinity of O(g) = -141 kJ/mole"
+    },
+    {
+      "type": "text",
+      "value": "2ⁿd electron affinity of O(g) = +845 kJ/mole"
+    },
+    {
+      "type": "text",
+      "value": "O"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2021"
+}

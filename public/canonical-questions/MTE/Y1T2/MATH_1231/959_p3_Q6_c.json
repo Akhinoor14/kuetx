@@ -1,0 +1,37 @@
+{
+  "id": "959_p3_Q6(c)",
+  "course": {
+    "code": "MATH 1231",
+    "title": "Vector, Matrix and Ordinary Differential Equation",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\1st_Year_2nd_Term_2021_959.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A body of temperature $8 0 ^ { \\circ } \\mathrm { F }$ is placed in a room of constant temperature $5 0 \\%$ at time $t =$ 0. At the end of 5 minutes, the body has cooled to a temperature of $7 0 \\mathrm { { ^ \\circ F } }$ . Find the temperature of the body at the end of 10 minutes. After how many times, the temperature of the body will be within $1 ^ { \\circ } \\mathrm { F }$ compared to the room temperature?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

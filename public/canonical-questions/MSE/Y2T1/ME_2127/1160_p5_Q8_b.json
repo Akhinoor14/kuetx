@@ -1,0 +1,47 @@
+{
+  "id": "1160_p5_Q8(b)",
+  "course": {
+    "code": "ME 2127",
+    "title": "Solid Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2022\\2nd_Year_1st_Term_2022_1160.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine by direct integration the moment of inertia of the shaded area with respect to the y-axis."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_bd29db52c87495f2fc27c6fda40ac5b0d1fc15c14cc94673b64b0ceed87e16d8.jpg",
+      "_source_path": "images/bd29db52c87495f2fc27c6fda40ac5b0d1fc15c14cc94673b64b0ceed87e16d8.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0196c9cd1b9a1e70b95722ff325ef5d7b42b1620cba7a8e35880febbe1315a90.jpg",
+      "_source_path": "images/0196c9cd1b9a1e70b95722ff325ef5d7b42b1620cba7a8e35880febbe1315a90.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

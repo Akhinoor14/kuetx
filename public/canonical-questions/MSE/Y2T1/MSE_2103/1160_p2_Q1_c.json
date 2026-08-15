@@ -1,0 +1,41 @@
+{
+  "id": "1160_p2_Q1(c)",
+  "course": {
+    "code": "MSE 2103",
+    "title": "Thermodynamics of Materials",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2022\\2nd_Year_1st_Term_2022_1160.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "The combined statement of the first and second laws of thermodynamics evaluates the heat absorbed and mechanical work done on a system with relationship only valid for \"reversible processes\". Since reversible processes do not occur in the real world, how is it possible for the combined statement to play an important role in the analysis of practical\"irreversible\" processes encountered in nature and in technology?"
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

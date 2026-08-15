@@ -1,0 +1,77 @@
+{
+  "id": "1161_p3_Q1(c)",
+  "course": {
+    "code": "MATH 2127",
+    "title": "Vector Analysis and Linear Algebra",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2023\\2nd_Year_1st_Term_2023_1161.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following events occurred in “Messrs. MSE Enterprise\" in April 2024:"
+    },
+    {
+      "type": "text",
+      "value": "April-1: Invested BDT 10,00,000 cash and furniture valued at BDT 3,00,000."
+    },
+    {
+      "type": "text",
+      "value": "April -7: Purchased goods for cash BDT 31,000"
+    },
+    {
+      "type": "text",
+      "value": "April -10: Goods were stolen from the shop valuing BDT 5,000."
+    },
+    {
+      "type": "text",
+      "value": "April -12: Paid an advertisement expense BDT 20,000 cash to the Daily Star ."
+    },
+    {
+      "type": "text",
+      "value": "April -15: Cash deposited into bank BDT 70,000."
+    },
+    {
+      "type": "text",
+      "value": "April -17: Purchased furniture on account BDT 78,000."
+    },
+    {
+      "type": "text",
+      "value": "April -19: Cash withdrawal of BDT 17,500 by owner for personal use."
+    },
+    {
+      "type": "text",
+      "value": "April -22: Sold goods to ‘Mansur Traders' and received a cheque of BDT 50,000."
+    },
+    {
+      "type": "text",
+      "value": "April -28: MSE Enterprise took a loan of BDT 3,00,000 from Janata Bank PLC, KUET Corporate Branch by signing a note."
+    },
+    {
+      "type": "text",
+      "value": "Required: Journalize the transactions for April 2024."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

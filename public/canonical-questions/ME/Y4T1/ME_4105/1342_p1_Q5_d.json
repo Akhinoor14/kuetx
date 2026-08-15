@@ -1,0 +1,45 @@
+{
+  "id": "1342_p1_Q5(d)",
+  "course": {
+    "code": "ME 4105",
+    "title": "Applied Thermodynamics",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2024\\4th_Year_1st_Term_2024_1342.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A test on a single cylinder 4-stroke engine with a cylinder diameter of 18 cm and stroke of 28 cm yielded the following:"
+    },
+    {
+      "type": "text",
+      "value": "Speed = 400 rpm, diameter of the brake = 1.52 m, net load on the brake = 1050 N, mep = 7.2 bar, fuel consumption = 3.5 kg/hr, barometer reading = 750 mm Hg, room temperature = 20°C, heating value of fuel = 44 MJ/kg, air-fuel ratio by mass = 25, flow of jacket cooling water = 4.5 kg/min, rise in temperature of cooling water = 38°C, exhaust gas temperature = 210°C."
+    },
+    {
+      "type": "text",
+      "value": "Determine – (i) indicated and brake thermal efficiency, (ii) volumetric efficiency, and (iii) draw up a heat balance sheet."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2024"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "1016_p4_Q6(c)",
+  "course": {
+    "code": "MATH 1105",
+    "title": "Mathematics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2023\\1st_Year_1st_Term_2023_1016.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "State different kinds of improper integrals. Draw the graphs of ${ \\frac { 1 } { x } } , \\ { \\frac { 1 } { x ^ { 2 } } }$ and $\\textstyle { \\frac { 1 } { x ^ { 3 } } }$ in the l O same axes and find for what values $\\int _ { 1 } ^ { \\infty } { \\frac { d x } { x ^ { p } } }$ converge?"
+    },
+    {
+      "type": "text",
+      "value": ". <sub>7(a)</sub> <sub>State</sub> <sub>beta</sub> <sub>and</sub> <sub>gamma</sub> <sub>functions.</sub> <sub>Prove</sub> <sub>that</sub> $\\textstyle \\int _ { 0 } ^ { \\infty } e ^ { - x ^ { 2 } } d x = { \\frac { \\sqrt { \\pi } } { 2 } }$ and also find the value 15 of $\\int _ { - \\infty } ^ { \\infty } e ^ { - x ^ { 2 } } d x$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2023"
+}

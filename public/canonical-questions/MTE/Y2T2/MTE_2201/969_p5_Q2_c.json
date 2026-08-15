@@ -1,0 +1,46 @@
+{
+  "id": "969_p5_Q2(c)",
+  "course": {
+    "code": "MTE 2201",
+    "title": "Control Systems",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\2nd_Year_2nd_Term_2021_969.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A unity feedback system is characterized by an open loop transfer function"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nG ( s ) = { \\frac { K } { s ( s + 2 0 ) } }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Determine the gain K so that the system will have a damping ratio of 0.6. For this value of K, calculate settling time and percentage of overshoot for a unit step input."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

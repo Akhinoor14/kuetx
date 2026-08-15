@@ -1,0 +1,42 @@
+{
+  "id": "1097_p2_Q8(a)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2016\\Backlog_2016_1097.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The continuous beam as shown is supported on rigid foundations. Determine the 18 bending moments in the beam over the supports."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_41b3275463e61d7eac696714abbcdd4854818caaf5e8d123a2b57a1eb4dd51ab.jpg",
+      "_source_path": "images/41b3275463e61d7eac696714abbcdd4854818caaf5e8d123a2b57a1eb4dd51ab.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Special Backlog Examination, 2016"
+}

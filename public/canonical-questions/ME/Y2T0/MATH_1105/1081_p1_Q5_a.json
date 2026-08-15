@@ -1,0 +1,37 @@
+{
+  "id": "1081_p1_Q5(a)",
+  "course": {
+    "code": "MATH 1105",
+    "title": "Mathematics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\2nd_Year_Backlog_2020_1081.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose that the temperature at a point $( x , y , z )$ in space is given by 15 $T { \\left( x , y , z \\right) } = 8 0 { \\left/ { \\left( 1 + { x } ^ { 2 } + 2 { y } ^ { 2 } + 3 { z } ^ { 2 } \\right) } \\right. }$ , where T is measured in degrees Celsius and $x , y , z$ in meters. In which direction does the temperature increase fastest at the point (1, 1, -2). What is the maximum rate of increase?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2020"
+}

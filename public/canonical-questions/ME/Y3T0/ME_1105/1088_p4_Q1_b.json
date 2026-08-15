@@ -1,0 +1,41 @@
+{
+  "id": "1088_p4_Q1(b)",
+  "course": {
+    "code": "ME 1105",
+    "title": "Thermal Engineering",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\3rd_Year_Backlog_2022_1088.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Which modification should make for a biological microscope to investigate 10 metallurgical properties? Distinguish between electron and light microscope."
+    },
+    {
+      "type": "text",
+      "value": "l(c) Write down the limitations of ultrasonic inspection. Describe briefly an inspection 12 method which suits you."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year Backlog Examination, 2022"
+}

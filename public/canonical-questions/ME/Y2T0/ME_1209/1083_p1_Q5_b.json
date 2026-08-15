@@ -1,0 +1,53 @@
+{
+  "id": "1083_p1_Q5(b)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\2nd_Year_Backlog_2022_1083.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A jet of water having a velocity of 45 mis impinges without shock on a series of vanes 17 moving at 15 mis, the direction of motion of the vanes being inclined at $2 0 ^ { \\circ }$ to that of jet. The relative velocity of outlet is 0.9 of that at the inlet and absolute velocity of water at exit is to be normal to motion of the vanes. Determine-"
+    },
+    {
+      "type": "text",
+      "value": "(i) the vane angles at entrance and exit,"
+    },
+    {
+      "type": "text",
+      "value": "(ii) the work done on the vanes per unit weight of water supplied by the <sub>jet,</sub>"
+    },
+    {
+      "type": "text",
+      "value": "(iii) the hydraulic efficiency."
+    },
+    {
+      "type": "text",
+      "value": "6(al Discuss lift and drag with their general mathematical expressions. 05 \r\n08 \r\n12"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2022"
+}

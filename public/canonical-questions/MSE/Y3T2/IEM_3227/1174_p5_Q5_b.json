@@ -1,0 +1,45 @@
+{
+  "id": "1174_p5_Q5(b)",
+  "course": {
+    "code": "IEM 3227",
+    "title": "Industrial Management",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\3rd_Year_2nd_Term_2021_1174.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Obtain a regression line for the data and predict the profit for a store assuming sales of \\$10 million. Both sales and profits are in millions."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Unit Sales</td><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>14</td><td rowspan=1 colspan=1>15</td><td rowspan=1 colspan=1>16</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>14</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>15</td><td rowspan=1 colspan=1>7</td></tr><tr><td rowspan=1 colspan=1>Profits</td><td rowspan=1 colspan=1>0.15</td><td rowspan=1 colspan=1>0.1</td><td rowspan=1 colspan=1>0.13</td><td rowspan=1 colspan=1>0.15</td><td rowspan=1 colspan=1>0.25</td><td rowspan=1 colspan=1>0.27</td><td rowspan=1 colspan=1>0.24</td><td rowspan=1 colspan=1>0.2</td><td rowspan=1 colspan=1>0.27</td><td rowspan=1 colspan=1>0.44</td><td rowspan=1 colspan=1>0.34</td><td rowspan=1 colspan=1>0.17</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Table"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2021"
+}

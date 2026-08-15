@@ -1,0 +1,37 @@
+{
+  "id": "964_p3_Q6(b)",
+  "course": {
+    "code": "HUM 2131",
+    "title": "Engineering Economics and Accounting",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\2nd_Year_1st_Term_2021_964.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Journalize the following transactions in the book of Arnold company: June 1: Mr. Arnold invested cash tk. 1,00,000 and a building valuing tk. 5,00,000 to start the business. June 5: Purchased an equipment on credit for tk. 20000 making one-fourth down payment. June 10: Paid tk. 8000 as two month's insurance premium in advance. June 15: Made a partial payment of tk. 1000 on the equipment purchased on June 5. June 20: A customer has been billed with tk. 2000 for the services provided. June 25: Mr. Arnold withdrew tk. 1500 for his personal need June 30: Paid utilities bill tk. 12,000 for the month of June. June 30: Transfer one month's insurance to insurance expense account."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

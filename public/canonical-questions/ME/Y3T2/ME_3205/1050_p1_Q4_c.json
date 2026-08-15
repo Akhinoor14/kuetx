@@ -1,0 +1,37 @@
+{
+  "id": "1050_p1_Q4(c)",
+  "course": {
+    "code": "ME 3205",
+    "title": "Heat Transfer II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\3rd_Year_2nd_Term_2022_1050.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 12 cm wide and 18 cm high vertical hot surface in $3 0 \\textdegree C$ air is to be cooled by a heat sink with equally spaced fins of rectangular profile. The fins are 0.1 cm thick and 18 cm long in the vertical direction and have a height of 2.4 cm from the base. Determine the optimum fin spacing and the rate of heat transfer by natural convection from the heat sink if the base temperature is $8 0 ^ { \\circ } \\mathrm { C }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

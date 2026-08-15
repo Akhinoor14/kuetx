@@ -1,0 +1,42 @@
+{
+  "id": "1173_p5_Q5(a)",
+  "course": {
+    "code": "IEM 3227",
+    "title": "Industrial Management",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2020\\3rd_Year_2nd_Term_2020_1173.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". The manager wants to know the material requirements for ordered part R that will be needed to complete 120 units of E by the start of week 5. Lead times for items are one week for level 0 items, one week for level 1 items and two weeks for level 2 items. There is scheduled receipt of 60 units of M at the start of week 2 and 100 units of R at the start of week 1. Lot-for-lot ordering is used."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f674a59171ec2131338f5de6d1a035baeb1fee119768498651f58b7e646711be.jpg",
+      "_source_path": "images/f674a59171ec2131338f5de6d1a035baeb1fee119768498651f58b7e646711be.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2020"
+}

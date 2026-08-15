@@ -1,0 +1,61 @@
+{
+  "id": "1044_p5_Q8(c)",
+  "course": {
+    "code": "ME 3119",
+    "title": "Statistics & Quality Control",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2021\\3rd_Year_1st_Term_2021_1044.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "A double sampling plan with $\\mathrm { n } _ { 1 } = 5 0$ ${ \\sf C } _ { 1 } = 2$ $ { \\mathrm { n } _ { 2 } } = 1 0 0$ and $\\mathrm { C } _ { 2 } = 4$ . If the 20 incoming lots have fraction non-conforming P = 0.05. Now calculate:"
+    },
+    {
+      "type": "text",
+      "value": "i)The probability of acceptance on first sample."
+    },
+    {
+      "type": "text",
+      "value": "ii)The probability of rejection after 1st sample."
+    },
+    {
+      "type": "text",
+      "value": "iii)The probability of going for $2 ^ { \\mathrm { n d } }$ sample."
+    },
+    {
+      "type": "text",
+      "value": "iv)The probability of acceptance after $2 ^ { \\mathrm { n d } }$ sample."
+    },
+    {
+      "type": "text",
+      "value": "v)Total probability of acceptance."
+    },
+    {
+      "type": "text",
+      "value": "vi)Total probability of rejection."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

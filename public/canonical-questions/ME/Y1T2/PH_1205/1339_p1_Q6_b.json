@@ -1,0 +1,46 @@
+{
+  "id": "1339_p1_Q6(b)",
+  "course": {
+    "code": "PH 1205",
+    "title": "Physics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2024\\1st_Year_2nd_Term_2024_1339.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Show that for a cubic lattice the interplanar separation between a set of (hkl) planes is given 12 12 by"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nd _ { h k l } = \\frac { a } { \\sqrt { ( h ^ { 2 } + k ^ { 2 } + l ^ { 2 } ) } }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "where a is the lattice parameter."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2024"
+}

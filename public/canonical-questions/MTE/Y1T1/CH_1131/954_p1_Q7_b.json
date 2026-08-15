@@ -1,0 +1,37 @@
+{
+  "id": "954_p1_Q7(b)",
+  "course": {
+    "code": "CH 1131",
+    "title": "Chemistry",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\1st_Year_1st_Term_2021_954.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider this equilibrium process: 16   \n$P C l _ { 5 }  P C l _ { 3 } + C l _ { 2 }$ ∆ H° = 92.5 kJ/mol   \nPredict the direction of the shift in equilibrium when   \n(i) The temperature is raised   \n(ii) More Cl₂ gas is added to the reaction mixture   \n(iii) Some PCl₃ is removed from the mixture   \n(iv) The pressure on the gas is increased."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2021"
+}

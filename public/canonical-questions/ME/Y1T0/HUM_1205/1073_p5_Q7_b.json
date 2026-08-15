@@ -1,0 +1,45 @@
+{
+  "id": "1073_p5_Q7(b)",
+  "course": {
+    "code": "HUM 1205",
+    "title": "Economics & Accounting",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\1st_Year_Backlog_2018_1073.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "From the following ledger balances of the campus shop, prepare a trial balance as on December 31, 2017."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>Taka</td></tr><tr><td>Cash. 1,125</td></tr><tr><td>Inventory 1-1-17 12,440</td></tr><tr><td>Store supplies . 845</td></tr><tr><td>Office supplies 170</td></tr><tr><td>Office equipment . 1,280 Accounts payable 3,230</td></tr><tr><td>Withdrawals .. 6,000</td></tr><tr><td>Sales returns and allowance 1,435</td></tr><tr><td>Prepaid insurance 345</td></tr><tr><td>Prepaid rent . 550</td></tr><tr><td>Store equipment . 8,850</td></tr><tr><td>Accumulated depreciation - store equipment 3,115</td></tr><tr><td>Accumulated depreciation - office equipment . 380</td></tr><tr><td>Capital. 21,530</td></tr><tr><td>Sales . 69,320</td></tr><tr><td>Purchases 41,315</td></tr><tr><td>Purchase returns and allowances . 725</td></tr><tr><td>955 Transportation-in</td></tr><tr><td>Salaries expanse 15,765</td></tr><tr><td>6,050 Rent expanse ..</td></tr><tr><td>Advertising expanse 810</td></tr><tr><td>Utilities expanse 365</td></tr></table>"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>Account Titles</td><td>Debit (Taka)</td><td>Credit (Taka)</td></tr><tr><td>Cash.</td><td>5,400</td><td></td></tr><tr><td>Accounts Receivable..</td><td>2,800</td><td></td></tr><tr><td>Prepaid Insurance..</td><td>2,400</td><td></td></tr><tr><td>Supplies..</td><td>1,300</td><td></td></tr><tr><td>Equipment..</td><td>60,000</td><td></td></tr><tr><td>Notes payable..</td><td></td><td>40,000</td></tr><tr><td>Accounts payable..</td><td></td><td>2,400</td></tr><tr><td>Jack and Rose, Capital..</td><td></td><td>30,000</td></tr><tr><td>Jack and Rose, Drawing..</td><td>1,000</td><td></td></tr><tr><td>Fees earned....</td><td></td><td>8,500</td></tr><tr><td>Salaries expense.</td><td>3,200</td><td></td></tr><tr><td>Utilities expanse..</td><td></td><td></td></tr><tr><td></td><td>800</td><td></td></tr><tr><td>Advertising expanse..</td><td>4,000 80,900</td><td>80,900</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2018"
+}

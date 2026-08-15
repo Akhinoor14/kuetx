@@ -1,0 +1,42 @@
+{
+  "id": "979_p2_Q2(a)",
+  "course": {
+    "code": "ME 3231",
+    "title": "Solid Mechanics and Machine Design",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\3rd_Year_2nd_Term_2022_979.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 16,
+  "content": [
+    {
+      "type": "text",
+      "value": "The rigid bar ABC shown in the following figure is hinged at A and supported by a steel rod at B. Determine the largest load P that can be applied at C if the stress in the steel rod is limited to 200 GPa and the vertical movement of the end C must not exceed 3 mm."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b7d327147a825be4a3af96666ecbf1f60d5dc468a5446b26ce6baf8b534723dd.jpg",
+      "_source_path": "images/b7d327147a825be4a3af96666ecbf1f60d5dc468a5446b26ce6baf8b534723dd.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

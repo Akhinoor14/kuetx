@@ -1,0 +1,42 @@
+{
+  "id": "1035_p2_Q4(a)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\2nd_Year_2nd_Term_2018_1035.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A cast iron beam 10 m long and supported as shown in figure, carries a uniformly distributed load of intensity $w _ { 0 }$ (including its own weight). The allowable stresses are $\\sigma _ { \\mathrm { t } } \\leq 1 2 0$ MPa and $\\mathfrak { o } _ { \\mathfrak { c } } \\leq 8 0$ MPa. Determine the maximum safe value of $w _ { 0 } \\mathbf { i } \\mathbf { f } x = 1 . 0$ m."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0eb81f9043c312c5128bb7eec63091455fd7a6603804ce86112d662e7a147bea.jpg",
+      "_source_path": "images/0eb81f9043c312c5128bb7eec63091455fd7a6603804ce86112d662e7a147bea.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

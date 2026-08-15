@@ -1,0 +1,41 @@
+{
+  "id": "965_p3_Q8(b)",
+  "course": {
+    "code": "HUM 2131",
+    "title": "Engineering Economics and Accounting",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\2nd_Year_1st_Term_2022_965.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "From the following information of “Square Fashions Limited\" as on 31 December 2022, 20 you are required to determine Cost of Goods Sold and Net Income:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Particulars</td><td rowspan=1 colspan=1>BDT</td></tr><tr><td rowspan=1 colspan=1>Raw Materials (1-1-22)</td><td rowspan=1 colspan=1>6,400</td></tr><tr><td rowspan=1 colspan=1>Raw Materials (31-12-22)</td><td rowspan=1 colspan=1>7,600</td></tr><tr><td rowspan=1 colspan=1>Work-in-process (1-1-22)</td><td rowspan=1 colspan=1>12,300</td></tr><tr><td rowspan=1 colspan=1>Work-in-process (31-12-22)</td><td rowspan=1 colspan=1>15,000</td></tr><tr><td rowspan=1 colspan=1>Finished Goods (1-1-22)</td><td rowspan=1 colspan=1>12,500</td></tr><tr><td rowspan=1 colspan=1>Finished Goods (31-12-22)</td><td rowspan=1 colspan=1>9,700</td></tr><tr><td rowspan=1 colspan=1>Purchase of Raw Materials</td><td rowspan=1 colspan=1>54,300</td></tr><tr><td rowspan=1 colspan=1>Factory Cost</td><td rowspan=1 colspan=1>8,600</td></tr><tr><td rowspan=1 colspan=1>Depreciation</td><td rowspan=1 colspan=1>4,400</td></tr><tr><td rowspan=1 colspan=1>Repair of Factory Building</td><td rowspan=1 colspan=1>12,200</td></tr><tr><td rowspan=1 colspan=1>Office Expenses</td><td rowspan=1 colspan=1>12,500</td></tr><tr><td rowspan=1 colspan=1>Selling Expenses</td><td rowspan=1 colspan=1>13,200</td></tr><tr><td rowspan=1 colspan=1>Sales</td><td rowspan=1 colspan=1>2,50,000</td></tr><tr><td rowspan=1 colspan=1>Wages</td><td rowspan=1 colspan=1>44,300</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

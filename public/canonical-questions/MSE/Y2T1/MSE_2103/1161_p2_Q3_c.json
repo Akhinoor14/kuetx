@@ -1,0 +1,41 @@
+{
+  "id": "1161_p2_Q3(c)",
+  "course": {
+    "code": "MSE 2103",
+    "title": "Thermodynamics of Materials",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2023\\2nd_Year_1st_Term_2023_1161.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "One mole of monoatomic ideal gas, initially at 273K and 1atm, is contained in a chamber that(15) permits programmed control of its state. Controlled quantities of heat and work are supplied in the system so that its pressure and volume change is given by the equation: $\\scriptstyle \\mathbf { V = } 2 2 . 4 \\mathbf { P }$ (litreatm). Assume the process is carried out reversibly. Evaluate the followings:"
+    },
+    {
+      "type": "text",
+      "value": "(i) Heat transfer required to take the system to a final pressure of 0.5 atm. (ii) The final temperature of the gas."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

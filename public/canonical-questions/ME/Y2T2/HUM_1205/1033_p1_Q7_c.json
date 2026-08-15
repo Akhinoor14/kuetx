@@ -1,0 +1,41 @@
+{
+  "id": "1033_p1_Q7(c)",
+  "course": {
+    "code": "HUM 1205",
+    "title": "Economics & Accounting",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2016\\2nd_Year_2nd_Term_2016_1033.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Draw a statement of cost of goods sold and income statement from the following 20 particulars. ……"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=\"4\">Beginning inventory:</td><td></td><td>Tk.</td></tr><tr><td>Materials</td><td>2,00,000 60,000</td></tr><tr><td>Work in process</td><td></td></tr><tr><td>Finished goods Materials</td><td>5,000 1.80,000</td></tr><tr><td rowspan=\"4\">Ending inventory: Material Purchased</td><td>Work in process</td><td>50,000</td></tr><tr><td>Finished goods</td><td>15.000</td></tr><tr><td></td><td>5,00.000</td></tr><tr><td></td><td></td></tr><tr><td>Direct labour</td><td></td><td>1.50,000</td></tr><tr><td>Factory overhead .</td><td></td><td>1,00.000</td></tr><tr><td>Selling expense</td><td></td><td>20,000</td></tr><tr><td>Sales</td><td></td><td>8,00,000</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

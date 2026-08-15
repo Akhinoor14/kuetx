@@ -1,0 +1,53 @@
+{
+  "id": "1055_p5_Q5(c)",
+  "course": {
+    "code": "ME 4105",
+    "title": "Applied Thermodynamics",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\4th_Year_1st_Term_2018_1055.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The air flow to the four cylinder four stroke petrol engine is measured by means of 7.5 18 cm diameter sharp-edged orifice, Ca=0.60. During the test on the engine the following data were recorded:"
+    },
+    {
+      "type": "text",
+      "value": "Bore=11cm, stroke=13cm, engine speed=2250rpm, brake power=36kW, fuel consumption=10.5 kg/hr, calorific value of the fuel=42,000kJ/kg, pressure drop across the orifice is 4.1cm of water.Atmospheric temperature and pressure are 15°C and 1.013 bar; Calculate;"
+    },
+    {
+      "type": "text",
+      "value": "(i) Thermal efficiency on the basis brake power,"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Brake mean effective pressure."
+    },
+    {
+      "type": "text",
+      "value": "(iii) Volumetric efficiency based on free air condition."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2018"
+}

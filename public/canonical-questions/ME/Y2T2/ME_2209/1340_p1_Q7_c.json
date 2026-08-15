@@ -1,0 +1,42 @@
+{
+  "id": "1340_p1_Q7(c)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2024\\2nd_Year_2nd_Term_2024_1340.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the largest force F that can be applied to the 5 kg ring, without causing it to 10 slip. Assume $\\mu _ { s } = 0 . 3$ and $\\mu _ { k } = 0 . 2$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_3d38fe1541c508e72b7befda049b67b04051a6f46bba812f411109fd6b699f72.jpg",
+      "_source_path": "images/3d38fe1541c508e72b7befda049b67b04051a6f46bba812f411109fd6b699f72.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2024"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1100_p2_Q3(c)",
+  "course": {
+    "code": "ME 1105",
+    "title": "Thermal Engineering",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\Backlog_2020_1100.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The mean diameter of the blades of an impulse turbine with a single row wheel is 110 cm and the speed 3100 rpm. The nozzle angle is $1 7 ^ { \\circ } ,$ the ratio of blade speed to steam speed is 0.48 and the ratio of the relative velocity of outlet from the blades to that at inlet is 0.85. The outlet angle of the blades is to be made $3 0$ less than the inlet angle. The steam flow is 8 kg/sec. Draw the velocity diagram for the blade and determine- (i) resultant thrust on blades; (ii) tangential thrust on blades; (iii) axial thrust on blades; (iv) power developed in blades and (v) blading efficiency."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Special Backlog Examination, 2020"
+}

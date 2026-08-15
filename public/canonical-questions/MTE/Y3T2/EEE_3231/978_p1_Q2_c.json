@@ -1,0 +1,42 @@
+{
+  "id": "978_p1_Q2(c)",
+  "course": {
+    "code": "EEE 3231",
+    "title": "Network and Communication Systems",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2021\\3rd_Year_2nd_Term_2021_978.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Assume the crossover distance is 42 m, Ec = 50 nj/bit, e1 = 10 pj/bit and e2 = 0.0013 nj/bit. The network is shown in the following figure. (i) Calculate total energy required from source to destination, (ii) also calculate the number of bits received in the sink node."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_91fdd7edbb07fc028cabed0c37c26ac671ff987272f3d9c8e8ac67b512443abf.jpg",
+      "_source_path": "images/91fdd7edbb07fc028cabed0c37c26ac671ff987272f3d9c8e8ac67b512443abf.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2021"
+}

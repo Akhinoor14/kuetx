@@ -1,0 +1,42 @@
+{
+  "id": "1039_p4_Q7(b)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2022\\2nd_Year_2nd_Term_2022_1039.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the slope of the elastic curve over the right support for the beam loaded as shown."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_02d375bee3c795eeca7ff5213491c293086a8ed31ea56b3a4b3da26dc3477593.jpg",
+      "_source_path": "images/02d375bee3c795eeca7ff5213491c293086a8ed31ea56b3a4b3da26dc3477593.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2022"
+}

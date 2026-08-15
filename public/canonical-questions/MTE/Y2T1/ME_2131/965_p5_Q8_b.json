@@ -1,0 +1,42 @@
+{
+  "id": "965_p5_Q8(b)",
+  "course": {
+    "code": "ME 2131",
+    "title": "Engineering Mechanics",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\2nd_Year_1st_Term_2022_965.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 3-kg slender rod rotates in a vertical plane about a pivot at B. A spring of constant k = 300 N/m and of unstretched length 120 mm is attached to the rod as shown. Knowing that, in the position shown the rod has an angular velocity of 4 rad/s clockwise, determine the angular velocity of the rod after it has rotated through 90 degrees."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f4c704f7a63b3a5f61ffca1bf0b580f8773c9747a47586341950f0bc381d9daa.jpg",
+      "_source_path": "images/f4c704f7a63b3a5f61ffca1bf0b580f8773c9747a47586341950f0bc381d9daa.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

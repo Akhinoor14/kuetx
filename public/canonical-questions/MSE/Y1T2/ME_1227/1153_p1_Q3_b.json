@@ -1,0 +1,47 @@
+{
+  "id": "1153_p1_Q3(b)",
+  "course": {
+    "code": "ME 1227",
+    "title": "Engineering Mechanics",
+    "department": "Department of Materials Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Materials_Science_and_Engineering\\2021\\1st_Year_2nd_Term_2021_1153.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "Replace the loading acting on the beam by a single resultant force. Specify where the force (17) acts, measured from B."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_57d7345a524c40e89c2c4c4a95d61392b90331a43f17ba34359d3e38ecfdb78c.jpg",
+      "_source_path": "images/57d7345a524c40e89c2c4c4a95d61392b90331a43f17ba34359d3e38ecfdb78c.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a3ed74ad54323176540e72c5e75f91b6b1dd8f773badf70d1e81a3d4898fc7ea.jpg",
+      "_source_path": "images/a3ed74ad54323176540e72c5e75f91b6b1dd8f773badf70d1e81a3d4898fc7ea.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "1340_p1_Q3(a)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2024\\2nd_Year_2nd_Term_2024_1340.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The two blocks, as shown, are originally at rest. Neglecting the masses of eys and considering the effect of friction in pulley C and the incline, determine (i) une acccleration of each block, (ii) the tension in the cable. Assume that the coefficient of friction between block A and the incline, and at pulley C are $\\mu _ { s } = 0 . 2 5$ and $\\mu _ { k } = 0 . 1 5$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ed94da20a51e9c261a1a7c18d985e608f6b646dc40b3b5ba4e1fbfd16bedc7f0.jpg",
+      "_source_path": "images/ed94da20a51e9c261a1a7c18d985e608f6b646dc40b3b5ba4e1fbfd16bedc7f0.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2024"
+}

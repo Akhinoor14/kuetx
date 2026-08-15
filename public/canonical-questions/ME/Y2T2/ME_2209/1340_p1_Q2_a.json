@@ -1,0 +1,42 @@
+{
+  "id": "1340_p1_Q2(a)",
+  "course": {
+    "code": "ME 2209",
+    "title": "Engineering Mechanics II",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2024\\2nd_Year_2nd_Term_2024_1340.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A player throws a ball with an initial velocity of 1.65 m/s from a point A located 1.2 m above the floor. Knowing that h = 3.5 m, determine the angle α, for which the ball will strike the wall at point B. Check whether the ball hits the ceiling or not."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_6686eccbfeada9f30b9fefde092852da384e50d935b90bae21ba398e56e46ee5.jpg",
+      "_source_path": "images/6686eccbfeada9f30b9fefde092852da384e50d935b90bae21ba398e56e46ee5.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2024"
+}

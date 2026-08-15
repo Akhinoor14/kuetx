@@ -1,0 +1,42 @@
+{
+  "id": "1022_Q1(b)",
+  "course": {
+    "code": "ME 1209",
+    "title": "Engineering Mechanics I",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2020\\1st_Year_2nd_Term_2020_1022.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The boom OA carries a load P and is supported by two cables as shown. Knowing that the tension in cable AB is 732 N and that the resultant of the load P and of the forces exerted at A by the two cables must be directed along OA, determine the tension in cable AC."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d9a9ed2efb0fc8da23f0d910c342d5e0c9cf8ebf25e4c7a46f63bc10668f0677.jpg",
+      "_source_path": "images/d9a9ed2efb0fc8da23f0d910c342d5e0c9cf8ebf25e4c7a46f63bc10668f0677.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Special Examination (COVID-19), 2020"
+}

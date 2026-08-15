@@ -1,0 +1,41 @@
+{
+  "id": "1092_p9_Q5(b)",
+  "course": {
+    "code": "ME 3121",
+    "title": "Numerical Computation for Mechanical Engineers",
+    "department": "Department of Mechanical Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Mechanical_Engineering\\2018\\4th_Year_Backlog_2018_1092.pdf",
+    "source_page": null,
+    "paper_index": 9
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Use Range-Kutta method to solve $\\begin{array} { r } { \\mathrm { ~ \\ } I \\mathcal { O } \\frac { d y } { d x } = x ^ { 2 } + y ^ { 2 } , \\quad y \\mathcal { O } \\mathcal { O } = 1 } \\end{array}$ for the 17 interval $0 \\leq . 5 \\leq 0 . 4$ with $j _ { 1 } = 0 , l$"
+    },
+    {
+      "type": "text",
+      "value": "09"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Backlog Examination, 2018"
+}
