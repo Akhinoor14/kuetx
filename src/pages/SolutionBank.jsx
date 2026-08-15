@@ -978,7 +978,7 @@ function FilterBar({ allYears, allTypes, activeYears, activeTypes, onYearToggle,
 // ─────────────────────────────────────────────────────────────────────────────
 // MAIN COMPONENT
 // ─────────────────────────────────────────────────────────────────────────────
-export default function QuestionBankSolutions() {
+export default function SolutionBank() {
   const { t, dark } = useSolutionsTheme();
 
   // Inject CSS variables

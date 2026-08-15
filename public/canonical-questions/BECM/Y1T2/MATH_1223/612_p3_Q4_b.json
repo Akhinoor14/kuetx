@@ -1,41 +1,48 @@
-{
-  "id": "612_p3_Q4(b)",
-  "course": {
-    "code": "MATH 1223",
-    "title": "Mathematics - II",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 2nd Term"
-  },
-  "exam": {
-    "exam_year": 2018,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\1st_Year_2nd_Term_2018_612.pdf",
-    "source_page": null,
-    "paper_index": 3
-  },
-  "question_number": "4(b)",
-  "numbering_source": "regex",
-  "marks": null,
-  "content": [
-    {
-      "type": "text",
-      "value": "Solve, ${ \\frac { { \\hat { \\sigma } } ^ { 2 } y } { { \\hat { \\sigma } } t ^ { 2 } } } = 1 6 { \\frac { { \\hat { \\sigma } } ^ { 2 } y } { { \\hat { \\sigma } } x ^ { 2 } } }$ , 0 < x < 2, t > 0 subject to the conditions $\\begin{array} { r l } { y ( 0 , t ) = { } } & { { } 2 0 } \\end{array}$ 0 = y(2, t), yt (x, 0) = 0, y(x, 0) = 6 sin πx − 3 sin 4πx , $y ( x , t ) < M$"
+[
+  {
+    "id": "612_p3_Q4(b)",
+    "course": {
+      "code": "MATH 1223",
+      "title": "Mathematics - II",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 2nd Term"
     },
-    {
-      "type": "text",
-      "value": "Section - B"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": true,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
-}
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\1st_Year_2nd_Term_2018_612.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "4(b)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Solve, ${ \\frac { { \\hat { \\sigma } } ^ { 2 } y } { { \\hat { \\sigma } } t ^ { 2 } } } = 1 6 { \\frac { { \\hat { \\sigma } } ^ { 2 } y } { { \\hat { \\sigma } } x ^ { 2 } } }$ , 0 < x < 2, t > 0 subject to the conditions $\\begin{array} { r l } { y ( 0 , t ) = { } } & { { } 2 0 } \\end{array}$ 0 = y(2, t), yt (x, 0) = 0, y(x, 0) = 6 sin πx − 3 sin 4πx , $y ( x , t ) < M$"
+      },
+      {
+        "type": "text",
+        "value": "Section - B"
+      }
+    ],
+    "topics": [
+      "Ordinary Differential Equation: Differential equations, order and degree of differential equation; equations of 1st order and 1st degree, separation of variable, homogeneous, exact, linear and related forms; higher order linear homogeneous and nonhomogeneous differential equation; cauchy and legendre linear differential equation. Partial Differential Equations: Method of separation of variables; transverse vibrations of a stretching string (vibration of beams. Geometry: Cartesian, cylindrical and spherical-coordinates in three dimensions; direction-cosine and direction ratios; angle between two lines; distance of a point from a line; plane; straight line, shortest distance between skew lines; sphere; tangent plane to sphere, circle."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018",
+    "classification_notes": "প্রশ্নটি একটি দ্বিতীয় ক্রমের রৈখিক ডিফারেন্সিয়াল সমীকরণ (Partial Differential Equation) যা সিলেবাস নং ১-এর 'higher order linear homogeneous and nonhomogeneous differential equation' এবং related forms টপিকে পড়ে।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি একটি পারশিয়াল ডিফারেন্সিয়ল সমীকরণ যা সিলেবাসের 'Partial Differential Equations' এবং 'higher order linear homogeneous and nonhomogeneous differential equation' টপিকের সাথে সরাসরি মিলে যায়।"
+  }
+]

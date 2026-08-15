@@ -1,37 +1,44 @@
-{
-  "id": "615_p1_Q1(a)",
-  "course": {
-    "code": "BECM 2101",
-    "title": "Building Engineering Systems",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "2nd Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2016,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\2nd_Year_1st_Term_2016_615.pdf",
-    "source_page": null,
-    "paper_index": 1
-  },
-  "question_number": "1(a)",
-  "numbering_source": "regex",
-  "marks": 8,
-  "content": [
-    {
-      "type": "text",
-      "value": "What do you mean by HVAC? Briefly describe the terms involved in HVAC system. (08)"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2016"
-}
+[
+  {
+    "id": "615_p1_Q1(a)",
+    "course": {
+      "code": "BECM 2101",
+      "title": "Building Engineering Systems",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "2nd Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2016,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\2nd_Year_1st_Term_2016_615.pdf",
+      "source_page": null,
+      "paper_index": 1
+    },
+    "question_number": "1(a)",
+    "numbering_source": "regex",
+    "marks": 8,
+    "content": [
+      {
+        "type": "text",
+        "value": "What do you mean by HVAC? Briefly describe the terms involved in HVAC system. (08)"
+      }
+    ],
+    "topics": [
+      "Introduction to Building Control System, types of control and applications, human comfort, relative humidity and psychrometric chart, HVAC fundamentals. heating systems, modes of heat transfer, ventilation and air conditioning, air conditioning load calculations, ducting system and duct design, cooling system, refrigeration system and cycle, control loop, HVAC performance testing, adjusting and balancing (TAB), Cleanroom Performance Testing (CPT), standards, facilities management and maintenance. plumbing and sanitary systems, drainage system design and construction, water supply design, plumbing fixtures, plumbing testing, MEP coordination, MEP sustainability implications."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2016",
+    "classification_notes": "প্রশ্নটি HVAC-এর সংজ্ঞা ও এর মৌলিক শব্দগুলোর বর্ণনা চায় যা সরাসরি 'Introduction to Building Control System' এবং 'HVAC fundamentals'-এর অধীনে পড়ে।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি HVAC এর সংজ্ঞা ও ভিত্তিগত ধারণার উপর জোর দেয় যা 'Introduction to Building Control System' এবং 'HVAC fundamentals'-এর সরাসরি অন্তর্ভুক্ত বিষয়।"
+  }
+]

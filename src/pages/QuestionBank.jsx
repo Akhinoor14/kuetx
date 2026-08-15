@@ -1,625 +1,341 @@
-import { useState, useMemo, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+// QuestionBank.jsx
+//
+// Browse the new canonical JSON-based Question Bank (54,001 questions,
+// public/canonical-questions/) via useCanonicalQuestions.js. This is
+// question-browsing ONLY -- no answers/solutions here. For answers, see
+// SolutionBank.jsx (route: /solutions), which is a separate, unrelated
+// dataset (public/solution-data/) and was NOT touched by this file.
+//
+// See PROGRESS_QB_WEBSITE_INTEGRATION.md for the full history of why
+// these two are split (they used to be confusingly combined under one
+// name, QuestionBankSolutions.jsx / "/solutions").
+//
+// Flow: department -> term -> course -> question list -> question detail
+// (drilldown state kept in the URL via useSearchParams, same pattern as
+// SolutionBank.jsx, so links/back-button work as expected).
+
+import { useEffect, useMemo, useState, useCallback, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { ChevronRight, ArrowLeft, Search, X, BookOpen, Hash } from 'lucide-react';
+import 'katex/dist/katex.min.css';
+import '../styles/questionbank.css';
 import {
-  ChevronLeft, ChevronRight, FileText, Upload, Search,
-  BookOpen, AlertCircle, RefreshCw, ExternalLink, Sparkles, Trash2,
-} from 'lucide-react';
-import { QB_DEPARTMENTS } from '../data/questionbank/questionBankData';
-import { QB_COURSE_CODES } from '../data/questionbank/qbCourseCodes';
-import { useQuestionBankData, getR2FileUrl } from '../hooks/useQuestionBankData';
-import UploadQuestionModal from '../components/UploadQuestionModal';
-import { getProfile } from '../store/store';
-import { isMultiSectionDept, getGroupId } from '../lib/groupUtils';
-import { auth } from '../lib/firebase';
-import { checkIsAdmin } from '../lib/adminAuth';
-import { subscribeMyRoles } from '../lib/staffSync';
-import { founderDeletePapers, submitDeleteRequest } from '../lib/deleteRequests';
-import { notify } from '../lib/notify';
+  useCanonicalIndex,
+  useCanonicalCourseList,
+  useCanonicalQuestions,
+} from '../hooks/useCanonicalQuestions';
 
-const TERMS = ['Y1T1', 'Y1T2', 'Y2T1', 'Y2T2', 'Y3T1', 'Y3T2', 'Y4T1', 'Y4T2'];
-
-function termLabel(term) {
-  // "Y2T1" -> "2nd Year 1st Term"
-  const yMap = { 1: '1st', 2: '2nd', 3: '3rd', 4: '4th' };
-  const tMap = { 1: '1st', 2: '2nd' };
-  const y = term[1];
-  const t = term[3];
-  return `${yMap[y] || y} Year ${tMap[t] || t} Term`;
+// ─────────────────────────────────────────────────────────────────────────
+// KATEX -- small local copy of the same lazy-loader SolutionBank.jsx uses.
+// Not extracted into a shared module on purpose: SolutionBank.jsx's own
+// copy is left completely untouched, so nothing there can regress.
+// ─────────────────────────────────────────────────────────────────────────
+let _katex = null;
+async function loadKatex() {
+  if (_katex) return _katex;
+  try { _katex = (await import('katex')).default; } catch (_) { _katex = null; }
+  return _katex;
 }
 
-// Screens: 'depts' -> 'terms' -> 'courses' -> 'papers'
-export default function QuestionBank() {
-  const navigate = useNavigate();
-  const { tree, loading, error, refetch } = useQuestionBankData();
-
-  const profile = useMemo(() => getProfile(), []);
-  const myDept = profile?.dept && QB_DEPARTMENTS[profile.dept] ? profile.dept : null;
-  const myTermMatch = profile?.currentTermKey?.match(/^Y\dT\d$/);
-  const myTerm = myTermMatch ? profile.currentTermKey : null;
-
-  const [screen, setScreen] = useState('depts');
-  const [dept, setDept] = useState(null);
-  const [term, setTerm] = useState(null);
-  const [course, setCourse] = useState(null); // { code, title }
-  const [search, setSearch] = useState('');
-  const [showUpload, setShowUpload] = useState(false);
-
-  // Delete UI: Founder gets an immediate "Delete" per paper (no review
-  // step, matching Founder uploads); a Campus Lead / Senior Campus Lead
-  // of the paper's OWN dept gets "Request deletion" instead, which lands
-  // in the same deleteRequests queue Founder/SCL already review from
-  // StaffDashboard/AdminDashboard (see deleteRequests.js).
-  const [isFounder, setIsFounder] = useState(false);
-  const [myRoles, setMyRoles] = useState([]);
-  const [deleteBusyKey, setDeleteBusyKey] = useState(null);
-  const [confirmDeleteKey, setConfirmDeleteKey] = useState(null);
-  const [requestDeleteKey, setRequestDeleteKey] = useState(null);
-
+function MathSpan({ src, display = false }) {
+  const ref = useRef(null);
   useEffect(() => {
-    checkIsAdmin(auth.currentUser?.uid).then(setIsFounder);
-  }, []);
-  useEffect(() => subscribeMyRoles(setMyRoles), []);
-
-  // The CL/SCL group scoped to this paper's dept, if the signed-in user
-  // holds one — used both to show "Request deletion" and to fill in the
-  // groupId submitDeleteRequest() needs.
-  function myGroupIdForDept(paperDept) {
-    // A CL's scope.groupId is `${batch}_${dept}` for single-section depts,
-    // or `${batch}_${dept}_${section}` for the 4 multi-section depts (see
-    // groupUtils.js). QB papers are organized by dept only (no section),
-    // so any CL of ANY section of this dept can manage/request-delete its
-    // papers — matching must compare the dept SEGMENT, not the tail of
-    // the string (`.endsWith('_' + paperDept)` would wrongly reject every
-    // multi-section CL, since their groupId ends in `_A`/`_B`, not the
-    // dept code).
-    const cl = myRoles.find((r) => {
-      if (r.role !== 'campus_lead' || !r.scope?.groupId) return false;
-      const parts = r.scope.groupId.split('_');
-      return parts[1] === paperDept;
+    loadKatex().then((kt) => {
+      if (!kt || !ref.current) return;
+      try { kt.render(src, ref.current, { displayMode: display, throwOnError: false, output: 'html' }); }
+      catch (_) { if (ref.current) ref.current.textContent = src; }
     });
-    if (cl) return cl.scope.groupId;
-    const scl = myRoles.find((r) => r.role === 'senior_campus_lead' && r.scope?.dept === paperDept);
-    if (scl) {
-      // SCL scope is dept-only (no single groupId, and no section either
-      // — an SCL oversees the whole dept across all sections). Fall back
-      // to the signed-in user's own profile groupId if it happens to
-      // match this dept, otherwise build a dept-level placeholder via
-      // getGroupId so the request doc still records which dept it's for.
-      // For multi-section depts this placeholder groupId legitimately
-      // has no real `groups/{groupId}` doc behind it (it's SCL-level, not
-      // tied to one section) — deleteRequests.js/firestore.rules only
-      // need it to identify the dept, not to resolve to a real group.
-      const myProfile = getProfile();
-      if (myProfile?.dept && QB_DEPARTMENTS[paperDept]) {
-        if (myProfile.dept === paperDept) {
-          const mine = getGroupId(myProfile);
-          if (mine) return mine;
-        }
-        return isMultiSectionDept(paperDept)
-          ? `${myProfile.batch || 'scl'}_${paperDept}_A`
-          : `${myProfile.batch || 'scl'}_${paperDept}`;
-      }
-    }
-    return null;
-  }
-  function canManageDept(paperDept) {
-    if (isFounder) return true;
-    return Boolean(myGroupIdForDept(paperDept));
-  }
+  }, [src, display]);
+  return <span ref={ref} />;
+}
 
-  const deptList = useMemo(
-    () => Object.entries(QB_DEPARTMENTS).map(([code, name]) => ({ code, name })),
-    []
-  );
+// strips the $$...$$ / $...$ wrapper canonical "formula" blocks store their
+// latex in, since MathSpan/katex.render wants the bare expression
+function stripLatexDelimiters(raw) {
+  const s = (raw || '').trim();
+  if (s.startsWith('$$') && s.endsWith('$$')) return s.slice(2, -2).trim();
+  if (s.startsWith('$') && s.endsWith('$')) return s.slice(1, -1).trim();
+  if (s.startsWith('\\[') && s.endsWith('\\]')) return s.slice(2, -2).trim();
+  return s;
+}
 
-  const filteredDepts = useMemo(() => {
-    if (!search.trim()) return deptList;
-    const q = search.toLowerCase();
-    return deptList.filter(
-      (d) => d.code.toLowerCase().includes(q) || d.name.toLowerCase().includes(q)
-    );
-  }, [deptList, search]);
+// ─────────────────────────────────────────────────────────────────────────
+// CONTENT BLOCK RENDERER
+//
+// Canonical question schema, content[].type is one of:
+//   text    -> { value: string }
+//   formula -> { value: "$$...$$", format: "latex" }
+//   table   -> { value_html: "<table>...</table>" }
+//   image   -> { asset: "assets/xyz.jpg", _source_path: "..." }
+//
+// NOTE (image assets): as of this writing, no actual asset files exist
+// under public/canonical-questions/ anywhere (verified by scanning for any
+// "assets" folder -- none found). This is a known, already-flagged open
+// item (ধাপ F in PROGRESS_QB_WEBSITE_INTEGRATION.md, §৪) -- image blocks
+// are rendered as a clearly-labeled placeholder instead of a broken <img>,
+// until that's resolved.
+// ─────────────────────────────────────────────────────────────────────────
+function ContentBlock({ block, idx }) {
+  if (!block || !block.type) return null;
 
-  // Course list for the selected dept+term: curriculum data (Theory only) MERGED
-  // with any course codes that actually exist in the live R2 tree. This matters
-  // because (a) 4 depts have no curriculum data at all, and (b) curriculum data
-  // could be incomplete/wrong for the other 12 - in either case, if a paper was
-  // uploaded under some course code, it must still be browsable here.
-  const courseList = useMemo(() => {
-    if (!dept || !term) return [];
-    const fromCurriculum = QB_COURSE_CODES[dept]?.[term] || [];
-    const knownCodes = new Set(fromCurriculum.map((c) => c.code.replace(/\s+/g, '')));
-
-    const fromR2 = Object.keys(tree?.[dept]?.[term] || {})
-      .filter((courseKey) => !knownCodes.has(courseKey))
-      .map((courseKey) => ({ code: courseKey, title: '(uploaded, not in curriculum list)' }));
-
-    return [...fromCurriculum, ...fromR2];
-  }, [dept, term, tree]);
-
-  const hasCurriculumData = dept ? Boolean(QB_COURSE_CODES[dept]) : true;
-
-  // Papers for the selected course, pulled from the live R2 tree.
-  const papers = useMemo(() => {
-    if (!dept || !term || !course) return [];
-    const courseKey = course.code.replace(/\s+/g, '');
-    return tree?.[dept]?.[term]?.[courseKey] || [];
-  }, [tree, dept, term, course]);
-
-  function goToDept(d) {
-    setDept(d.code);
-    setScreen('terms');
-  }
-  function jumpToMyTerm() {
-    if (!myDept || !myTerm) return;
-    setDept(myDept);
-    setTerm(myTerm);
-    setScreen('courses');
-  }
-  function goToTerm(t) {
-    setTerm(t);
-    setScreen('courses');
-  }
-  function goToCourse(c) {
-    setCourse(c);
-    setScreen('papers');
-  }
-  function goBack() {
-    if (screen === 'papers') { setCourse(null); setScreen('courses'); }
-    else if (screen === 'courses') { setTerm(null); setScreen('terms'); }
-    else if (screen === 'terms') { setDept(null); setScreen('depts'); }
+  if (block.type === 'text') {
+    if (!block.value) return null;
+    return <p className="qb-content-text" key={idx}>{block.value}</p>;
   }
 
-  function openPaper(paper) {
-    const url = getR2FileUrl(paper.key);
-    navigate(`/question-bank/view?src=${encodeURIComponent(url)}&title=${encodeURIComponent(paper.label)}`);
-  }
-
-  async function handleFounderDelete(paper) {
-    setDeleteBusyKey(paper.key);
-    try {
-      const { deleted, notFound } = await founderDeletePapers([paper.key]);
-      if (deleted.includes(paper.key)) {
-        notify(`Deleted "${paper.label}".`, 'success');
-        refetch();
-      } else if (notFound.includes(paper.key)) {
-        notify('That file was already gone — refreshing the list.', 'info');
-        refetch();
-      } else {
-        notify('Delete did not complete — try again.', 'error');
-      }
-    } catch (e) {
-      notify(e?.message || 'Failed to delete — try again.', 'error');
-    } finally {
-      setDeleteBusyKey(null);
-      setConfirmDeleteKey(null);
-    }
-  }
-
-  async function handleRequestDelete(paper) {
-    const paperGroupId = myGroupIdForDept(dept);
-    if (!paperGroupId) {
-      notify('Could not determine your class/department scope for this request.', 'error');
-      return;
-    }
-    setDeleteBusyKey(paper.key);
-    try {
-      await submitDeleteRequest(
-        { groupId: paperGroupId, dept },
-        [{ key: paper.key, dept, term, courseCode: course?.code, label: paper.label }]
-      );
-      notify('Delete request submitted — awaiting Founder approval.', 'success');
-    } catch (e) {
-      notify(e?.message || 'Failed to submit delete request.', 'error');
-    } finally {
-      setDeleteBusyKey(null);
-      setRequestDeleteKey(null);
-    }
-  }
-
-  return (
-    <div className="page-enter content-page-bg" style={styles.page}>
-      <div className="content-page-hero">
-        <div className="content-page-hero-main">
-          <div className="content-page-hero-head">
-            <div className="content-page-hero-icon">
-              <BookOpen size={24} color="var(--accent)" />
-            </div>
-            <h1 className="content-page-hero-title" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-              {screen === 'depts' && 'Question Bank'}
-              {screen === 'terms' && QB_DEPARTMENTS[dept]}
-              {screen === 'courses' && `${dept} — ${termLabel(term)}`}
-              {screen === 'papers' && `${course.code} — ${course.title}`}
-            </h1>
-          </div>
-          <p className="content-page-hero-subtitle">Browse and upload past papers by department, term and course</p>
-        </div>
-        <div className="content-page-hero-actions">
-          {screen !== 'depts' && (
-            <button style={styles.backBtn} onClick={goBack}>
-              <ChevronLeft size={18} /> Back
-            </button>
-          )}
-          <button className="accent-fill-glass" style={styles.uploadBtn} onClick={() => setShowUpload(true)}>
-            <Upload size={16} /> <span className="btn-txt">Upload</span>
-          </button>
-        </div>
+  if (block.type === 'formula') {
+    if (!block.value) return null;
+    return (
+      <div className="qb-content-formula" key={idx}>
+        <MathSpan src={stripLatexDelimiters(block.value)} display />
       </div>
+    );
+  }
 
-      {error && (
-        <div style={styles.errorBox}>
-          <AlertCircle size={16} />
-          <span>Couldn't load live data: {error}</span>
-          <button style={styles.retryBtn} onClick={refetch}><RefreshCw size={14} /> Retry</button>
-        </div>
-      )}
+  if (block.type === 'table') {
+    if (!block.value_html) return null;
+    // pipeline-sourced HTML, not user input -- safe to render directly,
+    // same trust boundary as the rest of this dataset
+    return (
+      <div
+        className="qb-content-table"
+        key={idx}
+        dangerouslySetInnerHTML={{ __html: block.value_html }}
+      />
+    );
+  }
 
-      {/* DEPT LIST */}
-      {screen === 'depts' && (
-        <>
-          {myDept && myTerm && (
-            <button className="accent-fill-glass" style={styles.jumpCard} onClick={jumpToMyTerm}>
-              <Sparkles size={18} />
-              <div style={{ textAlign: 'left', flex: 1 }}>
-                <div style={{ fontWeight: 700, fontSize: 14 }}>Jump to my term</div>
-                <div style={{ fontSize: 12, opacity: 0.75 }}>
-                  {myDept} — {termLabel(myTerm)}
-                </div>
-              </div>
-              <ChevronRight size={18} />
-            </button>
-          )}
-          <div style={styles.searchWrap}>
-            <Search size={16} style={{ opacity: 0.5 }} />
-            <input
-              style={styles.searchInput}
-              placeholder="Search department..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
-          <div style={styles.grid}>
-            {filteredDepts.map((d) => (
-              <button key={d.code} style={styles.card} onClick={() => goToDept(d)}>
-                <div style={styles.cardCode}>{d.code}</div>
-                <div style={styles.cardSub}>{d.name.replace('Department of ', '')}</div>
-                <ChevronRight size={16} style={styles.cardArrow} />
-              </button>
-            ))}
-          </div>
-        </>
-      )}
+  if (block.type === 'image') {
+    return (
+      <div className="qb-content-image-placeholder" key={idx}>
+        <span>ছবি এখনো যোগ করা যায়নি (asset pending)</span>
+      </div>
+    );
+  }
 
-      {/* TERM LIST */}
-      {screen === 'terms' && (
-        <div style={styles.grid}>
-          {TERMS.map((t) => (
-            <button key={t} style={styles.card} onClick={() => goToTerm(t)}>
-              <div style={styles.cardCode}>{t}</div>
-              <div style={styles.cardSub}>{termLabel(t)}</div>
-              <ChevronRight size={16} style={styles.cardArrow} />
-            </button>
-          ))}
-        </div>
-      )}
+  return null;
+}
 
-      {/* COURSE LIST */}
-      {screen === 'courses' && (
-        <>
-          {!hasCurriculumData && courseList.length === 0 && (
-            <div style={styles.infoBox}>
-              <AlertCircle size={16} />
-              <span>
-                No course list or uploaded papers found yet for this department. Use "Upload" and
-                type the course code manually — it'll show up here once uploaded.
-              </span>
-            </div>
-          )}
-          {!hasCurriculumData && courseList.length > 0 && (
-            <div style={styles.infoBox}>
-              <AlertCircle size={16} />
-              <span>
-                This department's course list isn't in our curriculum data yet, so only courses
-                with uploaded papers are shown below. Use "Upload" to add more.
-              </span>
-            </div>
-          )}
-          {hasCurriculumData && courseList.length === 0 && (
-            <div style={styles.infoBox}>
-              <AlertCircle size={16} />
-              <span>No theory courses found for this term.</span>
-            </div>
-          )}
-          <div style={styles.list}>
-            {courseList.map((c) => {
-              const courseKey = c.code.replace(/\s+/g, '');
-              const coursePapers = tree?.[dept]?.[term]?.[courseKey];
-              const paperCount = coursePapers ? coursePapers.length : 0;
-              return (
-                <button key={c.code} style={styles.listItem} onClick={() => goToCourse(c)}>
-                  <div>
-                    <div style={styles.listItemCode}>{c.code}</div>
-                    <div style={styles.listItemTitle}>{c.title}</div>
-                  </div>
-                  <div style={styles.listItemRight}>
-                    {paperCount > 0 && (
-                      <span style={styles.paperBadge}>{paperCount} paper{paperCount > 1 ? 's' : ''}</span>
-                    )}
-                    <ChevronRight size={16} style={{ opacity: 0.4 }} />
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </>
-      )}
-
-      {/* PAPERS LIST */}
-      {screen === 'papers' && (
-        <>
-          {loading && <div style={styles.infoBox}>Loading papers…</div>}
-          {!loading && papers.length === 0 && (
-            <div style={styles.infoBox}>
-              <AlertCircle size={16} />
-              <span>No papers uploaded yet for this course. Be the first to contribute!</span>
-            </div>
-          )}
-          <div style={styles.list}>
-            {papers.map((p) => {
-              const canManage = canManageDept(dept);
-              const busy = deleteBusyKey === p.key;
-              return (
-                <div key={p.key} style={styles.listItem}>
-                  <button style={styles.paperOpenArea} onClick={() => openPaper(p)}>
-                    <div style={styles.paperRow}>
-                      <FileText size={18} style={{ opacity: 0.6 }} />
-                      <span style={styles.listItemCode}>{p.label}</span>
-                    </div>
-                  </button>
-
-                  <div style={styles.listItemRight}>
-                    {canManage && confirmDeleteKey !== p.key && requestDeleteKey !== p.key && (
-                      <button
-                        style={styles.deleteIconBtn}
-                        title={isFounder ? 'Delete' : 'Request deletion'}
-                        disabled={busy}
-                        onClick={() => (isFounder ? setConfirmDeleteKey(p.key) : setRequestDeleteKey(p.key))}
-                      >
-                        <Trash2 size={15} />
-                      </button>
-                    )}
-                    {!canManage && <ExternalLink size={16} style={{ opacity: 0.4 }} onClick={() => openPaper(p)} />}
-
-                    {isFounder && confirmDeleteKey === p.key && (
-                      <div style={styles.confirmRow}>
-                        <span style={styles.confirmLabel}>Delete this paper?</span>
-                        <button style={styles.confirmDangerBtn} disabled={busy} onClick={() => handleFounderDelete(p)}>
-                          {busy ? 'Deleting…' : 'Delete'}
-                        </button>
-                        <button style={styles.confirmCancelBtn} disabled={busy} onClick={() => setConfirmDeleteKey(null)}>
-                          Cancel
-                        </button>
-                      </div>
-                    )}
-
-                    {!isFounder && requestDeleteKey === p.key && (
-                      <div style={styles.confirmRow}>
-                        <span style={styles.confirmLabel}>Request deletion?</span>
-                        <button style={styles.confirmDangerBtn} disabled={busy} onClick={() => handleRequestDelete(p)}>
-                          {busy ? 'Sending…' : 'Request'}
-                        </button>
-                        <button style={styles.confirmCancelBtn} disabled={busy} onClick={() => setRequestDeleteKey(null)}>
-                          Cancel
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </>
-      )}
-
-      {showUpload && (
-        <UploadQuestionModal
-          defaultDept={dept}
-          defaultTerm={term}
-          defaultCourse={course?.code}
-          onClose={() => setShowUpload(false)}
-        />
+function QuestionDetailCard({ question }) {
+  if (!question) return null;
+  return (
+    <div className="course-card" style={{ cursor: 'default' }}>
+      <div className="course-info-bar">
+        <span className="course-info-code">{question.id}</span>
+        {question.marks != null && (
+          <span className="course-card-hint">{question.marks} marks</span>
+        )}
+      </div>
+      {(question.content || []).map((block, i) => (
+        <ContentBlock block={block} idx={i} key={i} />
+      ))}
+      {question.needs_human_review && (
+        <div className="qb-review-flag">এই প্রশ্নটা এখনো manual review-এর অপেক্ষায় আছে</div>
       )}
     </div>
   );
 }
 
-const styles = {
-  page: {
-    width: '100%',
-    padding: '20px',
-    minHeight: '100vh',
-    color: 'var(--text)',
-  },
-  header: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 12,
-    marginBottom: 20,
-    flexWrap: 'wrap',
-  },
-  backBtn: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 4,
-    background: 'none',
-    border: '1px solid var(--border)',
-    borderRadius: 8,
-    padding: '6px 10px',
-    color: 'var(--text)',
-    cursor: 'pointer',
-    fontSize: 13,
-  },
-  headerTitleWrap: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 8,
-    flex: 1,
-    minWidth: 0,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 800,
-    letterSpacing: '-0.02em',
-    color: 'var(--text)',
-    margin: 0,
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-  },
-  uploadBtn: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 6,
-    background: 'var(--accent)',
-    color: 'var(--card)',
-    border: 'none',
-    borderRadius: 8,
-    padding: '8px 14px',
-    cursor: 'pointer',
-    fontSize: 13,
-    fontWeight: 600,
-  },
-  searchWrap: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 8,
-    background: 'var(--surface)',
-    border: '1px solid var(--border)',
-    borderRadius: 10,
-    padding: '8px 12px',
-    marginBottom: 16,
-  },
-  jumpCard: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 12,
-    width: '100%',
-    background: 'var(--accent)',
-    color: '#fff',
-    border: 'none',
-    borderRadius: 12,
-    padding: '14px 16px',
-    cursor: 'pointer',
-    marginBottom: 14,
-    textAlign: 'left',
-  },
-  searchInput: {
-    border: 'none',
-    outline: 'none',
-    background: 'transparent',
-    color: 'var(--text)',
-    fontSize: 14,
-    flex: 1,
-  },
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
-    gap: 10,
-  },
-  card: {
-    position: 'relative',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    gap: 4,
-    background: 'var(--surface)',
-    border: '1px solid var(--border)',
-    borderRadius: 12,
-    padding: '14px 16px',
-    cursor: 'pointer',
-    textAlign: 'left',
-  },
-  cardCode: { fontWeight: 700, fontSize: 15, color: 'var(--text)' },
-  cardSub: { fontSize: 12, opacity: 0.65, color: 'var(--text)' },
-  cardArrow: { position: 'absolute', top: 12, right: 12, opacity: 0.35 },
-  list: { display: 'flex', flexDirection: 'column', gap: 8 },
-  listItem: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    background: 'var(--surface)',
-    border: '1px solid var(--border)',
-    borderRadius: 10,
-    padding: '12px 14px',
-    cursor: 'pointer',
-    textAlign: 'left',
-  },
-  listItemRight: { display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 },
-  listItemCode: { fontWeight: 700, fontSize: 14, color: 'var(--text)' },
-  listItemTitle: { fontSize: 12, opacity: 0.65, color: 'var(--text)' },
-  paperRow: { display: 'flex', alignItems: 'center', gap: 10 },
-  paperOpenArea: {
-    display: 'flex', alignItems: 'center', flex: 1, minWidth: 0,
-    background: 'none', border: 'none', padding: 0, cursor: 'pointer', textAlign: 'left',
-  },
-  deleteIconBtn: {
-    display: 'flex', alignItems: 'center', justifyContent: 'center',
-    background: 'none', border: '1px solid var(--border)', borderRadius: 8,
-    width: 30, height: 30, cursor: 'pointer', color: 'var(--danger)',
-  },
-  confirmRow: { display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' },
-  confirmLabel: { fontSize: 11.5, color: 'var(--muted)' },
-  confirmDangerBtn: {
-    background: 'var(--danger)', color: '#fff', border: 'none', borderRadius: 6,
-    padding: '4px 10px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
-  },
-  confirmCancelBtn: {
-    background: 'none', border: '1px solid var(--border)', color: 'var(--text)', borderRadius: 6,
-    padding: '4px 10px', fontSize: 12, cursor: 'pointer',
-  },
-  paperBadge: {
-    fontSize: 11,
-    background: 'var(--accent)',
-    color: '#fff',
-    borderRadius: 999,
-    padding: '2px 8px',
-    opacity: 0.85,
-  },
-  infoBox: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 8,
-    background: 'var(--surface)',
-    border: '1px solid var(--border)',
-    borderRadius: 10,
-    padding: '12px 14px',
-    fontSize: 13,
-    opacity: 0.8,
-    marginBottom: 16,
-  },
-  errorBox: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 8,
-    background: 'rgba(248,113,113,0.1)',
-    border: '1px solid rgba(248,113,113,0.3)',
-    borderRadius: 10,
-    padding: '10px 14px',
-    fontSize: 13,
-    marginBottom: 16,
-    color: '#f87171',
-  },
-  retryBtn: {
-    marginLeft: 'auto',
-    display: 'flex',
-    alignItems: 'center',
-    gap: 4,
-    background: 'none',
-    border: '1px solid currentColor',
-    borderRadius: 6,
-    padding: '4px 8px',
-    cursor: 'pointer',
-    color: 'inherit',
-    fontSize: 12,
-  },
-};
+export default function QuestionBank() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { index, loading: indexLoading, error: indexError } = useCanonicalIndex();
+
+  const [selectedDept, setSelectedDept] = useState(searchParams.get('dept') || null);
+  const [selectedTerm, setSelectedTerm] = useState(searchParams.get('term') || null);
+  const [selectedCourse, setSelectedCourse] = useState(searchParams.get('course') || null);
+  const [search, setSearch] = useState('');
+
+  // keep URL in sync with drilldown state, same pattern as SolutionBank.jsx
+  useEffect(() => {
+    const params = {};
+    if (selectedDept) params.dept = selectedDept;
+    if (selectedTerm) params.term = selectedTerm;
+    if (selectedCourse) params.course = selectedCourse;
+    setSearchParams(params, { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedDept, selectedTerm, selectedCourse]);
+
+  const departments = useMemo(() => {
+    if (!index?.departments) return [];
+    return Object.keys(index.departments).sort();
+  }, [index]);
+
+  const terms = useMemo(() => {
+    if (!index?.departments || !selectedDept) return [];
+    return Object.keys(index.departments[selectedDept]?.terms || {}).sort();
+  }, [index, selectedDept]);
+
+  const { courses } = useCanonicalCourseList(selectedDept, selectedTerm);
+
+  const { questions, loading: questionsLoading, error: questionsError } =
+    useCanonicalQuestions(selectedDept, selectedTerm, selectedCourse);
+
+  const filteredQuestions = useMemo(() => {
+    if (!search.trim()) return questions;
+    const sq = search.toLowerCase();
+    return questions.filter((q) => {
+      const idMatch = String(q.id || '').toLowerCase().includes(sq);
+      const textMatch = (q.content || []).some(
+        (b) => b.type === 'text' && (b.value || '').toLowerCase().includes(sq)
+      );
+      return idMatch || textMatch;
+    });
+  }, [questions, search]);
+
+  const goToDepts = useCallback(() => {
+    setSelectedDept(null);
+    setSelectedTerm(null);
+    setSelectedCourse(null);
+  }, []);
+
+  const goToTerms = useCallback((dept) => {
+    setSelectedDept(dept);
+    setSelectedTerm(null);
+    setSelectedCourse(null);
+  }, []);
+
+  const goToCourses = useCallback((term) => {
+    setSelectedTerm(term);
+    setSelectedCourse(null);
+  }, []);
+
+  const goToCourse = useCallback((courseCode) => {
+    setSelectedCourse(courseCode);
+    setSearch('');
+  }, []);
+
+  if (indexError) {
+    return (
+      <div className="content-page-bg">
+        <div className="empty-state">Question Bank লোড করতে সমস্যা হয়েছে। একটু পরে আবার চেষ্টা করো।</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="content-page-bg">
+      <div className="content-page-hero">
+        <div className="content-page-hero-head">
+          <BookOpen className="content-page-hero-icon" size={28} />
+          <div className="content-page-hero-main">
+            <h1 className="content-page-hero-title">Question Bank</h1>
+            <p className="content-page-hero-subtitle">
+              বিভাগ, টার্ম আর কোর্স অনুযায়ী পুরনো প্রশ্ন খুঁজে দেখো
+            </p>
+          </div>
+        </div>
+        {index && (
+          <div className="content-page-hero-stats">
+            <div className="content-page-hero-stat">
+              <span className="content-page-hero-stat-n">{index.total_question_files}</span>
+              <span className="content-page-hero-stat-label">প্রশ্ন</span>
+            </div>
+            <div className="content-page-hero-stat">
+              <span className="content-page-hero-stat-n">{departments.length}</span>
+              <span className="content-page-hero-stat-label">বিভাগ</span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* breadcrumb */}
+      <div className="filter-bar-row qs-no-print">
+        {selectedDept && (
+          <button className="btn-secondary" onClick={goToDepts}>
+            <ArrowLeft size={16} /> বিভাগ তালিকা
+          </button>
+        )}
+        {selectedDept && (
+          <span className="crumb-active">
+            {selectedDept}
+            {selectedTerm && <> <ChevronRight size={14} style={{ display: 'inline' }} /> {selectedTerm}</>}
+            {selectedCourse && <> <ChevronRight size={14} style={{ display: 'inline' }} /> {selectedCourse.replace('_', ' ')}</>}
+          </span>
+        )}
+      </div>
+
+      {indexLoading && <div className="empty-state">লোড হচ্ছে...</div>}
+
+      {/* level 1: department picker */}
+      {!indexLoading && !selectedDept && (
+        <div className="course-grid">
+          {departments.map((dept) => (
+            <div className="course-card" key={dept} onClick={() => goToTerms(dept)}>
+              <div className="course-card-code">{dept}</div>
+              <div className="course-card-hint">
+                {Object.keys(index.departments[dept]?.terms || {}).length} টার্ম
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* level 2: term picker */}
+      {selectedDept && !selectedTerm && (
+        <div className="course-grid">
+          {terms.map((term) => (
+            <div className="course-card" key={term} onClick={() => goToCourses(term)}>
+              <div className="course-card-code">{term}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* level 3: course picker */}
+      {selectedDept && selectedTerm && !selectedCourse && (
+        <div className="course-grid">
+          {courses.map((c) => (
+            <div className="course-card" key={c.code} onClick={() => goToCourse(c.code)}>
+              <div className="course-card-code">{c.displayCode}</div>
+              <div className="course-card-hint">{c.questionCount} প্রশ্ন</div>
+            </div>
+          ))}
+          {courses.length === 0 && (
+            <div className="empty-state">এই টার্মে এখনো কোনো কোর্স যোগ হয়নি</div>
+          )}
+        </div>
+      )}
+
+      {/* level 4: question list for the selected course */}
+      {selectedCourse && (
+        <>
+          <div className="filter-bar-row qs-no-print">
+            <div className="filter-bar">
+              <Search className="filter-bar-icon" size={16} />
+              <input
+                type="text"
+                placeholder="প্রশ্ন খুঁজো..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="dt-select"
+              />
+              {search && (
+                <button className="filter-clear" onClick={() => setSearch('')}>
+                  <X size={14} />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {questionsLoading && <div className="empty-state">প্রশ্ন লোড হচ্ছে...</div>}
+          {questionsError && (
+            <div className="empty-state">এই কোর্সের প্রশ্ন লোড করতে সমস্যা হয়েছে।</div>
+          )}
+
+          {!questionsLoading && !questionsError && (
+            <div className="qb-question-list">
+              {filteredQuestions.map((q, i) => (
+                <QuestionDetailCard question={q} key={q.id || i} />
+              ))}
+              {filteredQuestions.length === 0 && (
+                <div className="empty-state">
+                  <Hash size={20} /> কোনো প্রশ্ন পাওয়া যায়নি
+                </div>
+              )}
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}

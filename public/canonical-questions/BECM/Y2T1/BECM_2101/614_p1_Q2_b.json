@@ -1,41 +1,48 @@
-{
-  "id": "614_p1_Q2(b)",
-  "course": {
-    "code": "BECM 2101",
-    "title": "Building Engineering Systems",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "2nd Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2015,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\2nd_Year_1st_Term_2015_614.pdf",
-    "source_page": null,
-    "paper_index": 1
-  },
-  "question_number": "2(b)",
-  "numbering_source": "regex",
-  "marks": 15,
-  "content": [
-    {
-      "type": "text",
-      "value": "Describe the summer air conditioning with block diagram."
+[
+  {
+    "id": "614_p1_Q2(b)",
+    "course": {
+      "code": "BECM 2101",
+      "title": "Building Engineering Systems",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "2nd Year 1st Term"
     },
-    {
-      "type": "text",
-      "value": "(15)"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2015"
-}
+    "exam": {
+      "exam_year": 2015,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\2nd_Year_1st_Term_2015_614.pdf",
+      "source_page": null,
+      "paper_index": 1
+    },
+    "question_number": "2(b)",
+    "numbering_source": "regex",
+    "marks": 15,
+    "content": [
+      {
+        "type": "text",
+        "value": "Describe the summer air conditioning with block diagram."
+      },
+      {
+        "type": "text",
+        "value": "(15)"
+      }
+    ],
+    "topics": [
+      "Introduction to Building Control System, types of control and applications, human comfort, relative humidity and psychrometric chart, HVAC fundamentals. heating systems, modes of heat transfer, ventilation and air conditioning, air conditioning load calculations, ducting system and duct design, cooling system, refrigeration system and cycle, control loop, HVAC performance testing, adjusting and balancing (TAB), Cleanroom Performance Testing (CPT), standards, facilities management and maintenance. plumbing and sanitary systems, drainage system design and construction, water supply design, plumbing fixtures, plumbing testing, MEP coordination, MEP sustainability implications."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2015",
+    "classification_notes": "প্রশ্নটি শীতলকরণ (cooling), এয়ার কন্ডিশনিং লোড এবং ডাক্টিং সিস্টেম নিয়ে যা সবই মূল টপিক ১-এর অন্তর্ভুক্ত।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি শীতলকরণ এবং এয়ার কন্ডিশনিং সিস্টেমের ওপর ভিত্তি করে যা মূল টপিক লিস্টে 'HVAC fundamentals', 'cooling system' এবং 'ducting system'-এর অন্তর্ভুক্ত।"
+  }
+]

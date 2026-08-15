@@ -1,41 +1,48 @@
-{
-  "id": "612_p3_Q3(c)",
-  "course": {
-    "code": "MATH 1223",
-    "title": "Mathematics - II",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 2nd Term"
-  },
-  "exam": {
-    "exam_year": 2018,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\1st_Year_2nd_Term_2018_612.pdf",
-    "source_page": null,
-    "paper_index": 3
-  },
-  "question_number": "3(c)",
-  "numbering_source": "regex",
-  "marks": 10,
-  "content": [
-    {
-      "type": "text",
-      "value": "Solve $\\begin{array} { r } { \\frac { \\partial u } { \\partial y } = c \\ \\frac { \\delta u } { \\delta x } } \\end{array}$ subject to the condition $u ( x , 0 ) = 3 e ^ { - 2 x }$"
+[
+  {
+    "id": "612_p3_Q3(c)",
+    "course": {
+      "code": "MATH 1223",
+      "title": "Mathematics - II",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 2nd Term"
     },
-    {
-      "type": "text",
-      "value": "(10)"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
-}
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\1st_Year_2nd_Term_2018_612.pdf",
+      "source_page": null,
+      "paper_index": 3
+    },
+    "question_number": "3(c)",
+    "numbering_source": "regex",
+    "marks": 10,
+    "content": [
+      {
+        "type": "text",
+        "value": "Solve $\\begin{array} { r } { \\frac { \\partial u } { \\partial y } = c \\ \\frac { \\delta u } { \\delta x } } \\end{array}$ subject to the condition $u ( x , 0 ) = 3 e ^ { - 2 x }$"
+      },
+      {
+        "type": "text",
+        "value": "(10)"
+      }
+    ],
+    "topics": [
+      "Ordinary Differential Equation: Differential equations, order and degree of differential equation; equations of 1st order and 1st degree, separation of variable, homogeneous, exact, linear and related forms; higher order linear homogeneous and nonhomogeneous differential equation; cauchy and legendre linear differential equation. Partial Differential Equations: Method of separation of variables; transverse vibrations of a stretching string (vibration of beams. Geometry: Cartesian, cylindrical and spherical-coordinates in three dimensions; direction-cosine and direction ratios; angle between two lines; distance of a point from a line; plane; straight line, shortest distance between skew lines; sphere; tangent plane to sphere, circle."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018",
+    "classification_notes": "প্রশ্নটি একটি পার্シャル ডিফারেন্সিয়াল ইকুয়েশন সমাধান করতে বলে যা সিলেবাসের 'Ordinary Differential Equation' মডিউলের অন্তর্ভুক্ত ধারণাগুলোর (যেমন linear, separation of variable) সাথে সরাসরি সম্পর্কিত।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রদত্ত সমীকরণটি একটি পার্シャル ডিফারেন্সিয়াল ইকুয়েশন (PDE) হলেও এটিকে 'Ordinary Differential Equation' মডিউলের সাথে যুক্ত করা ভুল কারণ PDE-এর জন্য আলাদা টপিক রয়েছে।"
+  }
+]
