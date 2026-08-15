@@ -449,7 +449,7 @@ export const ACADEMIC_UNITS = [
   ...BASIC_SCIENCE_DEPTS.map(d => ({ code: d.code, name: d.name, link: d.link, kind: 'basic_science' })),
 ];
 
-const ROLL_DEPT_MAP = {
+export const ROLL_DEPT_MAP = {
   '25': 'Arch',
   '23': 'BECM',
   '15': 'BME',

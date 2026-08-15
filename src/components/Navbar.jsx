@@ -473,12 +473,14 @@ export function Navbar({ onMenuClick }) {
       const { clearLocalDataOnLogout } = await import('../lib/accountLifecycle');
       await clearLocalDataOnLogout();
       setDrawerOpen(false);
-      // Full reload after sign-out clears any stale cached React state
-      // (roles, faculty/staff status, profile, etc.) that was loaded for
-      // the previous session — same pattern used in Settings.jsx. Without
-      // this, a signed-out user keeps seeing faculty/staff-gated UI until
-      // they manually refresh.
-      setTimeout(() => window.location.reload(), 800);
+      // Redirect to root (Guest Room landing page) after sign-out, not a
+      // reload of the current route — the current route may be a protected
+      // page (e.g. /faculty/profile) that a signed-out user shouldn't stay
+      // on. The full navigation (href, not reload) also clears any stale
+      // cached React state (roles, faculty/staff status, profile, etc.)
+      // that was loaded for the previous session — same pattern used in
+      // Settings.jsx and Profile.jsx.
+      setTimeout(() => { window.location.href = '/'; }, 800);
     } catch (err) {
       console.error(err);
       setLoggingOut(false);

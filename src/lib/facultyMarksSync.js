@@ -39,7 +39,7 @@
 //   }
 
 import {
-  collection, doc, addDoc, updateDoc, getDoc, getDocs, setDoc,
+  collection, doc, addDoc, updateDoc, deleteDoc, getDoc, getDocs, setDoc,
   onSnapshot, serverTimestamp, query, orderBy,
 } from 'firebase/firestore';
 import { db } from './firebase';
@@ -50,6 +50,98 @@ function sessionsCollection(groupId, assignmentId) {
 }
 function studentRecordsCollection(groupId, assignmentId) {
   return collection(db, 'groups', groupId, 'facultyAssignments', assignmentId, 'studentRecords');
+}
+function backlogStudentsCollection(groupId, assignmentId) {
+  return collection(db, 'groups', groupId, 'facultyAssignments', assignmentId, 'backlogStudents');
+}
+
+// ── Backlog / extra-student manual add (Attendance Rebuild Phase C, see
+// ATTENDANCE_REBUILD_PLAN.md §3c) ───────────────────────────────────────
+//
+// Covers TWO real-world cases identically (confirmed with Akhinoor
+// 2026-08-15 — no distinction in data model or UI flow):
+//   1. A genuine backlog student (earlier batch, repeating this course).
+//   2. A regular student of this batch+dept+section whose roll falls
+//      outside generateDeptRollRoster()'s seat-range default (seat counts
+//      are defaults, not hard caps — see groupUtils.js's doc comment).
+// Scoped per-assignment (this course offering only), doc id = roll, so a
+// re-add of the same roll for the same assignment naturally overwrites
+// rather than duplicating.
+
+const ROLL_PATTERN = /^\d{7}$/; // same regex as store.js's studentId validation, reused not reinvented
+
+/** Adds (or overwrites) one backlog/extra-student entry for this
+ * assignment. `section` is optional — only meaningful for multi-section
+ * depts, tags which section's daily-attendance view the row surfaces in. */
+export async function addBacklogStudent(groupId, assignmentId, { roll, name, section, addedBy }) {
+  const cleanRoll = String(roll || '').trim();
+  if (!ROLL_PATTERN.test(cleanRoll)) {
+    throw new Error('Roll must be exactly 7 digits (standard KUET roll format).');
+  }
+  await setDoc(doc(backlogStudentsCollection(groupId, assignmentId), cleanRoll), {
+    roll: cleanRoll,
+    name: name || cleanRoll,
+    section: section || null,
+    addedBy: addedBy || null,
+    addedAt: serverTimestamp(),
+  });
+  return cleanRoll;
+}
+
+/** Moves a backlog/extra-student entry to the other section — kept as a
+ * simple field update, no approval workflow (confirmed with Akhinoor,
+ * plan §4 item 1). No-op for single-section depts (section stays null). */
+export async function moveBacklogStudentSection(groupId, assignmentId, roll, newSection) {
+  await updateDoc(doc(backlogStudentsCollection(groupId, assignmentId), roll), { section: newSection || null });
+}
+
+/**
+ * Phase D — moves ANY roster row (a generated-default row with no
+ * Firestore doc of its own, or an existing backlog row) into a different
+ * section. Resolves the open scope question flagged at the end of Phase
+ * C's log entry: §4 item 1's "swap a student from Section A to B" reads
+ * as applying to every row, not just backlog ones, and 3c already
+ * describes the add-student mechanism as the generic way an
+ * outside-the-generated-range/reassigned roll gets an explicit entry — a
+ * section move is exactly that case (a generated row's section is
+ * implicit/derived, so "moving" it necessarily means giving it its own
+ * explicit doc, same as the over-quota case). If a backlog doc already
+ * exists for this roll, this is a plain section update (same as
+ * moveBacklogStudentSection above); if not (a generated-range row), this
+ * creates one — `name` is passed by the caller (the roster row's
+ * currently-displayed name, real or placeholder) so the new doc doesn't
+ * regress to a bare roll string.
+ */
+export async function moveStudentToSection(groupId, assignmentId, { roll, name, newSection, movedBy }) {
+  const ref = doc(backlogStudentsCollection(groupId, assignmentId), roll);
+  const snap = await getDoc(ref);
+  if (snap.exists()) {
+    await updateDoc(ref, { section: newSection || null });
+    return;
+  }
+  await setDoc(ref, {
+    roll,
+    name: name || roll,
+    section: newSection || null,
+    addedBy: movedBy || null,
+    addedAt: serverTimestamp(),
+    // Distinguishes "this doc exists only because of a section move" from
+    // a genuine manual add — purely informational, no read path branches
+    // on it (a moved row still shows the "Added" badge, which is
+    // accurate: it IS now an explicit entry, not a generated default).
+    movedFromGenerated: true,
+  });
+}
+
+export async function removeBacklogStudent(groupId, assignmentId, roll) {
+  await deleteDoc(doc(backlogStudentsCollection(groupId, assignmentId), roll));
+}
+
+export function subscribeBacklogStudents(groupId, assignmentId, callback) {
+  if (!groupId || !assignmentId) { callback([]); return () => {}; }
+  return onSnapshot(backlogStudentsCollection(groupId, assignmentId), (snap) => {
+    callback(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+  }, () => callback([]));
 }
 
 // ── §8.9 Attendance ─────────────────────────────────────────────────────
@@ -75,8 +167,35 @@ function studentRecordsCollection(groupId, assignmentId) {
  * actually changes is appended to `editHistory` (who/when/old/new),
  * mirroring the exact same never-overwritten audit-trail convention
  * saveStudentMarks() already uses for marks (§9.1). editHistory itself is
- * never rewritten or trimmed, only appended to. */
-export async function createOrUpdateSessionAttendance(groupId, assignmentId, { sessionId, date, dayName, slot, attendance, loggedBy, isCorrection = false }) {
+ * never rewritten or trimmed, only appended to.
+ *
+ * KEYING (Attendance Rebuild Phase B, see ATTENDANCE_REBUILD_PLAN.md §3b):
+ * `attendance` is keyed by ROLL NUMBER, not Firebase uid. This is
+ * deliberate — the Attendance roster includes every roll in a dept+batch
+ * whether or not that student has registered an account yet (a
+ * "placeholder" entry). Keying by roll means a placeholder's marked
+ * attendance is preserved automatically once that student later creates
+ * a real account for the same roll — no migration/merge step needed,
+ * since the key never changes. Every caller (AttendanceTab, MarksTab's
+ * attendancePctFor) passes roll, not uid, into this map.
+ *
+ * AUDIT SNAPSHOT (Phase B follow-up, same doc §3b): `rollToUid` is an
+ * OPTIONAL secondary map, `{ [roll]: uid | null }`, recording which real
+ * account (if any) sat behind a roll at the moment attendance was taken.
+ * This is deliberately NOT the source of truth for anything — the
+ * primary attendance map stays 100% roll-keyed and every read path
+ * (computeStudentAttendancePercent, MarksTab, the roster UI) only ever
+ * looks at `attendance`, never at this. `rollToUid` exists purely so a
+ * later debug/admin need ("which account was this roll's attendance
+ * actually recorded against on this date") has a real trail instead of
+ * nothing, at near-zero cost (the uid is already sitting in the caller's
+ * roster data when it calls this). Merged (not overwritten) across
+ * saves, same accumulate-only spirit as editHistory — a roll that had no
+ * account on an earlier save keeps that `null` entry from being lost if
+ * a later save's caller happens not to pass it again, and a roll that
+ * later gets an account can have its entry filled in without touching
+ * the ones already recorded for other rolls. */
+export async function createOrUpdateSessionAttendance(groupId, assignmentId, { sessionId, date, dayName, slot, attendance, rollToUid, loggedBy, isCorrection = false }) {
   const ref = sessionId ? doc(sessionsCollection(groupId, assignmentId), sessionId) : null;
   const existingSnap = ref ? await getDoc(ref) : null;
   const existing = existingSnap?.exists() ? existingSnap.data() : null;
@@ -94,19 +213,23 @@ export async function createOrUpdateSessionAttendance(groupId, assignmentId, { s
   const nextAttendance = attendance || {};
   const editEntries = isCorrection
     ? Object.keys({ ...prevAttendance, ...nextAttendance })
-        .filter((uid) => prevAttendance[uid] !== nextAttendance[uid])
-        .map((uid) => ({
+        .filter((roll) => prevAttendance[roll] !== nextAttendance[roll])
+        .map((roll) => ({
           ts: new Date().toISOString(),
-          studentUid: uid,
-          oldValue: prevAttendance[uid] ?? null,
-          newValue: nextAttendance[uid] ?? null,
+          studentRoll: roll,
+          oldValue: prevAttendance[roll] ?? null,
+          newValue: nextAttendance[roll] ?? null,
           by: loggedBy || null,
         }))
     : [];
 
   const data = {
     date, dayName, slot,
-    attendance: nextAttendance, // { [studentUid]: 'present' | 'absent' | 'late' | 'excused' }
+    attendance: nextAttendance, // { [studentRoll]: 'present' | 'absent' | 'late' | 'excused' } — keyed by roll, see doc comment above
+    // Audit-only snapshot, see doc comment above — merged so an earlier
+    // save's entries (including explicit nulls for placeholders) are
+    // never dropped just because a later save didn't repeat them.
+    rollToUid: { ...(existing?.rollToUid || {}), ...(rollToUid || {}) },
     loggedBy, // { uid, role: 'faculty', name } — §8.8's discrepancy-signal shape, reused here
     locked: true,
     updatedAt: serverTimestamp(),
@@ -133,12 +256,18 @@ export function subscribeSessionAttendance(groupId, assignmentId, callback) {
  * assignment. This is the teacher-side equivalent of
  * computeEffectiveAttendance() — see the flagged-conflict note above for
  * why that student-local function couldn't be reused directly.
+ *
+ * `studentRoll` — as of Phase B, session.attendance is keyed by roll
+ * number (not uid), so this must be called with the student's roll, not
+ * their Firebase uid. The function itself is key-agnostic (just reads
+ * sessions[i].attendance[studentRoll]) so nothing internal changed —
+ * only what callers pass in.
  */
-export function computeStudentAttendancePercent(sessions, studentUid) {
+export function computeStudentAttendancePercent(sessions, studentRoll) {
   let held = 0;
   let attended = 0;
   sessions.forEach((s) => {
-    const mark = s.attendance?.[studentUid];
+    const mark = s.attendance?.[studentRoll];
     if (mark === 'present' || mark === 'absent' || mark === 'late' || mark === 'excused') {
       held++;
       if (mark === 'present' || mark === 'late' || mark === 'excused') attended++;

@@ -27,7 +27,7 @@ export function canonicalize(value) {
 //
 // Derived from DEPARTMENTS' `seats` field (store.js) rather than a second
 // hardcoded list, so the two can never drift apart.
-import { DEPARTMENTS } from '../store/store';
+import { DEPARTMENTS, ROLL_DEPT_MAP } from '../store/store';
 
 export const MULTI_SECTION_DEPTS = DEPARTMENTS
   .filter((d) => d.seats === 120)
@@ -35,6 +35,91 @@ export const MULTI_SECTION_DEPTS = DEPARTMENTS
 
 export function isMultiSectionDept(deptCode) {
   return MULTI_SECTION_DEPTS.includes(canonicalize(deptCode));
+}
+
+// ─── Full dept+batch roll roster generation (Attendance Rebuild Phase A,
+// see ATTENDANCE_REBUILD_PLAN.md) ────────────────────────────────────────
+//
+// store.js's ROLL_DEPT_MAP goes ONE way: 2-digit roll code -> dept code
+// (used by getDeptCodeFromRoll to parse an existing roll). Here we need
+// the reverse: given a dept code, what 2-digit code goes in a generated
+// roll's positions 3-4. Built once from ROLL_DEPT_MAP so the two can
+// never drift apart — if store.js's map ever changes, this picks it up
+// automatically instead of needing a second hardcoded table.
+const DEPT_TO_ROLL_DIGITS = Object.fromEntries(
+  Object.entries(ROLL_DEPT_MAP).map(([digits, dept]) => [dept, digits]),
+);
+
+/**
+ * '2K23' / '2k23' / '23' -> '23' (the 2-digit batch prefix used inside a
+ * 7-digit roll). Mirrors extractBatchFromRoll's own format (store.js) in
+ * reverse. Returns '' if the input doesn't resolve to exactly 2 digits.
+ */
+export function batchToRollPrefix(batch) {
+  const b = canonicalize(batch).replace(/^2K/, ''); // '2K23' -> '23'
+  return /^\d{2}$/.test(b) ? b : '';
+}
+
+/**
+ * Generates every possible 7-digit roll number for a dept+batch(+section),
+ * whether or not that roll currently has a real KUETx account — this is
+ * what makes every seat show up in Attendance even for students who've
+ * never opened the app (see ATTENDANCE_REBUILD_PLAN.md §3a).
+ *
+ * Roll shape (confirmed against store.js's getDeptCodeFromRoll /
+ * extractBatchFromRoll, which parse it the other direction):
+ *   [batch 2-digit][dept 2-digit][seat-in-dept 3-digit], e.g. 2313014.
+ *
+ * Multi-section depts (CE/EEE/ME/CSE, 120 seats) split cleanly 60/60 —
+ * Section A = seat-in-dept 001-060, Section B = 061-120 (confirmed with
+ * Akhinoor 2026-08-15, not guessed). `section` is REQUIRED for these 4
+ * depts (pass 'A' or 'B'); pass null/omit for every other dept.
+ *
+ * `section: 'BOTH'` (or omitting section on a multi-section dept while
+ * passing `includeBothSections: true`) returns the FULL 120-seat roster
+ * with each entry tagged `section: 'A'|'B'` — used by the combined-
+ * section Excel export (§4 item 1 in the plan: "excel download korle dui
+ * section eksathe hoye download hobe").
+ *
+ * Returns [] (never throws) if dept/batch/section don't resolve — same
+ * "incomplete profile, fall back gracefully" convention as getGroupId().
+ */
+export function generateDeptRollRoster(dept, batch, section = null) {
+  const deptCode = canonicalize(dept);
+  const rollDigits = DEPT_TO_ROLL_DIGITS[deptCode];
+  const batchPrefix = batchToRollPrefix(batch);
+  if (!rollDigits || !batchPrefix) return [];
+
+  const seatInfo = DEPARTMENTS.find((d) => canonicalize(d.code) === deptCode);
+  if (!seatInfo) return [];
+  const totalSeats = seatInfo.seats;
+
+  const multiSection = isMultiSectionDept(deptCode);
+  const wantBoth = multiSection && (canonicalize(section) === 'BOTH' || !section);
+
+  const buildRange = (startSeat, endSeat, sectionTag) => {
+    const rolls = [];
+    for (let seat = startSeat; seat <= endSeat; seat++) {
+      const roll = `${batchPrefix}${rollDigits}${String(seat).padStart(3, '0')}`;
+      rolls.push(sectionTag ? { roll, section: sectionTag } : { roll, section: null });
+    }
+    return rolls;
+  };
+
+  if (!multiSection) {
+    // Single-section dept — section arg is irrelevant, always full roster.
+    return buildRange(1, totalSeats, null);
+  }
+
+  if (wantBoth) {
+    const half = totalSeats / 2; // 120/2 = 60, confirmed clean split with Akhinoor
+    return [...buildRange(1, half, 'A'), ...buildRange(half + 1, totalSeats, 'B')];
+  }
+
+  const sec = canonicalize(section);
+  if (sec !== 'A' && sec !== 'B') return []; // multi-section dept needs a real section pick
+  const half = totalSeats / 2;
+  return sec === 'A' ? buildRange(1, half, 'A') : buildRange(half + 1, totalSeats, 'B');
 }
 
 /**

@@ -52,7 +52,8 @@ const todayStr = () => {
 // Extracted to groupUtils.js — this is now its 2nd call site (Admin's
 // individual-student notice-targeting picker in AdminDashboard.jsx needs
 // the exact same roll-sort over the exact same dept+batch member shape).
-import { sortByRoll } from '../../lib/groupUtils';
+import { sortByRoll, generateDeptRollRoster, isMultiSectionDept } from '../../lib/groupUtils';
+import { DEPARTMENTS } from '../../store/store';
 
 import { getDeptSyllabus } from '../../store/curriculumStore';
 import { subscribeFacultyAssignment, setPlannedTotalClasses, updateAssignmentDayTimeSlots, findConflictingAssignment } from '../../lib/facultyClassSync';
@@ -62,6 +63,7 @@ import {
   computeStudentAttendancePercent, computeAttendanceComponentScore,
   setTeacherMarkComponents, getTeacherMarkComponents,
   saveStudentMarks, subscribeStudentRecords, sendAllReviewed,
+  addBacklogStudent, moveStudentToSection, subscribeBacklogStudents,
 } from '../../lib/facultyMarksSync';
 import { exportStudentMarksPdf, exportClassSummaryPdf } from '../../lib/facultyPdfExport';
 import { logFacultySession } from '../../lib/facultySessionSync';
@@ -773,12 +775,244 @@ function BatchRoutineGrid({ assignment, groupId }) {
   );
 }
 
+// Phase E — mobile 2-row swipeable roster row (ATTENDANCE_REBUILD_PLAN.md
+// §3e). Two independent swipe zones per row, matching the plan's spec:
+//   Row 1 (identity): resting position shows Roll, swipe left↔right
+//     reveals Name, snaps back to Roll on release (identity swipe is
+//     momentary — there's no "pinned" state for it in the plan, only the
+//     attendance row below gets a pinned resting position).
+//   Row 2 (attendance): resting position is the editable mark for the
+//     currently selected `date` (today by default) using the exact same
+//     effectiveMark/togglePresentAbsent/setMark/expandedRoll state Phase D
+//     built — swiping left↔right cycles through OTHER dates' historical
+//     marks (read-only), and releasing always snaps back to the pinned
+//     editable date rather than leaving the teacher stranded on a
+//     read-only history card, per the plan's explicit pinning requirement.
+// No swipe library: package.json has none (checked before this phase), so
+// this is plain pointer events + a CSS transform — proportionate to a
+// 2-row card, not worth a new dependency.
+function AttendanceMobileRow({
+  m, stats, effectiveMark, isExpanded, rosterLocked, multiSection, activeSection,
+  markColors, markLabels, sessions, date, togglePresentAbsent, setMark, setExpandedRoll,
+  handleMoveSection, draftMarks,
+}) {
+  // Row 1 state: false = showing Roll (resting), true = showing Name.
+  const [showName, setShowName] = useState(false);
+  // Row 2 state: index into `historyDates` below; 0 always means "today's
+  // editable date" (the pinned resting position). >0 means "viewing an
+  // older date's mark, read-only."
+  const [historyIndex, setHistoryIndex] = useState(0);
+
+  // Other held dates, most recent first, excluding the currently selected
+  // `date` itself (that's index 0 / the pinned live row, handled
+  // separately since it's editable and the others aren't).
+  const historyDates = (sessions || [])
+    .map((s) => s.date)
+    .filter((d) => d !== date)
+    .sort((a, b) => (a < b ? 1 : -1));
+
+  const dragState = useRef(null); // { startX, axis: 'identity'|'attendance', el }
+
+  const onPointerDown = (axis) => (e) => {
+    if (rosterLocked && axis === 'attendance') return;
+    dragState.current = {
+      startX: e.clientX ?? e.touches?.[0]?.clientX ?? 0,
+      axis,
+    };
+  };
+
+  const onPointerMove = (e) => {
+    // Only used for a live visual nudge; committed on release in
+    // onPointerUp below. Kept intentionally simple (no drag-following
+    // transform) — a snap-on-release swipe reads clearly enough for a
+    // 2-state card and avoids fighting the page's own vertical scroll.
+  };
+
+  const onPointerUp = (axis) => (e) => {
+    const drag = dragState.current;
+    dragState.current = null;
+    if (!drag || drag.axis !== axis) return;
+    const endX = e.clientX ?? e.changedTouches?.[0]?.clientX ?? drag.startX;
+    const dx = endX - drag.startX;
+    const THRESHOLD = 40; // px — deliberate swipe vs. an accidental tap/scroll
+    if (Math.abs(dx) < THRESHOLD) return;
+
+    if (axis === 'identity') {
+      setShowName((v) => !v);
+    } else if (axis === 'attendance') {
+      if (dx < 0) {
+        // swipe left → step forward into history
+        setHistoryIndex((v) => Math.min(v + 1, historyDates.length));
+      } else {
+        // swipe right → step back toward the pinned live date
+        setHistoryIndex((v) => Math.max(v - 1, 0));
+      }
+    }
+  };
+
+  const viewingHistory = historyIndex > 0;
+  const historyDate = viewingHistory ? historyDates[historyIndex - 1] : null;
+  const historyMark = historyDate
+    ? (sessions.find((s) => s.date === historyDate)?.attendance?.[m.roll] || null)
+    : null;
+
+  return (
+    <div className="attendance-mrow">
+      {/* Row 1 — identity: Roll (resting) ↔ Name (swiped) */}
+      <div
+        className="attendance-mrow-track attendance-mrow-identity"
+        onPointerDown={onPointerDown('identity')}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp('identity')}
+        onPointerCancel={() => { dragState.current = null; }}
+      >
+        <div style={{ minWidth: 0, display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+          <span style={{ fontWeight: 700, fontSize: 13.5, color: 'var(--text)', fontFamily: showName ? 'inherit' : 'JetBrains Mono, monospace' }}>
+            {showName ? (m.name || 'Unnamed') : (m.roll || '—')}
+          </span>
+          {m.isPlaceholder && (
+            <span style={{ fontSize: 9, fontWeight: 700, padding: '1px 5px', borderRadius: 5, background: 'var(--surface)', color: 'var(--muted)', border: '1px solid var(--border)' }}>
+              No account
+            </span>
+          )}
+          {m.isBacklog && (
+            <span style={{ fontSize: 9, fontWeight: 700, padding: '1px 5px', borderRadius: 5, background: 'color-mix(in srgb, var(--accent) 14%, var(--card))', color: 'var(--accent)' }}>
+              Added
+            </span>
+          )}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+          <span style={{
+            fontSize: 11.5, fontWeight: 700, fontFamily: 'JetBrains Mono, monospace',
+            color: stats.pct === null ? 'var(--muted)' : stats.pct >= 75 ? '#16a34a' : stats.pct >= 60 ? '#d97706' : '#dc2626',
+          }}>
+            {stats.pct === null ? '—' : `${stats.pct}%`}
+          </span>
+          <span style={{ fontSize: 10.5, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace' }}>
+            {stats.presentCount}/{stats.markedCount}
+          </span>
+        </div>
+      </div>
+
+      {/* Row 2 — attendance: pinned editable date (resting) ↔ swiped
+          read-only history */}
+      <div
+        className="attendance-mrow-track"
+        onPointerDown={onPointerDown('attendance')}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp('attendance')}
+        onPointerCancel={() => { dragState.current = null; }}
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}
+      >
+        {!viewingHistory ? (
+          <>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <button
+                onClick={() => !rosterLocked && togglePresentAbsent(m.roll, effectiveMark)}
+                disabled={rosterLocked || effectiveMark === 'late' || effectiveMark === 'excused'}
+                title={effectiveMark === 'late' || effectiveMark === 'excused' ? 'Clear via “…” to use the quick toggle again' : ''}
+                style={{
+                  width: 64, height: 30, borderRadius: 7, fontSize: 11.5, fontWeight: 700,
+                  cursor: (rosterLocked || effectiveMark === 'late' || effectiveMark === 'excused') ? 'not-allowed' : 'pointer',
+                  border: `1px solid ${markColors[effectiveMark]}`,
+                  background: `${markColors[effectiveMark]}22`,
+                  color: markColors[effectiveMark],
+                  opacity: (effectiveMark === 'late' || effectiveMark === 'excused') ? 0.75 : 1,
+                }}
+              >
+                {markLabels[effectiveMark]}
+              </button>
+              <button
+                onClick={() => !rosterLocked && setExpandedRoll((v) => (v === m.roll ? null : m.roll))}
+                disabled={rosterLocked}
+                title="Late / Excused"
+                style={{
+                  width: 26, height: 30, borderRadius: 7, border: '1px solid var(--border)', background: 'var(--bg)',
+                  color: 'var(--muted)', fontSize: 13, fontWeight: 700, cursor: rosterLocked ? 'not-allowed' : 'pointer',
+                }}
+              >
+                ⋯
+              </button>
+              {multiSection && (
+                <button
+                  onClick={() => handleMoveSection(m.roll, m.name, activeSection === 'A' ? 'B' : 'A')}
+                  style={{ background: 'none', border: 'none', padding: 0, color: 'var(--accent)', fontSize: 10, fontWeight: 600, cursor: 'pointer', textDecoration: 'underline' }}
+                >
+                  → Sec {activeSection === 'A' ? 'B' : 'A'}
+                </button>
+              )}
+            </div>
+            {historyDates.length > 0 && (
+              <span className="attendance-mrow-swipehint">← history</span>
+            )}
+          </>
+        ) : (
+          <>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace' }}>{historyDate}</span>
+              <span style={{
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                width: 26, height: 24, borderRadius: 6, fontSize: 11, fontWeight: 700,
+                border: `1px solid ${historyMark ? markColors[historyMark] : 'var(--border)'}`,
+                background: historyMark ? `${markColors[historyMark]}22` : 'transparent',
+                color: historyMark ? markColors[historyMark] : 'var(--muted)',
+              }}>
+                {historyMark ? markLabels[historyMark] : '—'}
+              </span>
+              <span style={{ fontSize: 9.5, color: 'var(--muted)', fontStyle: 'italic' }}>read-only</span>
+            </div>
+            <button
+              onClick={() => setHistoryIndex(0)}
+              style={{ background: 'none', border: 'none', padding: 0, color: 'var(--accent)', fontSize: 10.5, fontWeight: 700, cursor: 'pointer', textDecoration: 'underline' }}
+            >
+              → today
+            </button>
+          </>
+        )}
+      </div>
+
+      {isExpanded && !viewingHistory && (
+        <div style={{ display: 'flex', gap: 6, marginTop: 8, justifyContent: 'flex-end' }}>
+          {['late', 'excused'].map((mark) => (
+            <button
+              key={mark}
+              onClick={() => !rosterLocked && setMark(m.roll, mark)}
+              disabled={rosterLocked}
+              style={{
+                padding: '4px 10px', borderRadius: 7, fontSize: 11, fontWeight: 700, cursor: rosterLocked ? 'not-allowed' : 'pointer',
+                border: draftMarks[m.roll] === mark ? `1px solid ${markColors[mark]}` : '1px solid var(--border)',
+                background: draftMarks[m.roll] === mark ? `${markColors[mark]}22` : 'var(--bg)',
+                color: draftMarks[m.roll] === mark ? markColors[mark] : 'var(--muted)',
+              }}
+            >
+              {markLabels[mark]} · {mark === 'late' ? 'Late' : 'Excused'}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function AttendanceTab({ assignment, groupId }) {
   const [members, setMembers] = useState(null);
   const [sessions, setSessions] = useState(null);
   const [plannerLogs, setPlannerLogs] = useState(null);
+  const [backlogStudents, setBacklogStudents] = useState(null);
   const [facultyName, setFacultyName] = useState('');
   const [date, setDate] = useState(() => todayStr());
+  // Phase C — merged roster (see ATTENDANCE_REBUILD_PLAN.md §3c). Multi-
+  // section depts (CE/EEE/ME/CSE) need a Section A/B toggle above the
+  // roster; single-section depts ignore this entirely. Defaults to the
+  // assignment's own section if it has one (a class assignment is already
+  // scoped to one section via its groupId), otherwise 'A'.
+  const multiSection = isMultiSectionDept(assignment?.dept);
+  const [activeSection, setActiveSection] = useState(() => (assignment?.section === 'B' ? 'B' : 'A'));
+  const [showAddStudent, setShowAddStudent] = useState(false);
+  const [addRollInput, setAddRollInput] = useState('');
+  const [addNameInput, setAddNameInput] = useState('');
+  const [addSectionInput, setAddSectionInput] = useState('A');
+  const [addingStudent, setAddingStudent] = useState(false);
   // Sessions & Count, merged in — attendance-taking auto-logs a session
   // (see handleSave's auto-link below), so manual "+1 Log Class" is now
   // a rare fallback (e.g. a class held but attendance skipped that day).
@@ -809,10 +1043,32 @@ function AttendanceTab({ assignment, groupId }) {
   // locked date over to another.
   const [unlockedForEdit, setUnlockedForEdit] = useState(false);
 
+  // Phase F (§3f) — is TODAY one of this assignment's own scheduled days?
+  // `dayTimeSlots` is this faculty's own day/time slot(s) for this exact
+  // class (set via EditDayTimeModal, e.g. [{ day: 'Sunday', slot: ... }]),
+  // not the whole-batch routine (BatchRoutineGrid) — §3f is explicit this
+  // should key off "Class Setup schedule," i.e. this assignment's own
+  // slot, not every course the batch happens to have that day. Recomputed
+  // on every render (cheap — a few-item array compare) so it stays correct
+  // if the teacher edits day/time while this tab is still mounted.
+  const todayWeekday = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+  const isScheduledToday = (assignment?.dayTimeSlots || []).some((s) => s.day === todayWeekday);
+
   useEffect(() => {
+    // Phase F (§3f) — only auto-land on today if today is actually a
+    // scheduled day for THIS class (per assignment.dayTimeSlots), per the
+    // plan's read of "ajker date ta mile tahole sei date ta default
+    // dekhabe": auto-set today only when today matches a scheduled day,
+    // otherwise leave the date field for the teacher to pick manually
+    // rather than defaulting to today (which would silently be a day this
+    // class doesn't even meet) or guessing a "last scheduled day" (not
+    // what was asked for). `isScheduledToday` below is recomputed fresh
+    // each run since `assignment` can change (e.g. day/time edited via
+    // EditDayTimeModal while this tab stays mounted).
     const resyncIfAuto = () => {
       if (document.visibilityState !== 'visible') return;
       if (!isAutoDate.current) return;
+      if (!isScheduledToday) return; // leave `date` exactly as it is — no auto-jump on an unscheduled day
       const now = todayStr();
       setDate((prev) => (prev === now ? prev : now));
     };
@@ -823,7 +1079,7 @@ function AttendanceTab({ assignment, groupId }) {
       document.removeEventListener('visibilitychange', resyncIfAuto);
       window.removeEventListener('focus', resyncIfAuto);
     };
-  }, []);
+  }, [isScheduledToday]);
 
   useEffect(() => {
     if (!groupId) { setMembers([]); return; }
@@ -833,6 +1089,11 @@ function AttendanceTab({ assignment, groupId }) {
   useEffect(() => {
     if (!groupId || !assignment) { setSessions([]); return; }
     return subscribeSessionAttendance(groupId, assignment.id, setSessions);
+  }, [groupId, assignment]);
+
+  useEffect(() => {
+    if (!groupId || !assignment) { setBacklogStudents([]); return; }
+    return subscribeBacklogStudents(groupId, assignment.id, setBacklogStudents);
   }, [groupId, assignment]);
 
   // Feeds the auto-link to Sessions & Count below — needed to (a) dedup
@@ -903,8 +1164,25 @@ function AttendanceTab({ assignment, groupId }) {
 
   const existingSessionForDate = (sessions || []).find((s) => s.date === date);
 
-  const setMark = (studentUid, mark) => {
-    setDraftMarks((prev) => ({ ...prev, [studentUid]: prev[studentUid] === mark ? undefined : mark }));
+  const setMark = (studentRoll, mark) => {
+    setDraftMarks((prev) => ({ ...prev, [studentRoll]: prev[studentRoll] === mark ? undefined : mark }));
+  };
+
+  // Phase D — 2-state Present/Absent quick-toggle (§3d). Late/Excused stay
+  // in the data model (Marks tab's computeStudentAttendancePercent treats
+  // 'late'/'excused' as attended, same as 'present') — only hidden from
+  // this quick-entry surface, reachable via the "…" expand on each row
+  // instead of being removed outright, per §4 item 4's confirmed default.
+  const [expandedRoll, setExpandedRoll] = useState(null); // which row's "…" (Late/Excused) is open, one at a time
+
+  // Present/Absent 2-state click: flips only between those two, leaving an
+  // existing Late/Excused mark (set via "…") untouched by a stray click on
+  // the main toggle — a teacher who deliberately marked someone Late
+  // shouldn't have that silently reset to Present/Absent by brushing the
+  // main toggle instead of reopening "…" and explicitly clearing it.
+  const togglePresentAbsent = (studentRoll, effectiveMark) => {
+    if (effectiveMark === 'late' || effectiveMark === 'excused') return;
+    setMark(studentRoll, effectiveMark === 'absent' ? 'present' : 'absent');
   };
 
   const handleSave = async () => {
@@ -912,12 +1190,37 @@ function AttendanceTab({ assignment, groupId }) {
     try {
       const wasFirstSaveForDate = !existingSessionForDate;
       const isCorrection = !!existingSessionForDate?.locked && unlockedForEdit;
+      // §3d's default-present-on-save rule: a row with NO explicit mark
+      // (never clicked at all — the common "just click absentees" case)
+      // is only materialized as 'present' HERE, at save time, never in
+      // render/state. This is deliberate: `draftMarks` staying sparse
+      // during editing means a date the teacher opened but never actually
+      // saved doesn't silently pick up hundreds of bogus 'present'
+      // entries just from having been displayed — only an actual Save
+      // click commits the default. mergedRoster (Phase C) is already the
+      // complete roll set for the active section, generated + backlog, so
+      // this correctly defaults placeholder/backlog rows too, not just
+      // real accounts.
+      const attendanceToSave = { ...draftMarks };
+      mergedRoster.forEach((m) => {
+        if (attendanceToSave[m.roll] === undefined) attendanceToSave[m.roll] = 'present';
+      });
+      // Audit-only snapshot (see createOrUpdateSessionAttendance's doc
+      // comment) — which real account, if any, sat behind each roll at
+      // save time. Only rolls with a real account get an entry here; a
+      // roll with no account simply isn't present (not stored as null),
+      // since most of a dept's roster stays placeholder-only for a long
+      // time and there's no value in writing hundreds of null entries.
+      const rollToUid = Object.fromEntries(
+        (members || []).filter((m) => m.roll).map((m) => [m.roll, m.id])
+      );
       await createOrUpdateSessionAttendance(groupId, assignment.id, {
         sessionId: existingSessionForDate?.id || null,
         date,
         dayName: new Date(date).toLocaleDateString('en-US', { weekday: 'long' }),
         slot: assignment.dayTimeSlots?.[0]?.slot || '',
-        attendance: draftMarks,
+        attendance: attendanceToSave,
+        rollToUid,
         loggedBy: { uid: auth.currentUser.uid, role: 'faculty', name: facultyName },
         isCorrection,
       });
@@ -964,9 +1267,81 @@ function AttendanceTab({ assignment, groupId }) {
     }
   };
 
-  if (members === null || sessions === null || plannerLogs === null) {
+  const handleAddStudent = async () => {
+    setAddingStudent(true);
+    try {
+      await addBacklogStudent(groupId, assignment.id, {
+        roll: addRollInput.trim(),
+        name: addNameInput.trim(),
+        section: multiSection ? addSectionInput : null,
+        addedBy: { uid: auth.currentUser.uid, name: facultyName },
+      });
+      notify('Student added.', 'success');
+      setAddRollInput('');
+      setAddNameInput('');
+      setShowAddStudent(false);
+    } catch (e) {
+      notify(e.message || 'Could not add this student.', 'error');
+    } finally {
+      setAddingStudent(false);
+    }
+  };
+
+  const handleMoveSection = async (roll, name, newSection) => {
+    try {
+      await moveStudentToSection(groupId, assignment.id, {
+        roll, name, newSection,
+        movedBy: { uid: auth.currentUser.uid, name: facultyName },
+      });
+    } catch (e) {
+      notify(e.message || 'Could not move this student.', 'error');
+    }
+  };
+
+  if (members === null || sessions === null || plannerLogs === null || backlogStudents === null) {
     return <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0' }}>Loading…</div>;
   }
+
+  // Phase C — merged roster (ATTENDANCE_REBUILD_PLAN.md §3b/§3c). Every
+  // roll the generator produces for the active section, matched against a
+  // real member by roll (isPlaceholder if none), plus backlog/extra-
+  // student entries tagged for this section, concat'd on and clearly
+  // marked isBacklog so the UI can badge them apart from the generated
+  // default roster. Generated range is a starting DEFAULT ONLY — never
+  // treated as exhaustive; a backlog entry is exactly how a roll outside
+  // that range gets in (see groupUtils.js's generateDeptRollRoster doc).
+  const sectionForRoster = multiSection ? activeSection : null;
+  const generatedRolls = generateDeptRollRoster(assignment?.dept, assignment?.batch, sectionForRoster);
+  const backlogForSection = (backlogStudents || []).filter((b) => !multiSection || b.section === activeSection);
+  const backlogRolls = new Set(backlogForSection.map((b) => b.roll));
+
+  const generatedRoster = generatedRolls
+    .filter((g) => !backlogRolls.has(g.roll)) // a backlog entry for a roll inside the generated range takes over that row (e.g. a real name was added for it)
+    .map((g) => {
+      const realMember = members.find((m) => m.roll === g.roll);
+      return {
+        id: realMember?.id || `placeholder:${g.roll}`,
+        roll: g.roll,
+        name: realMember?.name || g.roll,
+        section: g.section,
+        isPlaceholder: !realMember,
+        isBacklog: false,
+      };
+    });
+
+  const backlogRoster = backlogForSection.map((b) => {
+    const realMember = members.find((m) => m.roll === b.roll);
+    return {
+      id: realMember?.id || `backlog:${b.roll}`,
+      roll: b.roll,
+      name: realMember?.name || b.name || b.roll,
+      section: b.section,
+      isPlaceholder: !realMember,
+      isBacklog: true,
+    };
+  });
+
+  const mergedRoster = sortByRoll([...generatedRoster, ...backlogRoster]);
 
   const marks = ['present', 'absent', 'late', 'excused'];
   const markColors = { present: '#16a34a', absent: '#dc2626', late: '#d97706', excused: '#6b7280' };
@@ -981,18 +1356,36 @@ function AttendanceTab({ assignment, groupId }) {
   // where every single student was necessarily markable.
   const totalClasses = sessions.length;
   const attendanceSummary = totalClasses > 0
-    ? members.map((m) => {
+    ? mergedRoster.map((m) => {
         const presentCount = sessions.filter((s) => {
-          const mark = s.attendance?.[m.id];
+          const mark = s.attendance?.[m.roll];
           return mark === 'present' || mark === 'late';
         }).length;
-        const markedCount = sessions.filter((s) => s.attendance?.[m.id]).length;
+        const markedCount = sessions.filter((s) => s.attendance?.[m.roll]).length;
         const pct = markedCount > 0 ? Math.round((presentCount / markedCount) * 100) : null;
         return { id: m.id, name: m.name || 'Unnamed', roll: m.roll || '—', pct, markedCount };
       }).filter((s) => s.pct !== null).sort((a, b) => b.pct - a.pct)
     : [];
   const mostRegular = attendanceSummary.slice(0, 3);
   const mostAbsent = attendanceSummary.slice().sort((a, b) => a.pct - b.pct).slice(0, 3);
+  // Phase D §3d — trailing per-row columns (Total classes held so far /
+  // Present count / Percentage) reuse this exact same per-student calc
+  // instead of a second implementation, keyed by roll for O(1) lookup
+  // per roster row below. Distinct from `attendanceSummary` above only in
+  // that this ISN'T filtered to markedCount>0 — a brand-new placeholder
+  // with zero markable sessions still needs a row (showing 0/0/—) rather
+  // than disappearing from the per-row columns the way it correctly does
+  // from the summary card's ranked lists.
+  const rowStatsByRoll = {};
+  mergedRoster.forEach((m) => {
+    const presentCount = sessions.filter((s) => {
+      const mark = s.attendance?.[m.roll];
+      return mark === 'present' || mark === 'late';
+    }).length;
+    const markedCount = sessions.filter((s) => s.attendance?.[m.roll]).length;
+    const pct = markedCount > 0 ? Math.round((presentCount / markedCount) * 100) : null;
+    rowStatsByRoll[m.roll] = { presentCount, markedCount, pct };
+  });
   // Class Performance — overall class attendance health in one number.
   // Defined as the plain average of every markable student's own
   // attendance % (attendanceSummary already excludes students with zero
@@ -1009,6 +1402,24 @@ function AttendanceTab({ assignment, groupId }) {
 
   return (
     <div>
+      {/* Phase D §3d — compact "print header" bar (dept, course code/title,
+          batch(+section), term, teacher name(s), date), kept live in the
+          UI (not just baked into the export) so what the teacher sees on
+          screen matches what gets exported — WYSIWYG per the plan. */}
+      <div className="faculty-summary-card" style={{ marginBottom: 14, padding: '12px 14px' }}>
+        <div style={{ fontWeight: 800, fontSize: 14, color: 'var(--text)' }}>
+          {(DEPARTMENTS.find((d) => d.code.toUpperCase() === String(assignment?.dept || '').toUpperCase())?.name) || assignment?.dept}
+          {assignment?.courseCode ? ` · ${assignment.courseCode}` : ''}
+          {assignment?.courseTitle ? ` — ${assignment.courseTitle}` : ''}
+        </div>
+        <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 3, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <span>{assignment?.batch}{multiSection ? ` · Section ${activeSection}` : ''}</span>
+          {assignment?.term && <span>{assignment.term}</span>}
+          {facultyName && <span>{facultyName}</span>}
+          <span style={{ fontFamily: 'JetBrains Mono, monospace' }}>{date}</span>
+        </div>
+      </div>
+
       {/* Sessions & Count + Attendance Summary — merged into ONE seamless
           card (was two separate .faculty-summary-card blocks stacked with
           a gap, which read as disconnected). An internal divider separates
@@ -1207,6 +1618,18 @@ function AttendanceTab({ assignment, groupId }) {
             Today
           </button>
         )}
+        {/* Phase F (§3f) — visible only when today ISN'T one of this
+            class's scheduled days, so the teacher understands why the
+            date field didn't auto-jump to today on its own (and knows
+            picking a date manually is expected here, not a bug). Never
+            shown once the teacher has picked a date manually for a
+            scheduled day either — this is purely about explaining the
+            "no auto-date today" state, not a general reminder. */}
+        {isAutoDate.current && !isScheduledToday && date === todayStr() && (
+          <span style={{ fontSize: 11, color: 'var(--muted)' }}>
+            No class scheduled today — pick a date manually if needed.
+          </span>
+        )}
         {existingSessionForDate?.locked && !unlockedForEdit && (
           <>
             <span style={{ fontSize: 11, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -1230,35 +1653,243 @@ function AttendanceTab({ assignment, groupId }) {
         )}
       </div>
 
+      {/* Section toggle (multi-section depts only — CE/EEE/ME/CSE) +
+          "+ Add student" (backlog / over-quota extra student, see
+          ATTENDANCE_REBUILD_PLAN.md §3c). Both sit above the roster. */}
+      <div className="faculty-summary-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 14, flexWrap: 'wrap' }}>
+        {multiSection ? (
+          <div style={{ display: 'flex', gap: 4 }}>
+            {['A', 'B'].map((sec) => (
+              <button
+                key={sec}
+                onClick={() => setActiveSection(sec)}
+                style={{
+                  padding: '6px 14px', borderRadius: 7, fontSize: 12.5, fontWeight: 700, cursor: 'pointer',
+                  border: activeSection === sec ? '1px solid var(--accent)' : '1px solid var(--border)',
+                  background: activeSection === sec ? 'color-mix(in srgb, var(--accent) 12%, var(--card))' : 'transparent',
+                  color: activeSection === sec ? 'var(--accent)' : 'var(--muted)',
+                }}
+              >
+                Section {sec}
+              </button>
+            ))}
+          </div>
+        ) : <div />}
+        <button
+          onClick={() => { setShowAddStudent((v) => !v); setAddSectionInput(activeSection); }}
+          style={{ padding: '6px 12px', borderRadius: 7, border: '1px solid var(--border)', background: 'transparent', color: 'var(--accent)', fontWeight: 700, fontSize: 12, cursor: 'pointer' }}
+        >
+          + Add student
+        </button>
+      </div>
+
+      {showAddStudent && (
+        <div className="faculty-summary-card" style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 14, flexWrap: 'wrap' }}>
+          <input
+            type="text"
+            placeholder="7-digit roll"
+            value={addRollInput}
+            onChange={(e) => setAddRollInput(e.target.value)}
+            style={{ width: 110, padding: '7px 9px', borderRadius: 7, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 12.5 }}
+          />
+          <input
+            type="text"
+            placeholder="Name (optional)"
+            value={addNameInput}
+            onChange={(e) => setAddNameInput(e.target.value)}
+            style={{ flex: '1 1 140px', padding: '7px 9px', borderRadius: 7, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 12.5 }}
+          />
+          {multiSection && (
+            <select
+              value={addSectionInput}
+              onChange={(e) => setAddSectionInput(e.target.value)}
+              style={{ padding: '7px 9px', borderRadius: 7, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 12.5 }}
+            >
+              <option value="A">Section A</option>
+              <option value="B">Section B</option>
+            </select>
+          )}
+          <button
+            className="accent-fill-glass"
+            onClick={handleAddStudent}
+            disabled={addingStudent || !/^\d{7}$/.test(addRollInput.trim())}
+            style={{ padding: '7px 14px', borderRadius: 7, color: '#fff', fontWeight: 700, fontSize: 12, cursor: 'pointer', opacity: (addingStudent || !/^\d{7}$/.test(addRollInput.trim())) ? 0.5 : 1 }}
+          >
+            {addingStudent ? 'Adding…' : 'Add'}
+          </button>
+          <button
+            onClick={() => setShowAddStudent(false)}
+            style={{ padding: '7px 10px', borderRadius: 7, border: '1px solid var(--border)', background: 'transparent', color: 'var(--muted)', fontSize: 12, cursor: 'pointer' }}
+          >
+            Cancel
+          </button>
+        </div>
+      )}
+
       {(() => {
         const rosterLocked = !!existingSessionForDate?.locked && !unlockedForEdit;
         return (
-          <div style={{ display: 'grid', gap: 6, opacity: rosterLocked ? 0.6 : 1 }}>
-            {sortByRoll(members).map((m) => (
-              <div key={m.id} className="faculty-row">
-                <div style={{ minWidth: 0 }}>
-                  <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--text)' }}>{m.name || 'Unnamed'}</div>
-                  <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>{m.roll || '—'}</div>
+          <div className="faculty-summary-card attendance-desktop-roster" style={{ padding: 0, overflow: 'hidden', opacity: rosterLocked ? 0.6 : 1 }}>
+            {/* Header row — spreadsheet-style column labels (§3d). This
+                block is the desktop rebuild; below 768px it's hidden via
+                .attendance-desktop-roster and AttendanceMobileRoster
+                (Phase E, §3e) renders instead — see index.css. */}
+            <div style={{
+              display: 'grid', gridTemplateColumns: '1fr 60px 64px 56px 96px',
+              gap: 8, padding: '9px 12px', borderBottom: '1px solid var(--border)',
+              fontSize: 10.5, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.04em',
+            }}>
+              <span>Name / Roll</span>
+              <span style={{ textAlign: 'center' }}>Held</span>
+              <span style={{ textAlign: 'center' }}>Present</span>
+              <span style={{ textAlign: 'center' }}>%</span>
+              <span style={{ textAlign: 'center' }}>Mark</span>
+            </div>
+
+            {mergedRoster.map((m) => {
+              // Effective mark for TODAY's row: explicit draft mark if the
+              // teacher touched it, otherwise 'present' is only what's
+              // SHOWN (the default-present quick-entry affordance) — not
+              // written into draftMarks itself, per §3d's care-point (see
+              // handleSave's comment for where it actually gets committed).
+              const effectiveMark = draftMarks[m.roll] || 'present';
+              const stats = rowStatsByRoll[m.roll] || { presentCount: 0, markedCount: 0, pct: null };
+              const isExpanded = expandedRoll === m.roll;
+              return (
+                <div key={m.id} style={{ borderBottom: '1px solid var(--border)' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 60px 64px 56px 96px', gap: 8, alignItems: 'center', padding: '8px 12px' }}>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--text)', display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                        <span>{m.name || 'Unnamed'}</span>
+                        {m.isPlaceholder && (
+                          <span style={{ fontSize: 9.5, fontWeight: 700, padding: '1px 6px', borderRadius: 5, background: 'var(--surface)', color: 'var(--muted)', border: '1px solid var(--border)' }}>
+                            No account yet
+                          </span>
+                        )}
+                        {m.isBacklog && (
+                          <span style={{ fontSize: 9.5, fontWeight: 700, padding: '1px 6px', borderRadius: 5, background: 'color-mix(in srgb, var(--accent) 14%, var(--card))', color: 'var(--accent)' }}>
+                            Added
+                          </span>
+                        )}
+                      </div>
+                      <div style={{ fontSize: 11.5, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                        <span>{m.roll || '—'}</span>
+                        {multiSection && (
+                          <button
+                            onClick={() => handleMoveSection(m.roll, m.name, activeSection === 'A' ? 'B' : 'A')}
+                            style={{ background: 'none', border: 'none', padding: 0, color: 'var(--accent)', fontSize: 10.5, fontWeight: 600, cursor: 'pointer', textDecoration: 'underline' }}
+                          >
+                            Move to Section {activeSection === 'A' ? 'B' : 'A'}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                    <div style={{ textAlign: 'center', fontSize: 12, fontFamily: 'JetBrains Mono, monospace', color: 'var(--muted)' }}>{stats.markedCount}</div>
+                    <div style={{ textAlign: 'center', fontSize: 12, fontFamily: 'JetBrains Mono, monospace', color: 'var(--muted)' }}>{stats.presentCount}</div>
+                    <div style={{
+                      textAlign: 'center', fontSize: 12.5, fontWeight: 700, fontFamily: 'JetBrains Mono, monospace',
+                      color: stats.pct === null ? 'var(--muted)' : stats.pct >= 75 ? '#16a34a' : stats.pct >= 60 ? '#d97706' : '#dc2626',
+                    }}>
+                      {stats.pct === null ? '—' : `${stats.pct}%`}
+                    </div>
+                    <div style={{ display: 'flex', gap: 4, justifyContent: 'center', alignItems: 'center' }}>
+                      {/* 2-state Present/Absent quick toggle (§3d). Green =
+                          Present (the default), red = Absent, one click
+                          flips between the two. A Late/Excused mark (set
+                          via "…" below) shows its own letter here instead
+                          and the main toggle is disabled for that row
+                          until "…" clears it — avoids a stray click
+                          silently downgrading a deliberate L/E mark. */}
+                      <button
+                        onClick={() => !rosterLocked && togglePresentAbsent(m.roll, effectiveMark)}
+                        disabled={rosterLocked || effectiveMark === 'late' || effectiveMark === 'excused'}
+                        title={effectiveMark === 'late' || effectiveMark === 'excused' ? 'Clear via “…” to use the quick toggle again' : ''}
+                        style={{
+                          width: 56, height: 28, borderRadius: 7, fontSize: 11, fontWeight: 700,
+                          cursor: (rosterLocked || effectiveMark === 'late' || effectiveMark === 'excused') ? 'not-allowed' : 'pointer',
+                          border: `1px solid ${markColors[effectiveMark]}`,
+                          background: `${markColors[effectiveMark]}22`,
+                          color: markColors[effectiveMark],
+                          opacity: (effectiveMark === 'late' || effectiveMark === 'excused') ? 0.75 : 1,
+                        }}
+                      >
+                        {markLabels[effectiveMark]}
+                      </button>
+                      <button
+                        onClick={() => !rosterLocked && setExpandedRoll((v) => (v === m.roll ? null : m.roll))}
+                        disabled={rosterLocked}
+                        title="Late / Excused"
+                        style={{
+                          width: 24, height: 28, borderRadius: 7, border: '1px solid var(--border)', background: 'var(--bg)',
+                          color: 'var(--muted)', fontSize: 13, fontWeight: 700, cursor: rosterLocked ? 'not-allowed' : 'pointer',
+                        }}
+                      >
+                        ⋯
+                      </button>
+                    </div>
+                  </div>
+                  {isExpanded && (
+                    <div style={{ display: 'flex', gap: 6, padding: '0 12px 10px 12px', justifyContent: 'flex-end' }}>
+                      {['late', 'excused'].map((mark) => (
+                        <button
+                          key={mark}
+                          onClick={() => !rosterLocked && setMark(m.roll, mark)}
+                          disabled={rosterLocked}
+                          style={{
+                            padding: '4px 10px', borderRadius: 7, fontSize: 11, fontWeight: 700, cursor: rosterLocked ? 'not-allowed' : 'pointer',
+                            border: draftMarks[m.roll] === mark ? `1px solid ${markColors[mark]}` : '1px solid var(--border)',
+                            background: draftMarks[m.roll] === mark ? `${markColors[mark]}22` : 'var(--bg)',
+                            color: draftMarks[m.roll] === mark ? markColors[mark] : 'var(--muted)',
+                          }}
+                        >
+                          {markLabels[mark]} · {mark === 'late' ? 'Late' : 'Excused'}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
-                  {marks.map((mark) => (
-                    <button
-                      key={mark}
-                      onClick={() => !rosterLocked && setMark(m.id, mark)}
-                      disabled={rosterLocked}
-                      style={{
-                        width: 30, height: 30, borderRadius: 7, fontSize: 11.5, fontWeight: 700, cursor: rosterLocked ? 'not-allowed' : 'pointer',
-                        border: draftMarks[m.id] === mark ? `1px solid ${markColors[mark]}` : '1px solid var(--border)',
-                        background: draftMarks[m.id] === mark ? `${markColors[mark]}22` : 'var(--bg)',
-                        color: draftMarks[m.id] === mark ? markColors[mark] : 'var(--muted)',
-                      }}
-                    >
-                      {markLabels[mark]}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ))}
+              );
+            })}
+          </div>
+        );
+      })()}
+
+      {/* Phase E — mobile 2-row swipeable roster (§3e). Same underlying
+          state as the desktop table above (effectiveMark/togglePresentAbsent/
+          setMark/expandedRoll/rowStatsByRoll) — reused as-is, not
+          reimplemented, per the plan's explicit instruction. Rendered only
+          below 768px (desktop table hides itself via CSS at the same
+          breakpoint) so there's exactly one roster mounted at a time. */}
+      {(() => {
+        const rosterLocked = !!existingSessionForDate?.locked && !unlockedForEdit;
+        return (
+          <div className="faculty-summary-card attendance-mobile-roster" style={{ padding: 0, overflow: 'hidden', opacity: rosterLocked ? 0.6 : 1 }}>
+            {mergedRoster.map((m) => {
+              const effectiveMark = draftMarks[m.roll] || 'present';
+              const stats = rowStatsByRoll[m.roll] || { presentCount: 0, markedCount: 0, pct: null };
+              const isExpanded = expandedRoll === m.roll;
+              return (
+                <AttendanceMobileRow
+                  key={m.id}
+                  m={m}
+                  stats={stats}
+                  effectiveMark={effectiveMark}
+                  isExpanded={isExpanded}
+                  rosterLocked={rosterLocked}
+                  multiSection={multiSection}
+                  activeSection={activeSection}
+                  markColors={markColors}
+                  markLabels={markLabels}
+                  sessions={sessions}
+                  date={date}
+                  togglePresentAbsent={togglePresentAbsent}
+                  setMark={setMark}
+                  setExpandedRoll={setExpandedRoll}
+                  handleMoveSection={handleMoveSection}
+                  draftMarks={draftMarks}
+                />
+              );
+            })}
           </div>
         );
       })()}
@@ -1568,7 +2199,15 @@ function MarksTab({ assignment, groupId }) {
   }
 
   const recordsByUid = Object.fromEntries((records || []).map((r) => [r.studentUid, r]));
-  const attendancePctFor = (studentUid) => computeStudentAttendancePercent(sessions, studentUid);
+  // Attendance sessions are keyed by ROLL NUMBER (not uid) as of Phase B of
+  // the Attendance Rebuild — see ATTENDANCE_REBUILD_PLAN.md §3b. A
+  // placeholder student (no account yet) and a later-registered real
+  // account for the same roll share the same attendance history with no
+  // migration step, since the key never changes when an account appears.
+  // computeStudentAttendancePercent itself is key-agnostic (just reads
+  // sessions[i].attendance[key]), so passing roll here is enough — no
+  // change needed inside facultyMarksSync.js.
+  const attendancePctFor = (studentRoll) => computeStudentAttendancePercent(sessions, studentRoll);
 
   const getFieldValue = (studentUid, key) => {
     if (draft[studentUid]?.[key] !== undefined) return draft[studentUid][key];
@@ -1586,10 +2225,10 @@ function MarksTab({ assignment, groupId }) {
     setDraft((prev) => ({ ...prev, [studentUid]: { ...prev[studentUid], [key]: v } }));
   };
 
-  const buildFieldsForSave = (studentUid) => {
+  const buildFieldsForSave = (studentUid, studentRoll) => {
     const d = draft[studentUid] || {};
     const existing = recordsByUid[studentUid]?.[`${teacherSlot}Marks`] || {};
-    const pct = attendancePctFor(studentUid);
+    const pct = attendancePctFor(studentRoll);
     const fields = { attendance: computeAttendanceComponentScore(pct, markConfig.attendanceWeight) };
     markConfig.components.forEach((c) => {
       // A component the teacher never touched (no draft edit, no existing
@@ -1606,10 +2245,10 @@ function MarksTab({ assignment, groupId }) {
     return fields;
   };
 
-  const handleSave = async (studentUid, status) => {
+  const handleSave = async (studentUid, studentRoll, status) => {
     setSavingUid(studentUid);
     try {
-      const fields = buildFieldsForSave(studentUid);
+      const fields = buildFieldsForSave(studentUid, studentRoll);
       const result = await saveStudentMarks(groupId, assignment.id, studentUid, teacherSlot, fields, status);
       setDraft((prev) => { const next = { ...prev }; delete next[studentUid]; return next; });
       notify(result.wasReSend ? 'Marks updated -- student notified.' : status === 'sent' ? 'Marks sent.' : 'Saved.', 'success');
@@ -1708,7 +2347,7 @@ function MarksTab({ assignment, groupId }) {
       <div style={{ display: 'grid', gap: 6 }}>
         {sortByRoll(members).map((m) => {
           const rec = recordsByUid[m.id];
-          const pct = attendancePctFor(m.id);
+          const pct = attendancePctFor(m.roll);
           return (
             <div key={m.id} className="faculty-marks-card">
               <div className="faculty-marks-card-student">
@@ -1731,7 +2370,7 @@ function MarksTab({ assignment, groupId }) {
 
               <div className="faculty-marks-card-actions">
                 <button
-                  onClick={() => handleSave(m.id, 'reviewed')}
+                  onClick={() => handleSave(m.id, m.roll, 'reviewed')}
                   disabled={savingUid === m.id}
                   className="faculty-marks-card-btn"
                   style={{ border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)' }}
@@ -1739,7 +2378,7 @@ function MarksTab({ assignment, groupId }) {
                   Save Draft
                 </button>
                 <button
-                  onClick={() => handleSave(m.id, 'sent')}
+                  onClick={() => handleSave(m.id, m.roll, 'sent')}
                   disabled={savingUid === m.id}
                   className="faculty-marks-card-btn accent-fill-glass"
                   style={{ color: '#fff', fontWeight: 700 }}

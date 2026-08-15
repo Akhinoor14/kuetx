@@ -692,12 +692,15 @@ export default function Profile() {
     // real benefit to keeping it around locally after logout — only risk.
     // Clearing here makes the promise simple and always true instead.
     await clearLocalDataOnLogout();
-    // Full reload after sign-out clears any stale cached React state
-    // (roles, faculty/staff status, profile, etc.) that was loaded for
-    // the previous session — same pattern used in Settings.jsx and
+    // Redirect to root (Guest Room landing page) after sign-out, not a
+    // reload of the current route — /profile (or /faculty/profile) is a
+    // protected page a signed-out user shouldn't stay on. The full
+    // navigation (href, not reload) also clears any stale cached React
+    // state (roles, faculty/staff status, profile, etc.) that was loaded
+    // for the previous session — same pattern used in Settings.jsx and
     // Navbar.jsx. Runs even if logout() throws, so a broken session never
     // gets stuck showing signed-in UI.
-    setTimeout(() => window.location.reload(), 800);
+    setTimeout(() => { window.location.href = '/'; }, 800);
   };
 
   // Called when user logs in from Profile page.

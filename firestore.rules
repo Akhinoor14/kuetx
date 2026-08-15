@@ -2839,6 +2839,16 @@ service cloud.firestore {
           allow write: if isFacultyFor(groupId, assignmentId) || isAdmin();
         }
 
+        // Attendance Rebuild Phase C (ATTENDANCE_REBUILD_PLAN.md §3c) —
+        // backlog/extra-student manual-add entries, scoped to this course
+        // offering only. Same access tier as sessions above (attendance
+        // roster data), not the studentRecords tier — this isn't graded/
+        // consequential data so it doesn't need the Blue-Tick-only gate.
+        match /backlogStudents/{roll} {
+          allow read: if isFacultyFor(groupId, assignmentId) || isGroupCR(groupId) || isGroupACR(groupId) || isAdmin();
+          allow write: if isFacultyFor(groupId, assignmentId) || isAdmin();
+        }
+
         match /studentRecords/{studentUid} {
           // Read: the student themself, either assigned teacher, or the
           // group's CR/staff tier.

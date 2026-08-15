@@ -89,7 +89,10 @@ export default function Settings() {
       await logout();
       await clearLocalDataOnLogout();
       flash(isProvider ? t('settings.signOutSuccess') : '✓ Signed out. This device has been cleared.');
-      setTimeout(() => window.location.reload(), 800);
+      // Redirect to root (Guest Room landing page), not a reload of the
+      // current route — /settings is a protected page a signed-out user
+      // shouldn't stay on. Same pattern used in Navbar.jsx and Profile.jsx.
+      setTimeout(() => { window.location.href = '/'; }, 800);
     } catch (err) {
       flash((isProvider ? `${t('settings.signOutFailed')} ` : '✗ Sign out failed: ') + err.message, 'error');
     } finally {

@@ -10474,3 +10474,47 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
 @media (max-width: 420px) {
   .classmates-list-card { padding: 8px 10px !important; }
 }
+
+/* Phase E — Attendance Tab mobile 2-row swipeable roster (ATTENDANCE_
+   REBUILD_PLAN.md §3e). Desktop keeps Phase D's spreadsheet-style grid
+   table; below 768px that table is hidden and this swipeable list takes
+   over instead. No swipe/gesture library added — package.json had none
+   (checked before starting), so this uses plain pointer events + a CSS
+   transform, which is all a 2-row card list actually needs. */
+.attendance-desktop-roster { display: block; }
+.attendance-mobile-roster { display: none; }
+
+@media (max-width: 768px) {
+  .attendance-desktop-roster { display: none; }
+  .attendance-mobile-roster { display: block; }
+}
+
+.attendance-mrow {
+  border-bottom: 1px solid var(--border);
+  padding: 10px 12px;
+  touch-action: pan-y; /* let vertical page scroll pass through; only horizontal drags are captured in JS */
+  user-select: none;
+}
+.attendance-mrow:last-child { border-bottom: none; }
+
+.attendance-mrow-identity {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.attendance-mrow-track {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.attendance-mrow-swipehint {
+  text-align: center;
+  font-size: 9.5px;
+  color: var(--muted);
+  margin-top: 4px;
+  opacity: 0.7;
+}
