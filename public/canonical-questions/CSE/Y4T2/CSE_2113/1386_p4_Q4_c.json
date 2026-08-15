@@ -1,0 +1,49 @@
+{
+  "id": "1386_p4_Q4(c)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Architecture",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2021\\4th_Year_2nd_Term_2021_1386.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "Check the data object (66, 570, 33) is an outlier or not in the following multivariate dataset. (20) [Use Mahalanobis distance]"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Height</td><td rowspan=1 colspan=1>Score</td><td rowspan=1 colspan=1>Age</td></tr><tr><td rowspan=1 colspan=1>64</td><td rowspan=1 colspan=1>580</td><td rowspan=1 colspan=1>29</td></tr><tr><td rowspan=1 colspan=1>66</td><td rowspan=1 colspan=1>570</td><td rowspan=1 colspan=1>33</td></tr><tr><td rowspan=1 colspan=1>68</td><td rowspan=1 colspan=1>590</td><td rowspan=1 colspan=1>37</td></tr><tr><td rowspan=1 colspan=1>69</td><td rowspan=1 colspan=1>660</td><td rowspan=1 colspan=1>46</td></tr><tr><td rowspan=1 colspan=1>73</td><td rowspan=1 colspan=1>600</td><td rowspan=1 colspan=1>55</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2021"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "854_p2_Q8(c)",
+  "course": {
+    "code": "ECE 2105",
+    "title": "Electromagnetic Fields and Waves",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2015\\2nd_Year_2nd_Term_2015_854.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider two closed loops $C _ { 1 }$ and $C _ { 2 }$ carrying current $I _ { 1 }$ and $I _ { 2 }$ respectively. Find the (17)   \nexpression of energy stored in the magnetic field. Also show that Newton's third law holds   \nhere."
+    },
+    {
+      "type": "text",
+      "value": "(08)"
+    },
+    {
+      "type": "text",
+      "value": "(13)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

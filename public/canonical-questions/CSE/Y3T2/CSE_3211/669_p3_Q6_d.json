@@ -1,0 +1,58 @@
+{
+  "id": "669_p3_Q6(d)",
+  "course": {
+    "code": "CSE 3211",
+    "title": "Compiler Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2015\\3rd_Year_2nd_Term_2015_669.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose a robot can be instructed to move one step east, north, west or south from its initial position as shown bellow. North"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_66dc3868c32b938b1f9037382ee0d682801e5a1386a5b976d1249ad3095be519.jpg",
+      "_source_path": "images/66dc3868c32b938b1f9037382ee0d682801e5a1386a5b976d1249ad3095be519.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "text",
+      "value": "i) construct a grammar for movement of the robot"
+    },
+    {
+      "type": "text",
+      "value": "ii) To verify your grammar show an input string that can be obtained from the grammar."
+    },
+    {
+      "type": "text",
+      "value": "iii) Draw annotated parse tree for an input. All the sample input must begin with an initial position start at (-5, 3) which is followed by at least four different directions."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2015"
+}

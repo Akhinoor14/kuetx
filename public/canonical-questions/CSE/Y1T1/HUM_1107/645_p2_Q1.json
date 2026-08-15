@@ -1,0 +1,42 @@
+{
+  "id": "645_p2_Q1",
+  "course": {
+    "code": "HUM 1107",
+    "title": "English and Human Communication",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2019\\1st_Year_1st_Term_2019_645.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Integrate the followings:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm {  { ~ \\bar { ( i ) } ~ } } \\int e ^ { 3 x } \\left\\{ \\frac { 3 x ^ { 2 } + 2 7 \\bar { x } + 5 9 } { \\left( x + 4 \\right) ^ { 2 } } \\right\\} d x \\ , \\mathrm {  { ~ ( i i ) ~ } } \\int \\sqrt { \\frac { 1 + x } { 1 - x } } \\mathrm {  { ~ a n d ~ } } \\mathrm {  { ~ \\bar { ( i i ) } ~ } } \\int \\tan ^ { - 1 } x d x \\ .\\tag{35}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1374_p2_Q1(a)",
+  "course": {
+    "code": "CSE 3107",
+    "title": "Applied Statistics and Queuing Theory",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2020\\3rd_Year_2nd_Term_2020_1374.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "A congested computer network has a 1% chance of losing a data packet, and packet losses are (13) independent. An email message requires 100 packets. If there are 10 email messages, what is the probability that at least one message requires that two or more packets be re-sent?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2020"
+}

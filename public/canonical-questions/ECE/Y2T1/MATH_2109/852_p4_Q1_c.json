@@ -1,0 +1,45 @@
+{
+  "id": "852_p4_Q1(c)",
+  "course": {
+    "code": "MATH 2109",
+    "title": "Vector, Matrix and Transform",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2019\\2nd_Year_1st_Term_2019_852.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Evaluate $\\iint _ { c } \\overline { { d } } . d \\overline { { s } }$ , where S is the $\\mathrm { ~ l ~ } ^ { s t }$ octant portion of the paraboloid $y = 9 - x ^ { 2 } - z ^ { 2 }$"
+    },
+    {
+      "type": "text",
+      "value": "(13)"
+    },
+    {
+      "type": "text",
+      "value": "whene $A = ( x y + 2 ) ^ { 1 } + x y ^ { 2 } ] + ( y ^ { 2 } - x ) ^ { k }$ ."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

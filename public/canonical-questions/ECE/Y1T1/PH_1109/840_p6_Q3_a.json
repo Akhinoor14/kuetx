@@ -1,0 +1,37 @@
+{
+  "id": "840_p6_Q3(a)",
+  "course": {
+    "code": "PH 1109",
+    "title": "Physics",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\1st_Year_1st_Term_2018_840.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is Doppler's effect? Derive an expression for the apparent frequency of a note (12) when (i) The source and observer is moving separately towards the stationary observer and source. (ii) The source and the listener are moving"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
+}

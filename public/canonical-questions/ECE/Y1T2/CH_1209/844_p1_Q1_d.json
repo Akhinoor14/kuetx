@@ -1,0 +1,37 @@
+{
+  "id": "844_p1_Q1(d)",
+  "course": {
+    "code": "CH 1209",
+    "title": "Chemistry",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\1st_Year_2nd_Term_2016_844.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "The resistance of a N/5 solution of a salt is found to be $2 . 5 \\times 1 0 ^ { 2 }$ ohms. Calculate (05) the equivalent conductance of the solution. Cell constant $: = 1 . 1 5 \\ c m ^ { - 1 }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

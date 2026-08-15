@@ -1,0 +1,53 @@
+{
+  "id": "663_p4_Q1(e)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Architecture",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2015\\3rd_Year_1st_Term_2015_663.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(e)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A band limited signal is expressed as 10 + 5 cos II10 ×10⁶t."
+    },
+    {
+      "type": "text",
+      "value": "i) Sketch the spectrum of the signal."
+    },
+    {
+      "type": "text",
+      "value": "ii) What will be the required channel band width to transmit this signal?"
+    },
+    {
+      "type": "text",
+      "value": "iii) Estimate thermal noise level of this channel when operated at 30º C."
+    },
+    {
+      "type": "text",
+      "value": "iv) What signal power is required to achieve the intended capacity of 20 Mbps in this noisy channel?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2015"
+}

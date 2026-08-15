@@ -1,0 +1,37 @@
+{
+  "id": "658_p3_Q7(d)",
+  "course": {
+    "code": "CSE 2201",
+    "title": "Algorithm Analysis and Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2015\\2nd_Year_2nd_Term_2015_658.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider disks with an advertised average seek time of 4 ms, rotation speed 12000 rpm and (10) 512 byte sectors with 500 sectors per track. We wish to read a file consisting of 2500 sectors for a total of 1.28 Mbytes. Find total average access time for: i) sequential access and ii) random access."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

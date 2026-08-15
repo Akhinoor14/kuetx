@@ -1,0 +1,53 @@
+{
+  "id": "678_p5_Q5(b)",
+  "course": {
+    "code": "CSE 4101",
+    "title": "Computer Graphics and Image Processing",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2019\\4th_Year_1st_Term_2019_678.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the 1D image below:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>a</td><td rowspan=1 colspan=1>b</td><td rowspan=1 colspan=1>c</td><td rowspan=1 colspan=1>d</td><td rowspan=1 colspan=1>e</td><td rowspan=1 colspan=1>f</td><td rowspan=1 colspan=1>g</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "(08)"
+    },
+    {
+      "type": "text",
+      "value": "i) Suppose, you apply a width-3 mean filter twice. Give an expression for the center pixel after the filter has been applied."
+    },
+    {
+      "type": "text",
+      "value": "ii) Define a single 1D kernel that, when applied only once to the image, will produce the same results."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2019"
+}

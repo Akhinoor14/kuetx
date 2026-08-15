@@ -1,0 +1,69 @@
+{
+  "id": "663_p2_Q1(b)",
+  "course": {
+    "code": "CSE 3109",
+    "title": "Database Systems",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2015\\3rd_Year_1st_Term_2015_663.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following two entity sets"
+    },
+    {
+      "type": "text",
+      "value": "(07)"
+    },
+    {
+      "type": "text",
+      "value": "Employee(ssn, name, address)"
+    },
+    {
+      "type": "text",
+      "value": "(18)"
+    },
+    {
+      "type": "text",
+      "value": "Dependents(pname, age)"
+    },
+    {
+      "type": "text",
+      "value": "The entity sets are related via a relation policy(amount). Employee is a strong entity set and Dependents is a weak entity set."
+    },
+    {
+      "type": "text",
+      "value": "(i) Define weak entity set and strong entity set."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Draw the ER diagram and hence the schema diagram to represent the system."
+    },
+    {
+      "type": "text",
+      "value": "(iii) Create the system using DDL."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2015"
+}

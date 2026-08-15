@@ -1,0 +1,37 @@
+{
+  "id": "656_p2_Q5(d)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Architecture",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2019\\2nd_Year_1st_Term_2019_656.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": ".In a coputer systém, main memory and cache memory ratio is 64:16 and 20 bits are for the: (08)   \naddressing. Find   \ni) TAG; BLOCK and WORD bits in direct mapping when block size is 8 words.   \nii) TAG, SET·and WORD bits for set-associative mapping for'4 blocks per set and 8   \nwords per block."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

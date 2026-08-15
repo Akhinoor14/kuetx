@@ -1,0 +1,53 @@
+{
+  "id": "661_p2_Q4(e)",
+  "course": {
+    "code": "CSE 2103",
+    "title": "Microprocessors and Microcontrollers",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\2nd_Year_2nd_Term_2018_661.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(e)",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider, a program with 80% of executed instructions being simple and 20% complex. (05) CISC: simple instructions take 4 cycle, complex instructions take 8 cycle, and cycle time is 100 ns."
+    },
+    {
+      "type": "text",
+      "value": "RISC: simple instructions are executed in one cycle, complex operations are implemented as a sequence of instructions (14 instructions on average), cycle time 75 ns."
+    },
+    {
+      "type": "text",
+      "value": "Measure the amount of time in seconds that a program of 1000,000 instructions will take if we execute it in CISC and RISC architecture separately."
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

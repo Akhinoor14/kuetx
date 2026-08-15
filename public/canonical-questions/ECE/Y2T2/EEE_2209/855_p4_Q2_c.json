@@ -1,0 +1,37 @@
+{
+  "id": "855_p4_Q2(c)",
+  "course": {
+    "code": "EEE 2209",
+    "title": "Electrical Drives and Instrumentation",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\2nd_Year_2nd_Term_2016_855.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "In a 120 V compound generator, the resistances of armature, shunt, and series windings are 0.06 Ω, 25 Ω, and 0.04 Ω respectively. The load current is 100 A at 120 V. Find the induced emf and armature current when the machine is connected as i).long-shunt and as ii) short-shunt."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "648_p2_Q8(b)",
+  "course": {
+    "code": "CSE 1101",
+    "title": "Structured Programming",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2016\\1st_Year_2nd_Term_2016_648.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Assume that you want to submit your solution to any·online judge (UVA, Codeforces, etc. ). But your solution of any problem must contain the below statements."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r l } & { \\mathtt { f r e o p e n } ( \\mathrm {  ~ \\ddot { \\Sigma } ~ f i ~ . } \\mathtt { t x t } ^ { \\prime \\prime } , \\mathrm {  ~ \\ddot { \\Sigma } ~ \\unboldmath } ^ { \\mathrm { w } } \\mathrm {  ~ \\Sigma ~ } ^ { \\mathrm { v } \\prime \\prime } , \\mathrm {  ~ \\hat { \\Sigma } ~ \\unboldmath } ^ { \\mathrm { s t d i n } } ) \\ ; } \\\\ & { \\mathtt { f r e o p e n } ( \\mathrm {  ~ \\ddot { \\Sigma } ~ f o ~ . } \\mathtt { t x t } ^ { \\prime \\prime } , \\mathrm {  ~ \\check { \\Sigma } ~ \\unboldmath } ^ { \\mathrm { w } } \\mathrm {  ~ \\Sigma ~ } ^ { \\mathrm { v } \\prime \\prime } , \\mathrm {  ~ \\hat { \\Sigma } ~ \\unboldmath } ^ { \\mathrm { s t d o u t } } ) \\ ; } \\end{array}\\tag{11}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "But we know that when we submit a solution into any onļine judge, it does not permit to open a file. for reading and writing. What will be the solution without comment out (//or $/ \\bar { * } \\ldots * \\ n$ or delete the above two statements? Give an example with proper explanation."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

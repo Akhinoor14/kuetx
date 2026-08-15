@@ -1,0 +1,42 @@
+{
+  "id": "655_p2_Q6(c)",
+  "course": {
+    "code": "CSE 2105",
+    "title": "Data Structures and Algorithms",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\2nd_Year_1st_Term_2018_655.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write a function to split a linked list into two lists at a specific point for the given example: (10)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r } { \\mathbf { \\dot { \\ m } } \\mathrm { L i s t } = ( 1 0 \\ 2 0 \\ 3 0 \\ 4 0 \\ 5 0 ) , \\mathrm { l o c } = 3 , \\mathrm { o u t L i s t } 1 = ( 1 0 \\ 2 0 \\ 3 0 ) , \\mathrm { o u t L i s t } 2 = ( 4 0 \\ 5 0 ) } \\end{array}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

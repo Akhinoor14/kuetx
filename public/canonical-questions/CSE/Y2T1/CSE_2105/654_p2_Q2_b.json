@@ -1,0 +1,50 @@
+{
+  "id": "654_p2_Q2(b)",
+  "course": {
+    "code": "CSE 2105",
+    "title": "Data Structures and Algorithms",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2017\\2nd_Year_1st_Term_2017_654.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the priority queue in the following figure which is maintained as a one way list. (08)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d0d8cfb99f8f5be416f6276982c1686a13baa9d6fc6398d7f7b095fed80875ee.jpg",
+      "_source_path": "images/d0d8cfb99f8f5be416f6276982c1686a13baa9d6fc6398d7f7b095fed80875ee.jpg"
+    },
+    {
+      "type": "text",
+      "value": "i) Describe the structure after (X, 2), (Y, 3), (Z, 2) and $( \\mathbb { W } , 1 )$ are added to the queue."
+    },
+    {
+      "type": "text",
+      "value": "ii) Describe the structure if, after the preceding insertions, 3 elements are deleted."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

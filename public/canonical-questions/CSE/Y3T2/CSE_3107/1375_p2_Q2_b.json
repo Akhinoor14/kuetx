@@ -1,0 +1,41 @@
+{
+  "id": "1375_p2_Q2(b)",
+  "course": {
+    "code": "CSE 3107",
+    "title": "Applied Statistics and Queuing Theory",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2021\\3rd_Year_2nd_Term_2021_1375.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "The frequency distribution of battery lives is approximated by a normal distribution with mean (15) µ = 3·5 and standard deviation $\\sigma = 0 ^ { . 7 }$ . The expected frequencies are obtained by computing the areas under the hypothesized normal curve that fall between the various class boundaries. Decide whether or not the normal distribution provide a good fit for the distribution of battery lives using Chi-square test."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Class Boundaries</td><td rowspan=1 colspan=1>1·45-1·95</td><td rowspan=1 colspan=1>1·95-2·45</td><td rowspan=1 colspan=1>2·45-2.95</td><td rowspan=1 colspan=1>2·95-3·45</td><td rowspan=1 colspan=1>3·45-3.95</td><td rowspan=1 colspan=1>3.95-4·45</td><td rowspan=1 colspan=1>4·45-4.95</td></tr><tr><td rowspan=1 colspan=1>Observed Frequency</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>15</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>3</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2021"
+}

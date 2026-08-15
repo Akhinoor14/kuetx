@@ -1,0 +1,57 @@
+{
+  "id": "846_p5_Q7",
+  "course": {
+    "code": "ECE 4139",
+    "title": "TV Engineering",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\1st_Year_2nd_Term_2018_846.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve the followings:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\mathrm { a ) } } \\quad { \\frac { d ^ { 2 } y } { d x ^ { 2 } } } + 4 y = x s i n x\\tag{35}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n6 ) \\frac { d ^ { 2 } y } { d x ^ { 2 } } - 4 \\frac { d y } { d x } + 4 y = x ^ { 2 } e ^ { 2 x }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\mathrm { ( ) } } \\quad { \\frac { d ^ { 2 } y } { d x ^ { 2 } } } - 2 { \\frac { d y } { d x } } + y = e ^ { \\dot { x } } s i n x\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { d } ) \\quad ( \\overrightharpoon { D } ^ { 2 } - 3 \\overrightharpoon { D } + 4 ) y = c o s ( 4 x + 5 )\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

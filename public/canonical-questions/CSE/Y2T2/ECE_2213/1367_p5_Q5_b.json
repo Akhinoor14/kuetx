@@ -1,0 +1,81 @@
+{
+  "id": "1367_p5_Q5(b)",
+  "course": {
+    "code": "ECE 2213",
+    "title": "Digital Electronics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\2nd_Year_2nd_Term_2024_1367.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "Draw the output waveforms of the following circuits."
+    },
+    {
+      "type": "text",
+      "value": "(20) [CO3]"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_77ed866f6dca6b19f36307661eb26f0b3f8f4fb05dafa26771bcbf1741bff8fe.jpg",
+      "_source_path": "images/77ed866f6dca6b19f36307661eb26f0b3f8f4fb05dafa26771bcbf1741bff8fe.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_9a26dc7d0284b6455c3f094248a94f7a59b46b5da409996e5a3bdfecb779d418.jpg",
+      "_source_path": "images/9a26dc7d0284b6455c3f094248a94f7a59b46b5da409996e5a3bdfecb779d418.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_3c5a16f05c59b55b3c0a209c01294f068cfcb698b4296e5bef8d4216eb662d52.jpg",
+      "_source_path": "images/3c5a16f05c59b55b3c0a209c01294f068cfcb698b4296e5bef8d4216eb662d52.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_6a5b223e1629f03a80856d8f37a4498becbe3a15571eb9c496af2e79ccea8f12.jpg",
+      "_source_path": "images/6a5b223e1629f03a80856d8f37a4498becbe3a15571eb9c496af2e79ccea8f12.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_7529367587d90a868c69c4bf401d899e0d26166a35eeb48d6d0d842b16746760.jpg",
+      "_source_path": "images/7529367587d90a868c69c4bf401d899e0d26166a35eeb48d6d0d842b16746760.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d9f0470f05bb6864ff186f8eb7e2bafc61438e78c1326ff644c97b948a8b2b3f.jpg",
+      "_source_path": "images/d9f0470f05bb6864ff186f8eb7e2bafc61438e78c1326ff644c97b948a8b2b3f.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_4de545d436b6fc8445608b48f84acf7ed66de697167b9105d2cfceaa9b7e47aa.jpg",
+      "_source_path": "images/4de545d436b6fc8445608b48f84acf7ed66de697167b9105d2cfceaa9b7e47aa.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8ece227af65e608cf07c6ccbb56207281876aa635e1b520f7cb5d1b65300cd94.jpg",
+      "_source_path": "images/8ece227af65e608cf07c6ccbb56207281876aa635e1b520f7cb5d1b65300cd94.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2024"
+}

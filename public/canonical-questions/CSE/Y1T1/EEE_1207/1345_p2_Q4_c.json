@@ -1,0 +1,37 @@
+{
+  "id": "1345_p2_Q4(c)",
+  "course": {
+    "code": "EEE 1207",
+    "title": "Basic Electrical Engineering",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2020\\1st_Year_1st_Term_2020_1345.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "A voltage $\\nu = 2 0 0 \\cos ( 1 5 7 t + 3 0 ^ { \\circ } )$ volts is applied to a particular circuit element and it is found (12) i = 5 sin(157t –150°) amp. Sketch ν and i waves. Find the nature and magnitude of the circuit element."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2020"
+}

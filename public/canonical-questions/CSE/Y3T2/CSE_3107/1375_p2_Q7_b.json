@@ -1,0 +1,58 @@
+{
+  "id": "1375_p2_Q7(b)",
+  "course": {
+    "code": "CSE 3107",
+    "title": "Applied Statistics and Queuing Theory",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2021\\3rd_Year_2nd_Term_2021_1375.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the closed queuing network of single server queues with exponentially distributed service times, as shown in the following figure. The average service rates of $\\mathrm { Q } _ { 1 } , \\mathrm { Q } _ { 2 }$ and $\\mathrm { Q } _ { 3 }$ are respectively $\\mu _ { 1 } = 0 { \\cdot } 5 , \\mu _ { 2 } = 1$ and $\\mu _ { 3 } = 0 ^ { . } 5$ . The system has a total user population of 4. Using the convolution approach, obtain the followings:"
+    },
+    {
+      "type": "text",
+      "value": "i) The normalization constant."
+    },
+    {
+      "type": "text",
+      "value": "ii) The state probability distribution of the network."
+    },
+    {
+      "type": "text",
+      "value": "iii) The actual throughput of each queue."
+    },
+    {
+      "type": "text",
+      "value": "iv) The average waiting time of each queue."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_cb144d928002ff51badd4058fa99ac701da008cd7cded54b669532ad9dadb2e0.jpg",
+      "_source_path": "images/cb144d928002ff51badd4058fa99ac701da008cd7cded54b669532ad9dadb2e0.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2021"
+}

@@ -1,0 +1,53 @@
+{
+  "id": "1360_p4_Q6(b)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Architecture",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\2nd_Year_1st_Term_2023_1360.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "For a computer, the given table represents the different cycle times for pipeline stages: (10) [CO3]"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Stage</td><td rowspan=1 colspan=1>IF</td><td rowspan=1 colspan=1>ID</td><td rowspan=1 colspan=1>FO</td><td rowspan=1 colspan=1>EI</td><td rowspan=1 colspan=1>WO</td></tr><tr><td rowspan=1 colspan=1>Delay</td><td rowspan=1 colspan=1>3ms</td><td rowspan=1 colspan=1>2ms</td><td rowspan=1 colspan=1>5ms</td><td rowspan=1 colspan=1>2ms</td><td rowspan=1 colspan=1>4ms</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "i) What would be the speedup factor for the instruction pipeline compared without pipeline execution for a program with 10 instructions?"
+    },
+    {
+      "type": "text",
+      "value": "ii) In some cases, pipeline results in greater latch delay. If we consider the delay to be 5ms, what would be the speedup factor for the same program execution?"
+    },
+    {
+      "type": "text",
+      "value": "(15) [CO3]"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "1348_p2_Q2(b)",
+  "course": {
+    "code": "CSE 1107",
+    "title": "Discrete Mathematics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\1st_Year_1st_Term_2023_1348.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "A popular puzzle of the late nineteenth Century, called the Tower of Hanoi, consists of (15) {CO3 three pegs mounted on a board together with disks of different sizes. Initially these disks are placed on the first peg in order of size, with the largest one on the bottom."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_c1829f0b8bcd76824154e3a734447c192c94447e212231918d5920b4c338250e.jpg",
+      "_source_path": "images/c1829f0b8bcd76824154e3a734447c192c94447e212231918d5920b4c338250e.jpg"
+    },
+    {
+      "type": "text",
+      "value": "The rules of the puzzle allow disks to be moved one at a time from one peg to another as long as a disk is never placed on top of a smaller disk. The goal of the puzzle is to have all the disks on the second peg in order of size, with the largest on the bottom. Let $H _ { n }$ denote the number of moves needed to solve the Tower of Hanoi problem with n disks. Setup a recurrence relation for the sequence $\\left\\{ H _ { n } \\right\\}$ . Hence, find the closed form of the solution."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2023"
+}

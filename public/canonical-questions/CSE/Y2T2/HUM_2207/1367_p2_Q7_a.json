@@ -1,0 +1,85 @@
+{
+  "id": "1367_p2_Q7(a)",
+  "course": {
+    "code": "HUM 2207",
+    "title": "Economics and Accounting",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\2nd_Year_2nd_Term_2024_1367.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 35,
+  "content": [
+    {
+      "type": "text",
+      "value": "Mr. Rahman started a business on June 01, 2024. The following transactions during (35) [CO2] June:"
+    },
+    {
+      "type": "text",
+      "value": "June-01 Invested cash for the business TK 3,50,000."
+    },
+    {
+      "type": "text",
+      "value": "57 02 Purchase a Delivery Van for the business in cash TK 40,000."
+    },
+    {
+      "type": "text",
+      "value": "77 - 03 Equipment purchase for office use in cash TK 20,000."
+    },
+    {
+      "type": "text",
+      "value": "75 04 A fee of TK 12,000 for the hauling goods is billed to a customer on account."
+    },
+    {
+      "type": "text",
+      "value": "05 Cash received from customer transaction June 04."
+    },
+    {
+      "type": "text",
+      "value": "99 06 Cash deposited into bank TK 45,000."
+    },
+    {
+      "type": "text",
+      "value": "75 07 Repair expense paid by cheque TK 10,000."
+    },
+    {
+      "type": "text",
+      "value": "79 08 Advertisement expense occurred in the Daily Bangladesh Pratidin on account TK 7,000."
+    },
+    {
+      "type": "text",
+      "value": "09 Supplies purchase for office use in cash TK 9,000."
+    },
+    {
+      "type": "text",
+      "value": "55 10 Advertisement bill paid by cheque transaction June 08."
+    },
+    {
+      "type": "text",
+      "value": "i) Prepare journal."
+    },
+    {
+      "type": "text",
+      "value": "ii) Prepare a tabular summary and show the effect on accounting equation. Mr. Rahman arrange the assets and liabilities are: Cash + Delivery Van + Equipment + Supplies = Accounts Payable + Rahman's Capital."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2024"
+}

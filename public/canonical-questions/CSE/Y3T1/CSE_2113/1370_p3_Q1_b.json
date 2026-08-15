@@ -1,0 +1,42 @@
+{
+  "id": "1370_p3_Q1(b)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Architecture",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\3rd_Year_1st_Term_2022_1370.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose you have a memory chip where each word has 32 bits and the total number of rows (12) are equal to the number of rows of a N MB memory. Now draw the complete memory chip by showing the size of address lines and data lines. Here,"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nN { = } ( \\mathrm { l a s t d i g i t o f { y o u r r o l l n u m b e r } } \\% 2 ) + 1 .\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

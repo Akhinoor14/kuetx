@@ -1,0 +1,54 @@
+{
+  "id": "1361_p2_Q1(c)",
+  "course": {
+    "code": "CSE 2105",
+    "title": "Data Structures and Algorithms",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\2nd_Year_1st_Term_2024_1361.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Explain the skewness problem in the binary search trees. For the given binary search (15) [CO4] tree, perform the following operations and show the updated tree after each operation."
+    },
+    {
+      "type": "text",
+      "value": "i. Delete the element 8"
+    },
+    {
+      "type": "text",
+      "value": "ii. Delete the element 2"
+    },
+    {
+      "type": "text",
+      "value": "Write pseudocode for deleting a node with two children node"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_2dcb9f1eb6fc53d22cfd52826e6a82e0edc96f8fa0450677dd81e28f2aba5617.jpg",
+      "_source_path": "images/2dcb9f1eb6fc53d22cfd52826e6a82e0edc96f8fa0450677dd81e28f2aba5617.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2024"
+}

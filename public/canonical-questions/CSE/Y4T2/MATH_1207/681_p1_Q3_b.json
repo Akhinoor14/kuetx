@@ -1,0 +1,46 @@
+{
+  "id": "681_p1_Q3(b)",
+  "course": {
+    "code": "MATH 1207",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2016\\4th_Year_2nd_Term_2016_681.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Use Liang-Barsky line clipping algorithm to clip the lines in the following figure."
+    },
+    {
+      "type": "text",
+      "value": "(14)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_dcbe06ea94acbf551c5d6b57ff73082c36a75b0bae32500c9e87b722d4698368.jpg",
+      "_source_path": "images/dcbe06ea94acbf551c5d6b57ff73082c36a75b0bae32500c9e87b722d4698368.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2016"
+}

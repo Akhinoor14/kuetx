@@ -1,0 +1,37 @@
+{
+  "id": "1372_p2_Q7(c)",
+  "course": {
+    "code": "CSE 3101",
+    "title": "Operating Systems",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\3rd_Year_1st_Term_2024_1372.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Design an IoT-based Room Temperature Monitoring and Control System using. an (15) [CO3] ESP32 and a DHT22 sensor. The fan should start when temperature goes above $3 0 ^ { \\circ } \\mathrm { C } ,$ speed gradually increasing from 50% to 100% as temperature rises from $3 0 \\textdegree C$ to 50°C or above, using PWM control. Use Blynk IoT platform for remote temperature and fan monitoring. Provide necessary connection diagram, coding, and IoT server-node setup steps."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2024"
+}

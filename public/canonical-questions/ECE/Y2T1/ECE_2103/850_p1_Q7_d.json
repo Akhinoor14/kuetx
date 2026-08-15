@@ -1,0 +1,46 @@
+{
+  "id": "850_p1_Q7(d)",
+  "course": {
+    "code": "ECE 2103",
+    "title": "Digital Electronics and Logic Circuits",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2017\\2nd_Year_1st_Term_2017_850.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": ", $R _ { A } = 2 . 2 k \\Omega , R _ { B } = 3 . 9 k \\Omega$ , and $C = 0 . 1 \\mu F$ Determine the positive pulse width $t _ { c } ,$ negative pulse width $t _ { d } ,$ and free-running frequency $f _ { 0 } .$"
+    },
+    {
+      "type": "text",
+      "value": "(08)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_bac531a1c3f80a047d1d7aaed3de5bb403aaf7cfc62fb7e1400c8026686043bb.jpg",
+      "_source_path": "images/bac531a1c3f80a047d1d7aaed3de5bb403aaf7cfc62fb7e1400c8026686043bb.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

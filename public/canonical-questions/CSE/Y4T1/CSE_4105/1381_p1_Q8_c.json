@@ -1,0 +1,41 @@
+{
+  "id": "1381_p1_Q8(c)",
+  "course": {
+    "code": "CSE 4105",
+    "title": "Computer Networks",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\4th_Year_1st_Term_2022_1381.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose, in a TCP connection, the receiver process is slow at data consumption. Eventually, the receiver buffer is full and the receiver advertises zero window size. The sender halts sending. Whenever the receiver process consumes a packet, receiver sends an acknowledgement to the sender. Sender sends the next packet. Will this result in a problem? If yes, discuss about the reasoning and a possible solution."
+    },
+    {
+      "type": "text",
+      "value": "(13)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

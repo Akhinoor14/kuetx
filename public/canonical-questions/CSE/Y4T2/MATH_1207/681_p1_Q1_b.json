@@ -1,0 +1,37 @@
+{
+  "id": "681_p1_Q1(b)",
+  "course": {
+    "code": "MATH 1207",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2016\\4th_Year_2nd_Term_2016_681.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Let a unit square defined by $0 \\leq x \\leq 1$ , and $0 \\leq y \\leq 1$ in object coordinate system. New (13) positions X' are derived from the local positions X by $\\mathbf { { X } ^ { \\prime } } = \\mathbf { { M } } \\mathbf { { X } }$ , where M is a transformation matrix. Give a matrix M, expressed in terms of basic modeling transformations, tó obtain a rectangle with width = 2 and height = 3, centered around the origin of'world coordinate system, ánd rotated over an angle of 30°."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2016"
+}

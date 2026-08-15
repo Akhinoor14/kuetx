@@ -1,0 +1,42 @@
+{
+  "id": "658_p2_Q7(c)",
+  "course": {
+    "code": "MATH 1107",
+    "title": "Differential and Integral Calculus",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2015\\2nd_Year_2nd_Term_2015_658.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the inverse of ${ \\left[ \\begin{array} { l l l } { 0 } & { 1 } & { 2 } \\\\ { 1 } & { 2 } & { 3 } \\\\ { 3 } & { 1 } & { 1 } \\end{array} \\right] } .$"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n3 x + y + 2 z = 8\\tag{10}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "677_p5_Q7(a)",
+  "course": {
+    "code": "CSE 4101",
+    "title": "Computer Graphics and Image Processing",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\4th_Year_1st_Term_2018_677.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Let a 4-bit, 4x4 image passes through an intensity transformation function given by (10) $s = \\mathrm { T } ( r ) = \\alpha \\log _ { 2 } ( 1 + r ) + \\beta$ , where $\\alpha , \\beta$ are constants. Few pixels are available in the input and output images, as shown below."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_173e0b6b24e8ab439db42f1e5883bd6ed08e5611e02cc42854a540f5b67294cb.jpg",
+      "_source_path": "images/173e0b6b24e8ab439db42f1e5883bd6ed08e5611e02cc42854a540f5b67294cb.jpg"
+    },
+    {
+      "type": "text",
+      "value": "What are the values of the pixels A, B and C, D in the input and output images respectively?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2018"
+}

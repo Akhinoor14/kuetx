@@ -1,0 +1,51 @@
+{
+  "id": "1353_p2_Q8(a)",
+  "course": {
+    "code": "CSE 1203",
+    "title": "Digital Logic Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2021\\1st_Year_2nd_Term_2021_1353.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Why do you need to analyze the sequential circuits? Analyze the following sequențial circuit (15) in terms of the followings:"
+    },
+    {
+      "type": "text",
+      "value": "(i) Input and output equations, (ii) State table, (iii) State diagram."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d96b760489a4da2f578952eea3f5574b778f2aa7304ebfb5e7f9f7fbe638c955.jpg",
+      "_source_path": "images/d96b760489a4da2f578952eea3f5574b778f2aa7304ebfb5e7f9f7fbe638c955.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ea0f5d3a4af0891c27d0f0826f70086de4a29f9f0a73f1508e88d11b72383f22.jpg",
+      "_source_path": "images/ea0f5d3a4af0891c27d0f0826f70086de4a29f9f0a73f1508e88d11b72383f22.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

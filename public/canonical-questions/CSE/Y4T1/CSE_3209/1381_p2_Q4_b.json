@@ -1,0 +1,42 @@
+{
+  "id": "1381_p2_Q4(b)",
+  "course": {
+    "code": "CSE 3209",
+    "title": "Artificial Intelligence",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\4th_Year_1st_Term_2022_1381.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Derive the product formula for Bayesian network. Show the steps to calculate the product (12) formula of the following Bayesian network."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_22027e636b60194e6dc7bc169b4952e00d36fe0d1b9c9e0112bb2edac25ee251.jpg",
+      "_source_path": "images/22027e636b60194e6dc7bc169b4952e00d36fe0d1b9c9e0112bb2edac25ee251.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

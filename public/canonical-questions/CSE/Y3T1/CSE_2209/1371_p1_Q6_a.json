@@ -1,0 +1,45 @@
+{
+  "id": "1371_p1_Q6(a)",
+  "course": {
+    "code": "CSE 2209",
+    "title": "Theory of Computation",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\3rd_Year_1st_Term_2023_1371.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "In province B, messages are sent using sequences of red (0’) and green (1’) flags (25) [CO4] which can't be void. The rule says any message must feature at least one green on its second half. And importantly, the first half of the message must be al least as long as the second half."
+    },
+    {
+      "type": "text",
+      "value": "i) Design a Pushdown Automata (PDA) that ensures messages are generated following the rules."
+    },
+    {
+      "type": "text",
+      "value": "ii) Convert the PDA into its equivalent CFG."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2023"
+}

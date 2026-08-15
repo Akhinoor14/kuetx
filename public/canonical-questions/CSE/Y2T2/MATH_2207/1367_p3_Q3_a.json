@@ -1,0 +1,57 @@
+{
+  "id": "1367_p3_Q3(a)",
+  "course": {
+    "code": "MATH 2207",
+    "title": "Complex Variable, Vector Analysis and Statistics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\2nd_Year_2nd_Term_2024_1367.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "An observer counts the number of correct signals for each 2-minute time interval. (12) [CO3]"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Possible number of correct signals within 2 min</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>&gt;4</td></tr><tr><td rowspan=1 colspan=1>Number of observations</td><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>0</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "i) Find the probability that 15 correct signals observed within 5 minutes."
+    },
+    {
+      "type": "text",
+      "value": "ii) Find the probability that no correct signal observed within the duration 10.00 –01.10 a.m, it is observed that (given that) no correct signal observed 10.00 – 01.05 a.m."
+    },
+    {
+      "type": "text",
+      "value": "iii) Find the probability that 15 correct signals observed within the duration 11.00 – 11.10 a.m. or 5.00 – 5.10 p.m."
+    },
+    {
+      "type": "text",
+      "value": "iv) Find the probability that 15 correct signals observed within the duration 11.00 – 11.10 a.m. or 11.05 – 11.15 a.m."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2024"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "1357_p2_Q5(b)",
+  "course": {
+    "code": "MATH 2107",
+    "title": "Fourier Analysis and Linear Algebra",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2020\\2nd_Year_1st_Term_2020_1357.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the vector space $\\mathbb { R } ^ { 3 }$ with Euclidian inner product. Use the Gram-Schmidt orthogonalization process to transform the basis vectors $u _ { 1 } = ( 1 , 1 ,$ 1), $u _ { 2 } = ( - 1 ,$ , 1, 0), $u _ { 3 } = ( 1 , 2 , 1 )$ into an orthogonal basis vectors to obtain an orthonormal basis $\\{ \\boldsymbol { \\nu } _ { 1 } , \\boldsymbol { \\nu } _ { 2 } , \\boldsymbol { \\nu } _ { 3 } \\}$"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2020"
+}

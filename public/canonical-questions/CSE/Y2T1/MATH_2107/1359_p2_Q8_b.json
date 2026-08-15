@@ -1,0 +1,42 @@
+{
+  "id": "1359_p2_Q8(b)",
+  "course": {
+    "code": "MATH 2107",
+    "title": "Fourier Analysis and Linear Algebra",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\2nd_Year_1st_Term_2022_1359.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the angle between A and B with respect to the standard inner product on $M _ { 2 2 }$ where, (09)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nA = { \\binom { 1 } { 2 } } \\quad { \\begin{array} { l } { 6 } \\\\ { - 3 } \\end{array} } \\textstyle { \\biggr ] } , B = { \\binom { 3 } { 1 } } \\quad { \\begin{array} { l } { 2 } \\\\ { - 4 } \\end{array} } \\textstyle { \\biggr ] }\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

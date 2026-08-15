@@ -1,0 +1,37 @@
+{
+  "id": "671_p2_Q1(c)",
+  "course": {
+    "code": "CSE 3107",
+    "title": "Applied Statistics and Queuing Theory",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2017\\3rd_Year_2nd_Term_2017_671.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "In a company• 1000 applicants show up for 70 new job positions. The company takes a test to select the best candidates. The mean marks on this test turns out to be 60, with à standard deviation of 6. Can a peson who scores 84 count on getting one of the jobs? Assume that the marks distribution is symmetric about the mean."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

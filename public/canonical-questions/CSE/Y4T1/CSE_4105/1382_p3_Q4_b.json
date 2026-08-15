@@ -1,0 +1,76 @@
+{
+  "id": "1382_p3_Q4(b)",
+  "course": {
+    "code": "CSE 4105",
+    "title": "Computer Networks",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\4th_Year_1st_Term_2023_1382.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is inductive bias in decision tree learning and which type of inductive bias is used (12) [CO2] in BFS-ID3 algorithm? Illustrate how BFS-ID3 algorithm exhibits the bias ‘shorter trees are preferred over longer trees’ with detailed explanation."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_64af99b2f38cb66283ed007856d37e622e06eef7c6011ba48b7dba537fac966f.jpg",
+      "_source_path": "images/64af99b2f38cb66283ed007856d37e622e06eef7c6011ba48b7dba537fac966f.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_fedb4be8e96de3f5f3e28832a8db7203196b3db9f5070e0f4d5c454b23bc1778.jpg",
+      "_source_path": "images/fedb4be8e96de3f5f3e28832a8db7203196b3db9f5070e0f4d5c454b23bc1778.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Let $y _ { A } = - 1 , y _ { B } = + 1$ be the class indicators for both classes where $A = \\{ \\textcircled { 1 } , \\textcircled { 2 } , \\textcircled { 3 } , \\textcircled { 4 } \\}$ and B ="
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a0ded3352819f5064323ac047ef830af902fad10224b5e3af541f09e7fd6e671.jpg",
+      "_source_path": "images/a0ded3352819f5064323ac047ef830af902fad10224b5e3af541f09e7fd6e671.jpg"
+    },
+    {
+      "type": "text",
+      "value": "i) Just using the above standing plot, specify which of the points should be identified as support vectors."
+    },
+    {
+      "type": "text",
+      "value": "ii) Draw the maximum margin line which separates the classes (you don't have to do any computations here). Write down the normalized normal vector w $\\in \\mathbb { R } ^ { 2 }$ of the separating line and the offset parameter b ∈ R."
+    },
+    {
+      "type": "text",
+      "value": "iii) Consider the decision rule: $H ( x ) = < w , x > + b$ . Now determine the class for the points 1 and"
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2023"
+}

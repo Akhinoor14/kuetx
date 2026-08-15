@@ -1,0 +1,41 @@
+{
+  "id": "851_p2_Q5(a)",
+  "course": {
+    "code": "ECE 2101",
+    "title": "Analog Electronics-II",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\2nd_Year_1st_Term_2018_851.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is flip-flop? Why flip-flop is called one-bit memory·cell? (10)"
+    },
+    {
+      "type": "text",
+      "value": "Write down the characteristics table and excitation table of RS, JK, D and T flip-flop. (10)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

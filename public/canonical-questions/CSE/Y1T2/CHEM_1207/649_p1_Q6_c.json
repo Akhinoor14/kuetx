@@ -1,0 +1,49 @@
+{
+  "id": "649_p1_Q6(c)",
+  "course": {
+    "code": "CHEM 1207",
+    "title": "Chemistry",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2017\\1st_Year_2nd_Term_2017_649.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose, in a project you have some sensor data in the form of short (16-bit values) array named “givenData”. You have to write those data in a file named “data.check\" using fwri te function and after that you need to read those data from \"data.check\" file using fread and store it to “outputData\" array. Write a C program for it."
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    },
+    {
+      "type": "text",
+      "value": "Write a Makefile whose default target builds the program app, and which only preprocesses and recompiles individual files as needed. Your Makefile must consider the dependency between the files."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

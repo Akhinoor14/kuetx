@@ -1,0 +1,56 @@
+{
+  "id": "641_p1_Q7(a)",
+  "course": {
+    "code": "CSE 1107",
+    "title": "Discrete Mathematics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2015\\1st_Year_1st_Term_2015_641.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine whether the relation with the directed graphs shown as follows is an equivalence (09) relation."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a907bd0dcd907690ba7000852076eaf7147837169f22ba8628e0baca0d203fc1.jpg",
+      "_source_path": "images/a907bd0dcd907690ba7000852076eaf7147837169f22ba8628e0baca0d203fc1.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_31e4cbd198d6dd0a80c496ad7d5cf08e0452792abff2d1e0ea4f114d0f9586e9.jpg",
+      "_source_path": "images/31e4cbd198d6dd0a80c496ad7d5cf08e0452792abff2d1e0ea4f114d0f9586e9.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8732f4bef2d62106e4777ce5b3484c9ccb39e59a5b752345879de5bb7c0e0616.jpg",
+      "_source_path": "images/8732f4bef2d62106e4777ce5b3484c9ccb39e59a5b752345879de5bb7c0e0616.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(18)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2015"
+}

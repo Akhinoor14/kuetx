@@ -1,0 +1,49 @@
+{
+  "id": "867_p3_Q8(d)",
+  "course": {
+    "code": "ECE 3201",
+    "title": "Information Theory",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2017\\3rd_Year_2nd_Term_2017_867.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "· A loop antenna is made by winding 10 turns of wire on one square meter frame and (10)   \nis located in a magnetic field of 0.015 μ teslas at 10 MHz for maximum signal   \nreception. Find (i) Induced emf on it and (ii) Terminal voltage of the antenna is   \nturned to resonate with 65 ohms resistance in series with a 25 pf capacitor."
+    },
+    {
+      "type": "text",
+      "value": "N.B. i) Answer ANY THREE questions from each section in separate scripts. ii) Figures in the right margin indicate full marks."
+    },
+    {
+      "type": "text",
+      "value": "SECTION A"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script A)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

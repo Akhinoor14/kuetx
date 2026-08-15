@@ -1,0 +1,52 @@
+{
+  "id": "854_p1_Q6(c)",
+  "course": {
+    "code": "ECE 2201",
+    "title": "Analog Communications",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2015\\2nd_Year_2nd_Term_2015_854.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "; derivę the Friis's formula.-With\" (12) the help of Friis's formula describe how the effects of mixer noise can:be reduced to negligible levels?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_2602a87fe90112ad800a8ef607158f40352e7d8b0f6c8b9913f973bd7df3fa5d.jpg",
+      "_source_path": "images/2602a87fe90112ad800a8ef607158f40352e7d8b0f6c8b9913f973bd7df3fa5d.jpg"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nG _ { ( i n ) } = G _ { 2 } \\cdots\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nN = \\sin C \\cos + \\cos + \\sqrt { 2 } , F _ { 2 }\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

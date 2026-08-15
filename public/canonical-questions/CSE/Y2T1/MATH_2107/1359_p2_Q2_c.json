@@ -1,0 +1,41 @@
+{
+  "id": "1359_p2_Q2(c)",
+  "course": {
+    "code": "MATH 2107",
+    "title": "Fourier Analysis and Linear Algebra",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\2nd_Year_1st_Term_2022_1359.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find $x ( n )$ by using convolution for $X ( Z ) = \\frac { 1 } { ( 1 - \\frac { 1 } { 2 } Z ^ { - 1 } ) ( 1 + \\frac { 1 } { 4 } Z ^ { - 1 } ) } .$"
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

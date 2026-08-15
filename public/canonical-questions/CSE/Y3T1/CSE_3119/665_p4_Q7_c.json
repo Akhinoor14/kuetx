@@ -1,0 +1,57 @@
+{
+  "id": "665_p4_Q7(c)",
+  "course": {
+    "code": "CSE 3119",
+    "title": "Information Systems Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2017\\3rd_Year_1st_Term_2017_665.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "Differentiate between usability and utility."
+    },
+    {
+      "type": "text",
+      "value": "(05)"
+    },
+    {
+      "type": "text",
+      "value": ") Briefly discuss the following diagrams with example."
+    },
+    {
+      "type": "text",
+      "value": "(09)"
+    },
+    {
+      "type": "text",
+      "value": "i) Sequence diagram"
+    },
+    {
+      "type": "text",
+      "value": "ii) Activity diagram"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

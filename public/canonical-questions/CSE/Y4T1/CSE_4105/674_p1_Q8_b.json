@@ -1,0 +1,37 @@
+{
+  "id": "674_p1_Q8(b)",
+  "course": {
+    "code": "CSE 4105",
+    "title": "Computer Networks",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2015\\4th_Year_1st_Term_2015_674.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "“MAC address of a host never goes outside the network\"-is it true? Justify your answer. (05)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2015"
+}

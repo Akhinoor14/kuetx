@@ -1,0 +1,62 @@
+{
+  "id": "848_p3_Q3(c)",
+  "course": {
+    "code": "ECE 2107",
+    "title": "Signals and Systems",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2015\\2nd_Year_1st_Term_2015_848.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "whose input is e(t) and output is i(t)."
+    },
+    {
+      "type": "text",
+      "value": "i) Obtain a differential equation describing the system response."
+    },
+    {
+      "type": "text",
+      "value": "ii) How many energy storage devices are there and why?"
+    },
+    {
+      "type": "text",
+      "value": "iii) Determine its homogeneous solution."
+    },
+    {
+      "type": "text",
+      "value": "iv) Determine its particular solution, if input $e ( t ) { = } \\cos ( w t )$"
+    },
+    {
+      "type": "text",
+      "value": "v) Determine the complete response of the circuit to an input, $e ( \\mathrm { t } ) { = } \\cos ( \\mathrm { t } ) u ( \\mathrm { t } )$ V, when $\\scriptstyle { \\dot { \\mathbb { R } } } = 1 \\Omega , \\subset = 1 \\ F \\ \\&$ initial voltage across capacitor is $v _ { \\mathrm { c } } ( 0 ) { = } 3 \\mathrm { v }$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_50bcb26177a7eda7b90d165fb8ab60ee06dbb48583b6c95cf871a50ad5bf68e0.jpg",
+      "_source_path": "images/50bcb26177a7eda7b90d165fb8ab60ee06dbb48583b6c95cf871a50ad5bf68e0.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2015"
+}

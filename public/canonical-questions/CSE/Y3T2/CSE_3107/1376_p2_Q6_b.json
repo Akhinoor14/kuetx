@@ -1,0 +1,45 @@
+{
+  "id": "1376_p2_Q6(b)",
+  "course": {
+    "code": "CSE 3107",
+    "title": "Applied Statistics and Queuing Theory",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\3rd_Year_2nd_Term_2022_1376.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "Department of CSE is trying to determine whether to rent a slow or a fast copier. The department believes that an employee's time is worth \\$15 per hour. The slow copier rents for \\$4 per hour and it takes an employee an average óf 10 minutes to complete copying (exponentially distributed). The fast copier rents for \\$15 per hour and it takes"
+    },
+    {
+      "type": "text",
+      "value": "(11) [CO4]"
+    },
+    {
+      "type": "text",
+      "value": "an employee an average of 6 minute to complete copying. An average of 4 employees per hour need to use the copying machine (interarrival times are exponential). Determine which machine should the department rent."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

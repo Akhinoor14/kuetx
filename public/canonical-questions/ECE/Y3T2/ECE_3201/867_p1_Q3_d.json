@@ -1,0 +1,41 @@
+{
+  "id": "867_p1_Q3(d)",
+  "course": {
+    "code": "ECE 3201",
+    "title": "Information Theory",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2017\\3rd_Year_2nd_Term_2017_867.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(d)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Construct the binary Fano code for the random message U with symbols having probabilities: $\\mathrm { P } _ { 1 } \\mathrm { = } 0 . 3 5 , \\mathrm { P } _ { 2 } \\mathrm { = } 0 . 3 , \\mathrm { P } _ { 3 } \\mathrm { = } 0 . 1 5 \\mathrm { a n d } \\mathrm { P } _ { 4 } \\mathrm { = } 0 . 0 5 , \\mathrm { P } _ { 5 } \\mathrm { = } 0 . 0 5 , \\mathrm { P } _ { 6 } \\mathrm { = } 0 . 0 5 , \\mathrm { P } _ { 7 } \\mathrm { = } 0 . 0 5 \\mathrm { a n d } \\mathrm { P } _ { 7 } \\mathrm { = } 0 . 0 5 \\mathrm { a n d } \\mathrm { P } _ { 8 } \\mathrm { = } 0 . 0 5 , \\mathrm { P } _ { 7 } \\mathrm { = } 0 . 0 5 \\mathrm { a n d } \\mathrm { P } _ { 8 } \\mathrm { = } 0 . 0 5 \\mathrm { a n d } \\mathrm { P } _ { 9 } \\mathrm { = } 0 . 0 5 \\mathrm { a n d } \\mathrm { P } _ { 8 } \\mathrm { = } 0 . 0 5 \\mathrm { P } _ { 7 } \\mathrm { = } 0 . 0 5 \\mathrm { a n d } \\mathrm { P } _ { 7 } \\mathrm { = } 0 . 0 5 \\mathrm { a n d } \\mathrm { P } _ { 8 } \\mathrm { = } 0 . 0 5 \\mathrm { P } _ { 7 } \\mathrm { = } 0 . 0 5 \\mathrm { a n d } \\mathrm { P } _ { 7 } \\mathrm { = } 0 . 0 5 \\mathrm { a n d } \\mathrm { P } _ { 8 }$ Also compute its performance."
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

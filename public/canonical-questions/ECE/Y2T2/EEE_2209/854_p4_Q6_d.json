@@ -1,0 +1,42 @@
+{
+  "id": "854_p4_Q6(d)",
+  "course": {
+    "code": "EEE 2209",
+    "title": "Electrical Drives and Instrumentation",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2015\\2nd_Year_2nd_Term_2015_854.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A meter has an internal resistance of 100 ohm and requires 1 mA for full scale deflection. It is to be converted to a 10 V ac voltmeter using circuit shown ion Fig. 2. The shunt resistor placed across the meter has a value of 100 ohm. Rectifiers D1 & D2 each have a forward resistance of 400 ohm and are assumed to have infinite resistance in reverse direction. Calculate i) value of multiplier Rs and ii) voltmeter sensitivity."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_10d26ce245a28d9175d16995467fbaf716dc08e41a2312f53dc1a2d11d25c201.jpg",
+      "_source_path": "images/10d26ce245a28d9175d16995467fbaf716dc08e41a2312f53dc1a2d11d25c201.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

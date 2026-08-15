@@ -1,0 +1,46 @@
+{
+  "id": "663_p1_Q2(b)",
+  "course": {
+    "code": "CSE 2209",
+    "title": "Theory of Computation",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2015\\3rd_Year_1st_Term_2015_663.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Convert the following NFA into DFA using subset construction method."
+    },
+    {
+      "type": "text",
+      "value": "(14)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_6cd5dc2bde8abfdc5d9de32dd9d8aad5a560c170198315c1fd4e04806d0455a3.jpg",
+      "_source_path": "images/6cd5dc2bde8abfdc5d9de32dd9d8aad5a560c170198315c1fd4e04806d0455a3.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2015"
+}

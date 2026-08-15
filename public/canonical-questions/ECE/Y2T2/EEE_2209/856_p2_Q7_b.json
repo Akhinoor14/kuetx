@@ -1,0 +1,37 @@
+{
+  "id": "856_p2_Q7(b)",
+  "course": {
+    "code": "EEE 2209",
+    "title": "Electrical Drives and Instrumentation",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2017\\2nd_Year_2nd_Term_2017_856.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is Seebeck effect? Write down the schematic diagram of thermocouple and (08) thermistor with their characteristics curve."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

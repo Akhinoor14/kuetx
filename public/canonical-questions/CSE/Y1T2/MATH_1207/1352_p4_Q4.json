@@ -1,0 +1,57 @@
+{
+  "id": "1352_p4_Q4",
+  "course": {
+    "code": "MATH 1207",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2020\\1st_Year_2nd_Term_2020_1352.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4",
+  "numbering_source": "regex",
+  "marks": 30,
+  "content": [
+    {
+      "type": "text",
+      "value": "Answer any three of the followings:"
+    },
+    {
+      "type": "text",
+      "value": "(30)"
+    },
+    {
+      "type": "text",
+      "value": "i) Define order of the differential equation (D.E). Find the D.E of all circles passing through the origin and having their centre on the x-axis."
+    },
+    {
+      "type": "text",
+      "value": "ii) Find the general solution of $( 1 - x ^ { 2 } ) { \\frac { d y } { d x } } = x { \\sqrt { 1 - x ^ { 2 } } } - 2 x y$"
+    },
+    {
+      "type": "text",
+      "value": "iii) Solve the D. $\\operatorname { E } , { \\frac { d y } { d x } } - 2 y = x y ^ { 3 }$"
+    },
+    {
+      "type": "text",
+      "value": "iv) Solve the D.E, $( x - 2 y + 1 ) d y = ( 3 x - y ) d x$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2020"
+}

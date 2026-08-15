@@ -1,0 +1,42 @@
+{
+  "id": "1366_p1_Q5(b)",
+  "course": {
+    "code": "CSE 2201",
+    "title": "Algorithm Analysis and Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\2nd_Year_2nd_Term_2023_1366.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the following graph, the bold edges form minimum spanning tree (MST). What can(12) [CO3] you tell about the range of values for X? If, $X = 5$ , then use Kruskal's algorithm to compute the MST. Write down the edges of the MST in the order they are added using Kruskal's algorithm."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a2b7bb664c3095e4932708a26cfcf5a330d8c2fd10574a93882c01179ffe3415.jpg",
+      "_source_path": "images/a2b7bb664c3095e4932708a26cfcf5a330d8c2fd10574a93882c01179ffe3415.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2023"
+}

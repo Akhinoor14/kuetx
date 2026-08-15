@@ -1,0 +1,41 @@
+{
+  "id": "1349_p3_Q3(b)",
+  "course": {
+    "code": "HUM 1107",
+    "title": "English and Human Communication",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\1st_Year_1st_Term_2024_1349.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Complete the sentences with subordinate clauses as directed. (12) [CO2 i) This is a grammar book ......................(Adjective clause) ii) Mr. Karim's car .......... has broken down. (Adjective clause) iii) He explained.. (Noun clause) iv) I know nothing except..... (Noun clause) v) I will let you know...... .... (Adverb clause of time) vi) ................, your parents will be happy. (Adverb clause of condition)"
+    },
+    {
+      "type": "text",
+      "value": "¿) Make sentences using the following phrases and idioms. (09) [CO1] As good as gold, in the common interest, to need for variety, call off, sign out, put back."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2024"
+}

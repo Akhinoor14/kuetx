@@ -1,0 +1,58 @@
+{
+  "id": "1376_p3_Q1(b)",
+  "course": {
+    "code": "CSE 3211",
+    "title": "Compiler Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\3rd_Year_2nd_Term_2022_1376.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 1,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following grammar."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r } { \\boxed { S  S a A b | B B } } \\\\ { A  a A | A B | c } \\\\ { B  S c d | C D } \\\\ { C  d c | c } \\\\ { D  d } \\end{array}\\tag{20) [CO2]}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "i) Eliminate left-recursion from the grammar,"
+    },
+    {
+      "type": "text",
+      "value": "ii) Compute FIRST and FOLLOW sets for all non-terminals,"
+    },
+    {
+      "type": "text",
+      "value": "iii) Build the predictive parsing table,"
+    },
+    {
+      "type": "text",
+      "value": "iv) Determine if the grammar is an LL (1) grammar."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

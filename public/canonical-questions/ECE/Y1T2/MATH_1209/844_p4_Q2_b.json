@@ -1,0 +1,42 @@
+{
+  "id": "844_p4_Q2(b)",
+  "course": {
+    "code": "MATH 1209",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\1st_Year_2nd_Term_2016_844.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Verify whether or not the following straight lines are co-planar."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r } { \\frac { x - 4 } { 3 } = \\frac { y - 1 } { 2 } = \\frac { z - 3 } { 1 } , x + y + 2 z - 4 = 0 = 3 x - 2 y - z - 3 . } \\end{array}\\tag{10}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

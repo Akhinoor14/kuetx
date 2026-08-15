@@ -1,0 +1,49 @@
+{
+  "id": "666_p2_Q7(d)",
+  "course": {
+    "code": "CSE 3109",
+    "title": "Database Systems",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\3rd_Year_1st_Term_2018_666.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "·Define Trigger and Cursor. Consider the following two tables Product' and Purchase: (15)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=6>Product</td></tr><tr><td rowspan=1 colspan=1>Product_idN</td><td rowspan=1 colspan=1>ameAc</td><td rowspan=1 colspan=1>tual_PriceTo</td><td rowspan=1 colspan=1>tal_Sell_ PriceT</td><td rowspan=1 colspan=1>otal_Unit SoldP</td><td rowspan=1 colspan=1>rofit</td></tr><tr><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>950</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>0</td></tr><tr><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>400</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>0</td></tr><tr><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>120</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>0</td></tr></table>"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=2>Purchase</td></tr><tr><td rowspan=1 colspan=1>P id</td><td rowspan=1 colspan=1>Sell Price</td></tr><tr><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>500</td></tr><tr><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>1000</td></tr><tr><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>520</td></tr><tr><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>130</td></tr><tr><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>980</td></tr><tr><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>150</td></tr><tr><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>1050</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Now, (i) Create a Trigger after insert on 'Purchase' so that it will update ‘Total\\_Sell Price' and 'Total\\_Unit\\_Sold' field of 'Product' table. (ii) Create a Procedure that wili calculate profit for each product and update ‘Profit' field of ‘Product' table."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

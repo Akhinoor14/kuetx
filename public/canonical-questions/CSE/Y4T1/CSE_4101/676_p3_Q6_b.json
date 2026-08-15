@@ -1,0 +1,54 @@
+{
+  "id": "676_p3_Q6(b)",
+  "course": {
+    "code": "CSE 4101",
+    "title": "Computer Graphics and Image Processing",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2017\\4th_Year_1st_Term_2017_676.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following 5×5 image with grayscale range of [0, 9]."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\left[ { \\begin{array} { c c c c c } { 0 } & { 5 } & { 7 } & { 7 } & { 5 } \\\\ { 7 } & { 2 } & { 6 } & { 2 } & { 6 } \\\\ { 6 } & { 9 } & { 7 } & { 7 } & { 0 } \\\\ { 6 } & { 6 } & { 1 } & { 7 } & { 6 } \\\\ { 9 } & { 3 } & { 2 } & { 4 } & { 8 } \\end{array} } \\right]\\tag{17}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "i) Plotthe histogram of the image."
+    },
+    {
+      "type": "text",
+      "value": "ii) Perform histogram equalization and then show the equalized image and plot histogram again."
+    },
+    {
+      "type": "text",
+      "value": "iii) Histogram matching is a useful contrast manipulation technique that transforms an image's histogram to match with that of another image. Clearly describe how can you achieve it."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2017"
+}

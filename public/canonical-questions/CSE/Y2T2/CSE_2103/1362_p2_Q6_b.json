@@ -1,0 +1,42 @@
+{
+  "id": "1362_p2_Q6(b)",
+  "course": {
+    "code": "CSE 2103",
+    "title": "Microprocessors and Microcontrollers",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2019\\2nd_Year_2nd_Term_2019_1362.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Derive the formula for modified Euler's method."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\mathrm { ~ c ) ~ ~ U s e ~ R - K ~ m e t h o d ~ t o ~ e s i m a t e ~ } } y ( 0 . 4 ) { \\mathrm { ~ w h e n ~ } } y ^ { \\prime } ( x ) = x ^ { 2 } + y ^ { 2 } { \\mathrm { ~ w i t h ~ } } y ( 0 ) = 0 { \\mathrm { ~ a s s u m e ~ } } h = 0 . 2 \\qquad { \\mathrm { ~ ( 1 2 ) ~ } } x = \\pm { \\mathrm { ~ a ~ t ~ h ~ e ~ r ~ - ~ t ~ - ~ } }\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "844_p2_Q1(a)",
+  "course": {
+    "code": "ECE 1209",
+    "title": "Analog Electronics-I",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\1st_Year_2nd_Term_2016_844.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is the necessity. of biasing a transistor? Design a fixed bias circuit in order to (10) obtain the following load line and Q-point."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_5a8a209a8b5bbbd7b32b4e760af238bc64b57930ebb8793d0aef59181e8e852d.jpg",
+      "_source_path": "images/5a8a209a8b5bbbd7b32b4e760af238bc64b57930ebb8793d0aef59181e8e852d.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

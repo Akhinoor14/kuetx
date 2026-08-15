@@ -1,0 +1,45 @@
+{
+  "id": "671_p2_Q6(c)",
+  "course": {
+    "code": "CSE 3107",
+    "title": "Applied Statistics and Queuing Theory",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2017\\3rd_Year_2nd_Term_2017_671.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Market researchers know that background music can influence the mood and purchasing behavior (15) of customers. A study was conducted in restaurants where the customers heard: no music, French music and Italian music. Under each condition, the researchers recorded the number of French, Italian or other food dishes were ordered. The following table summarizes the data:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Food</td><td rowspan=1 colspan=1>None</td><td rowspan=1 colspan=1>French</td><td rowspan=1 colspan=1>Italian</td><td rowspan=1 colspan=1>Total</td></tr><tr><td rowspan=1 colspan=1>Frenchi</td><td rowspan=1 colspan=1>30</td><td rowspan=1 colspan=1>39</td><td rowspan=1 colspan=1>30</td><td rowspan=1 colspan=1>99</td></tr><tr><td rowspan=1 colspan=1>Italian</td><td rowspan=1 colspan=1>11</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>19</td><td rowspan=1 colspan=1>31</td></tr><tr><td rowspan=1 colspan=1>Other</td><td rowspan=1 colspan=1>43</td><td rowspan=1 colspan=1>35</td><td rowspan=1 colspan=1>35</td><td rowspan=1 colspan=1>113</td></tr><tr><td rowspan=1 colspan=1>Total</td><td rowspan=1 colspan=1>84</td><td rowspan=1 colspan=1>75.</td><td rowspan=1 colspan=1>84</td><td rowspan=1 colspan=1>143</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Test if the type of music being played has a significant effect on food dishes sales. :"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

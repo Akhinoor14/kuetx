@@ -1,0 +1,50 @@
+{
+  "id": "1367_p3_Q5(c)",
+  "course": {
+    "code": "MATH 2207",
+    "title": "Complex Variable, Vector Analysis and Statistics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\2nd_Year_2nd_Term_2024_1367.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 3,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define harmonic function and analytic function."
+    },
+    {
+      "type": "text",
+      "value": "(03) [CO3]"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { ( j ) ~ \\operatorname* { P r o v e } \\ t h a t } u = x ^ { 3 } - 3 x y ^ { 2 } + 3 x ^ { 2 } - 3 y ^ { 2 } + 1 \\mathrm { i s \\ h a r m o n i c . \\ F i n d } v , \\mathrm { s u c h \\ t h a t }\\tag{11) [CO3]}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "$f ( z ) = u + i \\imath$ is analytic, where v is harmonic conjugate."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2024"
+}

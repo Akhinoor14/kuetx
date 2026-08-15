@@ -1,0 +1,37 @@
+{
+  "id": "1379_p1_Q6(c)",
+  "course": {
+    "code": "CSE 4105",
+    "title": "Computer Networks",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2020\\4th_Year_1st_Term_2020_1379.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose, a company has 200 personal computers and 10 servers. The network administrator (12) wants you to dynamically assign the IP address of those personal PCs. How personal computer get the IP address if you have a network address: 172.16.0.0/24. Also, state the dynamic range of IP addresses."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2020"
+}

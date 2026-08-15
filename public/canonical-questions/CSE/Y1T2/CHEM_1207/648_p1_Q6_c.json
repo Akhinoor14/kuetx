@@ -1,0 +1,42 @@
+{
+  "id": "648_p1_Q6(c)",
+  "course": {
+    "code": "CHEM 1207",
+    "title": "Chemistry",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2016\\1st_Year_2nd_Term_2016_648.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Explain the basic principle and instrumentations of spectroscopic technique. (10)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { d ) \\ C a l c u l a t e \\ t h e \\ v i b r a t i o n s \\ f r e q u e n c y , { v _ { \\mathrm { m a x } } } \\left( i n \\ c e m ^ { - 1 } \\right) \\ f o r - C = 0 \\ a n d \\ - C \\equiv N \\ g r o u p s . }\\tag{05}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

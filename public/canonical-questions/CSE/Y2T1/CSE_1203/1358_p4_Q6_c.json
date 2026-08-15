@@ -1,0 +1,52 @@
+{
+  "id": "1358_p4_Q6(c)",
+  "course": {
+    "code": "CSE 1203",
+    "title": "Digital Logic Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2021\\2nd_Year_1st_Term_2021_1358.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Draw the output waveform of the following clamper circuit shown in the following figure. (10)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f90d3de7505287b3107bce055fe4af26d2b4e300a05fd3588057777127f5cebd.jpg",
+      "_source_path": "images/f90d3de7505287b3107bce055fe4af26d2b4e300a05fd3588057777127f5cebd.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ebad5770f18644685cae1b06a2a2ce218307c4dc2c744418751bc633cc4bc909.jpg",
+      "_source_path": "images/ebad5770f18644685cae1b06a2a2ce218307c4dc2c744418751bc633cc4bc909.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0996c92a96cef25117ca81eb359e87e24ee7bf4af40dd22e4614f59f4049451f.jpg",
+      "_source_path": "images/0996c92a96cef25117ca81eb359e87e24ee7bf4af40dd22e4614f59f4049451f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

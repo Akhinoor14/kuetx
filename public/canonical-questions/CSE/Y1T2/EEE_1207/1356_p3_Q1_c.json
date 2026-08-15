@@ -1,0 +1,42 @@
+{
+  "id": "1356_p3_Q1(c)",
+  "course": {
+    "code": "EEE 1207",
+    "title": "Basic Electrical Engineering",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\1st_Year_2nd_Term_2024_1356.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the following electrical network, calculate ${ \\mathbf { I } } _ { \\mathbf { A } } , { \\mathbf { I } } _ { \\mathbf { B } } ,$ and $\\mathbf { I _ { C } }$ using the superposition (11) [CO4] theorem. Given: $\\mathrm { E } _ { \\mathrm { A } } = 3 0 \\mathrm { V } , \\mathrm { E } _ { \\mathrm { B } } = 1 2 0 \\mathrm { V } , \\mathrm { R } _ { \\mathrm { A } } = 5 0 \\Omega , \\mathrm { R } _ { \\mathrm { B } } = 2 0 \\Omega , \\mathrm { R } _ { \\mathrm { C } } = 1 5 \\Omega$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f25a1f09b17f381cb07e2232e15724150241dde1e4019604b872084b5ebf346f.jpg",
+      "_source_path": "images/f25a1f09b17f381cb07e2232e15724150241dde1e4019604b872084b5ebf346f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2024"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "643_p4_Q4(b)",
+  "course": {
+    "code": "PHY 1107",
+    "title": "Physics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2017\\1st_Year_1st_Term_2017_643.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Two monochromatic waves emanating from two conerent sources have the displacements (13) represented by"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { l } { y _ { 1 } = a \\cos { \\omega } \\mathrm { : } } \\\\ { y _ { 2 } = a \\cos { ( \\omega t \\cdot \\dot { \\varphi } ) } } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Where $\\phi$ is the phase difference between two waves. Show that the resuitant intensity at a point due to their superposition is given by $I = \\frac { 1 } { 2 } \\cos ^ { 2 } \\frac { \\phi } { 2 }$ , where $\\boldsymbol { \\check { i } } _ { 0 } = \\boldsymbol { \\mathcal { G } } ^ { 2 }$ . Hence, obtain the conditions for constructive interference."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2017"
+}

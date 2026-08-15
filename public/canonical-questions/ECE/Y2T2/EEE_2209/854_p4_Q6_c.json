@@ -1,0 +1,52 @@
+{
+  "id": "854_p4_Q6(c)",
+  "course": {
+    "code": "EEE 2209",
+    "title": "Electrical Drives and Instrumentation",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2015\\2nd_Year_2nd_Term_2015_854.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define Lissajous pattern. Calculate the frequency of vertical plates if the applied frequency (07) to the horizontal plate is 100 Hz for the following patterns shown in Fig. 1 below."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_1e6e1e60b614dc780a28ad64796fbfd7fd80940806eca9a7a18447f8ba3f30e7.jpg",
+      "_source_path": "images/1e6e1e60b614dc780a28ad64796fbfd7fd80940806eca9a7a18447f8ba3f30e7.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_fd37cea887e6f654a432dc4cb6a46d6629c1135067dfee6efca1317c868dcb19.jpg",
+      "_source_path": "images/fd37cea887e6f654a432dc4cb6a46d6629c1135067dfee6efca1317c868dcb19.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_15910a466e07bafaccd7b836a093e84cc4f9db9f0e878bc6971ebe4762c1062b.jpg",
+      "_source_path": "images/15910a466e07bafaccd7b836a093e84cc4f9db9f0e878bc6971ebe4762c1062b.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

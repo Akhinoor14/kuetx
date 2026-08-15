@@ -1,0 +1,42 @@
+{
+  "id": "1372_p4_Q1(c)",
+  "course": {
+    "code": "CSE 3109",
+    "title": "Database Systems",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\3rd_Year_1st_Term_2024_1372.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following INSTRUCTOR entity. Convert it to an appropriate physical (10) [CO1] schema. How can you handle a multivalued attribute?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_690d59ed3459662d077c6049a369d935af9c896369597f4a7c9054892f4f1c3f.jpg",
+      "_source_path": "images/690d59ed3459662d077c6049a369d935af9c896369597f4a7c9054892f4f1c3f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2024"
+}

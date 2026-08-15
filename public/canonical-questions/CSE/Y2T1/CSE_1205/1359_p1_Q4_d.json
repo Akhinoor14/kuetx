@@ -1,0 +1,54 @@
+{
+  "id": "1359_p1_Q4(d)",
+  "course": {
+    "code": "CSE 1205",
+    "title": "Object Oriented Programming",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\2nd_Year_1st_Term_2022_1359.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define recursion. Let $^ { a , }$ and $^ { b }$ denotes positive integers. Suppose a function Q is defined recursively (07) as follows:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nQ ( a , b ) = \\left\\{ \\begin{array} { l l } { 0 \\qquad , \\qquad i f a < b } \\\\ { Q ( a - b , b ) + 1 , \\qquad i f b \\leq a } \\end{array} \\right.\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Find the value of Q(14, 3)"
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREÉ questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

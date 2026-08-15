@@ -1,0 +1,42 @@
+{
+  "id": "1389_p1_Q7(b)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Architecture",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\4th_Year_2nd_Term_2024_1389.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the sentence: “It/PRP would/MD be/VB better/JJR to/TO book/? a/DT (12) [CO3] ticket/NN via/IN internet/NNP.\" The word \"book\" is often used as VB or NN. Given the probabilities below, find the right POS tag for the word “book\"."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r } { \\begin{array} { r l } & { { \\mathrm { P } } ( { \\mathrm { V B } } | { \\mathrm { T O } } ) = 0 . 6 7 , \\quad { \\mathrm { P } } ( { \\mathrm { N N } } | { \\mathrm { T O } } ) = 0 . 0 2 , { \\mathrm { P } } ( { \\mathrm { b o o k } } | { \\mathrm { V B } } ) = 0 . 5 0 , } \\\\ & { { \\mathrm { P } } ( { \\mathrm { b o o k } } | { \\mathrm { N N } } ) = 0 . 5 0 , \\ { \\mathrm { P } } ( { \\mathrm { D T } } | { \\mathrm { V B } } ) = 0 . 0 2 , \\ { \\mathrm { P } } ( { \\mathrm { D T } } | { \\mathrm { N N } } ) = 0 . 0 6 . } \\end{array} } \\end{array}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2024"
+}

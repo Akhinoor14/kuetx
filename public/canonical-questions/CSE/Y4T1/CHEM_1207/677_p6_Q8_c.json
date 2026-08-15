@@ -1,0 +1,41 @@
+{
+  "id": "677_p6_Q8(c)",
+  "course": {
+    "code": "CHEM 1207",
+    "title": "Chemistry",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\4th_Year_1st_Term_2018_677.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Using the information given in the following table, determine an order processing sequence (10) using s/o priority rule."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Order</td><td rowspan=1 colspan=1>Processing timeremaining (days)</td><td rowspan=1 colspan=1>Due Date(days)</td><td rowspan=1 colspan=1>Number ofoperations remaining</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>30</td><td rowspan=1 colspan=1>2</td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>11</td><td rowspan=1 colspan=1>18</td><td rowspan=1 colspan=1>5</td></tr><tr><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>2</td></tr><tr><td rowspan=1 colspan=1>D</td><td rowspan=1 colspan=1>16</td><td rowspan=1 colspan=1>23</td><td rowspan=1 colspan=1>4</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2018"
+}

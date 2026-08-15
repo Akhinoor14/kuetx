@@ -1,0 +1,62 @@
+{
+  "id": "855_p3_Q3(b)",
+  "course": {
+    "code": "CSE 2209",
+    "title": "Data Structures and Algorithm",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\2nd_Year_2nd_Term_2016_855.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following deque of characters where DEQUE is a circular array wich(12) is allocated in six memory cells:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { L E F T } = 2 , \\mathrm { R I G H T } = 4 , \\mathrm { D } \\dot { \\mathrm { E Q U E } } : - \\ , \\mathrm { A } , \\mathrm { C } , \\mathrm { D } , - \\ , \\dot { - } .\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Describe the deque while the following operations take place sequentially:"
+    },
+    {
+      "type": "text",
+      "value": "i. F is added to he right of the deque."
+    },
+    {
+      "type": "text",
+      "value": "ii. Two letters on the right are deleted."
+    },
+    {
+      "type": "text",
+      "value": "iii. K, L and M are added to the left of the deque."
+    },
+    {
+      "type": "text",
+      "value": "iv. One letter on the left is deleted."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

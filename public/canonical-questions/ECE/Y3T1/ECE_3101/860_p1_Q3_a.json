@@ -1,0 +1,37 @@
+{
+  "id": "860_p1_Q3(a)",
+  "course": {
+    "code": "ECE 3101",
+    "title": "Industrial Electronics",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\3rd_Year_1st_Term_2016_860.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "How to make a 3-φ inverter with three 1-φ half-bridge inverters? Show with schematic diagram and circuit diagram."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "1383_p2_Q3(d)",
+  "course": {
+    "code": "CSE 4105",
+    "title": "Computer Networks",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\4th_Year_1st_Term_2024_1383.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(d)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "Identify the learnable parameters for the below Convolutional Neural Network (CNN) (08) [CO3] to classify numeral images having size 28×28 pixels. Also, count the learnable parameters."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r l } & { I _ { 2 8 x 2 8 }  \\langle 6 K 1 _ { 5 x 5 } C 1 _ { 2 4 x 2 4 } - S _ { 2 x 2 } 6 S 1 _ { 1 2 x 1 2 } \\rangle  } \\\\ & { \\quad \\quad \\quad \\quad \\langle 6 K 2 _ { 5 x 5 } C 2 _ { 8 x 8 } - S _ { 2 x 2 } 6 S 2 _ { 4 x 4 } \\rangle  W _ { o _ { 9 6 x 1 0 } }  O _ { 1 0 } } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "where symbols hold usual meanings."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2024"
+}

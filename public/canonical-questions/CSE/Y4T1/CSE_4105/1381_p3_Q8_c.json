@@ -1,0 +1,55 @@
+{
+  "id": "1381_p3_Q8(c)",
+  "course": {
+    "code": "CSE 4105",
+    "title": "Computer Networks",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\4th_Year_1st_Term_2022_1381.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the problem of ACO to look for a solution to TSP for 5 cities. The symmetric travel (15) costs for cities {1, 2, 3, 4, 5} are given in the matrix C. The start city is City1. At time t, the pheromone deposits between cities are summarized in matrix P."
+    },
+    {
+      "type": "formula",
+      "value": "$$\nC = \\left( \\begin{array} { c c c c c } { { 0 } } & { { 2 7 } } & { { 2 3 } } & { { 1 0 } } & { { 7 0 } } \\\\ { { } } & { { 0 } } & { { 2 0 } } & { { 1 0 } } & { { 1 6 } } \\\\ { { } } & { { } } & { { 0 } } & { { 5 } } & { { 1 0 } } \\\\ { { } } & { { } } & { { } } & { { 0 } } & { { 2 0 } } \\\\ { { } } & { { } } & { { } } & { { } } & { { 0 } } \\end{array} \\right)\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nP = \\left( \\begin{array} { c c c c c } { { \\times } } & { { 1 } } & { { 2 } } & { { 3 } } & { { 2 } } \\\\ { { } } & { { \\times } } & { { 7 } } & { { 2 } } & { { 0 } } \\\\ { { } } & { { } } & { { \\times } } & { { 3 } } & { { 1 } } \\\\ { { } } & { { } } & { { } } & { { \\times } } & { { 5 } } \\\\ { { } } & { { } } & { { } } & { { } } & { { \\times } } \\end{array} \\right)\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "(i) At time t, Ant1 has moved from City1 to City3. Perform all probability' calculations needed to determine which city Ant1 will move to next if the decision is to be made by pheromone only."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Repeat (i) when the decision is based on both pheromones and cost with equal weights."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

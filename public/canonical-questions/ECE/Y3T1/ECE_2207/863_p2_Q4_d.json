@@ -1,0 +1,45 @@
+{
+  "id": "863_p2_Q4(d)",
+  "course": {
+    "code": "ECE 2207",
+    "title": "Microprocessors and Microcomputers",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2019\\3rd_Year_1st_Term_2019_863.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Explain the functions performed by BX, BP and CX in addition to the function of a general purpose register? What are the function of index registers SI and·DI?"
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE queştions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

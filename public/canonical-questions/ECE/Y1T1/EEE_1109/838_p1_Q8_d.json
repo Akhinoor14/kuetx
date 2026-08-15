@@ -1,0 +1,37 @@
+{
+  "id": "838_p1_Q8(d)",
+  "course": {
+    "code": "EEE 1109",
+    "title": "Basic Electrical Engineering",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\1st_Year_1st_Term_2016_838.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is the primary difference between D-MOSFET and E-MOSFET? Explain the (11) basic operation and characteristics of D-MOSFET withnecessary sketch."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2016"
+}

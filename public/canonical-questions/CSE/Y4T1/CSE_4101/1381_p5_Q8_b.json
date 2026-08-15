@@ -1,0 +1,47 @@
+{
+  "id": "1381_p5_Q8(b)",
+  "course": {
+    "code": "CSE 4101",
+    "title": "Computer Graphics and Image Processing",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\4th_Year_1st_Term_2022_1381.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the region descriptors: form factor, compactness, and circularity to describe the binary (12) region in the following images."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0f1d769b65d40647d0da7c8cace26af2615cb3d473e4671e0162a477882db12f.jpg",
+      "_source_path": "images/0f1d769b65d40647d0da7c8cace26af2615cb3d473e4671e0162a477882db12f.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_cd82ea2e362c98588df5bc3371d32e89ca1a69d6981822c0d0e591e8cb2e9eaf.jpg",
+      "_source_path": "images/cd82ea2e362c98588df5bc3371d32e89ca1a69d6981822c0d0e591e8cb2e9eaf.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

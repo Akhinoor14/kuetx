@@ -1,0 +1,41 @@
+{
+  "id": "1388_p4_Q4(d)",
+  "course": {
+    "code": "CSE 3109",
+    "title": "Database Systems",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\4th_Year_2nd_Term_2023_1388.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find out the frequent itemset from the following table using Apriori algorithm where support (10) [CO3] threshold = 50% and confidence = 60%."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Transactions</td><td rowspan=1 colspan=1>T1</td><td rowspan=1 colspan=1>T2</td><td rowspan=1 colspan=1>T3</td><td rowspan=1 colspan=1>T4</td><td rowspan=1 colspan=1>T5</td><td rowspan=1 colspan=1>T6</td></tr><tr><td rowspan=1 colspan=1>List of Items</td><td rowspan=1 colspan=1>I1,I2,I3</td><td rowspan=1 colspan=1>I2,I3,I4</td><td rowspan=1 colspan=1>I4,I5</td><td rowspan=1 colspan=1>I1,I2,I4</td><td rowspan=1 colspan=1>I1,I2,13,15</td><td rowspan=1 colspan=1>I1,I2,I3,I4</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2023"
+}

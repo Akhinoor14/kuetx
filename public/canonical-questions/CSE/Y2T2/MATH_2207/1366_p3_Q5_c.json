@@ -1,0 +1,41 @@
+{
+  "id": "1366_p3_Q5(c)",
+  "course": {
+    "code": "MATH 2207",
+    "title": "Complex Variable, Vector Analysis and Statistics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\2nd_Year_2nd_Term_2023_1366.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define the following singularitieswith example: ${ ( \\mathrm { i ) } ^ { \\bullet } }$ Pole, (ii) Essential Singularity, (10) [CO1] (iii) Removable Singularity and (iv) Isolated Singularity."
+    },
+    {
+      "type": "text",
+      "value": "(06) [CO3]"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2023"
+}

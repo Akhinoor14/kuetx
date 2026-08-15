@@ -1,0 +1,53 @@
+{
+  "id": "841_p2_Q8(d)",
+  "course": {
+    "code": "ECE 1109",
+    "title": "Introduction to Electronics and Communication Engineering",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2019\\1st_Year_1st_Term_2019_841.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is varactor diode? Describe the operation of a voltage controlled tuning with (08) varactor diode."
+    },
+    {
+      "type": "text",
+      "value": "Notc from the various curves that for a particular valuc of H, say. Hx. the valuc of B can vary widely, as detcrmincd by thc history of thc corc. In an cffort to assign a particular valuc of B to cach valuc of H, we compromise by connccting thc tips of thc hystercsis loops. Thc resulting curvc, shown by thc heavy, solid linc in Fig. 12.6 and for various matcrials in Fig. 12.7, is calicd thc normal magnetization curve. An cxpandcd view of onc rcgion appears in Fig. 12.8."
+    },
+    {
+      "type": "text",
+      "value": "Λ comparison of Figs. 12.3 and 12.7 shows that for thc same valuc of H, the valuc of B is highcr in Fig. 12.7 for thc matcrials with thc highcr μ in Fig. 12.3. This is particularly obvious for low valucs of H. This correspondcncc bctwcen thc two figurçs must exist sincc B = μH. In fact, if in Fig. 12.7 we find μ for cach valuc of H ušing thc cquation μ = B/H, wc obtain thc curvcs in Fig. 12.3."
+    },
+    {
+      "type": "text",
+      "value": "It is intcrcsting to notc that thc hystcrcsis curves in Fig. 12.6 havc a point symmetry about thc origin; that is, thc invcrtcd patter to thc left of thc vcrtical axis is the samc as that appcaring to the right of thc vertical axis. In addition, you will find that a furthcr application of thc samc magnctizing forces to the sample results in the samc plot. For a current I in H = NI/ that movcs bctwecn positivc and ncgative maximums at a fixcd ratc, thc samc B-H curvc results during cach cyclc. Such will bc thc casc whcn we cxaminc ac (sinusoidal) nctworks in thc latcr chaptcrs. Thc reversal of thc ficld (Φ) duc to thc changing currcnt dircction results in a loss of cncrgy that can bcst bc dcscribcd by first introducing the domain theory of mugnetism."
+    },
+    {
+      "type": "text",
+      "value": "Within cach atom, thc orbiting ciectrons (dcscribcd in Chaptcr 2) are also spinning as thcy revolve around the nuclcus. Thc atom, duc to its"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
+}

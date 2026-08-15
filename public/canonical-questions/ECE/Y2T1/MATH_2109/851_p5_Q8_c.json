@@ -1,0 +1,37 @@
+{
+  "id": "851_p5_Q8(c)",
+  "course": {
+    "code": "MATH 2109",
+    "title": "Vector, Matrix and Transform",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\2nd_Year_1st_Term_2018_851.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "In an electrical circuit with electromagnetic force E(t), resistance R and inductance $\\begin{array} { r } { \\boldsymbol { L } , } \\end{array}$ the current i build up at the rate given by $L ( d i / d t ) + R i = E ( t )$ . If the switch is connected at $\\ell = 0$ and disconnected at $t = 3$ , find the current i at any instant (use Laplace transform method)."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

@@ -1,0 +1,61 @@
+{
+  "id": "1381_p1_Q2(b)",
+  "course": {
+    "code": "CSE 4105",
+    "title": "Computer Networks",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\4th_Year_1st_Term_2022_1381.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "You are given an IPv4 datagram described in hexadecimal format: “4640 001C 00D1 00B9 (15) 1E11 DE0B 4AFA 0A14 C878 321E 0000 000F 0272 6F9A\". Answer the following questions based on the given datagram (in decimal)"
+    },
+    {
+      "type": "text",
+      "value": "i) Header length (in bytes) = ?"
+    },
+    {
+      "type": "text",
+      "value": "ii) Identifier = ?"
+    },
+    {
+      "type": "text",
+      "value": "iii) Fragment offset = ?"
+    },
+    {
+      "type": "text",
+      "value": "iv) Payload = ?"
+    },
+    {
+      "type": "text",
+      "value": "v) Is it a fragmented packet? If yes, does the packet has any specialty?"
+    },
+    {
+      "type": "text",
+      "value": "vi) Which fields will get updated if the packet is sent to the next hop router?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

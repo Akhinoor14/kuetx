@@ -1,0 +1,42 @@
+{
+  "id": "1381_p3_Q1(b)",
+  "course": {
+    "code": "CSE 4105",
+    "title": "Computer Networks",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\4th_Year_1st_Term_2022_1381.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Propose a model to fit the data plotted in the following figure. Discuss about the model's parameters and their effect on the proposed model. For example, the model could be, f(x) = mx + c ; here m and c are the said parameters. Give an idea about how you can find the optimal values of the parameters."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_640119615707f97a5320327b471e2b3dba3a2849b17eaee0e9b4746c8461626e.jpg",
+      "_source_path": "images/640119615707f97a5320327b471e2b3dba3a2849b17eaee0e9b4746c8461626e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

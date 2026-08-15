@@ -1,0 +1,41 @@
+{
+  "id": "661_p4_Q8",
+  "course": {
+    "code": "HUM 2207",
+    "title": "Economics and Accounting",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\2nd_Year_2nd_Term_2018_661.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8",
+  "numbering_source": "regex",
+  "marks": 35,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following balances are taken from the books of accounts of Sanju Ltd on $3 0 ^ { \\mathrm { t h } }$ June, 2004 (35) Sanju Ltd."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Particulars</td><td rowspan=1 colspan=1>Debit</td><td rowspan=1 colspan=1>Credti</td></tr><tr><td rowspan=1 colspan=1>Account Receivable</td><td rowspan=1 colspan=1>29,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Purchases</td><td rowspan=1 colspan=1>81,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Allowance for doubtful accounts</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>16,000</td></tr><tr><td rowspan=1 colspan=1>Invêntories.</td><td rowspan=1 colspan=1>6,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Furniture</td><td rowspan=1 colspan=1>10,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Accumulated depreciation-Furniture</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>4,000</td></tr><tr><td rowspan=1 colspan=1>Buildings</td><td rowspan=1 colspan=1>1,40,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Accumulated depreciation Building</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>30,000</td></tr><tr><td rowspan=1 colspan=1>Cash</td><td rowspan=1 colspan=1>2,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Bad debts</td><td rowspan=1 colspan=1>6,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Salaries</td><td rowspan=1 colspan=1>20,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Interest expense</td><td rowspan=1 colspan=1>4,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Rent, rates, taxes</td><td rowspan=1 colspan=1>6,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Salesman&#x27;s salaries</td><td rowspan=1 colspan=1>2,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Freight in</td><td rowspan=1 colspan=1>7,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Dividend</td><td rowspan=1 colspan=1>15,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Sales</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>2,00,000</td></tr><tr><td rowspan=1 colspan=1>Interest Income</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>1,000</td></tr><tr><td rowspan=1 colspan=1>Bonds Payable</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>10,000</td></tr><tr><td rowspan=1 colspan=1>Capital</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>60,000</td></tr><tr><td rowspan=1 colspan=1>Retained earnings (30.606.2003)</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>7,000</td></tr><tr><td rowspan=1 colspan=1>Total</td><td rowspan=1 colspan=1>3,28,000</td><td rowspan=1 colspan=1>3,28,000</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "843_p2_Q8(a)",
+  "course": {
+    "code": "CSE 1209",
+    "title": "Computer Fundamentals and Programming",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2015\\1st_Year_2nd_Term_2015_843.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is flow chart? Write the flowchart to generate the sum(s) from the following (10) series."
+    },
+    {
+      "type": "formula",
+      "value": "$$\nS = 1 + x + x ^ { 2 } + \\cdots + x ^ { k }\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
+}

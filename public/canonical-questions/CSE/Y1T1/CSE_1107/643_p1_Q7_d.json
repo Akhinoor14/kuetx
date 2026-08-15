@@ -1,0 +1,49 @@
+{
+  "id": "643_p1_Q7(d)",
+  "course": {
+    "code": "CSE 1107",
+    "title": "Discrete Mathematics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2017\\1st_Year_1st_Term_2017_643.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose that the number of bacteria in a colony triples every hour."
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    },
+    {
+      "type": "text",
+      "value": "i) Set up a recurrence relation for the number of bacteria after n hours have elapsed."
+    },
+    {
+      "type": "text",
+      "value": "ii) If 100 bacteria are used to begin a new colony, how many bacteria will be in the colony in 10 hours?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2017"
+}

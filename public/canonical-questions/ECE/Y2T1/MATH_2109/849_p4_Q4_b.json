@@ -1,0 +1,46 @@
+{
+  "id": "849_p4_Q4(b)",
+  "course": {
+    "code": "MATH 2109",
+    "title": "Vector, Matrix and Transform",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\2nd_Year_1st_Term_2016_849.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the Fourier series of the function:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nf ( x ) = \\left\\{ \\begin{array} { l l } { 2 , } & { f o r \\ - 2 \\leq x < 0 } \\\\ { x , } & { f o r \\ 0 < x < 2 } \\end{array} \\right. ,\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Where $f ( x + 4 ) = f ( x ) .$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2016"
+}

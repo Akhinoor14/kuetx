@@ -1,0 +1,81 @@
+{
+  "id": "649_p1_Q5(b)",
+  "course": {
+    "code": "CHEM 1207",
+    "title": "Chemistry",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2017\\1st_Year_2nd_Term_2017_649.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Design a structure student\\_record to contain name, date: of birth and total marks obtained. Design another structure data type named date containing three integer members day, month and year. Use the date structure to represent the date of birth."
+    },
+    {
+      "type": "text",
+      "value": "i) First, you have to take inputs from the user for all of the variables of the structure and after taking all inputs, you have to print all the given inputs on output console."
+    },
+    {
+      "type": "text",
+      "value": "ii) Write a user-defined function “CalculateAgeDifference\" which will take two student\\_record type variables and finally, return a date type variable which contains the age difference between two students. (Note: Assume, each month has 30 days.)"
+    },
+    {
+      "type": "text",
+      "value": "Sample Input: Enter Total Number of Students = 2"
+    },
+    {
+      "type": "text",
+      "value": "Name of the student 1 = Rafi"
+    },
+    {
+      "type": "text",
+      "value": "Date of birth of student 1 = 12/11/1996"
+    },
+    {
+      "type": "text",
+      "value": "Total Marks of student 1 = 205"
+    },
+    {
+      "type": "text",
+      "value": "Name of the student 2 = Nowsin"
+    },
+    {
+      "type": "text",
+      "value": "Date of birth of student 2 = 1/9/1999"
+    },
+    {
+      "type": "text",
+      "value": "Total Marks of student 2 = 185"
+    },
+    {
+      "type": "text",
+      "value": "Sample Output for “CalculateAgeDifference\" function:"
+    },
+    {
+      "type": "text",
+      "value": "The age difference between the two is: 2years 9months 19days"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

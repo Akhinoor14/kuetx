@@ -1,0 +1,45 @@
+{
+  "id": "1349_p3_Q2(a)",
+  "course": {
+    "code": "HUM 1107",
+    "title": "English and Human Communication",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\1st_Year_1st_Term_2024_1349.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Transform the following sentences as directed."
+    },
+    {
+      "type": "text",
+      "value": "(14) [CO2]"
+    },
+    {
+      "type": "text",
+      "value": "i) Rahim always minds his lesson. (Negative) ii) It matters little if I go. (Interrogative) iii) Had I possessed the mine of Solomon! (Assertive) iv) I called but you did not respond. (Simple) v) I saw him playing. (Complex) vi) They were hungrier than I thought. (Positive) vii) We are going to publish a book. (Passive)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2024"
+}

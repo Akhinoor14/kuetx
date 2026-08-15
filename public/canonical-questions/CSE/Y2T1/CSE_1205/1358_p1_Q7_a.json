@@ -1,0 +1,42 @@
+{
+  "id": "1358_p1_Q7(a)",
+  "course": {
+    "code": "CSE 1205",
+    "title": "Object Oriented Programming",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2021\\2nd_Year_1st_Term_2021_1358.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define the terms: Degree of a node, connected graph and multigraph. Now, run a Breadth First (15) Search (BFS) algorithm on the graph G shown in following figure to find the minimum path P from 0 to 8. Show the queue status after each iteration."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8e9d11ce58175078818e8629b8245f26c614154e823b1fc574d915ceb76eaa5d.jpg",
+      "_source_path": "images/8e9d11ce58175078818e8629b8245f26c614154e823b1fc574d915ceb76eaa5d.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

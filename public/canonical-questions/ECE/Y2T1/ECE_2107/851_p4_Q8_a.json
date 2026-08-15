@@ -1,0 +1,42 @@
+{
+  "id": "851_p4_Q8(a)",
+  "course": {
+    "code": "ECE 2107",
+    "title": "Signals and Systems",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\2nd_Year_1st_Term_2018_851.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define Z-transform and Inverse Z-transform. Determine the Z-transform of the signal, (07)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nx ( n ) = \\delta ( n + 1 ) + 3 \\delta ( n ) + 7 \\delta ( n - 3 ) - 3 \\delta ( n - 4 ) .\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

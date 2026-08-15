@@ -1,0 +1,58 @@
+{
+  "id": "1359_p1_Q3(b)",
+  "course": {
+    "code": "CSE 1205",
+    "title": "Object Oriented Programming",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\2nd_Year_1st_Term_2022_1359.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following binary search tree"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_c5069311fa4f87de700a67f2da3e84a165ae4faed4c9e4be6cdb3defcf59a4d4.jpg",
+      "_source_path": "images/c5069311fa4f87de700a67f2da3e84a165ae4faed4c9e4be6cdb3defcf59a4d4.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(i) Write the reverse post order traversal of the binary tree above."
+    },
+    {
+      "type": "text",
+      "value": "(ii) What is the depth of the binary tree above?"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Draw the binary search tree after the node containing M is removed."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

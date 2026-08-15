@@ -1,0 +1,42 @@
+{
+  "id": "867_p1_Q1(d)",
+  "course": {
+    "code": "ECE 3201",
+    "title": "Information Theory",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2017\\3rd_Year_2nd_Term_2017_867.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Here, N is the Gaussian noise with . (10+ zero meán and variance $\\sigma _ { N } ^ { 2 }$ , Z and Y are the transmitted and received signal, 05) respectively. Z is the zero mean Gaussian variable with variance $\\sigma _ { z } ^ { 2 }$ . Y and N are statistically independent. Assume that channel bandwidth is B. Find the mutual information between Y and Z. Also find the channel capacity."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_5410b2e36414c0d4675f059b0b3914bb9df291eccfd0fe804df67d3355acf257.jpg",
+      "_source_path": "images/5410b2e36414c0d4675f059b0b3914bb9df291eccfd0fe804df67d3355acf257.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

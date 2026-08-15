@@ -1,0 +1,53 @@
+{
+  "id": "1362_p3_Q8(b)",
+  "course": {
+    "code": "MATH 2207",
+    "title": "Complex Variable, Vector Analysis and Statistics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2019\\2nd_Year_2nd_Term_2019_1362.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose there are 5500 candidates in any examination of a qualification test. Let the average score is 70 (in percentage) and variance is 36. Assume that scores are normally distributed. Find the expected number of candidates who are"
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    },
+    {
+      "type": "text",
+      "value": "i) not qualified (i.e., score is less than 60),"
+    },
+    {
+      "type": "text",
+      "value": "ii) qualified but not eligible for choosing any specific field (i.e., 60< score<75),"
+    },
+    {
+      "type": "text",
+      "value": "iii) eligible for choosing any department (i.e., score>80)."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

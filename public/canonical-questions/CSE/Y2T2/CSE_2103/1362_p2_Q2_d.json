@@ -1,0 +1,41 @@
+{
+  "id": "1362_p2_Q2(d)",
+  "course": {
+    "code": "CSE 2103",
+    "title": "Microprocessors and Microcontrollers",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2019\\2nd_Year_2nd_Term_2019_1362.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "Derive Newton-Raphson method using Taylor's series expansion."
+    },
+    {
+      "type": "text",
+      "value": "(07)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

@@ -1,0 +1,54 @@
+{
+  "id": "846_p2_Q5(a)",
+  "course": {
+    "code": "CH 1209",
+    "title": "Chemistry",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\1st_Year_2nd_Term_2018_846.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the bond order of following ions and indicate which are paramagnetic in (10) nature: $N _ { 2 } ^ { - } , \\cdot O _ { 2 } ^ { 2 - } , H e _ { 2 } ^ { + }$"
+    },
+    {
+      "type": "text",
+      "value": "(08)"
+    },
+    {
+      "type": "text",
+      "value": "(07)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { \\ v i t h \\ t h e i r \\ w a v e s : \\ ( i ) } \\ [ Z n ( N H _ { 3 } ) _ { 4 } \\ C l _ { 2 } ] ^ { 2 + } , \\mathrm { \\ ( i i ) } \\ [ C r \\ ( H _ { 2 } O ) _ { 6 } ] ^ { 3 + } \\ \\mathrm { ( i i i ) } \\ [ N i ( H _ { 2 } O ) _ { 6 } ] ^ { 2 + } .\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

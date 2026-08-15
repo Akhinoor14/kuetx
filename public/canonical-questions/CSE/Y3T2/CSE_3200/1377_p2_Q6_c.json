@@ -1,0 +1,45 @@
+{
+  "id": "1377_p2_Q6(c)",
+  "course": {
+    "code": "CSE 3200",
+    "title": "System Development Project",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\3rd_Year_2nd_Term_2023_1377.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A small post office has two open windows. Customers arrive according to a Poisson distribution at the rate of 1 every 3 minutes. However, only 80% of them seek service at the windows. The service time per customer is exponential, with a mean of 5 minutes. All arriving customers from one line and access available windows on an FCFS basis. Answer the followings:"
+    },
+    {
+      "type": "text",
+      "value": "i) Would it be possible to offer reasonable service with only one window? Explain"
+    },
+    {
+      "type": "text",
+      "value": "ii) Probability of waiting more than 3 minutes in queue."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2023"
+}

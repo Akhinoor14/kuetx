@@ -1,0 +1,85 @@
+{
+  "id": "1389_p1_Q6(b)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Architecture",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\4th_Year_2nd_Term_2024_1389.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following corpus shown in the following figure. What is the most probable (15) [CO3] next word?"
+    },
+    {
+      "type": "text",
+      "value": "<s> I like Henry </s>"
+    },
+    {
+      "type": "text",
+      "value": "i) “<s> Do ”\" applying bigram"
+    },
+    {
+      "type": "text",
+      "value": "<s> I like college </s>"
+    },
+    {
+      "type": "text",
+      "value": "probability model?"
+    },
+    {
+      "type": "text",
+      "value": "<s> Do Henry like college </ s>"
+    },
+    {
+      "type": "text",
+      "value": "ii) “<s> Do I like \" applying bigram"
+    },
+    {
+      "type": "text",
+      "value": "<s> Henry Iam </s>"
+    },
+    {
+      "type": "text",
+      "value": "probability model?"
+    },
+    {
+      "type": "text",
+      "value": "<s> Do I like Henry </s>"
+    },
+    {
+      "type": "text",
+      "value": "iii) “<s> Do I like \" applying trigram"
+    },
+    {
+      "type": "text",
+      "value": "<s> Do I like college </ s>"
+    },
+    {
+      "type": "text",
+      "value": "probability model?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2024"
+}

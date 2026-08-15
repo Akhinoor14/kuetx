@@ -1,0 +1,37 @@
+{
+  "id": "1353_p5_Q5(d)",
+  "course": {
+    "code": "EEE 2117",
+    "title": "Analog Electronics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2021\\1st_Year_2nd_Term_2021_1353.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define the negative resistance region from UJT characteristics curve. A UJT has 10V between the bases. The intrinsic stand-off ratio is 0.65 and the interbase resistance is 10KΩ. Find, (i) the values of $\\mathrm { R } _ { \\mathrm { B } 1 }$ and RB2, (ii) the stand-off voltage, and (iii) the peak-point voltage."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "661_p1_Q3(a)",
+  "course": {
+    "code": "CSE 2201",
+    "title": "Algorithm Analysis and Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\2nd_Year_2nd_Term_2018_661.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the graph mentioned in following figure Now split the vertex of the graph using greedy method."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8d2b0aa767c90fb875223eaf4b0c562cb4cd536f254a3da5837a34e0766b008b.jpg",
+      "_source_path": "images/8d2b0aa767c90fb875223eaf4b0c562cb4cd536f254a3da5837a34e0766b008b.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(13)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

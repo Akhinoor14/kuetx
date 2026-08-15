@@ -1,0 +1,46 @@
+{
+  "id": "843_p3_Q1(d)",
+  "course": {
+    "code": "ECE 1209",
+    "title": "Analog Electronics-I",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2015\\1st_Year_2nd_Term_2015_843.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "$\\ b { A } _ { V }$ for the following network."
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b0cd96d857fb1c8fe91a6d1737f78f3a36f48e7662566d04f0c89d1aaf37d8e0.jpg",
+      "_source_path": "images/b0cd96d857fb1c8fe91a6d1737f78f3a36f48e7662566d04f0c89d1aaf37d8e0.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
+}

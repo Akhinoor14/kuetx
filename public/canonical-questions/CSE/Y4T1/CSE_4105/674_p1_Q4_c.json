@@ -1,0 +1,42 @@
+{
+  "id": "674_p1_Q4(c)",
+  "course": {
+    "code": "CSE 4105",
+    "title": "Computer Networks",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2015\\4th_Year_1st_Term_2015_674.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following graph. Assume that link (x,y) cost has been changed from 3 to 55. (11). Show that the poisoned reverse technique can resolve the count to infinity problem in this case."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_74bb490bf02c79312e0d8c38f0ac60c7fc413d0399f7413cb75768c8474e2645.jpg",
+      "_source_path": "images/74bb490bf02c79312e0d8c38f0ac60c7fc413d0399f7413cb75768c8474e2645.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2015"
+}

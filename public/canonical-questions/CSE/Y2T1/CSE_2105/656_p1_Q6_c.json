@@ -1,0 +1,53 @@
+{
+  "id": "656_p1_Q6(c)",
+  "course": {
+    "code": "CSE 2105",
+    "title": "Data Structures and Algorithms",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2019\\2nd_Year_1st_Term_2019_656.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose AAA and BBB are sorted linked lists with distinct elements, both maintain INFO and LINK. Write a procedure which combines the lists into a single sorted linked list CCC without changing any values in INFO. Also, write advantages, if any, of a two-way list over one-way for the following operations:"
+    },
+    {
+      "type": "text",
+      "value": "(13)"
+    },
+    {
+      "type": "text",
+      "value": "i). Traversing the list to process each node."
+    },
+    {
+      "type": "text",
+      "value": "ii) Searching-an unsorted list for given element ITEM"
+    },
+    {
+      "type": "text",
+      "value": "iii) Inserting a node after the node a given location LOC."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

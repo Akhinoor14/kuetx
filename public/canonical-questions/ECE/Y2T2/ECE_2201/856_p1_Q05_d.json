@@ -1,0 +1,37 @@
+{
+  "id": "856_p1_Q05(d)",
+  "course": {
+    "code": "ECE 2201",
+    "title": "Analog Communications",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2017\\2nd_Year_2nd_Term_2017_856.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "05(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "In the U.S..ÑTSC system, the aspect ratio is 4/3, te total number of line periods per . frame is 525, and the number of suppressed lines are 40 per frame. Find the picture height and width in the number of pixels. Also, find the number of pixel periods: in a line period."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

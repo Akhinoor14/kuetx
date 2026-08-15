@@ -1,0 +1,61 @@
+{
+  "id": "1354_p4_Q8(d)",
+  "course": {
+    "code": "CHEM 1207",
+    "title": "Chemistry",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\1st_Year_2nd_Term_2022_1354.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "Explain the reasons of arousal colors and spectra. (07) [CO4]"
+    },
+    {
+      "type": "text",
+      "value": "TIME: 3 hours"
+    },
+    {
+      "type": "text",
+      "value": "N.B. i) Answer ANY THREE questions from each section in separate scripts."
+    },
+    {
+      "type": "text",
+      "value": "ii) Figures in the immediate right column of the questions indicate full marks."
+    },
+    {
+      "type": "text",
+      "value": "iii) The rightmost column indicates course outcomes."
+    },
+    {
+      "type": "text",
+      "value": "SECTION A"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script A)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2022"
+}

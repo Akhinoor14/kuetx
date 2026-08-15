@@ -1,0 +1,45 @@
+{
+  "id": "659_p4_Q3(b)",
+  "course": {
+    "code": "MATH 2207",
+    "title": "Complex Variable, Vector Analysis and Statistics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2016\\2nd_Year_2nd_Term_2016_659.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "Test whether the vector field F is rotational or not. If possible find the scalar potential at"
+    },
+    {
+      "type": "text",
+      "value": "(17)"
+    },
+    {
+      "type": "text",
+      "value": "$( 1 , - 2 , 3 ) \\mathrm { ~ o f ~ } \\overline { { F } } \\mathrm { ~ w h e r e ~ } \\overline { { F } } = ( 2 x y ^ { 3 } z - y + 2 ) \\overline { { i } } + ( 3 x ^ { 2 } y ^ { 2 } z - x + z ) \\overline { { j } } + ( x ^ { 2 } y ^ { 3 } + y - 2 ) \\overline { { k } } .$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

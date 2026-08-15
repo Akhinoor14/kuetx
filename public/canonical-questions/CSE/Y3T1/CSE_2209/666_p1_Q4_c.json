@@ -1,0 +1,37 @@
+{
+  "id": "666_p1_Q4(c)",
+  "course": {
+    "code": "CSE 2209",
+    "title": "Theory of Computation",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\3rd_Year_1st_Term_2018_666.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "Design an interface cireuit using the 8255A where the chip is selected when A:s is high. In (11)   \nthis desigo:   \ni) Identify the port addresses.   \nii) Identify the Mode 0 control word to configure port A and port Cu as input ports, and port   \nB and port CL as output ports.   \niii) Write a program to read the DIP switches and display the reading from port A at port B   \nand from port Cu at port CL."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

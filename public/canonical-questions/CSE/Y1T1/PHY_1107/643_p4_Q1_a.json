@@ -1,0 +1,53 @@
+{
+  "id": "643_p4_Q1(a)",
+  "course": {
+    "code": "PHY 1107",
+    "title": "Physics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2017\\1st_Year_1st_Term_2017_643.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Show that the spectral distribution derived by Plank is $n ( \\nu ) d \\nu = \\frac { 8 \\pi \\nu ^ { 3 } } { c ^ { 3 } } \\frac { 1 } { \\exp ( h \\nu / _ { k t } - 1 ) } d \\nu$ and"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "text",
+      "value": "which reduce to the Rayleigh-Jeans law, $n ( \\nu ) d \\nu = { \\frac { 8 \\pi \\nu ^ { 2 } k t } { c ^ { 3 } } } d \\nu$ in the long wavelength limit."
+    },
+    {
+      "type": "text",
+      "value": "b In what sense wave theory is inadequate to explain photoelectric effect?"
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2017"
+}

@@ -1,0 +1,56 @@
+{
+  "id": "666_p2_Q1(c)",
+  "course": {
+    "code": "CSE 3109",
+    "title": "Database Systems",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\3rd_Year_1st_Term_2018_666.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the Physical Schema of the following E-R diagram."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_c00d1a9376749f0f7431a0c6986d8150834a0d3a35452b9090ef0cef91bf941c.jpg",
+      "_source_path": "images/c00d1a9376749f0f7431a0c6986d8150834a0d3a35452b9090ef0cef91bf941c.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_668e087f7b89694ea7e7b2a0d8023d3d409d531d03743e4e5b9688c7d8b4d462.jpg",
+      "_source_path": "images/668e087f7b89694ea7e7b2a0d8023d3d409d531d03743e4e5b9688c7d8b4d462.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_9aa3de156c8d79b77cbd043921ab90cb585b624fdae1891078248349184f80ff.jpg",
+      "_source_path": "images/9aa3de156c8d79b77cbd043921ab90cb585b624fdae1891078248349184f80ff.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

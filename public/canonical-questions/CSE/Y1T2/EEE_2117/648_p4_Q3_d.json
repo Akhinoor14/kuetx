@@ -1,0 +1,42 @@
+{
+  "id": "648_p4_Q3(d)",
+  "course": {
+    "code": "EEE 2117",
+    "title": "Analog Electronics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2016\\1st_Year_2nd_Term_2016_648.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(d)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Design base resistor bias circuit for a CE amplifier such that operating point is $\\mathrm { V } _ { \\mathrm { C E } } = 8 \\mathrm { V }$ , and (12) $\\mathrm { I } _ { \\mathsf { C } } = 2 \\mathrm { m A }$ . If the supplied DC voltage is 15 volt and $\\beta = 5 0$ , calculate the value of load resistance that would be employed for the following circuit."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d31459f653f674a45896d8ca58c18fda71af2d7fdfdf12871caf98e0e407e781.jpg",
+      "_source_path": "images/d31459f653f674a45896d8ca58c18fda71af2d7fdfdf12871caf98e0e407e781.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

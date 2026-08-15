@@ -1,0 +1,47 @@
+{
+  "id": "852_p1_Q6(d)",
+  "course": {
+    "code": "ECE 2101",
+    "title": "Analog Electronics-II",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2019\\2nd_Year_1st_Term_2019_852.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ", $\\mathrm { V } _ { \\mathrm { c c } } = 1 2 \\mathrm { V }$ $\\mathtt { R } = 3 3$ KΩ, and $C = 0 . 4 7$ μF. (i) what is the minimum trigger voltage that produces an output pulse? (ii) what is thę maximum capacitor voltage? (iii) what is the width of the output pulse?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_1d1c65e452f1e57f69d0072e43cd5a6e27f754b9c23f74a9b39bdf70fca25498.jpg",
+      "_source_path": "images/1d1c65e452f1e57f69d0072e43cd5a6e27f754b9c23f74a9b39bdf70fca25498.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_fdc03b530593ce658bae56fff5476f4d1a3fa53ed0b499f098f90b7abf60fb4f.jpg",
+      "_source_path": "images/fdc03b530593ce658bae56fff5476f4d1a3fa53ed0b499f098f90b7abf60fb4f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

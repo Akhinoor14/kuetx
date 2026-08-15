@@ -1,0 +1,41 @@
+{
+  "id": "1365_p2_Q7(c)",
+  "course": {
+    "code": "CSE 2201",
+    "title": "Algorithm Analysis and Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\2nd_Year_2nd_Term_2022_1365.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "From the following ledger balances of M/S Rahman & Sons, you are required to prepare (20) [CO4] a trial balance as on December 31, 2022."
+    },
+    {
+      "type": "text",
+      "value": "Cash --- Tk 5000, Accounts receivable --- Tk 20,000, Supplies --- Tk 500, Equipment --- Tk 35,000, Accumulated depreciation - Equipment --- Tk 2,500, Building --- Tk 45,000, Accumulated depreciation – Building --- Tk 7,000, Accounts payable --- Tk 12,000, Salary payable --- Tk 4,000, Unearned service revenue --- Tk 2,500, Capital M/S Rahman --- Tk 85,000, Withdrawn Rahman --- Tk 8,000, Service revenue --- Tk 48,000, Salaries expense --- Tk 16000, Rent expense --- Tk 8,000, Supplies expense --- Tk 4,000, Advertisement expense --- Tk 5,000, Depreciation expense – Equipment --- Tk 5,000, Depreçiation expense – Building -- – Tk 6,000, Miscellaneous expense --- Tk 3,000."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2022"
+}

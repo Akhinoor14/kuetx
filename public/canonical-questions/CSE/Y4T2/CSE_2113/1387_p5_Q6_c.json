@@ -1,0 +1,45 @@
+{
+  "id": "1387_p5_Q6(c)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Architecture",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\4th_Year_2nd_Term_2022_1387.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following example from a supermarket transactions database:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=\"3\">Lentils Not Lentils</td><td>Rice</td><td>Not Rice</td><td>Total</td></tr><tr><td>700</td><td>120</td><td>820</td></tr><tr><td>50</td><td>330</td><td>380</td></tr><tr><td>Total</td><td>750</td><td>450</td><td>1200</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Find out the support, confidence value for the association rule Rice → Lentils and discuss the correlation relationship between Rice and Lentils whether they are substitute or complementary to one another."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2022"
+}

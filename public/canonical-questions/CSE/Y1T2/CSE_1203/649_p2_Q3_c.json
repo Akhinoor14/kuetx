@@ -1,0 +1,45 @@
+{
+  "id": "649_p2_Q3(c)",
+  "course": {
+    "code": "CSE 1203",
+    "title": "Digital Logic Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2017\\1st_Year_2nd_Term_2017_649.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose that you are asked to design an alarm circuit which will be operated as follows: (12)"
+    },
+    {
+      "type": "text",
+      "value": "\"The alarm will ring if the alarm switch is turned on and the door is not closed, or the time is between 6 PM and 6 AM and the window is not closed.\""
+    },
+    {
+      "type": "text",
+      "value": "Show the design of this combinational circuit in detail."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

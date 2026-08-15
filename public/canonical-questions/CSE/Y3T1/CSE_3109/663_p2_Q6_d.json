@@ -1,0 +1,65 @@
+{
+  "id": "663_p2_Q6(d)",
+  "course": {
+    "code": "CSE 3109",
+    "title": "Database Systems",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2015\\3rd_Year_1st_Term_2015_663.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "Let the following relational schema is given - (08)"
+    },
+    {
+      "type": "text",
+      "value": "R(A, B, C)"
+    },
+    {
+      "type": "text",
+      "value": "S(D, E, F)"
+    },
+    {
+      "type": "text",
+      "value": "the relations r(R) and s(S) are also given. Give an expression in SQL that is equivalent to each of the followings:"
+    },
+    {
+      "type": "text",
+      "value": "(i) $\\pi _ { A B } ( r ) \\bowtie \\pi _ { B C } ( r )$"
+    },
+    {
+      "type": "text",
+      "value": "(ii) $\\pi _ { A , F } ( \\sigma _ { C = D } ( r \\times s ) )$"
+    },
+    {
+      "type": "text",
+      "value": "(iii). $\\sigma _ { B = 1 7 } ( r )$"
+    },
+    {
+      "type": "text",
+      "value": "(iv) $\\rho _ { T } ( \\sigma _ { A = D } ( r \\times s ) )$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2015"
+}

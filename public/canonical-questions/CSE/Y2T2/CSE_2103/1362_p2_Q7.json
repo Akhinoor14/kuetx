@@ -1,0 +1,73 @@
+{
+  "id": "1362_p2_Q7",
+  "course": {
+    "code": "CSE 2103",
+    "title": "Microprocessors and Microcontrollers",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2019\\2nd_Year_2nd_Term_2019_1362.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7",
+  "numbering_source": "regex",
+  "marks": 35,
+  "content": [
+    {
+      "type": "text",
+      "value": "IT center was started by Tanni in a small shopping center, in a first week of operation, she(35) completed the following transactions."
+    },
+    {
+      "type": "text",
+      "value": "2019 Deposited Tk. 70,000 cash in account in the name of company to start the June 1business."
+    },
+    {
+      "type": "text",
+      "value": "June 2 Paid current month rent Tk. 9,000 cash."
+    },
+    {
+      "type": "text",
+      "value": "June 3 Purchase store equipment on credit/on account Tk. 36,000."
+    },
+    {
+      "type": "text",
+      "value": "June 4 Purchased supplies for cash Tk. 17,000."
+    },
+    {
+      "type": "text",
+      "value": "June 5 Received revenue Tk. 8,000 cash for service provided."
+    },
+    {
+      "type": "text",
+      "value": "June 6 Service provided on account Tk. 7,000."
+    },
+    {
+      "type": "text",
+      "value": "June 7Paid utility expense Tk. 2,500 in cash."
+    },
+    {
+      "type": "text",
+      "value": "June 10 Withdraw cash for personal use Tk. 4,000."
+    },
+    {
+      "type": "text",
+      "value": "From the above information, prepare necessary Ledger accounts."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

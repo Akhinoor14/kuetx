@@ -1,0 +1,50 @@
+{
+  "id": "840_p6_Q4(c)",
+  "course": {
+    "code": "PH 1109",
+    "title": "Physics",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\1st_Year_1st_Term_2018_840.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A nuclear reaction is given bełow,"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\stackrel { 2 3 5 } { 9 ! } U + { } _ { 0 } ^ { 1 } n \\longrightarrow \\left[ \\stackrel { 2 3 6 } { 9 ! } U \\right] \\longrightarrow \\stackrel { 9 5 } { 4 ! } M o + { } _ { 5 7 } ^ { 1 3 9 } L a + 2 { } _ { 0 } ^ { 1 } n + Q\\tag{10}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "i) What type of reaction is it? Explain in brief."
+    },
+    {
+      "type": "text",
+      "value": "ii) Calculate the released energy (Q) from the reaction."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
+}

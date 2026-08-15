@@ -1,0 +1,49 @@
+{
+  "id": "1367_p3_Q3(c)",
+  "course": {
+    "code": "MATH 2207",
+    "title": "Complex Variable, Vector Analysis and Statistics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\2nd_Year_2nd_Term_2024_1367.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "The grade on a quiz were $0 , 1 , 2 , . . . , 1 0$ points, depending the number answered correctly (10) [CO4] out of 50 questions. The mean grade was 6.25 and the standard deviation was. 1.25. Express with appropriate assumptions to determine the following probabilities."
+    },
+    {
+      "type": "text",
+      "value": "i) the percentage of student scoring 6.0 point."
+    },
+    {
+      "type": "text",
+      "value": "ii) the maximum grade of the lowest 20% of the class."
+    },
+    {
+      "type": "text",
+      "value": "iii) the minimum grade of the highest 15% of the class."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2024"
+}

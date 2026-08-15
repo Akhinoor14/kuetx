@@ -1,0 +1,41 @@
+{
+  "id": "861_p5_Q1(b)",
+  "course": {
+    "code": "ECE 3109",
+    "title": "Numerical Analysis",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2017\\3rd_Year_1st_Term_2017_861.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Prove that the Newton-Raphson method shows quadratic convergence of the error function. What is the physical significance of this statement for Communication Engineering?"
+    },
+    {
+      "type": "text",
+      "value": "(12+5)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

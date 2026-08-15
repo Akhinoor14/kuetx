@@ -1,0 +1,42 @@
+{
+  "id": "1378_p1_Q8(d)",
+  "course": {
+    "code": "CSE 3209",
+    "title": "Artificial Intelligence",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\3rd_Year_2nd_Term_2024_1378.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": 6,
+  "content": [
+    {
+      "type": "text",
+      "value": "Convert the following propositional logic expression into CNF, showing all the (06) [CO2] intermediate steps:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nA \\Longleftrightarrow ( B \\lor C )\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2024"
+}

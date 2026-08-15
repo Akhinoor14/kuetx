@@ -1,0 +1,42 @@
+{
+  "id": "663_p3_Q7(b)",
+  "course": {
+    "code": "CSE 3119",
+    "title": "Information Systems Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2015\\3rd_Year_1st_Term_2015_663.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is sequence diagram? From the class diagram in the following figure, draw a sequence (15) diagram with appropriate symbol and properties."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e91fb3952562d470be8069ad1e6278686c491f19090ad848999b45ff4b452b34.jpg",
+      "_source_path": "images/e91fb3952562d470be8069ad1e6278686c491f19090ad848999b45ff4b452b34.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2015"
+}

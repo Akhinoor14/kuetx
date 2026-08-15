@@ -1,0 +1,42 @@
+{
+  "id": "1381_p1_Q1(b)",
+  "course": {
+    "code": "CSE 4105",
+    "title": "Computer Networks",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\4th_Year_1st_Term_2022_1381.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Let you are a network engineer at XYZ Inc. Your task is to design the forwarding tables of (15) each router in a network. Consider the following network and design the forwarding tables of each router."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_54186c567d1f799ff38b5a420aefd6911473c739c563aaafba3b49868332b2c0.jpg",
+      "_source_path": "images/54186c567d1f799ff38b5a420aefd6911473c739c563aaafba3b49868332b2c0.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

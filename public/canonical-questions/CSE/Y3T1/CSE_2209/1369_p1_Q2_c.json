@@ -1,0 +1,46 @@
+{
+  "id": "1369_p1_Q2(c)",
+  "course": {
+    "code": "CSE 2209",
+    "title": "Theory of Computation",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2021\\3rd_Year_1st_Term_2021_1369.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find ECLOSE of each state of the following NFA."
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_7ab3518f05c2ea59082d44c59540f718c56cade48104df4816ffa6982f0df7c8.jpg",
+      "_source_path": "images/7ab3518f05c2ea59082d44c59540f718c56cade48104df4816ffa6982f0df7c8.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

@@ -1,0 +1,56 @@
+{
+  "id": "672_p2_Q3(c)",
+  "course": {
+    "code": "EEE 1207",
+    "title": "Basic Electrical Engineering",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\3rd_Year_2nd_Term_2018_672.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is the handle for shift reduce parser? Consider the grammar"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\operatorname { \\mathbb { E } \\to \\operatorname { \\mathbb { E } } + T } \\mid \\operatorname { T }\\tag{08}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathbb { T } { \\to } \\mathbb { T } ^ { * } \\mathbb { F } \\left| \\mathbb { F } \\right.\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathtt { F } \\to ( \\mathrm { E } ) \\mid \\mathrm { i d }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "and the input is id + id \\* id. Find the handles for right sentential form."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

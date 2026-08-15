@@ -1,0 +1,46 @@
+{
+  "id": "1362_p1_Q2(b)",
+  "course": {
+    "code": "CSE 2201",
+    "title": "Algorithm Analysis and Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2019\\2nd_Year_2nd_Term_2019_1362.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is Spanning Tree? Use Prim's algorithm to determine the Minimum Cost Spanning Tree (10) of the graph below."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_c4b2b3fdc77a1020c99f6fd98272dca3c10f4da96ca3b63aad55eed48a935f6b.jpg",
+      "_source_path": "images/c4b2b3fdc77a1020c99f6fd98272dca3c10f4da96ca3b63aad55eed48a935f6b.jpg"
+    },
+    {
+      "type": "text",
+      "value": "What is the total cost of the tree?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

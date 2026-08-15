@@ -1,0 +1,58 @@
+{
+  "id": "648_p4_Q4(d)",
+  "course": {
+    "code": "EEE 2117",
+    "title": "Analog Electronics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2016\\1st_Year_2nd_Term_2016_648.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the followings for the circuit as shown below"
+    },
+    {
+      "type": "text",
+      "value": "(i) VD , (ii) $\\mathrm { V _ { S } \\ , \\langle i i i \\rangle ^ { \\cdot } V _ { D S } }$ and (iv) VDG"
+    },
+    {
+      "type": "text",
+      "value": "(09)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_1dbcc5c5a4994435d491f783e1318c19fe409a0bec722a0c311284dc385be918.jpg",
+      "_source_path": "images/1dbcc5c5a4994435d491f783e1318c19fe409a0bec722a0c311284dc385be918.jpg"
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

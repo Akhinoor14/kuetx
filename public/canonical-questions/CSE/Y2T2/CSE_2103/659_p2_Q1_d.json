@@ -1,0 +1,45 @@
+{
+  "id": "659_p2_Q1(d)",
+  "course": {
+    "code": "CSE 2103",
+    "title": "Microprocessors and Microcontrollers",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2016\\2nd_Year_2nd_Term_2016_659.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": 6,
+  "content": [
+    {
+      "type": "text",
+      "value": "Let us consider that SS contains 5000H and SP contains FFE0H. Then (06)"
+    },
+    {
+      "type": "text",
+      "value": "ii) Calculate the lower range and upper range of the mentioned segment."
+    },
+    {
+      "type": "text",
+      "value": "iii) Determine the maximum size of the stack segment."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

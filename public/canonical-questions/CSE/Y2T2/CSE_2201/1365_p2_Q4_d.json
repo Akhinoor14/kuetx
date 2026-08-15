@@ -1,0 +1,53 @@
+{
+  "id": "1365_p2_Q4(d)",
+  "course": {
+    "code": "CSE 2201",
+    "title": "Algorithm Analysis and Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\2nd_Year_2nd_Term_2022_1365.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following table where different instructions and corresponding required (08) [CO4] cycles are shown."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td></td><td>Instrutions</td><td>Required cycles</td></tr><tr><td>THERE: HERE:</td><td>MOV BX, N1 MOV CX, N2 LOOP HERE DEC BX JN2 THERE</td><td>4 4 17/5 2</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "If the system has a clock of 12 MHz, and N2=FFFFH then find the value of N1 for a delay of 1 second."
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2022"
+}

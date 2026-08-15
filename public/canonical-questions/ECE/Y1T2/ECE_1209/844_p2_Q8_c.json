@@ -1,0 +1,42 @@
+{
+  "id": "844_p2_Q8(c)",
+  "course": {
+    "code": "ECE 1209",
+    "title": "Analog Electronics-I",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\1st_Year_2nd_Term_2016_844.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "using the (12) following parameters. $C _ { \\mathsf { G } } { = } \\bar { 0 } . 0 1 \\ \\dot { \\mu } F , \\ \\dot { C _ { \\mathsf { C } } } { = } 0 . 5 \\ \\mu F , \\ \\mathrm { C } _ { \\mathsf { S } } { = } 2 \\ \\mu F , \\ \\mathrm { R } _ { \\mathsf { S i g } } { = } 1 0 \\ \\bar { \\mathrm { K } } \\bar { \\Omega } , \\ \\mathrm { R } _ { \\mathsf { D } } { = } 4 . 7 \\ \\mathrm { \\bar { K } } \\bar { \\Omega } ,$ $\\begin{array} { r } { \\mathrm { R } _ { \\mathrm { S } } \\mathrm { = } 1 \\mathrm { K } \\bar { \\Omega } \\dot { \\mathrm { R } } _ { \\mathrm { L } } \\mathrm { = } 2 . 2 \\mathrm { K } \\Omega , \\mathrm { I } _ { \\mathrm { D S S } } \\mathrm { = } 8 \\operatorname* { m a x } \\mathrm { V } _ { \\mathrm { p } } \\mathrm { = } 4 \\mathrm { V } , \\dot { \\mathrm { r } } _ { \\mathrm { d } } \\mathrm { = } \\infty \\bar { \\Omega } , \\dot { \\mathrm { V } } _ { \\mathrm { D D } } \\mathrm { = } 2 0 \\ddot { \\mathrm { V } } . } \\end{array}$ R6=1M2"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_c40856221c717a90245807c6f3437b68a76c94a9c608c8709639f9c3d67e0996.jpg",
+      "_source_path": "images/c40856221c717a90245807c6f3437b68a76c94a9c608c8709639f9c3d67e0996.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

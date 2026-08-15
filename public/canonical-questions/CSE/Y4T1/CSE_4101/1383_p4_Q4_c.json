@@ -1,0 +1,49 @@
+{
+  "id": "1383_p4_Q4(c)",
+  "course": {
+    "code": "CSE 4101",
+    "title": "Computer Graphics and Image Processing",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\4th_Year_1st_Term_2024_1383.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "A satellite captured an image of earth when one side of the earth is exposed to sunlight and other side remained dark, resulting a non-uniform illumination. Further, the memory of the satellite was lit by the cosmic rays causing an addition of very dense impulse noise to the stored image. What are the appropriate filters that can be used one after another to remove the impulse noises then to suppress the illumination?"
+    },
+    {
+      "type": "text",
+      "value": "(13) [CO4]"
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2024"
+}

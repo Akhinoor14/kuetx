@@ -1,0 +1,45 @@
+{
+  "id": "1348_p2_Q7(b)",
+  "course": {
+    "code": "CSE 1107",
+    "title": "Discrete Mathematics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\1st_Year_1st_Term_2023_1348.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve the following linear non homogeneous recurrence relation"
+    },
+    {
+      "type": "text",
+      "value": "(10) [CO4]"
+    },
+    {
+      "type": "text",
+      "value": "$a _ { n } = 6 a _ { n - 1 } - 1 2 a _ { n - 2 } + 8 a _ { n - 3 } + 3 .$ with initial condition $a _ { 0 } = - 5 , a _ { 1 } = 4 , a _ { 2 } = 8 8$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2023"
+}

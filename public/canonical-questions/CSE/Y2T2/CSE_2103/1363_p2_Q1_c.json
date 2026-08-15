@@ -1,0 +1,50 @@
+{
+  "id": "1363_p2_Q1(c)",
+  "course": {
+    "code": "CSE 2103",
+    "title": "Microprocessors and Microcontrollers",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2020\\2nd_Year_2nd_Term_2020_1363.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the contents of Control Word Register (CWR) of 8254 shown in the following figure. (11)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nA _ { 0 } , A _ { 1 } = 1 \\ 1 , \\ \\overline { { { C S } } } = 0 , \\ \\overline { { { R D } } } = 1 , \\ \\overline { { { W R } } } = 0\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>D7</td><td>D6</td><td>D5</td><td>D4</td><td> $D _ { 3 }$  0</td><td>D_{2 1</td><td>D{1</td><td>D0</td></tr><tr><td>1</td><td>1</td><td>0</td><td>0</td><td></td><td></td><td>1</td><td>0</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "If the command is written into the CWR and has the format shown in the above figure, then a specific command will be executed. Briefly explain the operation of the executed command."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2020"
+}

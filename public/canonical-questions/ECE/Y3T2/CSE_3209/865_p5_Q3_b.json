@@ -1,0 +1,46 @@
+{
+  "id": "865_p5_Q3(b)",
+  "course": {
+    "code": "CSE 3209",
+    "title": "Database System",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2015\\3rd_Year_2nd_Term_2015_865.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose you have the relation R(A, B, C, D, E, F, G, H) and the functional (13) dependencies for this relation as follows ;"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { C H } \\to \\mathrm { G } , \\mathrm { A } { \\to } \\mathrm { B C } , \\ \\mathrm { B } { \\to } \\mathrm { C F H } , \\ \\mathrm { E } \\to \\mathrm { A a n d } \\ \\mathrm { F } { \\to } \\mathrm { E G }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Now, write/list all the candidate keys for the above relation and dependencies."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2015"
+}

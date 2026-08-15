@@ -1,0 +1,42 @@
+{
+  "id": "677_p1_Q6(b)",
+  "course": {
+    "code": "CSE 4105",
+    "title": "Computer Networks",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\4th_Year_1st_Term_2018_677.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the routing table/forwarding table at the router B from the following topology using (17) a Link-State. Routing Algorithm."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_230a10aedf1a9fd69bb28e8460bcda15db106cc9d40e474cc5e0d88d5f097da3.jpg",
+      "_source_path": "images/230a10aedf1a9fd69bb28e8460bcda15db106cc9d40e474cc5e0d88d5f097da3.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2018"
+}

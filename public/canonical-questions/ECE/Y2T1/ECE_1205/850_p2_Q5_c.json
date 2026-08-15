@@ -1,0 +1,46 @@
+{
+  "id": "850_p2_Q5(c)",
+  "course": {
+    "code": "ECE 1205",
+    "title": "Science of Engineering Materials",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2017\\2nd_Year_1st_Term_2017_850.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "whose mean circumference is l and that has N tightly wound turns around it. Suppose that the diameter of the core is 2a and l>>a. by applying Ampere's law, show that the inductance of the coil is $L = \\frac { \\mu _ { o } \\mu _ { r } N ^ { 2 } A } { l }$ , where symbols have their usual meanings."
+    },
+    {
+      "type": "text",
+      "value": "(11)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d2daa595ed27d211f9278a505c2dd3f6aa97b0c6388a949253293c07e455d7f6.jpg",
+      "_source_path": "images/d2daa595ed27d211f9278a505c2dd3f6aa97b0c6388a949253293c07e455d7f6.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

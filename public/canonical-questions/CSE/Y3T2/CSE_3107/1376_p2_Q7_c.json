@@ -1,0 +1,49 @@
+{
+  "id": "1376_p2_Q7(c)",
+  "course": {
+    "code": "CSE 3107",
+    "title": "Applied Statistics and Queuing Theory",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\3rd_Year_2nd_Term_2022_1376.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider an M/G/1/GD/∞/∞ queuing system in which an average 10 arrivals occur (14) [CO4] each hour. Suppose that each customer's service time follows an Erlang distribution, . with rate parameter 1 customer per minute and shape parameter 4. Now,"
+    },
+    {
+      "type": "text",
+      "value": "(i) Find the expected number of customers waiting in line."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Find the expected time a customer will spend in the system."
+    },
+    {
+      "type": "text",
+      "value": "(iii) What fraction of the time will the server be idle?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

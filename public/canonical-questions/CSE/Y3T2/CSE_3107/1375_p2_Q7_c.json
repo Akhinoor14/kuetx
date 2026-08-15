@@ -1,0 +1,51 @@
+{
+  "id": "1375_p2_Q7(c)",
+  "course": {
+    "code": "CSE 3107",
+    "title": "Applied Statistics and Queuing Theory",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2021\\3rd_Year_2nd_Term_2021_1375.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following Markov chain. There are two recurrent classes, $R _ { 1 } = \\{ 1 , 2 \\}$ and $R _ { 2 } = \\{ 5 , 6 , 7 \\}$ Assuming $X _ { 0 } = 3$ , find the probability that the chain gets absorbed in $R _ { 1 }$"
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_5ffd2a82b90df92f8384a78c3d545836475e64f67f0f5d5c904782d846e6f90b.jpg",
+      "_source_path": "images/5ffd2a82b90df92f8384a78c3d545836475e64f67f0f5d5c904782d846e6f90b.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0fce850c8669bf6762ec643a817af36afb394f04f0013b39c44307bc99642b57.jpg",
+      "_source_path": "images/0fce850c8669bf6762ec643a817af36afb394f04f0013b39c44307bc99642b57.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2021"
+}

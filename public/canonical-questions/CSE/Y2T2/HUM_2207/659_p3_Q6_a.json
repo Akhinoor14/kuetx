@@ -1,0 +1,81 @@
+{
+  "id": "659_p3_Q6(a)",
+  "course": {
+    "code": "HUM 2207",
+    "title": "Economics and Accounting",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2016\\2nd_Year_2nd_Term_2016_659.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Digital IT centre was started by Nabila in a smali shopping center, in the first weeks of (15) operation, he completed the following transactions:"
+    },
+    {
+      "type": "text",
+      "value": "2016 Deposited Tk 70,000 in an account in the name of companyto start the"
+    },
+    {
+      "type": "text",
+      "value": ", 2 Paid current month rent Tk 9,000."
+    },
+    {
+      "type": "text",
+      "value": ",: 3 Purchase store equipment on account Tk 36,000."
+    },
+    {
+      "type": "text",
+      "value": ",, 4 Purchase supplies for cash Tk 17,000:"
+    },
+    {
+      "type": "text",
+      "value": ",, . 5 Received revenue Tk 8,000 for service provided,"
+    },
+    {
+      "type": "text",
+      "value": ",, 6 Billed customers for services Tk 7,000."
+    },
+    {
+      "type": "text",
+      "value": ",, 7 Paid utilities expense Tk 2,500."
+    },
+    {
+      "type": "text",
+      "value": ",, 8 Received from customers Tk 2,000."
+    },
+    {
+      "type": "text",
+      "value": "» .9 Made payment ou store equipment purchase in transaction 03 Tk 18,000."
+    },
+    {
+      "type": "text",
+      "value": ", 10 Withdrew cash for personal expense Tk 4,000."
+    },
+    {
+      "type": "text",
+      "value": "Required: prepare a tabular analysis of the July transactions. Uses column heads: Cash, Account receivable, Supplies store equipment, Accounts payable, and Capital."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

@@ -1,0 +1,47 @@
+{
+  "id": "859_p5_Q8(d)",
+  "course": {
+    "code": "ECE 3109",
+    "title": "Numerical Analysis",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2015\\3rd_Year_1st_Term_2015_859.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve the wave equation $f _ { t t } ( x , t ) = 4 f _ { x x } ( x , t ) , 0 \\leq x \\leq 5$ with boundary conditions (12) $f ( O , t ) { = } O \\operatorname { a n d } f ( S , t ) { = } O$"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nf ( x , 0 ) = f ( x ) = x ( 5 - x )\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nf _ { t } ( x , 0 ) { = } g ( x ) { = } 0 .\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2015"
+}

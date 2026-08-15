@@ -1,0 +1,88 @@
+{
+  "id": "667_p1_Q7(a)",
+  "course": {
+    "code": "CSE 2209",
+    "title": "Theory of Computation",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2019\\3rd_Year_1st_Term_2019_667.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following grammar:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nS  a A a \\vert  b { \\cal B } b  \\varepsilon\\tag{25}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nA \\to C | a\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\left| B \\to C \\right| \\boldsymbol { b }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nC \\to C D E { \\mid } \\varepsilon\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nD \\to A \\mid B \\mid a b\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "i) Are there any useless symbols? Eliminate them if so."
+    },
+    {
+      "type": "text",
+      "value": "ii) Eliminate ε -productions."
+    },
+    {
+      "type": "text",
+      "value": "iii) Eliminate unit productions."
+    },
+    {
+      "type": "text",
+      "value": "iv) Put the grammar into CNF."
+    },
+    {
+      "type": "formula",
+      "value": "$$\nL = \\{ a ^ { n } b ^ { j } c ^ { k } \\mid k = j n \\}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\Sigma = \\{ a , b , c \\}\\tag{10}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

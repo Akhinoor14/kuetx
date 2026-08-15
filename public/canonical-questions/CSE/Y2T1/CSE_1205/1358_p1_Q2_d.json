@@ -1,0 +1,66 @@
+{
+  "id": "1358_p1_Q2(d)",
+  "course": {
+    "code": "CSE 1205",
+    "title": "Object Oriented Programming",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2021\\2nd_Year_1st_Term_2021_1358.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following deque of characters where DEQUE is a circular array which allocates (10) six memory cells:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { L E F T } = 2 , \\mathrm { R I G H T } = 4 , \\mathrm { D E Q U E } ; \\quad \\substack { \\mathrm { - - s - a - b - b } } , \\mathrm { A } , \\mathrm { C } , \\mathrm { D } , \\quad \\substack { \\mathrm { - -- - s - a - b } } .\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Describe the deque while the following operations take place:"
+    },
+    {
+      "type": "text",
+      "value": "i) F is added to the right of the deque."
+    },
+    {
+      "type": "text",
+      "value": "ii) Two letters on the right are deleted."
+    },
+    {
+      "type": "text",
+      "value": "iii) K, L, M are added to the left of the deque."
+    },
+    {
+      "type": "text",
+      "value": "iv) One letter on the left is deleted."
+    },
+    {
+      "type": "text",
+      "value": "v) R is added to the left of the deque."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

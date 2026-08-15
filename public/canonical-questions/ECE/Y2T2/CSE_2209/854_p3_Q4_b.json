@@ -1,0 +1,61 @@
+{
+  "id": "854_p3_Q4(b)",
+  "course": {
+    "code": "CSE 2209",
+    "title": "Data Structures and Algorithm",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2015\\2nd_Year_2nd_Term_2015_854.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following memory representation of linked list: START=4, AVAIL=3."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td></td></tr><tr><td>INFO</td><td>A</td><td>B</td><td></td><td>C</td><td>D</td><td></td><td></td><td>E</td><td>F</td></tr><tr><td>LINK</td><td>2</td><td>8</td><td>6</td><td>7</td><td>0</td><td></td><td>0</td><td>1</td><td>S</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Fig. 1"
+    },
+    {
+      "type": "text",
+      "value": "i) Find the sequence of characters in the list."
+    },
+    {
+      "type": "text",
+      "value": "ii) Suppose F & then C are deleted from the list and G is inserted at the beginning of the list. Find the final structure."
+    },
+    {
+      "type": "text",
+      "value": "iii) Suppose C & then F are deleted from the list and G is inserted at the beginning of the list. Find the final structure."
+    },
+    {
+      "type": "text",
+      "value": "iv) Suppose G is inserted at the beginning of the list and then F & C are deleted from the list. Find the final structure."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

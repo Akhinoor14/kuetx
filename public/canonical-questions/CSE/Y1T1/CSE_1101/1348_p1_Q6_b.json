@@ -1,0 +1,44 @@
+[
+  {
+    "id": "1348_p1_Q6(b)",
+    "course": {
+      "code": "CSE 1101",
+      "title": "Structured Programming",
+      "department": "Department of Computer Science and Engineering",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2023,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\1st_Year_1st_Term_2023_1348.pdf",
+      "source_page": null,
+      "paper_index": 1
+    },
+    "question_number": "6(b)",
+    "numbering_source": "regex",
+    "marks": 8,
+    "content": [
+      {
+        "type": "text",
+        "value": "Differentiate between malloc and calloc. How can you resize a dynamically allocated (08) [CO1] memory space?"
+      }
+    ],
+    "topics": [
+      "Input and Output: Standard input and output, Formatted input and output, File access, Dynamic memory allocation, Valgrind, Garbage collection, Variable length argument list, Command line parameters, Error handling, Introduction to graphics routines, Compiling, Make file, Debugging."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2023",
+    "classification_notes": "প্রশ্নটি মূলত ডায়নামিক মেমোরি অ্যালোকেশন (malloc/calloc), রিসাইজিং এবং এর সাথে সম্পর্কিত ফাংশনগুলো নিয়ে যা সিলেবাসের ৫ নং টপিকে 'Dynamic memory allocation' শিরোনামে সরাসরি উল্লেখ আছে।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি সরাসরি ডায়নামিক মেমোরি অ্যালোকেশনের মূল বিষয় (malloc/calloc ও resizing) নিয়ে যা সিলেবাসের 'Dynamic memory allocation' টপিকে পুরোপুরি ফিট করে।"
+  }
+]

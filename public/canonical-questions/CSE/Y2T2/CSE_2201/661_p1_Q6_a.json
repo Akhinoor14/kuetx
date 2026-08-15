@@ -1,0 +1,58 @@
+{
+  "id": "661_p1_Q6(a)",
+  "course": {
+    "code": "CSE 2201",
+    "title": "Algorithm Analysis and Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\2nd_Year_2nd_Term_2018_661.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following directed, weighted graph."
+    },
+    {
+      "type": "text",
+      "value": "(20)"
+    },
+    {
+      "type": "text",
+      "value": "i) Even though the graph has negative weight edges, step through Dijkstra's algorithm to calculate shortest paths from A to every other vertex"
+    },
+    {
+      "type": "text",
+      "value": "ii) Dijkstra's algorithm found the wrong path to some of the vertices. For just the vertices where the wrong path was computed, indicate both the path that was computed and the correct path."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_1328c0977ed33fa24de253d32cb3b3ef093755d5661e78c4159e6194542de190.jpg",
+      "_source_path": "images/1328c0977ed33fa24de253d32cb3b3ef093755d5661e78c4159e6194542de190.jpg"
+    },
+    {
+      "type": "text",
+      "value": "iii) What single edge could be removed from the graph such that Dijkstra's algorithm would happen to compute correct answers for all vertices in the remaining graph."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

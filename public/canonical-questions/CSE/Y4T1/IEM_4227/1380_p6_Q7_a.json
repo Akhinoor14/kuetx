@@ -1,0 +1,42 @@
+{
+  "id": "1380_p6_Q7(a)",
+  "course": {
+    "code": "IEM 4227",
+    "title": "Industrial Management",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2021\\4th_Year_1st_Term_2021_1380.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "The product structure tree for end item E is given below. The manager wants to know the (17) material requirements for part R that will be needed to complete 120 units of E by the start of week 5. Lead time for E is one week, one week for M and I, and two weeks for R, P, N and V. There is a scheduled receipt of 60 units of M at the start of week 2 and 100 units of R at the start of week 1. Lot for lot ordering is used."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_9917d1749b65a3ff527f5d504385d355b41948f4da89746c8b952784844d24e1.jpg",
+      "_source_path": "images/9917d1749b65a3ff527f5d504385d355b41948f4da89746c8b952784844d24e1.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2021"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "669_p3_Q8(b)",
+  "course": {
+    "code": "CSE 3211",
+    "title": "Compiler Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2015\\3rd_Year_2nd_Term_2015_669.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Eliminate common sub expression from the following code segment"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { l } { { u p = \\nu [ ( i - I ) ^ { * } n + j J ; \\quad \\stackrel { } { d o w n } = \\nu [ ( i + l ) ^ { * } n + j J ; \\quad \\cdot \\cdot \\cdot \\cdot \\nonumber \\ \\cdot \\nonumber \\ \\ \\cdot \\nonumber \\ \\ \\cdot \\nonumber \\ \\ \\ } } \\\\ { { l e f \\dag = \\nu [ i ^ { * } n + j - l J ; \\quad \\ r i g h t = \\nu [ i ^ { * } n + j + l J ; \\quad s u m = u p + d o w n + l e f t + r i g h t ; } } \\end{array}\\tag{05}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2015"
+}

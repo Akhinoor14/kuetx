@@ -1,0 +1,53 @@
+{
+  "id": "1378_p2_Q4(c)",
+  "course": {
+    "code": "CSE 3200",
+    "title": "System Development Project",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\3rd_Year_2nd_Term_2024_1378.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "A private company deploys a smart agriculture system using IoT sensors, drones, and (15) [CO2] AI analytics to monitor crops and optimize irrigation in rural Bangladesh."
+    },
+    {
+      "type": "text",
+      "value": "i) Examine the positive and negative societal implications of this system focusing on productivity and food security, cost, and accessibility and impact on traditional farmers."
+    },
+    {
+      "type": "text",
+      "value": "ii) For the smart agriculture system, explain the meaning of risk = probability × consequence and identify one technical risk, one operational risk, and one environmental risk."
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2024"
+}

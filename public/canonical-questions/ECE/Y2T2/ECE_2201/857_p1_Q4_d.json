@@ -1,0 +1,61 @@
+{
+  "id": "857_p1_Q4(d)",
+  "course": {
+    "code": "ECE 2201",
+    "title": "Analog Communications",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\2nd_Year_2nd_Term_2018_857.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "An angle modulated signal with carrier frequency ω = 2π×10. is described·by the (12)"
+    },
+    {
+      "type": "text",
+      "value": "equation $Q _ { E M } \\left( t \\right) = 1 0 \\cos \\left( \\omega _ { c } t + 0 . 1 \\sin 2 0 0 0 \\pi t \\right) .$"
+    },
+    {
+      "type": "text",
+      "value": "(i) Find the power of the modulated signal."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Find the frequency deviation $\\Delta f$ and deviation ratio ${ \\mathbf { } } . { \\mathbf { } } \\beta .$"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Estimate the bandwidth of $Q _ { \\varepsilon , \\forall } \\left( t \\right)$"
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

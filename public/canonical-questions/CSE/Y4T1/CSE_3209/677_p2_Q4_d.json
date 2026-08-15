@@ -1,0 +1,45 @@
+{
+  "id": "677_p2_Q4(d)",
+  "course": {
+    "code": "CSE 3209",
+    "title": "Artificial Intelligence",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\4th_Year_1st_Term_2018_677.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Based on the following \"how to buy fresh fish” problem, construct a set of fuzzy rules: \"If you (12 go to the fish market to buy some fresh fish, you must know how to identify one. First, look at the eyes of the fish. If the eyes are reddish then the fish is no longer fresh, if the eyes are clear then the fish is fresh. Another tip is to look at fish's gills. The gills should be in rich red for the fish to be fresh. Otherwise, if the gills look pale red then it indicates that the fish is somewhat old and no longer fresh.\" Based on your given fuzzy rules, construct a Fuzzy Associative Memory (FAM) accordingly."
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2018"
+}

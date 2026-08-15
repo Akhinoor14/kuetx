@@ -1,0 +1,45 @@
+{
+  "id": "1364_p5_Q4(c)",
+  "course": {
+    "code": "MATH 2207",
+    "title": "Complex Variable, Vector Analysis and Statistics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2021\\2nd_Year_2nd_Term_2021_1364.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write down the relation in direction cosine between two cartesian coordinate systems (x, y, z) and $( x ^ { \\prime } , y ^ { \\prime } , z ^ { \\prime } )$ which have same origin but rotated an angle θ. Given a vector (1, 1, 1)t, using 4 × 4 matrix operator, shift it uniformly 3 units in positive direction, then using $3 \\times 3$ matrix rotational operator, rotate it $9 0 ^ { \\circ }$ in anti-clockwise about x axis and finally scale it unequally with 2, 3 and 4 along $x , y ,$ and z axis respectively. Draw original and modified vectors after each operation. If the order of matrix operators are changed – are the modified points have same position as previous one, why?"
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

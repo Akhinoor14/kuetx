@@ -1,0 +1,42 @@
+{
+  "id": "1383_p5_Q8(b)",
+  "course": {
+    "code": "IEM 4227",
+    "title": "Industrial Management",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\4th_Year_1st_Term_2024_1383.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the critical path and calculate the slack time of each activity for the following (15) [CO2] network using computing algorithm."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ce8640fe9fcad08816cebdc63d9d6d0bc4cfce7d9440065245f2d7a01a8c5473.jpg",
+      "_source_path": "images/ce8640fe9fcad08816cebdc63d9d6d0bc4cfce7d9440065245f2d7a01a8c5473.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2024"
+}

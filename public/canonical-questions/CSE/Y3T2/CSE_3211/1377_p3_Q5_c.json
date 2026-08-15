@@ -1,0 +1,42 @@
+{
+  "id": "1377_p3_Q5(c)",
+  "course": {
+    "code": "CSE 3211",
+    "title": "Compiler Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\3rd_Year_2nd_Term_2023_1377.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define activation record. Draw an activation tree for the following program:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { l l } { { \\mathrm { F i b o n a c c i } } } & { { ( \\mathrm { i n t . ~ n } ) \\left\\{ \\begin{array} { l l } { { } } & { { } } \\\\ { { } } & { { \\mathrm { i f ~ ( n ~ < = ~ 1 ) ~ } \\left\\{ \\mathrm { ~ r e f u r n } \\ n ; \\right\\} } } \\right.} \\end{array}  }  \\\\ { { \\mathrm { ~ } } } & { { \\mathrm { r e t u r n ~ \\ F i b o n a c c i ~ ( n - 1 ) + F i b o n a c c i ~ ( n - 2 ) ~ } } ; } \\\\ { { \\mathrm { ~ } } } & { { \\cdot \\mathrm { ~ } } } \\\\ { { \\mathrm { m a i n ~ ( } \\begin{array} { l l } { { } } & { { } } \\\\ { { } } & { { \\cdot } } \\end{array} } } \\\\ { { \\mathrm { ~ \\ f i ~ \\ } } } & { { \\mathrm { i n t ~ \\ } \\textbf { x \\ } = \\mathrm { \\ F i b o n a c c i ~ ( 4 ) ~ } ; } } \\end{array}\\tag{10) [CO2]}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2023"
+}

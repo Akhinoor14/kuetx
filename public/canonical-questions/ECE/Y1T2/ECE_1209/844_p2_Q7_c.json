@@ -1,0 +1,56 @@
+{
+  "id": "844_p2_Q7(c)",
+  "course": {
+    "code": "ECE 1209",
+    "title": "Analog Electronics-I",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\1st_Year_2nd_Term_2016_844.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ", given(Vgsa)-2.86V and IDQ=4.56mA."
+    },
+    {
+      "type": "formula",
+      "value": "$$\nP _ { 1 } ( 1 , 2 ) = 6 \\max 2 < 9 0 ( \\frac { 8 \\sin \\theta } { 1 2 } ) = 0 . 8 \\dot { 3 }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "i. 'om.: determine i $) \\ \\mathrm { g } _ { \\mathrm { { i } \\mathrm { { i } } } } , \\ \\mathrm { i } \\mathrm { { i } } ) \\cdot \\mathrm { { r } } _ { \\mathrm { d } } , \\ \\mathrm { i } \\mathrm { { i } } ) \\cdot Z _ { \\mathrm { { i } } } ^ { : }$ iv) $Z _ { 0 }$ with and without ra, v) $A _ { v }$ with and without rd."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\sum \\limits _ { i = 1 } ^ { n } \\sin ( 2 \\cdot \\cos \\cdot \\sin 2 )\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nR _ { 3 } ( 1 ) \\forall \\sin = 3 \\sqrt { 3 } \\times 9\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "650_p2_Q3(c)",
+  "course": {
+    "code": "CSE 1203",
+    "title": "Digital Logic Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\1st_Year_2nd_Term_2018_650.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write down the output Boolean functions and truth table for the following circuit:"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8e18bc4ccd2e53e3058aa70d862e4bdd9367cd6d6a689623a5e502664a05b35e.jpg",
+      "_source_path": "images/8e18bc4ccd2e53e3058aa70d862e4bdd9367cd6d6a689623a5e502664a05b35e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

@@ -1,0 +1,58 @@
+{
+  "id": "648_p5_Q6",
+  "course": {
+    "code": "MATH 1207",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2016\\1st_Year_2nd_Term_2016_648.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "6",
+  "numbering_source": "regex",
+  "marks": 35,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve any three of the followings:"
+    },
+    {
+      "type": "text",
+      "value": "(i) $\\begin{array} { r } { \\left( x ^ { 3 } + y ^ { 2 } \\sqrt { x ^ { 2 } + y ^ { 2 } } \\right) d x - \\left( x y \\sqrt { x ^ { 2 } + y ^ { 2 } } \\right) d y = 0 . } \\end{array}$"
+    },
+    {
+      "type": "text",
+      "value": "(35)"
+    },
+    {
+      "type": "text",
+      "value": "(ii). $\\Big ( 1 + x ^ { 2 } \\Big ) \\frac { d y } { d x } + y = \\tan ^ { - 1 } x$"
+    },
+    {
+      "type": "text",
+      "value": "(iii) $( 6 x - 4 y + 1 ) d y = ( 3 x - 2 y + 1 ) d x .$"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { ( i v ) } \\quad \\frac { d y } { d x } + \\left( \\frac { 2 x + 1 } { x } \\right) y = e ^ { - 2 x } .\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

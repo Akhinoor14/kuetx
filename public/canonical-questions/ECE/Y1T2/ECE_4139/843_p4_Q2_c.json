@@ -1,0 +1,53 @@
+{
+  "id": "843_p4_Q2(c)",
+  "course": {
+    "code": "ECE 4139",
+    "title": "TV Engineering",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2015\\1st_Year_2nd_Term_2015_843.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": "Identify the types of function of a noun as come in the followings with underlined (09) words."
+    },
+    {
+      "type": "text",
+      "value": "(i) Azad, a teacher, met Rabbi."
+    },
+    {
+      "type": "text",
+      "value": "(ii) They elected him chairman."
+    },
+    {
+      "type": "text",
+      "value": "(iii) He is a teacher."
+    },
+    {
+      "type": "text",
+      "value": "(iv) I think of Karim"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
+}

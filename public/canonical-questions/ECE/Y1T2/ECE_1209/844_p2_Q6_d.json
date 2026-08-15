@@ -1,0 +1,50 @@
+{
+  "id": "844_p2_Q6(d)",
+  "course": {
+    "code": "ECE 1209",
+    "title": "Analog Electronics-I",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\1st_Year_2nd_Term_2016_844.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": ", determine i) ID, ii) VGsa, i Ds and iv) ${ \\tt V } _ { \\mathbb { S } } .$ Use appropriate transfer curvé for calculation. 一"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a7ba8289b23be3f01a7efb82b94c0d0d8e80c64e882b3cf966b107679c4006b1.jpg",
+      "_source_path": "images/a7ba8289b23be3f01a7efb82b94c0d0d8e80c64e882b3cf966b107679c4006b1.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Fig."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

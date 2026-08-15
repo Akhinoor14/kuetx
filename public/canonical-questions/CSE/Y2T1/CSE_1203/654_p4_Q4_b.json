@@ -1,0 +1,49 @@
+{
+  "id": "654_p4_Q4(b)",
+  "course": {
+    "code": "CSE 1203",
+    "title": "Digital Logic Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2017\\2nd_Year_1st_Term_2017_654.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "A Boolean function is defined by the truth table given below:"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>E2</td><td colspan=\"4\">00010101</td></tr><tr><td>E</td><td>00001101</td><td></td><td></td><td></td><td></td></tr><tr><td>C</td><td>0101</td><td>0</td><td>101</td><td></td><td></td></tr><tr><td>B</td><td>001</td><td>1 0</td><td>0</td><td>11</td><td></td></tr><tr><td>A</td><td>00001111</td><td></td><td></td><td></td><td></td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Implement the circuit with a PLA having three inputs, three product terms and two outputs."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

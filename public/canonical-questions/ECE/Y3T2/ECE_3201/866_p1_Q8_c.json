@@ -1,0 +1,54 @@
+{
+  "id": "866_p1_Q8(c)",
+  "course": {
+    "code": "ECE 3201",
+    "title": "Information Theory",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\3rd_Year_2nd_Term_2016_866.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Construct the following figure as the structure of a convolutional encoder with (15) constraint length 3 and the shift register."
+    },
+    {
+      "type": "text",
+      "value": "(i) What is the rate of this convolution code?"
+    },
+    {
+      "type": "text",
+      "value": "(ii) What is the generator matrix of this code?"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Draw the state transition diagram of this code."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_149d22c4761b06f17a3ee6641cf4e51c4e17bc6a81c81ce545cd456fa0d2f9fd.jpg",
+      "_source_path": "images/149d22c4761b06f17a3ee6641cf4e51c4e17bc6a81c81ce545cd456fa0d2f9fd.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

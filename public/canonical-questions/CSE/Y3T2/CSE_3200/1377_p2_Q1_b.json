@@ -1,0 +1,53 @@
+{
+  "id": "1377_p2_Q1(b)",
+  "course": {
+    "code": "CSE 3200",
+    "title": "System Development Project",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\3rd_Year_2nd_Term_2023_1377.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "A computer system is using a probabilistic approach to classify emails as Spam or Not (15) [CO3] Spam based on two features:"
+    },
+    {
+      "type": "text",
+      "value": "• F1: The presence of the keyword \"Offer\" in the email subject (Yes/No)."
+    },
+    {
+      "type": "text",
+      "value": "• F2: Whether the sender's email address is on the trusted domain list (Yes/No). Historical data of 100 emails is summarized below:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Category</td><td rowspan=1 colspan=1>&quot;Offer&quot; Present (Yes)</td><td rowspan=1 colspan=1>&quot;Offer&quot; Absent (No)</td></tr><tr><td rowspan=1 colspan=1>Trusted Domain (Yes)</td><td rowspan=1 colspan=1>10 (Spam), 20 (Not Spam)</td><td rowspan=1 colspan=1>5 (Spam), 35 (Not Spam)</td></tr><tr><td rowspan=1 colspan=1>Trusted Domain (No)</td><td rowspan=1 colspan=1>15 (Spam), 5 (Not Spam)</td><td rowspan=1 colspan=1>5 (Spam), 5 (Not Spam)</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Calculate the probabilities of an email being Spam or Not Spam, assuming feature independence, if it contains \"Offer\" and is from an untrusted domain. Then calculate the same probabilities without assuming feature independence and compare the results to discuss the impact of the independence assumption."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2023"
+}

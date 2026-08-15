@@ -1,0 +1,45 @@
+{
+  "id": "850_p1_Q3(d)",
+  "course": {
+    "code": "ECE 2103",
+    "title": "Digital Electronics and Logic Circuits",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2017\\2nd_Year_1st_Term_2017_850.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(d)",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "An amplifier has an open-circuit voltage gain of 70db and an output resistance of (05) 1.5kΩ. Determine the minimum value of load resistance so that voltage gain is not more than 67db."
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

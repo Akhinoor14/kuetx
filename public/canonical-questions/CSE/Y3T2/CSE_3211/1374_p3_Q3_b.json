@@ -1,0 +1,62 @@
+{
+  "id": "1374_p3_Q3(b)",
+  "course": {
+    "code": "CSE 3211",
+    "title": "Compiler Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2020\\3rd_Year_2nd_Term_2020_1374.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Show the stack content for the following tree when"
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    },
+    {
+      "type": "text",
+      "value": "i) Partition(1, n) is in execution."
+    },
+    {
+      "type": "text",
+      "value": "ii) QS(4, 4) is in execution."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_200f1952c73111d9f2142449779d4347b33764d59d05a5959a434f20d9c67d70.jpg",
+      "_source_path": "images/200f1952c73111d9f2142449779d4347b33764d59d05a5959a434f20d9c67d70.jpg"
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY TWO questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2020"
+}

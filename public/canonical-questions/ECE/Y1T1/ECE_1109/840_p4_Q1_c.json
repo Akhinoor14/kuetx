@@ -1,0 +1,45 @@
+{
+  "id": "840_p4_Q1(c)",
+  "course": {
+    "code": "ECE 1109",
+    "title": "Introduction to Electronics and Communication Engineering",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\1st_Year_1st_Term_2018_840.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve the problem: There are 10,000 identical individuals in the market for commodity $\\mathbf { x } ,$ each with a demand equation is given by $\\mathrm { Q } _ { \\mathrm { d } \\mathbf { x } } { = } 1 2 { - } 2 \\mathrm { P } _ { \\mathbf { x } }$ and 1000 identical producers of commodity x, each with a supply equation is given by $\\sf { Q } _ { \\sf s x } { = } 2 0$ $\\mathbf { P _ { x } } .$ (i) Find the market demand and market supply equation for commodity x. (ii) Obtain equilibrium price and quantity."
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "text",
+      "value": "Now if the government decides to colect a sales ax of \\$2· per unit sold, from each of the 1000 identical sellers of comodity x. (iii) What effect does this have on the equilibrium price and quantity? (iv) Who actually pays the tax? (v) What is the total amount of taxes collected by the government?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
+}

@@ -1,0 +1,62 @@
+{
+  "id": "1380_p1_Q4(b)",
+  "course": {
+    "code": "CSE 4105",
+    "title": "Computer Networks",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2021\\4th_Year_1st_Term_2021_1380.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the routing table/forwarding table at the router B from the following topology using (17) a Link-state Routing Algorithm."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a3cea53c57644c7c286e6bdb6870e9514ab67de4ae4b9b1b408a6f22777f7f6a.jpg",
+      "_source_path": "images/a3cea53c57644c7c286e6bdb6870e9514ab67de4ae4b9b1b408a6f22777f7f6a.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(08)"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "i) A and B are in the same network."
+    },
+    {
+      "type": "text",
+      "value": "ii) A and B are in the different network."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2021"
+}

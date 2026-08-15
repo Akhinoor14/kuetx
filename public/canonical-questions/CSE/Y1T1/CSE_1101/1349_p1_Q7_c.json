@@ -1,0 +1,37 @@
+{
+  "id": "1349_p1_Q7(c)",
+  "course": {
+    "code": "CSE 1101",
+    "title": "Structured Programming",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\1st_Year_1st_Term_2024_1349.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Design a compact data structure in C to efficiently store and manipulate a 32-bit word (12) [CO4] representing sensor data. The 32-bit word should be divided as follows: 3 bits: Sensor type identifier, 5-bits: Error code, 1-bit: Status flag, 23 bits: Measurement value. Write functions in C to encode individual sensor components into the 32-bit word and decode the 32-bit word back into its respective components. N.B.: uint8 t is 8 bits wide and uint32 t is 32-bit wide."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2024"
+}

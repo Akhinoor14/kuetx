@@ -1,0 +1,65 @@
+{
+  "id": "1367_p2_Q6(b)",
+  "course": {
+    "code": "HUM 2207",
+    "title": "Economics and Accounting",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\2nd_Year_2nd_Term_2024_1367.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "From the following transactions, you are required to prepare necessary ledger (25) [CO3] accounts:"
+    },
+    {
+      "type": "text",
+      "value": "July-01 Mr. Rafin invested cash TK 200,000."
+    },
+    {
+      "type": "text",
+      "value": "02 Cash deposited into bank TK 50,000."
+    },
+    {
+      "type": "text",
+      "value": "03 Advertisement expense paid by cheque TK 5,000."
+    },
+    {
+      "type": "text",
+      "value": "04 Furniture purchase in cash TK 25,000."
+    },
+    {
+      "type": "text",
+      "value": "\". 06 Service provided and receive cash TK 40,000."
+    },
+    {
+      "type": "text",
+      "value": "79 07 Utility bill received but not yet paid TK 1,000."
+    },
+    {
+      "type": "text",
+      "value": "99 10Utility bill paid in cash TK 1,000 transaction July 07."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2024"
+}

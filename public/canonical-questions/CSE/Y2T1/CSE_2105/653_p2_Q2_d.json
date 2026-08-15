@@ -1,0 +1,66 @@
+{
+  "id": "653_p2_Q2(d)",
+  "course": {
+    "code": "CSE 2105",
+    "title": "Data Structures and Algorithms",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2016\\2nd_Year_1st_Term_2016_653.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "where F is a pointer to the first element in (13) the linked list and L is a pointer to the last element in the list."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_9fcc4f8925005e36e8f897ea3ac6e082174b541dca1443f1525bb070714b14a0.jpg",
+      "_source_path": "images/9fcc4f8925005e36e8f897ea3ac6e082174b541dca1443f1525bb070714b14a0.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Write the functions/programs separately to perform the following operations."
+    },
+    {
+      "type": "text",
+      "value": "(i) Delete the last element of the list."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Delete the first element of the list."
+    },
+    {
+      "type": "text",
+      "value": "(iii) Add an element after the last element of the list."
+    },
+    {
+      "type": "text",
+      "value": "(iv) Add an element before the first element of the list."
+    },
+    {
+      "type": "text",
+      "value": "(v) Interchange the first two elements of the list."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2016"
+}

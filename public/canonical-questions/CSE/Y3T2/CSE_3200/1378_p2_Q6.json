@@ -1,0 +1,41 @@
+{
+  "id": "1378_p2_Q6",
+  "course": {
+    "code": "CSE 3200",
+    "title": "System Development Project",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\3rd_Year_2nd_Term_2024_1378.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A software engineer named Ms. Tania, working in a private software company, is assigned to develop a mobile banking application. During the testing phase, she discovers a serious security vulnerability that may expose user personal data."
+    },
+    {
+      "type": "text",
+      "value": "Her project manager insists on releasing the product quickly tò meet the deadline and tells her that the issue can be fixed in a later update. At the same time, the company is trying to attract investors, so they want to avoid any delay or negative reporting. As an engineer and computing professional, Ms. Tania is concerned about public safety, user privacy, and professional responsibility. Now, answer the following:"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2024"
+}

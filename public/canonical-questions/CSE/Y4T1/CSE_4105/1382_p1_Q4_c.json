@@ -1,0 +1,42 @@
+{
+  "id": "1382_p1_Q4(c)",
+  "course": {
+    "code": "CSE 4105",
+    "title": "Computer Networks",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\4th_Year_1st_Term_2023_1382.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "In the network shown in following figure, a data packet is routing from A to C and C (15) [CO2] sends a response to A. Assuming all hosts know the necessary IP addresses, MAC addresses and first hop router addresses, show the data capsulation and decapsulation in each device with necessary diagram(s) and table(s)."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_92dc23ff914cecee119a14da7c0da2645d3dd2a252e30746c7c2c3f77c318df1.jpg",
+      "_source_path": "images/92dc23ff914cecee119a14da7c0da2645d3dd2a252e30746c7c2c3f77c318df1.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2023"
+}

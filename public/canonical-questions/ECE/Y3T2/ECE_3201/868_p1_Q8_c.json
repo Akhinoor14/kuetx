@@ -1,0 +1,50 @@
+{
+  "id": "868_p1_Q8(c)",
+  "course": {
+    "code": "ECE 3201",
+    "title": "Information Theory",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\3rd_Year_2nd_Term_2018_868.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider a binary linear convolution code described by the following generator matrix"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nG = { \\left[ \\begin{array} { l l l } { 0 } & { 1 } & { 1 } \\\\ { 1 } & { 0 } & { 1 } \\\\ { 1 } & { 1 } & { 1 } \\end{array} \\right] }\\tag{20}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "i. Draw the state transition diagram for this code."
+    },
+    {
+      "type": "text",
+      "value": "ii. . Assume that 3 information bits followed by 2 zero bits are transmitted. Suppose that the received signals are given by $( 0 . 1 , - 0 . 4 , - 0 . 2 , \\ 0 . 3 , 0 . 2 , \\stackrel { . . } { - } 0 . 4 ,$ $0 . 1 , 0 . 4 , - 0 . 2 , 0 . 1 , - 0 . 1 , 0 . 3 , 0 . 2 , - 0 . 1 , - 0 . 3 )$ .. Use the Viterbi algorithm to perform soft decision decoding of this received sequences. Identify the 3 information bits."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

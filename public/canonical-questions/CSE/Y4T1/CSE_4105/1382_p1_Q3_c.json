@@ -1,0 +1,58 @@
+{
+  "id": "1382_p1_Q3(c)",
+  "course": {
+    "code": "CSE 4105",
+    "title": "Computer Networks",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\4th_Year_1st_Term_2023_1382.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "In the switch shown in following figure, all datagrams have the same fixed length and (12 the switch operates in a slotted, synchronous manner. Assuming a datagram can be transferred from input port tó output port in one time slot, what is the minimal number of slots needed for the transfer of all datagrams when:"
+    },
+    {
+      "type": "text",
+      "value": "i) The switching fabric is memory."
+    },
+    {
+      "type": "text",
+      "value": "ii)The switching fabric is bus."
+    },
+    {
+      "type": "text",
+      "value": "iii)The switching fabric is crossbar."
+    },
+    {
+      "type": "text",
+      "value": "Briefly explain the process for each of these switching fabrics (You can assume any input queue scheduling order)."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_67b8887fc4599a967906d51a9d0a44b6f4f9e92a66c0a31bb655387dc5e7ba15.jpg",
+      "_source_path": "images/67b8887fc4599a967906d51a9d0a44b6f4f9e92a66c0a31bb655387dc5e7ba15.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2023"
+}

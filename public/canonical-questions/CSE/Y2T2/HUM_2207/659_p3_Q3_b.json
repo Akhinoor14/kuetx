@@ -1,0 +1,49 @@
+{
+  "id": "659_p3_Q3(b)",
+  "course": {
+    "code": "HUM 2207",
+    "title": "Economics and Accounting",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2016\\2nd_Year_2nd_Term_2016_659.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The ‘Nobaron Corporation’ is a publisher of romance novels. The corporation hires an ( economist to determine the demand for its novel. After months of hard work the economist informed the corporation that the demand for the firm's novel (θ) is given by the equation $\\theta _ { x } = 1 \\bar { 2 } , 0 0 0 - 5 , 0 0 0 P _ { x } + \\bar { 3 } \\bar { l } + 5 \\mathrm { C O } P _ { z }$ , Assume -that the initial values of $P _ { x } ,$ I and $P _ { c }$ are \\$5, \\$10,000 and \\$6 respectively. Using the above information, the company's managèr wants to –"
+    },
+    {
+      "type": "text",
+      "value": "i) Determine what effect a price incrcase would have on toial revenues."
+    },
+    {
+      "type": "text",
+      "value": "ii) Evaluate how sale of the novel would change uring a period of rising incomes."
+    },
+    {
+      "type": "text",
+      "value": "iii) Assess the probable impact if competing publishers would raise their prices."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

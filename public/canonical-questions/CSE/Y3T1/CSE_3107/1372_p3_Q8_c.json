@@ -1,0 +1,70 @@
+{
+  "id": "1372_p3_Q8(c)",
+  "course": {
+    "code": "CSE 3107",
+    "title": "Applied Statistics and Queuing Theory",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\3rd_Year_1st_Term_2024_1372.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the simple model of a computer system shown below, where (13) [CO4] Queue 1 – the CPU, Queue 2 – disk drive, and Queue 3 – I/O. Given $\\mu _ { 1 } = 1 0 , \\mu _ { 2 } = 5 \\AA$ $\\mu _ { 3 } = 1 , K = 4$ jobs. Find the normalization constant and actual throughputs of each queue."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8e9f959d6b8c03f5321fd9d4938db88346629a3be2b7e4c3876be2d9e465375b.jpg",
+      "_source_path": "images/8e9f959d6b8c03f5321fd9d4938db88346629a3be2b7e4c3876be2d9e465375b.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Formula Chart: Applied Statistics and Queuing Theory"
+    },
+    {
+      "type": "text",
+      "value": "Queuing Models"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Parameters</td><td rowspan=1 colspan=1>M/M/1</td><td rowspan=1 colspan=1>M/M/s</td><td rowspan=1 colspan=1>M/M/1/GD/n/∞</td><td rowspan=1 colspan=1>M/G/1/GD/∞/∞</td></tr><tr><td rowspan=1 colspan=1> $\\pmb { \\pi _ { 0 } }$ </td><td rowspan=1 colspan=1> $\\begin{array} { l } { 1 - \\rho , } \\\\ { \\rho = ~ \\lambda / \\mu } \\end{array}$ </td><td rowspan=1 colspan=1> $\\left( \\sum _ { j = 0 } ^ { s - 1 } \\frac { ( s \\rho ) ^ { j } } { j ! } + \\frac { ( s \\rho ) ^ { s } } { s ! ( 1 - \\rho ) } \\right) ^ { - 1 } .$  $\\rho = \\lambda / ( s \\mu )$ </td><td rowspan=1 colspan=1> $\\begin{array} { r l } { ~ } & { { } \\frac { 1 - \\rho } { 1 - \\rho ^ { n + 1 } } ~ f o r , \\rho \\neq 1 } \\end{array}$  $\\begin{array} { r l } { \\bullet } & { { } { \\frac { 1 } { n + 1 } } f o r \\rho = 1 } \\end{array}$ </td><td rowspan=1 colspan=1> $1 - \\rho$ </td></tr><tr><td rowspan=1 colspan=1> $\\pi _ { j }$ </td><td rowspan=1 colspan=1> $\\rho ^ { j } ( 1 - \\rho )$ </td><td rowspan=1 colspan=1> $\\begin{array} { r l } { \\bullet } & { { } \\frac { ( s \\rho ) ^ { j } \\pi _ { 0 } } { j ! } \\mathrm { f o r } ( j = 1 , 2 , \\ldots , s ) } \\end{array}$  $\\begin{array} { r l } { \\bullet } & { { } \\frac { ( s \\rho ) ^ { j } \\pi _ { 0 } } { s ! s ^ { j - s } } \\mathrm { ~ f o r ~ } ( j = s , s + } \\end{array}$  ${ 1 , s + 2 , \\ldots } )$ </td><td rowspan=1 colspan=1>ρjπ0 $f o r j = 1 , 2 , 3 , . . . . . , n$ and $f o r a n y \\rho$ </td><td rowspan=1 colspan=1> $\\rho ^ { j } ( 1 - \\rho )$ </td></tr><tr><td rowspan=1 colspan=1> $\\mathbf { L }$ </td><td rowspan=1 colspan=1> $\\frac { \\rho } { 1 - \\rho }$ </td><td rowspan=1 colspan=1> ${ \\frac { \\rho } { 1 - \\rho } } P _ { d } + s \\rho$ </td><td rowspan=1 colspan=1> $\\begin{array} { r l } { \\cdot } & { { } \\frac { \\rho \\left[ 1 - ( n + 1 ) \\rho ^ { n } + n \\rho ^ { n + 1 } \\right] } { ( 1 - \\rho ^ { n + 1 } ) ( 1 - \\rho ) } } \\end{array}$  $f o r f o r \\rho \\neq 1$  ${ \\frac { n } { 2 } } f o r \\rho = 1$ </td><td rowspan=1 colspan=1> ${ \\cal L } _ { q } + \\rho$ </td></tr><tr><td rowspan=1 colspan=1> $L _ { q }$ </td><td rowspan=1 colspan=1> $\\frac { { \\rho } ^ { 2 } } { 1 - { \\rho } }$ </td><td rowspan=1 colspan=1> ${ \\frac { \\rho } { 1 - \\rho } } P _ { d }$ </td><td rowspan=1 colspan=1> $L - ( 1 - \\pi _ { 0 } )$ </td><td rowspan=1 colspan=1> $\\frac { \\lambda ^ { 2 } \\sigma ^ { 2 } + \\rho ^ { 2 } } { 2 }$  ${ \\overline { { 2 ( 1 - \\rho ) } } }$ </td></tr><tr><td rowspan=1 colspan=1>Extra</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1> $\\mathrm { d e l a y p r o b a b i l i t y : } P _ { d } = P ( j \\geq s )$ (sp)⁵π0s!(1-p)</td><td rowspan=1 colspan=1> $\\overline { { { \\bf S a t u r a t i o n } { \\bf P r o b a b i l i t y } } } ,$  $\\begin{array} { r l } { \\bullet } & { { } \\pi _ { n } = \\frac { 1 - \\rho } { 1 - \\rho ^ { n + 1 } } \\rho ^ { n } } \\end{array}$  $f o r \\rho \\neq 1$  $\\begin{array} { r } { \\pi _ { n } = \\frac { 1 } { n + 1 } ~ f o r \\rho = 1 } \\end{array}$  $\\begin{array} { r l } { \\mathbf { \\nabla } } & { { } \\lambda _ { l o s t } = \\lambda \\pi _ { n } } \\end{array}$  $\\begin{array} { r l } { \\bullet } & { { } \\lambda _ { e f f } = \\lambda - \\lambda _ { l o s t } = } \\end{array}$  $\\lambda ( 1 - \\pi _ { n } ) .$ </td><td rowspan=1 colspan=1>ErlangDistribution: $\\mathbf { M e a n } \\colon \\mathbf { k } / \\lambda .$ Variance: $\\mathbf { k } / \\lambda ^ { 2 , }$ Where k: shape $\\mathtt { p a r a m e t e r a n d } \\lambda ;$ rate parameter</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Waiting Time Distribution"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td></td><td> $\\overline { { { \\bf M } / { \\bf M } / { \\bf F } { \\bf C F } { \\bf S } / \\infty } } / \\infty$ </td><td>M/M/s/FCFS/∞/∞</td></tr><tr><td></td><td> $\\begin{array} { r } { \\overline { { w ( t ) = ( \\mu - \\lambda ) e ^ { - ( \\mu - \\lambda ) t } , t > 0 } } } \\end{array}$   $\\begin{array} { r } { P ( t > W ) = 1 - \\int _ { 0 } ^ { W } w ( t ) d t } \\end{array}$ </td><td> $\\begin{array} { r l } { \\bullet } & { { } P ( W > t ) = \\hat { e ^ { - \\mu t } } \\left\\{ 1 + P ( j \\geq s ) \\frac { 1 - \\exp { [ - \\mu t ( s - 1 - s \\rho ) ] } } { s - 1 - s \\rho } \\right\\} } \\end{array}$ </td></tr><tr><td></td><td> $w _ { q } ( t ) = \\rho ( \\mu - \\lambda ) e ^ { - ( \\mu - \\lambda ) t } , t > 0$ </td><td> $\\begin{array} { r l } { \\bullet \\ } & { { } P \\big ( W _ { q } > { t } \\big ) = P ( j \\geq s ) \\mathrm { e x p } [ - s \\mu ( 1 - \\rho ) { t } ] , } \\end{array}$   $P ( j \\geq s ) = { \\frac { ( s \\rho ) ^ { s } \\pi _ { 0 } } { s ! ( 1 - \\rho ) } }$ </td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Queuing Network"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>Closed Queuing Network Parameters</td><td> $\\begin{array} { r } { \\pi ( { \\bf n } ) = \\frac { 1 } { G ( K , m ) } \\prod _ { i = 1 } ^ { m } \\rho _ { i } ^ { n _ { i } } \\mathrm { { w h e r e } } \\rho _ { i } = \\frac { \\lambda _ { i } } { \\mu _ { i } } } \\end{array}$   $G ( K , m ) \\ = \\ G ( K , m - 1 ) + \\rho _ { m } G ( K - 1 , m )$   $G ( 0 , m ) = 1 , \\qquad m = 1 , 2 , \\ldots \\ldots , M$   $G ( k , 1 ) = \\rho _ { 1 } ^ { k } , ~ k = 0 , 1 , 2 , \\ldots \\ldots , K$   $\\begin{array} { r } { L _ { i } = \\frac { 1 } { G ( K , M ) } \\sum _ { k = 1 } ^ { K } \\rho _ { i } ^ { k } G ( K - k , M ) } \\end{array}$   $\\begin{array} { r } { e _ { i } = \\lambda _ { i } \\frac { G ( K - 1 , M ) } { G ( K , M ) } , W _ { i } = \\frac { L _ { i } } { e _ { i } } } \\end{array}$   $\\begin{array} { r } { P ( n _ { i } \\ge k ) = \\rho _ { i } ^ { k } \\frac { G ( K - k , M ) } { G ( K , M ) } } \\end{array}$   $\\rho _ { e _ { i } } = \\frac { e _ { i } } { \\mu _ { i } }$ </td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2024"
+}

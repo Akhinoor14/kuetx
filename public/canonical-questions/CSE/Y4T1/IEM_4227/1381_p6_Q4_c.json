@@ -1,0 +1,57 @@
+{
+  "id": "1381_p6_Q4(c)",
+  "course": {
+    "code": "IEM 4227",
+    "title": "Industrial Management",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\4th_Year_1st_Term_2022_1381.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Exactly 10 years ago, company D professional associates purchased \\$100,000 in depreciable assets with an estimated salvage of \\$10,000. For tax depreciation, the SL method with n = 10 years was used. But for book depreciation company D applied the DDB method with n = 7 years and neglected the salvage estimates. The company sold the asset today for \\$12,500."
+    },
+    {
+      "type": "text",
+      "value": "i) Compare the sells price today with the book values using the SL and DDB methods."
+    },
+    {
+      "type": "text",
+      "value": "ii) If the salvage of \\$12,500 had been estimated exactly 10 years ago, determine the depreciation for each method in year 10."
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREEquestions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

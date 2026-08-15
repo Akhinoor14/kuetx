@@ -1,0 +1,37 @@
+{
+  "id": "840_p6_Q5(b)",
+  "course": {
+    "code": "PH 1109",
+    "title": "Physics",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\1st_Year_1st_Term_2018_840.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Derive an expression for Einstein's mass energy relation and hence prove that (15) classical kinetic energy is only an approximation."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
+}

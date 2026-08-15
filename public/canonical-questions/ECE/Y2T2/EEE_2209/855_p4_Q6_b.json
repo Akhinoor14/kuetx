@@ -1,0 +1,37 @@
+{
+  "id": "855_p4_Q6(b)",
+  "course": {
+    "code": "EEE 2209",
+    "title": "Electrical Drives and Instrumentation",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\2nd_Year_2nd_Term_2016_855.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What do you mean by piezo-electric effect? A barium titanate pick up has the dimension of 5mm×5mm×1.25mm. The force acting ·on it is 5N. The charge ·sensitivity of barium titanate is 150 pC/N and its permittivity is 12.5×10-9 F/m. If the modulus of elasticity of barium titanate is $1 2 \\times 1 0 ^ { 6 } \\mathrm { { N / m } } ^ { 2 } .$ Calculate strain, charge and capacitance."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

@@ -1,0 +1,50 @@
+{
+  "id": "659_p1_Q6(b)",
+  "course": {
+    "code": "CSE 2201",
+    "title": "Algorithm Analysis and Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2016\\2nd_Year_2nd_Term_2016_659.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is spanning tree? Consider the following undirected graph wherę the value of each edge (10) represents the length of that edge. Apply Prim's algorithm."
+    },
+    {
+      "type": "text",
+      "value": "i) What is the length of the shortest path between 0 and 7?"
+    },
+    {
+      "type": "text",
+      "value": "ii) What is the total length of the edges in a minimum spanning tree?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_643d3cc7b9f4f5e6c40e494e5ab3b1341677d1e900fa58e451cb18bb0183b8af.jpg",
+      "_source_path": "images/643d3cc7b9f4f5e6c40e494e5ab3b1341677d1e900fa58e451cb18bb0183b8af.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

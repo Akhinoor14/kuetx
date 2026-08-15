@@ -1,0 +1,50 @@
+{
+  "id": "1368_p1_Q3(a)",
+  "course": {
+    "code": "CSE 2209",
+    "title": "Theory of Computation",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2020\\3rd_Year_1st_Term_2020_1368.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Let M be the DFA having alphabet $\\left\\{ a , b \\right\\}$ and the following transition diagram."
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_7cbaaa71c3201cc87e5dba7da9c20e2f4984b60d3d58b6dace718dc14e886496.jpg",
+      "_source_path": "images/7cbaaa71c3201cc87e5dba7da9c20e2f4984b60d3d58b6dace718dc14e886496.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Give a regular expression for $L ( M )$ .Use any method you want."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2020"
+}

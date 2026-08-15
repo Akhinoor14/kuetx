@@ -1,0 +1,53 @@
+{
+  "id": "1367_p2_Q3(a)",
+  "course": {
+    "code": "HUM 2207",
+    "title": "Economics and Accounting",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\2nd_Year_2nd_Term_2024_1367.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "The schedule is given below:"
+    },
+    {
+      "type": "text",
+      "value": "(25) [CO2]"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Goods &#x27;X&#x27;</td><td rowspan=1 colspan=1>Goods&#x27;Y&#x27;</td></tr><tr><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>150</td></tr><tr><td rowspan=1 colspan=1>50</td><td rowspan=1 colspan=1>140</td></tr><tr><td rowspan=1 colspan=1>100</td><td rowspan=1 colspan=1>100</td></tr><tr><td rowspan=1 colspan=1>140</td><td rowspan=1 colspan=1>50</td></tr><tr><td rowspan=1 colspan=1>150</td><td rowspan=1 colspan=1>0</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "i) Draw a production possibility curve from the given schedule."
+    },
+    {
+      "type": "text",
+      "value": "ii) Explain the logicality of production when X = 60, Y = 80 and X = 80, Y = 160."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2024"
+}

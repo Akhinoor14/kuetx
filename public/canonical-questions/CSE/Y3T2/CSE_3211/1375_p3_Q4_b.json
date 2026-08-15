@@ -1,0 +1,46 @@
+{
+  "id": "1375_p3_Q4(b)",
+  "course": {
+    "code": "CSE 3211",
+    "title": "Compiler Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2021\\3rd_Year_2nd_Term_2021_1375.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 3 dimensional array is declared using the following c statement (Assume base value = 400)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r l } { \\operatorname* { i n t } { \\mathrm { A } [ 1 0 ] [ 1 5 ] [ 2 0 ] } ; } & { { } } \\end{array}\\tag{10}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Develop the three address code to access an element $\\mathbf { e } = \\mathbf { A } [ \\mathrm { i } ] [ \\mathrm { j } ] [ \\mathbf { k } ] ;$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2021"
+}

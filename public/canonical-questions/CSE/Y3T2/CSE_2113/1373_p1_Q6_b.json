@@ -1,0 +1,45 @@
+{
+  "id": "1373_p1_Q6(b)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Architecture",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2019\\3rd_Year_2nd_Term_2019_1373.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 16,
+  "content": [
+    {
+      "type": "text",
+      "value": "An operating system uses Shortest Remaining Time First (SRTF) process scheduling (16) algorithm. Consider the arrival times and burst times for the processes mentioned in the following table."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Process</td><td rowspan=1 colspan=1>Burst Time</td><td rowspan=1 colspan=1>Arrival Time</td></tr><tr><td rowspan=1 colspan=1> ${ \\bf P } _ { 1 }$ </td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>1</td></tr><tr><td rowspan=1 colspan=1> ${ \\bf P } _ { 2 }$ </td><td rowspan=1 colspan=1>25</td><td rowspan=1 colspan=1>15</td></tr><tr><td rowspan=1 colspan=1> ${ \\bf P } _ { 3 }$ </td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>30</td></tr><tr><td rowspan=1 colspan=1> ${ \\tt P } _ { 4 }$ </td><td rowspan=1 colspan=1>15</td><td rowspan=1 colspan=1>65</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Calculate waiting time and turnaround time."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2019"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "1346_p4_Q4(d)",
+  "course": {
+    "code": "EEE 1207",
+    "title": "Basic Electrical Engineering",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2021\\1st_Year_1st_Term_2021_1346.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 4-pole short-shunt lap-wound generator supplies 25 kw at a terminal voltage of 500V. The (12 armature resistance is 0.03Ω, series field resistance is 0.2Ω, and shunt field resistance is 255Ω. The brush drop may betaken as 1V per brush. Determine the emf generated. Calċulate the number of conductor if the speed is 1200 rpm and flux per pole is 0.02 wb. Neglect armature reaction."
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2021"
+}

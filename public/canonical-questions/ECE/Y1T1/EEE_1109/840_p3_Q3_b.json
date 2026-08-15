@@ -1,0 +1,51 @@
+{
+  "id": "840_p3_Q3(b)",
+  "course": {
+    "code": "EEE 1109",
+    "title": "Basic Electrical Engineering",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\1st_Year_1st_Term_2018_840.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "State Norton's theorem. For the circuit as given below, find: iy Thevenin equivalent circuit to the left of the terminal a-b. ii) Norton equivalent circuit."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_26c9c94c45f31e773e074d2571a679e5625b22706fb9ddf4d09ee681b8d7e534.jpg",
+      "_source_path": "images/26c9c94c45f31e773e074d2571a679e5625b22706fb9ddf4d09ee681b8d7e534.jpg"
+    },
+    {
+      "type": "text",
+      "value": ") What is supernode? Using the supernode approach, determine the nodal voltages for· (10) the following network."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ac6fb506f29054532dc3063daa01d2d58a1daadcbd28dbd9203ec98f2ec34a4b.jpg",
+      "_source_path": "images/ac6fb506f29054532dc3063daa01d2d58a1daadcbd28dbd9203ec98f2ec34a4b.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
+}

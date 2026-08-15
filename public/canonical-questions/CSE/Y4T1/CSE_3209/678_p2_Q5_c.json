@@ -1,0 +1,41 @@
+{
+  "id": "678_p2_Q5(c)",
+  "course": {
+    "code": "CSE 3209",
+    "title": "Artificial Intelligence",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2019\\4th_Year_1st_Term_2019_678.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "You have a new burglar alarm installed at home. It is fairly reliable at detecting burglary, but also responds on occasion to minor earthquakes. You also have two neighbours, John and Mary, who have promised to call you at work when they her the alarm. Consider, Burglary=B, Earthquake=E, John=J, Mary=M and Alarm=A. $p ( B ) = 0 . 0 0 1$ $p ( E ) = 0 . 0 0 2$ $p ( A \\mid B , E ) = \\left. 0 . 9 5 , 0 . 9 4 , 0 . 2 9 , 0 . 0 0 1 \\right. , ~ p ( J \\mid A ) = \\left. 0 . 9 0 , 0 . 0 5 \\right. ~ \\mathrm { a n d } ~ p ( M \\mid A ) = \\left. 0 . 7 0 , 0 . 1 0 \\right.$"
+    },
+    {
+      "type": "text",
+      "value": "Draw the Bayesian Network and calculate $p ( \\neg j , \\neg m , a , b , e )$ and $p ( j , m , a , \\lnot e , \\lnot b )$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2019"
+}

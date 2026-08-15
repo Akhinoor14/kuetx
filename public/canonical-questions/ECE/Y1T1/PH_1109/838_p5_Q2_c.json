@@ -1,0 +1,42 @@
+{
+  "id": "838_p5_Q2(c)",
+  "course": {
+    "code": "PH 1109",
+    "title": "Physics",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\1st_Year_1st_Term_2016_838.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Two aeroplanes pass each other in opposite directions and one of them is blowing a whistle of frequency 540 Hz. Calculate the frequencies of the notes heard in the other aeroplane (i) before and (ii) after they have passed each other. Velocity of either of the aeroplanes is 540 kim/hr and velocity of sound =350 ms-1."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\therefore \\ldots \\ldots\\tag{10}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2016"
+}

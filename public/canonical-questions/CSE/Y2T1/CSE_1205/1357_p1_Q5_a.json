@@ -1,0 +1,49 @@
+{
+  "id": "1357_p1_Q5(a)",
+  "course": {
+    "code": "CSE 1205",
+    "title": "Object Oriented Programming",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2020\\2nd_Year_1st_Term_2020_1357.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider each digit of your roll number as a single numeral and store them in an array. Sort them either using selection or insertion sort. Then, apply binary search algorithm to find a number from that sorted array."
+    },
+    {
+      "type": "text",
+      "value": "Example: Roll 1807562'"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=2 colspan=1>Array A:Sorted Array A&#x27;:</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>2</td></tr><tr><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>8</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Now, if we want to find 5’ as search item, it will return $\\bullet _ { 3 } ,$ as $^ { \\mathfrak { s } }$ is in the $4 ^ { \\mathrm { t h } }$ position of the array A'. Show step by step simulation. Also, write a sample code for this."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2020"
+}

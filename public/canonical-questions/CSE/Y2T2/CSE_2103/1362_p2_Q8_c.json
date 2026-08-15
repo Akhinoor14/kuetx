@@ -1,0 +1,58 @@
+{
+  "id": "1362_p2_Q8(c)",
+  "course": {
+    "code": "CSE 2103",
+    "title": "Microprocessors and Microcontrollers",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2019\\2nd_Year_2nd_Term_2019_1362.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve the following equations using Gauss Shield iterative method. 2x - 6y – 8z = 24;"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n5 x - 4 y - 3 z = 2 ; 3 x + y + 2 z = 1 6 .\\tag{12}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "TIME: 3 hours"
+    },
+    {
+      "type": "text",
+      "value": "N.B. Figures in the right margin indicate full marks."
+    },
+    {
+      "type": "text",
+      "value": "SECTION A"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script A)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

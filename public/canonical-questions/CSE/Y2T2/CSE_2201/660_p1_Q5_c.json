@@ -1,0 +1,42 @@
+{
+  "id": "660_p1_Q5(c)",
+  "course": {
+    "code": "CSE 2201",
+    "title": "Algorithm Analysis and Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2017\\2nd_Year_2nd_Term_2017_660.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "shows the prerequisite relation among courses of different semesters. Give a linear ordering of nodes of the graph showing visiting time and finishing time for each node. Draw your own opinion about whether it is possible to give a linear ordering of nodes if a new directed edge is inserted in the graph from the node CSE 4205 to CSE 2173."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_be30dd0d83c303910efb752984caa4a69757f9afa571f3a3f64ffbad66790d9a.jpg",
+      "_source_path": "images/be30dd0d83c303910efb752984caa4a69757f9afa571f3a3f64ffbad66790d9a.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

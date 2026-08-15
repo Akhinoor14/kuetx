@@ -1,0 +1,42 @@
+{
+  "id": "1366_p4_Q7(c)",
+  "course": {
+    "code": "CSE 2209",
+    "title": "Theory of Computation",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\2nd_Year_2nd_Term_2023_1366.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Analyze whether the given Turing machine accepts all the strings for the language (15) [CO2] L = {strings containing $^ { \\mathfrak { s } } a b ^ { \\mathfrak { s } }$ or énding with $\\hat { \\cdots } b \\dot { a } ^ { \\cdots } \\}$ . If not, propose necessary modifications to the machine to ensure it accepts all strings form L."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b57dda757b7d231428117c3a5c748a103733da3ed5fa56f75fa2bd115f718005.jpg",
+      "_source_path": "images/b57dda757b7d231428117c3a5c748a103733da3ed5fa56f75fa2bd115f718005.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2023"
+}

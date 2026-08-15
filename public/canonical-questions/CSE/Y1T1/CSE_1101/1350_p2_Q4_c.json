@@ -1,0 +1,45 @@
+{
+  "id": "1350_p2_Q4(c)",
+  "course": {
+    "code": "CSE 1101",
+    "title": "Structured Programming",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2025,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2025\\1st_Year_1st_Term_2025_1350.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "A simple calculator can only perform addition and subtraction of 2 numbers, but it (18) [CO3] can work in 2 modes – normal mode and complex mode. In the complex mode, a complex number is represented by 2 consecutive real numbers. Normal operations are defined in “normal. c” and for complex operations “complex . c\". \"main. c” file includes only “main. h\". Design all the necessary C files and header files for the program."
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2025"
+}

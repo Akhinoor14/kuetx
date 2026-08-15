@@ -1,0 +1,37 @@
+{
+  "id": "644_p1_Q8(a)",
+  "course": {
+    "code": "CSE 1107",
+    "title": "Discrete Mathematics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\1st_Year_1st_Term_2018_644.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose that a valid codeword is n-digit number in decimal notation containing an even (10) number Os. let $a _ { n }$ denote the number of valid codewrds of length n. the sequence $\\left\\{ a _ { n } \\right\\}$ satisfies the recurrence relation $a _ { n } = 7 a _ { n - 1 } + 2$ where $a _ { 0 } = 5$ . Use generating function to find an explicit formula for $a _ { n }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "675_p1_Q4(a)",
+  "course": {
+    "code": "CSE 4105",
+    "title": "Computer Networks",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2016\\4th_Year_1st_Term_2016_675.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following graph. Assume that link $( x , y )$ cost has been changed from 3 to 55. (11) Show that the poissoned reverse technique can resolve the eount to infinity problem in this case."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b7fd2b5a4b26962ce470fc15bd5a65ee2254d363771f47330586f7dffd396647.jpg",
+      "_source_path": "images/b7fd2b5a4b26962ce470fc15bd5a65ee2254d363771f47330586f7dffd396647.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2016"
+}

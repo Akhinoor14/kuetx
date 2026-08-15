@@ -1,0 +1,66 @@
+{
+  "id": "654_p2_Q6(b)",
+  "course": {
+    "code": "CSE 2105",
+    "title": "Data Structures and Algorithms",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2017\\2nd_Year_1st_Term_2017_654.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following heap: (20)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_51f56ed79e19ee82137c88c3ccc1a29f8f5b680365340a5e043e1164c6dc5dbe.jpg",
+      "_source_path": "images/51f56ed79e19ee82137c88c3ccc1a29f8f5b680365340a5e043e1164c6dc5dbe.jpg"
+    },
+    {
+      "type": "text",
+      "value": "For each of the following questions use the original heap. Do not use the heap obtained after each answer."
+    },
+    {
+      "type": "text",
+      "value": "i)Represent the heap as an array indexed by 1 through 9."
+    },
+    {
+      "type": "text",
+      "value": "ii) Delete the element 99 from the heap shown in the above figure."
+    },
+    {
+      "type": "text",
+      "value": "iii) Delete the element 23 from the heap shown in the above figure."
+    },
+    {
+      "type": "text",
+      "value": "iv) Delete the element 8 from the heap shown in the above figure."
+    },
+    {
+      "type": "text",
+      "value": "v) Is it max heap or min heap? Sorting the elements in desoęnding order by heap sort."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

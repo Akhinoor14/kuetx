@@ -1,0 +1,47 @@
+{
+  "id": "655_p3_Q6(d)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Architecture",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\2nd_Year_1st_Term_2018_655.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the window comparator circuit of Fig. 6(d(ii)), find the output waveform of the input of (09) Fig. 6(d(i)). Here $\\mathrm { R } _ { 1 } = 3 \\Omega , \\mathrm { R } _ { 2 } = 4 \\Omega , \\mathrm { R } _ { 3 } = 5 \\Omega .$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_272a9909278d47c915fde69bdb8c1224fb381b2cdf081d6b5b6191fe11d10f31.jpg",
+      "_source_path": "images/272a9909278d47c915fde69bdb8c1224fb381b2cdf081d6b5b6191fe11d10f31.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b3368d1c8ad6ceaa320062c38838df40eb15df8c9b2e66537fec71ee4bf7c844.jpg",
+      "_source_path": "images/b3368d1c8ad6ceaa320062c38838df40eb15df8c9b2e66537fec71ee4bf7c844.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

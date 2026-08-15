@@ -1,0 +1,45 @@
+{
+  "id": "850_p4_Q1(a)",
+  "course": {
+    "code": "MATH 2109",
+    "title": "Vector, Matrix and Transform",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2017\\2nd_Year_1st_Term_2017_850.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the Lapláce transform of the following functions:"
+    },
+    {
+      "type": "text",
+      "value": "(i) $\\begin{array} { r } { t c o s 2 t e ^ { - 2 t } ; \\mathrm { ( i i ) } \\frac { e ^ { - a t } - e ^ { - b t } } { t } } \\end{array}$"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

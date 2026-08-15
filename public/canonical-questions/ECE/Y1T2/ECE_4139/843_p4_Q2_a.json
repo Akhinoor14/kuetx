@@ -1,0 +1,69 @@
+{
+  "id": "843_p4_Q2(a)",
+  "course": {
+    "code": "ECE 4139",
+    "title": "TV Engineering",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2015\\1st_Year_2nd_Term_2015_843.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make W/H questions from the underlined parts for the following answers."
+    },
+    {
+      "type": "text",
+      "value": "(i) I like honest people."
+    },
+    {
+      "type": "text",
+      "value": "(14)"
+    },
+    {
+      "type": "text",
+      "value": "(ii) It is half past twelve."
+    },
+    {
+      "type": "text",
+      "value": "(iii) They planned to go on a picnic."
+    },
+    {
+      "type": "text",
+      "value": "(iv) As he is ill, he could not come."
+    },
+    {
+      "type": "text",
+      "value": "(v) Mr. Zahid is 6 feet tall."
+    },
+    {
+      "type": "text",
+      "value": "(vi) The sun rises in the morning."
+    },
+    {
+      "type": "text",
+      "value": "(vii) The flat has been sold at 20 lac taka."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
+}

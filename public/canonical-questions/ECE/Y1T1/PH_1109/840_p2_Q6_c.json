@@ -1,0 +1,42 @@
+{
+  "id": "840_p2_Q6(c)",
+  "course": {
+    "code": "PH 1109",
+    "title": "Physics",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\1st_Year_1st_Term_2018_840.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Figure (6c) shows the bridge type circuit having the load resistance 100 Ω and (12) transformer twin ratio 5:1. The primary is connected to 230 V, 50 Hz supply. Find the dc voltage and PIV for dc output. Assume the diodes to be ideal."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_c65b571121c337b62ac667321269fd2841246f0638f8f1617c3a03fb2e2e800c.jpg",
+      "_source_path": "images/c65b571121c337b62ac667321269fd2841246f0638f8f1617c3a03fb2e2e800c.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
+}

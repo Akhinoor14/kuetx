@@ -1,0 +1,46 @@
+{
+  "id": "1389_p2_Q8(d)",
+  "course": {
+    "code": "CSE 1203",
+    "title": "Digital Logic Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\4th_Year_2nd_Term_2024_1389.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "For a 2D dataset, suppose the mean vector and covariance matrix are:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mu = ( 5 , 5 ) , \\ \\Sigma = \\bigl [ { \\begin{array} { l l } { 4 } & { 1 } \\\\ { 1 } & { 3 } \\end{array} } \\bigr ]\\tag{11) [CO3]}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "For point X = (11,10), calculate the Mahalanobis distance. Use chi-square critical value 5.991 for 2 degrees of freedom at 5% significance level and decide whether X is an outlier."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2024"
+}

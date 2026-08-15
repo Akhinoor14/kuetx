@@ -1,0 +1,42 @@
+{
+  "id": "848_p3_Q4(b)",
+  "course": {
+    "code": "ECE 2107",
+    "title": "Signals and Systems",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2015\\2nd_Year_1st_Term_2015_848.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Draw the block diagram of the system:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\ny ( n ) + 0 . 5 { \\overset { \\cdot } { y } } ( n - 1 ) + 0 . 2 5 y ( n - 2 ) = x ( n - 1 ) .\\tag{06}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2015"
+}

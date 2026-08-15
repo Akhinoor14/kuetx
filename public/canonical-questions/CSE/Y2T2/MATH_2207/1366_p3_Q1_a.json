@@ -1,0 +1,49 @@
+{
+  "id": "1366_p3_Q1(a)",
+  "course": {
+    "code": "MATH 2207",
+    "title": "Complex Variable, Vector Analysis and Statistics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\2nd_Year_2nd_Term_2023_1366.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": 19,
+  "content": [
+    {
+      "type": "text",
+      "value": "The frequency distributions are given below:"
+    },
+    {
+      "type": "text",
+      "value": "(19)[CO3]"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Class interval</td><td rowspan=1 colspan=1>35-45</td><td rowspan=1 colspan=1>45-55</td><td rowspan=1 colspan=1>55-65</td><td rowspan=1 colspan=1>65-75</td><td rowspan=1 colspan=1>75-85</td><td rowspan=1 colspan=1>85-95</td></tr><tr><td rowspan=1 colspan=1>Frequency</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>16</td><td rowspan=1 colspan=1>22</td><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>3</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Calculate the first four raw moments about O (origin) from the above table. Also find the coefficient of skewness, CoV, mean and comment on the result."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2023"
+}

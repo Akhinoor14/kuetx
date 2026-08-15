@@ -1,0 +1,50 @@
+{
+  "id": "1383_p4_Q7(b)",
+  "course": {
+    "code": "CSE 4101",
+    "title": "Computer Graphics and Image Processing",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\4th_Year_1st_Term_2024_1383.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 16,
+  "content": [
+    {
+      "type": "text",
+      "value": "Following figure shows a RGB image with a white and a yellow region, where values(16) [CO3 in the parenthesis means RGB channel values. Compute edge magnitude and orientation at the diagonal line separating the regions using-"
+    },
+    {
+      "type": "text",
+      "value": "(i) Di Zenzo-Cumani color edge operator."
+    },
+    {
+      "type": "text",
+      "value": "(ii) First convert the image to grayscale then apply monochromatic edge operator. Use simplest possible derivative operator."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_caf2fd67673310b620dd8d2d4226bd4645b289f838802823e251465d23e73998.jpg",
+      "_source_path": "images/caf2fd67673310b620dd8d2d4226bd4645b289f838802823e251465d23e73998.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2024"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "1364_p1_Q4(c)",
+  "course": {
+    "code": "CSE 2201",
+    "title": "Algorithm Analysis and Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2021\\2nd_Year_2nd_Term_2021_1364.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The branch-and-bound method is to be used to find a solution to the travelling salesh problem for the following graph."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_86fdcf6b7522ca7df4b25574723affa20e035b9bd935015f51051160e8076bff.jpg",
+      "_source_path": "images/86fdcf6b7522ca7df4b25574723affa20e035b9bd935015f51051160e8076bff.jpg"
+    },
+    {
+      "type": "text",
+      "value": "What is the initial lower bound obtained by considering the rows and columns of the table of edge weights?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

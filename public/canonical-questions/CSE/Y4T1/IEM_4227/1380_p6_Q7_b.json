@@ -1,0 +1,45 @@
+{
+  "id": "1380_p6_Q7(b)",
+  "course": {
+    "code": "IEM 4227",
+    "title": "Industrial Management",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2021\\4th_Year_1st_Term_2021_1380.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "Processing times and due dates for six jobs waiting to be processed at a work center are given (18) in the following table. Determine the sequence of the jobs, average flow time, average tardiness and average number of jobs for each of these rules:"
+    },
+    {
+      "type": "text",
+      "value": "(i) FCFS, (ii) SPT and (iii) CR."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Job</td><td rowspan=1 colspan=1>Processing Time (days)</td><td rowspan=1 colspan=1>Due Date (days)</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>7</td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>16</td></tr><tr><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>4</td></tr><tr><td rowspan=1 colspan=1>D</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>17</td></tr><tr><td rowspan=1 colspan=1>E</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>15</td></tr><tr><td rowspan=1 colspan=1>F</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>18.</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2021"
+}

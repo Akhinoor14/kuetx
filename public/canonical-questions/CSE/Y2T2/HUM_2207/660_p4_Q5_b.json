@@ -1,0 +1,77 @@
+{
+  "id": "660_p4_Q5(b)",
+  "course": {
+    "code": "HUM 2207",
+    "title": "Economics and Accounting",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2017\\2nd_Year_2nd_Term_2017_660.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "Mr. Rony is a C. A. During the firšt month of operations of the business, the following events (25) and transactions occurred:"
+    },
+    {
+      "type": "text",
+      "value": "April - 01Rony invested Tk. 1,00,000 cash."
+    },
+    {
+      "type": "text",
+      "value": ",, 08 Incurred advertising expenses of Tk. 5,000 on account."
+    },
+    {
+      "type": "text",
+      "value": ",, 10 Hired secretary at a salary of Tk: 4,000 per month."
+    },
+    {
+      "type": "text",
+      "value": "\". 12 Paid Tk. 3,600 cash for one year insurance policy."
+    },
+    {
+      "type": "text",
+      "value": ", 21 Completed a Tax assignment and billed client Tk.15,000 for services rendered."
+    },
+    {
+      "type": "text",
+      "value": ",, 22 Received cash of Tk. 20,000 for service completed."
+    },
+    {
+      "type": "text",
+      "value": ", 24 Paid Tk. 5,000 on account for advertising incurred."
+    },
+    {
+      "type": "text",
+      "value": ",26Received Tk. 7,000 advance on a management consulting engagement."
+    },
+    {
+      "type": "text",
+      "value": "30 Paid secretary Tk. 4,000 for the month as salary."
+    },
+    {
+      "type": "text",
+      "value": "Instruction: Post the transactions into ledger."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

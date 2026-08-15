@@ -1,0 +1,46 @@
+[
+  {
+    "id": "1348_p1_Q7(d)",
+    "course": {
+      "code": "CSE 1101",
+      "title": "Structured Programming",
+      "department": "Department of Computer Science and Engineering",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2023,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\1st_Year_1st_Term_2023_1348.pdf",
+      "source_page": null,
+      "paper_index": 1
+    },
+    "question_number": "7(d)",
+    "numbering_source": "regex",
+    "marks": 12,
+    "content": [
+      {
+        "type": "text",
+        "value": "Write a program to split the strings into parts by delimiters like comma, space, dollar sign. (12) [CO4]"
+      }
+    ],
+    "topics": [
+      "Functions and Program Structures: Function basics, Parameter passing conventions, Scope rules and storage classes, Recursion, Header files, Preprocessor, Arrays.",
+      "User Defined Data Type: Structure, Structure bit fields, Structure padding, Unions, Enumeration.",
+      "Input and Output: Standard input and output, Formatted input and output, File access, Dynamic memory allocation, Valgrind, Garbage collection, Variable length argument list, Command line parameters, Error handling, Introduction to graphics routines, Compiling, Make file, Debugging."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2023",
+    "classification_notes": "প্রশ্নটিতে স্ট্রিং ম্যানিপুলেশন এবং ডেলিমিটার ব্যবহারের জন্য টপিক-৩ (Strings) প্রয়োজন, যা কোড লজিক বা ফাংশনের সাথে যুক্ত হওয়ায় টপিক-২ (Functions)-এর অন্তর্ভুক্ত; আর মেমোরি ম্যানেজমেন্ট এবং ইনপুট/আউটপুটের জন্য টপিক-৫ (Input and Output) প্রযোজন।",
+    "topic_confidence": 0.95,
+    "verification_notes": "স্ট্রিং পার্সিং এবং ডেলিমিটার হ্যান্ডলিংয়ের জন্য ফাংশন ব্যবহার ও স্ট্যান্ডার্ড I/O অপারেটরগুলো প্রয়োজন বলে মূল কারণগুলোর যুক্তিযুক্ত নির্বাচন।"
+  }
+]

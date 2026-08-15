@@ -1,0 +1,37 @@
+{
+  "id": "1361_p3_Q2(c)",
+  "course": {
+    "code": "MATH 2107",
+    "title": "Fourier Analysis and Linear Algebra",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\2nd_Year_1st_Term_2024_1361.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the inverse z-transform of $\\begin{array} { r } { X ( Z ) = \\frac { z + 0 . 5 } { ( z + 0 . 6 ) ( z + 0 . 8 ) } , | z | > 0 . 8 } \\end{array}$ using residue method. (13) [CO2]"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2024"
+}

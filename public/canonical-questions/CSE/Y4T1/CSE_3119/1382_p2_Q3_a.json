@@ -1,0 +1,53 @@
+{
+  "id": "1382_p2_Q3(a)",
+  "course": {
+    "code": "CSE 3119",
+    "title": "Information Systems Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\4th_Year_1st_Term_2023_1382.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find out the objects, relations, properties and functions from the following sentences. (12) [CO2]"
+    },
+    {
+      "type": "text",
+      "value": "i) The cat chases the mouse."
+    },
+    {
+      "type": "text",
+      "value": "ii) The sun rises in the east."
+    },
+    {
+      "type": "text",
+      "value": "iii) Socrates is a philosopher."
+    },
+    {
+      "type": "text",
+      "value": "iv) The book is on the table."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2023"
+}

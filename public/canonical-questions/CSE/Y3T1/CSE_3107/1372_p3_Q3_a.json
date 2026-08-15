@@ -1,0 +1,41 @@
+{
+  "id": "1372_p3_Q3(a)",
+  "course": {
+    "code": "CSE 3107",
+    "title": "Applied Statistics and Queuing Theory",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\3rd_Year_1st_Term_2024_1372.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "The frequency distribution of battery lives is approximately determined by a normal (20) [à distribution with mean, $\\mu = 3 . 5$ and standard deviation, $\\sigma = 0 . 7$ The expected frequencies are obtained by computing the areas under the hypothesized normal curve that fall between the various class boundaries. Decide whether or not the normal distribution provides a good fit for the distribution of battery lives using $\\chi ^ { 2 }$ -test. Here, $\\alpha = 0 . 0 5$"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Class Boundaries</td><td rowspan=1 colspan=1>Observed Frequency</td></tr><tr><td rowspan=1 colspan=1>1.45-1.95</td><td rowspan=1 colspan=1>2</td></tr><tr><td rowspan=1 colspan=1>1.95-2.45</td><td rowspan=1 colspan=1>1</td></tr><tr><td rowspan=1 colspan=1>2.45-2.95</td><td rowspan=1 colspan=1>4</td></tr><tr><td rowspan=1 colspan=1>2.95-3.45</td><td rowspan=1 colspan=1>15</td></tr><tr><td rowspan=1 colspan=1>3.45-3.95</td><td rowspan=1 colspan=1>10</td></tr><tr><td rowspan=1 colspan=1>3.95-4.45</td><td rowspan=1 colspan=1>5</td></tr><tr><td rowspan=1 colspan=1>4.45-4.95</td><td rowspan=1 colspan=1>3</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2024"
+}

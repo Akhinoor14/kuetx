@@ -1,0 +1,45 @@
+{
+  "id": "1382_p5_Q4(b)",
+  "course": {
+    "code": "CSE 4101",
+    "title": "Computer Graphics and Image Processing",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\4th_Year_1st_Term_2023_1382.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Handheld optic meters are useful for measuring temperature, pressure and strain. The fixed (13) [CO4] costs associated with manufacturing are \\$800,000 per year. If a base unit sells(revenue) for \\$2,850 and its variable cost is \\$1,975."
+    },
+    {
+      "type": "text",
+      "value": "i) How many units must be sold each year for breakeven?"
+    },
+    {
+      "type": "text",
+      "value": "ii) What will be the profit for a sale of 3,500 units per year?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2023"
+}

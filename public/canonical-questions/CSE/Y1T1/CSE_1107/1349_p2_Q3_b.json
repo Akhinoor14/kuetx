@@ -1,0 +1,45 @@
+{
+  "id": "1349_p2_Q3(b)",
+  "course": {
+    "code": "CSE 1107",
+    "title": "Discrete Mathematics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\1st_Year_1st_Term_2024_1349.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the set Q of rational numbers, and let $\\bullet 6 \\ast \\ast$ is the operation on Q defined by (10) [CO2] $a * b \\ : = \\ : a + b - a b .$"
+    },
+    {
+      "type": "text",
+      "value": "i) Is (Q, \\*) a semigroup? Is it commutative?"
+    },
+    {
+      "type": "text",
+      "value": "ii) Find the identity element for “\\*”."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2024"
+}

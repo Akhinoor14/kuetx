@@ -1,0 +1,62 @@
+{
+  "id": "670_Q4(c)",
+  "course": {
+    "code": "CSE 3211",
+    "title": "Compiler Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2016\\3rd_Year_2nd_Term_2016_670.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following code segment:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { l } { { \\tt A = B ^ { \\star } C + D ; ~ \\tt S u m = 0 ; } } \\\\ { { \\tt w h i l e ~ \\mathbb { A } ~ \\mathbb { d } \\phi } } \\\\ { { \\tt b e g i n } } \\\\ { { \\tt ~ \\mathbb { A } ^ { \\alpha } = ~ \\mathbb { A } - D ; } } \\\\ { { \\tt S u m = \\delta \\operatorname { s u m } + \\mathbb { A } ; } } \\\\ { { \\tt e n d ; } } \\end{array} \\quad .\\tag{15}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "i) Generate the three address code."
+    },
+    {
+      "type": "text",
+      "value": "ii) Implement the code using quadruples and triples."
+    },
+    {
+      "type": "text",
+      "value": "iii)Develop the semantic rule for while statement."
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

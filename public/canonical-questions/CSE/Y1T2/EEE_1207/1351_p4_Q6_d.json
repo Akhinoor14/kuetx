@@ -1,0 +1,42 @@
+{
+  "id": "1351_p4_Q6(d)",
+  "course": {
+    "code": "EEE 1207",
+    "title": "Basic Electrical Engineering",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2019\\1st_Year_2nd_Term_2019_1351.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the cut-off frequency and voltage gain of a second order high pass filter for the (08) following figure: where $\\begin{array} { r } { \\mathbb { R } _ { 1 } = \\mathbb { R } _ { 2 } = 2 . 2 \\mathbb { K } \\Omega , } \\end{array}$ $\\mathrm { C } _ { 1 } = \\mathrm { C } _ { 2 } = 0 . 1 0 \\mu \\mathrm { F }$ $\\mathbf { R } _ { \\mathbb { G } } = 1 2 \\mathbf { K } \\Omega$ and $\\mathtt { R } _ { \\mathtt { F } } = 5 0 \\mathtt { K } \\Omega$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_49975db1415b99c03d0631dcee8aa0e286e0e6512a87963073b094ba9e6b2aea.jpg",
+      "_source_path": "images/49975db1415b99c03d0631dcee8aa0e286e0e6512a87963073b094ba9e6b2aea.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2019"
+}

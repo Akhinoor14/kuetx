@@ -1,0 +1,45 @@
+[
+  {
+    "id": "1349_p1_Q1(c)",
+    "course": {
+      "code": "CSE 1101",
+      "title": "Structured Programming",
+      "department": "Department of Computer Science and Engineering",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2024,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\1st_Year_1st_Term_2024_1349.pdf",
+      "source_page": null,
+      "paper_index": 1
+    },
+    "question_number": "1(c)",
+    "numbering_source": "regex",
+    "marks": 13,
+    "content": [
+      {
+        "type": "text",
+        "value": "Write a function that takes variable number of arguments, where each 3 consecutive (13) [CO3] parameters represent roll, name, and marks (float) of a student. The function prints (rollgrade) touple of each student according to the following condition: marks ≥ 80: A, 70 to 79: B, 60 to 69: C, marks < 60: F."
+      }
+    ],
+    "topics": [
+      "Functions and Program Structures: Function basics, Parameter passing conventions, Scope rules and storage classes, Recursion, Header files, Preprocessor, Arrays.",
+      "Input and Output: Standard input and output, Formatted input and output, File access, Dynamic memory allocation, Valgrind, Garbage collection, Variable length argument list, Command line parameters, Error handling, Introduction to graphics routines, Compiling, Make file, Debugging."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2024",
+    "classification_notes": "প্রশ্নটি ভেরিয়েবল আর্গুমেন্ট (topic-5), ফাংশন এবং স্কোপ রুলস (topic-2) ব্যবহার করে গ্রেড ক্যালকুলেশনের জন্য তৈরি করা হয়েছে।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটিতে ভেরিয়েবল আর্গুমেন্ট এবং ফাংশন স্ট্রাকচার ব্যবহার করার নির্দেশনা দেওয়া হয়েছে যা প্রদত্ত টপিক তালিকা (topic-2 ও topic-5) এর সাথে সামঞ্জস্যপূর্ণ।"
+  }
+]

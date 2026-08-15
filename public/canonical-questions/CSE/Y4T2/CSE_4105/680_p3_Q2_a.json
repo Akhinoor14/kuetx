@@ -1,0 +1,55 @@
+{
+  "id": "680_p3_Q2(a)",
+  "course": {
+    "code": "CSE 4105",
+    "title": "Computer Networks",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2015\\4th_Year_2nd_Term_2015_680.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Look the following two neural networks model."
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_885cdb8181fa0801ae67aa966694da73164933991a51a907ae40f1e096e607a9.jpg",
+      "_source_path": "images/885cdb8181fa0801ae67aa966694da73164933991a51a907ae40f1e096e607a9.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_445b9e4fd8666fec708fb380838b1a9472d1498097eda17aabb90c5fe62a85f0.jpg",
+      "_source_path": "images/445b9e4fd8666fec708fb380838b1a9472d1498097eda17aabb90c5fe62a85f0.jpg"
+    },
+    {
+      "type": "text",
+      "value": "For the model tabulate the outputs of $\\mathrm { H } _ { 1 } , \\mathrm { H } _ { 2 }$ and Y for inputs (A and B) values 0 or 1. Are the model performs any logic gate operation? Which ones?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2015"
+}

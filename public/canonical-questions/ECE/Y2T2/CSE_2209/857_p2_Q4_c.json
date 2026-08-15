@@ -1,0 +1,49 @@
+{
+  "id": "857_p2_Q4(c)",
+  "course": {
+    "code": "CSE 2209",
+    "title": "Data Structures and Algorithm",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\2nd_Year_2nd_Term_2018_857.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is meant by virtual height in wave propagation? Why virtual height is used rather (07) than actual height"
+    },
+    {
+      "type": "text",
+      "value": ") A high frequency radio link has to be established between two points at a distance of 250 km on earth's surface. Considering the ionospheric height to be 200 km and it's critical frequency 5 MHz, caiculatè the maximum usable frequency (MUF) for the given path."
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

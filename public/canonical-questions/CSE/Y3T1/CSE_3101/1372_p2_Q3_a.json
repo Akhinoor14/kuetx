@@ -1,0 +1,49 @@
+{
+  "id": "1372_p2_Q3(a)",
+  "course": {
+    "code": "CSE 3101",
+    "title": "Operating Systems",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\3rd_Year_1st_Term_2024_1372.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose, you want to design and develop an automated chocolate vending machine. (12) [CO2]"
+    },
+    {
+      "type": "text",
+      "value": "i) Draw the diagrammatic representation of this system."
+    },
+    {
+      "type": "text",
+      "value": "ii) Show the software requirement for this system."
+    },
+    {
+      "type": "text",
+      "value": "iii) Briefly explain the hardware components that are required in this system."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2024"
+}

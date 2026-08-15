@@ -1,0 +1,45 @@
+{
+  "id": "1376_p2_Q4(b)",
+  "course": {
+    "code": "CSE 3107",
+    "title": "Applied Statistics and Queuing Theory",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\3rd_Year_2nd_Term_2022_1376.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "A scientist wants to know if education level and marital status are related for all people (12) [CO2] in some country. He collects data on a simple random sample of 300 people, shown in following table."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=2 colspan=1>Marital status</td><td rowspan=1 colspan=4>Highest education level</td><td rowspan=2 colspan=1>Total</td></tr><tr><td rowspan=1 colspan=1>Ordinary level</td><td rowspan=1 colspan=1>Advanced level</td><td rowspan=1 colspan=1>Degree</td><td rowspan=1 colspan=1>Masters or above</td></tr><tr><td rowspan=1 colspan=1>Single</td><td rowspan=1 colspan=1>18</td><td rowspan=1 colspan=1>36</td><td rowspan=1 colspan=1>21</td><td rowspan=1 colspan=1>15</td><td rowspan=1 colspan=1>90</td></tr><tr><td rowspan=1 colspan=1>Married</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>36</td><td rowspan=1 colspan=1>45</td><td rowspan=1 colspan=1>57</td><td rowspan=1 colspan=1>150</td></tr><tr><td rowspan=1 colspan=1>Divorced</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>9</td><td rowspan=1 colspan=1>9</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>30</td></tr><tr><td rowspan=1 colspan=1>Widowed</td><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>9</td><td rowspan=1 colspan=1>9</td><td rowspan=1 colspan=1>9</td><td rowspan=1 colspan=1>30</td></tr><tr><td rowspan=1 colspan=1>Total</td><td rowspan=1 colspan=1>39</td><td rowspan=1 colspan=1>90</td><td rowspan=1 colspan=1>84</td><td rowspan=1 colspan=1>87</td><td rowspan=1 colspan=1>300</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Analyze if we can infer at 5% significance level that the highest education level is associated with marital status."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

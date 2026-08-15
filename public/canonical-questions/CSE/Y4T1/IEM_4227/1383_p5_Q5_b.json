@@ -1,0 +1,49 @@
+{
+  "id": "1383_p5_Q5(b)",
+  "course": {
+    "code": "IEM 4227",
+    "title": "Industrial Management",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\4th_Year_1st_Term_2024_1383.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 16,
+  "content": [
+    {
+      "type": "text",
+      "value": "A textbook publishing company has compiled data on total annual sales of its business (16) [CO4] texts for the preceding nine years:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Year</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>9</td></tr><tr><td rowspan=1 colspan=1>Sales (000)</td><td rowspan=1 colspan=1>40.2</td><td rowspan=1 colspan=1>44.5</td><td rowspan=1 colspan=1>48.0</td><td rowspan=1 colspan=1>52.3</td><td rowspan=1 colspan=1>55.8</td><td rowspan=1 colspan=1>57.1</td><td rowspan=1 colspan=1>62.4</td><td rowspan=1 colspan=1>69.0</td><td rowspan=1 colspan=1>73.7</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "i) Using an appropriate model, forecast textbook sales for each of the next five years."
+    },
+    {
+      "type": "text",
+      "value": "ii) Prepare a control chart for the forecast errors using the original data. Use 2s limits."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2024"
+}

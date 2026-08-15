@@ -1,0 +1,61 @@
+{
+  "id": "1383_p3_Q5(c)",
+  "course": {
+    "code": "CSE 4115",
+    "title": "Computer Security",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\4th_Year_1st_Term_2024_1383.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Explain scalar multiplication operation on Elliptic Curve (EC). Given an EC"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nE { \\mathrm { : } } y ^ { 2 } = x ^ { 3 } + 3 x + 5 { \\bmod { 1 } } 7 { \\mathrm { ~ a n d ~ p o i n t ~ } } P = ( 1 , 3 ) , Q = ( 4 , 8 ) ,\\tag{15) [CO3]}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "compute $2 P = P + P = ( x _ { 3 } , y _ { 3 } )$ and $P + Q = ( x _ { 4 } , y _ { 4 } )$ . Consider the equations:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nx _ { 3 } = S ^ { 2 } - x _ { 1 } - x _ { 2 } { \\mathrm { ~ m o d ~ } } P\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\ny _ { 3 } \\cdot = S ( x _ { 1 } - x _ { 3 } ) - y _ { 1 } \\ \\mathrm { m o d } \\ R\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nS = \\left\\{ \\begin{array} { l l } { \\displaystyle { \\frac { 3 x _ { 1 } ^ { 2 } + a } { 2 y _ { 1 } } } \\ \\mathrm { m o d } \\ P } \\\\ { \\displaystyle { \\frac { y _ { 2 } - y _ { 1 } } { x _ { 2 } - x _ { 1 } } } \\ \\mathrm { m o d } \\ P } \\end{array} \\right.\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2024"
+}

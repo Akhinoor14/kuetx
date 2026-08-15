@@ -1,0 +1,89 @@
+[
+  {
+    "id": "1348_p1_Q6(a)",
+    "course": {
+      "code": "CSE 1101",
+      "title": "Structured Programming",
+      "department": "Department of Computer Science and Engineering",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2023,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\1st_Year_1st_Term_2023_1348.pdf",
+      "source_page": null,
+      "paper_index": 1
+    },
+    "question_number": "6(a)",
+    "numbering_source": "regex",
+    "marks": 20,
+    "content": [
+      {
+        "type": "text",
+        "value": "You are tasked with creating a program to sort students in the CSE2 k22 class based on (20) [CO4] their roll numbers and final results. The CSE2k22 structure has int roll and float result. Now,"
+      },
+      {
+        "type": "text",
+        "value": "i) Define the CSE2 k22 structure."
+      },
+      {
+        "type": "text",
+        "value": "ii)Implement two custom comparison functions:"
+      },
+      {
+        "type": "text",
+        "value": "• int compareRollAscending(const void\\*, const void\\*)-take two CSE2k22 object references and return their roll difference."
+      },
+      {
+        "type": "text",
+        "value": "●int compareResultDescending(const void\\*, const void\\*)-take two CSE2 k22 object references and return their result difference."
+      },
+      {
+        "type": "text",
+        "value": "iii) Create a function"
+      },
+      {
+        "type": "text",
+        "value": "void customSort (CSE2k22 \\*matrix, int row, int col, int (\\*compare)(const \\*void,const \\*void)) to sort the matrix of students."
+      },
+      {
+        "type": "text",
+        "value": "iv) Implement a function to display the CSE2 k22 \\*matrix."
+      },
+      {
+        "type": "text",
+        "value": "v) In the main function:"
+      },
+      {
+        "type": "text",
+        "value": "•Create a 2×3 matrix of CSE2 k22 students."
+      },
+      {
+        "type": "text",
+        "value": "•Sort the matrix based on roll and print the output."
+      },
+      {
+        "type": "text",
+        "value": "• Sort the matrix based on result and print the output."
+      }
+    ],
+    "topics": [
+      "User Defined Data Type: Structure, Structure bit fields, Structure padding, Unions, Enumeration.",
+      "Input and Output: Standard input and output, Formatted input and output, File access, Dynamic memory allocation, Valgrind, Garbage collection, Variable length argument list, Command line parameters, Error handling, Introduction to graphics routines, Compiling, Make file, Debugging."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2023",
+    "classification_notes": "প্রশ্নটিতে struct সংজ্ঞায়ন (Topic 4), dynamic memory allocation/matrix handling এবং sorting logic implementation (qsort ব্যবহার করে) যা Input/Output ও Dynamic Memory Allocation মডিউলের অংশ।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটিতে struct সংজ্ঞায়ন এবং dynamic memory allocation/matrix handling এর প্রয়োজনীয়তা সঠিকভাবে চিহ্নিত করা হয়েছে।"
+  }
+]

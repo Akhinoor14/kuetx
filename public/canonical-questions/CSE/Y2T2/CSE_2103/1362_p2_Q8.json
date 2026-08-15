@@ -1,0 +1,73 @@
+{
+  "id": "1362_p2_Q8",
+  "course": {
+    "code": "CSE 2103",
+    "title": "Microprocessors and Microcontrollers",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2019\\2nd_Year_2nd_Term_2019_1362.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8",
+  "numbering_source": "regex",
+  "marks": 35,
+  "content": [
+    {
+      "type": "text",
+      "value": "The trial balance of Mr. Amin on December 31, 2017."
+    },
+    {
+      "type": "text",
+      "value": "(35)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Account Titles</td><td rowspan=1 colspan=1>Debit (Tk.)</td><td rowspan=1 colspan=1>Credit (Tk.)</td></tr><tr><td rowspan=1 colspan=1>Cash</td><td rowspan=1 colspan=1>24,780</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Accounts receivable</td><td rowspan=1 colspan=1>5,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Allowance for doubtful accounts</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>400</td></tr><tr><td rowspan=1 colspan=1>Inventory 1-1-17</td><td rowspan=1 colspan=1>31,400</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Prepaid insurance</td><td rowspan=1 colspan=1>5,520</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Office equipment</td><td rowspan=1 colspan=1>12,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Accumulated depreciation (equipment)</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>4,500</td></tr><tr><td rowspan=1 colspan=1>Amin&#x27;s capital,</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>12,000</td></tr><tr><td rowspan=1 colspan=1>Accounts payable</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>8,000</td></tr><tr><td rowspan=1 colspan=1>Drawing, Amin</td><td rowspan=1 colspan=1>20,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Sales</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>30,0000</td></tr><tr><td rowspan=1 colspan=1>Sales return</td><td rowspan=1 colspan=1>1,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Advertising expense</td><td rowspan=1 colspan=1>1,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Purchases</td><td rowspan=1 colspan=1>1,99,200</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Purchase return</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>1,400</td></tr><tr><td rowspan=1 colspan=1>Rent expense</td><td rowspan=1 colspan=1>3,200</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Salaries expense</td><td rowspan=1 colspan=1>23,200</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Total</td><td rowspan=1 colspan=1>3,23,420</td><td rowspan=1 colspan=1>3,26,300</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "i) Bad debt expense for the year ended December 31, 2017 is estimated to be Tk. 1,000."
+    },
+    {
+      "type": "text",
+      "value": "ii)Prepaid insurance balance at the end of the year Tk. 368."
+    },
+    {
+      "type": "text",
+      "value": "iii)Depreciation charged on equipment @ 10% p. a."
+    },
+    {
+      "type": "text",
+      "value": "iv) Closing inventory at December 31, 2017 Tk. 26,400. From the above information,"
+    },
+    {
+      "type": "text",
+      "value": "i) Prepare a statement of comprehensive income for the period ended December 31,2017."
+    },
+    {
+      "type": "text",
+      "value": "ii)Prepare a statement of owner's equity."
+    },
+    {
+      "type": "text",
+      "value": "iii) Prepare statement of Financial Position as on 31st December, 2017."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2019"
+}

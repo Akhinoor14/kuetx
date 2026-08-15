@@ -1,0 +1,119 @@
+{
+  "id": "1376_p2_Q8(b)",
+  "course": {
+    "code": "CSE 3107",
+    "title": "Applied Statistics and Queuing Theory",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\3rd_Year_2nd_Term_2022_1376.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 23,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the closed queueing network of single server queues with exponentially (23) [CO4] distributed service times, as shown in the following figure."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0e985478aaf9f6db8a2d6a888ba06bd05c8c38735ff1c20e8e68bf18579cd1c0.jpg",
+      "_source_path": "images/0e985478aaf9f6db8a2d6a888ba06bd05c8c38735ff1c20e8e68bf18579cd1c0.jpg"
+    },
+    {
+      "type": "text",
+      "value": "The average service rates of $\\mathrm { Q } _ { 1 } , \\mathrm { Q } _ { 2 } ,$ and $\\mathrm { Q } _ { 3 }$ are respectively, $\\mu _ { 1 } = 0 . 5 , \\mu _ { 2 , } = 1$ , and $\\mu _ { 3 } = 0 . 5$ . The system has a total user population of 4. Using the convolution approach obtain the followings."
+    },
+    {
+      "type": "text",
+      "value": "(i) The normalization constant."
+    },
+    {
+      "type": "text",
+      "value": "(ii) The state probability distribution of the network."
+    },
+    {
+      "type": "text",
+      "value": "(iii)The actual throughput of each queue."
+    },
+    {
+      "type": "text",
+      "value": "(iv)The average waiting time of each queue."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td colspan=\"1\" rowspan=\"1\">Parameters</td><td colspan=\"1\" rowspan=\"1\"> $M / M / 1$ </td><td colspan=\"1\" rowspan=\"1\">M/M/s</td><td colspan=\"1\" rowspan=\"1\"> $\\overline { { M / M / 1 / G D / n / \\infty } }$ </td><td colspan=\"1\" rowspan=\"1\"> $\\overline { { M / G / 1 / G D / \\infty / \\infty } }$ </td></tr><tr><td colspan=\"1\" rowspan=\"1\"> $\\pi _ { 0 }$ </td><td colspan=\"1\" rowspan=\"1\"> $1 - \\rho ,$  $\\rho = \\lambda / \\mu$ </td><td colspan=\"1\" rowspan=\"1\"> $\\left( \\sum _ { j = 0 } ^ { s - 1 } { \\frac { ( s \\rho ) ^ { j } } { j ! } } + { \\frac { ( s \\rho ) ^ { s } } { s ! ( 1 - \\rho ) } } \\right) ^ { - 1 }$  $\\rho = \\lambda / ( s \\mu )$ </td><td colspan=\"1\" rowspan=\"1\"> $\\begin{array} { r l } { ~ } & { { } \\overline { { { \\bf { \\sigma } } \\cdot { \\bf { \\sigma } } _ { 1 - \\rho ^ { n + 1 } } ^ { 1 - \\rho } { f o r \\rho } \\neq 1 } } } \\end{array}$  $\\begin{array} { r l } { \\bullet } & { { } { \\frac { 1 } { n + 1 } } f o r \\rho = 1 } \\end{array}$ </td><td colspan=\"1\" rowspan=\"1\"> $1 - \\rho$ </td></tr><tr><td colspan=\"1\" rowspan=\"1\"> $\\pi _ { j }$ </td><td colspan=\"1\" rowspan=\"1\"> $\\rho ^ { j } ( 1 - \\rho )$ </td><td colspan=\"1\" rowspan=\"1\"> $\\begin{array} { r l } { \\bullet } & { { } \\frac { ( s \\rho ) ^ { j } \\pi _ { 0 } } { j ! } \\mathrm { ~ f o r ~ } ( j = 1 , 2 , \\ldots , s ) } \\end{array}$  $\\frac { ( s \\rho ) ^ { j } \\pi _ { 0 } } { s ! s ^ { j - s } } \\mathrm { f o r } \\mathrm { } ( j = s , s +$  ${ 1 , s + 2 , \\ldots } )$ </td><td colspan=\"1\" rowspan=\"1\"> $\\rho ^ { j } \\pi _ { 0 }$  $f o r j = 1 , 2 , 3 , \\dots \\dots , n$ and $f o r a n y \\rho$ </td><td colspan=\"1\" rowspan=\"1\"> $\\rho ^ { j } ( 1 - \\rho )$ </td></tr><tr><td colspan=\"1\" rowspan=\"1\"> $L$ </td><td colspan=\"1\" rowspan=\"1\"> $\\frac { \\rho } { 1 - \\rho }$ </td><td colspan=\"1\" rowspan=\"1\"> $\\frac { \\rho } { 1 - \\rho } P _ { d } + s \\rho$ </td><td colspan=\"1\" rowspan=\"1\"> $\\begin{array} { r l } { \\cdot } & { { } \\frac { \\rho \\left[ 1 - ( n + 1 ) \\rho ^ { n } + n \\rho ^ { n + 1 } \\right] } { ( 1 - \\rho ^ { n + 1 } ) ( 1 - \\rho ) } } \\end{array}$  $f o r \\rho \\neq 1$  ${ \\scriptstyle { \\frac { n } { 2 } } } f o r \\rho = 1$ </td><td colspan=\"1\" rowspan=\"1\"> ${ \\cal L } _ { q } + \\rho$ </td></tr><tr><td colspan=\"1\" rowspan=\"1\"> $L _ { q }$ </td><td colspan=\"1\" rowspan=\"1\"> $\\frac { { \\overline { { \\rho ^ { 2 } } } } } { 1 - \\rho }$ </td><td colspan=\"1\" rowspan=\"1\"> $\\frac { \\rho } { 1 - \\rho } P _ { d }$ </td><td colspan=\"1\" rowspan=\"1\"> $\\overline { { L - ( 1 - \\pi _ { 0 } ) } }$ </td><td colspan=\"1\" rowspan=\"1\"> $\\frac { \\overline { { { \\lambda } ^ { 2 } \\sigma ^ { 2 } + { \\rho } ^ { 2 } } } } { 2 ( 1 - \\rho ) }$ </td></tr><tr><td colspan=\"1\" rowspan=\"1\">Extra</td><td colspan=\"1\" rowspan=\"1\"></td><td colspan=\"1\" rowspan=\"1\"> $\\overline { { \\mathrm { d e l a y p r o b a b i l i t y } \\colon P _ { d } } }$  $= P ( j \\geq s )$  $= \\frac { ( s \\rho ) ^ { s } \\pi _ { 0 } } { s ! ( 1 - \\rho ) }$ </td><td colspan=\"1\" rowspan=\"1\">Saturation ${ \\mathrm { P r o b a b i l i t y } } ,$  $\\begin{array} { r } { \\pi _ { n } = \\frac { 1 - \\rho } { 1 - \\rho ^ { n + 1 } } \\rho ^ { n } } \\end{array}$  $f o r \\rho \\neq 1$ πn = $\\begin{array} { r } { { \\frac { 1 } { n + 1 } } \\ f o r \\ \\rho = 1 \\ } \\end{array}$  $\\lambda _ { l o s t } = \\lambda \\pi _ { n }$  $\\lambda _ { e f f } = \\lambda -$  $\\lambda _ { l o s t } = \\lambda ( 1 - \\pi _ { n } )$ </td><td colspan=\"1\" rowspan=\"1\">ErlangDistribution:Mean: k / λ.Variance: $\\mathbf { k } / \\lambda ^ { 2 , }$ Where k: shapeparameter ad λ:rate parameter</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "• Queuing Network"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r l } { \\bullet } & { { } \\pi ( { \\mathsf n } ) = \\frac { 1 } { G ( K , m ) } \\prod _ { i = 1 } ^ { m } \\rho _ { i } ^ { n _ { i } } \\mathrm { w h e r e } \\rho _ { i } = \\frac { \\lambda _ { i } } { \\mu _ { i } } } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\bullet \\ : \\ : G ( K , m ) \\ : = \\ : G ( K , m - 1 ) \\ : + \\ : \\rho _ { m } G ( K - 1 , m )\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nG ( 0 , m ) = 1 , \\qquad m = 1 , 2 , \\ldots \\ldots , M\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nG ( k , 1 ) = \\rho _ { 1 } ^ { k } , ~ k = 0 , 1 , 2 , \\ldots \\ldots , K\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Closed Queuing Network Parameters"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r l } { \\bullet _ { \\mathrm { } } } & { { } L _ { i } = \\frac { 1 } { G ( K , M ) } \\sum _ { k = 1 } ^ { K } \\ \\rho _ { i } ^ { k } G ( K - k , M ) } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r l } { \\bullet } & { { } e _ { i } = \\lambda _ { i } \\frac { G ( K - 1 , M ) } { G ( K , M ) } } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r l } { \\bullet } & { { } W _ { i } \\ : = \\frac { L _ { i } } { e _ { i } } } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r l } { \\bullet } & { { } P ( n _ { i } \\geq k ) = \\rho _ { i } ^ { k } \\frac { G ( K - k , M ) } { G ( K , M ) } } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r l } { \\mathbf { \\nabla } \\cdot } & { { } \\rho _ { e _ { i } } = \\frac { e _ { i } } { \\mu _ { i } } } \\end{array}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

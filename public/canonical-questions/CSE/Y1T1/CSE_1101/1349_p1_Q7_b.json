@@ -1,0 +1,37 @@
+{
+  "id": "1349_p1_Q7(b)",
+  "course": {
+    "code": "CSE 1101",
+    "title": "Structured Programming",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\1st_Year_1st_Term_2024_1349.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write a program in C that will take the roll number and marks of 3 subjects (Math, (15) [CO2] Physics, Chemistry) of N students as input. Calculate the average mark of each student and print the roll number and average mark of the student whose average mark is the second highest. If more than one student gets the second highest average, print the roll number and average mark of the student who got the highest mark in Math among them. It is ensured that no two students get the same mark in Math."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2024"
+}

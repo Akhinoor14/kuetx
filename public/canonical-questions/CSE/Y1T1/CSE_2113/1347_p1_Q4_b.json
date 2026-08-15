@@ -1,0 +1,42 @@
+{
+  "id": "1347_p1_Q4(b)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Architecture",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\1st_Year_1st_Term_2022_1347.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is a rooted tree? Find the pre-order, in-order and post-order traversal sequence results of (11) the following tree. Using their corresponding traversal rules."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a5b303d99a71d9d8405390492197fc1537dc22dab3a32a69031d36bf25b913b2.jpg",
+      "_source_path": "images/a5b303d99a71d9d8405390492197fc1537dc22dab3a32a69031d36bf25b913b2.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2022"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1350_p5_Q3(c)",
+  "course": {
+    "code": "PHY 1107",
+    "title": "Physics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2025,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2025\\1st_Year_1st_Term_2025_1350.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "An under damped harmonic oscillator has its amplitude reduced to $\\frac { 1 } { 1 0 }$ th of its initial (10) [CO4] value after 100 oscillations. Its period is 1.25 sec. Calculate the damping constant and relaxation time, if the observed value of the first amplitude of the oscillator is 2.2cm. What would be its value in absence of damping?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2025"
+}

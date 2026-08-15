@@ -1,0 +1,53 @@
+{
+  "id": "1352_p4_Q5",
+  "course": {
+    "code": "MATH 1207",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2020\\1st_Year_2nd_Term_2020_1352.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5",
+  "numbering_source": "regex",
+  "marks": 30,
+  "content": [
+    {
+      "type": "text",
+      "value": "Answer any two of the followings:"
+    },
+    {
+      "type": "text",
+      "value": "(30)"
+    },
+    {
+      "type": "text",
+      "value": "i) Solve the D.E, $( D ^ { 3 } - 2 D ^ { 2 } - 5 D + 6 ) y = e ^ { 2 x }$ , where $D = { \\frac { d } { d x } }$"
+    },
+    {
+      "type": "text",
+      "value": "ii) Solve the D.E, $( D ^ { 2 } + 3 D + 2 ) y = x \\sin x .$"
+    },
+    {
+      "type": "text",
+      "value": "iii) Solve $\\frac { d ^ { 3 } y } { d x ^ { 3 } } + 8 y = e ^ { - 2 x } + x ^ { 4 } + 1 .$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2020"
+}

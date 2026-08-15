@@ -1,0 +1,37 @@
+{
+  "id": "654_p4_Q5(b)",
+  "course": {
+    "code": "CSE 1203",
+    "title": "Digital Logic Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2017\\2nd_Year_1st_Term_2017_654.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "À pulse of amplitude 10V and duration 10μs is applied to a highpass RC circuit. Sketch the output waveform indicating the voltage levels for (i) $R C = t _ { p } { \\mathrm { : } }$ (ii) $R C = 0 . 5 t _ { p }$ (iii) $R C = 2 t _ { p } , \\mathrm { ( i v ) } R C = 1 0 t _ { p }$ and (v) $R C = 0 . 1 t _ { p } ,$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

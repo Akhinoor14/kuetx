@@ -1,0 +1,42 @@
+{
+  "id": "654_p2_Q8(d)",
+  "course": {
+    "code": "CSE 2105",
+    "title": "Data Structures and Algorithms",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2017\\2nd_Year_1st_Term_2017_654.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Is the tree given below a B tree or $\\mathtt { B } ^ { + }$ tree or none? What is its degree? Show the new tree (10) after insertion of the records with the key values 135, 200, 100 to the above tree if it's a proper tree structure"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_99423d7128e0718c1690beecb9dc5d181ff846f9afeebe949b2406431e23be36.jpg",
+      "_source_path": "images/99423d7128e0718c1690beecb9dc5d181ff846f9afeebe949b2406431e23be36.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

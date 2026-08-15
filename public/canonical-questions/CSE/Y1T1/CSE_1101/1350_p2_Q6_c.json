@@ -1,0 +1,57 @@
+{
+  "id": "1350_p2_Q6(c)",
+  "course": {
+    "code": "CSE 1101",
+    "title": "Structured Programming",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2025,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2025\\1st_Year_1st_Term_2025_1350.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 16,
+  "content": [
+    {
+      "type": "text",
+      "value": "Create a command interpreter in C that processes user input commands. The program (16) [CO2] should support the following commands (commands should be taken input as string):"
+    },
+    {
+      "type": "text",
+      "value": "• add <num1><num2>: Add two numbers and display the result."
+    },
+    {
+      "type": "text",
+      "value": "sub <num1><num2>: Subtract the second number from the first and display the result."
+    },
+    {
+      "type": "text",
+      "value": "• mul <num1><num2>: Multiply two numbers and display the result."
+    },
+    {
+      "type": "text",
+      "value": "div <num1><num2>: Divide the first number by the second and display the result."
+    },
+    {
+      "type": "text",
+      "value": "Use an array of pointers to function to call the appropriate function for each command."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2025"
+}

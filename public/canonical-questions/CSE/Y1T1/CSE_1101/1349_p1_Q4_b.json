@@ -1,0 +1,53 @@
+{
+  "id": "1349_p1_Q4(b)",
+  "course": {
+    "code": "CSE 1101",
+    "title": "Structured Programming",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\1st_Year_1st_Term_2024_1349.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A program generates the following summary.txt’ file from ‘course.txt’ file. You have to design the program where- (i) all mathematical operations are in the file ‘statistics. c', (ii) all file operations are in the file file.c', (iii) main function is written in ‘main.c' that only includes main.h’ as header file. You must handle multiple inclusions of header files."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td></td><td colspan=\"3\">course.txt</td></tr><tr><td>course CSE 1101 CSE 1102 CSE 1107</td><td>98 80 75 66 92 80</td><td>Marks 75 77 21</td><td>60 26 54 40 34 80</td></tr></table>"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td></td><td colspan=\"3\">summary.txt</td></tr><tr><td>course</td><td>min</td><td>max</td><td>average</td></tr><tr><td>CSE 1101 CSE 1102</td><td>26 40</td><td>98 77</td><td>67.8 62.4</td></tr><tr><td>CSE 1107</td><td>21</td><td>92</td><td>61.4</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2024"
+}

@@ -1,0 +1,49 @@
+{
+  "id": "857_p1_Q3(c)",
+  "course": {
+    "code": "ECE 2201",
+    "title": "Analog Communications",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\2nd_Year_2nd_Term_2018_857.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Over an interval $| \\big \\vert t \\big \\vert \\leq \\mathrm { ^ { \\ddag } }$ , an angle modulated signal is given by $\\dot { Q _ { E M } } \\dot { ( t ) } = 1 0 \\dot { \\cos } 1 3 0 0 0 t \\dot { . } \\mathrm { I t } \\dot { \\mathrm { \\ i s } }$ known that the carrier frequ ${ \\mathfrak { D } } _ { \\mathfrak { c } } = 1 0 , 0 0 0 \\cdot$"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "text",
+      "value": "(i). If this were a PM si with $k _ { \\rho } = 1 0 0 0$ , determine m(t) over the interval $\\left| t \\right| \\leq 1$"
+    },
+    {
+      "type": "text",
+      "value": "(ii) If this were a FM si vith $k _ { f } ^ { \\mathrm { ~ ~ } } = 1 0 0 0$ , determine m(t) over the interval $\\vert t \\vert \\leq 1$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

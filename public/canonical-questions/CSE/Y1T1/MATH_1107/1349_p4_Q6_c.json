@@ -1,0 +1,47 @@
+{
+  "id": "1349_p4_Q6(c)",
+  "course": {
+    "code": "MATH 1107",
+    "title": "Differential and Integral Calculus",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\1st_Year_1st_Term_2024_1349.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Use integration to approximate the value of"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\operatorname* { l i m } _ { n \\to \\infty } \\left[ \\left( 1 + { \\frac { 1 } { n ^ { 2 } } } \\right) ^ { 2 / n ^ { 2 } } \\cdot \\cdot \\left( 1 + { \\frac { 2 ^ { 2 } } { n ^ { 2 } } } \\right) ^ { 4 / n ^ { 2 } } \\cdot \\left( 1 + { \\frac { 3 ^ { 2 } } { n ^ { 2 } } } \\right) ^ { 6 / n ^ { 2 } } \\cdot \\cdot \\cdot \\cdot \\left( 1 + { \\frac { n ^ { 2 } } { n ^ { 2 } } } \\right) ^ { 2 n / n ^ { 2 } } \\right]\\tag{12) [CO2]}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { 7 . ~ \\ a ) ~ { \\ D e f i n e ~ B e t a ~ a n d ~ G a m m a ~ f u n c t i o n s } , ~ W r i t e ~ d o w n ~ t h e ~ r e l a t i o n s h i p ~ b e t w e e n ~ t h e m \\% ~ }\\tag{04) [CO1]}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2024"
+}

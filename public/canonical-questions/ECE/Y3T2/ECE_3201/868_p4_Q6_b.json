@@ -1,0 +1,65 @@
+{
+  "id": "868_p4_Q6(b)",
+  "course": {
+    "code": "ECE 3201",
+    "title": "Information Theory",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\3rd_Year_2nd_Term_2018_868.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following Orders table:"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>O ID</td><td rowspan=1 colspan=1>Order Price</td><td rowspan=1 colspan=1>Customer</td></tr><tr><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>1000</td><td rowspan=1 colspan=1>Hansen</td></tr><tr><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>1600</td><td rowspan=1 colspan=1>Nilsen</td></tr><tr><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>700</td><td rowspan=1 colspan=1>Hansen</td></tr><tr><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>300</td><td rowspan=1 colspan=1>Hansen</td></tr><tr><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>2000</td><td rowspan=1 colspan=1>Jensen</td></tr><tr><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>100</td><td rowspan=1 colspan=1>Nilsen</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Now what will be the output of the following queries:"
+    },
+    {
+      "type": "text",
+      "value": "i) Select Customer, SUM (Order Price) from Orders. Group by Customer"
+    },
+    {
+      "type": "text",
+      "value": "ii) Select Customer, SUM (Order Price) from orders."
+    },
+    {
+      "type": "text",
+      "value": "ii) Select Customer, SUM (Order Price) from orders. Group by Customer having SUM (Order Price) < 2000."
+    },
+    {
+      "type": "text",
+      "value": "iv) Select Customer, SUM (Order Price) from orders. where Customer = Hansen' OR Customer = Jensen' Group by Customer having SUM (Order Price) > 1700. ."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

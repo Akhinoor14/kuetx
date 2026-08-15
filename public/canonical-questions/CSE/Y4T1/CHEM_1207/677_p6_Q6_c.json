@@ -1,0 +1,45 @@
+{
+  "id": "677_p6_Q6(c)",
+  "course": {
+    "code": "CHEM 1207",
+    "title": "Chemistry",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\4th_Year_1st_Term_2018_677.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "A small manufacturing firm uses roughly 3400 pounds of chemical dye a year. Currently the (12) firm purchases 300 pounds per order and pays \\$3 per pound. The supplier has just announced that orders of 1000 pounds or more will be filled at a price of \\$2 per pound. The manufacturing firm incurs a cost of \\$100 each time it submits an order and assigns an annual holding cost of 17 percent of the purchase price per pound."
+    },
+    {
+      "type": "text",
+      "value": "(i) Determine the order size that will minimize the total cost."
+    },
+    {
+      "type": "text",
+      "value": "(ii) If the supplier offered the discount at 1500 pounds instead of 1000 pounds, What order size would minimize total cost?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2018"
+}

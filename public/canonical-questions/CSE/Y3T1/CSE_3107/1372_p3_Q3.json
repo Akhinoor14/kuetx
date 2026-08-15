@@ -1,0 +1,49 @@
+{
+  "id": "1372_p3_Q3",
+  "course": {
+    "code": "CSE 3107",
+    "title": "Applied Statistics and Queuing Theory",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\3rd_Year_1st_Term_2024_1372.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "4, 2.8, 4.4, 2.5, 3.3, 4.0, 4.8, 5.6, 5.2, 2.9, 3.7, 3.0, 3.6, 2.8, 4.8"
+    },
+    {
+      "type": "text",
+      "value": "Assuming that the measurements represent a random sample from a normal population, find a 95% confidence interval for the drying time of this paint. Explain how confidence level affects the interval width and precision."
+    },
+    {
+      "type": "text",
+      "value": "$( x _ { i } - { \\bar { x } } ) ^ { 2 }$ by (n - 1) instead of n (sample size) to get an unbiased estimation of the population variance? The lifetime of batteries is normally distributed with a mean of 30 months and a standard deviation of 2 months. A random sample of 1600 batteries are taken. Find the probability that the sample mean lifetime lies within two standard deviation of the population mean."
+    },
+    {
+      "type": "text",
+      "value": "(12) [CO1]"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2024"
+}

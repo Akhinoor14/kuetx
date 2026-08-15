@@ -1,0 +1,57 @@
+{
+  "id": "1350_p3_Q4(c)",
+  "course": {
+    "code": "CSE 1107",
+    "title": "Discrete Mathematics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2025,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2025\\1st_Year_1st_Term_2025_1350.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "A municipality wants to install a low-cost communication cable network connecting (20) [CO4] following administrative hubs: A(City Hall); B(Health Center); C(Fire Station); D(Water Supply Office); E(Transport Control Unit)."
+    },
+    {
+      "type": "text",
+      "value": "The Cost (in millions of Taka) of laying cables between these hubs is given below:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Edge</td><td rowspan=1 colspan=1>Cost</td><td rowspan=1 colspan=1>Edge</td><td rowspan=1 colspan=1>Cost</td></tr><tr><td rowspan=1 colspan=1>A-B</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>B-D</td><td rowspan=1 colspan=1>5</td></tr><tr><td rowspan=1 colspan=1>A-C</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>B-E</td><td rowspan=1 colspan=1>4</td></tr><tr><td rowspan=1 colspan=1>A-D</td><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>C-D</td><td rowspan=1 colspan=1>1</td></tr><tr><td rowspan=1 colspan=1>A-E</td><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>C-E</td><td rowspan=1 colspan=1>5</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "The municipality authority wants a layout that (i) Connects all five hubs, (ii) Avoids cycles, and (iii) Minimizes total cabling cost. Now design your cable network following these guidelines."
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2025"
+}

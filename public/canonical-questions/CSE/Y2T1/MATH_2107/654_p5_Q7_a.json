@@ -1,0 +1,37 @@
+{
+  "id": "654_p5_Q7(a)",
+  "course": {
+    "code": "MATH 2107",
+    "title": "Fourier Analysis and Linear Algebra",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2017\\2nd_Year_1st_Term_2017_654.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Test the following vectors are linearly dependent or independent. $\\mathbf { I f } \\ ^ { \\cdot \\cdot } { \\mathrm { I h e } }$ vectors are linear (12) dependent determine a maximum subset of linear independent vectors and express the other as a liner combination of these, where $x _ { 1 } = [ 1 , 2 , 3 , 2 ] , x _ { 2 } = [ 2 , 3 , 5 , 1 ] , x _ { 3 } = [ 1 , \\hat { 3 } , 4 , 5 ]$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

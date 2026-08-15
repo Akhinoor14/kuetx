@@ -1,0 +1,42 @@
+{
+  "id": "1359_p2_Q8(a)",
+  "course": {
+    "code": "MATH 2107",
+    "title": "Fourier Analysis and Linear Algebra",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\2nd_Year_1st_Term_2022_1359.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Construct bases for the eigenspace of the following matrix A correspondingto the largest (14) eigenvalues of the matrix where,"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nA = { \\left[ \\begin{array} { l l l } { 0 } & { 0 } & { - 2 } \\\\ { 1 } & { 2 } & { 1 } \\\\ { 1 } & { 0 } & { . 3 } \\end{array} \\right] }\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

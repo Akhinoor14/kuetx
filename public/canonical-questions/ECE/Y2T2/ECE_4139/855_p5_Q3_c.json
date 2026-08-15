@@ -1,0 +1,41 @@
+{
+  "id": "855_p5_Q3(c)",
+  "course": {
+    "code": "ECE 4139",
+    "title": "TV Engineering",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\2nd_Year_2nd_Term_2016_855.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 6,
+  "content": [
+    {
+      "type": "text",
+      "value": "Locate and name all the singularities óf $\\mathrm { ( i ) } \\ \\frac { \\ln ( z - 2 ) } { ( z ^ { 2 } + 2 z + 2 ) ^ { 4 } } , \\mathrm { ( i i ) } \\frac { \\cdot 1 } { s i n ^ { 3 } z }$"
+    },
+    {
+      "type": "text",
+      "value": "(06)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

@@ -1,0 +1,77 @@
+{
+  "id": "1370_p4_Q7(a)",
+  "course": {
+    "code": "CSE 3109",
+    "title": "Database Systems",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\3rd_Year_1st_Term_2022_1370.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following bank database."
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "text",
+      "value": "branch (branch name, branch\\_city, assets)"
+    },
+    {
+      "type": "text",
+      "value": "customer (customer name, customer street, customer city)"
+    },
+    {
+      "type": "text",
+      "value": "loan (loan number, branch name, amount)"
+    },
+    {
+      "type": "text",
+      "value": "borrower (customer name, loan number)"
+    },
+    {
+      "type": "text",
+      "value": "account (account number, branch name, balance)"
+    },
+    {
+      "type": "text",
+      "value": "depositor (customer name, account number)"
+    },
+    {
+      "type": "text",
+      "value": "Let us define a view branch\\_cost as follows:"
+    },
+    {
+      "type": "text",
+      "value": "“create view branch cost as select branch name, customer name from depositor, account where depositor.account number=account.account number\""
+    },
+    {
+      "type": "text",
+      "value": "Suppose that the view is materialized; that is, the view is computed and stored. Write triggers to maintain the view, that is, to keep it up-to-date on insertions to depositor or account. It is not necessary to handle deletions on updates. Note that, for simplicity, the elimination of duplicates is not required."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

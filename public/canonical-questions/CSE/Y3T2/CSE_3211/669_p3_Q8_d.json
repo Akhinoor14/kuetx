@@ -1,0 +1,42 @@
+{
+  "id": "669_p3_Q8(d)",
+  "course": {
+    "code": "CSE 3211",
+    "title": "Compiler Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2015\\3rd_Year_2nd_Term_2015_669.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Apply the techniques induction variables elimination and reduction in strength on the (10) following flow graph."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_229e07b3578df9df096b75dc8a0de2129558320e5422de9b11347a567ce1618e.jpg",
+      "_source_path": "images/229e07b3578df9df096b75dc8a0de2129558320e5422de9b11347a567ce1618e.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2015"
+}

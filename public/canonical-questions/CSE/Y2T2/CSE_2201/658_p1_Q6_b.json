@@ -1,0 +1,53 @@
+{
+  "id": "658_p1_Q6(b)",
+  "course": {
+    "code": "CSE 2201",
+    "title": "Algorithm Analysis and Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2015\\2nd_Year_2nd_Term_2015_658.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "The Knapsack problem takes 2 inputs: the capacity of the knapsack and a list of items. Each (12) item has a value and weight. The goal is to put items into the knapsack such that the value is maximized (optimal) but we cannot go over the weight capacity of the knapsack (valid). As an example, consider a knapsack with capacity 15 and items (25, 5), (45,11), (12,3), (7,2), (6,2), (10,7), and (5,4), where the first number in each pair indicates the value and second number the weight. Valid solutions are: $\\cdot < > , < 1 , 3 , 4 > , < 2 , 3 , 4 , 5 >$ , and an optimal solution is <2,7>."
+    },
+    {
+      "type": "text",
+      "value": "i) Describe a possible way of creating a state space tree for this problem."
+    },
+    {
+      "type": "text",
+      "value": "ii)Design a heuristic for a branch-and-bound algorithm."
+    },
+    {
+      "type": "text",
+      "value": "A)Will the branch-and-bound algorithm return a valid solution?"
+    },
+    {
+      "type": "text",
+      "value": "B) Will the branch-and-bound algorithm return an optimal solution?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

@@ -1,0 +1,45 @@
+[
+  {
+    "id": "1349_p1_Q1(a)",
+    "course": {
+      "code": "CSE 1101",
+      "title": "Structured Programming",
+      "department": "Department of Computer Science and Engineering",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2024,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\1st_Year_1st_Term_2024_1349.pdf",
+      "source_page": null,
+      "paper_index": 1
+    },
+    "question_number": "1(a)",
+    "numbering_source": "regex",
+    "marks": 10,
+    "content": [
+      {
+        "type": "text",
+        "value": "Explain why is C classified as structured programming language? Describe the control (10) [CO1] structures of C programming language."
+      }
+    ],
+    "topics": [
+      "Programming Concepts and Structured Programming Language: Data types, Variables, Operators, Type of expressions, Control structures.",
+      "Input and Output: Standard input and output, Formatted input and output, File access, Dynamic memory allocation, Valgrind, Garbage collection, Variable length argument list, Command line parameters, Error handling, Introduction to graphics routines, Compiling, Make file, Debugging."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2024",
+    "classification_notes": "প্রশ্নটি সরাসরি 'Structured Programming Language' এবং 'Control structures'-এর ওপর জোর দেয় যা Topic-1 এর মূল বিষয়বস্তু, আর C প্রোগ্রামিংয়ে Control Structures বাস্তবায়ন হয় Input/Output ফাইল অ্যাক্সেসের মাধ্যমে (Topic-5)।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি শুধুমাত্র Structured Programming এবং Control Structures নিয়ে থাকলেও উত্তরে দেওয়া কারণের দ্বিতীয় অংশ (Input/Output ফাইল অ্যাক্সেস) প্রশ্নের সাথে সম্পর্কহীন যা Topic-1 এর ভুল ব্যাখ্যা।"
+  }
+]

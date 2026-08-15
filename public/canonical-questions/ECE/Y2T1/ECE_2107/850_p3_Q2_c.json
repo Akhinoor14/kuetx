@@ -1,0 +1,46 @@
+{
+  "id": "850_p3_Q2(c)",
+  "course": {
+    "code": "ECE 2107",
+    "title": "Signals and Systems",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2017\\2nd_Year_1st_Term_2017_850.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine whether the discrete time. system represented by the difference equation: (12)"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { i } \\dot { \\gamma } ( \\mathsf { n } ) = \\mathsf { x } ( \\mathsf { n } + 1 ) - 3 \\dot { \\mathsf { x } } ( \\mathsf { n } ) \\ddag \\dot { \\alpha } ( \\mathsf { n } - \\mathsf { I } ^ { \\cdot } ) ; \\mathsf { n } \\ge 0 .\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Time invariant, ii) Liñear, and ii) Casual"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

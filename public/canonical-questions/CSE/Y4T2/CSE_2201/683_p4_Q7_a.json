@@ -1,0 +1,53 @@
+{
+  "id": "683_p4_Q7(a)",
+  "course": {
+    "code": "CSE 2201",
+    "title": "Algorithm Analysis and Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\4th_Year_2nd_Term_2018_683.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose a hospital tested the age and body fat data for 10 randomly selected adults with (15) following result:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>age</td><td rowspan=1 colspan=1>23</td><td rowspan=1 colspan=1>23</td><td rowspan=1 colspan=1>27</td><td rowspan=1 colspan=1>27</td><td rowspan=1 colspan=1>39</td><td rowspan=1 colspan=1>41</td><td rowspan=1 colspan=1>47</td><td rowspan=1 colspan=1>49</td><td rowspan=1 colspan=1>50</td><td rowspan=1 colspan=1>52</td></tr><tr><td rowspan=1 colspan=1>%fat</td><td rowspan=1 colspan=1>9.5</td><td rowspan=1 colspan=1>26.5</td><td rowspan=1 colspan=1>7.8</td><td rowspan=1 colspan=1>17.8</td><td rowspan=1 colspan=1>31.4</td><td rowspan=1 colspan=1>25.9</td><td rowspan=1 colspan=1>27.4</td><td rowspan=1 colspan=1>27.2</td><td rowspan=1 colspan=1>31.2</td><td rowspan=1 colspan=1>34.6</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "i) Draw the Boxplot for age."
+    },
+    {
+      "type": "text",
+      "value": "ii) Draw a scatter plot on these two variables."
+    },
+    {
+      "type": "text",
+      "value": "iii) Calculate the Correlation Coefficient (Pearson's product moment coefficient). Are these two variables positively or negatively correlated?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2018"
+}

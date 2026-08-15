@@ -1,0 +1,37 @@
+{
+  "id": "661_p1_Q5(c)",
+  "course": {
+    "code": "CSE 2201",
+    "title": "Algorithm Analysis and Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\2nd_Year_2nd_Term_2018_661.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "In scheduling independent tasks problem let the number of processor, m = 3 number of tasks (12) n = 7, where $( t _ { 1 } , t _ { 2 } , t _ { 3 } , t _ { 4 } , t _ { 5 } , t _ { 6 } , t _ { 7 } ) = ( 5 , \\ 2 , \\ 2 , \\ 4 , \\ 3 , \\ 5 , \\ 3 )$ . Schedule the tasks by Longest processing Time (LPT) rule and then find the time difference between LPT scheduling and optimal scheduling."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

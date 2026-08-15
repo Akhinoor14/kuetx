@@ -1,0 +1,45 @@
+{
+  "id": "1355_p4_Q7(b)",
+  "course": {
+    "code": "MATH 1207",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\1st_Year_2nd_Term_2023_1355.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve the D.E $( D ^ { 3 } - 2 D ^ { 2 } - 5 D + 6 ) y = e ^ { 5 x }$ , where D = d dx"
+    },
+    {
+      "type": "text",
+      "value": "(12) [CO3]"
+    },
+    {
+      "type": "text",
+      "value": "¿) A body executes damped forced vibrations given by the equation (13) [CO3] $\\begin{array} { r } { \\frac { d ^ { 2 } x } { d t ^ { 2 } } + 2 k \\frac { d x } { d t } + b ^ { 2 } x = e ^ { - k t } } \\end{array}$ sin ωt. Solve the D.E for both the cases when $\\stackrel { \\sim } { \\omega ^ { 2 } } \\neq b ^ { 2 } - \\stackrel { \\sim } { k } ^ { 2 }$ and when $\\omega ^ { 2 } = b ^ { 2 } - k ^ { 2 }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2023"
+}

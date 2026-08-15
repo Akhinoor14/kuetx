@@ -1,0 +1,46 @@
+{
+  "id": "677_p5_Q7(d)",
+  "course": {
+    "code": "CSE 4101",
+    "title": "Computer Graphics and Image Processing",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\4th_Year_1st_Term_2018_677.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following 5x5 8-bit image with grayscale range of [0, 9]."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\left[ \\begin{array} { l l l l l } { 0 } & { 5 } & { 7 } & { 7 } & { 5 } \\\\ { 7 } & { 2 } & { 6 } & { 2 } & { 6 } \\\\ { 6 } & { 9 } & { 7 } & { 7 } & { 0 } \\\\ { 6 } & { 6 } & { 1 } & { 7 } & { 6 } \\\\ { 9 } & { 3 } & { 2 } & { 4 } & { 8 } \\end{array} \\right] }\\tag{10}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Compress the image using Huffman encoding techniques and also discuss the efficiency of this compression."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2018"
+}

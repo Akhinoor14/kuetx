@@ -1,0 +1,42 @@
+{
+  "id": "1360_p2_Q6(c)",
+  "course": {
+    "code": "CSE 2105",
+    "title": "Data Structures and Algorithms",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\2nd_Year_1st_Term_2023_1360.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following course dependency graph. An edge from course x to course y (14) [CO3] indicates that course x must be completed before course y can be taken. Design an algorithm to find a sequential order of courses that a student can undertake. Also find a sequence for the given graph applying your proposed algorithm."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_910487076217a03ad0ee2a3165e4f52f7f3f5aab9e2ba4c93a5b5b34886a0230.jpg",
+      "_source_path": "images/910487076217a03ad0ee2a3165e4f52f7f3f5aab9e2ba4c93a5b5b34886a0230.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

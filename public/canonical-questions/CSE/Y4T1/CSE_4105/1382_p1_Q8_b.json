@@ -1,0 +1,46 @@
+{
+  "id": "1382_p1_Q8(b)",
+  "course": {
+    "code": "CSE 4105",
+    "title": "Computer Networks",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\4th_Year_1st_Term_2023_1382.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Host A and B are each connected to a switch S via 10 Mbps link as shown in following (10) [CO1] figure."
+    },
+    {
+      "type": "text",
+      "value": "The propagation delay on each link is 20μs. Assume signaling message for circuit setup and acceptance are 100 bit long and processing time of a signaling message at switch S, hosts A and B is 15μs. These signaling messages are transmitted over the 10 Mbps link. Calculate the total time required to transmit a 10,000-bit message from A to B for circuit switching."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_4e9d4aaafb5916500f03270a9974f0e8163a479a88b2e617489772e889a4d78b.jpg",
+      "_source_path": "images/4e9d4aaafb5916500f03270a9974f0e8163a479a88b2e617489772e889a4d78b.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2023"
+}

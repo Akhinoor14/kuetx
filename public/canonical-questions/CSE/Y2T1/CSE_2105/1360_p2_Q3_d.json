@@ -1,0 +1,42 @@
+{
+  "id": "1360_p2_Q3(d)",
+  "course": {
+    "code": "CSE 2105",
+    "title": "Data Structures and Algorithms",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\2nd_Year_1st_Term_2023_1360.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following binary search tree T. Show stepwise, the In-order traversal result (10) [CO3] of T after the key 17 is deleted."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b428a07e9a8a8e1e0a6ec00e67c054b5c287102598fb44e440ad9dc8cc836a7c.jpg",
+      "_source_path": "images/b428a07e9a8a8e1e0a6ec00e67c054b5c287102598fb44e440ad9dc8cc836a7c.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

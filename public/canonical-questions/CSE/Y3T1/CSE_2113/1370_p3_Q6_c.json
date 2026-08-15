@@ -1,0 +1,42 @@
+{
+  "id": "1370_p3_Q6(c)",
+  "course": {
+    "code": "CSE 2113",
+    "title": "Computer Architecture",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\3rd_Year_1st_Term_2022_1370.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Describe keyboard scanning technique when the key $\\bullet _ { 2 } \\bullet _ { }$ is pressed on the $4 { \\times } 4$ keyboard shown (13) in following figure."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_86611df40016474e769c257eab2a01e84e4deb478fe6d7652ddd7bd40d5735a1.jpg",
+      "_source_path": "images/86611df40016474e769c257eab2a01e84e4deb478fe6d7652ddd7bd40d5735a1.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

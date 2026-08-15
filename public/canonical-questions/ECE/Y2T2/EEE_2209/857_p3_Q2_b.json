@@ -1,0 +1,49 @@
+{
+  "id": "857_p3_Q2(b)",
+  "course": {
+    "code": "EEE 2209",
+    "title": "Electrical Drives and Instrumentation",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\2nd_Year_2nd_Term_2018_857.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "Evaluate $\\int _ { \\zeta } . \\left( \\overline { z } - z ^ { 2 } \\right) d z$ , where C is the lower half of the circle $\\left\\{ z \\right| = 1$ in the positive sense. (08)"
+    },
+    {
+      "type": "text",
+      "value": "If $F ( z _ { 0 } ) = \\nsubseteq { 1 } . \\frac { 2 z ^ { 2 } - z - 2 } { z - z _ { 0 } } d z$ , where C is a positively oriented circle $\\left. z \\right. = 4$ , find $F ^ { \\prime } { \\left( - 3 i \\right) }$"
+    },
+    {
+      "type": "text",
+      "value": "(13)"
+    },
+    {
+      "type": "text",
+      "value": "using suitable theorem. What will be the value of F(5)?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

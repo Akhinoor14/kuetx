@@ -1,0 +1,42 @@
+{
+  "id": "850_p4_Q4(b)",
+  "course": {
+    "code": "MATH 2109",
+    "title": "Vector, Matrix and Transform",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2017\\2nd_Year_1st_Term_2017_850.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define Eigen value and Eigen vector. Find the Eigen values and Eigen vectors for (15) the matrix:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nA = \\left[ { \\begin{array} { r r r } { 2 } & { 2 } & { 1 } \\\\ { 1 } & { 3 } & { 1 } \\\\ { 1 } & { 2 } & { 2 } \\end{array} } \\right]\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

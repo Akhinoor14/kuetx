@@ -1,0 +1,50 @@
+{
+  "id": "1384_p2_Q7(c)",
+  "course": {
+    "code": "EEE 1207",
+    "title": "Basic Electrical Engineering",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2019\\4th_Year_2nd_Term_2019_1384.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "A capacitive discharge defibrillator circuit is shown in the following figure (10)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_3482694f06b361f6606b307d1e2393bb69189ed28850b031c829ae03ab9bec2e.jpg",
+      "_source_path": "images/3482694f06b361f6606b307d1e2393bb69189ed28850b031c829ae03ab9bec2e.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Here, $\\mathrm { R } _ { \\mathrm { c h e s t } } = 9 5 \\Omega , \\mathrm { R } _ { \\mathrm { l e a d } } = 5 \\Omega$ , total energy stored in C is W = 300J, If you want to deliver 90% of"
+    },
+    {
+      "type": "text",
+      "value": "W to heart in 8ms, what value of C should be used?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2019"
+}

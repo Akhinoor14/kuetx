@@ -1,0 +1,50 @@
+{
+  "id": "854_p1_Q8(d)",
+  "course": {
+    "code": "ECE 2201",
+    "title": "Analog Communications",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2015\\2nd_Year_2nd_Term_2015_854.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Explain additive three colour mixing theory. Describe with suitable diagrams the gun arrangement and constructional details of a delta gun color picture tübe."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_4d4d1dbc5de5ff07d5890b5e4fbfb17b2704903d6402a9be05f955db0d66cbaa.jpg",
+      "_source_path": "images/4d4d1dbc5de5ff07d5890b5e4fbfb17b2704903d6402a9be05f955db0d66cbaa.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

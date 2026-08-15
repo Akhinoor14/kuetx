@@ -1,0 +1,49 @@
+{
+  "id": "866_p5_Q7(a)",
+  "course": {
+    "code": "CSE 3209",
+    "title": "Database System",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\3rd_Year_2nd_Term_2016_866.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": "Why do we need PL/SQL? Consider the table mentioned in Table-7(a). Now write (09) the following queries:"
+    },
+    {
+      "type": "text",
+      "value": "(i) A PL/SQL block to calculate the grades of the students."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Show the number of students that have enrolled in subject S1, S2 and S3, respectively."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Roll</td><td rowspan=1 colspan=1>Subject</td><td rowspan=1 colspan=1>Marks</td></tr><tr><td rowspan=1 colspan=1>01</td><td rowspan=1 colspan=1>S1</td><td rowspan=1 colspan=1>80</td></tr><tr><td rowspan=1 colspan=1>02</td><td rowspan=1 colspan=1>S2</td><td rowspan=1 colspan=1>75</td></tr><tr><td rowspan=1 colspan=1>03</td><td rowspan=1 colspan=1>S1</td><td rowspan=1 colspan=1>67</td></tr><tr><td rowspan=1 colspan=1>04</td><td rowspan=1 colspan=1>S2</td><td rowspan=1 colspan=1>85</td></tr><tr><td rowspan=1 colspan=1>05</td><td rowspan=1 colspan=1>S3</td><td rowspan=1 colspan=1>77</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

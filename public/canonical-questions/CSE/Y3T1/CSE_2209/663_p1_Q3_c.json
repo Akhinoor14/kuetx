@@ -1,0 +1,57 @@
+{
+  "id": "663_p1_Q3(c)",
+  "course": {
+    "code": "CSE 2209",
+    "title": "Theory of Computation",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2015\\3rd_Year_1st_Term_2015_663.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write regular expression/definition for the following languages:"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "text",
+      "value": "(i) All strings containing no more than three a's over alphabet $\\{ { \\sf a } , { \\sf b } , { \\sf c } \\}$"
+    },
+    {
+      "type": "text",
+      "value": "(ii) The set of strings of $0 ^ { \\circ } { \\mathsf { s } }$ and 1's whose number of $\\rho \\ s$ is divisible by three and whose number of ${ \\bf \\Xi } _ { 1 } \\cdot { \\bf \\underline { { \\Lambda } } } _ { \\bf s }$ is odd."
+    },
+    {
+      "type": "text",
+      "value": "(iii)All string of digits with at most one repeated digit."
+    },
+    {
+      "type": "text",
+      "value": "(iv)All Strings which contain no runs of a’s length greater than two over alphabet {a, b, c}"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2015"
+}

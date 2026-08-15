@@ -1,0 +1,45 @@
+{
+  "id": "658_p2_Q2(c)",
+  "course": {
+    "code": "MATH 1107",
+    "title": "Differential and Integral Calculus",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2015\\2nd_Year_2nd_Term_2015_658.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the following table of data, estimate cos1.15 using Newton interpolation polynomial."
+    },
+    {
+      "type": "text",
+      "value": "(14)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>x</td><td rowspan=1 colspan=1>1.0</td><td rowspan=1 colspan=1>1.1</td><td rowspan=1 colspan=1>1.2</td></tr><tr><td rowspan=1 colspan=1>COSX</td><td rowspan=1 colspan=1>0.5403</td><td rowspan=1 colspan=1>0.4536</td><td rowspan=1 colspan=1>0.3024</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

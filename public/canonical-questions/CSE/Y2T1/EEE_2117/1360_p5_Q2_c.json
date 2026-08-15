@@ -1,0 +1,42 @@
+{
+  "id": "1360_p5_Q2(c)",
+  "course": {
+    "code": "EEE 2117",
+    "title": "Analog Electronics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\2nd_Year_1st_Term_2023_1360.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "What are the essentials of a transistor biasing circuit? For the emitter-stabilized bias (13) [CO1] circuit in following figure, determine: (i) $I _ { B } , ( \\mathrm { i i } ) I _ { c } , ( \\mathrm { i i i } ) V _ { C E } , ( \\mathrm { i v } ) V _ { C } , ( \\mathrm { v } ) V _ { B C }$ . Mention the application of Darlington pair circuit."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f9a4c779e8e05068c0deae8993f49b87e56754f5a379a8ea91028c0708b70395.jpg",
+      "_source_path": "images/f9a4c779e8e05068c0deae8993f49b87e56754f5a379a8ea91028c0708b70395.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

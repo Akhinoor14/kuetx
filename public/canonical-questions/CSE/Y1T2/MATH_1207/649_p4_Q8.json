@@ -1,0 +1,57 @@
+{
+  "id": "649_p4_Q8",
+  "course": {
+    "code": "MATH 1207",
+    "title": "Coordinate Geometry and Differential Equations",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2017\\1st_Year_2nd_Term_2017_649.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8",
+  "numbering_source": "regex",
+  "marks": 35,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve any three of the fóllowing differential equations:"
+    },
+    {
+      "type": "text",
+      "value": "i) $y ^ { \\prime } - 6 y ^ { \\prime } + 9 y = \\overset { : } { x } e ^ { 3 x } \\sin 2 x$"
+    },
+    {
+      "type": "text",
+      "value": "(35)"
+    },
+    {
+      "type": "text",
+      "value": "ii) $( D ^ { 2 } - 5 D + 4 ) y = 3 x + 2 e ^ { x } + 4 e ^ { 3 x }$"
+    },
+    {
+      "type": "text",
+      "value": "iii) $y ^ { \\prime \\prime } - 3 y ^ { \\prime } + 2 y = \\frac { 1 } { 1 + e ^ { - x } }$"
+    },
+    {
+      "type": "text",
+      "value": "iv) $y ^ { \\prime \\prime } + y = \\cot x$ , where. $y ^ { n } = \\frac { d ^ { 2 } y } { d x ^ { 2 } }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

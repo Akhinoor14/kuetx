@@ -1,0 +1,41 @@
+{
+  "id": "848_p2_Q6(d)",
+  "course": {
+    "code": "ECE 2101",
+    "title": "Analog Electronics-II",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2015\\2nd_Year_1st_Term_2015_848.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Spectroscopic ellipsometry measurements on a solid crystal at a wavelength of 826.6 nm. Show that the real and imaginary parts of the complex relative permittivity are 13.488 and 0.038 respectively. Find the complex refractive index, the reflectance and the absorption coefficient at this wavelength and the phase velocity."
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2015"
+}

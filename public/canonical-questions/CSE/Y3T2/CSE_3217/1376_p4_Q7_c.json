@@ -1,0 +1,42 @@
+{
+  "id": "1376_p4_Q7(c)",
+  "course": {
+    "code": "CSE 3217",
+    "title": "Mobile Computing",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\3rd_Year_2nd_Term_2022_1376.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "In the network shown in following figure, originally node A belongs to network-2 and(12) [CO3 node B belongs to network-3. In the above scenario, describe the data packet transmission process from node A to node B with a detailed explanation and necessary diagram(s)."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_205236bd23d81baf5cd8acb709778aa77b52e3bb536899b30cef301ab62f7ceb.jpg",
+      "_source_path": "images/205236bd23d81baf5cd8acb709778aa77b52e3bb536899b30cef301ab62f7ceb.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

@@ -1,0 +1,53 @@
+{
+  "id": "683_p4_Q2(b)",
+  "course": {
+    "code": "CSE 2201",
+    "title": "Algorithm Analysis and Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\4th_Year_2nd_Term_2018_683.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose that a data warehouse for ‘Big University' consists of the following four dimensions: student, course, semester and instructor; and two measures count and ávg\\_grade. When at the lowest conceptual level (e.g., fora given student, course, semester and instructor combination), the avg\\_grade measure stores the actual course grade of the student. At higher conceptual levels, avg\\_grade stores the average grade for the given combination."
+    },
+    {
+      "type": "text",
+      "value": "(18)"
+    },
+    {
+      "type": "text",
+      "value": "i) Draw the snowflake schema for the data warehouse."
+    },
+    {
+      "type": "text",
+      "value": "ii) Starting with the base cuboid [student, course, semester, instructor], what specific OLAP operations should one perform in order to list the average grade of CS courses for each ‘Big University' student."
+    },
+    {
+      "type": "text",
+      "value": "iii)  If each dimension has five levels, such as “student < major < status < university < all\", how many cuboids will this cube contain?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2018"
+}

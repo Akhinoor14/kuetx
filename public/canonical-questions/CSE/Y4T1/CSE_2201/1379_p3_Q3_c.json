@@ -1,0 +1,57 @@
+{
+  "id": "1379_p3_Q3(c)",
+  "course": {
+    "code": "CSE 2201",
+    "title": "Algorithm Analysis and Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2020\\4th_Year_1st_Term_2020_1379.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the label data points in the following table."
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>X1</td><td rowspan=1 colspan=1>x₂</td><td rowspan=1 colspan=1>Label</td></tr><tr><td rowspan=1 colspan=1>05</td><td rowspan=1 colspan=1>15</td><td rowspan=1 colspan=1>+</td></tr><tr><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>30</td><td rowspan=1 colspan=1>一</td></tr><tr><td rowspan=1 colspan=1>30</td><td rowspan=1 colspan=1>40</td><td rowspan=1 colspan=1>+</td></tr><tr><td rowspan=1 colspan=1>40</td><td rowspan=1 colspan=1>100</td><td rowspan=1 colspan=1>一</td></tr><tr><td rowspan=1 colspan=1>80</td><td rowspan=1 colspan=1>130</td><td rowspan=1 colspan=1>+</td></tr><tr><td rowspan=1 colspan=1>120</td><td rowspan=1 colspan=1>250</td><td rowspan=1 colspan=1>一</td></tr><tr><td rowspan=1 colspan=1> $\\underline { { Y _ { I } } }$ </td><td rowspan=1 colspan=1>Y2</td><td rowspan=1 colspan=1>?</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Identify the label of data point $( Y _ { l , }$ Y2) using KNN for $K = 3$ , where $Y _ { I } = \\mathrm { I }$ ast three digits of your Roll Number and $Y _ { 2 } { = } 2 Y _ { I }$"
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY TWO questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2020"
+}

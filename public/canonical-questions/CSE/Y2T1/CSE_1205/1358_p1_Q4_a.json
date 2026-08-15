@@ -1,0 +1,58 @@
+{
+  "id": "1358_p1_Q4(a)",
+  "course": {
+    "code": "CSE 1205",
+    "title": "Object Oriented Programming",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2021\\2nd_Year_1st_Term_2021_1358.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following binary tree representation of a max heap."
+    },
+    {
+      "type": "text",
+      "value": "(13)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_c366ee2958c004ef5884402fde39ccb76cbbd746b934aff2edc1515ff3406f5d.jpg",
+      "_source_path": "images/c366ee2958c004ef5884402fde39ccb76cbbd746b934aff2edc1515ff3406f5d.jpg"
+    },
+    {
+      "type": "text",
+      "value": "i) Give the array representation of the heap."
+    },
+    {
+      "type": "text",
+      "value": "ii) Delete the maximum key. Give the resulting heap, circling any entries from (i) that changed."
+    },
+    {
+      "type": "text",
+      "value": "iii) Insert the key Q into the original binary heap, circling any entries from (i) that changed."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2021"
+}

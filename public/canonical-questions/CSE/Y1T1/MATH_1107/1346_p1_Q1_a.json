@@ -1,0 +1,49 @@
+{
+  "id": "1346_p1_Q1(a)",
+  "course": {
+    "code": "MATH 1107",
+    "title": "Differential and Integral Calculus",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2021\\1st_Year_1st_Term_2021_1346.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define limit and differentiability of a function. A function f(x) is defined as follows:"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "text",
+      "value": "$f ( x ) = { \\left\\{ \\frac { x ^ { 2 } - 1 } { x - 1 } \\right. }$ , when $x \\neq 1$ 2, when whan"
+    },
+    {
+      "type": "text",
+      "value": "$D i s ( v s ) + u$ conti conn $\\lim \\limits _ { n  1 } \\frac { 1 } { n }$ and differtiability $d ^ { \\prime } x = 1$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2021"
+}

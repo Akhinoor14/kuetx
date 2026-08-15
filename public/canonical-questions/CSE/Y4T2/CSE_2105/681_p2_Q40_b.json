@@ -1,0 +1,53 @@
+{
+  "id": "681_p2_Q40(b)",
+  "course": {
+    "code": "CSE 2105",
+    "title": "Data Structures and Algorithms",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2016\\4th_Year_2nd_Term_2016_681.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "40(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose we have a 2-D data set mentioned in the following table. Given a new data point, (15) x = (1.4,1.6) as a query, rank the database points based on similarity with the query using the following:"
+    },
+    {
+      "type": "text",
+      "value": "i) Euclidean distance"
+    },
+    {
+      "type": "text",
+      "value": "ii)Manhattan distance"
+    },
+    {
+      "type": "text",
+      "value": "iii) Cosine similarity"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>A1</td><td rowspan=1 colspan=1>A2</td></tr><tr><td rowspan=1 colspan=1>X1</td><td rowspan=1 colspan=1>1.5</td><td rowspan=1 colspan=1>1.7</td></tr><tr><td rowspan=1 colspan=1>X2</td><td rowspan=1 colspan=1>2.0</td><td rowspan=1 colspan=1>1.9</td></tr><tr><td rowspan=1 colspan=1>x3</td><td rowspan=1 colspan=1>1.6</td><td rowspan=1 colspan=1>1.8</td></tr><tr><td rowspan=1 colspan=1>X4</td><td rowspan=1 colspan=1>1.2</td><td rowspan=1 colspan=1>1.5</td></tr><tr><td rowspan=1 colspan=1>x5</td><td rowspan=1 colspan=1>1.5</td><td rowspan=1 colspan=1>1.0</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2016"
+}

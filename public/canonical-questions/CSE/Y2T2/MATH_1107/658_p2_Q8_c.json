@@ -1,0 +1,49 @@
+{
+  "id": "658_p2_Q8(c)",
+  "course": {
+    "code": "MATH 1107",
+    "title": "Differential and Integral Calculus",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2015\\2nd_Year_2nd_Term_2015_658.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Give $\\frac { d y } { d x } = x ^ { 2 } + x y + y ^ { 2 }$ with $y = 1$ for $\\boldsymbol { x } = 0$ . Find y approximately for $x = 0 . 1$ by $\\mathtt { E u l e r } ^ { * } { \\mathtt { s } }$ method."
+    },
+    {
+      "type": "text",
+      "value": "(13)"
+    },
+    {
+      "type": "text",
+      "value": "(14)"
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

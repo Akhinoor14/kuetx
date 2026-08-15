@@ -1,0 +1,42 @@
+{
+  "id": "1372_p5_Q8(b)",
+  "course": {
+    "code": "CSE 3109",
+    "title": "Database Systems",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\3rd_Year_1st_Term_2024_1372.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "Based on the principles of Understanding Organizational Style, a Level-1 DFD for a (17) [CO2] Library Management System is provided in the following. Using this DFD, create a corresponding UML class diagram."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ddae49fe129b30322c5ac57d4fbc1f24bcffd4b532e41cb4ffd033c4645baf5c.jpg",
+      "_source_path": "images/ddae49fe129b30322c5ac57d4fbc1f24bcffd4b532e41cb4ffd033c4645baf5c.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2024"
+}

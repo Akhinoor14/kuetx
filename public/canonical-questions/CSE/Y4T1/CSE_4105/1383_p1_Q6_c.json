@@ -1,0 +1,42 @@
+{
+  "id": "1383_p1_Q6(c)",
+  "course": {
+    "code": "CSE 4105",
+    "title": "Computer Networks",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\4th_Year_1st_Term_2024_1383.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is link-local address in IPv6? Describe the process of Router Solicitation (20) [CO4] Message showing IPv6 header and ICMPv6 header values to get an IP using Stateless Auto Configuration mode. Calculate the IP of PC-A during this process shown in following figure."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_016d1579f601f7112e622cffc357889a34c4fc48a729b35ddbe3a7261e8c330d.jpg",
+      "_source_path": "images/016d1579f601f7112e622cffc357889a34c4fc48a729b35ddbe3a7261e8c330d.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2024"
+}

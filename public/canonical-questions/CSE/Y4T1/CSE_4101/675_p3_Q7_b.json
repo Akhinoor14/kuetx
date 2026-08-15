@@ -1,0 +1,47 @@
+{
+  "id": "675_p3_Q7(b)",
+  "course": {
+    "code": "CSE 4101",
+    "title": "Computer Graphics and Image Processing",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2016\\4th_Year_1st_Term_2016_675.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define Thinning. Draw the skeleton of the following binary image. Iş it possible to recover (15) the original image from the skeleton?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_027df89d81541f2fadf27a2e1e72d70f7b77983b7354eae47ec9b49b4b0340e7.jpg",
+      "_source_path": "images/027df89d81541f2fadf27a2e1e72d70f7b77983b7354eae47ec9b49b4b0340e7.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_89de23bde7a02294a3ca399e588224f66a58392e9bdd66f3fc822270ff65a2f1.jpg",
+      "_source_path": "images/89de23bde7a02294a3ca399e588224f66a58392e9bdd66f3fc822270ff65a2f1.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2016"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "661_p4_Q6(c)",
+  "course": {
+    "code": "HUM 2207",
+    "title": "Economics and Accounting",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\2nd_Year_2nd_Term_2018_661.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following accounts are taken from the ledger of Neha company at December 31,2017 (15)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Name of accounts</td><td rowspan=1 colspan=1>Tk</td></tr><tr><td rowspan=1 colspan=1>Cash at bank</td><td rowspan=1 colspan=1>43,400</td></tr><tr><td rowspan=1 colspan=1>Sales return</td><td rowspan=1 colspan=1>2,800</td></tr><tr><td rowspan=1 colspan=1>Sales</td><td rowspan=1 colspan=1>48,500</td></tr><tr><td rowspan=1 colspan=1>Depreciation</td><td rowspan=1 colspan=1>700</td></tr><tr><td rowspan=1 colspan=1>Allowance for bad debit</td><td rowspan=1 colspan=1>31,000</td></tr><tr><td rowspan=1 colspan=1>Accumulated depreciation</td><td rowspan=1 colspan=1>19,500</td></tr><tr><td rowspan=1 colspan=1>Advance paid salaries</td><td rowspan=1 colspan=1>31,100</td></tr><tr><td rowspan=1 colspan=1>Interest received</td><td rowspan=1 colspan=1>67,000</td></tr><tr><td rowspan=1 colspan=1>Rent Receivable</td><td rowspan=1 colspan=1>27,550</td></tr><tr><td rowspan=1 colspan=1>Motor car</td><td rowspan=1 colspan=1>41,500</td></tr><tr><td rowspan=1 colspan=1>Profit on sale of furniture</td><td rowspan=1 colspan=1>11,250</td></tr><tr><td rowspan=1 colspan=1>Bills Payable</td><td rowspan=1 colspan=1>20,250</td></tr><tr><td rowspan=1 colspan=1>Income tax expense</td><td rowspan=1 colspan=1>26,700</td></tr><tr><td rowspan=1 colspan=1>Loss on fire</td><td rowspan=1 colspan=1>2,650</td></tr><tr><td rowspan=1 colspan=1>Goodwill</td><td rowspan=1 colspan=1>21,100</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "838_p1_Q6(a)",
+  "course": {
+    "code": "EEE 1109",
+    "title": "Basic Electrical Engineering",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\1st_Year_1st_Term_2016_838.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": 6,
+  "content": [
+    {
+      "type": "text",
+      "value": "."
+    },
+    {
+      "type": "text",
+      "value": "(06)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_75edc1a19f1e16d79e40deb988d6e0c93c940e6ef07db741b1edf0b32f1b1dad.jpg",
+      "_source_path": "images/75edc1a19f1e16d79e40deb988d6e0c93c940e6ef07db741b1edf0b32f1b1dad.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2016"
+}

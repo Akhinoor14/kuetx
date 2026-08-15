@@ -1,0 +1,53 @@
+{
+  "id": "1368_p1_Q2(a)",
+  "course": {
+    "code": "CSE 2209",
+    "title": "Theory of Computation",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2020\\3rd_Year_1st_Term_2020_1368.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write regular expressions/definitions for the following languages:"
+    },
+    {
+      "type": "text",
+      "value": "(09)"
+    },
+    {
+      "type": "text",
+      "value": "i) All strings continuing no more than three a's over alphabet $\\{ a , b , c \\}$"
+    },
+    {
+      "type": "text",
+      "value": "ii) The set of strings of ${ 0 } ^ { \\circ } { \\bf { s } }$ and 1’s whose number of $0 ^ { \\circ } { \\bf s }$ is divisible by three and whose number of 1’s is odd,"
+    },
+    {
+      "type": "text",
+      "value": "iii) All string of digits with at most one repeated digit."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2020"
+}

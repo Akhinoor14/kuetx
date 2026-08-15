@@ -1,0 +1,53 @@
+{
+  "id": "1352_p1_Q6(a)",
+  "course": {
+    "code": "CSE 1101",
+    "title": "Structured Programming",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2020\\1st_Year_2nd_Term_2020_1352.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": 17,
+  "content": [
+    {
+      "type": "text",
+      "value": "Design a structure “student-record” to contain “name” and “date of birth\". Design another (17) structure data type named “date\" containing three integer members: day, month, and year. Use the “date” structure to represent the “date of birth” variable of “student-record\" structure."
+    },
+    {
+      "type": "text",
+      "value": "i) Suppose, we have only two students. You have to take inputs from the user for all of the variables of the structures for these two students, and after that, you have to print all the given input on the output console."
+    },
+    {
+      "type": "text",
+      "value": "ii) Write a user-defined function “CalculateAgeDifference\" which will take two “studentrecord\" type variables and finally, return a “date\" type variable which contains the age difference between two students. (Note: Assume, each month has 30 days)."
+    },
+    {
+      "type": "text",
+      "value": "Sample Input: Name of the student 1 = Rafi Date of birth of student 1 = 12/11/1996 Name of the student 2 = Riya Date of birth of student 2 = 1/9/1999"
+    },
+    {
+      "type": "text",
+      "value": "Sample Output for “CalculateAgeDifference\" function:   \nThe age difference between the two is 2 years 9 months 19 days."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2020"
+}

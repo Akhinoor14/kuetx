@@ -1,0 +1,42 @@
+{
+  "id": "1361_p5_Q3(b)",
+  "course": {
+    "code": "EEE 2117",
+    "title": "Analog Electronics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\2nd_Year_1st_Term_2024_1361.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine (i) ${ \\cal I } _ { c } \\left( \\mathrm { i i } \\right) V _ { E } \\left( \\mathrm { i i i } \\right) V _ { C C } \\left( \\mathrm { i v } \\right) V _ { C E } \\left( \\mathrm { v } \\right) V _ { B } \\left( \\mathrm { v i } \\right) R _ { 1 }$ for the amplifier circuit in the (10) [CO3] following figure"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_78461d5e8e0c21e14423f7d1bdd20d7a17cda4f40204fbf61b76bc5a8fa1e442.jpg",
+      "_source_path": "images/78461d5e8e0c21e14423f7d1bdd20d7a17cda4f40204fbf61b76bc5a8fa1e442.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2024"
+}

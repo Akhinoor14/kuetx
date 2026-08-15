@@ -1,0 +1,50 @@
+{
+  "id": "1377_p2_Q5(b)",
+  "course": {
+    "code": "CSE 3200",
+    "title": "System Development Project",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\3rd_Year_2nd_Term_2023_1377.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider a board game with 4 states {Start, Play, Bonus, End}. A player starts at “Start\" (20) [CO4] and transitions according to the probabilities given below:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\np = { \\left[ \\begin{array} { l l l l } { 0 . 1 } & { 0 . 8 } & { 0 . 1 } & { 0 } \\\\ { 0 } & { 0 . 5 } & { 0 . 4 } & { 0 . 1 } \\\\ { 0 } & { 0 . 3 } & { 0 . 6 } & { 0 . 1 } \\\\ { 0 } & { . 0 } & { 0 } & { 1 } \\end{array} \\right] }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "i) Find the expected number of steps to reach the “End’ state from “Start\"."
+    },
+    {
+      "type": "text",
+      "value": "ii) Compute steady-state probabilities (if they exist)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2023"
+}

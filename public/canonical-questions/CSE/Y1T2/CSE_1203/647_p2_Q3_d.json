@@ -1,0 +1,52 @@
+{
+  "id": "647_p2_Q3(d)",
+  "course": {
+    "code": "CSE 1203",
+    "title": "Digital Logic Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2015\\1st_Year_2nd_Term_2015_647.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Implement the following functions using PAL."
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r } { F _ { 1 } = A B ^ { \\prime } + A C } \\end{array}\\tag{05}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nF _ { 2 } = A C ^ { \\prime } + B C\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nF _ { 3 } = A B + B ^ { \\prime } C + A B C\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "863_p1_Q3(d)",
+  "course": {
+    "code": "ECE 3101",
+    "title": "Industrial Electronics",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2019\\3rd_Year_1st_Term_2019_863.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "with $V _ { s } = 2 2 0 V , R = 5 \\Omega$ $L = 7 . 5 n H , f = 1 k \\tilde { H } z , k = 0 . 5$ and $E = 0 V ,$ Calculate (i) the minimum instantaneous load current; (ii) the maximum peak-to-peak load ripple current."
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d318baac0f4bee31774f23a4f054b88e0791ee1d2ddcf5b25ae1dae5e42abfb4.jpg",
+      "_source_path": "images/d318baac0f4bee31774f23a4f054b88e0791ee1d2ddcf5b25ae1dae5e42abfb4.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

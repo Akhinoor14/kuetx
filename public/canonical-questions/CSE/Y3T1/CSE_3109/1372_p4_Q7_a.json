@@ -1,0 +1,53 @@
+{
+  "id": "1372_p4_Q7(a)",
+  "course": {
+    "code": "CSE 3109",
+    "title": "Database Systems",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\3rd_Year_1st_Term_2024_1372.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 16,
+  "content": [
+    {
+      "type": "text",
+      "value": "You are given two tables: Result and Distinction. The Result table contains the grades (16) [CO2] of all students in all subjects. The Distinction table contains the conditions for a student to pass with distinction, i.e., a student must get the same grades specified in the distinction table for all subjects to be a distinction holder."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>ID</td><td rowspan=1 colspan=1>Name</td><td rowspan=1 colspan=1>Subject</td><td rowspan=1 colspan=1>Grades</td></tr><tr><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>Abe</td><td rowspan=1 colspan=1>Japanese</td><td rowspan=1 colspan=1>A</td></tr><tr><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>Imai</td><td rowspan=1 colspan=1>Japanese</td><td rowspan=1 colspan=1>C</td></tr><tr><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>Ono</td><td rowspan=1 colspan=1>Japanese</td><td rowspan=1 colspan=1>B</td></tr><tr><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>Ono</td><td rowspan=1 colspan=1>English</td><td rowspan=1 colspan=1>A</td></tr><tr><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>Abe</td><td rowspan=1 colspan=1>English</td><td rowspan=1 colspan=1>A</td></tr><tr><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>Imai</td><td rowspan=1 colspan=1>English</td><td rowspan=1 colspan=1>B</td></tr></table>"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=2>Table2: Distinction</td></tr><tr><td rowspan=1 colspan=1>Subject</td><td rowspan=1 colspan=1>Grade</td></tr><tr><td rowspan=1 colspan=1>Japanese</td><td rowspan=1 colspan=1>A</td></tr><tr><td rowspan=1 colspan=1>English</td><td rowspan=1 colspan=1>A</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "i) Identify the relational operator with which you can find out the IDs and names of the students who passed with distinction, and show the output table."
+    },
+    {
+      "type": "text",
+      "value": "ii) Formulate an SQL query to do the operation of (i)."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2024"
+}

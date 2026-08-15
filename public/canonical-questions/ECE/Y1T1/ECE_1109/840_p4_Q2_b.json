@@ -1,0 +1,50 @@
+{
+  "id": "840_p4_Q2(b)",
+  "course": {
+    "code": "ECE 1109",
+    "title": "Introduction to Electronics and Communication Engineering",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\1st_Year_1st_Term_2018_840.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The R J smith corporation is a publisher of romance novel. The corporation hires an economical to determine the demand for its product. After months of hard work the analyst informed that the demand for the fim's novel is given by the following equation:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { Q _ { x } { = } 1 2 0 0 0 { - } 5 0 0 0 \\ \\mathrm { P _ { x } { + } } 5 \\mathrm { I } { + } 5 0 0 \\ \\mathrm { P _ { c } } }\\tag{25}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Where, Px is the price charged for the R J Smith novel. I1 is the incoe per capita. $\\mathbf { P _ { x } }$   \n$\\mathrm { P C } _ { 1 }$ is the price of books from competing publisher."
+    },
+    {
+      "type": "text",
+      "value": "Assume, that the initial values of $\\mathrm { \\Delta P _ { x } , }$ I andPc are\\$5, \\$10000 and \\$6 respectively. Using the information, the manager wanted to , (i) determine what effect a price increased would have on total revenue. (ii) Evaluate how sale of the novels would change during a period of rising incomes. (iii) Assess the probable impact if competing publishers would raise their price."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
+}

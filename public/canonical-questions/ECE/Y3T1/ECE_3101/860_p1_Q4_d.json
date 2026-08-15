@@ -1,0 +1,45 @@
+{
+  "id": "860_p1_Q4(d)",
+  "course": {
+    "code": "ECE 3101",
+    "title": "Industrial Electronics",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\3rd_Year_1st_Term_2016_860.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A slab of insulating material 0.025 m² in area, 0.01 m in thickness having relative $\\mathrm { m } ^ { 2 }$ permittivity of 5, and power factor of 0.05, is to be heated by dielectric heating. The $0 . 0 5 ,$ power required at 30 MHz is 400 W. Determine the voltage required and the resulting current that will flow through the material."
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

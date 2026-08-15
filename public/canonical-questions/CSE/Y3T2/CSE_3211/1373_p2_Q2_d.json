@@ -1,0 +1,66 @@
+{
+  "id": "1373_p2_Q2(d)",
+  "course": {
+    "code": "CSE 3211",
+    "title": "Compiler Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2019\\3rd_Year_2nd_Term_2019_1373.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following CFG for data type declaration of a programming language"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathrm { T Y P E }  \\mathrm { S I M P L E } | \\mathrm { i d } | \\mathrm { a r r a y } [ \\mathrm { S I M P L E } ] \\mathrm { o f } \\lessgtr \\neq \\emptyset \\mathrm { e } \\mathrm { ~ T \\mathcal { X } \\cap \\mathbb { E } ~ }\\tag{15}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "SIMPLE → integer | char | num dotdot num"
+    },
+    {
+      "type": "text",
+      "value": "Where Nonterminal : TYP, SIMPLE"
+    },
+    {
+      "type": "text",
+      "value": "Terminal : id, array, of, type, integer, char, num, dotdot"
+    },
+    {
+      "type": "text",
+      "value": "i) Calculate the FIRST and FOLLOW set."
+    },
+    {
+      "type": "text",
+      "value": "ii) Construct the Predictive Parsing table."
+    },
+    {
+      "type": "text",
+      "value": "i) Show the moement by the parser for the input “array [num dotdot num] of integer\"”."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2019"
+}

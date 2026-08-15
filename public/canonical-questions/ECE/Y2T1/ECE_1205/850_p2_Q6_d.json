@@ -1,0 +1,37 @@
+{
+  "id": "850_p2_Q6(d)",
+  "course": {
+    "code": "ECE 1205",
+    "title": "Science of Engineering Materials",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2017\\2nd_Year_1st_Term_2017_850.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The maximum magnetization $\\mathbf { M } _ { \\mathsf { s a t } }$ in iron is about $1 . 7 5 \\times 1 0 ^ { 6 } ~ \\mathrm { A m } ^ { - 1 }$ . This corresponds to all possible net spins aligning parallel to each other. Calculate the effective number of Bohr magnetrons per atom that would give $\\mathbf { M } _ { \\mathsf { s a t } } ,$ given that the density and relative atomic mass of iron are 7.86 gcm-³ and 55.85, respectively."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

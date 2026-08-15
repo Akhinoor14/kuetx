@@ -1,0 +1,41 @@
+{
+  "id": "683_p4_Q3(b)",
+  "course": {
+    "code": "CSE 2201",
+    "title": "Algorithm Analysis and Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\4th_Year_2nd_Term_2018_683.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Draw the FP-tree from the following table of five transactions, where minimum support (13) (min\\_sup) count = 3."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>TID</td><td rowspan=1 colspan=1>Item</td></tr><tr><td rowspan=1 colspan=1>T1</td><td rowspan=1 colspan=1>C, D, G, I, M, P, F, A</td></tr><tr><td rowspan=1 colspan=1>T2</td><td rowspan=1 colspan=1> $\\mathbf { F } , \\mathbf { L } , \\mathbf { M } , \\mathbf { O } , \\mathbf { A } , \\mathbf { B } , \\mathbf { C }$ </td></tr><tr><td rowspan=1 colspan=1>T3</td><td rowspan=1 colspan=1> $\\underline { { \\mathbf { \\bar { B } } , \\mathbf { F } , \\mathbf { H } , \\mathbf { j } , 0 } }$ </td></tr><tr><td rowspan=1 colspan=1>T4</td><td rowspan=1 colspan=1>B, C, K, S, P</td></tr><tr><td rowspan=1 colspan=1>T5</td><td rowspan=1 colspan=1> $\\overline { { \\mathrm { E } , \\mathrm { L } , \\mathrm { P } , \\mathrm { N } , \\mathrm { M } , \\mathrm { A } , \\mathrm { F } , \\mathrm { C } } }$ </td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2018"
+}

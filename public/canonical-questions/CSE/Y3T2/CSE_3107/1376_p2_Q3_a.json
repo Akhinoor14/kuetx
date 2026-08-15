@@ -1,0 +1,57 @@
+{
+  "id": "1376_p2_Q3(a)",
+  "course": {
+    "code": "CSE 3107",
+    "title": "Applied Statistics and Queuing Theory",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\3rd_Year_2nd_Term_2022_1376.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "In a study, the effectiveness of the methods of memorization was to be determined. For this purpose, three groups of 10 students, each randomly selected from a class were taken and each group was made to adopt a particular method of memorization. In the end, the performance was tested. The number of nonsense syllables correctly recalled by the students of these groups is shown in following table."
+    },
+    {
+      "type": "text",
+      "value": "(25) [CO4]"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Group1</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>11</td><td rowspan=1 colspan=1>11</td><td rowspan=1 colspan=1>08</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>07</td><td rowspan=1 colspan=1>09</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>06</td></tr><tr><td rowspan=1 colspan=1>Group2</td><td rowspan=1 colspan=1>14</td><td rowspan=1 colspan=1>08</td><td rowspan=1 colspan=1>19</td><td rowspan=1 colspan=1>15</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>11</td><td rowspan=1 colspan=1>13</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>09</td><td rowspan=1 colspan=1>12</td></tr><tr><td rowspan=1 colspan=1>Group3</td><td rowspan=1 colspan=1>11</td><td rowspan=1 colspan=1>11</td><td rowspan=1 colspan=1>13</td><td rowspan=1 colspan=1>09</td><td rowspan=1 colspan=1>07</td><td rowspan=1 colspan=1>05</td><td rowspan=1 colspan=1>06</td><td rowspan=1 colspan=1>08</td><td rowspan=1 colspan=1>07</td><td rowspan=1 colspan=1>10</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Now, using 5% level of significance perform the followings:"
+    },
+    {
+      "type": "text",
+      "value": "(i) Apply the Analysis of Variance (ANOVA) technique for testing the significance of the difference between group means."
+    },
+    {
+      "type": "text",
+      "value": "(ii) If (i) shows significant difference then perform t-tests to find out pairs of groups that are significantly different from one another."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2022"
+}

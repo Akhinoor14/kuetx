@@ -1,0 +1,46 @@
+{
+  "id": "677_p2_Q2(c)",
+  "course": {
+    "code": "CSE 3209",
+    "title": "Artificial Intelligence",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\4th_Year_1st_Term_2018_677.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following graph and associated information. Which one of greedy best and A\\* (15) search will give better route from A to B? Explain using necessary details:"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_70537d7ff30bd938715d9bd5ce5f37a15e28bc14204696823669ea58b4ee5742.jpg",
+      "_source_path": "images/70537d7ff30bd938715d9bd5ce5f37a15e28bc14204696823669ea58b4ee5742.jpg"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=2>Straight line distance to B</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>366</td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>0</td></tr><tr><td rowspan=1 colspan=1>F</td><td rowspan=1 colspan=1>176</td></tr><tr><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>380</td></tr><tr><td rowspan=1 colspan=1>S</td><td rowspan=1 colspan=1>253</td></tr><tr><td rowspan=1 colspan=1>R</td><td rowspan=1 colspan=1>193</td></tr><tr><td rowspan=1 colspan=1>P</td><td rowspan=1 colspan=1>100</td></tr><tr><td rowspan=1 colspan=1>Z</td><td rowspan=1 colspan=1>374</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2018"
+}

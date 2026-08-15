@@ -1,0 +1,46 @@
+{
+  "id": "1367_p1_Q1(b)",
+  "course": {
+    "code": "CSE 2201",
+    "title": "Algorithm Analysis and Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\2nd_Year_2nd_Term_2024_1367.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "A city traffic management authority wants to design a navigation system to compute the shortest travel time between intersections. The road network is represented as a weighted directed graph, where some roads may have negative weights due to traffic incentives, but no negative cycle exists. Apply the appropriate algorithm on the given graph to compute the shortest path from S vertex as the source."
+    },
+    {
+      "type": "text",
+      "value": "(13) [CO4]"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_230b374d3a36612cddeb469b487b1e60fc702342a49c1cddda0e46440681a482.jpg",
+      "_source_path": "images/230b374d3a36612cddeb469b487b1e60fc702342a49c1cddda0e46440681a482.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2024"
+}

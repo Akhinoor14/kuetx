@@ -1,0 +1,41 @@
+{
+  "id": "1370_p6_Q7(a)",
+  "course": {
+    "code": "CSE 3119",
+    "title": "Information Systems Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\3rd_Year_1st_Term_2022_1370.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Explain the concept of following class diagram using (i) Sequence diagram, (ii) State diagram. (15)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Sports</td><td rowspan=1 colspan=1>1    *</td><td rowspan=1 colspan=1>TeamManger</td><td rowspan=1 colspan=1>1     *</td><td rowspan=1 colspan=1>Matches</td><td rowspan=1 colspan=1>*   1</td><td rowspan=1 colspan=1>Player</td></tr><tr><td rowspan=1 colspan=2>getfitness(</td><td rowspan=1 colspan=1>getfitness()</td><td rowspan=1 colspan=2>request-toplay()addtoTeam()</td><td rowspan=1 colspan=2>Manofthematch()</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

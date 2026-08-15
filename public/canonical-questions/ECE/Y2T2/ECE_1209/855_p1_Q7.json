@@ -1,0 +1,69 @@
+{
+  "id": "855_p1_Q7",
+  "course": {
+    "code": "ECE 1209",
+    "title": "Analog Electronics-I",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\2nd_Year_2nd_Term_2016_855.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Show that for a fixed transmitted power, the SNR at the demodulator output is the (13) same for the baseband and the DSB-SC systems."
+    },
+    {
+      "type": "text",
+      "value": "What are differences between TDM and FDM? Draw the biock diagram of North (5+7) American FDM hierarchy."
+    },
+    {
+      "type": "text",
+      "value": ". What are disadvantages of FDM technique? Desigri an FDM system that can occupy.(10) 4 voice channels, each having 4 kHz of bandwidth. Show the configuration using frequency domain. Use 30-50kHz frequency space in the speċtrum and also use guard bands of 1 kHz."
+    },
+    {
+      "type": "text",
+      "value": "What are the functions of CRT in TV receiver? What are the differences between color (4+8) and·Black and White CRT?"
+    },
+    {
+      "type": "text",
+      "value": "Draw the block diagram of color TV receiver. (08)"
+    },
+    {
+      "type": "text",
+      "value": "What type of modulation is used in TV transmission? Explain the necessity of color (3+5) killer circuit in a color TV receiver."
+    },
+    {
+      "type": "text",
+      "value": "(:: Explain the composite video signal with necessary diagrams. (07)"
+    },
+    {
+      "type": "text",
+      "value": "(08)"
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

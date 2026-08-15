@@ -1,0 +1,53 @@
+{
+  "id": "1370_p4_Q3(b)",
+  "course": {
+    "code": "CSE 3109",
+    "title": "Database Systems",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\3rd_Year_1st_Term_2022_1370.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "When do you apply bitmap indexing in a database? Consider the following table:"
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>ID</td><td rowspan=1 colspan=1> $\\underline { { S _ { 1 } } }$ </td><td rowspan=1 colspan=1> $S _ { 2 }$ </td><td rowspan=1 colspan=1> $\\underline { { S } } _ { 3 }$ </td><td rowspan=1 colspan=1> $\\underline { { S _ { 4 } } }$ </td><td rowspan=1 colspan=1> $\\underline { { S _ { 5 } } }$ </td></tr><tr><td rowspan=1 colspan=1>Gender</td><td rowspan=1 colspan=1> $m$ </td><td rowspan=1 colspan=1> $\\mathcal { L }$ </td><td rowspan=1 colspan=1> $\\mathcal { L }$ </td><td rowspan=1 colspan=1> $\\underline { m }$ </td><td rowspan=1 colspan=1> $\\boldsymbol { \\underline f 1 }$ </td></tr><tr><td rowspan=1 colspan=1>Income_level</td><td rowspan=1 colspan=1> $L _ { 1 }$ </td><td rowspan=1 colspan=1> $L _ { 2 }$ </td><td rowspan=1 colspan=1> $\\underline { { L _ { 1 } } }$ </td><td rowspan=1 colspan=1> $L _ { 4 }$ </td><td rowspan=1 colspan=1> $\\underline { { L _ { 3 } } }$ </td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Find the bitmaps for income level and gender attributes. Hence formulate following queries using bitmap operations:"
+    },
+    {
+      "type": "text",
+      "value": "(i) the females with income level $L _ { 1 } , ( \\mathrm { i i } )$ the males with income level $L _ { 4 }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2022"
+}

@@ -1,0 +1,51 @@
+{
+  "id": "1382_p2_Q4(c)",
+  "course": {
+    "code": "CSE 3119",
+    "title": "Information Systems Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\4th_Year_1st_Term_2023_1382.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider planning problem in the block's world where a robot with one hand wants to (15) [CO2] rearrange the following blocks from the initial state to the goal state. Now, design exactly two actions and show the sequence of actions should perform by the robot to achieve the job done by forward planning."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f4fef9ac30b593b460496cda7c10700fed1b1e505e5516e958f6142f723d50d2.jpg",
+      "_source_path": "images/f4fef9ac30b593b460496cda7c10700fed1b1e505e5516e958f6142f723d50d2.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_1537dd17046885c3d1edeea5ca30c72800c12e0ab339ebec113c19fde0adace9.jpg",
+      "_source_path": "images/1537dd17046885c3d1edeea5ca30c72800c12e0ab339ebec113c19fde0adace9.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2023"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "866_p5_Q6(c)",
+  "course": {
+    "code": "CSE 3209",
+    "title": "Database System",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\3rd_Year_2nd_Term_2016_866.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Let the following relational schema be given: ${ \\mathrm { R } = ( \\mathrm { A } , \\mathrm { \\ B } , \\mathrm { \\ C } ) ; \\mathrm { \\ S } = ( \\mathrm { D } , \\mathrm { \\ E } , \\mathrm { \\ F } ) }$ , let relations r(R) and s(S) be given. Give a $\\mathtt { S Q L }$ statements that are equivalent- to the following relational algebra. Expressions:"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "text",
+      "value": "(i) $\\pi _ { \\mathsf { A B } } ( \\dot { \\mathbf { r } } ) \\ltimes \\pi _ { \\mathsf { B C } } ( \\ r ) ,$ (ii) πA,F(σc = D(r×s)), and (iii) ρr(σA = D(r×s))"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "861_p1_Q2(d)",
+  "course": {
+    "code": "ECE 3101",
+    "title": "Industrial Electronics",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2017\\3rd_Year_1st_Term_2017_861.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "is required to be designed for triggering an SCR. The UJT has the following data: $R _ { { \\tt B B } } = 4 . 5 { \\tt k } \\Omega _ { \\mathrm { ~ \\tt ~ } }$ $\\mathfrak { n } = 0 . 7 ;$ $\\bar { \\mathsf { V } } _ { \\mathfrak { p } } { = } 1 7 . 5 \\mathsf { v } ,$ $\\bar { \\mathrm { I } } _ { \\mathfrak { p } } { = } 0 . 7 \\mathrm { { m A } } .$ Vv=1.2v, $\\mathrm { I } _ { \\mathrm { v } } { = } 3 \\mathrm { m A }$ . Normal leakage current with emitter open= 4mA. Calculate the values of R, R1 and $\\mathtt { R } _ { 2 }$ (Neglect $\\bar { \\mathsf { V } } _ { \\mathsf { D } } )$ for the firing frequency 2.5kHz and capacitance $\\mathrm { C } { = } 0 . 0 5 \\mu \\mathrm { F }$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ace818a39ba08be2ebf2f77c6086daa459d49fcdf486b2bdea14444bf64d01fc.jpg",
+      "_source_path": "images/ace818a39ba08be2ebf2f77c6086daa459d49fcdf486b2bdea14444bf64d01fc.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

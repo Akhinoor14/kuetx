@@ -1,0 +1,50 @@
+{
+  "id": "863_p3_Q2(c)",
+  "course": {
+    "code": "ECE 3105",
+    "title": "Microwave Engineering and Radar",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2019\\3rd_Year_1st_Term_2019_863.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A signal generator is to feed equal power through a lossless air transmission line with a characteristic impedance 50 Ω to two separate resistive loads, 64 Ω and 25 Ω. Quarter wave transformers are used to match the loads to the 50 Ω line, as shown in figure below."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_6b8d45e0da25da27c2106c8899fa8c07b77399786bac92aa8089d94885f5e90a.jpg",
+      "_source_path": "images/6b8d45e0da25da27c2106c8899fa8c07b77399786bac92aa8089d94885f5e90a.jpg"
+    },
+    {
+      "type": "text",
+      "value": "i) Determine the required characteristics impedances of the quarter wave line,"
+    },
+    {
+      "type": "text",
+      "value": "ii) Find the standing-wave ratio on the matching line sections."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2019"
+}

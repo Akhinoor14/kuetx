@@ -1,0 +1,61 @@
+{
+  "id": "1369_p5_Q8(d)",
+  "course": {
+    "code": "CSE 3119",
+    "title": "Information Systems Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2021\\3rd_Year_1st_Term_2021_1369.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "Compare circuit switching and packet switching. (08)"
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    },
+    {
+      "type": "text",
+      "value": "TIME: 3 hours"
+    },
+    {
+      "type": "text",
+      "value": "N.B. i) Answer ANY THREE questions from each section in separate scripts."
+    },
+    {
+      "type": "text",
+      "value": "ii) Figures in the right margin indicate full marks."
+    },
+    {
+      "type": "text",
+      "value": "SECTION A"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script A)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2021"
+}

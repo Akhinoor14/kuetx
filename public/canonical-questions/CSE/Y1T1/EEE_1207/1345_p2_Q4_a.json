@@ -1,0 +1,77 @@
+{
+  "id": "1345_p2_Q4(a)",
+  "course": {
+    "code": "EEE 1207",
+    "title": "Basic Electrical Engineering",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2020\\1st_Year_1st_Term_2020_1345.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 30,
+  "content": [
+    {
+      "type": "text",
+      "value": "In today's world tablet computers are changing education. Tablets are more convenient than (30) books. They are more portable, and they have more features. Many people believe that in the future, the best jobs will require students to have strong online skilis. They also believe that tablets allow students to be more creative. As an example, students in a history class in Singapore are using an app to discover and “rebuild\" an ancient city. To start, they take a video"
+    },
+    {
+      "type": "text",
+      "value": "tour of the ancient city of Machu Picchu. With a tablet, they can “take a tour\". It is as if they were really there. Next, they use an app to design their own city. Finally, they turn their designs into a presentation and share them instantly on their screens. The students use creativity to solve their own problems. Teachers also find students are more motivated."
+    },
+    {
+      "type": "text",
+      "value": "Another advantage of tablet education is that it can improve student's test score. This is because tablets and other online devices allow teachers to help students in real time. They can also use AI tools that give them useful feedback about student performances."
+    },
+    {
+      "type": "text",
+      "value": "Still, no technology is perfect. There are the usual problems of lack of internet access and slow wifi connections. Another disadvantage is that students can get easily distracted. Some students end up playing a game or texting their friends. They stop concentrating on the teacher and classroom. This can be frustrating for teachers. Too much distraction can also have a negative impact on student's grades."
+    },
+    {
+      "type": "text",
+      "value": "To solve these problems, teachers are going to need more training in using tablets for education. Second, all students need to have reasonable quality devices and good wifi connections. Parents also must learn to adapt to technology. If students, parents, and teachers can work together, this new type of classroom could become the classroom of future."
+    },
+    {
+      "type": "text",
+      "value": "Read the above passage and answer the following questions."
+    },
+    {
+      "type": "text",
+      "value": "i) What are the differences between tablets and books for learning?"
+    },
+    {
+      "type": "text",
+      "value": "ii) What are the advantages of tablet education?"
+    },
+    {
+      "type": "text",
+      "value": "iii) What are the disadvantages of tablet education?"
+    },
+    {
+      "type": "text",
+      "value": "iv) What are some solutions to these disadvantages?"
+    },
+    {
+      "type": "text",
+      "value": "v)What is your opinion about tablet education? Explain."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2020"
+}

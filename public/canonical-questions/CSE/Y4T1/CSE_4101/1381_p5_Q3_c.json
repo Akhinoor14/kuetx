@@ -1,0 +1,52 @@
+{
+  "id": "1381_p5_Q3(c)",
+  "course": {
+    "code": "CSE 4101",
+    "title": "Computer Graphics and Image Processing",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\4th_Year_1st_Term_2022_1381.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Figure below shows a binary image containing Greek letter θ, and four structuring elements. (15) What morphological operations(s) would you use to obtain the number zero (0) from the letter θ? Consider that you can use any of the given structuring elements as many times as you wish Provide a reason for your choice of operation(s) as well as the structuring elements."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_fbd5eed562cf6ec92b89ff0cdf27bb8c5132abdcd91a3816768e00480b67ba36.jpg",
+      "_source_path": "images/fbd5eed562cf6ec92b89ff0cdf27bb8c5132abdcd91a3816768e00480b67ba36.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_fb6599ca7d073896e5fdfd9a83ca1fd1f38ec87110881df9c0fb227e9071f8c3.jpg",
+      "_source_path": "images/fb6599ca7d073896e5fdfd9a83ca1fd1f38ec87110881df9c0fb227e9071f8c3.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_eca7017dde0fe6cc3bf28df165c7ce510db4cc88e04e945db4c626e6a06b756a.jpg",
+      "_source_path": "images/eca7017dde0fe6cc3bf28df165c7ce510db4cc88e04e945db4c626e6a06b756a.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

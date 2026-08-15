@@ -1,0 +1,45 @@
+{
+  "id": "862_p3_Q3(c)",
+  "course": {
+    "code": "ECE 3105",
+    "title": "Microwave Engineering and Radar",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\3rd_Year_1st_Term_2018_862.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A $\\mathrm { T E } _ { 1 0 }$ wave at 10 GHz propagates in a brass $( \\sigma _ { c } = 1 . 5 7 x 1 0 _ { . } ^ { 7 } s / m )$ rectangular waveguide with inner dimensions $a { = } 1 . 5 c m$ and $\\pmb { b = } 0 . 6 c m$ , which is filled with polyethylene $( \\varepsilon _ { r } = 2 . 2 5 , \\mu _ { r } = 1$ , loss $\\mathrm { \\ t a n g e n t { = } } 4 x 1 0 ^ { - 4 } )$ . Determine: i) the phase constant, ii) the guide wavelength, iii) the phase velocity, iv) the wave impedance, and v) the attenuation constant due to loss in the dielectric."
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

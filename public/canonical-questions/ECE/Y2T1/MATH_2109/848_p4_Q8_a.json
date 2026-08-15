@@ -1,0 +1,46 @@
+{
+  "id": "848_p4_Q8(a)",
+  "course": {
+    "code": "MATH 2109",
+    "title": "Vector, Matrix and Transform",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2015\\2nd_Year_1st_Term_2015_848.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define the Laplace transform. Draw the graph of f(t), where"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathscr { f } ( t ) = \\left\\{ \\begin{array} { l l } { { \\sin t , } } & { { 0 < 1 < \\pi } } \\\\ { { 0 } } & { { , } } & { { \\pi < 1 < 2 \\pi } } \\end{array} \\right.\\tag{10}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Extended periodically with period $2 \\pi .$ Also find $L \\left\\{ f ( t ) \\right\\}$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2015"
+}

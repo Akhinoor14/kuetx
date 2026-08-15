@@ -1,0 +1,45 @@
+{
+  "id": "855_p5_Q4(b)",
+  "course": {
+    "code": "ECE 4139",
+    "title": "TV Engineering",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\2nd_Year_2nd_Term_2016_855.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write down the one·and two dimensional wave equations. A tightly, stretched string with fixed end points $x = 0$ and $x = 2$ is initially at a position given by'y = $\\begin{array} { r } { { \\frac { a } { 4 } } \\left( 3 \\sin { \\frac { \\pi x } { 2 } } - \\sin { \\frac { \\bar { 3 } \\pi x } { 2 } } \\right) } \\end{array}$ ), where a is a constant. If it is released from the rest from this position, find the displacement $y ( x , t )$ at any time $ { \\boldsymbol { t } } > 0$ at any position x."
+    },
+    {
+      "type": "text",
+      "value": "SECTION B"
+    },
+    {
+      "type": "text",
+      "value": "(Answer ANY THREE questions from this section in-Script B)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

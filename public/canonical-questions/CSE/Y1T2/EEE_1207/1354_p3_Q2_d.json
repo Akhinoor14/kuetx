@@ -1,0 +1,42 @@
+{
+  "id": "1354_p3_Q2(d)",
+  "course": {
+    "code": "EEE 1207",
+    "title": "Basic Electrical Engineering",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\1st_Year_2nd_Term_2022_1354.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the Thevenin's equivalent circuit for the network shown in the following figure (12) [CO4] across the RL."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_2f34add007efd1fc523b732a83a42957e2dd1dcdef1c261831c607cecc8aa9c7.jpg",
+      "_source_path": "images/2f34add007efd1fc523b732a83a42957e2dd1dcdef1c261831c607cecc8aa9c7.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2022"
+}

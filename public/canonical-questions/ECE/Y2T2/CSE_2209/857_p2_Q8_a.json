@@ -1,0 +1,37 @@
+{
+  "id": "857_p2_Q8(a)",
+  "course": {
+    "code": "CSE 2209",
+    "title": "Data Structures and Algorithm",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\2nd_Year_2nd_Term_2018_857.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "The electric field intensity of a linearly polarized uniform plane wave propagating in the $x > \\pm 2$ direction in seawater is $ { \\bar { E } _ { \\mathrm { r } } } = a _ { \\mathrm { s } } 5 0 \\cos { \\left( { \\mathrm { l 0 } ^ { 5 } \\pi t } \\right) } \\big ( { \\nu } / { m } \\big )$ at z=0. The constitutive parameter of (14) $z { = } 0$ seawater are $\\varepsilon _ { r } = 7 2 , \\mu _ { r } = 1$ and $\\sigma = 4 \\left( s / m \\right) \\mathbf { \\Omega } \\cdot \\mathbf { \\Omega } ( \\mathbf { a } )$ Determine the attenuation constant, phase constant, intrinsic impedance, phase velocity, wavelength and skin depth"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

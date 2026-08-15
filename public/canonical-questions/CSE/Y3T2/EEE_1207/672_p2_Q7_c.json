@@ -1,0 +1,37 @@
+{
+  "id": "672_p2_Q7(c)",
+  "course": {
+    "code": "EEE 1207",
+    "title": "Basic Electrical Engineering",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2018\\3rd_Year_2nd_Term_2018_672.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "An experiment reported in popular science compared fuel economics for two types of (13) similarity equipped diesel mini-trucks. Let us suppose that 12 Volkswager and 10 Toyota trucks are used in 90 km per hour steady-spaced tasks. If the 12 Volkswager trucks average 16 km per liter with a standard deviation of 1 km per liter and 10 Toyota trucks average 11 km per liter with a standard deviation of 0.8 km per liter, construct a 90% confidence interval for difference between the average km per liter of these two mini trucks."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2018"
+}

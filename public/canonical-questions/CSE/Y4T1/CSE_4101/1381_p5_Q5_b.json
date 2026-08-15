@@ -1,0 +1,53 @@
+{
+  "id": "1381_p5_Q5(b)",
+  "course": {
+    "code": "CSE 4101",
+    "title": "Computer Graphics and Image Processing",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2022\\4th_Year_1st_Term_2022_1381.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "You are given the following spatial domain filter."
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>0.15</td><td rowspan=1 colspan=1>0.35</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>-0.35</td><td rowspan=1 colspan=1>-0.15</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "i) Compute Fourier spectrum and phase of this filter,"
+    },
+    {
+      "type": "text",
+      "value": "ii) What do you think the effect of applying this filter to an image will be? Justify your answer."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

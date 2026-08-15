@@ -1,0 +1,41 @@
+{
+  "id": "866_p5_Q2(d)",
+  "course": {
+    "code": "CSE 3209",
+    "title": "Database System",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\3rd_Year_2nd_Term_2016_866.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write the algorithm to compute ${ \\mathfrak { a } } ^ { + }$ , the closure of a under $\\mathrm { F } \\colon \\alpha  \\beta$ is in $\\mathrm { F } ^ { + }  \\beta \\subseteq \\mathrm { a } ^ { + }$ Suppose $\\mathrm { R } = ( \\dot { \\mathrm { A } } , \\mathrm { B } , \\mathrm { C } , \\mathrm { G } , \\mathrm { H } ,$ I) and $\\mathrm { F } = \\{ \\mathrm { A {  } B , \\mathrm { A {  } C _ { \\mathrm { { , } } C G  H , C G  I , B  H } } } \\}$ Compute (AG)† and (AB)†. Which one is the candidate key and why."
+    },
+    {
+      "type": "text",
+      "value": "(09)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

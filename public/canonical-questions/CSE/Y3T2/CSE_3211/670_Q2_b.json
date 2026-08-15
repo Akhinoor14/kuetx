@@ -1,0 +1,42 @@
+{
+  "id": "670_Q2(b)",
+  "course": {
+    "code": "CSE 3211",
+    "title": "Compiler Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2016\\3rd_Year_2nd_Term_2016_670.pdf",
+    "source_page": null,
+    "paper_index": null
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define left factoring. Why do you need to eliminate left factoring? Eliminate left factoring (07) from the following grammar:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nA  a b B \\vert a B \\vert c d g \\vert c d \\dot { e } B \\vert c d f B\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

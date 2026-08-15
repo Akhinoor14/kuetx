@@ -1,0 +1,42 @@
+{
+  "id": "1357_p1_Q5(b)",
+  "course": {
+    "code": "CSE 1205",
+    "title": "Object Oriented Programming",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2020\\2nd_Year_1st_Term_2020_1357.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define the terms: complete graph, directed graph and degree of node in a graph. Consider the following graph G. Now, run a Breadth-First Search (BFS) algorithm on G to find the minimum path P from A to H. Show the queue status after each iteration."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_7febcdf3ceb07b0d8e4a0e84c14bd9274261a11d43c7a4c53f5205fccc090fb8.jpg",
+      "_source_path": "images/7febcdf3ceb07b0d8e4a0e84c14bd9274261a11d43c7a4c53f5205fccc090fb8.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2020"
+}

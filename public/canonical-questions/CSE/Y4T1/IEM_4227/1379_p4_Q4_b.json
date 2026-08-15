@@ -1,0 +1,41 @@
+{
+  "id": "1379_p4_Q4(b)",
+  "course": {
+    "code": "IEM 4227",
+    "title": "Industrial Management",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2020\\4th_Year_1st_Term_2020_1379.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "The sale of mobile phone of a store over the last 8 years is shown in the table below. Plot the (20) data, and visually check to see if a linear trend line would be appropriate. Then determine the equation of the trerd line, and predict sales for years 2022 and 2023."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Year</td><td rowspan=1 colspan=1>Unit Sales</td></tr><tr><td rowspan=1 colspan=1>2014</td><td rowspan=1 colspan=1>348</td></tr><tr><td rowspan=1 colspan=1>2015</td><td rowspan=1 colspan=1>370</td></tr><tr><td rowspan=1 colspan=1>2016</td><td rowspan=1 colspan=1>385</td></tr><tr><td rowspan=1 colspan=1>2017</td><td rowspan=1 colspan=1>355</td></tr><tr><td rowspan=1 colspan=1>2018</td><td rowspan=1 colspan=1>368</td></tr><tr><td rowspan=1 colspan=1>2019</td><td rowspan=1 colspan=1>390</td></tr><tr><td rowspan=1 colspan=1>2020</td><td rowspan=1 colspan=1>410</td></tr><tr><td rowspan=1 colspan=1>2021</td><td rowspan=1 colspan=1>425</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2020"
+}

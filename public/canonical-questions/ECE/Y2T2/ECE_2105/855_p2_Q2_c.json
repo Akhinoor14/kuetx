@@ -1,0 +1,42 @@
+{
+  "id": "855_p2_Q2(c)",
+  "course": {
+    "code": "ECE 2105",
+    "title": "Electromagnetic Fields and Waves",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2016\\2nd_Year_2nd_Term_2016_855.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b9b8b2084f1eb9770297c9456ee3b263aaaf8047c59a0eae9d16892827a5c9ae.jpg",
+      "_source_path": "images/b9b8b2084f1eb9770297c9456ee3b263aaaf8047c59a0eae9d16892827a5c9ae.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

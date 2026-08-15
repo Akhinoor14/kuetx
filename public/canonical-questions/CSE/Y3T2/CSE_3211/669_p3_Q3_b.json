@@ -1,0 +1,37 @@
+{
+  "id": "669_p3_Q3(b)",
+  "course": {
+    "code": "CSE 3211",
+    "title": "Compiler Design",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2015\\3rd_Year_2nd_Term_2015_669.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the general configuration of a LR parser $( \\mathrm { S } _ { 0 } \\mathrm { X } _ { 1 } \\mathrm { S } _ { 1 } . . . \\mathrm { X } _ { \\mathrm { m } } \\mathrm { S } _ { \\mathrm { m } } , \\mathrm { a } _ { \\mathrm { i } } \\mathrm { a } _ { \\mathrm { i } + 1 } . . . \\mathrm { a } _ { \\mathrm { n } } \\mathrm { \\$ } )$ . Explain the (09) actions by the parser based on $< \\mathsf { S } _ { \\mathsf { m } } , \\mathsf { a } _ { \\mathrm { i } } > .$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2015"
+}

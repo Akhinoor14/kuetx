@@ -1,0 +1,41 @@
+{
+  "id": "653_p5_Q7(a)",
+  "course": {
+    "code": "MATH 2107",
+    "title": "Fourier Analysis and Linear Algebra",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2016\\2nd_Year_1st_Term_2016_653.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "\\* A sinusoidal voltage E sin ωt , where t is time, is passed through a half-wave rectifier that (18) clips the negative portion of the wave. Find the Fourier series of the resulting periodic"
+    },
+    {
+      "type": "text",
+      "value": "function $u ( t ) = \\left\\{ \\begin{array} { l l } { \\displaystyle 0 \\qquad \\mathrm { , ~ i f } \\quad \\displaystyle - \\frac { \\pi } { \\omega } < t \\leq 0 } \\\\ { \\displaystyle E \\sin \\omega t , \\mathrm { ~ i f } \\quad 0 < t < \\frac { \\pi } { \\omega } } \\end{array} \\right.$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2016"
+}

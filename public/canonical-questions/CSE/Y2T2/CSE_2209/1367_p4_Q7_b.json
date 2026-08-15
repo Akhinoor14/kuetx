@@ -1,0 +1,49 @@
+{
+  "id": "1367_p4_Q7(b)",
+  "course": {
+    "code": "CSE 2209",
+    "title": "Theory of Computation",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2024,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2024\\2nd_Year_2nd_Term_2024_1367.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "A software company is building an automated code verification system where the first requirement is to check whether program constructs (such as parentheses and block delimiters) are properly nested, and the second requirement is to ensure that every declared function is invoked exactly once and that the total number of variable declarations equals the total number of variable usages across the entire program. Now,"
+    },
+    {
+      "type": "text",
+      "value": "(15) [CO2]"
+    },
+    {
+      "type": "text",
+      "value": "i) Analyze whether a pushdown automaton is sufficient to handle both verification tasks."
+    },
+    {
+      "type": "text",
+      "value": "ii) Explain how Turing Machine (TM) can overcome the limitations of a PDA in this scenario and justify why a TM is strictly more powerful."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2024"
+}

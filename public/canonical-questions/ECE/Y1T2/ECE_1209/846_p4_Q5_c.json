@@ -1,0 +1,46 @@
+{
+  "id": "846_p4_Q5(c)",
+  "course": {
+    "code": "ECE 1209",
+    "title": "Analog Electronics-I",
+    "department": "Department of Electronics and Communication Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Electronics_and_Communication_Engineering\\2018\\1st_Year_2nd_Term_2018_846.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "The source follower network of the following figure has the Q-point as $V _ { G S _ { 2 } } { = } { - } 2 . 8 6 \\nabla$ and $I _ { D \\varrho } = 4 . 5 6 \\mathrm { m A }$ . Determine: (i) gm, (ii) $^ { r _ { d } , }$ (iii) $Z _ { i } ,$ (iv) $Z _ { o }$ with and without rd and (v) $\\boldsymbol { A } _ { \\boldsymbol { v } }$ with and without $r _ { d } .$"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_df4c120834f47d3f36e4bca36214bb0a10258a76e7c863cf13312b37162697a5.jpg",
+      "_source_path": "images/df4c120834f47d3f36e4bca36214bb0a10258a76e7c863cf13312b37162697a5.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

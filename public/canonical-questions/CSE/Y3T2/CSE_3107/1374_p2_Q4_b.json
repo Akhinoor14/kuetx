@@ -1,0 +1,37 @@
+{
+  "id": "1374_p2_Q4(b)",
+  "course": {
+    "code": "CSE 3107",
+    "title": "Applied Statistics and Queuing Theory",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2020\\3rd_Year_2nd_Term_2020_1374.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "The systolic blood-pressure threshold for hypertension treatment is 140 mm Hg for all adults. (10) We surveyed 157 Bangladeshi people and found that the mean systolic blood pressure was 146 mm Hg with a standard deviation of 27. On the basis of the above information, decide whether the mean systolic blood pressure of Bangladeshi people is greater than the standard threshold of 140 mm Hg using a 99% confidence level?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2020"
+}

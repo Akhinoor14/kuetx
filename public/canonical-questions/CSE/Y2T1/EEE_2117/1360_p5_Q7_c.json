@@ -1,0 +1,51 @@
+{
+  "id": "1360_p5_Q7(c)",
+  "course": {
+    "code": "EEE 2117",
+    "title": "Analog Electronics",
+    "department": "Department of Computer Science and Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Computer_Science_and_Engineering\\2023\\2nd_Year_1st_Term_2023_1360.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the output voltages of the following op-Amp circuits:"
+    },
+    {
+      "type": "text",
+      "value": "(12) [CO4]"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_4b54e174aaad858f2da8835d397a3793f49a161e40830204d2fe86d7d3e785f6.jpg",
+      "_source_path": "images/4b54e174aaad858f2da8835d397a3793f49a161e40830204d2fe86d7d3e785f6.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a73ed7f0dbc5a12b5b99f9278ecf946492c90119bfa0c01495b63d1e636c1ccc.jpg",
+      "_source_path": "images/a73ed7f0dbc5a12b5b99f9278ecf946492c90119bfa0c01495b63d1e636c1ccc.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}
