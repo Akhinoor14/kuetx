@@ -1,37 +1,44 @@
-{
-  "id": "609_p5_Q3(a)",
-  "course": {
-    "code": "HUM 1223",
-    "title": "Sociology",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 2nd Term"
-  },
-  "exam": {
-    "exam_year": 2015,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\1st_Year_2nd_Term_2015_609.pdf",
-    "source_page": null,
-    "paper_index": 5
-  },
-  "question_number": "3(a)",
-  "numbering_source": "regex",
-  "marks": 10,
-  "content": [
-    {
-      "type": "text",
-      "value": "What is social structure and what are the basic elements of social structure? (10)"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
-}
+[
+  {
+    "id": "609_p5_Q3(a)",
+    "course": {
+      "code": "HUM 1223",
+      "title": "Sociology",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2015,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\1st_Year_2nd_Term_2015_609.pdf",
+      "source_page": null,
+      "paper_index": 5
+    },
+    "question_number": "3(a)",
+    "numbering_source": "regex",
+    "marks": 10,
+    "content": [
+      {
+        "type": "text",
+        "value": "What is social structure and what are the basic elements of social structure? (10)"
+      }
+    ],
+    "topics": [
+      "Introduction to sociology and sociological perspective. The modern interdisciplinary relation between sociology and development. Basic concept of sociology: society and its evolution, community, association, institution, groups, customs, culture, and civilization. Socialization process and formation of personality. Marriage and Family: Types of Family and Future structure of family. Social and Environmental issues. Social structure and its components. Social control and deviance art and architecture as an agency of social control, social stratification and mobility evolutionary forms of social change and agencies for social change. Social structure and change of Bangladesh in urban and rural context. Industrialization and urbanization in Bangladesh and its pattern and impact on society."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015",
+    "classification_notes": "প্রশ্নটি সমাজের গঠন ও মৌলিক উপাদান নিয়ে যা, যা সিলেবাস ১-এর 'সমাজ এবং এর বিকাশ' (society and its evolution) অংশের সাথে সরাসরি সম্পর্কিত।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি সিলেবাসের 'Social structure and its components' শিরোনামের সাথে সরাসরি মিলে এবং বিষয়বস্তুর প্রকৃতি অনুযায়ী এটি অত্যন্ত উপযুক্ত।"
+  }
+]

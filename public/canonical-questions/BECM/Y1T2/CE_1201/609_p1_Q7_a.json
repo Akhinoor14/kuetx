@@ -1,46 +1,53 @@
-{
-  "id": "609_p1_Q7(a)",
-  "course": {
-    "code": "CE 1201",
-    "title": "Engineering Mechanics",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 2nd Term"
-  },
-  "exam": {
-    "exam_year": 2015,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\1st_Year_2nd_Term_2015_609.pdf",
-    "source_page": null,
-    "paper_index": 1
-  },
-  "question_number": "7(a)",
-  "numbering_source": "regex",
-  "marks": 20,
-  "content": [
-    {
-      "type": "text",
-      "value": "State the principle of linear impulse and momentum. A jet of water A, whose (20)"
+[
+  {
+    "id": "609_p1_Q7(a)",
+    "course": {
+      "code": "CE 1201",
+      "title": "Engineering Mechanics",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 2nd Term"
     },
-    {
-      "type": "text",
-      "value": "velocity is $V _ { A } = 5 5$ fps, strikes a blade B, which is moving at $V _ { 8 } = 2 2$ fps in the same direction as A, shown in figure. 7 Ib/s of water strike the blade, halfpassing without friction along the upper part and half-passing across the lower. What force in the y-direction is needed to prevent the movement of the blade in that direction? What is the horizontal thrust on the blade?"
+    "exam": {
+      "exam_year": 2015,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\1st_Year_2nd_Term_2015_609.pdf",
+      "source_page": null,
+      "paper_index": 1
     },
-    {
-      "type": "image",
-      "asset": "assets/_tmp_Q_tmp_48863d6b06877871f17647e8a184dc27fd6ad938d5ffc14c66bcd3f14a40c988.jpg",
-      "_source_path": "images/48863d6b06877871f17647e8a184dc27fd6ad938d5ffc14c66bcd3f14a40c988.jpg"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
-}
+    "question_number": "7(a)",
+    "numbering_source": "regex",
+    "marks": 20,
+    "content": [
+      {
+        "type": "text",
+        "value": "State the principle of linear impulse and momentum. A jet of water A, whose (20)"
+      },
+      {
+        "type": "text",
+        "value": "velocity is $V _ { A } = 5 5$ fps, strikes a blade B, which is moving at $V _ { 8 } = 2 2$ fps in the same direction as A, shown in figure. 7 Ib/s of water strike the blade, halfpassing without friction along the upper part and half-passing across the lower. What force in the y-direction is needed to prevent the movement of the blade in that direction? What is the horizontal thrust on the blade?"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_48863d6b06877871f17647e8a184dc27fd6ad938d5ffc14c66bcd3f14a40c988.jpg",
+        "_source_path": "images/48863d6b06877871f17647e8a184dc27fd6ad938d5ffc14c66bcd3f14a40c988.jpg"
+      }
+    ],
+    "topics": [
+      "Introduction; Coplanar concurrent forces; moments and parallel coplanar forces; Non-concurrent non-parallel coplanar forces; Non-coplanar forces; Centroids; Moment of inertia of areas; Moment of inertia of masses; Friction; Flexible cords; Plane motion; Force systems that produce rectilinear motion; Work, kinetic energy & power; Impulse and momentum."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015",
+    "classification_notes": "প্রশ্নটি জেটের গতি, বল এবং ভরবেগের (momentum) ওপর নির্ভরশীল যা সরাসরি সিলেবাসের 'Force systems that produce rectilinear motion' টপিকের অন্তর্ভুক্ত।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি সরাসরি ইম্পালস এবং মোমেন্টামের নীতি ও রেখীয় গতির বল ব্যবস্থার সাথে সম্পর্কিত যা সিলেবাসের 'Impulse and momentum' টপিকের অন্তর্ভুক্ত।"
+  }
+]

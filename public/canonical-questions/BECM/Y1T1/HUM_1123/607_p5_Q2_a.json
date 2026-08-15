@@ -1,69 +1,76 @@
-{
-  "id": "607_p5_Q2(a)",
-  "course": {
-    "code": "HUM 1123",
-    "title": "English",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2019,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\1st_Year_1st_Term_2019_607.pdf",
-    "source_page": null,
-    "paper_index": 5
-  },
-  "question_number": "2(a)",
-  "numbering_source": "regex",
-  "marks": 14,
-  "content": [
-    {
-      "type": "text",
-      "value": "Frame wh questions from the underlined parts of the following answers:"
+[
+  {
+    "id": "607_p5_Q2(a)",
+    "course": {
+      "code": "HUM 1123",
+      "title": "English",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 1st Term"
     },
-    {
-      "type": "text",
-      "value": "(14)"
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\1st_Year_1st_Term_2019_607.pdf",
+      "source_page": null,
+      "paper_index": 5
     },
-    {
-      "type": "text",
-      "value": "(i) We worship God."
+    "question_number": "2(a)",
+    "numbering_source": "regex",
+    "marks": 14,
+    "content": [
+      {
+        "type": "text",
+        "value": "Frame wh questions from the underlined parts of the following answers:"
+      },
+      {
+        "type": "text",
+        "value": "(14)"
+      },
+      {
+        "type": "text",
+        "value": "(i) We worship God."
+      },
+      {
+        "type": "text",
+        "value": "(ii) The Minister visited the college."
+      },
+      {
+        "type": "text",
+        "value": "(iii) The boy shouted for help."
+      },
+      {
+        "type": "text",
+        "value": "(iv) Open fresh air is good for health."
+      },
+      {
+        "type": "text",
+        "value": "(v) I was annoyed with him."
+      },
+      {
+        "type": "text",
+        "value": "(vi) The man was set free for his innocence."
+      },
+      {
+        "type": "text",
+        "value": "(vii) He drives car seventy km per hour."
+      }
+    ],
+    "topics": [
+      "General Discussion: Introduction, Mastering Various Approaches to Learning English. Grammatical Problem: Construction of Words and Sentences, Grammatical Problems, Sentence variety and style, Conditionals, Grammar and Usages, Vocabulary and Diction, Clauses, Prefixes & Suffixes, Synonyms and Antonyms. English phonetics: The phonetics, systems and Correct English pronunciation. Reading Skill: Discussing Readability, Scan and skim Reading, Generating Ideas through Purposive Reading, The reading of selected Stories. Writing Skill: Principles of Effective Writing, Organization in writing, Planning and Development, Composition, Precise writing, Paragraph writing, Amplification, Free Composition. General Strategies for the writing process: Generating Ideas, Identifying Audiences and Purposes, Constructing Arguments, Stating Problems, Drafting and finalizing. Approaches to Communication: Communication Today, Business Communication, Organization and organizational Behavior, Developing Intra-personal Interpersonal Relationship, Introducing Dialogue. Specific Applications of Tenders and Quotations, Resumes and job Letters, journal Articles, Technical and Scientific Presentation."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
     },
-    {
-      "type": "text",
-      "value": "(ii) The Minister visited the college."
-    },
-    {
-      "type": "text",
-      "value": "(iii) The boy shouted for help."
-    },
-    {
-      "type": "text",
-      "value": "(iv) Open fresh air is good for health."
-    },
-    {
-      "type": "text",
-      "value": "(v) I was annoyed with him."
-    },
-    {
-      "type": "text",
-      "value": "(vi) The man was set free for his innocence."
-    },
-    {
-      "type": "text",
-      "value": "(vii) He drives car seventy km per hour."
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
-}
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019",
+    "classification_notes": "প্রশ্নটি 'wh questions' গঠন ও বাক্যের কাঠামো পরিবর্তনের সাথে সরাসরি সম্পর্কিত, যা সিলেবাসের প্রথম পয়েন্টে উল্লেখিত 'Construction of Words and Sentences', 'Sentence variety' এবং 'Grammatical Problems'-এর অন্তর্ভুক্ত।",
+    "topic_confidence": 0.95,
+    "verification_notes": "'WH questions' গঠন ও বাক্য কাঠামো পরিবর্তনের বিষয়টি স্পষ্টভাবে 'Construction of Words and Sentences', 'Sentence variety' এবং 'Grammatical Problems'-এর অন্তর্ভুক্ত।"
+  }
+]

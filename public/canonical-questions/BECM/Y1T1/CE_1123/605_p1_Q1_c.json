@@ -1,41 +1,48 @@
-{
-  "id": "605_p1_Q1(c)",
-  "course": {
-    "code": "CE 1123",
-    "title": "Surveying",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2017,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\1st_Year_1st_Term_2017_605.pdf",
-    "source_page": null,
-    "paper_index": 1
-  },
-  "question_number": "1(c)",
-  "numbering_source": "regex",
-  "marks": 13,
-  "content": [
-    {
-      "type": "text",
-      "value": "An old map was plotted to a scale of 40 m to 1 cm. Over the years, this map has been shrinking and a line originally 20 cm long is only 19.5 cm long at present. Again, the 20 cm chain was 5cm too long. If the present area of the map measured by planimeter is 125.50 cm², find the true area of the land surveying."
+[
+  {
+    "id": "605_p1_Q1(c)",
+    "course": {
+      "code": "CE 1123",
+      "title": "Surveying",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 1st Term"
     },
-    {
-      "type": "text",
-      "value": "(13)"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2017"
-}
+    "exam": {
+      "exam_year": 2017,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\1st_Year_1st_Term_2017_605.pdf",
+      "source_page": null,
+      "paper_index": 1
+    },
+    "question_number": "1(c)",
+    "numbering_source": "regex",
+    "marks": 13,
+    "content": [
+      {
+        "type": "text",
+        "value": "An old map was plotted to a scale of 40 m to 1 cm. Over the years, this map has been shrinking and a line originally 20 cm long is only 19.5 cm long at present. Again, the 20 cm chain was 5cm too long. If the present area of the map measured by planimeter is 125.50 cm², find the true area of the land surveying."
+      },
+      {
+        "type": "text",
+        "value": "(13)"
+      }
+    ],
+    "topics": [
+      "Reconnaissance survey; Linear measurements; Traverse survey; Plane table survey; Levelling & contouring; Calculation of areas and volumes; Tachometry: Introduction, principles and problems on tachometry; Astronomical surveying: Definition, instruments, astronomical corrections, systems of time; Introduction of terrestrial photography, aerial photography, reading of photo mosaic, scale Project surveying; Errors in surveying; remote sensing; Introduction and application of global positioning system (GPS) and geographical information system (GIS), House setting."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2017",
+    "classification_notes": "প্রশ্নটি মূলত ভূমি পরিমাপ, স্কেল সংশোধন এবং ক্ষেত্রফল গণনা নিয়ে যা 'Levelling & contouring; Calculation of areas and volumes' টপিকের অন্তর্ভুক্ত।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি সত্যিই ভূমি পরিমাপের ত্রুটি সংশোধন ও ক্ষেত্রফল গণনা নিয়ে যা 'Calculation of areas and volumes' টপিকের সাথে সরাসরি সম্পর্কিত।"
+  }
+]

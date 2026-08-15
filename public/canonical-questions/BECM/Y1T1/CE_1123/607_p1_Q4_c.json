@@ -1,45 +1,52 @@
-{
-  "id": "607_p1_Q4(c)",
-  "course": {
-    "code": "CE 1123",
-    "title": "Surveying",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2019,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\1st_Year_1st_Term_2019_607.pdf",
-    "source_page": null,
-    "paper_index": 1
-  },
-  "question_number": "4(c)",
-  "numbering_source": "regex",
-  "marks": 15,
-  "content": [
-    {
-      "type": "text",
-      "value": "To find the elevation of the top of the minar of KUET mosque, observations were (15) made from two stations P and R, 50 m apart. The horizontal angle measured at P between R and the top of the minar was 60º45' and that measured at R between the top of the minar and P station was 72º30'. The angle of elevation of the top of the minar was measured to be 20º17' at R and that was 20º48' at P. Stadia readings on B.M. when the instrument was at P = 2.969 m and that with the instrument at R = 3.073 m. Calculate the elevation of the minar of KUET mosque if that of B.M. was 420 m."
+[
+  {
+    "id": "607_p1_Q4(c)",
+    "course": {
+      "code": "CE 1123",
+      "title": "Surveying",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 1st Term"
     },
-    {
-      "type": "text",
-      "value": "(05)"
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\1st_Year_1st_Term_2019_607.pdf",
+      "source_page": null,
+      "paper_index": 1
     },
-    {
-      "type": "text",
-      "value": "Section - B"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
-}
+    "question_number": "4(c)",
+    "numbering_source": "regex",
+    "marks": 15,
+    "content": [
+      {
+        "type": "text",
+        "value": "To find the elevation of the top of the minar of KUET mosque, observations were (15) made from two stations P and R, 50 m apart. The horizontal angle measured at P between R and the top of the minar was 60º45' and that measured at R between the top of the minar and P station was 72º30'. The angle of elevation of the top of the minar was measured to be 20º17' at R and that was 20º48' at P. Stadia readings on B.M. when the instrument was at P = 2.969 m and that with the instrument at R = 3.073 m. Calculate the elevation of the minar of KUET mosque if that of B.M. was 420 m."
+      },
+      {
+        "type": "text",
+        "value": "(05)"
+      },
+      {
+        "type": "text",
+        "value": "Section - B"
+      }
+    ],
+    "topics": [
+      "Reconnaissance survey; Linear measurements; Traverse survey; Plane table survey; Levelling & contouring; Calculation of areas and volumes; Tachometry: Introduction, principles and problems on tachometry; Astronomical surveying: Definition, instruments, astronomical corrections, systems of time; Introduction of terrestrial photography, aerial photography, reading of photo mosaic, scale Project surveying; Errors in surveying; remote sensing; Introduction and application of global positioning system (GPS) and geographical information system (GIS), House setting."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019",
+    "classification_notes": "প্রশ্নটিতে উচ্চতা নির্ণয়, স্টেডিয়া পদ্ধতি এবং ভূমি পরিমাপের মূল নীতির প্রয়োগ করা হয়েছে যা 'Levelling & contouring' ও 'Tachometry'-এর অন্তর্ভুক্ত।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি স্টেডিয়া পদ্ধতিতে উচ্চতা নির্ণয় করে যা Levelling এবং Tachometry-এর সরাসরি অংশ।"
+  }
+]

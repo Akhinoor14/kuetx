@@ -77,9 +77,13 @@ const Today = lazy(() => import('./pages/Today'));
 const Teachers = lazy(() => import('./pages/Teachers'));
 const Diary = lazy(() => import('./pages/Diary'));
 const Assignments = lazy(() => import('./pages/Assignments'));
-const QuestionBank = lazy(() => import('./pages/QuestionBank'));
+// [QB-DEPRECATED 2026-08-15] পুরনো PDF-upload-based Question Bank বন্ধ —
+// canonical JSON-based নতুন সিস্টেম এখন /solutions (QuestionBankSolutions)
+// দিয়ে সার্ভ হচ্ছে। ফিরিয়ে আনতে চাইলে এই দুই লাইন + নিচের route/UI
+// reference গুলো আনকমেন্ট করলেই হবে। দেখো: PROGRESS_QB_WEBSITE_INTEGRATION.md
+// const QuestionBank = lazy(() => import('./pages/QuestionBank'));
 const PublicationsBrowse = lazy(() => import('./pages/PublicationsBrowse'));
-const QuestionBankViewer = lazy(() => import('./pages/QuestionBankViewer'));
+// const QuestionBankViewer = lazy(() => import('./pages/QuestionBankViewer'));
 const QuestionBankSolutions = lazy(() => import('./pages/QuestionBankSolutions'));
 const SelfStudy = lazy(() => import('./pages/SelfStudy'));
 const Namaz = lazy(() => import('./pages/Namaz'));
@@ -169,6 +173,9 @@ function Layout({ authState, onboardingActive }) {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const location = useLocation();
   const isMobileNav = useIsMobileNav();
+  // [QB-DEPRECATED 2026-08-15] /question-bank/view route বন্ধ (App.jsx উপরে
+  // দেখো), তাই এই flag এখন কার্যত সবসময় false -- harmless dead condition,
+  // ভাঙবে না, তাই touch করা হয়নি।
   const isQuestionBankViewer = location.pathname === '/question-bank/view';
 
   // BUGFIX: every page navigation used to land wherever the PREVIOUS
@@ -376,9 +383,10 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/syllabus" element={<RequireStudentMode><Syllabus /></RequireStudentMode>} />
             <Route path="/diary" element={<RequireStudentMode><Diary /></RequireStudentMode>} />
             <Route path="/assignments" element={<RequireStudentMode><Assignments /></RequireStudentMode>} />
-            <Route path="/question-bank" element={<RequireStudentMode><QuestionBank /></RequireStudentMode>} />
+            {/* [QB-DEPRECATED 2026-08-15] পুরনো PDF-based route বন্ধ, দেখো PROGRESS_QB_WEBSITE_INTEGRATION.md */}
+            {/* <Route path="/question-bank" element={<RequireStudentMode><QuestionBank /></RequireStudentMode>} /> */}
             <Route path="/publications" element={<RequireStudentMode><PublicationsBrowse canEdit={false} /></RequireStudentMode>} />
-            <Route path="/question-bank/view" element={<RequireStudentMode><QuestionBankViewer /></RequireStudentMode>} />
+            {/* <Route path="/question-bank/view" element={<RequireStudentMode><QuestionBankViewer /></RequireStudentMode>} /> */}
             <Route path="/solutions" element={<RequireStudentMode><QuestionBankSolutions /></RequireStudentMode>} />
             <Route path="/self-study/academic" element={<RequireStudentMode><SelfStudy /></RequireStudentMode>} />
             <Route path="/self-study/deep-focus" element={<RequireStudentMode><SelfStudy /></RequireStudentMode>} />
@@ -578,7 +586,8 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/faculty/meetings" element={<RequireFaculty><FacultyMeetings /></RequireFaculty>} />
             <Route path="/faculty/notices" element={<RequireFaculty><FacultyNoticeBroadcast /></RequireFaculty>} />
             <Route path="/faculty/contact" element={<RequireFaculty><FacultyContact /></RequireFaculty>} />
-            <Route path="/faculty/question-bank" element={<RequireFaculty><QuestionBank /></RequireFaculty>} />
+            {/* [QB-DEPRECATED 2026-08-15] পুরনো PDF-based route বন্ধ, দেখো PROGRESS_QB_WEBSITE_INTEGRATION.md */}
+            {/* <Route path="/faculty/question-bank" element={<RequireFaculty><QuestionBank /></RequireFaculty>} /> */}
             <Route path="/faculty/publications" element={<RequireFaculty><PublicationsBrowse canEdit={true} /></RequireFaculty>} />
             {/* Bottom-nav "More" destination — combines what used to be two
                 separate, mobile-unreachable sidebar groups (Campus →

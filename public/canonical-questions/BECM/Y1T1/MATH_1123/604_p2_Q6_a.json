@@ -1,37 +1,44 @@
-{
-  "id": "604_p2_Q6(a)",
-  "course": {
-    "code": "MATH 1123",
-    "title": "Mathematics-I",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2016,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\1st_Year_1st_Term_2016_604.pdf",
-    "source_page": null,
-    "paper_index": 2
-  },
-  "question_number": "6(a)",
-  "numbering_source": "regex",
-  "marks": null,
-  "content": [
-    {
-      "type": "text",
-      "value": "What is Lissajous Figure? The simple harmonic vibration acting at right angles to each other have the time period in the ratio 1:2. The phase difference between the two vibrations is π/2. Show graphically that the resultant curve is a parabola."
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": true,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2016"
-}
+[
+  {
+    "id": "604_p2_Q6(a)",
+    "course": {
+      "code": "MATH 1123",
+      "title": "Mathematics-I",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2016,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\1st_Year_1st_Term_2016_604.pdf",
+      "source_page": null,
+      "paper_index": 2
+    },
+    "question_number": "6(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "What is Lissajous Figure? The simple harmonic vibration acting at right angles to each other have the time period in the ratio 1:2. The phase difference between the two vibrations is π/2. Show graphically that the resultant curve is a parabola."
+      }
+    ],
+    "topics": [
+      "Differential Calculus: Limit; Continuity; Differentiability, differentiation; Successive differentiation, Leibnitz theorem; Partial differentiation; Maximum and minimum of two independent variables; Rolle's theorem, Lagrange's, Cauchy's and generalized mean value theorem; Taylor's and McLaurin's series; Indeterminate form. Integral Calculus: Indefinite integrals, method of substitution, method of partial fraction, integration by parts and special integrals; Reduction formula; Definite integrals, limit of the sum, properties of definite integrals; Improper integrals, (differentiation and integration under sign of integration) Bata Function, Gamma Function length of plane curves; Area under plane curves; Volume of solid of revolution of plane curves. Spherical Trigonometry: Spherical triangle; Relations between sides and angles of a spherical triangle; Solution of spherical triangle (right and oblique). Fourier Series; Fourier series. Dirichlet condition; Fourier series representation of a Periodic function; Fourier series for even and odd function; Half range Fourier series."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2016",
+    "classification_notes": "প্রশ্নটি সরল হারমোনিক আন্দোলন এবং ফলাফলের বক্ররেখা (parabola) বিশ্লেষণের ওপর ভিত্তি করে যা ডিফারেনশিয়াল ক্যালকুলাসে প্যারামেট্রিক সমীকরণ ব্যবহার করে সমাধান করা হয়।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি সরল হারমোনিক আন্দোলনের প্যারামেট্রিক সমীকরণ বিশ্লেষণ ও ফলাফলের বক্ররেখা (parabola) প্রমাণের জন্য ডিফারেনশিয়াল ক্যালকুলাসের ধারণা ব্যবহার করে, যা দেওয়া ট্যাগিংয়ের সাথে সামঞ্জস্যপূর্ণ।"
+  }
+]

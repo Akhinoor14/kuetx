@@ -1,47 +1,54 @@
-{
-  "id": "610_p1_Q1(b)",
-  "course": {
-    "code": "CE 1201",
-    "title": "Engineering Mechanics",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 2nd Term"
-  },
-  "exam": {
-    "exam_year": 2016,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\1st_Year_2nd_Term_2016_610.pdf",
-    "source_page": null,
-    "paper_index": 1
-  },
-  "question_number": "1(b)",
-  "numbering_source": "regex",
-  "marks": null,
-  "content": [
-    {
-      "type": "text",
-      "value": "Draw the free body diagram of members of the following structures."
+[
+  {
+    "id": "610_p1_Q1(b)",
+    "course": {
+      "code": "CE 1201",
+      "title": "Engineering Mechanics",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 2nd Term"
     },
-    {
-      "type": "image",
-      "asset": "assets/_tmp_Q_tmp_26cf3b4a67ea9177bcd0da1a10b74439d30359b8cf89d8d65f0ee454ab70fbe3.jpg",
-      "_source_path": "images/26cf3b4a67ea9177bcd0da1a10b74439d30359b8cf89d8d65f0ee454ab70fbe3.jpg"
+    "exam": {
+      "exam_year": 2016,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\1st_Year_2nd_Term_2016_610.pdf",
+      "source_page": null,
+      "paper_index": 1
     },
-    {
-      "type": "image",
-      "asset": "assets/_tmp_Q_tmp_5ea0621e6270f0f3316dc0c645b4307df50865753a3b5b82ce9850b102d2f8ca.jpg",
-      "_source_path": "images/5ea0621e6270f0f3316dc0c645b4307df50865753a3b5b82ce9850b102d2f8ca.jpg"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": true,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
-}
+    "question_number": "1(b)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Draw the free body diagram of members of the following structures."
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_26cf3b4a67ea9177bcd0da1a10b74439d30359b8cf89d8d65f0ee454ab70fbe3.jpg",
+        "_source_path": "images/26cf3b4a67ea9177bcd0da1a10b74439d30359b8cf89d8d65f0ee454ab70fbe3.jpg"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_5ea0621e6270f0f3316dc0c645b4307df50865753a3b5b82ce9850b102d2f8ca.jpg",
+        "_source_path": "images/5ea0621e6270f0f3316dc0c645b4307df50865753a3b5b82ce9850b102d2f8ca.jpg"
+      }
+    ],
+    "topics": [
+      "Introduction; Coplanar concurrent forces; moments and parallel coplanar forces; Non-concurrent non-parallel coplanar forces; Non-coplanar forces; Centroids; Moment of inertia of areas; Moment of inertia of masses; Friction; Flexible cords; Plane motion; Force systems that produce rectilinear motion; Work, kinetic energy & power; Impulse and momentum."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016",
+    "classification_notes": "Free body diagram drawing is a fundamental concept introduced in the 'Introduction' module which covers force systems and structural analysis basics.",
+    "topic_confidence": 0.95,
+    "verification_notes": "Free body diagram drawing সরাসরি 'Introduction' বা তাত্ত্বিক ধারণার চেয়ে বলবিদ্যার প্রয়োগ (Application) বিষয়ক মডিউল যেমন Statics of Rigid Bodies-এর অধীনে পড়ে।"
+  }
+]

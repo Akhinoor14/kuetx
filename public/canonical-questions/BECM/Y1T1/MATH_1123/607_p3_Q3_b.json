@@ -1,45 +1,52 @@
-{
-  "id": "607_p3_Q3(b)",
-  "course": {
-    "code": "MATH 1123",
-    "title": "Mathematics-I",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2019,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\1st_Year_1st_Term_2019_607.pdf",
-    "source_page": null,
-    "paper_index": 3
-  },
-  "question_number": "3(b)",
-  "numbering_source": "regex",
-  "marks": 10,
-  "content": [
-    {
-      "type": "text",
-      "value": "State Rolle's theorem."
+[
+  {
+    "id": "607_p3_Q3(b)",
+    "course": {
+      "code": "MATH 1123",
+      "title": "Mathematics-I",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 1st Term"
     },
-    {
-      "type": "text",
-      "value": "(10)"
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\1st_Year_1st_Term_2019_607.pdf",
+      "source_page": null,
+      "paper_index": 3
     },
-    {
-      "type": "text",
-      "value": "Expand $x ^ { 3 } - 3 x ^ { 2 } + 7 x + 2$ in powers of $( x - 2 )$"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
-}
+    "question_number": "3(b)",
+    "numbering_source": "regex",
+    "marks": 10,
+    "content": [
+      {
+        "type": "text",
+        "value": "State Rolle's theorem."
+      },
+      {
+        "type": "text",
+        "value": "(10)"
+      },
+      {
+        "type": "text",
+        "value": "Expand $x ^ { 3 } - 3 x ^ { 2 } + 7 x + 2$ in powers of $( x - 2 )$"
+      }
+    ],
+    "topics": [
+      "Differential Calculus: Limit; Continuity; Differentiability, differentiation; Successive differentiation, Leibnitz theorem; Partial differentiation; Maximum and minimum of two independent variables; Rolle's theorem, Lagrange's, Cauchy's and generalized mean value theorem; Taylor's and McLaurin's series; Indeterminate form. Integral Calculus: Indefinite integrals, method of substitution, method of partial fraction, integration by parts and special integrals; Reduction formula; Definite integrals, limit of the sum, properties of definite integrals; Improper integrals, (differentiation and integration under sign of integration) Bata Function, Gamma Function length of plane curves; Area under plane curves; Volume of solid of revolution of plane curves. Spherical Trigonometry: Spherical triangle; Relations between sides and angles of a spherical triangle; Solution of spherical triangle (right and oblique). Fourier Series; Fourier series. Dirichlet condition; Fourier series representation of a Periodic function; Fourier series for even and odd function; Half range Fourier series."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019",
+    "classification_notes": "প্রশ্নটি সরাসরি রোল'স উপপাদ্য (Rolle's theorem)-এর উক্তি এবং টেলারের সিরিজ ব্যবহার করে বহুপদী প্রসারণ সম্পর্কিত, যা ১ নম্বর মডিউলের অন্তর্ভুক্ত।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি সরাসরি Rolle's theorem এবং Taylor series (powers of x-a) এর সাথে সম্পর্কিত যা দেওয়া টপিক লিস্টের অন্তর্ভুক্ত।"
+  }
+]

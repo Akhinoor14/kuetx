@@ -1,65 +1,72 @@
-{
-  "id": "607_p5_Q3(b)",
-  "course": {
-    "code": "HUM 1123",
-    "title": "English",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2019,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\1st_Year_1st_Term_2019_607.pdf",
-    "source_page": null,
-    "paper_index": 5
-  },
-  "question_number": "3(b)",
-  "numbering_source": "regex",
-  "marks": 12,
-  "content": [
-    {
-      "type": "text",
-      "value": "Make sentences using the following Modals as directed."
+[
+  {
+    "id": "607_p5_Q3(b)",
+    "course": {
+      "code": "HUM 1123",
+      "title": "English",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 1st Term"
     },
-    {
-      "type": "text",
-      "value": "(12)"
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\1st_Year_1st_Term_2019_607.pdf",
+      "source_page": null,
+      "paper_index": 5
     },
-    {
-      "type": "text",
-      "value": "(i) May (To express guess about the future)"
+    "question_number": "3(b)",
+    "numbering_source": "regex",
+    "marks": 12,
+    "content": [
+      {
+        "type": "text",
+        "value": "Make sentences using the following Modals as directed."
+      },
+      {
+        "type": "text",
+        "value": "(12)"
+      },
+      {
+        "type": "text",
+        "value": "(i) May (To express guess about the future)"
+      },
+      {
+        "type": "text",
+        "value": "(ii) Must (To express internal obligation)"
+      },
+      {
+        "type": "text",
+        "value": ". (iii) Could (To express opportunity in the past which was not executed)"
+      },
+      {
+        "type": "text",
+        "value": "(iv) Should (To express duty in the past)"
+      },
+      {
+        "type": "text",
+        "value": "(v) Need (To express unnecessary action in the present)"
+      },
+      {
+        "type": "text",
+        "value": "(vi) Be to (To express command)"
+      }
+    ],
+    "topics": [
+      "General Discussion: Introduction, Mastering Various Approaches to Learning English. Grammatical Problem: Construction of Words and Sentences, Grammatical Problems, Sentence variety and style, Conditionals, Grammar and Usages, Vocabulary and Diction, Clauses, Prefixes & Suffixes, Synonyms and Antonyms. English phonetics: The phonetics, systems and Correct English pronunciation. Reading Skill: Discussing Readability, Scan and skim Reading, Generating Ideas through Purposive Reading, The reading of selected Stories. Writing Skill: Principles of Effective Writing, Organization in writing, Planning and Development, Composition, Precise writing, Paragraph writing, Amplification, Free Composition. General Strategies for the writing process: Generating Ideas, Identifying Audiences and Purposes, Constructing Arguments, Stating Problems, Drafting and finalizing. Approaches to Communication: Communication Today, Business Communication, Organization and organizational Behavior, Developing Intra-personal Interpersonal Relationship, Introducing Dialogue. Specific Applications of Tenders and Quotations, Resumes and job Letters, journal Articles, Technical and Scientific Presentation."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
     },
-    {
-      "type": "text",
-      "value": "(ii) Must (To express internal obligation)"
-    },
-    {
-      "type": "text",
-      "value": ". (iii) Could (To express opportunity in the past which was not executed)"
-    },
-    {
-      "type": "text",
-      "value": "(iv) Should (To express duty in the past)"
-    },
-    {
-      "type": "text",
-      "value": "(v) Need (To express unnecessary action in the present)"
-    },
-    {
-      "type": "text",
-      "value": "(vi) Be to (To express command)"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
-}
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019",
+    "classification_notes": "প্রশ্নটি মডাল ভের্ব এবং গ্রামার ব্যবহার নিয়ে যা সিলেবাসের 'Grammatical Problem: Construction of Words and Sentences' ও 'Grammar and Usages' টপিকের অন্তর্ভুক্ত।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি মডাল ভের্ব ও গ্রামার ব্যবহার নিয়ে যা সিলেবাসের 'Grammatical Problem: Construction of Words and Sentences' এবং 'Grammar and Usages' টপিকের সরাসরি অন্তর্ভুক্ত।"
+  }
+]

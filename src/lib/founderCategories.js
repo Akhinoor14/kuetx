@@ -105,6 +105,14 @@ export const FOUNDER_CATEGORIES = [
     key: 'question-bank',
     label: 'Question Bank',
     icon: 'BookOpen',
+    // [QB-DEPRECATED 2026-08-15] পুরনো PDF-upload/review/delete-request
+    // workflow বন্ধ — নতুন canonical JSON-based সিস্টেম এখন /solutions
+    // এ সার্ভ হচ্ছে, ফাউন্ডার-সাইড আপলোড/রিভিউ আর দরকার নেই। ঠিক 'trust'
+    // ক্যাটাগরির মতোই hidden: true প্যাটার্ন — কিছু ডিলিট হয়নি,
+    // QuestionBankView/QBReviewQueue/DeleteRequestQueue এখনো কাজ করবে
+    // যদি সরাসরি link করা হয়, শুধু grid/chip থেকে বাদ। দেখো:
+    // PROGRESS_QB_WEBSITE_INTEGRATION.md
+    hidden: true,
     subtitle: 'Founder upload, Campus Lead review queue, delete requests',
     getCount: (ctx) => ctx.qbUploadRequests,
     subcategories: [

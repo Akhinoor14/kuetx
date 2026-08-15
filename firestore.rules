@@ -1824,8 +1824,13 @@ service cloud.firestore {
     // or their own hand-added entry). That skip logic lives in the
     // Python script, NOT here — these rules only gate client writes.
     //
-    // Public read: shown on the standalone /publications browse page to
-    // students too, not just signed-in faculty.
+    // Read restricted to signed-in users (not fully public) — this is a
+    // deliberate friction choice: the scraped+aggregated publication set
+    // is a meaningful data asset, and requiring an account (which needs
+    // email verification) raises the cost of a bulk scrape-and-copy
+    // script without blocking any legitimate student/faculty use. The
+    // Guest Room demo landing page does NOT need this collection, so
+    // this doesn't affect signed-out demo browsing.
     //
     // Write restricted to the doc's own teacherEmail matching the
     // caller's auth token email, so a faculty account can only ever
@@ -1835,7 +1840,7 @@ service cloud.firestore {
     // (the existing doc) instead.
     // -------------------------------------------------------------
     match /facultyPublications/{docId} {
-      allow read: if true;
+      allow read: if isSignedIn();
       allow create, update: if isSignedIn()
         && request.resource.data.teacherEmail == request.auth.token.email;
       allow delete: if isSignedIn()

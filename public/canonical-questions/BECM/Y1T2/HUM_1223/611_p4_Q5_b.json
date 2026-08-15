@@ -1,37 +1,44 @@
-{
-  "id": "611_p4_Q5(b)",
-  "course": {
-    "code": "HUM 1223",
-    "title": "Sociology",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 2nd Term"
-  },
-  "exam": {
-    "exam_year": 2017,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\1st_Year_2nd_Term_2017_611.pdf",
-    "source_page": null,
-    "paper_index": 4
-  },
-  "question_number": "5(b)",
-  "numbering_source": "regex",
-  "marks": 20,
-  "content": [
-    {
-      "type": "text",
-      "value": "What are the types of stratification? Where does class system differ from caste (20)   \nsystem?"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
-}
+[
+  {
+    "id": "611_p4_Q5(b)",
+    "course": {
+      "code": "HUM 1223",
+      "title": "Sociology",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2017,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\1st_Year_2nd_Term_2017_611.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "5(b)",
+    "numbering_source": "regex",
+    "marks": 20,
+    "content": [
+      {
+        "type": "text",
+        "value": "What are the types of stratification? Where does class system differ from caste (20)   \nsystem?"
+      }
+    ],
+    "topics": [
+      "Introduction to sociology and sociological perspective. The modern interdisciplinary relation between sociology and development. Basic concept of sociology: society and its evolution, community, association, institution, groups, customs, culture, and civilization. Socialization process and formation of personality. Marriage and Family: Types of Family and Future structure of family. Social and Environmental issues. Social structure and its components. Social control and deviance art and architecture as an agency of social control, social stratification and mobility evolutionary forms of social change and agencies for social change. Social structure and change of Bangladesh in urban and rural context. Industrialization and urbanization in Bangladesh and its pattern and impact on society."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017",
+    "classification_notes": "প্রশ্নটি সামাজিক শ্রেণীবিভাগ (stratification), ক্লাস ও কাষ্টের পার্থক্য নিয়ে যা সিলেবাস ১ নম্বর মডিউলের 'Basic concept of sociology' এবং সমাজ সংক্রান্ত বেসিক ধারণার অন্তর্গত।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি সোজাসুজি সামাজিক শ্রেণীবিভাগ ও ক্লাস-কাষ্টের পার্থক্য নিয়ে যা বর্ণিত সিলেবাসের 'Social stratification' অংশের সরাসরি অন্তর্গত।"
+  }
+]

@@ -1,37 +1,44 @@
-{
-  "id": "603_p1_Q2(c)",
-  "course": {
-    "code": "CE 1123",
-    "title": "Surveying",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2015,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\1st_Year_1st_Term_2015_603.pdf",
-    "source_page": null,
-    "paper_index": 1
-  },
-  "question_number": "2(c)",
-  "numbering_source": "regex",
-  "marks": null,
-  "content": [
-    {
-      "type": "text",
-      "value": "What are the points to be considered by a staff man and level man? (07"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": true,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2015"
-}
+[
+  {
+    "id": "603_p1_Q2(c)",
+    "course": {
+      "code": "CE 1123",
+      "title": "Surveying",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2015,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\1st_Year_1st_Term_2015_603.pdf",
+      "source_page": null,
+      "paper_index": 1
+    },
+    "question_number": "2(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "What are the points to be considered by a staff man and level man? (07"
+      }
+    ],
+    "topics": [
+      "Reconnaissance survey; Linear measurements; Traverse survey; Plane table survey; Levelling & contouring; Calculation of areas and volumes; Tachometry: Introduction, principles and problems on tachometry; Astronomical surveying: Definition, instruments, astronomical corrections, systems of time; Introduction of terrestrial photography, aerial photography, reading of photo mosaic, scale Project surveying; Errors in surveying; remote sensing; Introduction and application of global positioning system (GPS) and geographical information system (GIS), House setting."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2015",
+    "classification_notes": "প্রশ্নটি স্টাফ এবং লেভেল ম্যানের কাজ সম্পর্কিত যা সরাসরি 'Levelling' (মডিউল ১) এর অন্তর্গত, অন্য কোনো টপিক এতে প্রযোজ্য নয়।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি স্পষ্টভাবে 'Levelling' টপিকের সাথে সম্পর্কিত যা দেওয়া তালিকাতে আছে এবং অন্যান্য টপিক থেকে এটি আলাদা।"
+  }
+]

@@ -1,42 +1,49 @@
-{
-  "id": "611_p1_Q8(b)",
-  "course": {
-    "code": "CE 1201",
-    "title": "Engineering Mechanics",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 2nd Term"
-  },
-  "exam": {
-    "exam_year": 2017,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\1st_Year_2nd_Term_2017_611.pdf",
-    "source_page": null,
-    "paper_index": 1
-  },
-  "question_number": "8(b)",
-  "numbering_source": "regex",
-  "marks": null,
-  "content": [
-    {
-      "type": "text",
-      "value": "A 90 Ib body is on a horizontal plane, where the co-efficient of kinetic friction, f = 0.25. $\\mathsf { ~ \\pmb { A } ~ } ^ { \\ast } \\mathsf { Q }$ and $\\mathsf { F } ^ { \\prime \\prime }$ are applied to the body as shown in figure. (i) What is the impulse of Q and F force in the horizontal direction during 2.5 sec? (ii) What is the net impulse on the body during the same time?"
+[
+  {
+    "id": "611_p1_Q8(b)",
+    "course": {
+      "code": "CE 1201",
+      "title": "Engineering Mechanics",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 2nd Term"
     },
-    {
-      "type": "image",
-      "asset": "assets/_tmp_Q_tmp_4bf063bb2331b42955cea1e686c6e9d3e7dc593386bbb07399e458e3da45fdf3.jpg",
-      "_source_path": "images/4bf063bb2331b42955cea1e686c6e9d3e7dc593386bbb07399e458e3da45fdf3.jpg"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": true,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
-}
+    "exam": {
+      "exam_year": 2017,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\1st_Year_2nd_Term_2017_611.pdf",
+      "source_page": null,
+      "paper_index": 1
+    },
+    "question_number": "8(b)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "A 90 Ib body is on a horizontal plane, where the co-efficient of kinetic friction, f = 0.25. $\\mathsf { ~ \\pmb { A } ~ } ^ { \\ast } \\mathsf { Q }$ and $\\mathsf { F } ^ { \\prime \\prime }$ are applied to the body as shown in figure. (i) What is the impulse of Q and F force in the horizontal direction during 2.5 sec? (ii) What is the net impulse on the body during the same time?"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_4bf063bb2331b42955cea1e686c6e9d3e7dc593386bbb07399e458e3da45fdf3.jpg",
+        "_source_path": "images/4bf063bb2331b42955cea1e686c6e9d3e7dc593386bbb07399e458e3da45fdf3.jpg"
+      }
+    ],
+    "topics": [
+      "Introduction; Coplanar concurrent forces; moments and parallel coplanar forces; Non-concurrent non-parallel coplanar forces; Non-coplanar forces; Centroids; Moment of inertia of areas; Moment of inertia of masses; Friction; Flexible cords; Plane motion; Force systems that produce rectilinear motion; Work, kinetic energy & power; Impulse and momentum."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017",
+    "classification_notes": "প্রশ্নটিতে ঘর্ষণ (friction), বলের প্রয়োগ এবং সময়ের সাথে ইম্পালস গণনা করা হয়েছে যা সিলেবাসের 'Friction' ও 'Force systems that produce rectilinear motion'-এর অন্তর্ভুক্ত।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটিতে ঘর্ষণ এবং ইম্পালসের ধারণা ব্যবহার করে সরল রেখীয় গতি বিশ্লেষণ করা হয়েছে যা দেওয়া ট্যাগগুলোর সাথে সামঞ্জস্যপূর্ণ।"
+  }
+]

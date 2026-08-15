@@ -1,41 +1,48 @@
-{
-  "id": "606_p1_Q1(a)",
-  "course": {
-    "code": "CE 1123",
-    "title": "Surveying",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2018,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\1st_Year_1st_Term_2018_606.pdf",
-    "source_page": null,
-    "paper_index": 1
-  },
-  "question_number": "1(a)",
-  "numbering_source": "regex",
-  "marks": 8,
-  "content": [
-    {
-      "type": "text",
-      "value": "What do you mean by surveying? Why surveying is so significant in any construction engineering projéct?"
+[
+  {
+    "id": "606_p1_Q1(a)",
+    "course": {
+      "code": "CE 1123",
+      "title": "Surveying",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 1st Term"
     },
-    {
-      "type": "text",
-      "value": "(08)"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
-}
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\1st_Year_1st_Term_2018_606.pdf",
+      "source_page": null,
+      "paper_index": 1
+    },
+    "question_number": "1(a)",
+    "numbering_source": "regex",
+    "marks": 8,
+    "content": [
+      {
+        "type": "text",
+        "value": "What do you mean by surveying? Why surveying is so significant in any construction engineering projéct?"
+      },
+      {
+        "type": "text",
+        "value": "(08)"
+      }
+    ],
+    "topics": [
+      "Reconnaissance survey; Linear measurements; Traverse survey; Plane table survey; Levelling & contouring; Calculation of areas and volumes; Tachometry: Introduction, principles and problems on tachometry; Astronomical surveying: Definition, instruments, astronomical corrections, systems of time; Introduction of terrestrial photography, aerial photography, reading of photo mosaic, scale Project surveying; Errors in surveying; remote sensing; Introduction and application of global positioning system (GPS) and geographical information system (GIS), House setting."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018",
+    "classification_notes": "প্রশ্নটি সাধারণত সার্ভেইংয়ের মৌলিক সংজ্ঞা ও গুরুত্ব নিয়ে যাওয়া হয়, যা 'Reconnaissance survey' বা মোট বিষয়বস্তুর অধীনে পড়ে।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি সার্ভেইংয়ের সাধারণ সংজ্ঞা ও গুরুত্ব নিয়ে যাওয়ায় 'Reconnaissance survey' বা নির্দিষ্ট কোনো টেকনিক্যাল মেথডের বদলে 'Introduction to Surveying'-এর একটি নতুন থিম হিসেবে ম্যাপ করা উচিত।"
+  }
+]

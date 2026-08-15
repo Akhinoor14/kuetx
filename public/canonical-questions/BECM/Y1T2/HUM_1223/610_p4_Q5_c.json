@@ -1,37 +1,44 @@
-{
-  "id": "610_p4_Q5(c)",
-  "course": {
-    "code": "HUM 1223",
-    "title": "Sociology",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 2nd Term"
-  },
-  "exam": {
-    "exam_year": 2016,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\1st_Year_2nd_Term_2016_610.pdf",
-    "source_page": null,
-    "paper_index": 4
-  },
-  "question_number": "5(c)",
-  "numbering_source": "regex",
-  "marks": 10,
-  "content": [
-    {
-      "type": "text",
-      "value": "Difference between ‘Ascribed' and ‘Achieved' status. (10)"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
-}
+[
+  {
+    "id": "610_p4_Q5(c)",
+    "course": {
+      "code": "HUM 1223",
+      "title": "Sociology",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2016,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\1st_Year_2nd_Term_2016_610.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "5(c)",
+    "numbering_source": "regex",
+    "marks": 10,
+    "content": [
+      {
+        "type": "text",
+        "value": "Difference between ‘Ascribed' and ‘Achieved' status. (10)"
+      }
+    ],
+    "topics": [
+      "Introduction to sociology and sociological perspective. The modern interdisciplinary relation between sociology and development. Basic concept of sociology: society and its evolution, community, association, institution, groups, customs, culture, and civilization. Socialization process and formation of personality. Marriage and Family: Types of Family and Future structure of family. Social and Environmental issues. Social structure and its components. Social control and deviance art and architecture as an agency of social control, social stratification and mobility evolutionary forms of social change and agencies for social change. Social structure and change of Bangladesh in urban and rural context. Industrialization and urbanization in Bangladesh and its pattern and impact on society."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016",
+    "classification_notes": "প্রশ্নটি 'Ascribed' এবং 'Achieved' status নিয়ে যা সরাসরি সোশায়লাইজেশন প্রক্রিয়ায় গড়ে ওঠা ব্যক্তিত্বের মূল ধারণার অংশ, তাই এটি ১ নম্বর টপিকের অন্তর্ভুক্ত।",
+    "topic_confidence": 0.95,
+    "verification_notes": "'Ascribed' এবং 'Achieved' status সরাসরি Social Stratification বা সামাজিক স্তরবিন্যস্তের মূল ধারণা যা প্রদত্ত টপিক লিস্টে আছে কিন্তু Introduction to sociology বা socialization-এর অংশ নয়।"
+  }
+]

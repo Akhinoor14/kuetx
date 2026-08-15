@@ -1,65 +1,72 @@
-{
-  "id": "607_p5_Q3(a)",
-  "course": {
-    "code": "HUM 1123",
-    "title": "English",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2019,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\1st_Year_1st_Term_2019_607.pdf",
-    "source_page": null,
-    "paper_index": 5
-  },
-  "question_number": "3(a)",
-  "numbering_source": "regex",
-  "marks": null,
-  "content": [
-    {
-      "type": "text",
-      "value": "Transform the following sentences as directed."
+[
+  {
+    "id": "607_p5_Q3(a)",
+    "course": {
+      "code": "HUM 1123",
+      "title": "English",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 1st Term"
     },
-    {
-      "type": "text",
-      "value": "(i) Did you sent the book? (passive)"
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\1st_Year_1st_Term_2019_607.pdf",
+      "source_page": null,
+      "paper_index": 5
     },
-    {
-      "type": "text",
-      "value": "(ii) He is accused of theft by his friends. (complex)"
+    "question_number": "3(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Transform the following sentences as directed."
+      },
+      {
+        "type": "text",
+        "value": "(i) Did you sent the book? (passive)"
+      },
+      {
+        "type": "text",
+        "value": "(ii) He is accused of theft by his friends. (complex)"
+      },
+      {
+        "type": "text",
+        "value": "(ii) We are extremely sorry at his death. (complex)"
+      },
+      {
+        "type": "text",
+        "value": "(iv) If you prick us, we shall react. (interrogative)"
+      },
+      {
+        "type": "text",
+        "value": "(v) He died in the village where he was born. (simple)"
+      },
+      {
+        "type": "text",
+        "value": "(vi) He sold the car that belonged to his brother. (compound)"
+      },
+      {
+        "type": "text",
+        "value": "(vii) It is better to starve than to beg."
+      }
+    ],
+    "topics": [
+      "General Discussion: Introduction, Mastering Various Approaches to Learning English. Grammatical Problem: Construction of Words and Sentences, Grammatical Problems, Sentence variety and style, Conditionals, Grammar and Usages, Vocabulary and Diction, Clauses, Prefixes & Suffixes, Synonyms and Antonyms. English phonetics: The phonetics, systems and Correct English pronunciation. Reading Skill: Discussing Readability, Scan and skim Reading, Generating Ideas through Purposive Reading, The reading of selected Stories. Writing Skill: Principles of Effective Writing, Organization in writing, Planning and Development, Composition, Precise writing, Paragraph writing, Amplification, Free Composition. General Strategies for the writing process: Generating Ideas, Identifying Audiences and Purposes, Constructing Arguments, Stating Problems, Drafting and finalizing. Approaches to Communication: Communication Today, Business Communication, Organization and organizational Behavior, Developing Intra-personal Interpersonal Relationship, Introducing Dialogue. Specific Applications of Tenders and Quotations, Resumes and job Letters, journal Articles, Technical and Scientific Presentation."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
     },
-    {
-      "type": "text",
-      "value": "(ii) We are extremely sorry at his death. (complex)"
-    },
-    {
-      "type": "text",
-      "value": "(iv) If you prick us, we shall react. (interrogative)"
-    },
-    {
-      "type": "text",
-      "value": "(v) He died in the village where he was born. (simple)"
-    },
-    {
-      "type": "text",
-      "value": "(vi) He sold the car that belonged to his brother. (compound)"
-    },
-    {
-      "type": "text",
-      "value": "(vii) It is better to starve than to beg."
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": true,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
-}
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019",
+    "classification_notes": "প্রশ্নটি বাক্য রূপান্তর ও জটিল/জোটকৃত বাক্য গঠনের সাথে সরাসরি সম্পর্কিত যা 'General Discussion' মডিউলের 'Sentence variety and style', 'Clauses' এবং 'Grammar and Usages'-এর অন্তর্ভুক্ত।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রদত্ত টপিক তালিকাটি অত্যন্ত সাধারণ এবং প্রশ্নের নির্দিষ্ট ব্যাকরণগত ধরন (Sentence Transformation) এর জন্য খুবই প্রাসঙ্গিক নয়।"
+  }
+]

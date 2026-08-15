@@ -1,37 +1,44 @@
-{
-  "id": "607_p5_Q6(a)",
-  "course": {
-    "code": "HUM 1123",
-    "title": "English",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2019,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\1st_Year_1st_Term_2019_607.pdf",
-    "source_page": null,
-    "paper_index": 5
-  },
-  "question_number": "6(a)",
-  "numbering_source": "regex",
-  "marks": 20,
-  "content": [
-    {
-      "type": "text",
-      "value": "Amplify the idea – “Morning shows the day”. (20)"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
-}
+[
+  {
+    "id": "607_p5_Q6(a)",
+    "course": {
+      "code": "HUM 1123",
+      "title": "English",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\1st_Year_1st_Term_2019_607.pdf",
+      "source_page": null,
+      "paper_index": 5
+    },
+    "question_number": "6(a)",
+    "numbering_source": "regex",
+    "marks": 20,
+    "content": [
+      {
+        "type": "text",
+        "value": "Amplify the idea – “Morning shows the day”. (20)"
+      }
+    ],
+    "topics": [
+      "General Discussion: Introduction, Mastering Various Approaches to Learning English. Grammatical Problem: Construction of Words and Sentences, Grammatical Problems, Sentence variety and style, Conditionals, Grammar and Usages, Vocabulary and Diction, Clauses, Prefixes & Suffixes, Synonyms and Antonyms. English phonetics: The phonetics, systems and Correct English pronunciation. Reading Skill: Discussing Readability, Scan and skim Reading, Generating Ideas through Purposive Reading, The reading of selected Stories. Writing Skill: Principles of Effective Writing, Organization in writing, Planning and Development, Composition, Precise writing, Paragraph writing, Amplification, Free Composition. General Strategies for the writing process: Generating Ideas, Identifying Audiences and Purposes, Constructing Arguments, Stating Problems, Drafting and finalizing. Approaches to Communication: Communication Today, Business Communication, Organization and organizational Behavior, Developing Intra-personal Interpersonal Relationship, Introducing Dialogue. Specific Applications of Tenders and Quotations, Resumes and job Letters, journal Articles, Technical and Scientific Presentation."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019",
+    "classification_notes": "প্রশ্নটি 'Amplify the idea' (আদর্শ প্রকাশ বা বর্ণনা বিস্তারিত করা)-এর ওপর ভিত্তি করে, যা সরাসরি সিলেবাসের 'Sentence variety and style', 'Vocabulary and Diction' এবং 'Grammar and Usages'-এর সাথে সম্পর্কিত।",
+    "topic_confidence": 0.95,
+    "verification_notes": "'Amplify the idea' প্রশ্নটি সরাসরি বর্ণনা বিস্তারিত করার (sentence variety and style) ও শব্দচয়নের (vocabulary and diction) দক্ষতা যাচাই করে, তাই সিলেবাসের এই বিষয়গুলোকে assign করা যুক্তিসঙ্গত।"
+  }
+]

@@ -1,37 +1,44 @@
-{
-  "id": "603_p2_Q6(d)",
-  "course": {
-    "code": "CH 1123",
-    "title": "Chemistry",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2015,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\1st_Year_1st_Term_2015_603.pdf",
-    "source_page": null,
-    "paper_index": 2
-  },
-  "question_number": "6(d)",
-  "numbering_source": "regex",
-  "marks": 7,
-  "content": [
-    {
-      "type": "text",
-      "value": "Draw the flow chart diagram for the manufacture of cement in Chatak cement: (07) mill."
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2015"
-}
+[
+  {
+    "id": "603_p2_Q6(d)",
+    "course": {
+      "code": "CH 1123",
+      "title": "Chemistry",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2015,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\1st_Year_1st_Term_2015_603.pdf",
+      "source_page": null,
+      "paper_index": 2
+    },
+    "question_number": "6(d)",
+    "numbering_source": "regex",
+    "marks": 7,
+    "content": [
+      {
+        "type": "text",
+        "value": "Draw the flow chart diagram for the manufacture of cement in Chatak cement: (07) mill."
+      }
+    ],
+    "topics": [
+      "Chemistry of cement, silicates and limes, Chemistry of polymerization; Different types of polymers and their properties. Introduction to paint and varnishes; Pretreatment of surface, metallic, non-metallic and organic protective coating, types of paints and their uses. Physical and Chemical properties of liquid. Chemical Corrosion: Introduction to chemical corrosion, corrosion of metals and alloys in dry and wet environments, mechanism of corrosion, atmospheric, under water and soil corrosion and their protective measures. Electro Chemistry: Electrolytes, sources of EMF, electrochemical series pH value and determination. Surface Chemistry: adsorption, desorption and absorption, nature of absorption, absorption isotherms, application of adsorption."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2015",
+    "classification_notes": "প্রশ্নটি সিমেন্টের উৎপাদন প্রক্রিয়া নিয়ে যা সরাসরি 'Chemistry of cement' টপিকটির অন্তর্ভুক্ত।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি সিমেন্ট উৎপাদন প্রক্রিয়া নিয়ে যা সরাসরি 'Chemistry of cement' টপিকের অন্তর্ভুক্ত এবং অন্য কোনো অপ্টিমাল টপিকের সাথে মিল নেই।"
+  }
+]

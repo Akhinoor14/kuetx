@@ -1,45 +1,52 @@
-{
-  "id": "603_p5_Q3(a)",
-  "course": {
-    "code": "HUM 1123",
-    "title": "English",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2015,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\1st_Year_1st_Term_2015_603.pdf",
-    "source_page": null,
-    "paper_index": 5
-  },
-  "question_number": "3(a)",
-  "numbering_source": "regex",
-  "marks": 14,
-  "content": [
-    {
-      "type": "text",
-      "value": "Write sentences by using Modal auxiliaries to express each of the following.(14) i) Something that you had the opportunity to do and you didn't ii) a guess about the future iii) a guess about the present iv) internal obligation"
+[
+  {
+    "id": "603_p5_Q3(a)",
+    "course": {
+      "code": "HUM 1123",
+      "title": "English",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 1st Term"
     },
-    {
-      "type": "text",
-      "value": "v) Strong possibility   \nvi) Unnecessary action in the past   \nvii) Duty in the past"
+    "exam": {
+      "exam_year": 2015,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\1st_Year_1st_Term_2015_603.pdf",
+      "source_page": null,
+      "paper_index": 5
     },
-    {
-      "type": "text",
-      "value": "(12)"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2015"
-}
+    "question_number": "3(a)",
+    "numbering_source": "regex",
+    "marks": 14,
+    "content": [
+      {
+        "type": "text",
+        "value": "Write sentences by using Modal auxiliaries to express each of the following.(14) i) Something that you had the opportunity to do and you didn't ii) a guess about the future iii) a guess about the present iv) internal obligation"
+      },
+      {
+        "type": "text",
+        "value": "v) Strong possibility   \nvi) Unnecessary action in the past   \nvii) Duty in the past"
+      },
+      {
+        "type": "text",
+        "value": "(12)"
+      }
+    ],
+    "topics": [
+      "General Discussion: Introduction, Mastering Various Approaches to Learning English. Grammatical Problem: Construction of Words and Sentences, Grammatical Problems, Sentence variety and style, Conditionals, Grammar and Usages, Vocabulary and Diction, Clauses, Prefixes & Suffixes, Synonyms and Antonyms. English phonetics: The phonetics, systems and Correct English pronunciation. Reading Skill: Discussing Readability, Scan and skim Reading, Generating Ideas through Purposive Reading, The reading of selected Stories. Writing Skill: Principles of Effective Writing, Organization in writing, Planning and Development, Composition, Precise writing, Paragraph writing, Amplification, Free Composition. General Strategies for the writing process: Generating Ideas, Identifying Audiences and Purposes, Constructing Arguments, Stating Problems, Drafting and finalizing. Approaches to Communication: Communication Today, Business Communication, Organization and organizational Behavior, Developing Intra-personal Interpersonal Relationship, Introducing Dialogue. Specific Applications of Tenders and Quotations, Resumes and job Letters, journal Articles, Technical and Scientific Presentation."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2015",
+    "classification_notes": "Modal auxiliaries (যেমন could have done, must be, should do) সরাসরি 'Grammatical Problem: Construction of Words and Sentences' এবং 'Grammar and Usages' টপিকের অন্তর্ভুক্ত।",
+    "topic_confidence": 0.95,
+    "verification_notes": "Modal auxiliaries ব্যবহার করে বাক্য গঠন 'Grammar and Usages' এবং 'Construction of Words and Sentences'-এর সরাসরি অংশ হওয়ায় টপিক ক্লাসিফিকেশনটি সঠিক।"
+  }
+]

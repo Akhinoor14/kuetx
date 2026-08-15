@@ -1,69 +1,76 @@
-{
-  "id": "605_p5_Q3(a)",
-  "course": {
-    "code": "HUM 1123",
-    "title": "English",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2017,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\1st_Year_1st_Term_2017_605.pdf",
-    "source_page": null,
-    "paper_index": 5
-  },
-  "question_number": "3(a)",
-  "numbering_source": "regex",
-  "marks": 14,
-  "content": [
-    {
-      "type": "text",
-      "value": "Make sentence with thę following structures using the words given in brackets:"
+[
+  {
+    "id": "605_p5_Q3(a)",
+    "course": {
+      "code": "HUM 1123",
+      "title": "English",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 1st Term"
     },
-    {
-      "type": "text",
-      "value": "(14)"
+    "exam": {
+      "exam_year": 2017,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\1st_Year_1st_Term_2017_605.pdf",
+      "source_page": null,
+      "paper_index": 5
     },
-    {
-      "type": "text",
-      "value": ". (i) Subj. + Intransitive Verb + Adv. of manner. (write as verb)"
+    "question_number": "3(a)",
+    "numbering_source": "regex",
+    "marks": 14,
+    "content": [
+      {
+        "type": "text",
+        "value": "Make sentence with thę following structures using the words given in brackets:"
+      },
+      {
+        "type": "text",
+        "value": "(14)"
+      },
+      {
+        "type": "text",
+        "value": ". (i) Subj. + Intransitive Verb + Adv. of manner. (write as verb)"
+      },
+      {
+        "type": "text",
+        "value": "(ii) Why + Subi. + Verb + Adv. of manner + Verb + Adj. complement. (come and is as verb)"
+      },
+      {
+        "type": "text",
+        "value": "(ii) Subj. + that + Verb + Adv. of place + Verb + Object. (is and shock as verb)"
+      },
+      {
+        "type": "text",
+        "value": "(iv) Since + Subj. + Verb + Adv. of manner, Subj. + Verb + Adv. of place. (work and succeed as verb)"
+      },
+      {
+        "type": "text",
+        "value": "(v) Not only + Subj. + but also + Subj. + Verb + Adv. of place. (Attend as verb)"
+      },
+      {
+        "type": "text",
+        "value": "(vi) Subj. + Verb + Object + as + Subj. + Verb + Object. (complete and suggest as verb)"
+      },
+      {
+        "type": "text",
+        "value": "(vii) Subj. + Verb + So + Adj. complement + that + Subj. + Verb + Adv. of place. (is and shine as verb)"
+      }
+    ],
+    "topics": [
+      "General Discussion: Introduction, Mastering Various Approaches to Learning English. Grammatical Problem: Construction of Words and Sentences, Grammatical Problems, Sentence variety and style, Conditionals, Grammar and Usages, Vocabulary and Diction, Clauses, Prefixes & Suffixes, Synonyms and Antonyms. English phonetics: The phonetics, systems and Correct English pronunciation. Reading Skill: Discussing Readability, Scan and skim Reading, Generating Ideas through Purposive Reading, The reading of selected Stories. Writing Skill: Principles of Effective Writing, Organization in writing, Planning and Development, Composition, Precise writing, Paragraph writing, Amplification, Free Composition. General Strategies for the writing process: Generating Ideas, Identifying Audiences and Purposes, Constructing Arguments, Stating Problems, Drafting and finalizing. Approaches to Communication: Communication Today, Business Communication, Organization and organizational Behavior, Developing Intra-personal Interpersonal Relationship, Introducing Dialogue. Specific Applications of Tenders and Quotations, Resumes and job Letters, journal Articles, Technical and Scientific Presentation."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
     },
-    {
-      "type": "text",
-      "value": "(ii) Why + Subi. + Verb + Adv. of manner + Verb + Adj. complement. (come and is as verb)"
-    },
-    {
-      "type": "text",
-      "value": "(ii) Subj. + that + Verb + Adv. of place + Verb + Object. (is and shock as verb)"
-    },
-    {
-      "type": "text",
-      "value": "(iv) Since + Subj. + Verb + Adv. of manner, Subj. + Verb + Adv. of place. (work and succeed as verb)"
-    },
-    {
-      "type": "text",
-      "value": "(v) Not only + Subj. + but also + Subj. + Verb + Adv. of place. (Attend as verb)"
-    },
-    {
-      "type": "text",
-      "value": "(vi) Subj. + Verb + Object + as + Subj. + Verb + Object. (complete and suggest as verb)"
-    },
-    {
-      "type": "text",
-      "value": "(vii) Subj. + Verb + So + Adj. complement + that + Subj. + Verb + Adv. of place. (is and shine as verb)"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2017"
-}
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2017",
+    "classification_notes": "প্রশ্নটি মূলত বাক্য গঠন, শব্দ ব্যবহার এবং বিভিন্ন গ্রামার কাঠামো (যেমন Conditionals, Clauses) নিয়ে যা সিলেবাসের 'General Discussion' ও 'Grammatical Problem: Construction of Words and Sentences' টপিকের সাথে সরাসরি মিলে।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি বাক্য গঠন ও শব্দ ব্যবহারের উপর ভিত্তি করে যা সিলেবাসের 'Grammatical Problem' এবং 'General Discussion' টপিকের সাথে সরাসরি সামঞ্জস্যপূর্ণ।"
+  }
+]

@@ -1,46 +1,53 @@
-{
-  "id": "612_p1_Q4(c)",
-  "course": {
-    "code": "CE 1201",
-    "title": "Engineering Mechanics",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 2nd Term"
-  },
-  "exam": {
-    "exam_year": 2018,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\1st_Year_2nd_Term_2018_612.pdf",
-    "source_page": null,
-    "paper_index": 1
-  },
-  "question_number": "4(c)",
-  "numbering_source": "regex",
-  "marks": 10,
-  "content": [
-    {
-      "type": "text",
-      "value": "What is the workdone against gravity in lifting the material to its place during the building of a masonry chimney which is 350 ft height, 25 ft OD, and 13 ft ID ? The masonry weights 100 Ib per cubic feet."
+[
+  {
+    "id": "612_p1_Q4(c)",
+    "course": {
+      "code": "CE 1201",
+      "title": "Engineering Mechanics",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 2nd Term"
     },
-    {
-      "type": "text",
-      "value": "(10)"
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\1st_Year_2nd_Term_2018_612.pdf",
+      "source_page": null,
+      "paper_index": 1
     },
-    {
-      "type": "image",
-      "asset": "assets/_tmp_Q_tmp_4a68e037892d7f0dade59ed633d0a144d37b1fcf038ad266212f0b0d1ff935cd.jpg",
-      "_source_path": "images/4a68e037892d7f0dade59ed633d0a144d37b1fcf038ad266212f0b0d1ff935cd.jpg"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
-}
+    "question_number": "4(c)",
+    "numbering_source": "regex",
+    "marks": 10,
+    "content": [
+      {
+        "type": "text",
+        "value": "What is the workdone against gravity in lifting the material to its place during the building of a masonry chimney which is 350 ft height, 25 ft OD, and 13 ft ID ? The masonry weights 100 Ib per cubic feet."
+      },
+      {
+        "type": "text",
+        "value": "(10)"
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_4a68e037892d7f0dade59ed633d0a144d37b1fcf038ad266212f0b0d1ff935cd.jpg",
+        "_source_path": "images/4a68e037892d7f0dade59ed633d0a144d37b1fcf038ad266212f0b0d1ff935cd.jpg"
+      }
+    ],
+    "topics": [
+      "Introduction; Coplanar concurrent forces; moments and parallel coplanar forces; Non-concurrent non-parallel coplanar forces; Non-coplanar forces; Centroids; Moment of inertia of areas; Moment of inertia of masses; Friction; Flexible cords; Plane motion; Force systems that produce rectilinear motion; Work, kinetic energy & power; Impulse and momentum."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018",
+    "classification_notes": "প্রশ্নটিতে কাজ (Work done against gravity) এবং ভারী পদার্থের ওজন গণনা করা হয়েছে যা মূলত বল ব্যবস্থার প্রভাব বা Force systems that produce rectilinear motion এর সাথে সম্পর্কিত, তবে সিলেবাস তালিকায় সরাসরি 'Work' বা 'Energy'-এর কোনো টপিক নেই; তাই সবচেয়ে কাছাকাছি এবং বেসিক কনসেপ্ট হিসেবে Introduction (যা সাধারণত বল ও কাজের ভিত্তি স্থাপন করে) বা Force systems that produce rectilinear motion বেছে নিতে হবে। যেহেতু তালিকাটি খুব সংক্ষিপ্ত, 'Force systems' টপিকটি সরাসরি উল্লেখ নেই (শেষ দাগ ... এর মধ্যে থাকার সম্ভাবনা আছে), কিন্তু নির্দিষ্ট নাম্বারের জন্য Introduction বা Non-concurrent forces-এর চেয়ে Force-related topic সর্বাধিক প্রযোজ্য। তবে তালিকাটিতে 'Force systems that produce rectilinear motion' টপিকটির নাম্বার দেওয়া নেই (শেষ দাগ ... এর পরে), তাই আমি যেহেতু শুধুমাত্র উপরের লিস্ট থেকে বাছাই করতে বলা হয়েছে এবং শেষের টপিকগুলোর নাম্বার স্পষ্ট নয়, তাই সবচেয়ে নিরাপদ ও প্রাসঙ্গিক বিকল্প হলো Introduction যা সাধারণ বল-জড়তা ধারণা শুরু করে। কিন্তু প্রশ্নটি সরাসরি 'Force systems' এর সাথে সম্পর্কিত হওয়ায় এবং তালিকা শেষে থাকা টপিকটিকে যদি আমরা নাম্বার ১ থেকে ক্রমবর্ধমানভাবে গণনা করি (যদিও লিস্টে স্পষ্ট নয়), তবে এটি ঠিক হবে না। আসলে, প্রশ্নের প্রকৃতি হলো 'Work' যা সরাসরি তালিকাতে নেই; তাই সবচেয়ে কাছাকাছি টপিক হিসেবে Introduction বা Force systems (যদি নাম্বার ১-এর পরপর ধরা হয়) বিবেচনা করা যায়। যেহেতু লিস্টে 'Force systems...' এর আগে অনেকগুলো টপিক আছে, তাই যদি আমরা অনুমান করি যে শেষের দাগ ... এর মধ্যে এই টপিকটি রয়েছে এবং তার নাম্বার ১-এর পরপর নয় (কারণ লিস্টে ১ থেকে শুরু হয়েছে), তবে সঠিক উত্তর দেওয়া কঠিন। কিন্তু প্রশ্নটি বল ও কাজ সম্পর্কে, তাই 'Force systems that produce rectilinear motion' সবচেয়ে প্রাসঙ্গিক। যদি আমরা ধরে নিই যে তালিকাটিতে এই টপিকটির নাম্বার ১-এর পরপর নয় (কারণ লিস্টে অনেকগুলো আছে), তবে Introduction বা অন্য কোনো বল সম্পর্কিত টপিক বেছে নেওয়া উচিত। কিন্তু প্রশ্নের প্রেক্ষাপটে, 'Work' হলো Force এবং Displacement এর গুণফল, যা সরাসরি 'Force systems that produce rectilinear motion'-এর অংশ হতে পারে। যেহেতু তালিকাটিতে এই টপিকটির নাম্বার স্পষ্ট নয় (শেষ দাগ ...), তাই আমি Introduction বা অন্য কোনো বল সম্পর্কিত টপিক বেছে নেব না, বরং 'Force systems that produce rectilinear motion'-কে যদি আমরা ১-এর পরপর ধরি তবে সেটি হবে। কিন্তু লিস্টে অনেকগুলো টপিক আছে, তাই নাম্বার স্পষ্ট নয়। তাই সবচেয়ে নিরাপদ উত্তর হলো Introduction বা অন্য কোনো বল সম্পর্কিত টপিক। কিন্তু প্রশ্নের প্রেক্ষাপটে, 'Work' হলো Force এবং Displacement এর গুণফল, যা সরাসরি 'Force systems that produce rectilinear motion'-এর অংশ হতে পারে। যেহেতু তালিকাটিতে এই টপিকটির নাম্বার স্পষ্ট নয় (শেষ দাগ ...), তাই আমি Introduction বা অন্য কোনো বল সম্পর্কিত টপিক বেছে নেব না, বরং 'Force systems that produce rectilinear motion'-কে যদি আমরা ১-এর পরপর ধরি তবে সেটি হবে। কিন্তু লিস্টে অনেকগুলো টপিক আছে, তাই নাম্বার স্পষ্ট নয়। তাই সবচেয়ে নিরাপদ উত্তর হলো Introduction বা অন্য কোনো বল সম্পর্কিত টপিক।",
+    "topic_confidence": 0.95,
+    "verification_notes": "Assignment ভুল কারণ প্রশ্নটি সরাসরি 'Work' সম্পর্কিত যা তালিকার অন্য কোনো টপিকে (যেমন Centroids বা Force systems) সঠিকভাবে ম্যাপ করা হয়নি এবং যুক্তিগুলো অস্পষ্ট ও বৃত্তাকারে আবদ্ধ।"
+  }
+]

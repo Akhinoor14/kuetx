@@ -1,37 +1,44 @@
-{
-  "id": "610_p1_Q1(a)",
-  "course": {
-    "code": "CE 1201",
-    "title": "Engineering Mechanics",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 2nd Term"
-  },
-  "exam": {
-    "exam_year": 2016,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\1st_Year_2nd_Term_2016_610.pdf",
-    "source_page": null,
-    "paper_index": 1
-  },
-  "question_number": "1(a)",
-  "numbering_source": "regex",
-  "marks": 10,
-  "content": [
-    {
-      "type": "text",
-      "value": "Define – (i) Transmissibility of force system (ii) Two force member (ii) Free - body (10) diagram (iv) Equilibrium (v) Zero force męmber"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
-}
+[
+  {
+    "id": "610_p1_Q1(a)",
+    "course": {
+      "code": "CE 1201",
+      "title": "Engineering Mechanics",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2016,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\1st_Year_2nd_Term_2016_610.pdf",
+      "source_page": null,
+      "paper_index": 1
+    },
+    "question_number": "1(a)",
+    "numbering_source": "regex",
+    "marks": 10,
+    "content": [
+      {
+        "type": "text",
+        "value": "Define – (i) Transmissibility of force system (ii) Two force member (ii) Free - body (10) diagram (iv) Equilibrium (v) Zero force męmber"
+      }
+    ],
+    "topics": [
+      "Introduction; Coplanar concurrent forces; moments and parallel coplanar forces; Non-concurrent non-parallel coplanar forces; Non-coplanar forces; Centroids; Moment of inertia of areas; Moment of inertia of masses; Friction; Flexible cords; Plane motion; Force systems that produce rectilinear motion; Work, kinetic energy & power; Impulse and momentum."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": true,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016",
+    "classification_notes": "প্রশ্নটি বলবলীয় সিস্টেমের মৌলিক ধারণা (যেমন Force system, Equilibrium, Free-body diagram) নিয়ে যা 'Introduction' এবং 'Force systems that produce rectilinear motion'-এর অধীনে পড়ে।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রদত্ত টপিক তালিকাটি বলবলীয় সিস্টেমের মৌলিক সংজ্ঞাগুলোর জন্য অত্যন্ত ব্যাপক এবং ভুলভাবে 'Introduction' বা অন্যান্য জটিল বিষয়ের (যেমন Centroids) সাথে মিশিয়ে দেওয়া হয়েছে, যা প্রশ্নের সরাসরি প্রয়োজন মেটা না।"
+  }
+]

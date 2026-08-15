@@ -1,37 +1,44 @@
-{
-  "id": "610_p2_Q1(c)",
-  "course": {
-    "code": "CE 1213",
-    "title": "Building & Construction Materials",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 2nd Term"
-  },
-  "exam": {
-    "exam_year": 2016,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\1st_Year_2nd_Term_2016_610.pdf",
-    "source_page": null,
-    "paper_index": 2
-  },
-  "question_number": "1(c)",
-  "numbering_source": "regex",
-  "marks": 11,
-  "content": [
-    {
-      "type": "text",
-      "value": "Write down the advantages and disadvantages of Bull's trench kiln and (11) Hoffman's kiln for brick burning with their figures."
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
-}
+[
+  {
+    "id": "610_p2_Q1(c)",
+    "course": {
+      "code": "CE 1213",
+      "title": "Building & Construction Materials",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 2nd Term"
+    },
+    "exam": {
+      "exam_year": 2016,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2016\\1st_Year_2nd_Term_2016_610.pdf",
+      "source_page": null,
+      "paper_index": 2
+    },
+    "question_number": "1(c)",
+    "numbering_source": "regex",
+    "marks": 11,
+    "content": [
+      {
+        "type": "text",
+        "value": "Write down the advantages and disadvantages of Bull's trench kiln and (11) Hoffman's kiln for brick burning with their figures."
+      }
+    ],
+    "topics": [
+      "Introduction and importance of Engineering materials. Bricks: Constituents of brick clay, harmful ingredients of brick clay. Manufacture, characteristics, test and specification, classification and use; Different types of bricks (hollow, perforated, angular, mud etc.), sand cement block, ceramic products, different types of tiles. Aggregate: Classification and properties of aggregate, bulking of aggregate, grading of aggregate, testing of aggregate; Classification, properties, test and function of sand. Cement and Lime: Properties, uses and classification of lime; Difference between cement and lime; Manufacture of cement, types of cement, composition of cement, Functions of various ingredients of cement, physical properties of Portland cement, testing of cement. Mortar and Plaster: Types of mortar, function of sand and surki in mortars, uses of mortar, preparation of cement mortar, precautions in using mortars, special mortars; Plastering; Pointing. Paints & Varnishes: White and color washing, distempering, plastic and cement paint, water repellent paints, epoxy coating. Concrete: Function of aggregate and water in concrete, segregation, bleeding, properties of concrete, strength and workability of concrete, factors influencing the properties of concrete, creep of concrete, chemical attack of concrete; Design of concrete mixes; Use of admixtures in concrete and their properties. Other materials: Introduction to ply wood, plastic wood, and their properties, Geo-textiles, FRP, Synthetic fiber, Ferrocement etc; Properties and uses of rubber, timber, plastics, glass and aluminum. Corrosion of metals."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016",
+    "classification_notes": "প্রশ্নটি ইট তৈরির প্রক্রিয়া এবং বিভিন্ন ধরণের ইট (Bull's trench kiln, Hoffman's kiln) নিয়ে যা সিলেবাস নম্বর ১-এ 'Manufacture' ও 'Different types of bricks'-এর অংশ।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি ইট তৈরির প্রক্রিয়া ও কুঁড়ি (kiln) সম্পর্কিত যা সিলেবাসের 'Manufacture' অংশের সরাসরি অন্তর্ভুক্ত।"
+  }
+]

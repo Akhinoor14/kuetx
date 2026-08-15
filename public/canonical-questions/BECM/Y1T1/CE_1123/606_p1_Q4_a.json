@@ -1,37 +1,44 @@
-{
-  "id": "606_p1_Q4(a)",
-  "course": {
-    "code": "CE 1123",
-    "title": "Surveying",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2018,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\1st_Year_1st_Term_2018_606.pdf",
-    "source_page": null,
-    "paper_index": 1
-  },
-  "question_number": "4(a)",
-  "numbering_source": "regex",
-  "marks": null,
-  "content": [
-    {
-      "type": "text",
-      "value": "Trapezoidal rule and"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": true,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
-}
+[
+  {
+    "id": "606_p1_Q4(a)",
+    "course": {
+      "code": "CE 1123",
+      "title": "Surveying",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\1st_Year_1st_Term_2018_606.pdf",
+      "source_page": null,
+      "paper_index": 1
+    },
+    "question_number": "4(a)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "Trapezoidal rule and"
+      }
+    ],
+    "topics": [
+      "Reconnaissance survey; Linear measurements; Traverse survey; Plane table survey; Levelling & contouring; Calculation of areas and volumes; Tachometry: Introduction, principles and problems on tachometry; Astronomical surveying: Definition, instruments, astronomical corrections, systems of time; Introduction of terrestrial photography, aerial photography, reading of photo mosaic, scale Project surveying; Errors in surveying; remote sensing; Introduction and application of global positioning system (GPS) and geographical information system (GIS), House setting."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018",
+    "classification_notes": "প্রশ্নটি জ্যামিতিক ক্ষেত্রফল নির্ণয়ের ট্রাপিজয়েডিয়াল নিয়মের ওপর ভিত্তি করে, যা সিলেবাস নং ১-এর 'Calculation of areas and volumes' অংশের সরাসরি অন্তর্ভুক্ত।",
+    "topic_confidence": 0.95,
+    "verification_notes": "ট্রাপিজয়েডিয়াল নিয়ম জ্যামিতিক ক্ষেত্রফল নির্ণয়ের একটি পদ্ধতি যা সিলেবাসের 'Calculation of areas and volumes' অংশের অন্তর্ভুক্ত।"
+  }
+]

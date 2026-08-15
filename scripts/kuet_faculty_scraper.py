@@ -699,6 +699,11 @@ def push_to_firestore(teachers: list[Teacher], profiles: dict[str, ProfileDetail
     """
     import firebase_admin
     from firebase_admin import credentials, firestore
+    # firebase_admin.firestore doesn't re-export FieldPath (that's a
+    # firebase-admin>=7.x API surface change vs older versions this
+    # script was originally written against) — import it directly from
+    # google-cloud-firestore instead.
+    from google.cloud.firestore_v1.field_path import FieldPath
 
     if not firebase_admin._apps:
         raw_cred = os.environ.get("FIREBASE_SERVICE_ACCOUNT_JSON")
@@ -772,7 +777,7 @@ def push_to_firestore(teachers: list[Teacher], profiles: dict[str, ProfileDetail
         if not chunk:
             continue
         docs = pubs_col.where(
-            firestore.FieldPath.document_id(), "in", chunk
+            FieldPath.document_id(), "in", chunk
         ).stream()
         for d in docs:
             data = d.to_dict() or {}

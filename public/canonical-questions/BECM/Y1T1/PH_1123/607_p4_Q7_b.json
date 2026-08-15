@@ -1,37 +1,44 @@
-{
-  "id": "607_p4_Q7(b)",
-  "course": {
-    "code": "PH 1123",
-    "title": "Physics-I",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2019,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\1st_Year_1st_Term_2019_607.pdf",
-    "source_page": null,
-    "paper_index": 4
-  },
-  "question_number": "7(b)",
-  "numbering_source": "regex",
-  "marks": 15,
-  "content": [
-    {
-      "type": "text",
-      "value": "Derive the expressions for the change in entropy of a gas when it is heated in a (15) general manner."
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
-}
+[
+  {
+    "id": "607_p4_Q7(b)",
+    "course": {
+      "code": "PH 1123",
+      "title": "Physics-I",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\1st_Year_1st_Term_2019_607.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "7(b)",
+    "numbering_source": "regex",
+    "marks": 15,
+    "content": [
+      {
+        "type": "text",
+        "value": "Derive the expressions for the change in entropy of a gas when it is heated in a (15) general manner."
+      }
+    ],
+    "topics": [
+      "Heat and Thermodynamics: Thermometry: Measurement of low and high temperature; Constant volume thermometers; Resistance thermometer and thermocouple & radiation parameters. Transmission of Heat: Thermal conductivity of solids and liquids; Thermodynamics: First law of thermodynamics and its application; Adiabatic and isothermal transformation; Work done by a gas; Second law of thermodynamics; Reversible and irreversible; Carnot cycle; Efficiency of heat engines; Entropy and its physical concept; Entropy changes in reversible and an irreversible process, entropy of a perfect gas. Elasticity: Young and Bulk and Modulus; Bending moment; Cantilever; Surface Tension: Surface energy and surface tension; Excess pressure; Capillarity; viscocity: Stoke's law; Poiseuille's equation; Waves and Oscillations: Simple harmonic motion; Superposition principle; Lissajous figures; Free, damped and forced vibrations; Wave motion: Transverse and longitudinal nature of waves; Progressive and stationary waves; Power and intensity of wave motion; Energy of progressive and stationary wave; Interference of sound waves; Wave velocity, group velocity and phase velocity; Reflection, Refraction, Diffraction and Scattering: Reflection, refraction and transmission of sound waves and their applications; Transmission in two and three media; Acoustics of enclosed Spaces: Intensity of sound, Bel, acoustic intensity, architectural acoustics, noise insulation and reduction, sound distribution, sabine's formula; Room acoustics; Design of concert halls, opera house and auditorium; Acoustic energy density and directivity."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019",
+    "classification_notes": "প্রশ্নটি গ্যাসের এনট্রপি পরিবর্তনের ওপর ভিত্তি করে যা তাপগতিবিদ্যার প্রথম সূত্র এবং থার্মোডাইনামিক্স (সিলেবাস নম্বর ১) এর সরাসরি অংশ।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি থার্মোডাইনামিক্সের এনট্রপি পরিবর্তনের সরাসরি অংশ যা দেওয়া টপিক লিস্টে স্পষ্টভাবে উল্লেখ আছে।"
+  }
+]

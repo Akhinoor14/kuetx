@@ -1,37 +1,44 @@
-{
-  "id": "605_p4_Q3(c)",
-  "course": {
-    "code": "PH 1123",
-    "title": "Physics-I",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2017,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\1st_Year_1st_Term_2017_605.pdf",
-    "source_page": null,
-    "paper_index": 4
-  },
-  "question_number": "3(c)",
-  "numbering_source": "regex",
-  "marks": 10,
-  "content": [
-    {
-      "type": "text",
-      "value": "A Carnot refrigerator takes heat from water at $0 ^ { \\circ } C$ and discards it to a room at (10) $2 7 ^ { \\circ } C$ 1kg of water at $0 ^ { \\circ } C$ is to be changed into ice at $0 \\%$ (i) How many calories of heat are discarded: to the room? (ii) What is the work done by the refrigerator in this process?"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2017"
-}
+[
+  {
+    "id": "605_p4_Q3(c)",
+    "course": {
+      "code": "PH 1123",
+      "title": "Physics-I",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2017,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\1st_Year_1st_Term_2017_605.pdf",
+      "source_page": null,
+      "paper_index": 4
+    },
+    "question_number": "3(c)",
+    "numbering_source": "regex",
+    "marks": 10,
+    "content": [
+      {
+        "type": "text",
+        "value": "A Carnot refrigerator takes heat from water at $0 ^ { \\circ } C$ and discards it to a room at (10) $2 7 ^ { \\circ } C$ 1kg of water at $0 ^ { \\circ } C$ is to be changed into ice at $0 \\%$ (i) How many calories of heat are discarded: to the room? (ii) What is the work done by the refrigerator in this process?"
+      }
+    ],
+    "topics": [
+      "Heat and Thermodynamics: Thermometry: Measurement of low and high temperature; Constant volume thermometers; Resistance thermometer and thermocouple & radiation parameters. Transmission of Heat: Thermal conductivity of solids and liquids; Thermodynamics: First law of thermodynamics and its application; Adiabatic and isothermal transformation; Work done by a gas; Second law of thermodynamics; Reversible and irreversible; Carnot cycle; Efficiency of heat engines; Entropy and its physical concept; Entropy changes in reversible and an irreversible process, entropy of a perfect gas. Elasticity: Young and Bulk and Modulus; Bending moment; Cantilever; Surface Tension: Surface energy and surface tension; Excess pressure; Capillarity; viscocity: Stoke's law; Poiseuille's equation; Waves and Oscillations: Simple harmonic motion; Superposition principle; Lissajous figures; Free, damped and forced vibrations; Wave motion: Transverse and longitudinal nature of waves; Progressive and stationary waves; Power and intensity of wave motion; Energy of progressive and stationary wave; Interference of sound waves; Wave velocity, group velocity and phase velocity; Reflection, Refraction, Diffraction and Scattering: Reflection, refraction and transmission of sound waves and their applications; Transmission in two and three media; Acoustics of enclosed Spaces: Intensity of sound, Bel, acoustic intensity, architectural acoustics, noise insulation and reduction, sound distribution, sabine's formula; Room acoustics; Design of concert halls, opera house and auditorium; Acoustic energy density and directivity."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2017",
+    "classification_notes": "প্রশ্নটি কার্ণট রেফ্রিজারেটর এবং তাপের স্থানান্তরের (Heat transfer/refrigeration cycle) সাথে সরাসরি সম্পর্কিত যা সিলেবাস নম্বর ১-এ থার্মোডাইনামিক্স ও হিট ট্রান্সমিশনের অধীনে পড়ে।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি কার্ণট চক্র এবং তাপগতিবিদ্যার প্রথম ও দ্বিতীয় সূত্রের সরাসরি অধীনে পড়ে যা দেওয়া ট্যাগে সুস্পষ্টভাবে উল্লিখিত আছে।"
+  }
+]

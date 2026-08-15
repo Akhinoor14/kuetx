@@ -1,42 +1,49 @@
-{
-  "id": "607_p1_Q5(d)",
-  "course": {
-    "code": "CE 1123",
-    "title": "Surveying",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2019,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\1st_Year_1st_Term_2019_607.pdf",
-    "source_page": null,
-    "paper_index": 1
-  },
-  "question_number": "5(d)",
-  "numbering_source": "regex",
-  "marks": null,
-  "content": [
-    {
-      "type": "text",
-      "value": "A survey line ABC cuts the banks of a river at B and C and to determining the distance BC, a line BE, 60 m long was set out roughly parallel to the river. A point D was then found in CE produced and middle point F of DB determined. EF was then produced to G making FG equal to EF and DG produced to cut the survey line in-H.: GH and HB were found to be 40 and 80 meters\" long respectively. Find the distance from B to C."
+[
+  {
+    "id": "607_p1_Q5(d)",
+    "course": {
+      "code": "CE 1123",
+      "title": "Surveying",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 1st Term"
     },
-    {
-      "type": "image",
-      "asset": "assets/_tmp_Q_tmp_5385793dc7bff2753f30e5d832955d51b242af01b1d70a1a9cb31a4b5b2611c3.jpg",
-      "_source_path": "images/5385793dc7bff2753f30e5d832955d51b242af01b1d70a1a9cb31a4b5b2611c3.jpg"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": true,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
-}
+    "exam": {
+      "exam_year": 2019,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2019\\1st_Year_1st_Term_2019_607.pdf",
+      "source_page": null,
+      "paper_index": 1
+    },
+    "question_number": "5(d)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "A survey line ABC cuts the banks of a river at B and C and to determining the distance BC, a line BE, 60 m long was set out roughly parallel to the river. A point D was then found in CE produced and middle point F of DB determined. EF was then produced to G making FG equal to EF and DG produced to cut the survey line in-H.: GH and HB were found to be 40 and 80 meters\" long respectively. Find the distance from B to C."
+      },
+      {
+        "type": "image",
+        "asset": "assets/_tmp_Q_tmp_5385793dc7bff2753f30e5d832955d51b242af01b1d70a1a9cb31a4b5b2611c3.jpg",
+        "_source_path": "images/5385793dc7bff2753f30e5d832955d51b242af01b1d70a1a9cb31a4b5b2611c3.jpg"
+      }
+    ],
+    "topics": [
+      "Reconnaissance survey; Linear measurements; Traverse survey; Plane table survey; Levelling & contouring; Calculation of areas and volumes; Tachometry: Introduction, principles and problems on tachometry; Astronomical surveying: Definition, instruments, astronomical corrections, systems of time; Introduction of terrestrial photography, aerial photography, reading of photo mosaic, scale Project surveying; Errors in surveying; remote sensing; Introduction and application of global positioning system (GPS) and geographical information system (GIS), House setting."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019",
+    "classification_notes": "প্রশ্নটি সরাসরি ট্রাভার্স সার্ভে (Traverse survey)-এর মৌলিক নীতি ও দূরত্ব নির্ণয়ের গাণিতিক পদ্ধতির ওপর ভিত্তি করে তৈরি।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি ট্রানজিট বা চেস্ট সার্ভের মাধ্যমে নদীর অতিক্রম করে দূরত্ব নির্ণয় করার একটি ক্লাসিক সমস্যার উপর ভিত্তি করে তৈরি যা সরাসরি Traverse survey-এর মৌলিক নীতি ও গাণিতিক পদ্ধতির সাথে সম্পর্কিত।"
+  }
+]

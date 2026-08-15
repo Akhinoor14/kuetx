@@ -1,37 +1,44 @@
-{
-  "id": "603_p5_Q6(b)",
-  "course": {
-    "code": "HUM 1123",
-    "title": "English",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2015,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\1st_Year_1st_Term_2015_603.pdf",
-    "source_page": null,
-    "paper_index": 5
-  },
-  "question_number": "6(b)",
-  "numbering_source": "regex",
-  "marks": 15,
-  "content": [
-    {
-      "type": "text",
-      "value": "Make a dialogue between you and your teacher on the importance of learning (15) English. (Around 800 words)"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2015"
-}
+[
+  {
+    "id": "603_p5_Q6(b)",
+    "course": {
+      "code": "HUM 1123",
+      "title": "English",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2015,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\1st_Year_1st_Term_2015_603.pdf",
+      "source_page": null,
+      "paper_index": 5
+    },
+    "question_number": "6(b)",
+    "numbering_source": "regex",
+    "marks": 15,
+    "content": [
+      {
+        "type": "text",
+        "value": "Make a dialogue between you and your teacher on the importance of learning (15) English. (Around 800 words)"
+      }
+    ],
+    "topics": [
+      "General Discussion: Introduction, Mastering Various Approaches to Learning English. Grammatical Problem: Construction of Words and Sentences, Grammatical Problems, Sentence variety and style, Conditionals, Grammar and Usages, Vocabulary and Diction, Clauses, Prefixes & Suffixes, Synonyms and Antonyms. English phonetics: The phonetics, systems and Correct English pronunciation. Reading Skill: Discussing Readability, Scan and skim Reading, Generating Ideas through Purposive Reading, The reading of selected Stories. Writing Skill: Principles of Effective Writing, Organization in writing, Planning and Development, Composition, Precise writing, Paragraph writing, Amplification, Free Composition. General Strategies for the writing process: Generating Ideas, Identifying Audiences and Purposes, Constructing Arguments, Stating Problems, Drafting and finalizing. Approaches to Communication: Communication Today, Business Communication, Organization and organizational Behavior, Developing Intra-personal Interpersonal Relationship, Introducing Dialogue. Specific Applications of Tenders and Quotations, Resumes and job Letters, journal Articles, Technical and Scientific Presentation."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2015",
+    "classification_notes": "প্রশ্নটিতে শিক্ষক-বিদ্যার্থীর সংলাপ (Dialogue), শব্দচয়ন ও ভাষার ব্যবহারের প্রয়োজনীয়তা এবং বাক্য গঠনের বিভিন্ন দিক তুলে ধরা হয়েছে যা General Discussion, Vocabulary and Diction, Sentence variety and style topics এর সাথে সরাসরি সম্পর্কিত।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নের চাহিদা অনুযায়ী শিক্ষক-বিদ্যার্থীর সংলাপ এবং শব্দচয়ন ও বাক্য গঠনের বিষয়গুলো General Discussion, Vocabulary and Diction, Sentence variety and style টপিকগুলোর সাথে সরাসরি সামঞ্জস্যপূর্ণ।"
+  }
+]

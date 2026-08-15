@@ -1,37 +1,44 @@
-{
-  "id": "603_p1_Q4(c)",
-  "course": {
-    "code": "CE 1123",
-    "title": "Surveying",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2015,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\1st_Year_1st_Term_2015_603.pdf",
-    "source_page": null,
-    "paper_index": 1
-  },
-  "question_number": "4(c)",
-  "numbering_source": "regex",
-  "marks": 10,
-  "content": [
-    {
-      "type": "text",
-      "value": "Define plane table survey. When do you recommend it? State the advantages (10) 'and disadvantages of plane table survey."
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2015"
-}
+[
+  {
+    "id": "603_p1_Q4(c)",
+    "course": {
+      "code": "CE 1123",
+      "title": "Surveying",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2015,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2015\\1st_Year_1st_Term_2015_603.pdf",
+      "source_page": null,
+      "paper_index": 1
+    },
+    "question_number": "4(c)",
+    "numbering_source": "regex",
+    "marks": 10,
+    "content": [
+      {
+        "type": "text",
+        "value": "Define plane table survey. When do you recommend it? State the advantages (10) 'and disadvantages of plane table survey."
+      }
+    ],
+    "topics": [
+      "Reconnaissance survey; Linear measurements; Traverse survey; Plane table survey; Levelling & contouring; Calculation of areas and volumes; Tachometry: Introduction, principles and problems on tachometry; Astronomical surveying: Definition, instruments, astronomical corrections, systems of time; Introduction of terrestrial photography, aerial photography, reading of photo mosaic, scale Project surveying; Errors in surveying; remote sensing; Introduction and application of global positioning system (GPS) and geographical information system (GIS), House setting."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2015",
+    "classification_notes": "প্রশ্নটি Plane table survey-এর সংজ্ঞা, সুবিধা ও অসুবিধার কথা জিজ্ঞাসা করেছে যা সরাসরি সিলেবাসের প্রথম মডিউলের 'Plane table survey' টপিকের সাথে সম্পর্কিত।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি সরাসরি সিলেবাসের 'Plane table survey' টপিকের সাথে মিলে এবং অন্যান্য অপ্টিয়নগুলো প্রশ্নের প্রেক্ষাপটে অসম্পর্কিত।"
+  }
+]

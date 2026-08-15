@@ -1,41 +1,48 @@
-{
-  "id": "606_p1_Q5(c)",
-  "course": {
-    "code": "CE 1123",
-    "title": "Surveying",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2018,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\1st_Year_1st_Term_2018_606.pdf",
-    "source_page": null,
-    "paper_index": 1
-  },
-  "question_number": "5(c)",
-  "numbering_source": "regex",
-  "marks": 15,
-  "content": [
-    {
-      "type": "text",
-      "value": "Calculate the R.L. of station A, B, distance AB and the gradient of AB line from(15) the following observations. The tacheometer is fitted with an anallactic lens and the staff is held vertical. Assume, k = 100 and R.L. of station O is 150 m."
+[
+  {
+    "id": "606_p1_Q5(c)",
+    "course": {
+      "code": "CE 1123",
+      "title": "Surveying",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 1st Term"
     },
-    {
-      "type": "table",
-      "value_html": "<table><tr><td rowspan=1 colspan=1>InstrumentStation</td><td rowspan=1 colspan=1>Height ofInstrument (m)</td><td rowspan=1 colspan=1>StaffStation</td><td rowspan=1 colspan=1>W.C.B</td><td rowspan=1 colspan=1>Verticalangle</td><td rowspan=1 colspan=1>Staff readings (m)</td></tr><tr><td rowspan=2 colspan=1>o</td><td rowspan=2 colspan=1>1.550</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>30°30&#x27;</td><td rowspan=1 colspan=1>4°30</td><td rowspan=1 colspan=1>1.155,1.755,2.355</td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>75°30&#x27;</td><td rowspan=1 colspan=1>10°15&#x27;</td><td rowspan=1 colspan=1>1.250,2.00,2.750</td></tr></table>"
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": false,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
-}
+    "exam": {
+      "exam_year": 2018,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2018\\1st_Year_1st_Term_2018_606.pdf",
+      "source_page": null,
+      "paper_index": 1
+    },
+    "question_number": "5(c)",
+    "numbering_source": "regex",
+    "marks": 15,
+    "content": [
+      {
+        "type": "text",
+        "value": "Calculate the R.L. of station A, B, distance AB and the gradient of AB line from(15) the following observations. The tacheometer is fitted with an anallactic lens and the staff is held vertical. Assume, k = 100 and R.L. of station O is 150 m."
+      },
+      {
+        "type": "table",
+        "value_html": "<table><tr><td rowspan=1 colspan=1>InstrumentStation</td><td rowspan=1 colspan=1>Height ofInstrument (m)</td><td rowspan=1 colspan=1>StaffStation</td><td rowspan=1 colspan=1>W.C.B</td><td rowspan=1 colspan=1>Verticalangle</td><td rowspan=1 colspan=1>Staff readings (m)</td></tr><tr><td rowspan=2 colspan=1>o</td><td rowspan=2 colspan=1>1.550</td><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>30°30&#x27;</td><td rowspan=1 colspan=1>4°30</td><td rowspan=1 colspan=1>1.155,1.755,2.355</td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>75°30&#x27;</td><td rowspan=1 colspan=1>10°15&#x27;</td><td rowspan=1 colspan=1>1.250,2.00,2.750</td></tr></table>"
+      }
+    ],
+    "topics": [
+      "Reconnaissance survey; Linear measurements; Traverse survey; Plane table survey; Levelling & contouring; Calculation of areas and volumes; Tachometry: Introduction, principles and problems on tachometry; Astronomical surveying: Definition, instruments, astronomical corrections, systems of time; Introduction of terrestrial photography, aerial photography, reading of photo mosaic, scale Project surveying; Errors in surveying; remote sensing; Introduction and application of global positioning system (GPS) and geographical information system (GIS), House setting."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018",
+    "classification_notes": "প্রশ্নটি তাকেওমিটার ব্যবহার করে উচ্চতা, দূরত্ব ও ঢাল নির্ণয় করতে বলে যা সিলেবাসের 'Tachometry' টপিকের অন্তর্ভুক্ত।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটি তাকেওমিটার দিয়ে উচ্চতা ও দূরত্ব নির্ণয় সম্পর্কিত যা স্পষ্টভাবে Tachometry টপিকের অন্তর্ভুক্ত।"
+  }
+]

@@ -1,37 +1,44 @@
-{
-  "id": "605_p1_Q8(c)",
-  "course": {
-    "code": "CE 1123",
-    "title": "Surveying",
-    "department": "Department of Building Engineering and Construction Management",
-    "year_term": "1st Year 1st Term"
-  },
-  "exam": {
-    "exam_year": 2017,
-    "exam_type": "Regular",
-    "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\1st_Year_1st_Term_2017_605.pdf",
-    "source_page": null,
-    "paper_index": 1
-  },
-  "question_number": "8(c)",
-  "numbering_source": "regex",
-  "marks": null,
-  "content": [
-    {
-      "type": "text",
-      "value": "To find the elevation of the top (A) of the minar of KUET mosque, observations were made from two stations P and R, 50 m apart. The horizontal angel measured at P between R and the top of the minar was 60º 45' and that measured at R between the. top of the minar and P station was 72º 30'. The angel of elevation of the top of the minar was measured to be 20º 17' at R and that was 20º 48' at P. Stadia readings on. B.M. When the instrument was at P = 2.969 m and that with the instrument at R = 3.073 m. Calculate the elevation of the minar of KUET mosque if that B.M. was 420m."
-    }
-  ],
-  "topics": [],
-  "syllabus_module": null,
-  "difficulty": null,
-  "tags": [],
-  "status": "extracted",
-  "needs_human_review": true,
-  "created_by": null,
-  "usage": {
-    "used_in_exams": [],
-    "times_reused": 0
-  },
-  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2017"
-}
+[
+  {
+    "id": "605_p1_Q8(c)",
+    "course": {
+      "code": "CE 1123",
+      "title": "Surveying",
+      "department": "Department of Building Engineering and Construction Management",
+      "year_term": "1st Year 1st Term"
+    },
+    "exam": {
+      "exam_year": 2017,
+      "exam_type": "Regular",
+      "source_pdf": "question_bank_raw\\Department_of_Building_Engineering_and_Construction_Management\\2017\\1st_Year_1st_Term_2017_605.pdf",
+      "source_page": null,
+      "paper_index": 1
+    },
+    "question_number": "8(c)",
+    "numbering_source": "regex",
+    "marks": null,
+    "content": [
+      {
+        "type": "text",
+        "value": "To find the elevation of the top (A) of the minar of KUET mosque, observations were made from two stations P and R, 50 m apart. The horizontal angel measured at P between R and the top of the minar was 60º 45' and that measured at R between the. top of the minar and P station was 72º 30'. The angel of elevation of the top of the minar was measured to be 20º 17' at R and that was 20º 48' at P. Stadia readings on. B.M. When the instrument was at P = 2.969 m and that with the instrument at R = 3.073 m. Calculate the elevation of the minar of KUET mosque if that B.M. was 420m."
+      }
+    ],
+    "topics": [
+      "Reconnaissance survey; Linear measurements; Traverse survey; Plane table survey; Levelling & contouring; Calculation of areas and volumes; Tachometry: Introduction, principles and problems on tachometry; Astronomical surveying: Definition, instruments, astronomical corrections, systems of time; Introduction of terrestrial photography, aerial photography, reading of photo mosaic, scale Project surveying; Errors in surveying; remote sensing; Introduction and application of global positioning system (GPS) and geographical information system (GIS), House setting."
+    ],
+    "syllabus_module": null,
+    "difficulty": null,
+    "tags": [],
+    "status": "classified",
+    "needs_human_review": false,
+    "created_by": null,
+    "usage": {
+      "used_in_exams": [],
+      "times_reused": 0
+    },
+    "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2017",
+    "classification_notes": "প্রশ্নটিতে মিনিয়ারের উচ্চতা নির্ণয় করার জন্য স্টেডিয়া পদ্ধতি (Stadia readings), কোর্সের ১ নম্বর টপিক 'Tachometry'-এর সরাসরি অধীনে পড়ে।",
+    "topic_confidence": 0.95,
+    "verification_notes": "প্রশ্নটিতে স্টেডিয়া পদ্ধতি ব্যবহার করে উচ্চতা নির্ণয় করা হয়েছে যা ট্যাকোমেট্রি (Tachometry) এর সরাসরি অধীনে আসে।"
+  }
+]
