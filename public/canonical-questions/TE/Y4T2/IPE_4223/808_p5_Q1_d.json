@@ -1,0 +1,41 @@
+{
+  "id": "808_p5_Q1(d)",
+  "course": {
+    "code": "IPE 4223",
+    "title": "Operations Management",
+    "department": "Department of Textile Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\4th_Year_2nd_Term_2017_808.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Shed some light on the allowances considered in SMV calculations. Calculate SMV for 15 the operations tabulated below-"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Elements</td><td rowspan=1 colspan=1>Observed rating</td><td rowspan=1 colspan=1>Observed time</td><td rowspan=1 colspan=1>Frequency</td></tr><tr><td rowspan=1 colspan=1>Get bundle and sort parts</td><td rowspan=1 colspan=1>95</td><td rowspan=1 colspan=1>0.32</td><td rowspan=1 colspan=1>1/30</td></tr><tr><td rowspan=1 colspan=1>Match pocket flap to lining</td><td rowspan=1 colspan=1>105</td><td rowspan=1 colspan=1>0.11</td><td rowspan=1 colspan=1>1/1</td></tr><tr><td rowspan=1 colspan=1>Sew round flap</td><td rowspan=1 colspan=1>100</td><td rowspan=1 colspan=1>0.48</td><td rowspan=1 colspan=1>1/1</td></tr><tr><td rowspan=1 colspan=1>Trim threads and turn-out flap</td><td rowspan=1 colspan=1>85</td><td rowspan=1 colspan=1>0.35</td><td rowspan=1 colspan=1>1/1</td></tr><tr><td rowspan=1 colspan=1>Top stitch flap</td><td rowspan=1 colspan=1>90</td><td rowspan=1 colspan=1>0.56</td><td rowspan=1 colspan=1>1/1</td></tr><tr><td rowspan=1 colspan=1>Close bundle and place aside</td><td rowspan=1 colspan=1>110</td><td rowspan=1 colspan=1>0.23</td><td rowspan=1 colspan=1>1/30</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2017"
+}

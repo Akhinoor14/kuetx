@@ -1,0 +1,52 @@
+{
+  "id": "793_p5_Q4(b)",
+  "course": {
+    "code": "TE 3109",
+    "title": "Fabric Structure and Design",
+    "department": "Department of Textile Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\3rd_Year_1st_Term_2016_793.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find out the cam arrangement, needle arrangement of following designs:-"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_5133ed7e321a1164c5805a959f29eee7933f2139ad435f5687665d43baff7c72.jpg",
+      "_source_path": "images/5133ed7e321a1164c5805a959f29eee7933f2139ad435f5687665d43baff7c72.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_63248330771dbcc261eaccb273e428cc6d5370958af08aa30cef9608e2b2b5cd.jpg",
+      "_source_path": "images/63248330771dbcc261eaccb273e428cc6d5370958af08aa30cef9608e2b2b5cd.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0abcaf369d441d5c1dda634e995e95c808c868cd259d4b64d177224bf301b0af.jpg",
+      "_source_path": "images/0abcaf369d441d5c1dda634e995e95c808c868cd259d4b64d177224bf301b0af.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

@@ -1,0 +1,51 @@
+{
+  "id": "776_p2_Q4(d)",
+  "course": {
+    "code": "TE 1123",
+    "title": "Polymer Engineering",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\1st_Year_1st_Term_2018_776.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Is it possible to. produce fully crystalline polymeric material? Explain with valid 05   \nreason."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a51757cc3680264b0719433a9aaee7ec3490cca5e36525b22e73b4c5b8c7f901.jpg",
+      "_source_path": "images/a51757cc3680264b0719433a9aaee7ec3490cca5e36525b22e73b4c5b8c7f901.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_207a19b37492fae9192aec4d0a9292632a34c8efa4999f5d4164885528908c05.jpg",
+      "_source_path": "images/207a19b37492fae9192aec4d0a9292632a34c8efa4999f5d4164885528908c05.jpg"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
+}

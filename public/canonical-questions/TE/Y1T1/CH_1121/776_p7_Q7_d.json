@@ -1,0 +1,37 @@
+{
+  "id": "776_p7_Q7(d)",
+  "course": {
+    "code": "CH 1121",
+    "title": "Chemistry-1",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\1st_Year_1st_Term_2018_776.pdf",
+    "source_page": null,
+    "paper_index": 7
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "18.2 g öf urea is dissolved in 100 g of water at 50º C. The lowering of vapour pressure produced is 5 mm Hg. Claculate the molecular mass of urea. The vapour pressure of water at $5 0 ^ { \\circ } \\mathrm { C }$ is 92 mm Hg."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
+}

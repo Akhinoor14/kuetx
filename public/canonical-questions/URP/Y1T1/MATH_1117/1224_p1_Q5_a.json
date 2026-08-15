@@ -1,0 +1,41 @@
+{
+  "id": "1224_p1_Q5(a)",
+  "course": {
+    "code": "MATH 1117",
+    "title": "Mathematics-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\1st_Year_1st_Term_2015_1224.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "Being a planner you planned to make a straight elevated express way connecting Mongla (25°35'N, 89° 5'E) and Banglabandha $( 2 2 ^ { \\circ }$ 25'N, 89º 25'E). If the average speed of a train on that route be 120 kmph then how much time will be required to travel from Mongla to Banglabandha?"
+    },
+    {
+      "type": "text",
+      "value": "(11)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2015"
+}

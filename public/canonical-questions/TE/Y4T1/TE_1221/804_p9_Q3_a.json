@@ -1,0 +1,41 @@
+{
+  "id": "804_p9_Q3(a)",
+  "course": {
+    "code": "TE 1221",
+    "title": "Textile Fibers",
+    "department": "Department of Textile Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\4th_Year_1st_Term_2018_804.pdf",
+    "source_page": null,
+    "paper_index": 9
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "From the following particulars; find out the (i) Average yarn count (ii) Average Production/ 18 Spindle in g (iii) When average count is 40º then find out total production."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Count</td><td rowspan=1 colspan=1>Working no. of spindles</td><td rowspan=1 colspan=1>Production (kg)</td></tr><tr><td rowspan=1 colspan=1>805</td><td rowspan=1 colspan=1>4400</td><td rowspan=1 colspan=1>123.20</td></tr><tr><td rowspan=1 colspan=1>60^$</td><td rowspan=1 colspan=1>6600</td><td rowspan=1 colspan=1>283.80</td></tr><tr><td rowspan=1 colspan=1>44s</td><td rowspan=1 colspan=1>10500</td><td rowspan=1 colspan=1>650.00</td></tr><tr><td rowspan=1 colspan=1>30S</td><td rowspan=1 colspan=1>4000</td><td rowspan=1 colspan=1>360.00</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2018"
+}

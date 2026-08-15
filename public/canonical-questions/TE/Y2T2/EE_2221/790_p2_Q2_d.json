@@ -1,0 +1,42 @@
+{
+  "id": "790_p2_Q2(d)",
+  "course": {
+    "code": "EE 2221",
+    "title": "Instrumentation and Electrical Control",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\2nd_Year_2nd_Term_2017_790.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "On a 230 V supply a fault having a resistance of 20 Ω develops between the unearthed ends of the winding of an electric heatcr and the frame as shown in the figure. If the resistance of the substation electrode is 4Ω that of human body 1200 Ω and the safe maximum resistance is 25 mA, what is the safe maximum resistance of the consumer's earth electrode?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8603f6d050b556bf644c0befbc65564f9cdc079b45b0f4f8b4443d9a8919a359.jpg",
+      "_source_path": "images/8603f6d050b556bf644c0befbc65564f9cdc079b45b0f4f8b4443d9a8919a359.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "774_p2_Q3(c)",
+  "course": {
+    "code": "ME 1121",
+    "title": "Fundamentals of Mechanical Engineering",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\1st_Year_1st_Term_2016_774.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". A four stroke engine has 4-cylinders. The diameter of piston is 10 cm, stoke 17   \nlength is 15 cm. Indicated means effective pressure is 0.67 MPa. The speed of the   \nengine is 2000 rpm when the number of explosion is 980 per min. Brake torque is   \n181.5 N-m. Fuel consumption by the engine recorded as 11.89 kg/hr. Calorific   \nvalue of the fuel used is 41800 kJ/kg. Given the relative efficiency is 0.5. Find:-   \ni) Mechanical efficiency ii) Brake thermal efficiency and iii) Air standard   \nefficiency."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2016"
+}

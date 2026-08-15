@@ -1,0 +1,45 @@
+{
+  "id": "1235_p5_Q2(a)",
+  "course": {
+    "code": "URP 1281",
+    "title": "Surveying and Cartography",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\1st_Year_2nd_Term_2015_1235.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "A ground is developed by maintaining a fairly uniform level. A survey team is requested to check the desired level of the improved ground. During checking process they noticed that along a survey line with zero slope the level machine is providing different staff readings. What is the reason behind this situation? What kind of error is it? Derive the algebraic formula for the incurred error of the machine."
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "text",
+      "value": "(20)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
+}

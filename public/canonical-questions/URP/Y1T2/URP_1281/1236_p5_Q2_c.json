@@ -1,0 +1,41 @@
+{
+  "id": "1236_p5_Q2(c)",
+  "course": {
+    "code": "URP 1281",
+    "title": "Surveying and Cartography",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\1st_Year_2nd_Term_2016_1236.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following are the bearings observed in traversing, with a compass, an (12) area where local attraction was suspected. Calculate the interior angles of the traverse and correct them if necessary."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Line</td><td rowspan=1 colspan=1>FB</td><td rowspan=1 colspan=1>BB</td></tr><tr><td rowspan=1 colspan=1>AB</td><td rowspan=1 colspan=1>191°45&#x27;</td><td rowspan=1 colspan=1>13°0&#x27;</td></tr><tr><td rowspan=1 colspan=1>BC</td><td rowspan=1 colspan=1>39°30&#x27;</td><td rowspan=1 colspan=1>222°30&#x27;</td></tr><tr><td rowspan=1 colspan=1>CD</td><td rowspan=1 colspan=1>22°15&#x27;</td><td rowspan=1 colspan=1>200°30&#x27;</td></tr><tr><td rowspan=1 colspan=1>DE</td><td rowspan=1 colspan=1>242°45&#x27;</td><td rowspan=1 colspan=1>62°45&#x27;</td></tr><tr><td rowspan=1 colspan=1>EA</td><td rowspan=1 colspan=1>330°15&#x27;</td><td rowspan=1 colspan=1>147°45&#x27;</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

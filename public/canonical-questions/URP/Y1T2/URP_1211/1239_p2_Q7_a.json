@@ -1,0 +1,37 @@
+{
+  "id": "1239_p2_Q7(a)",
+  "course": {
+    "code": "URP 1211",
+    "title": "Urban Planning Principles",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\1st_Year_2nd_Term_2019_1239.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is the role of the financial system? Name and describe two markets that are (15) financial system of Bangladesh."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2019"
+}

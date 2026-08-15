@@ -1,0 +1,57 @@
+{
+  "id": "1249_p5_Q5(a)",
+  "course": {
+    "code": "URP 2191",
+    "title": "Statistics for Planners-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2018\\2nd_Year_1st_Term_2018_1249.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Classify the following probability as classical, relative frequency, or subjective:(10)"
+    },
+    {
+      "type": "text",
+      "value": "(i) The probability that tuition will increase next year is 0.95."
+    },
+    {
+      "type": "text",
+      "value": "(ii) The probability of scoring on a penalty shot in the World Cup Football 2018 is 0.47."
+    },
+    {
+      "type": "text",
+      "value": "(iii) The probability that you will win the lottery is 0.00062."
+    },
+    {
+      "type": "text",
+      "value": "(iv) The probability a randomly selected flight will arrive on time is 0.875."
+    },
+    {
+      "type": "text",
+      "value": "(v) The probability that you will go to Europe this year is 0.14."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

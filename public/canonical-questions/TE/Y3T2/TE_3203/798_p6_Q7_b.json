@@ -1,0 +1,75 @@
+{
+  "id": "798_p6_Q7(b)",
+  "course": {
+    "code": "TE 3203",
+    "title": "Fabric Manufacturing Engineering-II",
+    "department": "Department of Textile Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\3rd_Year_2nd_Term_2016_798.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find out the link arrangement and run in ratio of following designs:"
+    },
+    {
+      "type": "text",
+      "value": "(i)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8e13fbbf58aa464df370fd5b0cf8f5c7f652c5e612e2a9863816dc5a664b70e2.jpg",
+      "_source_path": "images/8e13fbbf58aa464df370fd5b0cf8f5c7f652c5e612e2a9863816dc5a664b70e2.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_31d046167bd2c819c0576337bdfd7f841daaaadb83690a3d1ee3999eea7698fe.jpg",
+      "_source_path": "images/31d046167bd2c819c0576337bdfd7f841daaaadb83690a3d1ee3999eea7698fe.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(ii)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0397c3eedb91a984bfa9bcbfea067305c7ccdb8ac532db5d83ee5bd22529314a.jpg",
+      "_source_path": "images/0397c3eedb91a984bfa9bcbfea067305c7ccdb8ac532db5d83ee5bd22529314a.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_38695cee85b309c3c0b34122f7e9aeace3d17fba5587ff2422ce15e7296e9b6b.jpg",
+      "_source_path": "images/38695cee85b309c3c0b34122f7e9aeace3d17fba5587ff2422ce15e7296e9b6b.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a52b28e71cdded481dd259053bba667a5b84d412eb739c45905239b44b9ac57b.jpg",
+      "_source_path": "images/a52b28e71cdded481dd259053bba667a5b84d412eb739c45905239b44b9ac57b.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ff44d0dcebb42b51c664615b3a48eb1ca85cf9873c5c41761c2304b361e302f3.jpg",
+      "_source_path": "images/ff44d0dcebb42b51c664615b3a48eb1ca85cf9873c5c41761c2304b361e302f3.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "774_p2_Q8(c)",
+  "course": {
+    "code": "ME 1121",
+    "title": "Fundamentals of Mechanical Engineering",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\1st_Year_1st_Term_2016_774.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider slab of thickness L. The boundary ‘surface at x=0 and x=L are maintained at constant but different temperature $\\mathbf { T } _ { 1 }$ and ${ \\sf T } _ { 2 }$ respectively. There is no energy generation in the solid and the thermal conductivity k is constant. Develop an expression for the temperature distribution $\\mathrm { T } _ { ( \\mathbf { x } ) }$ in the slab and the thermal resistance of the slab for the heat flow through an area A."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2016"
+}

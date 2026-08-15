@@ -1,0 +1,57 @@
+{
+  "id": "1235_p2_Q7",
+  "course": {
+    "code": "MATH 1217",
+    "title": "Mathematics-II",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\1st_Year_2nd_Term_2015_1235.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Identify and solve any THREE of the following differential equations:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n( { \\mathsf { a } } ) \\quad ( \\mathbf { x } ^ { 2 } + \\mathbf { y } ^ { 2 } ) { \\mathsf { d } } \\mathbf { x } + ( \\mathbf { x } ^ { 2 } - \\mathbf { x } \\mathbf { y } ) { \\mathsf { d } } \\mathbf { y } = { \\mathsf { 0 } }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\mathbf { ( b ) } \\quad { \\frac { \\mathrm { d } \\mathbf { y } } { \\mathrm { d } \\mathbf { x } } } = { \\frac { 4 \\mathbf { x } + 6 \\mathbf { y } + 5 } { 3 \\mathbf { y } + 2 \\mathbf { x } + 4 } }\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n( { \\mathsf { c } } ) ( { \\mathsf { y } } ^ { 4 } + 2 { \\mathsf { y } } ) \\mathrm { d } { \\mathsf { x } } + ( { \\mathrm { x y } } ^ { 3 } + 2 { \\mathsf { y } } ^ { 4 } - 4 { \\mathrm { x } } ) \\mathrm { d } { \\mathsf { y } } = 0\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n( \\mathsf { d } ) \\quad \\left( \\frac { 3 - \\mathrm { y } } { \\mathrm { x } ^ { 2 } } \\right) \\mathrm { d } \\mathbf { x } + \\left( \\frac { \\mathrm { y } ^ { 2 } - 2 \\mathbf { x } } { \\mathrm { x } \\mathrm { y } ^ { 2 } } \\right) \\mathrm { d } \\mathbf { y } = 0 , \\mathrm { y } ( - 1 ) = 2\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
+}

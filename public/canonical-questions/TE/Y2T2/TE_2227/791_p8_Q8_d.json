@@ -1,0 +1,41 @@
+{
+  "id": "791_p8_Q8(d)",
+  "course": {
+    "code": "TE 2227",
+    "title": "Mechanics of Textile Structures",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\2nd_Year_2nd_Term_2018_791.pdf",
+    "source_page": null,
+    "paper_index": 8
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A cotton fabric of 20tex warp and 38tex weft; P1=0.0357cm, P2=0.04:m, -: 7.63 15 mills, $\\rho { = } 1 . 5 ~ \\mathrm { g / c c }$ . Find out : $ { \\mathrm { n } } _ { 1 } ,  { \\mathrm { n } } _ { 2 } ,  { \\mathrm { h } } _ { 1 } ,  { \\mathrm { h } } _ { 2 } ,  { \\mathrm { c } } _ { 1 } ,  { \\mathrm { c } } _ { 2 } , \\theta _ { 1 } , \\ \\theta _ { 2 } , \\  { \\mathrm { d } } _ { 1 } , \\  { \\mathrm { d } } _ { 2 }$"
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNLY Department of Textile Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

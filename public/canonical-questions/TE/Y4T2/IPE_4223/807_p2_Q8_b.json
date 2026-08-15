@@ -1,0 +1,41 @@
+{
+  "id": "807_p2_Q8(b)",
+  "course": {
+    "code": "IPE 4223",
+    "title": "Operations Management",
+    "department": "Department of Textile Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\4th_Year_2nd_Term_2016_807.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Maximize, ${ Z = } 5 \\mathbf { x } _ { 1 } { + } 4 \\mathbf { x } _ { 2 }$ Subject to, $6 \\mathbf { x } _ { 1 } + 4 \\mathbf { x } _ { 2 } \\leq \\dot { 2 } 4$ ${ \\bf x } _ { 1 } + 2 { \\bf x } _ { 2 } \\leq 6$ −x1+x2 ≤ 1 $\\mathbf { x } _ { 1 } , \\mathbf { x } _ { 2 } , \\mathbf { x } _ { 3 } \\geq 0$"
+    },
+    {
+      "type": "text",
+      "value": "Use simplex method."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2016"
+}

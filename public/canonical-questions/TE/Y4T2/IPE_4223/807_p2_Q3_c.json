@@ -1,0 +1,45 @@
+{
+  "id": "807_p2_Q3(c)",
+  "course": {
+    "code": "IPE 4223",
+    "title": "Operations Management",
+    "department": "Department of Textile Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\4th_Year_2nd_Term_2016_807.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Annual demand for an item is 5400 units. Ordering cost is TK600 per order. Inventory 15 carrying cost is 30% of the purchase price per unit per year. The price breaks are as shown below-"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Quantity</td><td rowspan=1 colspan=1>0≤Q1&lt;2400</td><td rowspan=1 colspan=1>2400≤Q2&lt;3000</td><td rowspan=1 colspan=1>3000≤ Q3</td></tr><tr><td rowspan=1 colspan=1>Price</td><td rowspan=1 colspan=1>12</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>8</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "(ii) If the order cost is changed to TK 300 per order, find the optimal order size."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2016"
+}

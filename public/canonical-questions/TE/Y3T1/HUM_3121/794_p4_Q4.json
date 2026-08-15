@@ -1,0 +1,45 @@
+{
+  "id": "794_p4_Q4",
+  "course": {
+    "code": "HUM 3121",
+    "title": "Accounting and Industrial Law",
+    "department": "Department of Textile Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\3rd_Year_1st_Term_2017_794.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The trial balance for Mahim Video Service for the year ended 30 June, 2017 are given below:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Account Titles</td><td rowspan=1 colspan=1>Debit (Taka)</td><td rowspan=1 colspan=1>Credit (Taka)</td></tr><tr><td rowspan=1 colspan=1>Cash</td><td rowspan=1 colspan=1>10,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Accounts Receivable</td><td rowspan=1 colspan=1>18,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Parts and supplies</td><td rowspan=1 colspan=1>91,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Prepaid Insurance</td><td rowspan=1 colspan=1>5,400</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Lab Equipment</td><td rowspan=1 colspan=1>2,40,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Accumulated depreciation- Lab Equipment</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>60,000</td></tr><tr><td rowspan=1 colspan=1>Accounts payable</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>20,000</td></tr><tr><td rowspan=1 colspan=1>Notes payable</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>40,000</td></tr><tr><td rowspan=1 colspan=1>Mahim, capital</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>2,05,000</td></tr><tr><td rowspan=1 colspan=1>Mahim, Drawing</td><td rowspan=1 colspan=1>2,17000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>ServiceRevenue Earned</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>4,35,600</td></tr><tr><td rowspan=1 colspan=1>Wages Expense</td><td rowspan=1 colspan=1>10,3,800</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Rent Expenses</td><td rowspan=1 colspan=1>48,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Utilities Expenses</td><td rowspan=1 colspan=1>21,700</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Advertising Expenses</td><td rowspan=1 colspan=1>4,900</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Miscellaneous Expenses</td><td rowspan=1 colspan=1>800</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>7,60,600</td><td rowspan=1 colspan=1>7,60,600</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Adjustment data: i) Parts and supplies on hand at June 30, 2017 amount to Tk. 16,000   \nii) Wages payable at June Tk. 3200 iii) The estimated amount of utilities consumed but   \nunpaid as of year-end Tk. 4,000, iv) Depreciation on lab Equipment for the year   \namount to Tk. 30,000.   \nRequired:"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2017"
+}

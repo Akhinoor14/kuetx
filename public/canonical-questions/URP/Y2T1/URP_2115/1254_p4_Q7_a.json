@@ -1,0 +1,45 @@
+{
+  "id": "1254_p4_Q7(a)",
+  "course": {
+    "code": "URP 2115",
+    "title": "Urban Planning Techniques",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2023\\2nd_Year_1st_Term_2023_1254.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the total new housing units required for a population of 65000."
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Assumption</td><td rowspan=1 colspan=1>Value</td></tr><tr><td rowspan=1 colspan=2>Group Home</td></tr><tr><td rowspan=1 colspan=1>Proportion of persons living in Group Homes</td><td rowspan=1 colspan=1>4%</td></tr><tr><td rowspan=1 colspan=2>Housing Mix</td></tr><tr><td rowspan=1 colspan=1>Single Family</td><td rowspan=1 colspan=1>70%</td></tr><tr><td rowspan=1 colspan=1>Multi-Family</td><td rowspan=1 colspan=1>30%</td></tr><tr><td rowspan=1 colspan=2>Household Size</td></tr><tr><td rowspan=1 colspan=1>Single Family</td><td rowspan=1 colspan=1>2.5</td></tr><tr><td rowspan=1 colspan=1>Multi-Family</td><td rowspan=1 colspan=1>1.5</td></tr><tr><td rowspan=1 colspan=2>Vacancy Rate</td></tr><tr><td rowspan=1 colspan=1>Single Family</td><td rowspan=1 colspan=1>5%</td></tr><tr><td rowspan=1 colspan=1>Multi-Family</td><td rowspan=1 colspan=1>13%</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

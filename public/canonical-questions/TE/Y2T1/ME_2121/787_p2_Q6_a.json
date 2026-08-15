@@ -1,0 +1,42 @@
+{
+  "id": "787_p2_Q6(a)",
+  "course": {
+    "code": "ME 2121",
+    "title": "Engineering Mechanics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2019\\2nd_Year_1st_Term_2019_787.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "An area bounded by the parabola $y ^ { 2 } = 8 x$ and the straight line $x = 5$ cm. Determine 20 by direct integration, the centroid of this area."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ad0f4b01c43a160d36c415ee89774adf56aca3c0e7102a63ed3d602c7de8d5ec.jpg",
+      "_source_path": "images/ad0f4b01c43a160d36c415ee89774adf56aca3c0e7102a63ed3d602c7de8d5ec.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "815_p3_Q5(b)",
+  "course": {
+    "code": "TE 2111",
+    "title": "Statistical Analysis and Quality Control",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\2nd_Year_Backlog_2018_815.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "ANOVA for no. of knitting factory and city types-"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=2 colspan=1>Kmitting factory</td><td rowspan=1 colspan=3>City type</td></tr><tr><td rowspan=1 colspan=1>al</td><td rowspan=1 colspan=1>a2</td><td rowspan=1 colspan=1>a3</td></tr><tr><td rowspan=1 colspan=1>2016</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>2</td></tr><tr><td rowspan=1 colspan=1>2017</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>9</td><td rowspan=1 colspan=1>4</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2018"
+}

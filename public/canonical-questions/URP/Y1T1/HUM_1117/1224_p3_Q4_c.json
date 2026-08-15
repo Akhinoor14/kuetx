@@ -1,0 +1,54 @@
+{
+  "id": "1224_p3_Q4(c)",
+  "course": {
+    "code": "HUM 1117",
+    "title": "Functional English",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\1st_Year_1st_Term_2015_1224.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": "Express the following notions/attitudes in sentence."
+    },
+    {
+      "type": "text",
+      "value": "i. Offer ii. Disapproval iii. Apology iv. Joy v. Sadness vi. Anger,"
+    },
+    {
+      "type": "text",
+      "value": "(09)"
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_e8ca74b466a0d45973633ffd923692a38311c824b95b128e7738d474b68afc9f.jpg",
+      "_source_path": "images/e8ca74b466a0d45973633ffd923692a38311c824b95b128e7738d474b68afc9f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2015"
+}

@@ -1,0 +1,46 @@
+{
+  "id": "1245_p1_Q3(d)",
+  "course": {
+    "code": "CE 2107",
+    "title": "Construction Technology and Materials",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\2nd_Year_1st_Term_2014_1245.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(d)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "What are the functions of Sand and Surki in mortar? Mention the\\_precautions (08) in using mortar. nepartme"
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_de888a15e2def7a49b60edd5d580a1faec0dc58737c61de2e1d4feb8af4c1ad1.jpg",
+      "_source_path": "images/de888a15e2def7a49b60edd5d580a1faec0dc58737c61de2e1d4feb8af4c1ad1.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2014"
+}

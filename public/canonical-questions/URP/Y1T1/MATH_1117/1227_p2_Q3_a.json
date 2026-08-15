@@ -1,0 +1,37 @@
+{
+  "id": "1227_p2_Q3(a)",
+  "course": {
+    "code": "MATH 1117",
+    "title": "Mathematics-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2018\\1st_Year_1st_Term_2018_1227.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "If possible find the value of m so that the following system of linear (15) equations has (i) no solution (ii) unique soiution (iii) many (arbitrary) solutions. Give $2 m x + y = m ; 2 x + 3 m y = 1$ . In the case of existing solution for some m, find the solution(s)."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
+}

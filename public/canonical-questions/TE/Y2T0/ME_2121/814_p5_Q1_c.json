@@ -1,0 +1,42 @@
+{
+  "id": "814_p5_Q1(c)",
+  "course": {
+    "code": "ME 2121",
+    "title": "Engineering Mechanics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\2nd_Year_Backlog_2017_814.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A homogenous 800 Kg bar AB is supported at either end by a cable as shown in the figure. Calculate the smaliest area of each cable if the stress is not to exceed 90 MPa in bronze and 120 MPa in steel."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_69841c5471262b419b84ac8cab5d9869802808a53278aa63f709d44630c15565.jpg",
+      "_source_path": "images/69841c5471262b419b84ac8cab5d9869802808a53278aa63f709d44630c15565.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2017"
+}

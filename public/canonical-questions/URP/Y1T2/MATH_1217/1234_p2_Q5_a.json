@@ -1,0 +1,46 @@
+{
+  "id": "1234_p2_Q5(a)",
+  "course": {
+    "code": "MATH 1217",
+    "title": "Mathematics-II",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\1st_Year_2nd_Term_2014_1234.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define the continuity of a function at a point. A function f(x) is defined as (12) follows:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { c } { f ( x ) = 4 x ^ { 2 } - 3 x , f o r \\ 1 < x < 2 } \\\\ { = 3 x + 4 , f o r \\ x \\ge 2 } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Discuss the continuity of $f ( x )$ and the existence of $f ^ { ' ( x ) }$ for $x = 2$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2014"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "809_p3_Q4(c)",
+  "course": {
+    "code": "TE 2101",
+    "title": "Yarn Manufacturing Engineering-I",
+    "department": "Department of Textile Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\4th_Year_2nd_Term_2018_809.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the maximum and minimum weaver's load from the data given below:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>SL. No.</td><td rowspan=1 colspan=1>Occurrence (x)</td><td rowspan=1 colspan=1>No. of x/loom/hr.</td><td rowspan=1 colspan=1>Time for eachrepair in se cond</td></tr><tr><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>Warp break</td><td rowspan=1 colspan=1>1.25</td><td rowspan=1 colspan=1>8</td></tr><tr><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>Weft break</td><td rowspan=1 colspan=1>0.30</td><td rowspan=1 colspan=1>09</td></tr><tr><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>Shuttle trap</td><td rowspan=1 colspan=1>0.25</td><td rowspan=1 colspan=1>20</td></tr><tr><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>Trimming</td><td rowspan=1 colspan=1>03</td><td rowspan=1 colspan=1>13</td></tr><tr><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>Pirn change</td><td rowspan=1 colspan=1>04</td><td rowspan=1 colspan=1>15</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2018"
+}

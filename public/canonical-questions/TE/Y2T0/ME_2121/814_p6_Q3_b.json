@@ -1,0 +1,51 @@
+{
+  "id": "814_p6_Q3(b)",
+  "course": {
+    "code": "ME 2121",
+    "title": "Engineering Mechanics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\2nd_Year_Backlog_2017_814.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "Express the weight W required to maintain equilibrium in terms od P, d, and h."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ae0a75d34c8dc8646f4042e9439727455b1674cdd3c00923457d4f712d24ab64.jpg",
+      "_source_path": "images/ae0a75d34c8dc8646f4042e9439727455b1674cdd3c00923457d4f712d24ab64.jpg"
+    },
+    {
+      "type": "text",
+      "value": "In the truss shown in figure, let $F _ { 1 } = 1 0 0 0 K g$ and $F _ { 2 } = 5 0 0 0 K g$ Find the external 18 reactions and the loads on the members CG, CH and EH. Use methods of sections."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a7963c2f0b1b5eb1b46d01a33c6206d191f58a722b7e49b2b4851620e67eb022.jpg",
+      "_source_path": "images/a7963c2f0b1b5eb1b46d01a33c6206d191f58a722b7e49b2b4851620e67eb022.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2017"
+}

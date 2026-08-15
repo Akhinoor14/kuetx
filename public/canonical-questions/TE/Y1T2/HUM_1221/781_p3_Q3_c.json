@@ -1,0 +1,61 @@
+{
+  "id": "781_p3_Q3(c)",
+  "course": {
+    "code": "HUM 1221",
+    "title": "Business and Communicative English",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\1st_Year_2nd_Term_2017_781.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Correct the following sentences:"
+    },
+    {
+      "type": "text",
+      "value": "i) Five plus five are ten"
+    },
+    {
+      "type": "text",
+      "value": "ii) Twenty years are long time"
+    },
+    {
+      "type": "text",
+      "value": "iii) Either my daughters or my son are coming today"
+    },
+    {
+      "type": "text",
+      "value": ". iv) One third of the members of this group is present"
+    },
+    {
+      "type": "text",
+      "value": "v) This pair of shoes are very nice"
+    },
+    {
+      "type": "text",
+      "value": "vi)The number of the students in the class were 50"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

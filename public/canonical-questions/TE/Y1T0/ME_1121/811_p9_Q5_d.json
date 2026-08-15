@@ -1,0 +1,49 @@
+{
+  "id": "811_p9_Q5(d)",
+  "course": {
+    "code": "ME 1121",
+    "title": "Fundamentals of Mechanical Engineering",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\1st_Year_Backlog_2016_811.pdf",
+    "source_page": null,
+    "paper_index": 9
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A lancashire boiler generates 2400 kg of dry steam per hour at a pressure of 11.5 bar. The 11 grate àrea is 3m² and 90kg of coal is burnt per m² of grate area per hour. The calorific valve of the coal is 33180 kj/kg and the temperature of feed water is 17.5°C. Calculate the"
+    },
+    {
+      "type": "text",
+      "value": "(i) Actual evaporation per kg of coal"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Equivalent evaporation from and at 100°C, and"
+    },
+    {
+      "type": "text",
+      "value": "(iii)Efficiency of the boiler"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2016"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1229_p1_Q5(a)",
+  "course": {
+    "code": "URP 1113",
+    "title": "Fundamentals of Planning Process",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2020\\1st_Year_1st_Term_2020_1229.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Briefly explain the terms Vision, Mission, Goal and Objective with relevant (15) examples especially in context of Urban and Regional Planning."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2020"
+}

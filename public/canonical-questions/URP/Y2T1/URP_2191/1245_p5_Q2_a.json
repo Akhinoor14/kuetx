@@ -1,0 +1,41 @@
+{
+  "id": "1245_p5_Q2(a)",
+  "course": {
+    "code": "URP 2191",
+    "title": "Statistics for Planners-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\2nd_Year_1st_Term_2014_1245.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find (i) Arithmeted mean, (ii) Mean deviation about mode, (iii) Median of the (15) following experimental data."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Class interval (age)</td><td rowspan=1 colspan=1>0-9</td><td rowspan=1 colspan=1>10-19</td><td rowspan=1 colspan=1>20-29</td><td rowspan=1 colspan=1>30-39</td><td rowspan=1 colspan=1>40-49</td></tr><tr><td rowspan=1 colspan=1>Frequency</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>40</td><td rowspan=1 colspan=1>35</td><td rowspan=1 colspan=1>10</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2014"
+}

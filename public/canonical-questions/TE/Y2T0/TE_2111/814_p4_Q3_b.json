@@ -1,0 +1,45 @@
+{
+  "id": "814_p4_Q3(b)",
+  "course": {
+    "code": "TE 2111",
+    "title": "Statistical Analysis and Quality Control",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\2nd_Year_Backlog_2017_814.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The Alabama Department of Labor reports that 20% of the workforce in Mobile is 10 unemployed and interviewed· 14 workers."
+    },
+    {
+      "type": "text",
+      "value": "i) What is the probability at least three are unemployed?"
+    },
+    {
+      "type": "text",
+      "value": "ii) What is the probability at least one is unemployed?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2017"
+}

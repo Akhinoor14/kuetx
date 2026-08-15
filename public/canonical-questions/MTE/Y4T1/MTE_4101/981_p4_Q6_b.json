@@ -1,0 +1,47 @@
+{
+  "id": "981_p4_Q6(b)",
+  "course": {
+    "code": "MTE 4101",
+    "title": "Industrial Automation",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2023\\4th_Year_1st_Term_2023_981.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "We have a bottle filter with six filling nozzles and this filter will be filling two different size bottles which are 250 mL and 500 mL for this filling task. We have to track the bottle size under each filling nozzle accurately. The bottle height sensor only can sense the height of 500 mL bottle. We have an index sensor in the conveyer which is activated once for every rotation of the gear. This sensor indicates the conveyer belt is moved one step forward. We can use the sensor signal as a trigger to shift the data bits across the shift register. We have six bottles of mixed size in the filter and we can track the location and the size of the bottles under each filling nozzle using shift registers. When all the six positions are placed by different size of bottles, then use timers to fill these bottles. Now draw a ladder program for this task."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_4933fde2eef106ac17d574b3802e708f4b3e0d448911453b7f32464a602268f1.jpg",
+      "_source_path": "images/4933fde2eef106ac17d574b3802e708f4b3e0d448911453b7f32464a602268f1.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_5f6cd3aa24527e4a550ffc8ce99a7f08a56c3b503edea96dd5781c86ee3c00cf.jpg",
+      "_source_path": "images/5f6cd3aa24527e4a550ffc8ce99a7f08a56c3b503edea96dd5781c86ee3c00cf.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2023"
+}

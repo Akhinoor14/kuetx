@@ -1,0 +1,41 @@
+{
+  "id": "774_p5_Q8(a)",
+  "course": {
+    "code": "TE 1123",
+    "title": "Polymer Engineering",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\1st_Year_1st_Term_2016_774.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Reduce matrix A to its normal form and then find its rank."
+    },
+    {
+      "type": "text",
+      "value": "Where $\\begin{array} { r l } { \\mathbf { A } { } = { } } & { { } { } { \\left[ \\begin{array} { l l l } { \\mathbf { 1 } } & { 2 } & { 3 } \\\\ { 2 } & { 3 } & { 4 } \\\\ { 3 } & { 5 } & { 7 } \\end{array} \\right] } } \\end{array}$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2016"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "785_p4_Q2(b)",
+  "course": {
+    "code": "ME 2121",
+    "title": "Engineering Mechanics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\2nd_Year_1st_Term_2017_785.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_bc3701ebd8a1b00164d7c1e70efe33d85ed0978a7cffc0e7bbda6e235c4f37b1.jpg",
+      "_source_path": "images/bc3701ebd8a1b00164d7c1e70efe33d85ed0978a7cffc0e7bbda6e235c4f37b1.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

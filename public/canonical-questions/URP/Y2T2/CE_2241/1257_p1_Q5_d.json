@@ -1,0 +1,37 @@
+{
+  "id": "1257_p1_Q5(d)",
+  "course": {
+    "code": "CE 2241",
+    "title": "Principles of Environmental Engineering",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\2nd_Year_2nd_Term_2015_1257.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Design a leach pit for both single and alternating twin off-set pit pour flush (12) latrine serving a family of 8 members having a life period of 3 years. The average waste water flow rate is about 10 Ipcd and the soil is sandy soil."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2015"
+}

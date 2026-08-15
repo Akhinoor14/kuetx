@@ -1,0 +1,37 @@
+{
+  "id": "980_p4_Q4(b)",
+  "course": {
+    "code": "MTE 4103",
+    "title": "Digital Signal Processing and Machine Vision",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\4th_Year_1st_Term_2022_980.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is window technique of FIR filtering? A low-pass filter with passband gain of unity, cut-off frequency of 850 Hz and at a sampling frequency of F = 5000 Hz, the length of impulse response should be 5. Use Hanning Window to design this FIR digital filter."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

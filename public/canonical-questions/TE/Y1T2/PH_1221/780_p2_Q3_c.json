@@ -1,0 +1,37 @@
+{
+  "id": "780_p2_Q3(c)",
+  "course": {
+    "code": "PH 1221",
+    "title": "Physics",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\1st_Year_2nd_Term_2016_780.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The photoelectric threshold frequency of silver is 1.086×10¹⁵Hz. Calculate (i) the maximum kinetic energy of ejected electrons and (ii) the stopping potential in volts for the electrons, when the sliver surface is illuminated with ultra-violated light of frequency 1.5×10¹⁵Hz."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

@@ -1,0 +1,81 @@
+{
+  "id": "793_p6_Q2",
+  "course": {
+    "code": "HUM 3121",
+    "title": "Accounting and Industrial Law",
+    "department": "Department of Textile Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\3rd_Year_1st_Term_2016_793.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "2",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Quick carriage company started on June 1, 2016 by Mr. Hares has the following 35 transactions during June:"
+    },
+    {
+      "type": "text",
+      "value": "2016 June-01 Hares invests Tk 57,000 cash in a new business called quick carriage company."
+    },
+    {
+      "type": "text",
+      "value": "2016 June-02 A van is purchased for the business for Tk 36,000 in cash."
+    },
+    {
+      "type": "text",
+      "value": "2016 June-03 Equipment is purchased on account for Tk 9,000."
+    },
+    {
+      "type": "text",
+      "value": "2016 June-04A fee of Tk 1,200 for hauling goods is billed to a customer."
+    },
+    {
+      "type": "text",
+      "value": "2016 June-05 A fee of Tk 2300 for hauling goods is received in cash."
+    },
+    {
+      "type": "text",
+      "value": "2016 June-06 Cash Tk 600 is received from customer who was billed in June-04"
+    },
+    {
+      "type": "text",
+      "value": "2016 June-07 A payment of Tk 5000 is made on the equipment purchased in June-03"
+    },
+    {
+      "type": "text",
+      "value": "2016 June-08 Repair expense paid in cash Tk 1,900."
+    },
+    {
+      "type": "text",
+      "value": "2016 June-09 Purchased gasoline in cash Tk 1000."
+    },
+    {
+      "type": "text",
+      "value": "2016 June-10 Cash Tk 1,500 is withdrawn from business by Mr. Hares for his personal use:"
+    },
+    {
+      "type": "text",
+      "value": "Required: Pass journal entries in the book of Mr. Hares quick carriage company."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

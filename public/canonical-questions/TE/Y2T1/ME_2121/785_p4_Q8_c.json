@@ -1,0 +1,45 @@
+{
+  "id": "785_p4_Q8(c)",
+  "course": {
+    "code": "ME 2121",
+    "title": "Engineering Mechanics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\2nd_Year_1st_Term_2017_785.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Draw the power stage of induction motor. The power input to a 500V, 50 Hz 6 pole, 3φ induction motor running at 975 r.p.m is 40 KW. The stator losses are 1 KW and FWL are 2 KW. Calculate (i) slip (ii) the rotor Cu loss (iii) shaft power (iv) the efficiency."
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY"
+    },
+    {
+      "type": "text",
+      "value": "Department of Textile Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

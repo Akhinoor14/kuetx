@@ -1,0 +1,37 @@
+{
+  "id": "777_p4_Q7(c)",
+  "course": {
+    "code": "ME 1121",
+    "title": "Fundamentals of Mechanical Engineering",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2019\\1st_Year_1st_Term_2019_777.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The walls of a room consists of parallel layers in contact of cement, brick and wood of 14 thickness 20mm, 300mm, and 10mm respectively. Find the quantity of heat that passes through each ${ \\mathfrak { m } } ^ { 2 }$ of wall per minute, if the temperature of air in contact with the wall is 5°℃ and 30°℃ inside."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
+}

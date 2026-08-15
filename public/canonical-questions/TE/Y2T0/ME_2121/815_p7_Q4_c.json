@@ -1,0 +1,49 @@
+{
+  "id": "815_p7_Q4(c)",
+  "course": {
+    "code": "ME 2121",
+    "title": "Engineering Mechanics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\2nd_Year_Backlog_2018_815.pdf",
+    "source_page": null,
+    "paper_index": 7
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the same $\\mathbf { h } _ { \\mathfrak { o } } ,$ but for the maximum-load optimum, determine the permissible load and the fhp."
+    },
+    {
+      "type": "text",
+      "value": "A pair of gears with $2 0 ^ { \\circ }$ full-depth teeth are to transmit 10 hp at 1750 rpm of the 3 inch pinion; velocity ratio desired is about 3.8; intermittent service. Use a strength reduction factor of about 1.4, with the load at the tip and teeth are commercially cut. Determine the pitch, face width, and tooth numbers if the material is cast iron, class -20."
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY"
+    },
+    {
+      "type": "text",
+      "value": "Department of Textile Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2018"
+}

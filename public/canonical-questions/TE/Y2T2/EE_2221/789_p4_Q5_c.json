@@ -1,0 +1,42 @@
+{
+  "id": "789_p4_Q5(c)",
+  "course": {
+    "code": "EE 2221",
+    "title": "Instrumentation and Electrical Control",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\2nd_Year_2nd_Term_2016_789.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define poles and zeros. For the following positions of poles in S-plane as shown in below 12 figure, draw the system homogenous response and comment on system stability for each"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_7e1f2e399f69d2283a07f024ec9015c7cf3a8424c77e5bdc905a04428b8f14ef.jpg",
+      "_source_path": "images/7e1f2e399f69d2283a07f024ec9015c7cf3a8424c77e5bdc905a04428b8f14ef.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

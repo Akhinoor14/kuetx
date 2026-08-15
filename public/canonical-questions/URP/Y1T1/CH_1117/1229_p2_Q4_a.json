@@ -1,0 +1,49 @@
+{
+  "id": "1229_p2_Q4(a)",
+  "course": {
+    "code": "CH 1117",
+    "title": "Environmental Chemistry",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2020,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2020\\1st_Year_1st_Term_2020_1229.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Let a complex compound [Co(en)<sub>2</sub>(Cl)<sub>2</sub>]NO<sub>3</sub> (10)"
+    },
+    {
+      "type": "text",
+      "value": "(i) Find out the coordination and oxidation numbers of the central metal atop;"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Find out the bidentate ligand; and"
+    },
+    {
+      "type": "text",
+      "value": "(iii) The effective atomic number (EAN) of the central metal atom."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2020"
+}

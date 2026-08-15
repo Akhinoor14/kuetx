@@ -1,0 +1,65 @@
+{
+  "id": "1246_p4_Q5",
+  "course": {
+    "code": "URP 2113",
+    "title": "Site and Area Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\2nd_Year_1st_Term_2015_1246.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5",
+  "numbering_source": "regex",
+  "marks": 35,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write down the objectives, performance criteria and prescriptive (5x7) measures for any five of the following elements of residential (35) subdivision."
+    },
+    {
+      "type": "text",
+      "value": "i. Density"
+    },
+    {
+      "type": "text",
+      "value": "ii. Allotment layout"
+    },
+    {
+      "type": "text",
+      "value": "iii. Allotment design"
+    },
+    {
+      "type": "text",
+      "value": "iv. Setbacks"
+    },
+    {
+      "type": "text",
+      "value": "v. Solar access"
+    },
+    {
+      "type": "text",
+      "value": "vi. Private open space"
+    },
+    {
+      "type": "text",
+      "value": "vii. Landscaping"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2015"
+}

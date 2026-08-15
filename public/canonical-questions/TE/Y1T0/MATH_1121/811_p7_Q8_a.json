@@ -1,0 +1,45 @@
+{
+  "id": "811_p7_Q8(a)",
+  "course": {
+    "code": "MATH 1121",
+    "title": "Mathematics-1",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\1st_Year_Backlog_2016_811.pdf",
+    "source_page": null,
+    "paper_index": 7
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the inverse of the matrix:"
+    },
+    {
+      "type": "text",
+      "value": "$\\mathsf { A } = \\left[ \\begin{array} { c c c } { 3 } & { 4 } & { - 1 } \\\\ { 1 } & { 0 } & { 3 } \\\\ { 2 } & { 5 } & { - 4 } \\end{array} \\right]$ by using elementary row transformations."
+    },
+    {
+      "type": "text",
+      "value": "·8(b) Solve the following system of equations: $2 x + y - 3 z = 5$ $3 x - 2 y + 2 z = 5$ $5 { \\mathrm { x } } - 3 { \\mathrm { y } } - { \\mathrm { z } } = 1 6 .$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2016"
+}

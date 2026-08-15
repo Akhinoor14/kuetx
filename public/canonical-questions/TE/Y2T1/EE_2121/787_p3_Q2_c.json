@@ -1,0 +1,42 @@
+{
+  "id": "787_p3_Q2(c)",
+  "course": {
+    "code": "EE 2121",
+    "title": "Electrical Circuits, Machines and Electronics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2019\\2nd_Year_1st_Term_2019_787.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ", calculate real power, reactive power, apparent 12 power, power factor and also draw the complete vector diagram of this circuit."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a771a43def9771497eb3febcb33485c87da2327dae2df66965eff8ec1f62466f.jpg",
+      "_source_path": "images/a771a43def9771497eb3febcb33485c87da2327dae2df66965eff8ec1f62466f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

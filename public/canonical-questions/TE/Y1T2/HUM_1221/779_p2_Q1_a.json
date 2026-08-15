@@ -1,0 +1,65 @@
+{
+  "id": "779_p2_Q1(a)",
+  "course": {
+    "code": "HUM 1221",
+    "title": "Business and Communicative English",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2015\\1st_Year_2nd_Term_2015_779.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Complete the questions using a suitable verb:"
+    },
+    {
+      "type": "text",
+      "value": "i) I am looking for Paul ..him?- Yes. He was here."
+    },
+    {
+      "type": "text",
+      "value": "ii) Why ....o bed so early last night?- Because I felt tired."
+    },
+    {
+      "type": "text",
+      "value": "ii) Where ......?- Just to the postbox to post the letters."
+    },
+    {
+      "type": "text",
+      "value": "iv)......... television every evening?- Not only if there's a good programme."
+    },
+    {
+      "type": "text",
+      "value": "v)  Your house is very beautiful. How long ....... here?- Nearly 10 years."
+    },
+    {
+      "type": "text",
+      "value": "vi) How was your holiday? ......... a nice time?- Yes, thanks. It was great."
+    },
+    {
+      "type": "text",
+      "value": "vii)  ...Julie Jecently? Yes, I met her a ew days ago."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
+}

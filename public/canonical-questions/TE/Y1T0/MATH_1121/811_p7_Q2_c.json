@@ -1,0 +1,37 @@
+{
+  "id": "811_p7_Q2(c)",
+  "course": {
+    "code": "MATH 1121",
+    "title": "Mathematics-1",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\1st_Year_Backlog_2016_811.pdf",
+    "source_page": null,
+    "paper_index": 7
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "If u = logr and $\\scriptstyle \\mathbf { r } ^ { 2 } = \\mathbf { x } ^ { 2 } + \\mathbf { y } ^ { 2 } + \\mathbf { z } ^ { 2 } ,$ then find the value of $\\cdot \\frac { \\delta ^ { 2 } u } { \\delta x ^ { 2 } } + \\frac { \\delta ^ { 2 } u } { \\delta y _ { . } ^ { 2 } } + \\frac { \\delta ^ { 2 } u } { \\delta z ^ { 2 } } .$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2016"
+}

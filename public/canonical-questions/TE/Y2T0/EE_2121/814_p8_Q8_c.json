@@ -1,0 +1,49 @@
+{
+  "id": "814_p8_Q8(c)",
+  "course": {
+    "code": "EE 2121",
+    "title": "Electrical Circuits, Machines and Electronics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\2nd_Year_Backlog_2017_814.pdf",
+    "source_page": null,
+    "paper_index": 8
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define slip. A 3Φ induction motor is wound for 4 poles and is supplied from 50 Hz system. 08 Calculate:"
+    },
+    {
+      "type": "text",
+      "value": "i)Synchronous speed"
+    },
+    {
+      "type": "text",
+      "value": "¿i)Rotor speed, when slip is 5%"
+    },
+    {
+      "type": "text",
+      "value": "iii) Rotor frequency at 500 RPM"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2017"
+}

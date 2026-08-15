@@ -1,0 +1,42 @@
+{
+  "id": "955_p6_Q5(b)",
+  "course": {
+    "code": "MTE 4107",
+    "title": "Design of Mechatronic Systems",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\4th_Year_1st_Term_2022_955.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the RLC circuit shown in figure, Find the mathematical model when the input is applied voltage, V and output is voltage across the inductor, $V _ { 2 }$"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_8f0a8650eedc38793a5d494c328ce4620553ab27f9bf4b52bb4f4de1830e14e9.jpg",
+      "_source_path": "images/8f0a8650eedc38793a5d494c328ce4620553ab27f9bf4b52bb4f4de1830e14e9.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

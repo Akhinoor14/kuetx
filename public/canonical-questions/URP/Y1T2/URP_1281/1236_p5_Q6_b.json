@@ -1,0 +1,49 @@
+{
+  "id": "1236_p5_Q6(b)",
+  "course": {
+    "code": "URP 1281",
+    "title": "Surveying and Cartography",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\1st_Year_2nd_Term_2016_1236.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Consider the following scenario in a district with 4 zones:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Zone</td><td rowspan=1 colspan=1>Popuiation (in thousands)</td><td rowspan=1 colspan=1>Male to Female Ratio</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>1254</td><td rowspan=1 colspan=1>0.65</td></tr><tr><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>6250</td><td rowspan=1 colspan=1>0.45</td></tr><tr><td rowspan=1 colspan=1>C</td><td rowspan=1 colspan=1>4632</td><td rowspan=1 colspan=1>0.50</td></tr><tr><td rowspan=1 colspan=1>D</td><td rowspan=1 colspan=1>7412</td><td rowspan=1 colspan=1>0.55</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "(15)"
+    },
+    {
+      "type": "text",
+      "value": "Outline the process of creating a suitable map (type and design) that shows the Male to Female Ratio."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

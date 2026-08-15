@@ -1,0 +1,42 @@
+{
+  "id": "814_p6_Q2(a)",
+  "course": {
+    "code": "ME 2121",
+    "title": "Engineering Mechanics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\2nd_Year_Backlog_2017_814.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Two spheres are at rest against smooth surfaces as shown in figure. Sphere A weighs 3200 17 Kg and sphere B weighs 400 Kg. Let $\\mathbf { F } = 1 0 0 0 \\mathbf { K } \\mathbf { g }$ and $\\theta = 7 5 ^ { o }$ , find the reactions at C, D and E."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_995efa828bc60a38f9eaff202c99ffbfee29d74a1f23e4fff0fc325ec493bc20.jpg",
+      "_source_path": "images/995efa828bc60a38f9eaff202c99ffbfee29d74a1f23e4fff0fc325ec493bc20.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2017"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "1264_p4_Q3(b)",
+  "course": {
+    "code": "CE 2241",
+    "title": "Principles of Environmental Engineering",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2022\\2nd_Year_2nd_Term_2022_1264.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following water samples contain various impurities as shown below. Draw the (12) safest yet cheapest treatment process diagram for each sample and briefly discuss the reason."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>Sample-1 Source: Lake; TC: 100 N/100 mL; Color: 20 TCU; Turbidity: 60 NTU; Contain: 50% settleable aggregates</td><td>Sample-2 Source: River; Type: Palatable TC: 1 N/100 mL; Turbidity: 4 NTU</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2022"
+}

@@ -1,0 +1,53 @@
+{
+  "id": "1231_p1_Q8(c)",
+  "course": {
+    "code": "CH 1117",
+    "title": "Environmental Chemistry",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2022\\1st_Year_1st_Term_2022_1231.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Draw the molecular orbital structure of nitrogen molecule and answer the (12) followings:"
+    },
+    {
+      "type": "text",
+      "value": "(i) How many bonding and antibonding electrons are in the molecule?"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Explain the cause of showing magnetic properties."
+    },
+    {
+      "type": "text",
+      "value": "(iii) Find out the bond order."
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2022"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "1250_p5_Q8(c)",
+  "course": {
+    "code": "URP 2191",
+    "title": "Statistics for Planners-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\2nd_Year_1st_Term_2019_1250.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "The income of a group of 10,000 persons was found to be. normally (12) distributed with mean tk. 1750 per month and standard deviation of tk. 50. Show that of this group 95% had income exceeding tk. 1668 and only 5% had income exceeding tk. 1832. What was the lowest income among the richest 100?"
+    },
+    {
+      "type": "text",
+      "value": "[Note: Probabilities should be shown graphically]"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

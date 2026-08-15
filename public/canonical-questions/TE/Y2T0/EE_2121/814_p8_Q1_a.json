@@ -1,0 +1,42 @@
+{
+  "id": "814_p8_Q1(a)",
+  "course": {
+    "code": "EE 2121",
+    "title": "Electrical Circuits, Machines and Electronics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\2nd_Year_Backlog_2017_814.pdf",
+    "source_page": null,
+    "paper_index": 8
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "State KVL and KCL. Find the currents and voltages in the circuits shown in the figure."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_4787eb05745bdf7f5db937a9e7a75680214dd4055ef8fb1838a5d7d7d2579f16.jpg",
+      "_source_path": "images/4787eb05745bdf7f5db937a9e7a75680214dd4055ef8fb1838a5d7d7d2579f16.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2017"
+}

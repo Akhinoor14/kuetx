@@ -1,0 +1,42 @@
+{
+  "id": "791_p9_Q6(c)",
+  "course": {
+    "code": "EE 2221",
+    "title": "Instrumentation and Electrical Control",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\2nd_Year_2nd_Term_2018_791.pdf",
+    "source_page": null,
+    "paper_index": 9
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A system is represented by the block diagram as shown in following figure. Reduce the 1 bloçk diagram to a single transfer function block."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_1344882ae09afb49e5d16752ee913d3fd93bfab8151933382f0c41338f62da62.jpg",
+      "_source_path": "images/1344882ae09afb49e5d16752ee913d3fd93bfab8151933382f0c41338f62da62.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

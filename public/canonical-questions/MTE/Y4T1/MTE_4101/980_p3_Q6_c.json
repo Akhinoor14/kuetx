@@ -1,0 +1,37 @@
+{
+  "id": "980_p3_Q6(c)",
+  "course": {
+    "code": "MTE 4101",
+    "title": "Industrial Automation",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\4th_Year_1st_Term_2022_980.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write a PLC program to drive a motor in forward and in reverse direction. The motor takes approximately 10 secs todown to its rest state. When switch S1 is pressed, coil-1 energizes making coil-2 de-energized."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

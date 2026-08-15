@@ -1,0 +1,46 @@
+{
+  "id": "805_p7_Q6(c)",
+  "course": {
+    "code": "TE 2101",
+    "title": "Yarn Manufacturing Engineering-I",
+    "department": "Department of Textile Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2019\\4th_Year_1st_Term_2019_805.pdf",
+    "source_page": null,
+    "paper_index": 7
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the fashioning sequence of the following garment: 15"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_240a1711735b2f751ed575fc216ccd8563765876baca3f00cb01ba51b0eb8793.jpg",
+      "_source_path": "images/240a1711735b2f751ed575fc216ccd8563765876baca3f00cb01ba51b0eb8793.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Fig: Panel Measurements converted into wales and courses."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2019"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "812_p2_Q3(a)",
+  "course": {
+    "code": "MATH 1121",
+    "title": "Mathematics-1",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\1st_Year_Backlog_2018_812.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Test whether or not the straight lines $\\textstyle { \\frac { x - 3 } { - 3 } } = { \\frac { y - 8 } { 1 } } = { \\frac { z - 3 } { - 1 } }$ and $\\textstyle { \\frac { x + 3 } { - 3 } } = { \\frac { y + 7 } { 2 } } = { \\frac { z - 6 } { 4 } }$ are coplanar. If they are non-coplanar, then find the shortest distance between them."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2018"
+}

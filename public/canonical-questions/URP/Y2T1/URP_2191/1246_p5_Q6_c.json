@@ -1,0 +1,54 @@
+{
+  "id": "1246_p5_Q6(c)",
+  "course": {
+    "code": "URP 2191",
+    "title": "Statistics for Planners-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\2nd_Year_1st_Term_2015_1246.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 15,
+  "content": [
+    {
+      "type": "text",
+      "value": "Is the following functions are probability distribution function,why? If exist, find E(x) of (15) each problem."
+    },
+    {
+      "type": "text",
+      "value": "(i)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>x</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>-1</td></tr><tr><td rowspan=1 colspan=1>g(x)</td><td rowspan=1 colspan=1>212</td><td rowspan=1 colspan=1>k</td><td rowspan=1 colspan=1>3k</td></tr></table>"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>x</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>3</td></tr><tr><td rowspan=1 colspan=1>h(x)</td><td rowspan=1 colspan=1>0.5</td><td rowspan=1 colspan=1>0.4</td><td rowspan=1 colspan=1>0.3</td><td rowspan=1 colspan=1>4</td></tr></table>"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { c } { { \\int ( x ) = \\frac { - 3 e ^ { x } } { 1 0 } \\mathrm { { ' } } \\times \\geq 0 } } \\\\ { { = x \\mathrm { { ' } } x < 0 } } \\end{array}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2015"
+}

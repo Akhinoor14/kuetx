@@ -1,0 +1,45 @@
+{
+  "id": "807_p2_Q2(b)",
+  "course": {
+    "code": "IPE 4223",
+    "title": "Operations Management",
+    "department": "Department of Textile Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\4th_Year_2nd_Term_2016_807.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Alumco Ltd. Plans to set up a new aluminum products plant and has selected three sites with the following characteristics (for projected 75 percent capacity utilization equal to 300,000 tons/year)."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>Site</td><td>Annual fixed costs (millions)</td><td>Variable costs/ton</td></tr><tr><td>A</td><td>8.2</td><td>$452</td></tr><tr><td>B</td><td>10</td><td>290</td></tr><tr><td>C</td><td>7.5</td><td>530</td></tr></table>"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=2 colspan=1>Relative subjectivefactors</td><td rowspan=1 colspan=3>Rating Rij</td><td rowspan=2 colspan=1>Relative importanceindex , Wj</td></tr><tr><td rowspan=1 colspan=1>A</td><td rowspan=1 colspan=1>B</td><td rowspan=1 colspan=1>C</td></tr><tr><td rowspan=1 colspan=1>Housing</td><td rowspan=1 colspan=1>0.25</td><td rowspan=1 colspan=1>0.50</td><td rowspan=1 colspan=1>0.25</td><td rowspan=1 colspan=1>0.50</td></tr><tr><td rowspan=1 colspan=1>Community attitudes</td><td rowspan=1 colspan=1>0.25</td><td rowspan=1 colspan=1>0.25</td><td rowspan=1 colspan=1>0.50</td><td rowspan=1 colspan=1>0.25</td></tr><tr><td rowspan=1 colspan=1>Services</td><td rowspan=1 colspan=1>0.50</td><td rowspan=1 colspan=1>0.25</td><td rowspan=1 colspan=1>0.25</td><td rowspan=1 colspan=1>0.25</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2016"
+}

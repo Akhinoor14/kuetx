@@ -1,0 +1,41 @@
+{
+  "id": "1241_p1_Q4(b)",
+  "course": {
+    "code": "MATH 1217",
+    "title": "Mathematics-II",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2021\\1st_Year_2nd_Term_2021_1241.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "$\\begin{array} { r } { \\mathsf { S o l v e \\ } \\frac { d ^ { 2 } y } { d x ^ { 2 } } + y = \\tan { x } } \\end{array}$"
+    },
+    {
+      "type": "text",
+      "value": "(13)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2021"
+}

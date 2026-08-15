@@ -1,0 +1,45 @@
+{
+  "id": "1248_p4_Q8(c)",
+  "course": {
+    "code": "URP 2191",
+    "title": "Statistics for Planners-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2017\\2nd_Year_1st_Term_2017_1248.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(c)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "Fit the following data in Normal distribution given that μ = 35,and ${ \\mathfrak { S } } ^ { 2 } { \\mathfrak { s } } = 4$"
+    },
+    {
+      "type": "text",
+      "value": "(18)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Age</td><td rowspan=1 colspan=1>10-20</td><td rowspan=1 colspan=1>20-30</td><td rowspan=1 colspan=1>30-40</td><td rowspan=1 colspan=1>40-50</td></tr><tr><td rowspan=1 colspan=1>Frequency</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>7</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

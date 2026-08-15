@@ -1,0 +1,37 @@
+{
+  "id": "817_p8_Q2(d)",
+  "course": {
+    "code": "TE 2101",
+    "title": "Yarn Manufacturing Engineering-I",
+    "department": "Department of Textile Engineering",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\3rd_Year_Backlog_2018_817.pdf",
+    "source_page": null,
+    "paper_index": 8
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find out the Production/shift/frame when; .05   \nSpindle speed = 1050 rpm, Roving wt. = 305 grain/30 yds, TM = 1.25, No. of   \nspindles/frame = 120, and Efficiency = 85%."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year Backlog Examination, 2018"
+}

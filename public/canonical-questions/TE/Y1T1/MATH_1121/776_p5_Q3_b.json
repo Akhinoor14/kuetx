@@ -1,0 +1,41 @@
+{
+  "id": "776_p5_Q3(b)",
+  "course": {
+    "code": "MATH 1121",
+    "title": "Mathematics-1",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\1st_Year_1st_Term_2018_776.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A garments company has examined its cost structure, revenue structure and profit structure and has determined that C is the total cost, R total revenue, P total profit and x is the number of units produced are related as:"
+    },
+    {
+      "type": "text",
+      "value": "$C ( x ) = 1 0 0 + 0 . 0 1 5 x ^ { 2 } , R ( x ) = 3 x$ and $P ( x ) = R ( x ) - C ( x )$ . Find the production rate x that that will maximize profits of the company. Find that profit. Also determine the profit, when $x = \\cdot 1 2 0$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
+}

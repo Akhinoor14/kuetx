@@ -1,0 +1,51 @@
+{
+  "id": "812_p2_Q8(b)",
+  "course": {
+    "code": "MATH 1121",
+    "title": "Mathematics-1",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\1st_Year_Backlog_2018_812.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "1 $\\begin{array} { r } { \\operatorname { f } { \\vec { F } } = 4 x z { \\hat { \\imath } } - y ^ { 2 } { \\hat { \\jmath } } + y z { \\hat { k } } , } \\end{array}$ evaluate"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\iint _ { s } { \\vec { F } } . { \\hat { n } } d s\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "Where S is the surface of the cube bounded by"
+    },
+    {
+      "type": "formula",
+      "value": "$$\nx = 0 , x = 1 ; y = 0 , y = 1 ; z = 0 , z = 1 .\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2018"
+}

@@ -1,0 +1,49 @@
+{
+  "id": "776_p4_Q3(d)",
+  "course": {
+    "code": "ME 1121",
+    "title": "Fundamentals of Mechanical Engineering",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\1st_Year_1st_Term_2018_776.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "During the test on single cylinder oil engine, working on the four stroke cycle and fitted with a rope brake, the followings readings are taken:"
+    },
+    {
+      "type": "text",
+      "value": "Effective diameter of brake wheel = 630 mm; Dead load on brake = 200 N; Spring balance reading = 30 N; Speed = 450 rpm; Mean effective pressure = 7.7 bar;."
+    },
+    {
+      "type": "text",
+      "value": "Diameter of cylinder = 100 mm; Stroke = 150 mm; Quantity of oil used = 0.815 kg/h;   \nCalorific value of oil = 42000 KJ/kg."
+    },
+    {
+      "type": "text",
+      "value": "Calculate brake power, indicated power, mechanical efficiency' and brake thermal efficiency."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
+}

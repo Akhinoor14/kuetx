@@ -1,0 +1,69 @@
+{
+  "id": "1228_p4_Q1(a)",
+  "course": {
+    "code": "HUM 1117",
+    "title": "Functional English",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\1st_Year_1st_Term_2019_1228.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make sentences on the following structures."
+    },
+    {
+      "type": "text",
+      "value": "(14)"
+    },
+    {
+      "type": "text",
+      "value": "(i) Subject + Intransitive Verb + Adverbial + Extension"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Subject + Linking Verb + Adjective Complement + Extension"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Subject + Linking Verb+ Noun Comp!ement + Extension"
+    },
+    {
+      "type": "text",
+      "value": "(iv) Subject + Transitive Verb + Gerund as Object"
+    },
+    {
+      "type": "text",
+      "value": "(v) Subject + Transitive Verb + Infinitive as Object"
+    },
+    {
+      "type": "text",
+      "value": "(vi) Subject + Transitive Verb +Object + Adjective Compiement"
+    },
+    {
+      "type": "text",
+      "value": "(vii)Subject + Be Verb + Adverbiai"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
+}

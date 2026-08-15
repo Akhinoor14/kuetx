@@ -1,0 +1,42 @@
+{
+  "id": "814_p6_Q8(a)",
+  "course": {
+    "code": "ME 2121",
+    "title": "Engineering Mechanics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\2nd_Year_Backlog_2017_814.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the location of the center of gravity of the homogeneous body of revolution as shown in the figure, which was obtained by joining a hemisphere and a cylinder and carving out a cone."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_70a7a896c3c27a295295b86b0ff910b27ed4bbff140d2407290c574e0f25ef5b.jpg",
+      "_source_path": "images/70a7a896c3c27a295295b86b0ff910b27ed4bbff140d2407290c574e0f25ef5b.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2017"
+}

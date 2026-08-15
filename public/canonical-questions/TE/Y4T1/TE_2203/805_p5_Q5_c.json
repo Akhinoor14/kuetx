@@ -1,0 +1,41 @@
+{
+  "id": "805_p5_Q5(c)",
+  "course": {
+    "code": "TE 2203",
+    "title": "Fabric Manufacturing Engineering-I",
+    "department": "Department of Textile Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2019\\4th_Year_1st_Term_2019_805.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 3,
+  "content": [
+    {
+      "type": "text",
+      "value": "Imagine a buyer is asking for the following dry processes on ordered 5-pkt basic denim pant. Hlustrate and locate the areas of a denim pan where you can add/ perform the operations:"
+    },
+    {
+      "type": "text",
+      "value": "i) Whisker, ii) Hand scraping, iii) Tagging, iv) Patch (3), v) Grinding, vi) Damage (3), and vii) PP touch."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2019"
+}

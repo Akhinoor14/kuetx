@@ -1,0 +1,41 @@
+{
+  "id": "1250_p5_Q8(b)",
+  "course": {
+    "code": "URP 2191",
+    "title": "Statistics for Planners-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\2nd_Year_1st_Term_2019_1250.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "As a result of tests on 20,000 electric fans manufactures by a company, it was (11) found that life time of the fans was normally distributed with an average of 2,040 hours and standard deviation of 60 hours. On the basis of the information, estimate the number of fans that is expected to run for (i) more than 2,150 hours and (ii) less than 1,960 hours."
+    },
+    {
+      "type": "text",
+      "value": "[Note: Probabilities should be shown graphically]"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

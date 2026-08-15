@@ -1,0 +1,37 @@
+{
+  "id": "787_p9_Q2(d)",
+  "course": {
+    "code": "ME 1120",
+    "title": "Engineering Drawing",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2019\\2nd_Year_1st_Term_2019_787.pdf",
+    "source_page": null,
+    "paper_index": 9
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the total number of ends on back beam which weighs 242 lb. The weight of the empty beam as indicate from the marking on its flanges is 62 Ib. The count of the yarn is 40⁸ cotton and the length of warp on the beam is 15000 yds."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

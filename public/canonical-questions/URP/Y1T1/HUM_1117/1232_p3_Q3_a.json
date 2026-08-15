@@ -1,0 +1,69 @@
+{
+  "id": "1232_p3_Q3(a)",
+  "course": {
+    "code": "HUM 1117",
+    "title": "Functional English",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2023\\1st_Year_1st_Term_2023_1232.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make WH-questions with the underlined portions."
+    },
+    {
+      "type": "text",
+      "value": "(14)"
+    },
+    {
+      "type": "text",
+      "value": "i) Gluttony is one of the seven deadly sins."
+    },
+    {
+      "type": "text",
+      "value": "ii) Ms. Marvel is the first ever superhero representing brown muslim girls."
+    },
+    {
+      "type": "text",
+      "value": "iii)Rani owed her success to her mother."
+    },
+    {
+      "type": "text",
+      "value": "iv) Taj went to the movies with Neel."
+    },
+    {
+      "type": "text",
+      "value": "v) The film is sbout crime and punishment."
+    },
+    {
+      "type": "text",
+      "value": "vi) Doolittle's \\_definition of middle class mortality brutally criticised the society."
+    },
+    {
+      "type": "text",
+      "value": "vii) Ron Weasley comes from a closely kintted famility."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2023"
+}

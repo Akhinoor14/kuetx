@@ -1,0 +1,49 @@
+{
+  "id": "786_p3_Q8(b)",
+  "course": {
+    "code": "ME 2121",
+    "title": "Engineering Mechanics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\2nd_Year_1st_Term_2018_786.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Two weights W and Q are suspended one from each end of a rope which passes about a 18 stationary drum, where = . If Q is about to move downward, what is the value of Q/W?"
+    },
+    {
+      "type": "text",
+      "value": "Fig:"
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY"
+    },
+    {
+      "type": "text",
+      "value": "Department of Textile Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

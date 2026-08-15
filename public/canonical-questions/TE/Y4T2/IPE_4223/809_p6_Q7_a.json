@@ -1,0 +1,53 @@
+{
+  "id": "809_p6_Q7(a)",
+  "course": {
+    "code": "IPE 4223",
+    "title": "Operations Management",
+    "department": "Department of Textile Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\4th_Year_2nd_Term_2018_809.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate a denim pant cost (FOB)/Pcs based on following parameters-"
+    },
+    {
+      "type": "text",
+      "value": "Inseam length=32\". ½ Thigh=12\", Front rise=14\". Back rise=17\", No. o Back pocket=02, Back pocket length=8\",Back pocket width=7\", No. of Front Poct=02, Front pocket Bag length=8\" ,Front pocket bag width=6\",1/2 waist width=32\", a:st band height=2\", Total loop no.=05, Belt loop length=1.5\", Belt loop width =0.5\", Fabric width=58\"."
+    },
+    {
+      "type": "text",
+      "value": "■ Stitch quantity of embroidery is 6,000 and rate/unit of embroidery is US \\$0.24."
+    },
+    {
+      "type": "text",
+      "value": "Fabric price for body (Denim) is US \\$3.50/yds., Fabric price for pocketing is US \\$ 2.00/yds., accessories cost per dozen is US \\$ 2.50, Cost of manufacturing is US \\$ 15/dozen, Wash cost is US \\$ 8.00/dozen. :"
+    },
+    {
+      "type": "text",
+      "value": "Assume other parameters (e.g. wastage%, allowance) if necessary."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2018"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "789_p4_Q7(c)",
+  "course": {
+    "code": "EE 2221",
+    "title": "Instrumentation and Electrical Control",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\2nd_Year_2nd_Term_2016_789.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Explain Routh's stability criterion. The characteristic equation of a system is given by 13 $\\mathrm { Q ( S ) = S ^ { 5 } + \\left. S ^ { 5 } + 1 0 S ^ { 3 } + 7 2 S ^ { 2 } + 1 5 2 S + 2 4 0 \\right. }$ whether system is stable or unstable. Find the number of roots and show them graphically."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

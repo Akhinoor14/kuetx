@@ -1,0 +1,41 @@
+{
+  "id": "1256_p1_Q3(e)",
+  "course": {
+    "code": "CE 2241",
+    "title": "Principles of Environmental Engineering",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\2nd_Year_2nd_Term_2014_1256.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(e)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "A settling basin is designed to have a surface overflow rate of 32.6 m/day. Find (10) the overall removal obtained for a suspension with the size distribution given below: the specific gravity of particles is 1.2 and ${ \\sf T } = 2 0 ^ { \\circ } { \\sf C }$ ,I=1.027, p=0.9997"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Particle size, mm</td><td rowspan=1 colspan=1>0.10</td><td rowspan=1 colspan=1>0.08</td><td rowspan=1 colspan=1>0.07</td><td rowspan=1 colspan=1>0.06</td><td rowspan=1 colspan=1>0.04</td><td rowspan=1 colspan=1>0.02</td><td rowspan=1 colspan=1>0.01</td></tr><tr><td rowspan=1 colspan=1>Weight fraction  lessthan size, percent</td><td rowspan=1 colspan=1>90</td><td rowspan=1 colspan=1>85</td><td rowspan=1 colspan=1>60</td><td rowspan=1 colspan=1>30</td><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>0</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2014"
+}

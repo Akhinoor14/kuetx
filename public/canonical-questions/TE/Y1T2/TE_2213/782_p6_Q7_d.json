@@ -1,0 +1,37 @@
+{
+  "id": "782_p6_Q7(d)",
+  "course": {
+    "code": "TE 2213",
+    "title": "Textile Testing-I",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\1st_Year_2nd_Term_2018_782.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A water sample from KUET-ETP contains $M g C O _ { 3 } = 1 8 m g / L ; C a c l _ { 2 } = 1 6 m g / L$ $M g S O _ { 4 } = 2 5 m g / L ;$ and $C a C O _ { 3 } = 2 2 m g / L$ ; Calculate the temporary, permanent, and total hardness of the water."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

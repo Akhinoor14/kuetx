@@ -1,0 +1,65 @@
+{
+  "id": "1228_p4_Q3(a)",
+  "course": {
+    "code": "HUM 1117",
+    "title": "Functional English",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\1st_Year_1st_Term_2019_1228.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Transform the following sentences as directed. (14)"
+    },
+    {
+      "type": "text",
+      "value": "(i) Nothing is difficult there. (Interrogative)"
+    },
+    {
+      "type": "text",
+      "value": "(ii) It is true that he may get a scholarship. (Passive)"
+    },
+    {
+      "type": "text",
+      "value": "(iii) There are not many students in the college. (Affirmative)"
+    },
+    {
+      "type": "text",
+      "value": "(iv) We know him to be honest. (Complex)"
+    },
+    {
+      "type": "text",
+      "value": "(v) it was simply a rurnor."
+    },
+    {
+      "type": "text",
+      "value": "(vi) If you can try heart and soul, you can fulfill your dream. (Simple)"
+    },
+    {
+      "type": "text",
+      "value": "(vii) Having heard the news, he was shocked. (Compound)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
+}

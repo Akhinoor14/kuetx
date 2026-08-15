@@ -1,0 +1,45 @@
+{
+  "id": "817_p2_Q2(b)",
+  "course": {
+    "code": "HUM 3121",
+    "title": "Accounting and Industrial Law",
+    "department": "Department of Textile Engineering",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\3rd_Year_Backlog_2018_817.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Data for Nowshin Alom, an interior decorator, in her first month of business are as 20 follows:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>January 2</td><td rowspan=1 colspan=1>Invested Tk. 15,000 cash in business.</td></tr><tr><td rowspan=1 colspan=1>January 3</td><td rowspan=1 colspan=1>Purchased equipment for Tk. 4,000 cash for use in business.</td></tr><tr><td rowspan=1 colspan=1>January 9</td><td rowspan=1 colspan=1>Purchased supplies on account for Tk. 500.</td></tr><tr><td rowspan=1 colspan=1>January 11</td><td rowspan=1 colspan=1>Billed customers Tk. 1,800 for services performed.</td></tr><tr><td rowspan=1 colspan=1>January 16</td><td rowspan=1 colspan=1>Paid Tk: 200 cash for advertising.</td></tr><tr><td rowspan=1 colspan=1>January 20</td><td rowspan=1 colspan=1>Received Tk. 700 cash from customer billed on January 11.</td></tr><tr><td rowspan=1 colspan=1>January 23</td><td rowspan=1 colspan=1>Payment to Accounts Payable on 9th January Tk. 500.</td></tr><tr><td rowspan=1 colspan=1>January 28</td><td rowspan=1 colspan=1>Withdrew Tk. 2,000 cash for personal usé of owmer.</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Journalize the transactions."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year Backlog Examination, 2018"
+}

@@ -1,0 +1,57 @@
+{
+  "id": "809_p8_Q4(b)",
+  "course": {
+    "code": "IPE 4223",
+    "title": "Operations Management",
+    "department": "Department of Textile Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\4th_Year_2nd_Term_2018_809.pdf",
+    "source_page": null,
+    "paper_index": 8
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write short notes on:"
+    },
+    {
+      "type": "text",
+      "value": "i) Interference allowance"
+    },
+    {
+      "type": "text",
+      "value": "ii) Contingency allowance"
+    },
+    {
+      "type": "text",
+      "value": "Evening shift resident doctors in a government hospital work five consecutive days and have two consecutive days off. Their five days of work can start on any day of the week and the schedule rotates indefinitely. The hospital requires the following minimum number of factors working."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Sun.</td><td rowspan=1 colspan=1>Mon.</td><td rowspan=1 colspan=1>Tues.</td><td rowspan=1 colspan=1>Wed.</td><td rowspan=1 colspan=1>Thurs.</td><td rowspan=1 colspan=1>Fri.</td><td rowspan=1 colspan=1>Sat.</td></tr><tr><td rowspan=1 colspan=1>35</td><td rowspan=1 colspan=1>55</td><td rowspan=1 colspan=1>60</td><td rowspan=1 colspan=1>50</td><td rowspan=1 colspan=1>60</td><td rowspan=1 colspan=1>50</td><td rowspan=1 colspan=1>45</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "No more than 40 doctors can start their five working days on the same day. Formulate the general linear programming model to minimize the number of doctors employed by the hospital."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2018"
+}

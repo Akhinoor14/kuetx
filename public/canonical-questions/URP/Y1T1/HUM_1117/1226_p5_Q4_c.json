@@ -1,0 +1,69 @@
+{
+  "id": "1226_p5_Q4(c)",
+  "course": {
+    "code": "HUM 1117",
+    "title": "Functional English",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2017\\1st_Year_1st_Term_2017_1226.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": "Correct the following sentences"
+    },
+    {
+      "type": "text",
+      "value": "(09)"
+    },
+    {
+      "type": "text",
+      "value": "i. It is raining cats and dogs for two hours"
+    },
+    {
+      "type": "text",
+      "value": "li. He has come home yesterday."
+    },
+    {
+      "type": "text",
+      "value": "jii. Tell me where does he live?"
+    },
+    {
+      "type": "text",
+      "value": "iv. Trust to God."
+    },
+    {
+      "type": "text",
+      "value": "v. He needs not go there."
+    },
+    {
+      "type": "text",
+      "value": "vi. Either of this three pen wili do."
+    },
+    {
+      "type": "text",
+      "value": "Section-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2017"
+}

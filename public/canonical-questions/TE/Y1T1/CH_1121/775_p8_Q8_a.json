@@ -1,0 +1,41 @@
+{
+  "id": "775_p8_Q8(a)",
+  "course": {
+    "code": "CH 1121",
+    "title": "Chemistry-1",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\1st_Year_1st_Term_2017_775.pdf",
+    "source_page": null,
+    "paper_index": 8
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "State EAN rule. Calculate the EAN of the following complexes : (i) $[ \\mathrm { A g } ( \\mathrm { N H } _ { 3 } ) _ { 4 } ] ^ { + }$ (ii) $\\{ \\mathrm { C o } ( \\mathrm { C N } ) _ { 6 } ] ^ { 4 - }$"
+    },
+    {
+      "type": "text",
+      "value": "Here atomic number of Ag and Co are 47 and 27 respectively."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2017"
+}

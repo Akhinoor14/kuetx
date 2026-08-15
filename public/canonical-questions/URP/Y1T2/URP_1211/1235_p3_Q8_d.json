@@ -1,0 +1,42 @@
+{
+  "id": "1235_p3_Q8(d)",
+  "course": {
+    "code": "URP 1211",
+    "title": "Urban Planning Principles",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\1st_Year_2nd_Term_2015_1235.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write short notes on: (12)   \n(i) Collaborative partnership in town centre planning   \n(ii) Designing town centre as precinct   \n(iii) Multiple use in town centre"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_82997e60d13d4b55daff349ad895d15c9b54d295bc8afb2cd2003ea121f25cde.jpg",
+      "_source_path": "images/82997e60d13d4b55daff349ad895d15c9b54d295bc8afb2cd2003ea121f25cde.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
+}

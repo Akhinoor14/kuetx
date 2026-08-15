@@ -1,0 +1,42 @@
+{
+  "id": "1235_p5_Q4(a)",
+  "course": {
+    "code": "URP 1281",
+    "title": "Surveying and Cartography",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\1st_Year_2nd_Term_2015_1235.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "What are the two exceptional cases when two contour lines intercept with one (05) another?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ffb3fef8019b4e8c01705ba71515be1b5d9e824cf3e72494f1c55abe2a746caf.jpg",
+      "_source_path": "images/ffb3fef8019b4e8c01705ba71515be1b5d9e824cf3e72494f1c55abe2a746caf.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
+}

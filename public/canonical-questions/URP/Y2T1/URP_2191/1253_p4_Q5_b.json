@@ -1,0 +1,57 @@
+{
+  "id": "1253_p4_Q5(b)",
+  "course": {
+    "code": "URP 2191",
+    "title": "Statistics for Planners-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2022\\2nd_Year_1st_Term_2022_1253.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 19,
+  "content": [
+    {
+      "type": "text",
+      "value": "Four components are inspected and three event A, B, C are defined as follows: (19) A = all four components are either good or bad,"
+    },
+    {
+      "type": "text",
+      "value": "B = At least one components are found to be bad,"
+    },
+    {
+      "type": "text",
+      "value": "C = Exactly two components are good."
+    },
+    {
+      "type": "text",
+      "value": "(i) How many elementary event exist in the sample space?"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Define above events A, B, C as set in algebraic way."
+    },
+    {
+      "type": "text",
+      "value": "(iii) Interpret the following events: A ∩ B, B ∩ C, and A U B U C along with its set components."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2022"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "1223_p1_Q3(a)",
+  "course": {
+    "code": "URP 1111",
+    "title": "History/Evolution of Human Settlements",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\1st_Year_1st_Term_2014_1223.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make sentences with the folowing structures using the words given in (14) brackets: i) Subject + Transitive Verb + Object + Noun complement (name as Verb) ii) Subject + Transitive Verb + Indirect object + Direct object (write as Verb) li) There + Verb + subject (use any verb) iv) Subject + Transitive Verb + Object (open us Verb) v) Subject + Intransitive Verb + Adverbial complement (run as Verb) vi) Subject + Transitive Verb + Object + Adjective (keep as Verb) vii) Subject + Linking Verb + Noun complement (look as verb)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2014"
+}

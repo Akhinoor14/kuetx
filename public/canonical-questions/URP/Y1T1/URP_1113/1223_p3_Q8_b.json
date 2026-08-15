@@ -1,0 +1,49 @@
+{
+  "id": "1223_p3_Q8(b)",
+  "course": {
+    "code": "URP 1113",
+    "title": "Fundamentals of Planning Process",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\1st_Year_1st_Term_2014_1223.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "Abike costs Tk. 2/km when it is at the speed of 25km/hr and Tk. 5/km at the (20) speed of 40km/hr. If a- rider wants to spend a maximum of Tk. 100 for riding, what the maximum distance can be travelled by the rider within an hour?"
+    },
+    {
+      "type": "text",
+      "value": "Full Marks: 210"
+    },
+    {
+      "type": "text",
+      "value": "N.B. i) Answer any three questions from each section in separate script. ii)Figures in the right margin indicate full marks."
+    },
+    {
+      "type": "text",
+      "value": "Section - A"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2014"
+}

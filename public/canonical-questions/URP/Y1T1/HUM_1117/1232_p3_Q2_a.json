@@ -1,0 +1,69 @@
+{
+  "id": "1232_p3_Q2(a)",
+  "course": {
+    "code": "HUM 1117",
+    "title": "Functional English",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2023\\1st_Year_1st_Term_2023_1232.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Transform the following sentences as per instruction."
+    },
+    {
+      "type": "text",
+      "value": "(14)"
+    },
+    {
+      "type": "text",
+      "value": "i) Jamil is rich but honest. (Complex)"
+    },
+    {
+      "type": "text",
+      "value": "ii) Did you never hear that name? (Passive)"
+    },
+    {
+      "type": "text",
+      "value": "iii) He is better than me. (Negative)"
+    },
+    {
+      "type": "text",
+      "value": "iv) Usha Kiran is not taller than some other buildings in the city. (Superlative)"
+    },
+    {
+      "type": "text",
+      "value": "v) We must eat to live. (Compound)"
+    },
+    {
+      "type": "text",
+      "value": "vi) Make haste, or else you will be late. (Simple)"
+    },
+    {
+      "type": "text",
+      "value": "vii) Cain, being jealous of Abel, Strck him. (Complex)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2023"
+}

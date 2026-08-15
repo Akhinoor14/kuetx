@@ -1,0 +1,45 @@
+{
+  "id": "1250_p5_Q5(b)",
+  "course": {
+    "code": "URP 2191",
+    "title": "Statistics for Planners-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\2nd_Year_1st_Term_2019_1250.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": "A firm conducted a survey to study whether changes in office design increase productivity. 70% workers said that reducing noise would increase productivity. 67% workers said that more storage space would increase productivity. 56% workers said that both noise reduction and increased storage space would improve productivity. If a worker is randomly selected"
+    },
+    {
+      "type": "text",
+      "value": "(09)"
+    },
+    {
+      "type": "text",
+      "value": "and asked what changes«in office design wouldincrease worker productivity, what is the probability that this person would select reducing noise or more storage space?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

@@ -1,0 +1,65 @@
+{
+  "id": "1224_p3_Q1(a)",
+  "course": {
+    "code": "HUM 1117",
+    "title": "Functional English",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\1st_Year_1st_Term_2015_1224.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make sentence with the following structures using the words givenin brackets. (14)"
+    },
+    {
+      "type": "text",
+      "value": "i. Subj. + Intransitive verb (Walk as verb)"
+    },
+    {
+      "type": "text",
+      "value": "ii. Subj. + Transitive verb + Object. (Deliver as verb)"
+    },
+    {
+      "type": "text",
+      "value": "iii. What + Subj. + Verb + Adv. of manner + Verb + Adj. Complement. (Imagine and is as verb)."
+    },
+    {
+      "type": "text",
+      "value": "iv. Subj. + Verb + Preposition + What + Subj. + Verb + Adv. of manner. (Know and say as verb)"
+    },
+    {
+      "type": "text",
+      "value": "v. Subj. + verb + Adv. of manner, + so + Verb + Adv. of manner. (Study and do as verb)"
+    },
+    {
+      "type": "text",
+      "value": "vi. Subj. + Verb + Adv. of manner, + but+ Verb +Adj. complement. (Answer and stand as verb)"
+    },
+    {
+      "type": "text",
+      "value": "vii. Since+ Subj. + Verb + Adj. complement, + Subj + Verb + Adv. of manner. (is and try as verb)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2015"
+}

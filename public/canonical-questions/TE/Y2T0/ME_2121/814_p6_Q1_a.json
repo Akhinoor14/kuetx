@@ -1,0 +1,42 @@
+{
+  "id": "814_p6_Q1(a)",
+  "course": {
+    "code": "ME 2121",
+    "title": "Engineering Mechanics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\2nd_Year_Backlog_2017_814.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The member AB weighs 20 Kg and rests against smooth wall at B. Determine the reaction at B and A when $\\theta = 3 0 ^ { o }$ . What are the components of the reaction at A?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f10ad6c079bd9eb886ed1f47b6d186b28abcb24f1f4c918aa770003c6563f44a.jpg",
+      "_source_path": "images/f10ad6c079bd9eb886ed1f47b6d186b28abcb24f1f4c918aa770003c6563f44a.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2017"
+}

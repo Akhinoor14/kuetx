@@ -1,0 +1,49 @@
+{
+  "id": "781_p3_Q7(b)",
+  "course": {
+    "code": "HUM 1221",
+    "title": "Business and Communicative English",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\1st_Year_2nd_Term_2017_781.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose your department arranges a 3 days intensive course on silk fabric dyeing by a prominent professor of University of Technology Sydney. The Head of your department informs the $4 ^ { ( h }$ year students to attend this course. It also says that there will be a discussion session on the final day of the course and the student getting the highest score in the session will 'get the opportunity to attend a seminar in Sydney. Write a memo on the above information."
+    },
+    {
+      "type": "text",
+      "value": "8Write a free composition on any one of the following:"
+    },
+    {
+      "type": "text",
+      "value": "i) The role of Textile engineers in the nation building programme."
+    },
+    {
+      "type": "text",
+      "value": "ii) Truthfulness"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

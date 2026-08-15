@@ -1,0 +1,46 @@
+{
+  "id": "1235_p5_Q4(b)",
+  "course": {
+    "code": "URP 1281",
+    "title": "Surveying and Cartography",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\1st_Year_2nd_Term_2015_1235.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the slope percentage of star marked from the following figure. The distance between 150 ft to 180 ft contour is 3 inch. The verbal scale of the map is 1 inch=1000ft."
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0400354ac9dae9d59367504ba4d60529475ea59fef6db48d85e942a205de6f11.jpg",
+      "_source_path": "images/0400354ac9dae9d59367504ba4d60529475ea59fef6db48d85e942a205de6f11.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
+}

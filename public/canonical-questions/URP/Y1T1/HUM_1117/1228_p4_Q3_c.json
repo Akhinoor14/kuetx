@@ -1,0 +1,50 @@
+{
+  "id": "1228_p4_Q3(c)",
+  "course": {
+    "code": "HUM 1117",
+    "title": "Functional English",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\1st_Year_1st_Term_2019_1228.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make sentences using the following phrases and idioms."
+    },
+    {
+      "type": "text",
+      "value": "At a time; Far and wide; Hue and Cry; In a fix, Out of date, Rank and file"
+    },
+    {
+      "type": "text",
+      "value": "(09)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_0d9486c975407f50a1116f0b505a83ebec56e8c8b7d9644421927d4e4c93b3c9.jpg",
+      "_source_path": "images/0d9486c975407f50a1116f0b505a83ebec56e8c8b7d9644421927d4e4c93b3c9.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
+}

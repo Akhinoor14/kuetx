@@ -1,0 +1,37 @@
+{
+  "id": "804_p7_Q8(b)",
+  "course": {
+    "code": "TE 3105",
+    "title": "Wet Processing Engineering-I",
+    "department": "Department of Textile Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\4th_Year_1st_Term_2018_804.pdf",
+    "source_page": null,
+    "paper_index": 7
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is synthetic thickener? Why synthetic thickener is used instead of emulsion thickener? 08"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2018"
+}

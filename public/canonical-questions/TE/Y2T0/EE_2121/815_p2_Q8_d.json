@@ -1,0 +1,41 @@
+{
+  "id": "815_p2_Q8(d)",
+  "course": {
+    "code": "EE 2121",
+    "title": "Electrical Circuits, Machines and Electronics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\2nd_Year_Backlog_2018_815.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Mention some applications of induction motor."
+    },
+    {
+      "type": "text",
+      "value": "END("
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2018"
+}

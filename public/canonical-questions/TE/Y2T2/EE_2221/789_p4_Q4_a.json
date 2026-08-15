@@ -1,0 +1,37 @@
+{
+  "id": "789_p4_Q4(a)",
+  "course": {
+    "code": "EE 2221",
+    "title": "Instrumentation and Electrical Control",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\2nd_Year_2nd_Term_2016_789.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is strain gauge? A compressive force is applied to a structural member. The strain is 5 mircro-strain. Two separate strain gauges are attached to the structural member, one is a nickel wire strain gauge having a gauge factor of -12.1 and the other is nichrome wire strain gauge having a gauge factor of 2. Calculate the value of resistance of the gauges after they are strained. The resistance of strain gauges before being strained is 120Ω."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

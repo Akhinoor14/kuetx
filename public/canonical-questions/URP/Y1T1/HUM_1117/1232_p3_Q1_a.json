@@ -1,0 +1,65 @@
+{
+  "id": "1232_p3_Q1(a)",
+  "course": {
+    "code": "HUM 1117",
+    "title": "Functional English",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2023\\1st_Year_1st_Term_2023_1232.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make sentence with the following structures using the words given in brackets. (14)"
+    },
+    {
+      "type": "text",
+      "value": "i) Subj.+ Intransitive Verb + Adv. Qf manner. (Walk as verb)"
+    },
+    {
+      "type": "text",
+      "value": "ii) Subj.+ Transitive Verb +Object. (Read as verb)"
+    },
+    {
+      "type": "text",
+      "value": "iii) That+ Subj.+ Verb + Adv. Of manner +Verb+ Adj. Complement. (Work and is as verb)"
+    },
+    {
+      "type": "text",
+      "value": "iv) Subj.,+ Relative Pronoun + Verb + Adj.Complement + Verb+ Adv. Of Place. (is and work as verb)"
+    },
+    {
+      "type": "text",
+      "value": "v) Neither + Subj.+ nor+ Subj. + verb + Adv. Of manner. (Behave as verb)"
+    },
+    {
+      "type": "text",
+      "value": "vi) Since + Subj.+ Verb + Adv. Of manner, Subj. +verb + Adj. Complement (Work and is as verb)"
+    },
+    {
+      "type": "text",
+      "value": "vii) Though + Subj.+ Verb + Adv. Of manner, Subj. +verb + Adv. Of place (Study and fail as verb)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2023"
+}

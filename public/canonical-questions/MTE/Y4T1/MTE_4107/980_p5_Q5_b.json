@@ -1,0 +1,94 @@
+{
+  "id": "980_p5_Q5(b)",
+  "course": {
+    "code": "MTE 4107",
+    "title": "Design of Mechatronic Systems",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\4th_Year_1st_Term_2022_980.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "Design the value of gain K for the feedback control system so that the system will respond 10 with a 10% overshoot."
+    },
+    {
+      "type": "text",
+      "value": ") Generate a block diagram of the following electrical system and find $V _ { 3 } ( s ) / V _ { I ( } s )$ from block diagram reduction."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ba116523c04d8cb525335a0772ba2786925642418ddc9a2f6211bb1deff2b137.jpg",
+      "_source_path": "images/ba116523c04d8cb525335a0772ba2786925642418ddc9a2f6211bb1deff2b137.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Select a suitable DC permanent magnet motor from the datasheet that satisfies the performance requirements stated below:"
+    },
+    {
+      "type": "text",
+      "value": "The total maşs of the vehicle (live load and dead load) is 1300 kg. The electric vehicle must meet the following requirements:"
+    },
+    {
+      "type": "text",
+      "value": "Case I: On a level track"
+    },
+    {
+      "type": "text",
+      "value": "Acceleration: it should be able to accelerate from 0 to 60 mph in 6 s."
+    },
+    {
+      "type": "text",
+      "value": "Top speed: It should be able to achieve a top speed of 100 mph."
+    },
+    {
+      "type": "text",
+      "value": "Case II: Climbing at 30°"
+    },
+    {
+      "type": "text",
+      "value": "Acceleration: It should be able to accelerate from 0 to 60 mph in 10 s."
+    },
+    {
+      "type": "text",
+      "value": "Top speed: It should be able to achieve a top speed of 75 mph."
+    },
+    {
+      "type": "text",
+      "value": "Assume the following:"
+    },
+    {
+      "type": "text",
+      "value": "• An overall system efficiency of 88%."
+    },
+    {
+      "type": "text",
+      "value": "• The vehicle is fitted with tires that have a diameter of 17 inches."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>HPD 40</td><td rowspan=1 colspan=1>HPD 35</td><td rowspan=1 colspan=1>HPD 30</td></tr><tr><td rowspan=1 colspan=1>Torque (Max)</td><td rowspan=1 colspan=1>750 Nm</td><td rowspan=1 colspan=1>500 Nm</td><td rowspan=1 colspan=1>350 Nm</td></tr><tr><td rowspan=1 colspan=1>Speed (Max)</td><td rowspan=1 colspan=1>2000 rpm</td><td rowspan=1 colspan=1>2000 rpm</td><td rowspan=1 colspan=1>2000 rpm</td></tr><tr><td rowspan=1 colspan=1>Power (Max)</td><td rowspan=1 colspan=1>120 kW</td><td rowspan=1 colspan=1>80 kW</td><td rowspan=1 colspan=1>40 kW</td></tr><tr><td rowspan=1 colspan=1>Mass</td><td rowspan=1 colspan=1>25 kg</td><td rowspan=1 colspan=1>21 kg</td><td rowspan=1 colspan=1>18 kg</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

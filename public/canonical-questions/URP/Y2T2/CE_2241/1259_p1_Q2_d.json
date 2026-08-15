@@ -1,0 +1,37 @@
+{
+  "id": "1259_p1_Q2(d)",
+  "course": {
+    "code": "CE 2241",
+    "title": "Principles of Environmental Engineering",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2017\\2nd_Year_2nd_Term_2017_1259.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": 5,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write down the unit operations available for removal of specific impurities. (05)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

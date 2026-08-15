@@ -1,0 +1,42 @@
+{
+  "id": "1227_p4_Q4(d)",
+  "course": {
+    "code": "URP 1113",
+    "title": "Fundamentals of Planning Process",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2018\\1st_Year_1st_Term_2018_1227.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Negotiator 11(Bontal)"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_425b0f2bcd1f359b62ea09b99454d2293f86d50ec5a7d75461e4695f04cecaa5.jpg",
+      "_source_path": "images/425b0f2bcd1f359b62ea09b99454d2293f86d50ec5a7d75461e4695f04cecaa5.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
+}

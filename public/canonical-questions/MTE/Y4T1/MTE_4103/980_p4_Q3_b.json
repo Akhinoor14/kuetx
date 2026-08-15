@@ -1,0 +1,37 @@
+{
+  "id": "980_p4_Q3(b)",
+  "course": {
+    "code": "MTE 4103",
+    "title": "Digital Signal Processing and Machine Vision",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\4th_Year_1st_Term_2022_980.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the inverse z-transform of the output signal Y(z), if input $x ( n ) = u ( n - 1 )$ and impulse response $h ( n ) = ( - 0 . 2 5 ) ^ { n } u ( \\dot { n } )$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

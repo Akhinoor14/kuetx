@@ -1,0 +1,41 @@
+{
+  "id": "785_p6_Q1(c)",
+  "course": {
+    "code": "TE 2111",
+    "title": "Statistical Analysis and Quality Control",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\2nd_Year_1st_Term_2017_785.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Draw the histogram and the ogive curve from the following data :"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Monthly income( $ USD)</td><td rowspan=1 colspan=1>No. of employees</td></tr><tr><td rowspan=1 colspan=1>18-20</td><td rowspan=1 colspan=1>10</td></tr><tr><td rowspan=1 colspan=1>20-22</td><td rowspan=1 colspan=1>35</td></tr><tr><td rowspan=1 colspan=1>.22-24</td><td rowspan=1 colspan=1>140</td></tr><tr><td rowspan=1 colspan=1>24-26</td><td rowspan=1 colspan=1>300</td></tr><tr><td rowspan=1 colspan=1>26-28</td><td rowspan=1 colspan=1>370</td></tr><tr><td rowspan=1 colspan=1>28-30</td><td rowspan=1 colspan=1>320</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

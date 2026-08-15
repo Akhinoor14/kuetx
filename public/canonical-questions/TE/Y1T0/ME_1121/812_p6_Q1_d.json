@@ -1,0 +1,37 @@
+{
+  "id": "812_p6_Q1(d)",
+  "course": {
+    "code": "ME 1121",
+    "title": "Fundamentals of Mechanical Engineering",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\1st_Year_Backlog_2018_812.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A container contains 0.5 m³ of gas at a pressure of 2.5 bar and $1 7 0 ^ { o } C .$ It is compressed adiabatically to a pressure of 10.0 bar. Determine the work required. Take Cp = 1.06 Kj/kg.K and Cy = 0.731 Kj/kg.K."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2018"
+}

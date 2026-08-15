@@ -1,0 +1,41 @@
+{
+  "id": "1234_p2_Q6(b)",
+  "course": {
+    "code": "MATH 1217",
+    "title": "Mathematics-II",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\1st_Year_2nd_Term_2014_1234.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "Prove that $f ( x ) = { \\sqrt { 3 } } \\sin x + 3$ cos x has a maximum value at $\\begin{array} { r } { x = \\frac { \\pi } { 6 } . } \\end{array}$ Also find the maximum value."
+    },
+    {
+      "type": "text",
+      "value": "(13)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2014"
+}

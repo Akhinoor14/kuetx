@@ -1,0 +1,37 @@
+{
+  "id": "807_p5_Q1(b)",
+  "course": {
+    "code": "TE 2101",
+    "title": "Yarn Manufacturing Engineering-I",
+    "department": "Department of Textile Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\4th_Year_2nd_Term_2016_807.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A company produces 160kg of single jersey fabric by consuming 200kg of yarn for a 08 particular period. For the next period, the output is doubled by consuming 420kg of yarn and for the third period, the output is increased to 420kg by consuming 450kg of yarn. Comment based on productivity."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2016"
+}

@@ -1,0 +1,49 @@
+{
+  "id": "776_p4_Q2(d)",
+  "course": {
+    "code": "ME 1121",
+    "title": "Fundamentals of Mechanical Engineering",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\1st_Year_1st_Term_2018_776.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A quantity of gas has a volume of 0.15 m³, pressure 1.5 bar and a temperature 110°C. If 12 the gas is compressed at a constant pressure, until its volume become 0.112 m³, determine:"
+    },
+    {
+      "type": "text",
+      "value": "i) The temperature at the end of compression"
+    },
+    {
+      "type": "text",
+      "value": "ii) Work done in compressing the gas, and"
+    },
+    {
+      "type": "text",
+      "value": "iii) Decrease in internal energy"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "815_p9_Q1(b)",
+  "course": {
+    "code": "ME 2121",
+    "title": "Engineering Mechanics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\2nd_Year_Backlog_2018_815.pdf",
+    "source_page": null,
+    "paper_index": 9
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A 5000kg sphere rests on à smooth plane inclined at an anglè $\\theta { = } 4 0 ^ { \\circ }$ with: orizot and 18 against a smooth vertical wall. What are the reactions at the contact surfaces .À and ?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_7eeac51a5909f7e4adab8fb9d0895af496d3d1daf61a7473f2667fa338bb28a1.jpg",
+      "_source_path": "images/7eeac51a5909f7e4adab8fb9d0895af496d3d1daf61a7473f2667fa338bb28a1.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2018"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "816_p6_Q5(a)",
+  "course": {
+    "code": "TE 2203",
+    "title": "Fabric Manufacturing Engineering-I",
+    "department": "Department of Textile Engineering",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\3rd_Year_Backlog_2016_816.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Describe ‘Face to face in a single direction’ and ‘Zig-zag' spreading modes with heat 14   \ndiagram."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year Backlog Examination, 2016"
+}

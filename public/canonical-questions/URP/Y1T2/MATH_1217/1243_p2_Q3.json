@@ -1,0 +1,64 @@
+{
+  "id": "1243_p2_Q3",
+  "course": {
+    "code": "MATH 1217",
+    "title": "Mathematics-II",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2023\\1st_Year_2nd_Term_2023_1243.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "Integrate the followings:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\int { \\frac { \\ d x } { ( 2 x ^ { 2 } + 5 ) { \\sqrt { x ^ { 2 } - 4 } } } }\\tag{12}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\textstyle { \\int { \\frac { 3 s i n x - 4 c o s x - 5 } { c o s x - 2 s i n x + 2 } } d x }\\tag{12}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\int \\frac { ~ d x } { x ^ { 4 } + 1 }\\tag{11}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "<sup>4.</sup> <sup>(a)</sup> Evaluate $\\begin{array} { r } { \\int _ { 0 } ^ { \\frac { \\pi } { 2 } } l o g c o s x d x . } \\end{array}$ (11)"
+    },
+    {
+      "type": "text",
+      "value": "<sup>(b)</sup> Evaluate $\\int _ { 0 } ^ { \\pi } { \\frac { x } { a ^ { 2 } s i n ^ { 2 } x + b ^ { 2 } c o s ^ { 2 } x } } d x$"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2023"
+}

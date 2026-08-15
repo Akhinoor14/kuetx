@@ -1,0 +1,37 @@
+{
+  "id": "812_p3_Q7(c)",
+  "course": {
+    "code": "PH 1221",
+    "title": "Physics",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\1st_Year_Backlog_2018_812.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Caļculate the inter collision time at room temperature and drift velocity in a field of 10 100 $V m ^ { - 1 }$ in sodium, whose conductivity is 2.16x1 $\\dot { 0 } ^ { 7 } \\varOmega ^ { - 1 } m ^ { - 1 }$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2018"
+}

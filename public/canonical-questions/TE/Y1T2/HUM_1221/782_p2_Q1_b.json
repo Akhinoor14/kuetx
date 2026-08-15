@@ -1,0 +1,61 @@
+{
+  "id": "782_p2_Q1(b)",
+  "course": {
+    "code": "HUM 1221",
+    "title": "Business and Communicative English",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\1st_Year_2nd_Term_2018_782.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make wh questions from the underlined parts of the following answers."
+    },
+    {
+      "type": "text",
+      "value": "i) The day being hot, I did not go to office."
+    },
+    {
+      "type": "text",
+      "value": "ii) Our temporary capital was at Mujib Nagar."
+    },
+    {
+      "type": "text",
+      "value": "iii) My suit cost seven thousands taka only."
+    },
+    {
+      "type": "text",
+      "value": "iv) They are waiting for you."
+    },
+    {
+      "type": "text",
+      "value": "v) She likes flowers."
+    },
+    {
+      "type": "text",
+      "value": "vi) She takes only ripe mangoes."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2018"
+}

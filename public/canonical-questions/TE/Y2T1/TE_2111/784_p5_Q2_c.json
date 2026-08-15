@@ -1,0 +1,45 @@
+{
+  "id": "784_p5_Q2(c)",
+  "course": {
+    "code": "TE 2111",
+    "title": "Statistical Analysis and Quality Control",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\2nd_Year_1st_Term_2016_784.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The selling price and frequency distribution for the airjet loom is as follows:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Selling prices</td><td rowspan=1 colspan=1>15 upto18</td><td rowspan=1 colspan=1>18 upto21</td><td rowspan=1 colspan=1>21 upto24</td><td rowspan=1 colspan=1>24 upto27</td><td rowspan=1 colspan=1>27 upto30</td><td rowspan=1 colspan=1>30 upto33</td></tr><tr><td rowspan=1 colspan=1>Frequency</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>23</td><td rowspan=1 colspan=1>17</td><td rowspan=1 colspan=1>18  2</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>6</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Determine the measures of dispersion. Assume the information is based on population data."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2016"
+}

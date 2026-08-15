@@ -1,0 +1,95 @@
+{
+  "id": "814_p5_Q4(b)",
+  "course": {
+    "code": "ME 2121",
+    "title": "Engineering Mechanics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\2nd_Year_Backlog_2017_814.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 7,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write shear and moment equations for the simple supported beam carrying a distributed 17 load and a point load as shown in the figure. Also draw shear and moment diagrams specifying value at all change of loading positions and at points of zero shear. Neglect the mass of beam."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_174372f36624f7dd213feee21c9aa72adaaaa437dadc2e5be103caa487ef8eb6.jpg",
+      "_source_path": "images/174372f36624f7dd213feee21c9aa72adaaaa437dadc2e5be103caa487ef8eb6.jpg"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    },
+    {
+      "type": "text",
+      "value": "An axle (nonroatating) is to be machined from AISI 1144 OQT 1000° F to the proportions shown with a fillet radius r ≈0.25D; F yaries from 400 lb to 1200 lb; the supports are to the left of BB, not shown. Let N = 2, i) At the fillet, compute D and the maximum tensile stress. ii) Compute D at section BB."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a302bfe1caa5cbb63ce64b9f507f729f35beed8bb73e77e93398837cce14c383.jpg",
+      "_source_path": "images/a302bfe1caa5cbb63ce64b9f507f729f35beed8bb73e77e93398837cce14c383.jpg"
+    },
+    {
+      "type": "text",
+      "value": "A coils spring is to be used for the front spring of an automobile. The spring is to have a rate of 400 lb/in, an inside diameter of $4 \\frac { 3 } { 6 4 }$ in and a free length of $1 4 { \\frac { 1 } { 8 } }$ in. With squaredand-ground ends. The material is to oil tempered chrome-vanadium steel. Decide upon the diameter of the wire and the number of free coils for a design load of F= 1500 lb. Be sure solid stress is all right , How much is the pitch angle?"
+    },
+    {
+      "type": "text",
+      "value": "A 4-in. $3 6 0 ^ { \\circ }$ bearing with $\\scriptstyle L _ { D } = 1 . 1$ (Use the table and chart values for 1) is to support 5 kips with a minimum film thickness 0.0008 in. $\\Gamma _ { \\mathrm { d } } { = } 0 . 0 0 4$ in. & n=600 rpm. Determine:-"
+    },
+    {
+      "type": "text",
+      "value": "(i) The needed Absolute viscosity of the oil:"
+    },
+    {
+      "type": "text",
+      "value": "(ii) A suitable oil if the average film temperature is 160℉."
+    },
+    {
+      "type": "text",
+      "value": "(iii)· The frictional loss in hp."
+    },
+    {
+      "type": "text",
+      "value": "(iv) Adjusting only ho to the optimum value foř minimum friction, determine the fhp and compare"
+    },
+    {
+      "type": "text",
+      "value": "(v) This load varies, What could be the magnitude of the maximum impulsive load if the eccentrically ratio becomes 0.8?Ignore squeeze effect."
+    },
+    {
+      "type": "text",
+      "value": "The $2 0 ^ { \\circ }$ full-depth teeth for à pair of steel gears are to transmit 40 hp at 1200 rpm of the 20-tooth pinion; $\\mathfrak { m } _ { \\mathtt { g } } = 3 ;$ contimuous service and indefinite life. The driven machine is an off-and-on reciprocating compressor. i) Determine the pitch, face width and steel (with treatment); considering at least three alternatives, including carefully cut teeth ii) For the gear teeth decided on, what would be the power capacity if only intermittent service (wear not considered) were required? iii) If a limited life of 107 cycles were satisfactory?"
+    },
+    {
+      "type": "text",
+      "value": "KHULÑA UNIVERSITY OF ENGINEERING & TECHNOLOGY"
+    },
+    {
+      "type": "text",
+      "value": "Department of Textile Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2017"
+}

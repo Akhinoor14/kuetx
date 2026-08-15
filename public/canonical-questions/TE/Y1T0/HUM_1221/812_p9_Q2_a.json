@@ -1,0 +1,65 @@
+{
+  "id": "812_p9_Q2(a)",
+  "course": {
+    "code": "HUM 1221",
+    "title": "Business and Communicative English",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\1st_Year_Backlog_2018_812.pdf",
+    "source_page": null,
+    "paper_index": 9
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Correct the following sentences:"
+    },
+    {
+      "type": "text",
+      "value": "i) I am the younger in the family."
+    },
+    {
+      "type": "text",
+      "value": "ii). He is comparatively better today."
+    },
+    {
+      "type": "text",
+      "value": "iii)Most of the apples is rotten."
+    },
+    {
+      "type": "text",
+      "value": "iv) One must do her work."
+    },
+    {
+      "type": "text",
+      "value": "v) Cattles are grazing in the field."
+    },
+    {
+      "type": "text",
+      "value": "vi) He rests in evening"
+    },
+    {
+      "type": "text",
+      "value": "vii) He gets a good pay."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2018"
+}

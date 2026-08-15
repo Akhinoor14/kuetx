@@ -1,0 +1,42 @@
+{
+  "id": "790_p6_Q1(c)",
+  "course": {
+    "code": "ME 2221",
+    "title": "Solid Mechanics and Machine Design",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\2nd_Year_2nd_Term_2017_790.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "An aluminum rod is rigidly attached between a steel rod and a bronze rod. Axial loads 17 are applied at the positions indicated. Find the maximum value of P that will not exceed a stress in steel of 140 MPa or in bronze of 100 MPa."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b726002ccd2ffe1a9bf70b23b169b4b2fab3ff50fa0e8fcf079d94df1fb98107.jpg",
+      "_source_path": "images/b726002ccd2ffe1a9bf70b23b169b4b2fab3ff50fa0e8fcf079d94df1fb98107.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

@@ -1,0 +1,61 @@
+{
+  "id": "1227_p1_Q4(c)",
+  "course": {
+    "code": "HUM 1117",
+    "title": "Functional English",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2018\\1st_Year_1st_Term_2018_1227.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 9,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define transitive verb, intransitive verb and linking verb with two examples following (09) each of the definitions."
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    },
+    {
+      "type": "text",
+      "value": "A young lad was passing along a lane in Banaras. He had some fruits in his hands. A number of monkeys followed him. Soon they became so bold that they tried to snatch away the fruits. The lad began to run in fear. This only made the monkeys bolder still. They ran after the boy and were about to fall upon him. Just then the lad heard a voice, “\"Don't run my boy. This only puts you in greater danger. Face the monkeys, and they will stop.\" Looking up, the lad saw a Sannyasi close by. He took heart and turned round to face the monkeys. They stopped at once. He moved a few steps towards them, and they fell back. He then walked on with bold steps through the monkeys. They fel back still more, and they went away. The lesson went deep into the lad's mind. In after times he became famous as Swami Vivekananda. He would then speak of it very often. He taught: \"Be not afraid of anything. The moment you fear you are gone. It is fear that is the cause of misery in the world.\" Questions:"
+    },
+    {
+      "type": "text",
+      "value": "i. Who was the young lad? Why did he run?"
+    },
+    {
+      "type": "text",
+      "value": "ii. What was the result of his running?"
+    },
+    {
+      "type": "text",
+      "value": "jii. What did the lad do after hearing the voice and what was the result?"
+    },
+    {
+      "type": "text",
+      "value": "iv. What was the lesson he learnt?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2018"
+}

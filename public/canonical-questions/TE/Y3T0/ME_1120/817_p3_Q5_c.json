@@ -1,0 +1,37 @@
+{
+  "id": "817_p3_Q5(c)",
+  "course": {
+    "code": "ME 1120",
+    "title": "Engineering Drawing",
+    "department": "Department of Textile Engineering",
+    "year_term": "3rd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\3rd_Year_Backlog_2018_817.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A ring frame has following specifications:   \n18   \nSpindle speed = 15000 rpm; TPI = 20; Yarn Count = 308 (Hossiery); No. of 05   \nspindle/frame = 480; Waste = 2 %; Efficiency = 90%.   \nFind out the production/shift/frame in kg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year Backlog Examination, 2018"
+}

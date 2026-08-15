@@ -1,0 +1,41 @@
+{
+  "id": "1225_p2_Q2(b)",
+  "course": {
+    "code": "HUM 1117",
+    "title": "Functional English",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\1st_Year_1st_Term_2016_1225.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make sentences on the following structures using the verbs given in brackets. (12) i. Subj. + Intransitive verb + adverbial + extension. (Work as Verb) ii. Subj. + Linking verb + adjective complement + extension. (Turn as Verb) iii. Subj. + Linking verb + non complement + extension. (Become as Verb) iv. Subj. + Transitive verb +infinitive as object. (Want as Verb) v. Subj. + Transitive verb +gerund as object. (Finish as Verb) vi. Subj. + Transitive verb + object + adj. complement. (Declare as Verb)"
+    },
+    {
+      "type": "text",
+      "value": "(09)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2016"
+}

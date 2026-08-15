@@ -1,0 +1,50 @@
+{
+  "id": "819_p2_Q8(d)",
+  "course": {
+    "code": "TE 3109",
+    "title": "Fabric Structure and Design",
+    "department": "Department of Textile Engineering",
+    "year_term": "4th Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\4th_Year_Backlog_2018_819.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find out cam aná needle arrangements of following designs: 08"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_623d7ab3ab99e2e0b93ed2e8a0bb32b0e38e6f537af9cc2c4fca51a4659584fe.jpg",
+      "_source_path": "images/623d7ab3ab99e2e0b93ed2e8a0bb32b0e38e6f537af9cc2c4fca51a4659584fe.jpg"
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY"
+    },
+    {
+      "type": "text",
+      "value": "Department of Textile Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year Backlog Examination, 2018"
+}

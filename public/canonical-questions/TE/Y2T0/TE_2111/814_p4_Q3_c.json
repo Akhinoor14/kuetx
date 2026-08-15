@@ -1,0 +1,37 @@
+{
+  "id": "814_p4_Q3(c)",
+  "course": {
+    "code": "TE 2111",
+    "title": "Statistical Analysis and Quality Control",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\2nd_Year_Backlog_2017_814.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Professor Zane has determined that the scores in the statistics course are approximately 15 normally distributed with a mean of 80 and a S.D. of 5: He announces to the class that the top 15 percent of the scores will earn an A. What is the lowest score a student can earn and still receive an A?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2017"
+}

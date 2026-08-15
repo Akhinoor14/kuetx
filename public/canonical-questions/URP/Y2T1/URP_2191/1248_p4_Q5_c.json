@@ -1,0 +1,57 @@
+{
+  "id": "1248_p4_Q5(c)",
+  "course": {
+    "code": "URP 2191",
+    "title": "Statistics for Planners-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2017\\2nd_Year_1st_Term_2017_1248.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(c)",
+  "numbering_source": "regex",
+  "marks": 13,
+  "content": [
+    {
+      "type": "text",
+      "value": "The probability that husband, wife and child will be alive from now is given by o.6, 0.5 (13) and 0.9 respectively. Find the probability tat wihin 30 years"
+    },
+    {
+      "type": "text",
+      "value": "(i) Both husband and wife will be alive"
+    },
+    {
+      "type": "text",
+      "value": "(ii) None of them will be alive (husband, wife and child)"
+    },
+    {
+      "type": "text",
+      "value": "(iii) At least one of them will die"
+    },
+    {
+      "type": "text",
+      "value": "(iv) At most one of them will die"
+    },
+    {
+      "type": "text",
+      "value": "(v) If in a city there are such 10,000 families, how many families do you expect in which none of them will die?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

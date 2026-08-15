@@ -1,0 +1,41 @@
+{
+  "id": "980_p1_Q6(b)",
+  "course": {
+    "code": "MTE 3107",
+    "title": "Data Structure and Algorithm",
+    "department": "Department of Mechatronics Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Mechatronics_Engineering\\2022\\4th_Year_1st_Term_2022_980.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose, you have a distance matrix from a dataset containing information about six customer's purchasing capability and age. Now, cluster these customers and draw the dendrogram using Hierarchical Agglomerative Clustering with single linkage method. The distance matrix is given below."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>B1</td><td rowspan=1 colspan=1>B2</td><td rowspan=1 colspan=1>B3</td><td rowspan=1 colspan=1>B4</td><td rowspan=1 colspan=1>B5</td><td rowspan=1 colspan=1>B6</td></tr><tr><td rowspan=1 colspan=1>B1</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>B2</td><td rowspan=1 colspan=1>662</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>B3</td><td rowspan=1 colspan=1>877</td><td rowspan=1 colspan=1>295</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>B4</td><td rowspan=1 colspan=1>255</td><td rowspan=1 colspan=1>468</td><td rowspan=1 colspan=1>754</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>B5</td><td rowspan=1 colspan=1>412</td><td rowspan=1 colspan=1>268</td><td rowspan=1 colspan=1>564</td><td rowspan=1 colspan=1>219</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>B6</td><td rowspan=1 colspan=1>996</td><td rowspan=1 colspan=1>400</td><td rowspan=1 colspan=1>138</td><td rowspan=1 colspan=1>869</td><td rowspan=1 colspan=1>669</td><td rowspan=1 colspan=1>0</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2022"
+}

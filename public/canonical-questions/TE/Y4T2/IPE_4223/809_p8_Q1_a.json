@@ -1,0 +1,49 @@
+{
+  "id": "809_p8_Q1(a)",
+  "course": {
+    "code": "IPE 4223",
+    "title": "Operations Management",
+    "department": "Department of Textile Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\4th_Year_2nd_Term_2018_809.pdf",
+    "source_page": null,
+    "paper_index": 8
+  },
+  "question_number": "1(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A ratio assembly plant produces two models, HF-1 and $\\mathbf { H } _ { \\mathrm { i } } \\mathbf { F } _ { \\mathrm { i } } { \\mathbf { - } } 2 ,$ on the same assembly line. The assembly line consists of three stations. The assembly times in the workstations are-"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=2 colspan=1>Workstation</td><td rowspan=1 colspan=2>Minutes per unit of</td></tr><tr><td rowspan=1 colspan=1>HFi-1</td><td rowspan=1 colspan=1> $\\overline { { \\mathrm { H } _ { \\mathrm { i } } \\mathrm { F } _ { \\mathrm { i } } { \\cdot } 2 } }$ </td></tr><tr><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>6</td><td rowspan=1 colspan=1>4</td></tr><tr><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>5</td></tr><tr><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>4</td><td rowspan=1 colspan=1>6</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Each workstation has a maximum availability of 480 minutes per day. However, the workstations require daily maintenance, which amount to 10%, 14% and 12% of the 480 minutes daily availability for stations 1,2 and 3 respectively. The company wishes to determine the daily units to be assembled of $\\mathrm { H } _ { \\mathrm { i } } \\mathrm { F } _ { \\mathrm { i } } { - } 1$ and $\\mathrm { H } _ { \\mathrm { i } } \\mathrm { F } _ { \\mathrm { i } ^ { - 2 } }$ to minimize the sum of unused (idle) times at all three workstations."
+    },
+    {
+      "type": "text",
+      "value": "Formulate linear programming model for the above problem."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2018"
+}

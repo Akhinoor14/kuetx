@@ -1,0 +1,61 @@
+{
+  "id": "786_p6_Q4(c)",
+  "course": {
+    "code": "TE 2111",
+    "title": "Statistical Analysis and Quality Control",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\2nd_Year_1st_Term_2018_786.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The owner of Partex Denim was studying the relationship between sales and the amount spent on advertisement. The sales information of the first four months is as followed;"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td>Month</td><td>X Advertising Expenses</td><td>Y Sales Revenue</td></tr><tr><td colspan=\"1\" rowspan=\"1\"></td><td colspan=\"1\" rowspan=\"1\">(million)</td><td colspan=\"1\" rowspan=\"1\">(million)</td></tr><tr><td colspan=\"1\" rowspan=\"1\">January</td><td colspan=\"1\" rowspan=\"1\">2</td><td colspan=\"1\" rowspan=\"1\">7</td></tr><tr><td colspan=\"1\" rowspan=\"1\">February</td><td colspan=\"1\" rowspan=\"1\">1</td><td colspan=\"1\" rowspan=\"1\">3</td></tr><tr><td colspan=\"1\" rowspan=\"1\">March</td><td colspan=\"1\" rowspan=\"1\">3</td><td colspan=\"1\" rowspan=\"1\">8</td></tr><tr><td colspan=\"1\" rowspan=\"1\">April</td><td colspan=\"1\" rowspan=\"1\">4</td><td colspan=\"1\" rowspan=\"1\">10</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Given that Sx = 1.29 and Sy = 2.94"
+    },
+    {
+      "type": "text",
+      "value": "(i)Determine the correlation coefficient."
+    },
+    {
+      "type": "text",
+      "value": "(ii)Determine the regression equation."
+    },
+    {
+      "type": "text",
+      "value": "(iii)Estimate the sales when 5 millions money is spent on advertising."
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

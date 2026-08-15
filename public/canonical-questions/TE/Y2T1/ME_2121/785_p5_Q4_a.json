@@ -1,0 +1,42 @@
+{
+  "id": "785_p5_Q4(a)",
+  "course": {
+    "code": "ME 2121",
+    "title": "Engineering Mechanics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\2nd_Year_1st_Term_2017_785.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "In the bridge truss as shown in figure, find the forces in member AB, AF, BF and EF."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_824dbb90583ea8d4bea8ce83c9755e004a16df6f60bd32aa27a8bd5aed295e9c.jpg",
+      "_source_path": "images/824dbb90583ea8d4bea8ce83c9755e004a16df6f60bd32aa27a8bd5aed295e9c.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

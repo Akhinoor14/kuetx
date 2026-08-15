@@ -1,0 +1,65 @@
+{
+  "id": "1242_p1_Q7(a)",
+  "course": {
+    "code": "MATH 1217",
+    "title": "Mathematics-II",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2022\\1st_Year_2nd_Term_2022_1242.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": 11,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve $y ^ { 2 } d x + ( 3 x y + y ^ { 2 } - 1 ) d y = 0$"
+    },
+    {
+      "type": "text",
+      "value": "(11)"
+    },
+    {
+      "type": "text",
+      "value": "<sup>(b)</sup> Solve $\\begin{array} { r } { C o s y \\frac { d y } { d x } + \\frac { 1 } { x } s i n y = 1 . } \\end{array}$"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "text",
+      "value": "<sup>(c)</sup> Solve $\\begin{array} { r } { \\frac { d y } { d x } = \\sin ( x + y ) + \\cos ( x + y ) . } \\end{array}$"
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    },
+    {
+      "type": "text",
+      "value": "<sup>8.</sup> <sup>(a)</sup> <sub>Solve</sub> $\\begin{array} { r } { ( D ^ { 2 } - 3 D + 2 ) y = s i n 3 x ; D = \\frac { d } { d x } . } \\end{array}$"
+    },
+    {
+      "type": "text",
+      "value": "(11)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2022"
+}

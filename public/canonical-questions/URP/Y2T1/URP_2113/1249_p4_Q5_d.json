@@ -1,0 +1,49 @@
+{
+  "id": "1249_p4_Q5(d)",
+  "course": {
+    "code": "URP 2113",
+    "title": "Site and Area Planning",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2018\\2nd_Year_1st_Term_2018_1249.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Following are the two curve expressions: (10)"
+    },
+    {
+      "type": "text",
+      "value": "Linear Y = a + bx"
+    },
+    {
+      "type": "text",
+      "value": "Geometric Y = ab\\*"
+    },
+    {
+      "type": "text",
+      "value": "Which curve gives best possible fit to explain the population growth trend of Bangladesh? Explain."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

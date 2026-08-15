@@ -1,0 +1,42 @@
+{
+  "id": "813_p9_Q7(c)",
+  "course": {
+    "code": "EE 2221",
+    "title": "Instrumentation and Electrical Control",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\2nd_Year_Backlog_2016_813.pdf",
+    "source_page": null,
+    "paper_index": 9
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "What do you. mean by stable, unstable and marginally stable system? Show them 16 graphically. Also find the relationship between R, L, C for stable system in following figure."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_68438740e11ec0f40134f897280ba32717ee2597eeb7fc4fab16309988b4e570.jpg",
+      "_source_path": "images/68438740e11ec0f40134f897280ba32717ee2597eeb7fc4fab16309988b4e570.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2016"
+}

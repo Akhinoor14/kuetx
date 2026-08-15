@@ -1,0 +1,69 @@
+{
+  "id": "1225_p2_Q3(a)",
+  "course": {
+    "code": "HUM 1117",
+    "title": "Functional English",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\1st_Year_1st_Term_2016_1225.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "Transform the sentences as directed."
+    },
+    {
+      "type": "text",
+      "value": "(14)"
+    },
+    {
+      "type": "text",
+      "value": "i. I am sure that he will succeed. (Simple)"
+    },
+    {
+      "type": "text",
+      "value": "ii. Why did not they give the proof? (Passive)"
+    },
+    {
+      "type": "text",
+      "value": "iii. No one will deny that he is brave. (Affirmative)"
+    },
+    {
+      "type": "text",
+      "value": "iv. He is, at least, as wise as any other boy. (Comparative)"
+    },
+    {
+      "type": "text",
+      "value": "v. His honesty is known to all. (Complex)"
+    },
+    {
+      "type": "text",
+      "value": "vi. Your play is death to us. (Complex)"
+    },
+    {
+      "type": "text",
+      "value": "vii. He escaped unhurt. (Interrogative)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2016"
+}

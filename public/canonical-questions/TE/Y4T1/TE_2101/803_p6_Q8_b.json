@@ -1,0 +1,42 @@
+{
+  "id": "803_p6_Q8(b)",
+  "course": {
+    "code": "TE 2101",
+    "title": "Yarn Manufacturing Engineering-I",
+    "department": "Department of Textile Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\4th_Year_1st_Term_2017_803.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the fashioning frequencies of the following garment: 15"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b2425c61835d7a77aaaa62d38b777856743552554d56988db7b9fb2ea0bd0a7f.jpg",
+      "_source_path": "images/b2425c61835d7a77aaaa62d38b777856743552554d56988db7b9fb2ea0bd0a7f.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2017"
+}

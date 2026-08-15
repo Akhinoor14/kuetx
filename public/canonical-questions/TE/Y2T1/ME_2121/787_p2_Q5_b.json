@@ -1,0 +1,42 @@
+{
+  "id": "787_p2_Q5(b)",
+  "course": {
+    "code": "ME 2121",
+    "title": "Engineering Mechanics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2019\\2nd_Year_1st_Term_2019_787.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ": Determine the center of gravity of the shaded area as shown."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_4d5963380a2a6c20ca674bfab339f357a88066227d28fc3864b5787bdbde6e63.jpg",
+      "_source_path": "images/4d5963380a2a6c20ca674bfab339f357a88066227d28fc3864b5787bdbde6e63.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

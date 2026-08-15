@@ -1,0 +1,41 @@
+{
+  "id": "1249_p5_Q5(d)",
+  "course": {
+    "code": "URP 2191",
+    "title": "Statistics for Planners-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2018\\2nd_Year_1st_Term_2018_1249.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(d)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "According to a survey, the probability that a family owns a car if its monthly household income is greater than BDT 100000 is 0.75. Of the households surveyed, 60% had incomes over BDT 100000 and 52% had a car. A family is randomly selected; Find out the probability that the family has a car and an income over BDT 100000 monthly."
+    },
+    {
+      "type": "text",
+      "value": "(08)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

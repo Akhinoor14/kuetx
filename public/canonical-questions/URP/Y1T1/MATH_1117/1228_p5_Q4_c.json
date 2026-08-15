@@ -1,0 +1,46 @@
+{
+  "id": "1228_p5_Q4(c)",
+  "course": {
+    "code": "MATH 1117",
+    "title": "Mathematics-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\1st_Year_1st_Term_2019_1228.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "In the following traffic system can we block the route $x _ { 4 } \\geq$ If 40 vehicles are (18) permitted to pass through route $X _ { 4 }$ what will be volume of traffic in other routes?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f53efa2cf842ad77d5d26e392c60b5ce2b77e49d8ffc436f5bf19d652d1bab10.jpg",
+      "_source_path": "images/f53efa2cf842ad77d5d26e392c60b5ce2b77e49d8ffc436f5bf19d652d1bab10.jpg"
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
+}

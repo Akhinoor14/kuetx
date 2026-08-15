@@ -1,0 +1,42 @@
+{
+  "id": "814_p6_Q1(b)",
+  "course": {
+    "code": "ME 2121",
+    "title": "Engineering Mechanics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\2nd_Year_Backlog_2017_814.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A timber ABC is supported by another timber DB. A load F = 4.5 Kips acts horizontally 17 at C. If $\\theta = 6 0 ^ { o }$ , find the reaction at A and B."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d34af5fe0610788e7df2bb867c24eea57802cd3e4f9b6cb4c84d1a2a3af8e5d5.jpg",
+      "_source_path": "images/d34af5fe0610788e7df2bb867c24eea57802cd3e4f9b6cb4c84d1a2a3af8e5d5.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2017"
+}

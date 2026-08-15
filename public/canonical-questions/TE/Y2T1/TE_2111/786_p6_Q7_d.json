@@ -1,0 +1,45 @@
+{
+  "id": "786_p6_Q7(d)",
+  "course": {
+    "code": "TE 2111",
+    "title": "Statistical Analysis and Quality Control",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\2nd_Year_1st_Term_2018_786.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "7(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following table gives the no. of good and defective T-shirt produced by each of three 12 shift in a garment factory:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Shift</td><td rowspan=1 colspan=1>Good</td><td rowspan=1 colspan=1>Defective</td><td rowspan=1 colspan=1>Total</td></tr><tr><td rowspan=1 colspan=1>Day</td><td rowspan=1 colspan=1>900</td><td rowspan=1 colspan=1>130</td><td rowspan=1 colspan=1>1030</td></tr><tr><td rowspan=1 colspan=1>Evening</td><td rowspan=1 colspan=1>700</td><td rowspan=1 colspan=1>170</td><td rowspan=1 colspan=1>870</td></tr><tr><td rowspan=1 colspan=1>Night</td><td rowspan=1 colspan=1>400</td><td rowspan=1 colspan=1>200</td><td rowspan=1 colspan=1>600</td></tr><tr><td rowspan=1 colspan=1>Total</td><td rowspan=1 colspan=1>2000</td><td rowspan=1 colspan=1>500</td><td rowspan=1 colspan=1>2500</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "(Here, df=2; =5.991)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2018"
+}

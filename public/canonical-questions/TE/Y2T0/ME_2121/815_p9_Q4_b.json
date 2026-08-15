@@ -1,0 +1,46 @@
+{
+  "id": "815_p9_Q4(b)",
+  "course": {
+    "code": "ME 2121",
+    "title": "Engineering Mechanics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\2nd_Year_Backlog_2018_815.pdf",
+    "source_page": null,
+    "paper_index": 9
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the force in members BC,BG and FG of the truss as shown iņ figure."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_298f8070c2c7aa00378cdaac772bc59a036b69fa4ac33d9877a925d6c6557fb3.jpg",
+      "_source_path": "images/298f8070c2c7aa00378cdaac772bc59a036b69fa4ac33d9877a925d6c6557fb3.jpg"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2018"
+}

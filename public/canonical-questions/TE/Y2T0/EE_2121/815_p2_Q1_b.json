@@ -1,0 +1,42 @@
+{
+  "id": "815_p2_Q1(b)",
+  "course": {
+    "code": "EE 2121",
+    "title": "Electrical Circuits, Machines and Electronics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\2nd_Year_Backlog_2018_815.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the current through the 4Ω branch using loop analysis of the fig."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_387d049651ae1edec2ea1c179e56b0716165c6447e17c054b3a7182d5a697160.jpg",
+      "_source_path": "images/387d049651ae1edec2ea1c179e56b0716165c6447e17c054b3a7182d5a697160.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2018"
+}

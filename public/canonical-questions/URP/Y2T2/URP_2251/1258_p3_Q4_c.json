@@ -1,0 +1,66 @@
+{
+  "id": "1258_p3_Q4(c)",
+  "course": {
+    "code": "URP 2251",
+    "title": "Landscape Planning and Design",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\2nd_Year_2nd_Term_2016_1258.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write short notes on the followings (any four):"
+    },
+    {
+      "type": "text",
+      "value": "i) Different lines and their properties"
+    },
+    {
+      "type": "text",
+      "value": "ii) Proportion in landscape planning and design"
+    },
+    {
+      "type": "text",
+      "value": "iii) Tree forms in landscape"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_03b4d33411e1dfc81e6b7a467dac17d83bc0a855f8e5729275b1c043d9f5442d.jpg",
+      "_source_path": "images/03b4d33411e1dfc81e6b7a467dac17d83bc0a855f8e5729275b1c043d9f5442d.jpg"
+    },
+    {
+      "type": "text",
+      "value": "iv) Trees in controlling noise pollution"
+    },
+    {
+      "type": "text",
+      "value": "v) Trees in controlling solar radiation and temperature."
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

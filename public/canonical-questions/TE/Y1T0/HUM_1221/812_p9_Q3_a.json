@@ -1,0 +1,65 @@
+{
+  "id": "812_p9_Q3(a)",
+  "course": {
+    "code": "HUM 1221",
+    "title": "Business and Communicative English",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\1st_Year_Backlog_2018_812.pdf",
+    "source_page": null,
+    "paper_index": 9
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Complete the following sentences with subordinate clauses:"
+    },
+    {
+      "type": "text",
+      "value": "i) My mother taught me to read"
+    },
+    {
+      "type": "text",
+      "value": "ii)Mina went on reading .."
+    },
+    {
+      "type": "text",
+      "value": "iii).. The journey took longer than ........."
+    },
+    {
+      "type": "text",
+      "value": "iv) The passage is so difficult ............... ilt: ar"
+    },
+    {
+      "type": "text",
+      "value": "v) He is intelligent though .... 15"
+    },
+    {
+      "type": "text",
+      "value": "vi) Go to bed if"
+    },
+    {
+      "type": "text",
+      "value": "vii)Shella had to wait an hour"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2018"
+}

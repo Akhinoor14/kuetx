@@ -1,0 +1,73 @@
+{
+  "id": "793_p6_Q3",
+  "course": {
+    "code": "HUM 3121",
+    "title": "Accounting and Industrial Law",
+    "department": "Department of Textile Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\3rd_Year_1st_Term_2016_793.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "3",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Hasan a chartered accountant, started his own accounting firm. The transaction for July 35 for Hasan C.A; are as follows:-"
+    },
+    {
+      "type": "text",
+      "value": "2016 July-01 Hasan deposited Tk 50,000 in the accounting firm."
+    },
+    {
+      "type": "text",
+      "value": "2016 July-06Purchased office furniture costing Tk 20,000 on account."
+    },
+    {
+      "type": "text",
+      "value": "2016 July-10Purchased office supplies costing Tk 5,000 for cash.."
+    },
+    {
+      "type": "text",
+      "value": "2016 July-15 Billed clients for Audit service completed Tk 18,000."
+    },
+    {
+      "type": "text",
+      "value": "2016 July-20Paid for office furniture purchased on July 06 Tk 20,000."
+    },
+    {
+      "type": "text",
+      "value": "Required:"
+    },
+    {
+      "type": "text",
+      "value": "2016 July-25 Received Cash from clients previously billed Tk 5,000."
+    },
+    {
+      "type": "text",
+      "value": "2016 July-30 Salary paid to office assistant Tk 1,500 in cash."
+    },
+    {
+      "type": "text",
+      "value": "Required: Prepare necessary ledger accounts."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

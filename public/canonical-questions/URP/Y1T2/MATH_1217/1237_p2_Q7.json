@@ -1,0 +1,52 @@
+{
+  "id": "1237_p2_Q7",
+  "course": {
+    "code": "MATH 1217",
+    "title": "Mathematics-II",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2017\\1st_Year_2nd_Term_2017_1237.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "7",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Solve:"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n( \\mathsf { a } ) \\quad \\frac { \\mathrm { d } \\mathsf { y } } { \\mathrm { d } \\mathsf { x } } = \\frac { 2 \\mathsf { x } - 2 \\mathsf { y } + 3 } { \\mathsf { x } - \\mathsf { y } + 5 }\\tag{12}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\left( y + { \\frac { y ^ { 3 } } { 3 } } + { \\frac { x ^ { 2 } } { 2 } } \\right) \\mathrm { d x } + { \\frac { 1 } { 4 } } ( x + x y ^ { 2 } ) \\mathrm { d y } = 0\\tag{12}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n{ \\mathrm { ( c ) } } \\quad x { \\frac { d y } { d x } } + 2 y = \\log x\\tag{11}\n$$",
+      "format": "latex"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2017"
+}

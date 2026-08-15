@@ -1,0 +1,49 @@
+{
+  "id": "1246_p5_Q7(b)",
+  "course": {
+    "code": "URP 2191",
+    "title": "Statistics for Planners-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\2nd_Year_1st_Term_2015_1246.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(b)",
+  "numbering_source": "regex",
+  "marks": 14,
+  "content": [
+    {
+      "type": "text",
+      "value": "In a city there are 15,000 families. The number of each family is 10. The probability of (14) each number has job is 0.40. How many families are you expected to have:"
+    },
+    {
+      "type": "text",
+      "value": "(i) At least one member has job."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Exactly two member have job."
+    },
+    {
+      "type": "text",
+      "value": "(iii) None of them has job."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2015"
+}

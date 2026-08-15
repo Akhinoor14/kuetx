@@ -1,0 +1,37 @@
+{
+  "id": "1260_p2_Q1(d)",
+  "course": {
+    "code": "CE 2241",
+    "title": "Principles of Environmental Engineering",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2018\\2nd_Year_2nd_Term_2018_1260.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Distinguish between aquifer and aquitard. A 150 mm diameter tube well 1 (10) produces 100 lps with a drawdown of 3 m and a circle of influence of 120 m in diameter. The static depth of water in the tube well is 40 m. Calculate the co-efficient of permeability of the aquifer in which the tube well is sunk."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

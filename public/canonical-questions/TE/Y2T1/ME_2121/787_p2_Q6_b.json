@@ -1,0 +1,42 @@
+{
+  "id": "787_p2_Q6(b)",
+  "course": {
+    "code": "ME 2121",
+    "title": "Engineering Mechanics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2019\\2nd_Year_1st_Term_2019_787.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A cone and a cylinder of the same radius $\\cdot _ { a } .$ and height $\\hphantom { 0 }$ are attached as shown. 15. Determine the location of the centroid of the composite body."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_6c51e92c6c35853f78bf54427af1418154972e6703de2456ec7ae881b185a2ea.jpg",
+      "_source_path": "images/6c51e92c6c35853f78bf54427af1418154972e6703de2456ec7ae881b185a2ea.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2019"
+}

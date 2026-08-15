@@ -1,0 +1,81 @@
+{
+  "id": "1248_p4_Q6(a)",
+  "course": {
+    "code": "URP 2191",
+    "title": "Statistics for Planners-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2017\\2nd_Year_1st_Term_2017_1248.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "Three components are packed in a box. Four events A, B, C and D are defined as foliows: (18)"
+    },
+    {
+      "type": "text",
+      "value": "A = All three cornponents are found to be in proper working order."
+    },
+    {
+      "type": "text",
+      "value": "B = At least one component are found to be defective."
+    },
+    {
+      "type": "text",
+      "value": "C = Exactly one component is found to be in proper 'working order."
+    },
+    {
+      "type": "text",
+      "value": "D == None of the components is in proper working order."
+    },
+    {
+      "type": "text",
+      "value": "(i) Define above events by the elements of set."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Define the sample space of the three components of a box."
+    },
+    {
+      "type": "text",
+      "value": "(iii) Interpret the following events: À U B, B ∩ C, A U B U C."
+    },
+    {
+      "type": "text",
+      "value": "(iv) Find P (A), P (B ∩ C), P (B ∩ P). :  - …"
+    },
+    {
+      "type": "text",
+      "value": "(o) Are the following function probability distribution functions, why? If yes, then find E (x) of (17) the fumnction:."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=4>2i}</td></tr><tr><td rowspan=1 colspan=1>X</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>-1</td><td rowspan=1 colspan=1>0</td></tr><tr><td rowspan=1 colspan=1>g (x)</td><td rowspan=1 colspan=1>2k</td><td rowspan=1 colspan=1>k</td><td rowspan=1 colspan=1>3k</td></tr></table>"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>X</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>1</td><td rowspan=1 colspan=1>2</td><td rowspan=1 colspan=1>3</td></tr><tr><td rowspan=1 colspan=1>h(x)</td><td rowspan=1 colspan=1>0.5</td><td rowspan=1 colspan=1>0.4</td><td rowspan=1 colspan=1>0.3</td><td rowspan=1 colspan=1>-0.2</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

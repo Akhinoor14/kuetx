@@ -1,0 +1,42 @@
+{
+  "id": "785_p5_Q5(a)",
+  "course": {
+    "code": "ME 2121",
+    "title": "Engineering Mechanics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\2nd_Year_1st_Term_2017_785.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A ladder AB with a mass of 51 Kg shown in figure is held in impending motion toward the 18 right by the horizontal force Q. If $\\mathrm { ~ F ~ } _ { A } = 0 . 2$ and $\\mathtt { F } _ { \\scriptscriptstyle B } = 0 . 3$ What is the value of Q ?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_c6e0d28f05a205e046b5b12b5aa4354aca02d211397474648af29ed5b446ba17.jpg",
+      "_source_path": "images/c6e0d28f05a205e046b5b12b5aa4354aca02d211397474648af29ed5b446ba17.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

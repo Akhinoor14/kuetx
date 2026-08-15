@@ -1,0 +1,37 @@
+{
+  "id": "805_p9_Q3(a)",
+  "course": {
+    "code": "TE 1221",
+    "title": "Textile Fibers",
+    "department": "Department of Textile Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2019\\4th_Year_1st_Term_2019_805.pdf",
+    "source_page": null,
+    "paper_index": 9
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "·Suppose you are a production manager of Auto-Tex Spinning Ltd., Savar, Dhaka. Now you are producing 30ª (K) osiery yarn. At that time your factory GM (Production) suggested you for producing 60ª (C) yarn. What process parameters are to be changed for producing $6 0 ^ { \\mathrm { s } }$ (C) yarn in lieu of 30⁸ (K) yarn from Blow-room to Ring frame?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2019"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "1231_p3_Q2(a)",
+  "course": {
+    "code": "MATH 1117",
+    "title": "Mathematics-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2022\\1st_Year_1st_Term_2022_1231.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": 12,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define orthogonal matrix. If $( l _ { \\mathrm { r } } , m _ { \\mathrm { r } } , n _ { \\mathrm { r } } ) , \\mathsf { r } = 1 , 2$ , 3 be the direction cosines of three mutually perpendicular lines referred to an orthogonal coordinates system then prove that, $\\mathsf { A } = \\left[ \\begin{array} { l l l } { l 1 } & { m 1 } & { n 1 } \\\\ { l 2 } & { m 2 } & { n 2 } \\\\ { l 3 } & { m 3 } & { n 3 } \\end{array} \\right]$ is orthogonal."
+    },
+    {
+      "type": "text",
+      "value": "(12)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2022"
+}

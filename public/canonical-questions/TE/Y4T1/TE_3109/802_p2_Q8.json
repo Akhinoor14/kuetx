@@ -1,0 +1,89 @@
+{
+  "id": "802_p2_Q8",
+  "course": {
+    "code": "TE 3109",
+    "title": "Fabric Structure and Design",
+    "department": "Department of Textile Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\4th_Year_1st_Term_2016_802.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "8",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Suppose you are a Manager of Square knit fabrics Ltd. Your company has received a · 35 Double Lacoste order from H&M buyer on 4 truck 30\" diameter machine. Find out the following:"
+    },
+    {
+      "type": "text",
+      "value": "i) Number of total needles,"
+    },
+    {
+      "type": "text",
+      "value": "ii) Number of 1st butt needles,"
+    },
+    {
+      "type": "text",
+      "value": "iii) Number of 2ⁿd butt needles,"
+    },
+    {
+      "type": "text",
+      "value": "iv) Number of 3'd butt needles,"
+    },
+    {
+      "type": "text",
+      "value": "v) Number of 4th butt needles,"
+    },
+    {
+      "type": "text",
+      "value": "vi) Number of total cams,"
+    },
+    {
+      "type": "text",
+      "value": "vii) Number of total knit cams,"
+    },
+    {
+      "type": "text",
+      "value": "viii) Number of total tuck cams,"
+    },
+    {
+      "type": "text",
+      "value": "ix) Number of total miss cam,"
+    },
+    {
+      "type": "text",
+      "value": "x) Number of total cam boxes."
+    },
+    {
+      "type": "text",
+      "value": "---) END (---"
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY"
+    },
+    {
+      "type": "text",
+      "value": "Department of Textile Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2016."
+}

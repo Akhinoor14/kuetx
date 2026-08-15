@@ -1,0 +1,42 @@
+{
+  "id": "1226_p1_Q8(a)",
+  "course": {
+    "code": "MATH 1117",
+    "title": "Mathematics-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2017\\1st_Year_1st_Term_2017_1226.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "8(a)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "Mathematically formulated the following network flow diagram. Hence (08) represent it in matrix notation."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_ecd02e421e3bbe4e47ce94344c97e3f665eb7b1abcf5e264ccefea4cfcf8b914.jpg",
+      "_source_path": "images/ecd02e421e3bbe4e47ce94344c97e3f665eb7b1abcf5e264ccefea4cfcf8b914.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2017"
+}

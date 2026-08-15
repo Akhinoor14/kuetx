@@ -1,0 +1,45 @@
+{
+  "id": "807_p5_Q3(c)",
+  "course": {
+    "code": "TE 2101",
+    "title": "Yarn Manufacturing Engineering-I",
+    "department": "Department of Textile Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\4th_Year_2nd_Term_2016_807.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Why cut planning is so important for garment·Îndustries? Plan an optimum cut for the 23 below order-"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>SizesColors</td><td rowspan=1 colspan=1>30</td><td rowspan=1 colspan=1>321</td><td rowspan=1 colspan=1>34</td><td rowspan=1 colspan=1>36</td></tr><tr><td rowspan=1 colspan=1>RED</td><td rowspan=1 colspan=1>21</td><td rowspan=1 colspan=1>42</td><td rowspan=1 colspan=1>42</td><td rowspan=1 colspan=1>21</td></tr><tr><td rowspan=1 colspan=1>GREEN</td><td rowspan=1 colspan=1>42</td><td rowspan=1 colspan=1>42</td><td rowspan=1 colspan=1>42</td><td rowspan=1 colspan=1>42</td></tr><tr><td rowspan=1 colspan=1>YELLOW</td><td rowspan=1 colspan=1>21</td><td rowspan=1 colspan=1>42</td><td rowspan=1 colspan=1>42</td><td rowspan=1 colspan=1>21</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Consider- 1. Maximum ply height is 42"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2016"
+}

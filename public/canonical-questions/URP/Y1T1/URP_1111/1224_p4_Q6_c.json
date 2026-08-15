@@ -1,0 +1,46 @@
+{
+  "id": "1224_p4_Q6(c)",
+  "course": {
+    "code": "URP 1111",
+    "title": "History/Evolution of Human Settlements",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\1st_Year_1st_Term_2015_1224.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Discuss briefly “Mohenjodaro” and “Harappa” city planning."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_3a258cd838c1603a091e2ca72736a95a61bcc685879d0f0db54bfeb1d3be0fb9.jpg",
+      "_source_path": "images/3a258cd838c1603a091e2ca72736a95a61bcc685879d0f0db54bfeb1d3be0fb9.jpg"
+    },
+    {
+      "type": "text",
+      "value": "(10)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2015"
+}

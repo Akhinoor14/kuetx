@@ -1,0 +1,65 @@
+{
+  "id": "812_p9_Q4(a)",
+  "course": {
+    "code": "HUM 1221",
+    "title": "Business and Communicative English",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\1st_Year_Backlog_2018_812.pdf",
+    "source_page": null,
+    "paper_index": 9
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make sentences using the following modals as directed-"
+    },
+    {
+      "type": "text",
+      "value": "i)May (To express guess about the future)"
+    },
+    {
+      "type": "text",
+      "value": "ii)May (To express guess about the present)"
+    },
+    {
+      "type": "text",
+      "value": "iii)Could(To express past ability)"
+    },
+    {
+      "type": "text",
+      "value": "iv) Could (To express polite request)"
+    },
+    {
+      "type": "text",
+      "value": "v) Be to (To express arrangement)"
+    },
+    {
+      "type": "text",
+      "value": "vi) Be to (To express command)"
+    },
+    {
+      "type": "text",
+      "value": "vii) Had better (To express performance)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2018"
+}

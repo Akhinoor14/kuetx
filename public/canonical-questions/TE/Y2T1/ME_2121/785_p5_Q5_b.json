@@ -1,0 +1,55 @@
+{
+  "id": "785_p5_Q5(b)",
+  "course": {
+    "code": "ME 2121",
+    "title": "Engineering Mechanics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\2nd_Year_1st_Term_2017_785.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Determine the minimum value of P which must be applied to the wedge in order to move 17 the 2000 Kg block. The co-efficient of static friction is 0.30 at all surface of contact."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_9d6ef5ac396487dfd870ef5632a43aa4c6a5e9d990122673b3810a1b1630f938.jpg",
+      "_source_path": "images/9d6ef5ac396487dfd870ef5632a43aa4c6a5e9d990122673b3810a1b1630f938.jpg"
+    },
+    {
+      "type": "formula",
+      "value": "$$\n\\begin{array} { r } { \\frac { T _ { 2 } } { T _ { 1 } } = \\underbrace { e ^ { \\theta \\frac { \\mu _ { s } \\beta } { \\alpha } } } _ { \\mathrm { . } } } \\end{array}\n$$",
+      "format": "latex"
+    },
+    {
+      "type": "text",
+      "value": "For a V-belt Prove that , whereβ is angle of contact, α is angle of"
+    },
+    {
+      "type": "text",
+      "value": "V and other symbols have their usual meanings."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2017"
+}

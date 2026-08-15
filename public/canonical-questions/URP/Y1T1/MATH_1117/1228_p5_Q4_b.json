@@ -1,0 +1,41 @@
+{
+  "id": "1228_p5_Q4(b)",
+  "course": {
+    "code": "MATH 1117",
+    "title": "Mathematics-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2019\\1st_Year_1st_Term_2019_1228.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": 6,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the rank of $A = \\left[ \\begin{array} { c c c c c } { { 2 } } & { { 3 } } & { { - \\frac { 3 } { 4 } } } & { { 4 } } \\\\ { { 5 } } & { { 9 } } & { { - \\frac { 3 } { 2 } } } & { { \\frac { 1 2 } { 8 } } } \\\\ { { 4 } } & { { 6 } } & { { - 2 } } & { { 8 } } \\end{array} \\right]$"
+    },
+    {
+      "type": "text",
+      "value": "(06)"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2019"
+}

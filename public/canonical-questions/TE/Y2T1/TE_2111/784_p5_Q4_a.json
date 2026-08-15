@@ -1,0 +1,61 @@
+{
+  "id": "784_p5_Q4(a)",
+  "course": {
+    "code": "TE 2111",
+    "title": "Statistical Analysis and Quality Control",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\2nd_Year_1st_Term_2016_784.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "M/S Universal Textiles was studying the relationship between sales and the amount spent on advertisement. The sales information of the last 4 months is as follows:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Month</td><td rowspan=1 colspan=1>XAdvertising expenses (Lac)</td><td rowspan=1 colspan=1>ySales revenue (Lac)</td></tr><tr><td rowspan=1 colspan=1>January</td><td rowspan=1 colspan=1>20</td><td rowspan=1 colspan=1>120</td></tr><tr><td rowspan=1 colspan=1>February</td><td rowspan=1 colspan=1>10</td><td rowspan=1 colspan=1>125</td></tr><tr><td rowspan=1 colspan=1>March</td><td rowspan=1 colspan=1>5</td><td rowspan=1 colspan=1>131</td></tr><tr><td rowspan=1 colspan=1>April</td><td rowspan=1 colspan=1>8</td><td rowspan=1 colspan=1>115</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Give that Sx=.1.205 and $\\mathbf { S } _ { \\mathbf { y } } { = } 2 . 0 9 1$ . Determine,"
+    },
+    {
+      "type": "text",
+      "value": "i) the co-rrelation co-efficient."
+    },
+    {
+      "type": "text",
+      "value": "ii) the regression equation."
+    },
+    {
+      "type": "text",
+      "value": "iii) the sales when àdvertising expenditure is 25 Lac Taka."
+    },
+    {
+      "type": "text",
+      "value": "iv)· Draw a scatter diagram."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2016"
+}

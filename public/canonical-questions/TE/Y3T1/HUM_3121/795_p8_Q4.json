@@ -1,0 +1,45 @@
+{
+  "id": "795_p8_Q4",
+  "course": {
+    "code": "HUM 3121",
+    "title": "Accounting and Industrial Law",
+    "department": "Department of Textile Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\3rd_Year_1st_Term_2018_795.pdf",
+    "source_page": null,
+    "paper_index": 8
+  },
+  "question_number": "4",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following trial balance was taken from the ledger of Amin Traders, at the end of 35 his annual accounting period."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td colspan=\"1\" rowspan=\"1\">Account Titles</td><td colspan=\"1\" rowspan=\"1\">Debit (Taka)</td><td colspan=\"1\" rowspan=\"1\">Credit (Taka)</td></tr><tr><td colspan=\"1\" rowspan=\"1\">Amin, Capital</td><td colspan=\"1\" rowspan=\"1\"></td><td colspan=\"1\" rowspan=\"1\">32000</td></tr><tr><td colspan=\"1\" rowspan=\"1\">Sales</td><td colspan=\"1\" rowspan=\"1\"></td><td colspan=\"1\" rowspan=\"1\">62000</td></tr><tr><td colspan=\"1\" rowspan=\"1\">Sales return and allowances</td><td colspan=\"1\" rowspan=\"1\">2000</td><td colspan=\"1\" rowspan=\"1\"></td></tr><tr><td colspan=\"1\" rowspan=\"1\">Purchases</td><td colspan=\"1\" rowspan=\"1\">24000</td><td colspan=\"1\" rowspan=\"1\"></td></tr><tr><td colspan=\"1\" rowspan=\"1\">Purchase discount</td><td colspan=\"1\" rowspan=\"1\"></td><td colspan=\"1\" rowspan=\"1\">2000</td></tr><tr><td colspan=\"1\" rowspan=\"1\">Transportation-in</td><td colspan=\"1\" rowspan=\"1\">2000</td><td colspan=\"1\" rowspan=\"1\"></td></tr><tr><td colspan=\"1\" rowspan=\"1\">Salaries expense</td><td colspan=\"1\" rowspan=\"1\">12000</td><td colspan=\"1\" rowspan=\"1\"></td></tr><tr><td colspan=\"1\" rowspan=\"1\">Rent expense</td><td colspan=\"1\" rowspan=\"1\">12000</td><td colspan=\"1\" rowspan=\"1\"></td></tr><tr><td colspan=\"1\" rowspan=\"1\">Advertising expense</td><td colspan=\"1\" rowspan=\"1\">6000</td><td colspan=\"1\" rowspan=\"1\"></td></tr><tr><td colspan=\"1\" rowspan=\"1\">Cash</td><td colspan=\"1\" rowspan=\"1\">6000</td><td colspan=\"1\" rowspan=\"1\"></td></tr><tr><td colspan=\"1\" rowspan=\"1\">Accounts receivable</td><td colspan=\"1\" rowspan=\"1\">4000</td><td colspan=\"1\" rowspan=\"1\"></td></tr><tr><td colspan=\"1\" rowspan=\"1\">Stock 1-1-16</td><td colspan=\"1\" rowspan=\"1\">10000</td><td colspan=\"1\" rowspan=\"1\"></td></tr><tr><td colspan=\"1\" rowspan=\"1\">Store supplies</td><td colspan=\"1\" rowspan=\"1\">8000</td><td colspan=\"1\" rowspan=\"1\"></td></tr><tr><td colspan=\"1\" rowspan=\"1\">Store equipment</td><td colspan=\"1\" rowspan=\"1\">18000</td><td colspan=\"1\" rowspan=\"1\"></td></tr><tr><td colspan=\"1\" rowspan=\"1\">Accumulated depreciation-store equipment</td><td colspan=\"1\" rowspan=\"1\"></td><td colspan=\"1\" rowspan=\"1\">4000</td></tr><tr><td colspan=\"1\" rowspan=\"1\">Accounts payable</td><td colspan=\"1\" rowspan=\"1\"></td><td colspan=\"1\" rowspan=\"1\">4000</td></tr><tr><td colspan=\"1\" rowspan=\"1\"></td><td colspan=\"1\" rowspan=\"1\">104000</td><td colspan=\"1\" rowspan=\"1\">104000</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Instructions: You are required to prepare the following statements"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

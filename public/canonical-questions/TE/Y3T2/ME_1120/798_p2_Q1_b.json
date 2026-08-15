@@ -1,0 +1,37 @@
+{
+  "id": "798_p2_Q1(b)",
+  "course": {
+    "code": "ME 1120",
+    "title": "Engineering Drawing",
+    "department": "Department of Textile Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\3rd_Year_2nd_Term_2016_798.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the no. of comber machines required to process 45000 kg/day of 32ª Ne yarn from 10   \nthe following particulars:   \nFeed/nip =4.6 mm   \nNips/minute=380   \nLap wt.=1000 grain/yd   \nNo. of heads/frame=8   \nNoil extraction =16%   \nEfficiency=85%"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2016"
+}

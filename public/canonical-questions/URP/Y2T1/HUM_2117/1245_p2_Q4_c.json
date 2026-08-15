@@ -1,0 +1,46 @@
+{
+  "id": "1245_p2_Q4(c)",
+  "course": {
+    "code": "HUM 2117",
+    "title": "Sociology for Planners",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\2nd_Year_1st_Term_2014_1245.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is family? What are the responsibilities of a family? (10)   \nRental"
+    },
+    {
+      "type": "text",
+      "value": "Section - B"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_9bbc6ae4ca01907ee22dd2fa89ccd9b6403698372c8c87d25487db3a927bfca0.jpg",
+      "_source_path": "images/9bbc6ae4ca01907ee22dd2fa89ccd9b6403698372c8c87d25487db3a927bfca0.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2014"
+}

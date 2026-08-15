@@ -1,0 +1,37 @@
+{
+  "id": "811_p5_Q7(c)",
+  "course": {
+    "code": "PH 1221",
+    "title": "Physics",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\1st_Year_Backlog_2016_811.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "7(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Find the Hall co-efficient and electron mobility for germanium if for a given sample [ length 1cm, breath 4mm and thickness 1mm] a current of 5 milliamphere flown from a 1.5 volts supply develops a Hall voltage 20 millivolts across the specimen in a magneic field of 0.45 wb/m³."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2016"
+}

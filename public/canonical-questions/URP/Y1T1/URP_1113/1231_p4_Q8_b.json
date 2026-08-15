@@ -1,0 +1,61 @@
+{
+  "id": "1231_p4_Q8(b)",
+  "course": {
+    "code": "URP 1113",
+    "title": "Fundamentals of Planning Process",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2022,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2022\\1st_Year_1st_Term_2022_1231.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "8(b)",
+  "numbering_source": "regex",
+  "marks": 25,
+  "content": [
+    {
+      "type": "text",
+      "value": "Annotate any five of the following: (25)"
+    },
+    {
+      "type": "text",
+      "value": "(i) Rule of thumb"
+    },
+    {
+      "type": "text",
+      "value": "(ii) Inclusive city"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Spatial Planning"
+    },
+    {
+      "type": "text",
+      "value": "(iv) Precipitated Development"
+    },
+    {
+      "type": "text",
+      "value": "(v) Conservation and Preservation"
+    },
+    {
+      "type": "text",
+      "value": "(vi) Sustainable Planning"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2022"
+}

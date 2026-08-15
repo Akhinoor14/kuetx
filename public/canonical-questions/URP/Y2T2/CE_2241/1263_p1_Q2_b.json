@@ -1,0 +1,45 @@
+{
+  "id": "1263_p1_Q2(b)",
+  "course": {
+    "code": "CE 2241",
+    "title": "Principles of Environmental Engineering",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2021,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2021\\2nd_Year_2nd_Term_2021_1263.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 8,
+  "content": [
+    {
+      "type": "text",
+      "value": "What is water demand? Write down the factors that affect the rate of water (08) demand."
+    },
+    {
+      "type": "text",
+      "value": "(C) Estimate the population at 2030 and 2050 based on the given data. Use least (15) square parabolic method."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Year</td><td rowspan=1 colspan=1>1970</td><td rowspan=1 colspan=1>1980</td><td rowspan=1 colspan=1>1990</td><td rowspan=1 colspan=1>2000</td><td rowspan=1 colspan=1>210</td></tr><tr><td rowspan=1 colspan=1>Population (thousand)</td><td rowspan=1 colspan=1>200</td><td rowspan=1 colspan=1>215</td><td rowspan=1 colspan=1>240</td><td rowspan=1 colspan=1>270</td><td rowspan=1 colspan=1>325</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2021"
+}

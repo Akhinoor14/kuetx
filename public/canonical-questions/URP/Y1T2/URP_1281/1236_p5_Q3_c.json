@@ -1,0 +1,42 @@
+{
+  "id": "1236_p5_Q3(c)",
+  "course": {
+    "code": "URP 1281",
+    "title": "Surveying and Cartography",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\1st_Year_2nd_Term_2016_1236.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following figure is the outcome of levelling survey. Calculate the (18) elevations using rise and fall method and check your result."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_86e969e510fa21b6436ade9368e42876ea27e89502e0f47288600acffcd4cfad.jpg",
+      "_source_path": "images/86e969e510fa21b6436ade9368e42876ea27e89502e0f47288600acffcd4cfad.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

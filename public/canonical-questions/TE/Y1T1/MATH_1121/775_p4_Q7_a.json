@@ -1,0 +1,37 @@
+{
+  "id": "775_p4_Q7(a)",
+  "course": {
+    "code": "MATH 1121",
+    "title": "Mathematics-1",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\1st_Year_1st_Term_2017_775.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "7(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Prove that $\\begin{array} { l } { \\displaystyle { \\frac { \\Pi } { 2 } } } \\\\ { \\displaystyle { \\int _ { 0 } ^ { \\infty } \\sin ^ { m } \\theta \\cos ^ { n } \\theta d \\theta = \\frac { \\left) ( \\frac { m + 1 } { 2 } ) \\right) ( \\frac { n + 1 } { 2 } ) } { 2 \\left. ( \\frac { m + n + 2 } { 2 } ) \\right. } } } \\\\ { . } \\end{array}$ and hence evaluate $\\begin{array} { l } { \\displaystyle \\int _ { 0 } ^ { 1 } x ^ { 6 } \\sqrt { 1 - x ^ { 2 } } \\mathrm { d } { \\mathbf x } . } \\end{array}$"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2017"
+}

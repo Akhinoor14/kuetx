@@ -1,0 +1,42 @@
+{
+  "id": "790_p6_Q4(a)",
+  "course": {
+    "code": "ME 2221",
+    "title": "Solid Mechanics and Machine Design",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\2nd_Year_2nd_Term_2017_790.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "4(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Write shear and moment equations for the simple supported beam carrying a 18 distributed load and a point load as shown in the figure. Also draw shear and moment diagrams specifying value at all change of loading positions and at points of zero shear. Neglect the mass of beam."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f007e17064f90dcb148f063f362b9d2a206fa92c75aa65e81c93230501642cb4.jpg",
+      "_source_path": "images/f007e17064f90dcb148f063f362b9d2a206fa92c75aa65e81c93230501642cb4.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2017"
+}

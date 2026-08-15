@@ -1,0 +1,41 @@
+{
+  "id": "811_p6_Q3(c)",
+  "course": {
+    "code": "MATH 1121",
+    "title": "Mathematics-1",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\1st_Year_Backlog_2016_811.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "3(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": ". Prove that the lines"
+    },
+    {
+      "type": "text",
+      "value": "$\\frac { x + 1 } { 2 } = \\frac { y + 1 } { 3 } = \\frac { z + 1 } { 4 } \\mathrm { a n d } \\mathrm { x } + 2 \\mathrm { y } + 3 \\mathrm { z } - 4 = 0 = 3 \\mathrm { x } + 4 \\mathrm { y } + 5 \\mathrm { z } - 6$ are co planer and find the coordinates of their point of intersection."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year Backlog Examination, 2016"
+}

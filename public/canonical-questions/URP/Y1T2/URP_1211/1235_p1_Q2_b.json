@@ -1,0 +1,57 @@
+{
+  "id": "1235_p1_Q2(b)",
+  "course": {
+    "code": "URP 1211",
+    "title": "Urban Planning Principles",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\1st_Year_2nd_Term_2015_1235.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "There are 10,000 identical individuals in the market for commodity x, each with (20) a demand function is given by $\\mathsf { Q } _ { \\mathsf { d } \\mathsf { x } } = 1 2 \\mathsf { - } 2 \\mathsf { P } _ { \\mathsf { x } } ,$ and 1,000 identical producers of commodity x, each with a supply function is given by $\\mathsf { Q } _ { \\mathsf { s x } } { = } 2 0 \\mathsf { P } _ { \\mathsf { x } }$"
+    },
+    {
+      "type": "text",
+      "value": "(i) Obtain equilibrium price and quantity."
+    },
+    {
+      "type": "text",
+      "value": "Now, if the government decides to collect a sales tax of \\$2 per unit sold from each of the 1,000 identical sellers of commodity x-"
+    },
+    {
+      "type": "text",
+      "value": "(ii) What effect does this have on the equilibrium price and quantity of commodity x?"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Who actually pays the tax?"
+    },
+    {
+      "type": "text",
+      "value": "(iv) What is the amount of taxes collected by the government?"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2015"
+}

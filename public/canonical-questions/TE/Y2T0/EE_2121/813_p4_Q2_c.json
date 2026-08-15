@@ -1,0 +1,54 @@
+{
+  "id": "813_p4_Q2(c)",
+  "course": {
+    "code": "EE 2121",
+    "title": "Electrical Circuits, Machines and Electronics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\2nd_Year_Backlog_2016_813.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "2(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "For the circuit of bellow figure, find"
+    },
+    {
+      "type": "text",
+      "value": "(i) Conductance and susceptance of each branch"
+    },
+    {
+      "type": "text",
+      "value": "(ii) The resultant conductance and susceptance"
+    },
+    {
+      "type": "text",
+      "value": "(iii) Vector diagram."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_aaaa08f9350528fa43200dff297fa80d8d914ea92ac8229ff6902ff5c244fc88.jpg",
+      "_source_path": "images/aaaa08f9350528fa43200dff297fa80d8d914ea92ac8229ff6902ff5c244fc88.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2016"
+}

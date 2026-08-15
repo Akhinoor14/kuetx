@@ -1,0 +1,46 @@
+{
+  "id": "793_p5_Q4(c)",
+  "course": {
+    "code": "TE 3109",
+    "title": "Fabric Structure and Design",
+    "department": "Department of Textile Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\3rd_Year_1st_Term_2016_793.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Define the term purl. Describe the following design:-"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_d5abe7bbff67b5e1d36adaa7d9f978a578a8b67c5907c640fddad0c8f8253d9e.jpg",
+      "_source_path": "images/d5abe7bbff67b5e1d36adaa7d9f978a578a8b67c5907c640fddad0c8f8253d9e.jpg"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

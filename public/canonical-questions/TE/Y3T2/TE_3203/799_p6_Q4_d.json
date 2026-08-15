@@ -1,0 +1,45 @@
+{
+  "id": "799_p6_Q4(d)",
+  "course": {
+    "code": "TE 3203",
+    "title": "Fabric Manufacturing Engineering-II",
+    "department": "Department of Textile Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\3rd_Year_2nd_Term_2017_799.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "4(d)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the production per shift at 90% efficiency of a weaving mill in average 08   \n26 picks/cm from the following data:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>No. of Loom</td><td rowspan=1 colspan=1>Picks/cm</td><td rowspan=1 colspan=1>PPM</td></tr><tr><td rowspan=1 colspan=1>80</td><td rowspan=1 colspan=1>28</td><td rowspan=1 colspan=1>210</td></tr><tr><td rowspan=1 colspan=1>110</td><td rowspan=1 colspan=1>27</td><td rowspan=1 colspan=1>200</td></tr><tr><td rowspan=1 colspan=1>25</td><td rowspan=1 colspan=1>30</td><td rowspan=1 colspan=1>220</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "1234_p5_Q1(d)",
+  "course": {
+    "code": "URP 1281",
+    "title": "Surveying and Cartography",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\1st_Year_2nd_Term_2014_1234.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "The following table gives the corrected latitudes and departures (in (10) metres) of the sides of a closed traverse ABCD:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Side</td><td rowspan=1 colspan=1>Latitude</td><td rowspan=1 colspan=1>Departure</td></tr><tr><td rowspan=1 colspan=1>AB</td><td rowspan=1 colspan=1>108</td><td rowspan=1 colspan=1>4</td></tr><tr><td rowspan=1 colspan=1>BC</td><td rowspan=1 colspan=1>15</td><td rowspan=1 colspan=1>249</td></tr><tr><td rowspan=1 colspan=1>CD</td><td rowspan=1 colspan=1>-123</td><td rowspan=1 colspan=1>4</td></tr><tr><td rowspan=1 colspan=1>DA</td><td rowspan=1 colspan=1>0</td><td rowspan=1 colspan=1>257</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2014"
+}

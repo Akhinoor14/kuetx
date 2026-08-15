@@ -1,0 +1,50 @@
+{
+  "id": "791_p2_Q5(b)",
+  "course": {
+    "code": "ME 2221",
+    "title": "Solid Mechanics and Machine Design",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\2nd_Year_2nd_Term_2018_791.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "5(b)",
+  "numbering_source": "regex",
+  "marks": 20,
+  "content": [
+    {
+      "type": "text",
+      "value": "A centrifugal pump is to be driven by a 12hp electric motor at 1800rpm. The load is gradually repeated. What should be the standardized diameter of the pump shaft, if it is made of AISI 1340(OQT1200)?"
+    },
+    {
+      "type": "text",
+      "value": "6 A cold-finished shaft, AISI 1141, is to transmit power that varies from ¿00 to land back to200hp in each revolution at a speed of 600rpm. The power is recve b a 20in spur gear A and delivered by a 10in spur gear C. The tangential forccs !tvebeen converted into a force (A and C shown) and a couple (not shown). The radial copotient R of the tooth load is to be ignored in the initial design. Lęt N=2 and considerìng varýing stresses with maximum shear theory, compute the shaft diameter."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_41adc4a2295b19a0a37f8976b995eb0090d2e47b467ef17d35398b13c7d87a71.jpg",
+      "_source_path": "images/41adc4a2295b19a0a37f8976b995eb0090d2e47b467ef17d35398b13c7d87a71.jpg"
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY Department of Textile Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2018"
+}

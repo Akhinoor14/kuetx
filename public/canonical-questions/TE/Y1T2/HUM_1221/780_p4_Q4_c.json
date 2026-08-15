@@ -1,0 +1,65 @@
+{
+  "id": "780_p4_Q4(c)",
+  "course": {
+    "code": "HUM 1221",
+    "title": "Business and Communicative English",
+    "department": "Department of Textile Engineering",
+    "year_term": "1st Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\1st_Year_2nd_Term_2016_780.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "4(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Supply a suitable word to fill in the blanks."
+    },
+    {
+      "type": "text",
+      "value": "(i) We shall be there \\_8 P.M."
+    },
+    {
+      "type": "text",
+      "value": "(ii) \\_\\_ had I arrived when trouble started."
+    },
+    {
+      "type": "text",
+      "value": "(iii)The subjectdifficult, we cannot understand."
+    },
+    {
+      "type": "text",
+      "value": "(iv)He has no passion\\_ politics."
+    },
+    {
+      "type": "text",
+      "value": "(v) My brother went away"
+    },
+    {
+      "type": "text",
+      "value": "(vi)He treats me as \\_"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 2nd Term Regular Examination, 2016"
+}

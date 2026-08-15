@@ -1,0 +1,65 @@
+{
+  "id": "799_p6_Q6(b)",
+  "course": {
+    "code": "TE 3203",
+    "title": "Fabric Manufacturing Engineering-II",
+    "department": "Department of Textile Engineering",
+    "year_term": "3rd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\3rd_Year_2nd_Term_2017_799.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Identify true or false from following underlined questions:"
+    },
+    {
+      "type": "text",
+      "value": "i) Needle are thin metal plats drilled with hollow in their lower end through which a warp end may be threaded."
+    },
+    {
+      "type": "text",
+      "value": "ii) Conesare used in warp knitting machine."
+    },
+    {
+      "type": "text",
+      "value": "iii) Pattern wheel pullsthe guide bar away from pattern mechanism. So underlap is produced."
+    },
+    {
+      "type": "text",
+      "value": "iv) Push rod pushes the needle bar."
+    },
+    {
+      "type": "text",
+      "value": "v) C’ means that both fork and tail are ground."
+    },
+    {
+      "type": "text",
+      "value": "vi) Wire take down the fabrics in a certain width."
+    },
+    {
+      "type": "text",
+      "value": "vii) There are 4 basic overlap/ underlap variations."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 2nd Term Regular Examination, 2017"
+}

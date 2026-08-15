@@ -1,0 +1,41 @@
+{
+  "id": "1246_p1_Q2(d)",
+  "course": {
+    "code": "CE 2107",
+    "title": "Construction Technology and Materials",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2015,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2015\\2nd_Year_1st_Term_2015_1246.pdf",
+    "source_page": null,
+    "paper_index": 1
+  },
+  "question_number": "2(d)",
+  "numbering_source": "regex",
+  "marks": 16,
+  "content": [
+    {
+      "type": "text",
+      "value": "There are three different varieties of sand available in a construction site. (16) Sieve analysis data of sand type A’ is given in the following table. The fineness modules (FM) of sand type 'B’ and 'C’ are 2.20 and 2.40, respectively. To prepare a concrete mix, 20 kg sand of FM = 2.80 is required. What are the possible ways to get the required sand for the cement mix? Calculate the amount of each varieties of sand for the required 20 kg sand sample."
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Sieve No.</td><td rowspan=1 colspan=1>Weight Retained (gm)</td></tr><tr><td rowspan=1 colspan=1>No.4</td><td rowspan=1 colspan=1>10</td></tr><tr><td rowspan=1 colspan=1>No.8</td><td rowspan=1 colspan=1>60</td></tr><tr><td rowspan=1 colspan=1>No. 16</td><td rowspan=1 colspan=1>90</td></tr><tr><td rowspan=1 colspan=1>No.20</td><td rowspan=1 colspan=1>110</td></tr><tr><td rowspan=1 colspan=1>No.30</td><td rowspan=1 colspan=1>130</td></tr><tr><td rowspan=1 colspan=1>No.50</td><td rowspan=1 colspan=1>70</td></tr><tr><td rowspan=1 colspan=1>No. 100</td><td rowspan=1 colspan=1>25</td></tr><tr><td rowspan=1 colspan=1>No.200</td><td rowspan=1 colspan=1>10</td></tr><tr><td rowspan=1 colspan=1>Pan</td><td rowspan=1 colspan=1>5</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2015"
+}

@@ -1,0 +1,42 @@
+{
+  "id": "1247_p4_Q3(a)",
+  "course": {
+    "code": "URP 2115",
+    "title": "Urban Planning Techniques",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2016\\2nd_Year_1st_Term_2016_1247.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "3(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Make a comparison between the operational procedure of Guided Land Development and Land Readjustment Plan techniques of residential area development. Which one is more feasible regarding socio-economic condition of Bangladesh?"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b5df89e080871e1d63342f2cd47e9d4d0cfc5514f7149a6e84da295b93183f79.jpg",
+      "_source_path": "images/b5df89e080871e1d63342f2cd47e9d4d0cfc5514f7149a6e84da295b93183f79.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2016"
+}

@@ -1,0 +1,41 @@
+{
+  "id": "795_p8_Q2(b)",
+  "course": {
+    "code": "HUM 3121",
+    "title": "Accounting and Industrial Law",
+    "department": "Department of Textile Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\3rd_Year_1st_Term_2018_795.pdf",
+    "source_page": null,
+    "paper_index": 8
+  },
+  "question_number": "2(b)",
+  "numbering_source": "regex",
+  "marks": 10,
+  "content": [
+    {
+      "type": "text",
+      "value": "Mr. Rony is a C.A. During the first month of operations of the business, the following events and transactions occurred:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td colspan=\"1\" rowspan=\"1\">2017</td><td colspan=\"1\" rowspan=\"1\"></td></tr><tr><td colspan=\"1\" rowspan=\"1\">April 1</td><td colspan=\"1\" rowspan=\"1\">Rony invested Tk. 100000 cash.</td></tr><tr><td colspan=\"1\" rowspan=\"1\">April 8</td><td colspan=\"1\" rowspan=\"1\">Incurred advertising expenses of Tk. 5000 on account.</td></tr><tr><td colspan=\"1\" rowspan=\"1\">April 11</td><td colspan=\"1\" rowspan=\"1\">Hired secretary at a salary of Tk. 4000 per month.</td></tr><tr><td colspan=\"1\" rowspan=\"1\">April 13</td><td colspan=\"1\" rowspan=\"1\">Paid Tk. 3600 cash for one year insurance policy.</td></tr><tr><td colspan=\"1\" rowspan=\"1\">April 21</td><td colspan=\"1\" rowspan=\"1\">Completed a tax assignment and billed client Tk. 15000 for servicerendered.</td></tr><tr><td colspan=\"1\" rowspan=\"1\">April 22</td><td colspan=\"1\" rowspan=\"1\">Received cash of Tk. 20000 for service completed.</td></tr><tr><td colspan=\"1\" rowspan=\"1\">April 24</td><td colspan=\"1\" rowspan=\"1\">Paid Tk. 3000 on account for advertising incurred.</td></tr><tr><td colspan=\"1\" rowspan=\"1\">April 26</td><td colspan=\"1\" rowspan=\"1\">Received Tk. 7000 advance on a management consultingengagement.</td></tr><tr><td colspan=\"1\" rowspan=\"1\">April 28</td><td colspan=\"1\" rowspan=\"1\">Salary paid in cash Tk. 3000</td></tr><tr><td colspan=\"1\" rowspan=\"1\">April 30</td><td colspan=\"1\" rowspan=\"1\">Utility bill paid in cash Tk. 1000</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

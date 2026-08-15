@@ -1,0 +1,41 @@
+{
+  "id": "805_p5_Q2(a)",
+  "course": {
+    "code": "TE 2203",
+    "title": "Fabric Manufacturing Engineering-I",
+    "department": "Department of Textile Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2019,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2019\\4th_Year_1st_Term_2019_805.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Calculate the fabric consumption of Men's Woven Trouser from the following 20 specifications:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Description</td><td rowspan=1 colspan=1>Measurement (Inch)</td></tr><tr><td rowspan=1 colspan=1>Waist (Relaxed)</td><td rowspan=1 colspan=1>32</td></tr><tr><td rowspan=1 colspan=1>Thigh</td><td rowspan=1 colspan=1>25</td></tr><tr><td rowspan=1 colspan=1>Hip</td><td rowspan=1 colspan=1>46</td></tr><tr><td rowspan=1 colspan=1>Side Seam</td><td rowspan=1 colspan=1>40</td></tr><tr><td rowspan=1 colspan=1>Front Rise</td><td rowspan=1 colspan=1>11</td></tr><tr><td rowspan=1 colspan=1>Back Rise</td><td rowspan=1 colspan=1>13</td></tr><tr><td rowspan=1 colspan=1>Leg Opening</td><td rowspan=1 colspan=1>18</td></tr><tr><td rowspan=1 colspan=1>Fabric width</td><td rowspan=1 colspan=1>55</td></tr><tr><td rowspan=1 colspan=1>Allowances (Seam/ Sewing)</td><td rowspan=1 colspan=1>Assume</td></tr><tr><td rowspan=1 colspan=1>Wastages</td><td rowspan=1 colspan=1>Assume</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2019"
+}

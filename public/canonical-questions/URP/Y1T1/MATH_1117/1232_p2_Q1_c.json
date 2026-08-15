@@ -1,0 +1,37 @@
+{
+  "id": "1232_p2_Q1(c)",
+  "course": {
+    "code": "MATH 1117",
+    "title": "Mathematics-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "1st Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2023\\1st_Year_1st_Term_2023_1232.pdf",
+    "source_page": null,
+    "paper_index": 2
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "If (l1, m1, n1), (l2, m2, n₂) and (l3, m3, n3) are the direction cosines of three mutually (13 perpendicular lines then show that the line whose direction cosines are proportional to $| { \\boldsymbol { \\mathbf { \\rho } } } _ { 1 } + | { \\boldsymbol { \\mathbf { \\rho } } } _ { 2 } + | { \\boldsymbol { \\mathbf { \\rho } } } _ { 3 }$ , m₁+m₂+m₃, and $n _ { 1 } + n _ { 2 } + n _ { 3 }$ makes equal angle with them."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 1st Year 1st Term Regular Examination, 2023"
+}

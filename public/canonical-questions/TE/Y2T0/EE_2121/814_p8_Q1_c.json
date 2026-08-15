@@ -1,0 +1,42 @@
+{
+  "id": "814_p8_Q1(c)",
+  "course": {
+    "code": "EE 2121",
+    "title": "Electrical Circuits, Machines and Electronics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\2nd_Year_Backlog_2017_814.pdf",
+    "source_page": null,
+    "paper_index": 8
+  },
+  "question_number": "1(c)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "State the conditions for applying superposition theorem to a circuit. Use superposition theorem to find the current $I _ { m }$ flowing through the 3Ω resistor branch connected between the functional points A and B of the circuit shown in the following figure."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_1939830aa1ad78575b7bc758654f482757866e5a27c7785061e7f1bdbfed0221.jpg",
+      "_source_path": "images/1939830aa1ad78575b7bc758654f482757866e5a27c7785061e7f1bdbfed0221.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2017"
+}

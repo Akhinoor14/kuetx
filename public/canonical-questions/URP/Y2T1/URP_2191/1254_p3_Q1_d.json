@@ -1,0 +1,41 @@
+{
+  "id": "1254_p3_Q1(d)",
+  "course": {
+    "code": "URP 2191",
+    "title": "Statistics for Planners-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2023,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2023\\2nd_Year_1st_Term_2023_1254.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "1(d)",
+  "numbering_source": "regex",
+  "marks": 18,
+  "content": [
+    {
+      "type": "text",
+      "value": "Draw histogram, frequency polygon and ogive curve from the following data set. (18)"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Class</td><td rowspan=1 colspan=1>0-&lt;10</td><td rowspan=1 colspan=1>10-&lt;20</td><td rowspan=1 colspan=1>20-&lt;30</td><td rowspan=1 colspan=1>30-&lt;40</td><td rowspan=1 colspan=1>40-&lt;50</td><td rowspan=1 colspan=1>50-&lt;60</td><td rowspan=1 colspan=1>60-70</td></tr><tr><td rowspan=1 colspan=1>Frequency</td><td rowspan=1 colspan=1>3</td><td rowspan=1 colspan=1>7</td><td rowspan=1 colspan=1>13</td><td rowspan=1 colspan=1>17</td><td rowspan=1 colspan=1>14</td><td rowspan=1 colspan=1>9</td><td rowspan=1 colspan=1>2</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": false,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2023"
+}

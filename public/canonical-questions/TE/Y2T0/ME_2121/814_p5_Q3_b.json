@@ -1,0 +1,42 @@
+{
+  "id": "814_p5_Q3(b)",
+  "course": {
+    "code": "ME 2121",
+    "title": "Engineering Mechanics",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year Backlog"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Backlog",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\2nd_Year_Backlog_2017_814.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "3(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "As solid shaft is loaded as shown in the figure. Using G = 83 GPa,determine the required 18 diameter of the shaft, if the shearing strss is limited to 60 MPa and the angle of reaction at the free end is not to exceed 5 degree."
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_b2820894656defcf7c2245e6cb4c9ac1cce72890cd257a5fa0d75ba50b98842d.jpg",
+      "_source_path": "images/b2820894656defcf7c2245e6cb4c9ac1cce72890cd257a5fa0d75ba50b98842d.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year Backlog Examination, 2017"
+}

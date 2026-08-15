@@ -1,0 +1,47 @@
+{
+  "id": "803_p4_Q6(a)",
+  "course": {
+    "code": "TE 3109",
+    "title": "Fabric Structure and Design",
+    "department": "Department of Textile Engineering",
+    "year_term": "4th Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\4th_Year_1st_Term_2017_803.pdf",
+    "source_page": null,
+    "paper_index": 4
+  },
+  "question_number": "6(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Describe the following designs with proper cam arrangement and needle arrangement:"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_f32385cad8da5c99fe5a2bf1edfed5703be1e7c5e5c590b7bf14d930325b00ca.jpg",
+      "_source_path": "images/f32385cad8da5c99fe5a2bf1edfed5703be1e7c5e5c590b7bf14d930325b00ca.jpg"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_78ace9a63d6546ac7a9ed28e0637366a6e94820686647f5a6011016293a8fa26.jpg",
+      "_source_path": "images/78ace9a63d6546ac7a9ed28e0637366a6e94820686647f5a6011016293a8fa26.jpg"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 1st Term Regular Examination, 2017"
+}

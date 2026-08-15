@@ -1,0 +1,49 @@
+{
+  "id": "795_p8_Q1(b)",
+  "course": {
+    "code": "HUM 3121",
+    "title": "Accounting and Industrial Law",
+    "department": "Department of Textile Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2018,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2018\\3rd_Year_1st_Term_2018_795.pdf",
+    "source_page": null,
+    "paper_index": 8
+  },
+  "question_number": "1(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Mr. Rahi setup a consulting practice. After two months the consulting farm had the following assets and liabilities:"
+    },
+    {
+      "type": "text",
+      "value": "Cash Tk. 28800; Accounts receivable Tk. 1400; Office supplies Tk. 270; Office equipment Tk. 4200; Accounts payable Tk. 1900; Mr. Rahi capital Tk. 32770. During a short period of time, the following transactions were completed:"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>2017</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>January-1</td><td rowspan=1 colspan=1>Paid one month&#x27;s rent Tk. 300</td></tr><tr><td rowspan=1 colspan=1>January-2</td><td rowspan=1 colspan=1>Made payment towards accounts payable Tk. 500</td></tr><tr><td rowspan=1 colspan=1>January-3</td><td rowspan=1 colspan=1>Billed clients for services performed Tk. 800</td></tr><tr><td rowspan=1 colspan=1>January-4</td><td rowspan=1 colspan=1>Received from clients billed last month Tk. 1000</td></tr><tr><td rowspan=1 colspan=1>January-5</td><td rowspan=1 colspan=1>Purchased office supplies with cash Tk. 80</td></tr><tr><td rowspan=1 colspan=1>January-6</td><td rowspan=1 colspan=1>Paid salaries in cash Tk. 850</td></tr><tr><td rowspan=1 colspan=1>January-7</td><td rowspan=1 colspan=1>Paid utility expense Tk. 90</td></tr><tr><td rowspan=1 colspan=1>January-8</td><td rowspan=1 colspan=1>Received a bill for Tk. 65</td></tr><tr><td rowspan=1 colspan=1>January-9</td><td rowspan=1 colspan=1>Paid telephone expense Tk. 450</td></tr><tr><td rowspan=1 colspan=1>January-10</td><td rowspan=1 colspan=1>Purchased additional office equipmént for cash Tk. 400</td></tr><tr><td rowspan=1 colspan=1>January-11</td><td rowspan=1 colspan=1>Received cash from clients for services performed Tk. 1200</td></tr><tr><td rowspan=1 colspan=1>January-12</td><td rowspan=1 colspan=1>Withdrawn for own purpose Tk. 900</td></tr></table>"
+    },
+    {
+      "type": "text",
+      "value": "Requirement: Arrange the following assets, liabilities and owner's equity account in a tabular summary using the following accounts titles: Cash; Accounts receivable; Office supplies; Office equipment; Accounts payable; Mr. Rahi capital."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2018"
+}

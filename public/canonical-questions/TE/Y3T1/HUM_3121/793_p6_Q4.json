@@ -1,0 +1,53 @@
+{
+  "id": "793_p6_Q4",
+  "course": {
+    "code": "HUM 3121",
+    "title": "Accounting and Industrial Law",
+    "department": "Department of Textile Engineering",
+    "year_term": "3rd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\3rd_Year_1st_Term_2016_793.pdf",
+    "source_page": null,
+    "paper_index": 6
+  },
+  "question_number": "4",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "The Sea Coast Motel openned for business on March 31, 2011. Its trial balance before 35 adjustment on March 31 is as follows:"
+    },
+    {
+      "type": "text",
+      "value": "SEA COAST MOTEL"
+    },
+    {
+      "type": "text",
+      "value": "Trial Balance"
+    },
+    {
+      "type": "text",
+      "value": "March31,2011"
+    },
+    {
+      "type": "table",
+      "value_html": "<table><tr><td rowspan=1 colspan=1>Account titles</td><td rowspan=1 colspan=1>Debit (Tk)</td><td rowspan=1 colspan=1>Credit (Tk)</td></tr><tr><td rowspan=1 colspan=1>Cash -</td><td rowspan=1 colspan=1>3,500</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Prepaid insurance</td><td rowspan=1 colspan=1>1,800</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Supplies -</td><td rowspan=1 colspan=1>1,900</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Land - -</td><td rowspan=1 colspan=1>74,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Furniture -</td><td rowspan=1 colspan=1>26,800</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Accounts payable -</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>3,700</td></tr><tr><td rowspan=1 colspan=1>Unearned rent revenue</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>3,600</td></tr><tr><td rowspan=1 colspan=1>Mortgage payable -</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>36,000</td></tr><tr><td rowspan=1 colspan=1>Capital -</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>60,000</td></tr><tr><td rowspan=1 colspan=1>Rent Revenue</td><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>9,200</td></tr><tr><td rowspan=1 colspan=1>Salaries expense</td><td rowspan=1 colspan=1>3,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Utilities expense</td><td rowspan=1 colspan=1>1,000</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1>Advertising expense -</td><td rowspan=1 colspan=1>500</td><td rowspan=1 colspan=1></td></tr><tr><td rowspan=1 colspan=1></td><td rowspan=1 colspan=1>1,12,500</td><td rowspan=1 colspan=1>1,12,500</td></tr></table>"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 3rd Year 1st Term Regular Examination, 2016"
+}

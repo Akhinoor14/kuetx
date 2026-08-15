@@ -1,0 +1,85 @@
+{
+  "id": "808_p5_Q2(a)",
+  "course": {
+    "code": "IPE 4223",
+    "title": "Operations Management",
+    "department": "Department of Textile Engineering",
+    "year_term": "4th Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2017,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2017\\4th_Year_2nd_Term_2017_808.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "2(a)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "A garment factory has 240 machines in operation manned by 220 operators. The machines cannot be worked without an operator wholly engaged on it. The original cost of all these 240 machines is Tk 5000000. The following particulars are for a period of 1 year. Compute the comprehensive machine hour rate."
+    },
+    {
+      "type": "text",
+      "value": "Normal available hours per month : 210"
+    },
+    {
+      "type": "text",
+      "value": "Absenteeism (without pay) hours per month : 20"
+    },
+    {
+      "type": "text",
+      "value": "Leave (with pay) hours per month ：20"
+    },
+    {
+      "type": "text",
+      "value": "Normal idle hours per month ：10"
+    },
+    {
+      "type": "text",
+      "value": "Average rate of wages per day of 8 hours : Tk 100"
+    },
+    {
+      "type": "text",
+      "value": "Production bonus estimated : 15% on wages"
+    },
+    {
+      "type": "text",
+      "value": "Value of power consumed : Tk 100000"
+    },
+    {
+      "type": "text",
+      "value": "Supervising and indirect labour : Tk 200000"
+    },
+    {
+      "type": "text",
+      "value": "Lighting and electricity : Tk 25000"
+    },
+    {
+      "type": "text",
+      "value": "Repairs and maintenance : 2% on value of machines"
+    },
+    {
+      "type": "text",
+      "value": "Insurance : Tk 60000"
+    },
+    {
+      "type": "text",
+      "value": "Depreciation : 15% on original cost"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 4th Year 2nd Term Regular Examination, 2017"
+}

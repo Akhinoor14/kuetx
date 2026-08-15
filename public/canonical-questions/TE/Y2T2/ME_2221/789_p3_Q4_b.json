@@ -1,0 +1,114 @@
+{
+  "id": "789_p3_Q4(b)",
+  "course": {
+    "code": "ME 2221",
+    "title": "Solid Mechanics and Machine Design",
+    "department": "Department of Textile Engineering",
+    "year_term": "2nd Year 2nd Term"
+  },
+  "exam": {
+    "exam_year": 2016,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Textile_Engineering\\2016\\2nd_Year_2nd_Term_2016_789.pdf",
+    "source_page": null,
+    "paper_index": 3
+  },
+  "question_number": "4(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "Without writing shear and moment equations, draw the shear and moment diagrams for 17 the cantilever beam acted upon by uniformly distributed load and a couple as shown in figure. 5kN/m 1"
+    },
+    {
+      "type": "image",
+      "asset": "assets/_tmp_Q_tmp_a9ebc0e6c40d1dad3fec2538d23d128b4fe046500dd5018083f53ea9bee3cdae.jpg",
+      "_source_path": "images/a9ebc0e6c40d1dad3fec2538d23d128b4fe046500dd5018083f53ea9bee3cdae.jpg"
+    },
+    {
+      "type": "text",
+      "value": "SECTION-B"
+    },
+    {
+      "type": "text",
+      "value": "A 4-in. 360° bearing with $\\angle \\chi = 1$ is to support 5 kips with a minimum film thickness 0.0008 in. $\\mathrm { C _ { d } } { = } 0 . 0 0 4$ in. & n=600 rpm. Determine:-"
+    },
+    {
+      "type": "text",
+      "value": "(i): Absolute viscosity of the oil"
+    },
+    {
+      "type": "text",
+      "value": "(ii) A suitable oil grade if the temperature is 160℉."
+    },
+    {
+      "type": "text",
+      "value": "(iii) Frictional loss in hp."
+    },
+    {
+      "type": "text",
+      "value": "(iv) For optimum value of minimum friction, determine the fhp and compare."
+    },
+    {
+      "type": "text",
+      "value": "A pair of carefully cut, full depth $2 0 ^ { \\circ }$ involute gears, made of cast iron ASTM 30 is transmitting 5 hp at 1150 rpm of the pinion, $\\mathrm { N _ { p } = 2 4 , N _ { g } = 3 2 , P _ { d } = 8 , b = 1 . 5 i n . }$ . For the teeth, determine:-"
+    },
+    {
+      "type": "text",
+      "value": "(i) The endurance strength"
+    },
+    {
+      "type": "text",
+      "value": "(ii) The dynamic load and"
+    },
+    {
+      "type": "text",
+      "value": "(iii) The service factor"
+    },
+    {
+      "type": "text",
+      "value": "A belt drive is to be designed for $\\frac { F _ { 1 } } { F _ { 2 } } = 3$ , while transmitting 60 hp at 2700 rpm of the driver. D1, $\\mathrm { m } _ { \\mathrm { w } } \\cong 1 . 8 5$ Use a medium double belt, cemented joint, a squirrel-cage, compensator-motor drive with mildly jerking loads, center distance is expected to be about twice the diameter of larger pulley."
+    },
+    {
+      "type": "text",
+      "value": "(i) · Choose suitable iron pulley sizes and determine the belt width for S=300 Psi."
+    },
+    {
+      "type": "text",
+      "value": "(ii) Determine the belt width by ALBA procedure."
+    },
+    {
+      "type": "text",
+      "value": "(iii) : Compute the maximum stress of the straight part."
+    },
+    {
+      "type": "text",
+      "value": "(iv) What is $F _ { \\gamma _ { 2 } } = ? \\ \\mathrm { i f } \\ F _ { 1 } { = } 5 2 5 \\ \\mathrm { I b } .$"
+    },
+    {
+      "type": "text",
+      "value": "A 200-hp ,600 rpm induction motor is to drive a jaw crusher at 125 rpm; starting load is heavy; , operating with shock; intermittent service; c=113 to 123 in.. Recommend a multiple V-flat drive for this application. The B.F. Goodrich company recommended eight D480 V-belts with a 26-in. sheave and a 120.175in. pulley; c ≈ 116.3 in."
+    },
+    {
+      "type": "text",
+      "value": "KHULNA UNIVERSITY OF ENGINEERING & TECHNOLOGY"
+    },
+    {
+      "type": "text",
+      "value": "Department of Textile Engineering"
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 2nd Term Regular Examination, 2016"
+}

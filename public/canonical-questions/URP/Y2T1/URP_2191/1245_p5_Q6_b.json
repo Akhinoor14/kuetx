@@ -1,0 +1,45 @@
+{
+  "id": "1245_p5_Q6(b)",
+  "course": {
+    "code": "URP 2191",
+    "title": "Statistics for Planners-I",
+    "department": "Department of Urban and Regional Planning",
+    "year_term": "2nd Year 1st Term"
+  },
+  "exam": {
+    "exam_year": 2014,
+    "exam_type": "Regular",
+    "source_pdf": "question_bank_raw\\Department_of_Urban_and_Regional_Planning\\2014\\2nd_Year_1st_Term_2014_1245.pdf",
+    "source_page": null,
+    "paper_index": 5
+  },
+  "question_number": "6(b)",
+  "numbering_source": "regex",
+  "marks": null,
+  "content": [
+    {
+      "type": "text",
+      "value": "In Tokyo city, the mean height of 10,000 building is 100m and standard deviation is 30m. Assuming that the height of the buildings are normally distributed. Find how many building's height is (i) between 75m to 125m."
+    },
+    {
+      "type": "text",
+      "value": "(ii) very high rise building (greater than 200m)"
+    },
+    {
+      "type": "text",
+      "value": "(iii) very low height building (less than 50m)."
+    }
+  ],
+  "topics": [],
+  "syllabus_module": null,
+  "difficulty": null,
+  "tags": [],
+  "status": "extracted",
+  "needs_human_review": true,
+  "created_by": null,
+  "usage": {
+    "used_in_exams": [],
+    "times_reused": 0
+  },
+  "_source_title": "B.Sc. Engineering 2nd Year 1st Term Regular Examination, 2014"
+}
