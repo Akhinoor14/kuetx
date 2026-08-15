@@ -6,6 +6,10 @@
 > এই ফিচারের বড়, মাল্টি-ফেজ কাজের plan-prompt ফাইল (progress badge-সহ,
 > নতুন সেশনে সরাসরি ফিড করার জন্য):
 > [`TEACHER_ID_SESSIONAL_PLAN_PROMPT.md`](./TEACHER_ID_SESSIONAL_PLAN_PROMPT.md)
+>
+> **আলাদা related ফিচার:** Faculty Attendance Tab-এর রোস্টার/UI/এক্সপোর্ট/
+> co-teacher রিবিল্ড (এই ফোল্ডারের স্কোপের বাইরে, নিজস্ব ফোল্ডারে) —
+> [`../attendance-rebuild/CURRENT.md`](../attendance-rebuild/CURRENT.md)
 
 ---
 

@@ -16,9 +16,13 @@
 //     groupSync.js) is still how most students actually get verified.
 //     A student who's approved via System 1 first just leaves this
 //     request sitting unapproved/stale; nothing auto-resolves it.
-//   - Faculty: this IS the only path (no CR/ACR-equivalent exists for
-//     faculty), so the same auto-submit is faculty's sole route to
-//     verifiedAt=true.
+//   - Faculty: this used to be the ONLY path (no CR/ACR-equivalent exists
+//     for faculty) — as of the directory-auto-verify change, a match
+//     against the scraped official KUET directory (see
+//     facultyDirectoryMatch.js) can verify an account before this even
+//     files a pending request, but a request row is still written either
+//     way (status: 'approved' + autoVerified: true on a match) so the
+//     Founder keeps full visibility/audit + manual-override ability.
 //
 // The legacy submitManualVerifyRequest() (addDoc, random ID) is what the
 // "Contact Founder on WhatsApp" button used to call to create the
@@ -37,6 +41,7 @@ import {
 import { db, auth } from './firebase';
 import { syncFacultyVerificationStatus } from './facultySync';
 import { retryableOnSnapshot } from './safeSnapshot';
+import { tryAutoVerifyFacultyFromDirectory } from './facultyDirectoryMatch';
 
 const COLLECTION = 'manualVerifyRequests';
 
@@ -72,6 +77,23 @@ export async function ensureManualVerifyRequest(role, details) {
   if (role === 'student' && !roll) return;
   if (role === 'faculty' && !dept && !details?.email) return;
 
+  // AUTO-VERIFY (faculty only): before filing a pending request, check
+  // the scraped official KUET directory (facultyDirectory) for a
+  // name+email match — see facultyDirectoryMatch.js for the full
+  // rationale and the pre-existing-decision context. A successful match
+  // writes verifiedFacultyEmails/{email} + faculty/{uid}.verifiedAt
+  // directly, so no Founder action is needed for this account to become
+  // verified. We still fall through to the normal ensureManualVerifyRequest
+  // write below either way — even on a match, this keeps a record in the
+  // Approvals tab (status: 'approved', autoVerified: true) so the Founder
+  // has visibility and can manually revoke/intervene if the directory
+  // match was ever wrong (per product decision — see this function's
+  // caller-facing docs).
+  let autoVerified = false;
+  if (role === 'faculty' && details?.email) {
+    autoVerified = await tryAutoVerifyFacultyFromDirectory(uid, { name, email: details.email });
+  }
+
   try {
     const ref = doc(db, COLLECTION, uid);
     // BUGFIX: this used to getDoc(ref) first and bail out early if the
@@ -106,9 +128,12 @@ export async function ensureManualVerifyRequest(role, details) {
       roll,
       dept,
       uid,
-      status: 'pending',
+      status: autoVerified ? 'approved' : 'pending',
       requestedAt: serverTimestamp(),
       autoSubmitted: true, // distinguishes this from a WhatsApp-click submission, for the Approvals UI
+      ...(autoVerified
+        ? { autoVerified: true, reviewedAt: serverTimestamp(), reviewedBy: 'system:directory-match' }
+        : {}),
     });
   } catch (err) {
     // Best-effort background safety net — never let this block or throw

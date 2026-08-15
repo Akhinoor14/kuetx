@@ -1766,15 +1766,80 @@ service cloud.firestore {
     }
 
     // -------------------------------------------------------------
-    // Records that a person proved ownership of a *.kuet.ac.bd mailbox via
-    // the magic-link flow (facultyEmailVerify.js) — this is evidence an
-    // Admin can see, NOT an auto-verification switch. It does not, by
-    // itself, set faculty/{uid}.verifiedAt (see that match block above);
-    // only an Admin clicking Verify in the Faculty → Pending tab does.
-    // -------------------------------------------------------------
+    // Records that a person proved ownership of a *.kuet.ac.bd mailbox.
+    // UPDATED — this DOES now double as an auto-verification switch in
+    // one specific case: a doc with autoVerified: true means
+    // facultyDirectoryMatch.js's tryAutoVerifyFacultyFromDirectory()
+    // wrote it after matching the account against the official scraped
+    // KUET directory (facultyDirectory/{email}) — see that file's header
+    // for the product-decision context (this reverses an earlier
+    // deliberate "manual only" call, on purpose). A doc WITHOUT
+    // autoVerified is still what it always was: an Admin manually
+    // approving via manualVerifyRequests.js's approveManualVerifyRequest().
+    // Either way this is a bridge fact, not the final say — see
+    // syncFacultyVerificationStatus() for what actually flips
+    // faculty/{uid}.verifiedAt.
+    //
+    // KNOWN GAP (not introduced or widened by the auto-verify change,
+    // just documenting it here since this is exactly the rule an
+    // attacker would target): `allow write: if isSignedIn()` lets ANY
+    // signed-in account — including a student one — write here directly,
+    // bypassing the directory-match check entirely, since that check
+    // only lives in client JS (facultyDirectoryMatch.js), not in these
+    // rules. A real fix needs a server-side check (Cloud Function
+    // verifying the write against facultyDirectory), which needs the
+    // Blaze plan — see functions/index.js's header on why this project
+    // is staying on Spark. Until that's affordable, this collection is
+    // trust-the-client for both the manual-approval path (has been since
+    // before this change) and the new auto-verify path.
     match /verifiedFacultyEmails/{email} {
       allow read: if isSignedIn();
       allow write: if isSignedIn(); // the secondary app's own authenticated session
+    }
+
+    // -------------------------------------------------------------
+    // Official KUET faculty directory — populated ONLY by the scheduled
+    // scraper (scripts/kuet_faculty_scraper.py, run via GitHub Actions,
+    // see .github/workflows/kuet-faculty-scrape.yml) using a Firebase
+    // Admin SDK service account, which bypasses these rules entirely.
+    // No client (not even Admin/Founder) writes here — that's why there
+    // is no `allow write` clause at all; Firestore rules default-deny,
+    // so client writes are rejected outright. Read-only for the app:
+    // facultyDirectoryMatch.js looks up facultyDirectory/{email} to
+    // decide whether to auto-verify a faculty signup.
+    // -------------------------------------------------------------
+    match /facultyDirectory/{email} {
+      allow read: if isSignedIn();
+    }
+
+    // -------------------------------------------------------------
+    // Faculty publications — one document per publication, seeded by
+    // the same scraper as facultyDirectory (scripts/kuet_faculty_scraper.py)
+    // but ALSO directly editable by the owning teacher from
+    // /faculty/publications (see facultyPublicationsSync.js).
+    //
+    // Manual-wins rule: any doc a teacher has touched gets
+    // isManuallyEdited: true, and the scraper's push logic skips those
+    // docs on every future run (never overwrites a teacher's correction
+    // or their own hand-added entry). That skip logic lives in the
+    // Python script, NOT here — these rules only gate client writes.
+    //
+    // Public read: shown on the standalone /publications browse page to
+    // students too, not just signed-in faculty.
+    //
+    // Write restricted to the doc's own teacherEmail matching the
+    // caller's auth token email, so a faculty account can only ever
+    // create/edit/delete publications attributed to themselves — never
+    // another teacher's. request.resource check covers create+update;
+    // delete has no request.resource, so it's checked against resource
+    // (the existing doc) instead.
+    // -------------------------------------------------------------
+    match /facultyPublications/{docId} {
+      allow read: if true;
+      allow create, update: if isSignedIn()
+        && request.resource.data.teacherEmail == request.auth.token.email;
+      allow delete: if isSignedIn()
+        && resource.data.teacherEmail == request.auth.token.email;
     }
 
     // -------------------------------------------------------------
@@ -2849,6 +2914,29 @@ service cloud.firestore {
           allow write: if isFacultyFor(groupId, assignmentId) || isAdmin();
         }
 
+        // Phase I (ATTENDANCE_REBUILD_PLAN.md §7's Phase I entry) —
+        // co-teacher invite codes. Deliberately NOT the same read tier as
+        // backlogStudents/sessions above: a code is a bearer credential
+        // (whoever has the string can use it), so read access here is
+        // scoped tighter than "any group member/CR can see it" — only an
+        // already-assigned teacher on THIS assignment (i.e. Teacher A, the
+        // one who generated it) can read it back via the direct nested
+        // path. Teacher B's actual lookup-by-code goes through the
+        // collectionGroup rule below instead, which intentionally allows
+        // any verified faculty to query by code (the code itself IS the
+        // secret — knowing it is the proof), but still can't enumerate/
+        // list codes they don't already have. The real security gate stays
+        // where it always was: joinFacultyAssignment()'s own teacherUids
+        // update, unchanged by this feature — a code only ever resolves TO
+        // a (groupId, assignmentId) pair and hands off to that existing
+        // gated write, it never grants a write itself.
+        match /inviteCodes/{code} {
+          allow read: if isFacultyFor(groupId, assignmentId) || isAdmin();
+          allow create: if isFacultyFor(groupId, assignmentId);
+          allow update: if isVerifiedFaculty(request.auth.uid); // Teacher B marking a code used, on join
+          allow delete: if isFacultyFor(groupId, assignmentId) || isAdmin();
+        }
+
         match /studentRecords/{studentUid} {
           // Read: the student themself, either assigned teacher, or the
           // group's CR/staff tier.
@@ -2922,6 +3010,22 @@ service cloud.firestore {
     // shape.
     match /{path=**}/facultyAssignments/{assignmentId} {
       allow read: if isAdmin() || isFaculty(request.auth.uid);
+    }
+
+    // Phase I — Teacher B's code-entry lookup (joinViaInviteCode) has no
+    // groupId yet, so it queries across every group by code value alone;
+    // this is what makes that query shape work. Scoped to verified faculty
+    // only (an unverified account can't join a class at all per
+    // joinFacultyAssignment's downstream isFacultyFor gate anyway, so
+    // there's no reason to let an unverified account even read a code
+    // doc). This does NOT allow listing/enumerating codes — Firestore
+    // security rules only ever validate a query against a document that's
+    // actually being read, so a where('code', '==', X) query still only
+    // ever returns (and is only allowed to return) the one doc matching
+    // the exact code the caller already typed in; a caller can't discover
+    // codes they don't already have by trying different queries.
+    match /{path=**}/inviteCodes/{code} {
+      allow read: if isVerifiedFaculty(request.auth.uid);
     }
 
     // -------------------------------------------------------------

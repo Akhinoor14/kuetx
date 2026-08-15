@@ -36,7 +36,7 @@ import {
 import { getActiveBatches, getBatchStartDates } from '../../lib/appConfigSync';
 import {
   subscribeMyClassIndex, createFacultyAssignment, findJoinableAssignment, joinFacultyAssignment,
-  findConflictingAssignment,
+  findConflictingAssignment, joinViaInviteCode,
 } from '../../lib/facultyClassSync';
 import { notify } from '../../lib/notify';
 import { useIsFaculty } from '../../hooks/useIsFaculty';
@@ -114,6 +114,11 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
   const [joinOffer, setJoinOffer] = useState(null); // { id, groupId, ... } | null
   const [slotConflict, setSlotConflict] = useState(null); // { courseCode, courseTitle, ... } | null
   const [batchStartDates, setBatchStartDates] = useState({});
+  // Phase I — "Have a code?" alternative entry, skips the whole
+  // dept/batch/section/term/course picker below entirely when used.
+  const [showCodeEntry, setShowCodeEntry] = useState(false);
+  const [codeInput, setCodeInput] = useState('');
+  const [joiningViaCode, setJoiningViaCode] = useState(false);
   useEffect(() => {
     getBatchStartDates().then(setBatchStartDates);
   }, []);
@@ -173,6 +178,22 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
       notify(e.message || 'Could not join this class.', 'error');
     } finally {
       setSaving(false);
+    }
+  };
+
+  // Phase I — code-based join, bypasses dept/batch/section/term/course
+  // entirely (the code itself already identifies the exact assignment).
+  const handleJoinViaCode = async () => {
+    if (!codeInput.trim()) return;
+    setJoiningViaCode(true);
+    try {
+      await joinViaInviteCode(auth.currentUser.uid, codeInput);
+      notify('Joined the class.', 'success');
+      onCreated();
+    } catch (e) {
+      notify(e.message || 'Could not join with this code.', 'error');
+    } finally {
+      setJoiningViaCode(false);
     }
   };
 
@@ -252,6 +273,45 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}>
             <Icons.X size={18} />
           </button>
+        </div>
+
+        {/* Phase I — alternative entry point: skip the whole picker below
+            if a co-teacher already gave you a code. */}
+        <div style={{ marginBottom: 16 }}>
+          {!showCodeEntry ? (
+            <button
+              onClick={() => setShowCodeEntry(true)}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--accent)', fontWeight: 600, fontSize: 12.5, textDecoration: 'underline', padding: 0 }}
+            >
+              Have a code from your co-teacher?
+            </button>
+          ) : (
+            <div style={{ padding: '12px 14px', borderRadius: 10, background: 'color-mix(in srgb, var(--accent) 8%, var(--card))', border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)' }}>
+              <label style={labelStyle}>Invite code</label>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <input
+                  style={{ ...inputStyle, fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.1em', textTransform: 'uppercase' }}
+                  value={codeInput}
+                  onChange={(e) => setCodeInput(e.target.value)}
+                  placeholder="e.g. 7K4XPQ"
+                  maxLength={6}
+                />
+                <button
+                  onClick={handleJoinViaCode}
+                  disabled={joiningViaCode || !codeInput.trim()}
+                  style={{ padding: '9px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: 'pointer', opacity: (joiningViaCode || !codeInput.trim()) ? 0.6 : 1, whiteSpace: 'nowrap' }}
+                >
+                  {joiningViaCode ? 'Joining…' : 'Join'}
+                </button>
+              </div>
+              <button
+                onClick={() => { setShowCodeEntry(false); setCodeInput(''); }}
+                style={{ marginTop: 8, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)', fontSize: 11.5, padding: 0 }}
+              >
+                Or pick the class manually below
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="faculty-add-class-fields" style={{ display: 'grid', gap: 12 }}>

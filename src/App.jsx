@@ -78,6 +78,7 @@ const Teachers = lazy(() => import('./pages/Teachers'));
 const Diary = lazy(() => import('./pages/Diary'));
 const Assignments = lazy(() => import('./pages/Assignments'));
 const QuestionBank = lazy(() => import('./pages/QuestionBank'));
+const PublicationsBrowse = lazy(() => import('./pages/PublicationsBrowse'));
 const QuestionBankViewer = lazy(() => import('./pages/QuestionBankViewer'));
 const QuestionBankSolutions = lazy(() => import('./pages/QuestionBankSolutions'));
 const SelfStudy = lazy(() => import('./pages/SelfStudy'));
@@ -376,6 +377,7 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/diary" element={<RequireStudentMode><Diary /></RequireStudentMode>} />
             <Route path="/assignments" element={<RequireStudentMode><Assignments /></RequireStudentMode>} />
             <Route path="/question-bank" element={<RequireStudentMode><QuestionBank /></RequireStudentMode>} />
+            <Route path="/publications" element={<RequireStudentMode><PublicationsBrowse canEdit={false} /></RequireStudentMode>} />
             <Route path="/question-bank/view" element={<RequireStudentMode><QuestionBankViewer /></RequireStudentMode>} />
             <Route path="/solutions" element={<RequireStudentMode><QuestionBankSolutions /></RequireStudentMode>} />
             <Route path="/self-study/academic" element={<RequireStudentMode><SelfStudy /></RequireStudentMode>} />
@@ -577,6 +579,7 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/faculty/notices" element={<RequireFaculty><FacultyNoticeBroadcast /></RequireFaculty>} />
             <Route path="/faculty/contact" element={<RequireFaculty><FacultyContact /></RequireFaculty>} />
             <Route path="/faculty/question-bank" element={<RequireFaculty><QuestionBank /></RequireFaculty>} />
+            <Route path="/faculty/publications" element={<RequireFaculty><PublicationsBrowse canEdit={true} /></RequireFaculty>} />
             {/* Bottom-nav "More" destination — combines what used to be two
                 separate, mobile-unreachable sidebar groups (Campus →
                 Resources, and Tools) plus Meetings/Broadcast Notice into

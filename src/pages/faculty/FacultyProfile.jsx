@@ -22,6 +22,7 @@ import { getShortTitle } from '../../lib/facultyTitle';
 import { useIsFaculty } from '../../hooks/useIsFaculty';
 import BlueTick from '../../components/BlueTick';
 import ManualVerifyFallback from '../../components/ManualVerifyFallback';
+import PublicationsCard from '../../components/PublicationsCard';
 
 // ─── Shared field styles (used only inside the edit form) ─────────────────
 const inputStyle = {
@@ -505,6 +506,10 @@ export default function FacultyProfile() {
                 </button>
               </div>
             </Section>
+
+            {auth.currentUser?.email && (
+              <PublicationsCard teacherEmail={auth.currentUser.email} />
+            )}
           </div>
         </div>
       </div>

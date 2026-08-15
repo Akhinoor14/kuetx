@@ -1,0 +1,56 @@
+# প্রতিদিন নিজে থেকে চলবে — কোনো server/VPS লাগবে না, GitHub Actions
+# free tier যথেষ্ট (public repo হলে সম্পূর্ণ free, private repo হলেও
+# free minutes-এর মধ্যেই থাকবে এই ছোট job-টার জন্য)।
+#
+# সেটআপ করতে যা লাগবে (একবারই):
+#   1. Firebase Console -> Project Settings -> Service Accounts ->
+#      "Generate new private key" — JSON ফাইল ডাউনলোড হবে।
+#      (নিরাপত্তার জন্য: একটা নতুন, শুধু facultyDirectory collection-এ
+#      write access আছে এমন restricted service account বানানোই ভালো,
+#      পুরো project-এর owner key ব্যবহার না করে।)
+#   2. GitHub repo -> Settings -> Secrets and variables -> Actions ->
+#      "New repository secret" -> নাম: FIREBASE_SERVICE_ACCOUNT_JSON,
+#      value: ওই JSON ফাইলের পুরো content পেস্ট করো।
+#   3. এই ফাইলটা repo-তে commit/push করলেই schedule active হয়ে যাবে —
+#      আলাদা কিছু "enable" করতে হবে না।
+#
+# ম্যানুয়ালি টেস্ট করতে চাইলে: GitHub repo -> Actions tab -> এই
+# workflow সিলেক্ট করো -> "Run workflow" বাটন (workflow_dispatch এর
+# জন্য নিচে যোগ করা আছে)।
+
+name: KUET Faculty Directory Scrape
+
+on:
+  schedule:
+    # প্রতিদিন রাত ৩টা (Bangladesh time, UTC+6) => UTC 21:00 আগের দিন
+    - cron: "0 21 * * *"
+  workflow_dispatch: {} # Actions tab থেকে ম্যানুয়ালি "Run workflow" চাপার অপশন
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        working-directory: scripts
+        run: pip install -r requirements.txt
+
+      - name: Run scraper (scrape + push to Firestore)
+        working-directory: scripts
+        env:
+          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+        run: python kuet_faculty_scraper.py
+
+      - name: Upload JSON snapshot as run artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: kuet-faculty-data
+          path: scripts/kuet_faculty_data.json
+          retention-days: 14

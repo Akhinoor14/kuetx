@@ -96,6 +96,121 @@ export async function joinFacultyAssignment(uid, groupId, assignmentId) {
   });
 }
 
+// -----------------------------------------------------------------------
+// Phase I (ATTENDANCE_REBUILD_PLAN.md §7's hand-off entry) — co-teacher
+// invite code. This is a NEW DISCOVERY/ENTRY PATH into the exact same
+// joinFacultyAssignment() above — Teacher B still goes through that same
+// function, same 2-teacher cap, same no-op-if-already-joined guard. The
+// code's only job is letting Teacher B skip re-picking dept/batch/section/
+// term/course by hand (the fragile part of findJoinableAssignment's silent
+// auto-detect, which only fires on an EXACT course-selection match).
+// -----------------------------------------------------------------------
+
+function inviteCodesCollection(groupId, assignmentId) {
+  return collection(db, 'groups', groupId, 'facultyAssignments', assignmentId, 'inviteCodes');
+}
+
+const INVITE_CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no 0/O/1/I — avoids read-aloud/typo ambiguity
+const INVITE_CODE_LENGTH = 6;
+const INVITE_CODE_TTL_MS = 24 * 60 * 60 * 1000; // 24h
+
+function randomInviteCode() {
+  let code = '';
+  for (let i = 0; i < INVITE_CODE_LENGTH; i++) {
+    code += INVITE_CODE_CHARS[Math.floor(Math.random() * INVITE_CODE_CHARS.length)];
+  }
+  return code;
+}
+
+/**
+ * Teacher A generates a code from within their own class (only shown when
+ * teacherUids.length < 2 — see AttendanceTab's "Invite co-teacher"
+ * button). A fresh call always mints a brand-new code and invalidates any
+ * still-live earlier one for this same assignment (deletes it first) —
+ * "regenerate" is just calling this again, no separate revoke action
+ * needed. Stored as a SEPARATE random code -> assignmentId mapping (not a
+ * hash/encoding of assignmentId itself), so a code can't be reverse-
+ * engineered from the assignment id and doesn't need to change shape if
+ * assignmentId's own format ever changes.
+ *
+ * Collision handling: with a 6-char, 33-symbol alphabet that's ~1.3
+ * billion combinations — a retry-on-collision loop (rare, cheap doc reads)
+ * is simpler and safer than trusting math never collides.
+ */
+export async function generateInviteCode(groupId, assignmentId) {
+  const assignmentRef = doc(assignmentsCollection(groupId), assignmentId);
+  const assignmentSnap = await getDoc(assignmentRef);
+  if (!assignmentSnap.exists()) throw new Error('This class assignment no longer exists.');
+  const assignmentData = assignmentSnap.data();
+  if ((assignmentData.teacherUids || []).length >= 2) {
+    throw new Error('This class already has two teachers assigned.');
+  }
+
+  // Invalidate any earlier live code for this assignment first — an old
+  // code texted to the wrong person, or simply superseded by a fresh
+  // "Regenerate" click, should stop working the moment a new one exists.
+  const existingQ = query(inviteCodesCollection(groupId, assignmentId), where('assignmentId', '==', assignmentId));
+  const existingSnap = await withPromiseTimeout(getDocs(existingQ), '[facultyClassSync] generateInviteCode:cleanup');
+  await Promise.all(existingSnap.docs.map((d) => deleteDoc(d.ref)));
+
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const code = randomInviteCode();
+    const ref = doc(inviteCodesCollection(groupId, assignmentId), code);
+    const snap = await getDoc(ref);
+    if (snap.exists()) continue; // collision, try another
+    await setDoc(ref, {
+      code,
+      groupId,
+      assignmentId,
+      courseCode: assignmentData.courseCode,
+      createdBy: assignmentData.teacherUids?.[0] || null,
+      createdAt: serverTimestamp(),
+      expiresAt: Date.now() + INVITE_CODE_TTL_MS,
+      used: false,
+    });
+    return code;
+  }
+  throw new Error('Could not generate a unique invite code — please try again.');
+}
+
+/**
+ * Teacher B enters a code (from "+ Add Class" -> "Have a code?"). Looks up
+ * the code doc DIRECTLY BY ID across every group — the code alone
+ * identifies group+assignment, so Teacher B never needs to know or
+ * re-select dept/batch/section/term/course. Validates not-expired,
+ * not-already-used, then joins via the EXISTING joinFacultyAssignment() —
+ * this function does no teacherUids write of its own, it only resolves a
+ * code down to a (groupId, assignmentId) pair and hands off.
+ *
+ * A collectionGroup query is genuinely necessary here (same justification
+ * as listAllActiveFacultyAssignments's own comment) since the caller has
+ * no groupId yet — that's the whole point of the code.
+ */
+export async function joinViaInviteCode(uid, code) {
+  const normalizedCode = String(code || '').trim().toUpperCase();
+  if (!normalizedCode) throw new Error('Please enter a code.');
+
+  const q = query(collectionGroup(db, 'inviteCodes'), where('code', '==', normalizedCode));
+  const snap = await withPromiseTimeout(getDocs(q), '[facultyClassSync] joinViaInviteCode');
+  if (snap.empty) throw new Error('That code is not valid — check it and try again.');
+
+  const codeDoc = snap.docs[0];
+  const data = codeDoc.data();
+  if (data.used) throw new Error('That code has already been used.');
+  if (typeof data.expiresAt === 'number' && Date.now() > data.expiresAt) {
+    throw new Error('That code has expired — ask your co-teacher to generate a new one.');
+  }
+
+  await joinFacultyAssignment(uid, data.groupId, data.assignmentId);
+  // Mark used AFTER a successful join — if joinFacultyAssignment throws
+  // (e.g. the 2-teacher cap was hit by someone else in between), the code
+  // stays live so the real intended co-teacher can still retry.
+  await updateDoc(codeDoc.ref, { used: true, usedBy: uid, usedAt: serverTimestamp() });
+
+  return { groupId: data.groupId, assignmentId: data.assignmentId, courseCode: data.courseCode };
+}
+
+
 /** §8.6 "End Class" — status flag only, never removes the doc. Attendance/
  * marks history under this assignment is untouched. */
 export async function endFacultyAssignment(groupId, assignmentId) {

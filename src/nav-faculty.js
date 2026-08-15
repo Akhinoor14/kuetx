@@ -83,6 +83,7 @@ export const NAV_FACULTY = [
         hubIcon: 'BookMarked',
         items: [
           { id: 'f-qbank', label: 'Question Bank', icon: 'BookMarked', path: '/faculty/question-bank' },
+          { id: 'f-publications', label: 'Publications', icon: 'BookOpenCheck', path: '/faculty/publications' },
           { id: 'f-contact', label: 'Contact', icon: 'Mail', path: '/faculty/contact' },
           // Settings/About are shared, role-agnostic routes — same
           // destination as the student nav.js, not faculty-specific pages.

@@ -53,10 +53,11 @@ const todayStr = () => {
 // individual-student notice-targeting picker in AdminDashboard.jsx needs
 // the exact same roll-sort over the exact same dept+batch member shape).
 import { sortByRoll, generateDeptRollRoster, isMultiSectionDept } from '../../lib/groupUtils';
+import { exportAttendanceExcel, exportAttendancePdf } from '../../lib/attendanceExport';
 import { DEPARTMENTS } from '../../store/store';
 
 import { getDeptSyllabus } from '../../store/curriculumStore';
-import { subscribeFacultyAssignment, setPlannedTotalClasses, updateAssignmentDayTimeSlots, findConflictingAssignment } from '../../lib/facultyClassSync';
+import { subscribeFacultyAssignment, setPlannedTotalClasses, updateAssignmentDayTimeSlots, findConflictingAssignment, generateInviteCode } from '../../lib/facultyClassSync';
 import { subscribeMembers, subscribePlannerLogs, subscribeRoutine } from '../../lib/groupSync';
 import {
   createOrUpdateSessionAttendance, subscribeSessionAttendance,
@@ -1043,6 +1044,15 @@ function AttendanceTab({ assignment, groupId }) {
   // locked date over to another.
   const [unlockedForEdit, setUnlockedForEdit] = useState(false);
 
+  // Phase G (§3g) — Export button state. `exportingFormat` tracks which
+  // format is mid-export (or null) so the button can show its own
+  // "Exporting…" state without a generic shared spinner blocking the rest
+  // of the tab (unlike Save, an export doesn't touch Firestore or the
+  // roster state at all, so there's no reason to disable anything else
+  // while it runs).
+  const [exportingFormat, setExportingFormat] = useState(null); // null | 'excel' | 'pdf'
+  const [showExportMenu, setShowExportMenu] = useState(false);
+
   // Phase F (§3f) — is TODAY one of this assignment's own scheduled days?
   // `dayTimeSlots` is this faculty's own day/time slot(s) for this exact
   // class (set via EditDayTimeModal, e.g. [{ day: 'Sunday', slot: ... }]),
@@ -1162,7 +1172,50 @@ function AttendanceTab({ assignment, groupId }) {
     setUnlockedForEdit(false);
   }, [date, sessions]);
 
-  const existingSessionForDate = (sessions || []).find((s) => s.date === date);
+  // Phase H fix (see ATTENDANCE_REBUILD_PLAN.md §7's hand-off entry) — a
+  // date is NOT a unique key once two joined teachers can both take
+  // attendance for the same class. `existingSessionForDate` used to match
+  // on date alone, so Teacher B opening the same date would silently
+  // adopt Teacher A's session id and `handleSave` would overwrite Teacher
+  // A's attendance via `updateDoc`. Scoped to the CURRENT teacher's own
+  // session for this date — this is "my session to edit/save."
+  // `allSessionsForDate` holds every session (any teacher) for the merged
+  // "All sessions" read-only view below.
+  const myUid = auth.currentUser?.uid;
+  const allSessionsForDate = (sessions || []).filter((s) => s.date === date);
+  const existingSessionForDate = allSessionsForDate.find((s) => s.loggedBy?.uid === myUid);
+
+  // My/All toggle for the summary stats + per-row columns below. Defaults
+  // to 'mine' — a teacher's own numbers are what they expect to see when
+  // they open the tab; 'all' is an explicit opt-in to see the blended
+  // class picture across every joined teacher.
+  const [sessionScope, setSessionScope] = useState('mine'); // 'mine' | 'all'
+  const isJoinedClass = (assignment?.teacherUids || []).length > 1;
+  const scopedSessions = (!isJoinedClass || sessionScope === 'all')
+    ? (sessions || [])
+    : (sessions || []).filter((s) => s.loggedBy?.uid === myUid);
+
+  // Phase I — "Invite co-teacher" code, generated on demand from here.
+  // `inviteCode` holds the freshly (re)generated code for THIS session
+  // only — it's never re-read from Firestore after mount (the doc has no
+  // client-side read-back need beyond what generateInviteCode() already
+  // returns), so a page refresh simply shows the button again rather than
+  // an old code. That's fine: Teacher A can always click again for a new
+  // one, and only one code is ever live per assignment (generateInviteCode
+  // invalidates the previous one on every call).
+  const [inviteCode, setInviteCode] = useState(null);
+  const [generatingInvite, setGeneratingInvite] = useState(false);
+  const handleGenerateInvite = async () => {
+    setGeneratingInvite(true);
+    try {
+      const code = await generateInviteCode(groupId, assignment.id);
+      setInviteCode(code);
+    } catch (e) {
+      notify(e.message || 'Could not generate an invite code.', 'error');
+    } finally {
+      setGeneratingInvite(false);
+    }
+  };
 
   const setMark = (studentRoll, mark) => {
     setDraftMarks((prev) => ({ ...prev, [studentRoll]: prev[studentRoll] === mark ? undefined : mark }));
@@ -1237,6 +1290,13 @@ function AttendanceTab({ assignment, groupId }) {
       if (wasFirstSaveForDate) {
         const courseId = assignment?.courseId;
         const logsForCourse = (plannerLogs || []).filter((l) => l.courseId === courseId);
+        // Sessions & Count auto-link is a class-level "was a class held
+        // this day" fact, not a per-teacher one — a second joined teacher
+        // saving their own attendance for a date already logged by the
+        // first teacher (or a CR) correctly should NOT double-count, so
+        // this check intentionally stays date-only (matching
+        // `logFacultySession`'s own dedup), unlike `existingSessionForDate`
+        // above which is deliberately per-teacher.
         const alreadyLoggedThisDate = logsForCourse.some((l) => String(l.loggedAt || '').slice(0, 10) === date);
         if (!alreadyLoggedThisDate) {
           try {
@@ -1343,6 +1403,68 @@ function AttendanceTab({ assignment, groupId }) {
 
   const mergedRoster = sortByRoll([...generatedRoster, ...backlogRoster]);
 
+  // Phase G (§3g/§4 item 1) — export always covers the FULL dept+batch
+  // roster (both sections merged, section-tagged), never just whichever
+  // section is currently active for daily marking. Rebuilt independently
+  // of `mergedRoster` above (generateDeptRollRoster(dept, batch, null) is
+  // "both" mode, already supported — no changes needed there) rather than
+  // trying to reuse the per-section roster, since a single-section export
+  // would silently miss half a multi-section dept's students. For a
+  // single-section dept this naturally collapses to the same roster as
+  // `mergedRoster` (no `section` tag on any row), so the export code
+  // doesn't need a separate single-vs-multi branch.
+  const fullMergedRoster = (() => {
+    if (!multiSection) return mergedRoster; // already the full dept roster
+    const allGeneratedRolls = generateDeptRollRoster(assignment?.dept, assignment?.batch, null);
+    const allBacklogRolls = new Set((backlogStudents || []).map((b) => b.roll));
+    const allGenerated = allGeneratedRolls
+      .filter((g) => !allBacklogRolls.has(g.roll))
+      .map((g) => {
+        const realMember = members.find((m) => m.roll === g.roll);
+        return {
+          id: realMember?.id || `placeholder:${g.roll}`,
+          roll: g.roll,
+          name: realMember?.name || g.roll,
+          section: g.section,
+          isPlaceholder: !realMember,
+          isBacklog: false,
+        };
+      });
+    const allBacklog = (backlogStudents || []).map((b) => {
+      const realMember = members.find((m) => m.roll === b.roll);
+      return {
+        id: realMember?.id || `backlog:${b.roll}`,
+        roll: b.roll,
+        name: realMember?.name || b.name || b.roll,
+        section: b.section,
+        isPlaceholder: !realMember,
+        isBacklog: true,
+      };
+    });
+    return sortByRoll([...allGenerated, ...allBacklog]);
+  })();
+
+  const handleExport = async (format) => {
+    setShowExportMenu(false);
+    setExportingFormat(format);
+    try {
+      // Phase H — deliberately NOT `scopedSessions`. Export is a register
+      // handed to admin/dept, which wants the full picture (every joined
+      // teacher's sessions), not whichever teacher happens to have the
+      // My/All toggle set a certain way when they click Export. Raw
+      // `sessions` is correct here regardless of the on-screen toggle.
+      if (format === 'excel') {
+        exportAttendanceExcel(assignment, fullMergedRoster, sessions, facultyName);
+      } else {
+        await exportAttendancePdf(assignment, fullMergedRoster, sessions, facultyName);
+      }
+    } catch (e) {
+      notify(e.message || 'Could not export attendance.', 'error');
+    } finally {
+      setExportingFormat(null);
+    }
+  };
+
   const marks = ['present', 'absent', 'late', 'excused'];
   const markColors = { present: '#16a34a', absent: '#dc2626', late: '#d97706', excused: '#6b7280' };
   const markLabels = { present: 'P', absent: 'A', late: 'L', excused: 'E' };
@@ -1354,14 +1476,18 @@ function AttendanceTab({ assignment, groupId }) {
   // (they weren't on the roster yet, joined late in the term, etc.) don't
   // count against them — the denominator is sessions held, not sessions
   // where every single student was necessarily markable.
-  const totalClasses = sessions.length;
+  // Phase H — respects the My/All toggle (`scopedSessions`) instead of
+  // always reading the full `sessions` array. Before this fix, these
+  // numbers silently blended every joined teacher's sessions with no
+  // attribution, even though the UI never said so.
+  const totalClasses = scopedSessions.length;
   const attendanceSummary = totalClasses > 0
     ? mergedRoster.map((m) => {
-        const presentCount = sessions.filter((s) => {
+        const presentCount = scopedSessions.filter((s) => {
           const mark = s.attendance?.[m.roll];
           return mark === 'present' || mark === 'late';
         }).length;
-        const markedCount = sessions.filter((s) => s.attendance?.[m.roll]).length;
+        const markedCount = scopedSessions.filter((s) => s.attendance?.[m.roll]).length;
         const pct = markedCount > 0 ? Math.round((presentCount / markedCount) * 100) : null;
         return { id: m.id, name: m.name || 'Unnamed', roll: m.roll || '—', pct, markedCount };
       }).filter((s) => s.pct !== null).sort((a, b) => b.pct - a.pct)
@@ -1378,11 +1504,11 @@ function AttendanceTab({ assignment, groupId }) {
   // from the summary card's ranked lists.
   const rowStatsByRoll = {};
   mergedRoster.forEach((m) => {
-    const presentCount = sessions.filter((s) => {
+    const presentCount = scopedSessions.filter((s) => {
       const mark = s.attendance?.[m.roll];
       return mark === 'present' || mark === 'late';
     }).length;
-    const markedCount = sessions.filter((s) => s.attendance?.[m.roll]).length;
+    const markedCount = scopedSessions.filter((s) => s.attendance?.[m.roll]).length;
     const pct = markedCount > 0 ? Math.round((presentCount / markedCount) * 100) : null;
     rowStatsByRoll[m.roll] = { presentCount, markedCount, pct };
   });
@@ -1405,18 +1531,65 @@ function AttendanceTab({ assignment, groupId }) {
       {/* Phase D §3d — compact "print header" bar (dept, course code/title,
           batch(+section), term, teacher name(s), date), kept live in the
           UI (not just baked into the export) so what the teacher sees on
-          screen matches what gets exported — WYSIWYG per the plan. */}
-      <div className="faculty-summary-card" style={{ marginBottom: 14, padding: '12px 14px' }}>
-        <div style={{ fontWeight: 800, fontSize: 14, color: 'var(--text)' }}>
-          {(DEPARTMENTS.find((d) => d.code.toUpperCase() === String(assignment?.dept || '').toUpperCase())?.name) || assignment?.dept}
-          {assignment?.courseCode ? ` · ${assignment.courseCode}` : ''}
-          {assignment?.courseTitle ? ` — ${assignment.courseTitle}` : ''}
+          screen matches what gets exported — WYSIWYG per the plan. Phase
+          G's Export button sits in this same card, next to the header it
+          reuses. */}
+      <div className="faculty-summary-card" style={{ marginBottom: 14, padding: '12px 14px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+        <div>
+          <div style={{ fontWeight: 800, fontSize: 14, color: 'var(--text)' }}>
+            {(DEPARTMENTS.find((d) => d.code.toUpperCase() === String(assignment?.dept || '').toUpperCase())?.name) || assignment?.dept}
+            {assignment?.courseCode ? ` · ${assignment.courseCode}` : ''}
+            {assignment?.courseTitle ? ` — ${assignment.courseTitle}` : ''}
+          </div>
+          <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 3, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            <span>{assignment?.batch}{multiSection ? ` · Section ${activeSection}` : ''}</span>
+            {assignment?.term && <span>{assignment.term}</span>}
+            {facultyName && <span>{facultyName}</span>}
+            <span style={{ fontFamily: 'JetBrains Mono, monospace' }}>{date}</span>
+          </div>
         </div>
-        <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 3, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-          <span>{assignment?.batch}{multiSection ? ` · Section ${activeSection}` : ''}</span>
-          {assignment?.term && <span>{assignment.term}</span>}
-          {facultyName && <span>{facultyName}</span>}
-          <span style={{ fontFamily: 'JetBrains Mono, monospace' }}>{date}</span>
+
+        {/* Export — Excel default, PDF secondary (§3g, per Akhinoor's
+            stated preference). Small format-choice menu on one button
+            rather than two separate buttons, since export is a rare
+            action compared to the daily marking flow above it. Always
+            pulls the FULL dept+batch roster (fullMergedRoster, both
+            sections merged) regardless of which section is currently
+            active for marking — §4 item 1. */}
+        <div style={{ position: 'relative', flexShrink: 0 }}>
+          <button
+            onClick={() => setShowExportMenu((v) => !v)}
+            disabled={!!exportingFormat || sessions.length === 0}
+            title={sessions.length === 0 ? 'No attendance sessions saved yet' : ''}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6, padding: '7px 12px', borderRadius: 7,
+              border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)',
+              fontWeight: 700, fontSize: 12, cursor: (exportingFormat || sessions.length === 0) ? 'not-allowed' : 'pointer',
+              opacity: (exportingFormat || sessions.length === 0) ? 0.5 : 1,
+            }}
+          >
+            {exportingFormat ? `Exporting ${exportingFormat === 'excel' ? 'Excel' : 'PDF'}…` : 'Export'}
+          </button>
+          {showExportMenu && !exportingFormat && (
+            <div style={{
+              position: 'absolute', right: 0, top: '100%', marginTop: 4, zIndex: 5,
+              background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 8,
+              boxShadow: '0 4px 16px rgba(0,0,0,0.12)', overflow: 'hidden', minWidth: 140,
+            }}>
+              <button
+                onClick={() => handleExport('excel')}
+                style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', border: 'none', background: 'transparent', color: 'var(--text)', fontSize: 12.5, fontWeight: 600, cursor: 'pointer' }}
+              >
+                Excel (.xlsx)
+              </button>
+              <button
+                onClick={() => handleExport('pdf')}
+                style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 12px', border: 'none', borderTop: '1px solid var(--border)', background: 'transparent', color: 'var(--text)', fontSize: 12.5, fontWeight: 600, cursor: 'pointer' }}
+              >
+                PDF
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -1522,11 +1695,82 @@ function AttendanceTab({ assignment, groupId }) {
           </div>
         )}
 
+        {!isJoinedClass && (
+          <div style={{ marginTop: 12, paddingTop: 12, borderTop: '1px solid var(--border)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 13.5 }}>Co-teacher</div>
+                <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 2 }}>
+                  {inviteCode
+                    ? 'Share this code — it works once and expires in 24h.'
+                    : 'Generate a code so a second teacher can join this class instantly.'}
+                </div>
+              </div>
+              {inviteCode ? (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{
+                    fontFamily: 'JetBrains Mono, monospace', fontWeight: 800, fontSize: 16, letterSpacing: '0.12em',
+                    padding: '6px 12px', borderRadius: 8, background: 'var(--bg)', border: '1px solid var(--border)', color: 'var(--accent)',
+                  }}>
+                    {inviteCode}
+                  </span>
+                  <button
+                    onClick={handleGenerateInvite}
+                    disabled={generatingInvite}
+                    style={{ padding: '6px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--muted)', fontWeight: 600, fontSize: 11, cursor: 'pointer' }}
+                  >
+                    {generatingInvite ? '…' : 'Regenerate'}
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={handleGenerateInvite}
+                  disabled={generatingInvite}
+                  style={{ padding: '7px 14px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: 'pointer', opacity: generatingInvite ? 0.6 : 1 }}
+                >
+                  {generatingInvite ? 'Generating…' : 'Invite co-teacher'}
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
         {totalClasses > 0 && (
           <div style={{ marginTop: 12, paddingTop: 12, borderTop: '1px solid var(--border)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, flexWrap: 'wrap', gap: 8 }}>
               <div style={{ fontWeight: 700, fontSize: 13.5 }}>Attendance Summary</div>
-              <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>{totalClasses} class{totalClasses === 1 ? '' : 'es'} held</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                {/* Phase H — only meaningful once a second teacher has
+                    joined this assignment (see teacherUids). A solo
+                    teacher's "mine" and "all" are identical, so hiding
+                    this avoids a confusing no-op toggle in the common
+                    case. */}
+                {isJoinedClass && (
+                  <div style={{ display: 'flex', border: '1px solid var(--border)', borderRadius: 8, overflow: 'hidden' }}>
+                    <button
+                      onClick={() => setSessionScope('mine')}
+                      style={{
+                        padding: '4px 10px', fontSize: 11, fontWeight: 700, cursor: 'pointer', border: 'none',
+                        background: sessionScope === 'mine' ? 'var(--accent)' : 'var(--card)',
+                        color: sessionScope === 'mine' ? '#fff' : 'var(--muted)',
+                      }}
+                    >
+                      My sessions
+                    </button>
+                    <button
+                      onClick={() => setSessionScope('all')}
+                      style={{
+                        padding: '4px 10px', fontSize: 11, fontWeight: 700, cursor: 'pointer', border: 'none',
+                        background: sessionScope === 'all' ? 'var(--accent)' : 'var(--card)',
+                        color: sessionScope === 'all' ? '#fff' : 'var(--muted)',
+                      }}
+                    >
+                      All sessions
+                    </button>
+                  </div>
+                )}
+                <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>{totalClasses} class{totalClasses === 1 ? '' : 'es'} held</div>
+              </div>
             </div>
 
             {classPerformancePct !== null && (
@@ -1880,7 +2124,7 @@ function AttendanceTab({ assignment, groupId }) {
                   activeSection={activeSection}
                   markColors={markColors}
                   markLabels={markLabels}
-                  sessions={sessions}
+                  sessions={scopedSessions}
                   date={date}
                   togglePresentAbsent={togglePresentAbsent}
                   setMark={setMark}

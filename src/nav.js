@@ -152,6 +152,7 @@ export const NAV = [
           { id: 'courses',   label: 'Courses',       shortLabel: 'Courses',   icon: 'BookOpen',      accent: 'blue',   path: '/courses' },
           { id: 'syllabus',  label: 'Syllabus',      shortLabel: 'Syllabus',  icon: 'List',          accent: 'green',  path: '/syllabus' },
           { id: 'qbank',     label: 'Question Bank', shortLabel: 'Questions', icon: 'BookMarked',    accent: 'amber',  path: '/question-bank' },
+          { id: 'publications', label: 'Publications', shortLabel: 'Papers', icon: 'BookOpenCheck', accent: 'green', path: '/publications' },
           { id: 'solutions', label: 'Solution Bank', shortLabel: 'Solutions', icon: 'Lightbulb',     accent: 'purple', path: '/solutions' },
           { id: 'marks',     label: 'Term Planner',  shortLabel: 'Planner',   icon: 'ClipboardList', accent: 'red',    path: '/marks' },
           { id: 'results',   label: 'Results & GPA', shortLabel: 'Results',   icon: 'TrendingUp',    accent: 'blue',   path: '/results' },

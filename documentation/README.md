@@ -143,6 +143,9 @@ documentation/
 │   │   └── CURRENT.md
 │   ├── faculty-module/
 │   │   └── CURRENT.md
+│   ├── attendance-rebuild/
+│   │   ├── CURRENT.md
+│   │   └── ATTENDANCE_REBUILD_PLAN_PROMPT.md ← active plan-prompt (§৪), সব ৯ ফেজ DONE
 │   ├── notice-system/
 │   │   └── CURRENT.md
 │   ├── guest-mode/
