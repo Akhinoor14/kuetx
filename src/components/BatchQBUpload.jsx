@@ -32,25 +32,7 @@ import {
   startBatchUpload, pauseBatchUpload, getBatchProgress, getBatchDepts,
 } from '../lib/batchUploadManager';
 
-const TERM_RE = /^Y[0-5]T[0-2]$/;
-// NOTE (2026-08-16): T0 is not a real academic term — it's used as a
-// placeholder for exams that aren't tied to a specific term (Backlog,
-// Special, etc.), per Md.'s confirmation. Y0T0 also appears in real QB
-// data (e.g. EEE_Y0T0, ME_Y0T0) for the same "no specific year/term"
-// case. Y5 currently only applies to ARCH (5-year B.Arch program);
-// other depts top out at Y4. This regex intentionally stays permissive
-// (doesn't special-case ARCH-only for Y5) since QB_DEPARTMENTS +
-// course-folder naming already scope uploads per dept — a non-ARCH dept
-// typing Y5T0 would just mean an empty/unused folder, not a validation
-// hole.
-//
-// TODO: Arch's own curriculum data (src/data/curriculum/departments/Arch/
-// terms/ and /syllabus/) does NOT yet have Y5T1/Y5T2 entries — that's a
-// separate, content-dependent gap (actual 5th-year course codes/credits/
-// teachers), intentionally NOT touched here. Needs the source data Md.
-// will look into (see generate_arch_from_json.cjs for how Arch syllabus
-// is normally generated) before Y5 curriculum/teacher-class features can
-// show real content for ARCH Y5.
+const TERM_RE = /^Y[1-4]T[0-2]$/;
 // Accepts "Regular_2023.pdf", "Special_Backlog_2022.pdf" etc. — anything
 // ending in _<4-digit-year>.pdf, exam type is whatever's left of that.
 const FILE_RE = /^(.+)_(\d{4})\.pdf$/i;
@@ -78,21 +60,9 @@ function parseRelativePath(relPath) {
     return { ok: false, reason: `Filename must be ExamType_Year.pdf (got "${filename}")` };
   }
   const [, rawType, examYear] = m;
-  // exact match first (Regular, Backlog, Special, MidTerm, FinalTerm, and
-  // legacy Special_Backlog/Online); CT/LabQuiz also carry a trailing number
-  // (CT1, CT2, LabQuiz1...) so check for that prefix separately.
-  let examType = EXAM_TYPES.find((t) => t.toLowerCase() === rawType.toLowerCase());
+  const examType = EXAM_TYPES.find((t) => t.toLowerCase() === rawType.toLowerCase());
   if (!examType) {
-    const numberedMatch = EXAM_TYPES.find(
-      (t) => (t === 'CT' || t === 'LabQuiz')
-        && new RegExp(`^${t}\\d+$`, 'i').test(rawType),
-    );
-    if (numberedMatch) {
-      examType = rawType; // keep the number, e.g. "CT1", "LabQuiz2"
-    }
-  }
-  if (!examType) {
-    return { ok: false, reason: `Unknown exam type "${rawType}" (expected one of ${EXAM_TYPES.join(', ')}, or CT<n>/LabQuiz<n>)` };
+    return { ok: false, reason: `Unknown exam type "${rawType}" (expected one of ${EXAM_TYPES.join(', ')})` };
   }
 
   return { ok: true, dept, term, courseCode, examType, examYear };

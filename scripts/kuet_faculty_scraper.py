@@ -790,7 +790,23 @@ def push_to_firestore(teachers: list[Teacher], profiles: dict[str, ProfileDetail
             pubs_skipped_manual += 1
             continue
         ref = pubs_col.document(doc_id)
+        # NOTE: asdict(pub) writes Publication.teacher_email as literal
+        # key "teacher_email". Every other field in this dataclass is
+        # read by the frontend under that same snake_case name (title,
+        # link, authors, venue, year, raw_citation, etc. — see
+        # facultyPublicationsSync.js / PublicationsBrowse.jsx), so those
+        # stay untouched. But teacherEmail is the one field the frontend
+        # and firestore.rules read as camelCase (it's the denormalized
+        # query/ownership key, alongside teacherName/teacherDeptCode
+        # below) — "teacher_email" from asdict silently never matches
+        # `pub.teacherEmail`, `where('teacherEmail', ...)`, or the rules'
+        # teacherEmail check. That breaks three things with no error: the
+        # teacher-name button on each row never becomes clickable, a
+        # teacher's own scraped publications don't show on their profile
+        # preview, and edit/delete never appears for the owner. Add the
+        # camelCase key alongside the original.
         pub_data = asdict(pub)
+        pub_data["teacherEmail"] = pub_data.pop("teacher_email")
         pub_data["source"] = "scraper"
         pub_data["isManuallyEdited"] = False
         matching_teacher = teacher_by_email.get(pub.teacher_email)
