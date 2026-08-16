@@ -20,7 +20,13 @@ import { QB_DEPARTMENTS } from '../data/questionbank/questionBankData';
 const COLLECTION = 'qbUploadRequests';
 const WORKER_URL = import.meta.env.VITE_QB_WORKER_URL;
 
-export const EXAM_TYPES = ['Regular', 'Backlog', 'Special_Backlog', 'Online'];
+// Updated 2026-08-16: canonical list is now Regular/Backlog/Special/MidTerm/
+// FinalTerm/CT<n>/LabQuiz<n> (confirmed against current upload-flow
+// screenshots). Special_Backlog and Online are kept at the end for
+// backward-compat with existing live data (generatedQuestionBankAvailability.js,
+// questionBankData.js — years 2016-2023 use these) — do not remove without
+// migrating that data first.
+export const EXAM_TYPES = ['Regular', 'Backlog', 'Special', 'MidTerm', 'FinalTerm', 'CT', 'LabQuiz', 'Special_Backlog', 'Online'];
 
 // canonicalize() elsewhere in the app uppercases dept (profile.dept ==
 // 'CSE', 'CHE', etc.) but QB_DEPARTMENTS' keys are NOT uniformly
