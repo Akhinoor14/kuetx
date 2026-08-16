@@ -100,6 +100,9 @@ export default function PendingPublicationsPanel() {
             </div>
             <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 4 }}>
               Submitted by {sub.submittedBy?.displayName || sub.submittedBy?.email || 'unknown user'}
+              {sub.submittedBy?.email && sub.teacherEmail
+                && sub.submittedBy.email.trim().toLowerCase() === sub.teacherEmail.trim().toLowerCase()
+                ? ' (self-submitted — the teacher added their own publication)' : ''}
             </div>
             {sub.link && (
               <a

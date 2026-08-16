@@ -55,12 +55,20 @@ export default function PublicationsBrowse({ canEdit = false }) {
 
   const filtered = useMemo(() => {
     const text = searchText.trim().toLowerCase();
-    return pubs.filter((pub) => {
+    const matches = pubs.filter((pub) => {
       if (deptFilter && pub.teacherDeptCode !== deptFilter) return false;
       if (!text) return true;
       const haystack = [pub.title, pub.authors, pub.venue, pub.teacherName, pub.raw_citation]
         .filter(Boolean).join(' ').toLowerCase();
       return haystack.includes(text);
+    });
+    // Publications without a link (pub.link falsy) always sort to the
+    // bottom, regardless of search/department filter — a stable sort so
+    // within each group (has-link / no-link) the original order is kept.
+    return [...matches].sort((a, b) => {
+      const aHasLink = a.link ? 0 : 1;
+      const bHasLink = b.link ? 0 : 1;
+      return aHasLink - bHasLink;
     });
   }, [pubs, searchText, deptFilter]);
 
@@ -131,6 +139,19 @@ export default function PublicationsBrowse({ canEdit = false }) {
         </div>
       )}
 
+      {/* pub-actions: desktop → fixed column on the right of the row
+          (see .pub-row layout below). Under 560px → drops to a full-width
+          row directly under the title/teacher block, buttons split 50/50. */}
+      <style>{`
+        .pub-row { display: flex; justify-content: space-between; gap: 14px; }
+        .pub-actions { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
+        .pub-actions button, .pub-actions a, .pub-actions span { justify-content: center; white-space: nowrap; }
+        @media (max-width: 560px) {
+          .pub-row { flex-direction: column; }
+          .pub-actions { flex-direction: row; width: 100%; margin-top: 10px; }
+          .pub-actions button, .pub-actions a, .pub-actions span { flex: 1; }
+        }
+      `}</style>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {filtered.map((pub) => {
           const isMine = canEdit && myEmail && pub.teacherEmail === myEmail;
@@ -140,71 +161,99 @@ export default function PublicationsBrowse({ canEdit = false }) {
               className="card"
               style={{ padding: 14, borderRadius: 12 }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}>
+              <div className="pub-row">
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>
-                    {pub.link ? (
-                      <a href={pub.link} target="_blank" rel="noreferrer" style={{ color: 'var(--text)', textDecoration: 'none' }}>
-                        {pub.title || pub.raw_citation}
-                      </a>
-                    ) : (
-                      pub.title || pub.raw_citation
-                    )}
+                    {pub.title || pub.raw_citation}
                   </div>
                   <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 3 }}>
                     {[pub.venue, pub.year].filter(Boolean).join(' · ')}
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginTop: 4 }}>
-                    <button
-                      onClick={() => pub.teacherEmail && setDetailTeacherEmail(pub.teacherEmail)}
-                      disabled={!pub.teacherEmail}
-                      style={{
-                        fontSize: 11.5, color: 'var(--accent)', fontWeight: 700, background: 'transparent',
-                        border: 'none', padding: 0, cursor: pub.teacherEmail ? 'pointer' : 'default',
-                        textDecoration: pub.teacherEmail ? 'underline' : 'none', textUnderlineOffset: 2,
-                      }}
-                      title={pub.teacherEmail ? 'View teacher details' : undefined}
-                    >
-                      {pub.teacherName || pub.teacherEmail}
-                      {pub.teacherDeptCode && DEPT_NAME_BY_CODE[pub.teacherDeptCode]
-                        ? ` · ${DEPT_NAME_BY_CODE[pub.teacherDeptCode]}` : ''}
-                    </button>
-                    {pub.link && (
-                      <a
-                        href={pub.link}
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        style={{
-                          fontSize: 11, color: 'var(--muted)', fontWeight: 600, display: 'inline-flex',
-                          alignItems: 'center', gap: 3, textDecoration: 'none', border: '1px solid var(--border)',
-                          borderRadius: 6, padding: '2px 6px',
-                        }}
-                        title="Open the original publication link"
+                  <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 2 }}>
+                    {pub.teacherName || pub.teacherEmail}
+                    {pub.teacherDeptCode && DEPT_NAME_BY_CODE[pub.teacherDeptCode]
+                      ? ` · ${DEPT_NAME_BY_CODE[pub.teacherDeptCode]}` : ''}
+                  </div>
+                  {isMine && (
+                    <div style={{ display: 'flex', gap: 4, marginTop: 6 }}>
+                      <button
+                        onClick={() => { setEditing(pub); setModalOpen(true); }}
+                        title="Edit"
+                        style={{ padding: 6, borderRadius: 8, border: 'none', background: 'transparent', color: 'var(--muted)', cursor: 'pointer' }}
                       >
-                        <Icons.ExternalLink size={10} /> Link
-                      </a>
-                    )}
-                  </div>
+                        <Icons.Pencil size={14} />
+                      </button>
+                      <button
+                        onClick={() => setConfirmDeleteId(pub.id)}
+                        title="Delete"
+                        style={{ padding: 6, borderRadius: 8, border: 'none', background: 'transparent', color: 'var(--muted)', cursor: 'pointer' }}
+                      >
+                        <Icons.Trash2 size={14} />
+                      </button>
+                    </div>
+                  )}
                 </div>
-                {isMine && (
-                  <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
-                    <button
-                      onClick={() => { setEditing(pub); setModalOpen(true); }}
-                      title="Edit"
-                      style={{ padding: 6, borderRadius: 8, border: 'none', background: 'transparent', color: 'var(--muted)', cursor: 'pointer' }}
+
+                {/* Two clearly-labeled actions, always in this order:
+                    "View" (on-site teacher profile) then "Paper" (external
+                    source link). Desktop: fixed column, right side of the
+                    row. Mobile (<560px, see .pub-actions above): drops to
+                    a full-width row directly under the text block. */}
+                <div className="pub-actions">
+                  {/* "View" — opens TeacherDetailModal, on-site: teacher's
+                      photo/education/experience plus every publication of
+                      theirs (see TeacherDetailModal.jsx). Never navigates
+                      away from our site. Disabled (not hidden) when a doc
+                      has no teacherEmail, so the row still explains why. */}
+                  <button
+                    onClick={() => pub.teacherEmail && setDetailTeacherEmail(pub.teacherEmail)}
+                    disabled={!pub.teacherEmail}
+                    style={{
+                      fontSize: 11.5, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 5,
+                      color: pub.teacherEmail ? 'var(--accent)' : 'var(--muted)',
+                      background: 'transparent', border: '1px solid var(--border)', borderRadius: 6,
+                      padding: '5px 10px', cursor: pub.teacherEmail ? 'pointer' : 'default',
+                      opacity: pub.teacherEmail ? 1 : 0.5,
+                    }}
+                    title={pub.teacherEmail ? "View teacher's profile and publications" : "Teacher record unavailable"}
+                  >
+                    <Icons.User size={12} /> View
+                  </button>
+                  {/* "Paper" — direct external link to the source (DOI /
+                      publisher page). Only a real link when pub.link
+                      exists; most scraped citations don't have one
+                      because the original KUET page didn't hyperlink the
+                      title — not a bug, just missing source data. Shown
+                      faded/disabled rather than hidden so the two-button
+                      layout stays consistent row to row. */}
+                  {pub.link ? (
+                    <a
+                      href={pub.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      style={{
+                        fontSize: 11.5, color: 'var(--muted)', fontWeight: 700, display: 'inline-flex',
+                        alignItems: 'center', gap: 5, textDecoration: 'none', border: '1px solid var(--border)',
+                        borderRadius: 6, padding: '5px 10px',
+                      }}
+                      title="Open the original publication page"
                     >
-                      <Icons.Pencil size={14} />
-                    </button>
-                    <button
-                      onClick={() => setConfirmDeleteId(pub.id)}
-                      title="Delete"
-                      style={{ padding: 6, borderRadius: 8, border: 'none', background: 'transparent', color: 'var(--muted)', cursor: 'pointer' }}
+                      <Icons.ExternalLink size={12} /> Paper
+                    </a>
+                  ) : (
+                    <span
+                      style={{
+                        fontSize: 11.5, color: 'var(--muted)', fontWeight: 700, display: 'inline-flex',
+                        alignItems: 'center', gap: 5, border: '1px solid var(--border)',
+                        borderRadius: 6, padding: '5px 10px', opacity: 0.45,
+                      }}
+                      title="No external link on record for this publication"
                     >
-                      <Icons.Trash2 size={14} />
-                    </button>
-                  </div>
-                )}
+                      <Icons.ExternalLink size={12} /> Paper
+                    </span>
+                  )}
+                </div>
               </div>
 
               {confirmDeleteId === pub.id && (

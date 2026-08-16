@@ -14,7 +14,7 @@
 //
 // Collection: pendingPublicationSubmissions/{autoId}
 //   teacherEmail, teacherName, teacherDeptCode  — who this is claimed to be for
-//   title, authors, venue, year, link, volume, issue, pages, category
+//   title, authors, venue, year, link, volume, issue, pages, category, quartile
 //   submittedBy: { uid, displayName, email }    — who submitted it
 //   status: 'pending' | 'approved' | 'rejected'
 //   createdAt, resolvedAt, resolvedBy
@@ -78,6 +78,7 @@ export async function submitPublicationForReview(details) {
     issue: String(details?.issue || '').trim() || null,
     pages: String(details?.pages || '').trim() || null,
     category: String(details?.category || '').trim() || 'Journal',
+    quartile: String(details?.quartile || '').trim() || null,
     submittedBy: {
       uid: user.uid,
       displayName: user.displayName || null,
@@ -127,6 +128,7 @@ export async function approvePublicationSubmission(submission) {
     issue: submission.issue || null,
     pages: submission.pages || null,
     category: submission.category || 'Journal',
+    quartile: submission.quartile || null,
     raw_citation: null,
     source: 'community',
     isManuallyEdited: true, // scraper must never overwrite a Founder-approved community submission
