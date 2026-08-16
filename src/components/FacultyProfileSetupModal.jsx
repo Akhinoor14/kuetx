@@ -37,14 +37,41 @@
 // Wired into App.jsx's onboarding queue as 'faculty-profile', pushed by
 // buildQueue() only when isFacultyProfileComplete(fdoc) is false for a
 // verified faculty account — see App.jsx buildQueue() comments.
+//
+// STEP RESTRUCTURE (email-first): this used to be one flat form (email +
+// name + title + dept + phone + office all on one screen, submitted once
+// at the end) — the actual auto-verify match against facultyDirectory
+// (facultyDirectoryMatch.js's tryAutoVerifyFacultyFromDirectory) only
+// happened silently inside handleSubmit, so a matched faculty member got
+// zero feedback that their institutional email was already recognized
+// until after they'd filled out the whole form and submitted.
+//
+// Now split into three steps, purely a UI/form-flow change — the
+// underlying save/ensureManualVerifyRequest call at the very end is
+// unchanged, still one write, still the same auto-verify path:
+//   1. Email        — live-debounced facultyDirectory lookup as the user
+//                      types (see useDebouncedDirectoryLookup below).
+//   2. Preview       — shows the match (if any): directory name/dept
+//                      pre-fill the Name/Department fields, but both stay
+//                      fully editable (a scrape can be stale/wrong, and a
+//                      cross-department teaching assignment is common —
+//                      see the pre-existing dept pre-fill comment further
+//                      down). No match found isn't a dead end — just an
+//                      explicit "we'll send this to the Founder for
+//                      manual review" notice, and the form continues.
+//   3. Details+confirm — title, phone, office, preferred name, then the
+//                      same submit action as before.
+// Back navigation between steps is allowed; nothing is written to
+// Firestore until the final submit on step 3.
 
-import { useEffect, useState } from 'react';
-import { GraduationCap } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { GraduationCap, CheckCircle2, HelpCircle, Loader2, ChevronLeft } from 'lucide-react';
 import { auth } from '../lib/firebase';
 import { DEPARTMENTS, INSTITUTES, BASIC_SCIENCE_DEPTS } from '../store/store';
 import { getFacultyDoc, saveFacultyProfile, getFacultyInstitutionalEmail, setFacultyInstitutionalEmail } from '../lib/facultySync';
 import { ensureManualVerifyRequest } from '../lib/manualVerifyRequests';
 import { guessDeptFromFacultyEmail, isFacultyEmailFormat } from '../lib/facultyEmailVerify';
+import { lookupFacultyDirectoryEntry } from '../lib/facultyDirectoryMatch';
 
 // Common KUET faculty designations. Kept as a dropdown for consistency
 // across profiles (search/sort/display all rely on a small set of known
@@ -118,6 +145,48 @@ export default function FacultyProfileSetupModal({ onSave }) {
   // (so we never silently discard/overwrite someone's actual title on load).
   const [titleIsOther, setTitleIsOther] = useState(false);
 
+  // --- Step wizard state ---
+  // 1 = email, 2 = directory preview, 3 = remaining details + confirm.
+  const [step, setStep] = useState(1);
+  // 'idle' | 'checking' | 'matched' | 'no-match' — drives Step 1's inline
+  // status and whether Step 2 shows a match card or a "not found" notice.
+  const [lookupStatus, setLookupStatus] = useState('idle');
+  const [directoryMatch, setDirectoryMatch] = useState(null);
+  const debounceRef = useRef(null);
+  const lookupSeqRef = useRef(0); // guards against a stale, slower response overwriting a newer one
+
+  // Live-debounced facultyDirectory lookup as the email field changes —
+  // this is read-only preview data (lookupFacultyDirectoryEntry never
+  // writes anything); the actual auto-verify write still only happens
+  // once, inside handleSubmit on final confirm, exactly like before this
+  // restructure.
+  useEffect(() => {
+    const email = form.institutionalEmail.trim();
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (!email || !isFacultyEmailFormat(email)) {
+      setLookupStatus('idle');
+      setDirectoryMatch(null);
+      return;
+    }
+    setLookupStatus('checking');
+    const seq = ++lookupSeqRef.current;
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const entry = await lookupFacultyDirectoryEntry(email);
+        if (seq !== lookupSeqRef.current) return; // a newer keystroke's lookup has since started
+        setDirectoryMatch(entry);
+        setLookupStatus(entry ? 'matched' : 'no-match');
+      } catch {
+        if (seq !== lookupSeqRef.current) return;
+        // Lookup failure (offline, blocked request) — same as "no match",
+        // never blocks the form; falls through to manual review either way.
+        setDirectoryMatch(null);
+        setLookupStatus('no-match');
+      }
+    }, 500);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [form.institutionalEmail]);
+
   useEffect(() => {
     const uid = auth.currentUser?.uid;
     if (!uid) { setLoading(false); return; }
@@ -149,6 +218,15 @@ export default function FacultyProfileSetupModal({ onSave }) {
           preferredName: fdoc.preferredName || '',
           institutionalEmail,
         });
+        // A returning user with data already on file (e.g. they closed
+        // the modal partway through on a previous load) skips straight
+        // to Step 3 instead of re-walking email/preview — everything
+        // needed for those steps is already filled in and still fully
+        // editable via the "back" button from Step 3 if they want to
+        // revisit it.
+        if (institutionalEmail && fdoc.name && fdoc.dept) {
+          setStep(3);
+        }
       }
       setLoading(false);
     });
@@ -159,6 +237,33 @@ export default function FacultyProfileSetupModal({ onSave }) {
     setErrors((prev) => ({ ...prev, [key]: '' }));
   };
 
+  // Step 1 only checks the email field — the rest of the form doesn't
+  // exist on screen yet at this point.
+  const validateStep1 = () => {
+    const next = {};
+    if (!form.institutionalEmail.trim()) {
+      next.institutionalEmail = 'Institutional email is required';
+    } else if (!isFacultyEmailFormat(form.institutionalEmail.trim())) {
+      next.institutionalEmail = "This doesn't look like a valid KUET institutional email (a *.kuet.ac.bd address, not @stud.kuet.ac.bd).";
+    }
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  };
+
+  // Step 2 (preview) only gates on name/dept — both editable, pre-filled
+  // from directoryMatch when there was one, but nothing stops someone
+  // without a match from typing them in fresh.
+  const validateStep2 = () => {
+    const next = {};
+    if (!form.name.trim()) next.name = 'Name is required';
+    if (!form.dept.trim()) next.dept = 'Department is required';
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  };
+
+  // Step 3 (final submit) re-validates everything — belt-and-suspenders
+  // in case someone reaches this step via back-navigation with a field
+  // since cleared.
   const validate = () => {
     const next = {};
     if (!form.name.trim()) next.name = 'Name is required';
@@ -176,6 +281,27 @@ export default function FacultyProfileSetupModal({ onSave }) {
     // decision from the person running this migration.
     setErrors(next);
     return Object.keys(next).length === 0;
+  };
+
+  const goToStep2 = () => {
+    if (!validateStep1()) return;
+    // Entering Step 2 with a fresh directory match: pre-fill name/dept if
+    // those fields are still empty (never overwrite something the person
+    // already typed, e.g. if they went back and changed the email again
+    // after already filling name/dept once).
+    if (directoryMatch) {
+      setForm((f) => ({
+        ...f,
+        name: f.name.trim() ? f.name : (directoryMatch.name || ''),
+        dept: f.dept.trim() ? f.dept : (directoryMatch.department || ''),
+      }));
+    }
+    setStep(2);
+  };
+
+  const goToStep3 = () => {
+    if (!validateStep2()) return;
+    setStep(3);
   };
 
   const handleSubmit = async (e) => {
@@ -254,7 +380,15 @@ export default function FacultyProfileSetupModal({ onSave }) {
       `,
     }}>
       <form
-        onSubmit={handleSubmit}
+        onSubmit={(e) => {
+          // Enter-to-submit inside a <form> always targets the nearest
+          // submit-type button, which only exists on Step 3 now — but an
+          // Enter press on Step 1/2's inputs still fires this handler with
+          // no submit button focused, so guard on step explicitly instead
+          // of relying on button wiring alone.
+          if (step !== 3) { e.preventDefault(); return; }
+          handleSubmit(e);
+        }}
         style={{
           background: 'var(--surfaceGlassStrong, var(--card))',
           backdropFilter: 'blur(6px)',
@@ -288,111 +422,234 @@ export default function FacultyProfileSetupModal({ onSave }) {
           <div style={{ textAlign: 'center', color: 'var(--muted)', padding: '24px 0' }}>Loading…</div>
         ) : (
           <div style={{ display: 'grid', gap: 14 }}>
-            <div>
-              <label style={labelStyle}>Institutional Email</label>
-              <input
-                style={fieldStyle}
-                type="email"
-                value={form.institutionalEmail}
-                onChange={handleChange('institutionalEmail')}
-                placeholder="name@dept.kuet.ac.bd"
-              />
-              {errors.institutionalEmail && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.institutionalEmail}</div>}
-            </div>
-
-            <div>
-              <label style={labelStyle}>Full Name</label>
-              <input style={fieldStyle} value={form.name} onChange={handleChange('name')} placeholder="Your full name" />
-              {errors.name && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.name}</div>}
-            </div>
-
-            <div>
-              <label style={labelStyle}>Title / Designation</label>
-              <select
-                style={fieldStyle}
-                value={titleIsOther ? OTHER_TITLE : (FACULTY_TITLES.includes(form.title) ? form.title : '')}
-                onChange={(e) => {
-                  const v = e.target.value;
-                  if (v === OTHER_TITLE) {
-                    setTitleIsOther(true);
-                    // Don't clear an existing custom title when switching into Other.
-                    setForm((f) => ({ ...f, title: FACULTY_TITLES.includes(f.title) ? '' : f.title }));
-                  } else {
-                    setTitleIsOther(false);
-                    setForm((f) => ({ ...f, title: v }));
-                  }
-                  setErrors((prev) => ({ ...prev, title: '' }));
-                }}
-              >
-                <option value="">Select title / designation</option>
-                {FACULTY_TITLE_GROUPS.map((g) => (
-                  <optgroup key={g.label} label={g.label}>
-                    {g.options.map((t) => <option key={t} value={t}>{t}</option>)}
-                  </optgroup>
-                ))}
-                <option value={OTHER_TITLE}>Other…</option>
-              </select>
-              {titleIsOther && (
-                <input
-                  style={{ ...fieldStyle, marginTop: 8 }}
-                  value={form.title}
-                  onChange={handleChange('title')}
-                  placeholder="Enter your title / designation"
-                  autoFocus
+            {/* Step indicator — purely visual, no click-to-jump (each step
+                gates the next via validateStep1/validateStep2 above). */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginBottom: 4 }}>
+              {[1, 2, 3].map((n) => (
+                <div
+                  key={n}
+                  style={{
+                    width: n === step ? 22 : 8, height: 8, borderRadius: 4,
+                    background: n <= step ? 'var(--accent)' : 'var(--border)',
+                    transition: 'width 0.2s, background 0.2s',
+                  }}
                 />
-              )}
-              {errors.title && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.title}</div>}
+              ))}
             </div>
 
-            <div>
-              <label style={labelStyle}>Department</label>
-              <select style={fieldStyle} value={form.dept} onChange={handleChange('dept')}>
-                <option value="">Select department / institute</option>
-                <optgroup label="Departments">
-                  {DEPARTMENTS.map((d) => <option key={d.code} value={d.code}>{d.name} ({d.code})</option>)}
-                </optgroup>
-                <optgroup label="Institutes">
-                  {INSTITUTES.map((i) => <option key={i.code} value={i.code}>{i.name} ({i.code})</option>)}
-                </optgroup>
-                <optgroup label="Basic Science & Humanities">
-                  {BASIC_SCIENCE_DEPTS.map((d) => <option key={d.code} value={d.code}>{d.name} ({d.code})</option>)}
-                </optgroup>
-              </select>
-              {errors.dept && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.dept}</div>}
-            </div>
+            {/* ---------- STEP 1: email ---------- */}
+            {step === 1 && (
+              <>
+                <div>
+                  <label style={labelStyle}>Institutional Email</label>
+                  <div style={{ position: 'relative' }}>
+                    <input
+                      style={{ ...fieldStyle, paddingRight: 38 }}
+                      type="email"
+                      value={form.institutionalEmail}
+                      onChange={handleChange('institutionalEmail')}
+                      onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); goToStep2(); } }}
+                      placeholder="name@dept.kuet.ac.bd"
+                      autoFocus
+                    />
+                    <div style={{ position: 'absolute', right: 10, top: 0, bottom: 0, display: 'flex', alignItems: 'center' }}>
+                      {lookupStatus === 'checking' && <Loader2 size={16} color="var(--muted)" style={{ animation: 'spin 1s linear infinite' }} />}
+                      {lookupStatus === 'matched' && <CheckCircle2 size={16} color="#16a34a" />}
+                      {lookupStatus === 'no-match' && <HelpCircle size={16} color="var(--muted)" />}
+                    </div>
+                  </div>
+                  {errors.institutionalEmail && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.institutionalEmail}</div>}
+                  {!errors.institutionalEmail && lookupStatus === 'matched' && (
+                    <div style={{ fontSize: 11.5, color: '#16a34a', marginTop: 5, fontWeight: 600 }}>
+                      Found in the official KUET faculty directory — next step will pre-fill your details.
+                    </div>
+                  )}
+                  {!errors.institutionalEmail && lookupStatus === 'no-match' && (
+                    <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 5 }}>
+                      Not found in the directory yet — that's fine, you can still continue and your account will be reviewed by the Founder.
+                    </div>
+                  )}
+                </div>
 
-            <div>
-              <label style={labelStyle}>Phone (optional)</label>
-              <input style={fieldStyle} value={form.phone} onChange={handleChange('phone')} placeholder="e.g. 01700000000" />
-            </div>
-
-            <div>
-              <label style={labelStyle}>Office Room (optional)</label>
-              <input style={fieldStyle} value={form.officeRoom} onChange={handleChange('officeRoom')} />
-            </div>
-
-            <div>
-              <label style={labelStyle}>Preferred display name (optional, self-facing only)</label>
-              <input style={fieldStyle} value={form.preferredName} onChange={handleChange('preferredName')} />
-            </div>
-
-            {errors._general && (
-              <div style={{ fontSize: 12, color: '#dc2626', padding: '8px 10px', background: 'rgba(220,38,38,0.08)', borderRadius: 6 }}>
-                {errors._general}
-              </div>
+                <button
+                  type="button"
+                  onClick={goToStep2}
+                  disabled={lookupStatus === 'checking'}
+                  style={{
+                    marginTop: 6, padding: '12px 18px', borderRadius: 8, border: 'none',
+                    background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 14,
+                    cursor: lookupStatus === 'checking' ? 'wait' : 'pointer', opacity: lookupStatus === 'checking' ? 0.7 : 1,
+                  }}
+                >
+                  Continue
+                </button>
+              </>
             )}
 
-            <button
-              type="submit"
-              disabled={saving}
-              style={{
-                marginTop: 6, padding: '12px 18px', borderRadius: 8, border: 'none',
-                background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 14,
-                cursor: saving ? 'wait' : 'pointer', opacity: saving ? 0.7 : 1,
-              }}
-            >
-              {saving ? 'Saving…' : 'Finish Setup'}
-            </button>
+            {/* ---------- STEP 2: preview / name & department ---------- */}
+            {step === 2 && (
+              <>
+                {directoryMatch ? (
+                  <div style={{
+                    display: 'flex', alignItems: 'flex-start', gap: 10, padding: '10px 12px',
+                    borderRadius: 10, background: 'rgba(22,163,74,0.08)', border: '1px solid rgba(22,163,74,0.25)',
+                  }}>
+                    <CheckCircle2 size={18} color="#16a34a" style={{ flexShrink: 0, marginTop: 1 }} />
+                    <div style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.5 }}>
+                      Matched against the official directory as <strong>{directoryMatch.name}</strong>
+                      {directoryMatch.department ? ` (${directoryMatch.department})` : ''}. Pre-filled below — feel free to correct anything that's out of date.
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{
+                    display: 'flex', alignItems: 'flex-start', gap: 10, padding: '10px 12px',
+                    borderRadius: 10, background: 'var(--surfaceGlassStrong, var(--bg))', border: '1px solid var(--border)',
+                  }}>
+                    <HelpCircle size={18} color="var(--muted)" style={{ flexShrink: 0, marginTop: 1 }} />
+                    <div style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.5 }}>
+                      No directory match for this email — enter your details below and a Founder will review your account.
+                    </div>
+                  </div>
+                )}
+
+                <div>
+                  <label style={labelStyle}>Full Name</label>
+                  <input style={fieldStyle} value={form.name} onChange={handleChange('name')} placeholder="Your full name" />
+                  {errors.name && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.name}</div>}
+                </div>
+
+                <div>
+                  <label style={labelStyle}>Department</label>
+                  <select style={fieldStyle} value={form.dept} onChange={handleChange('dept')}>
+                    <option value="">Select department / institute</option>
+                    <optgroup label="Departments">
+                      {DEPARTMENTS.map((d) => <option key={d.code} value={d.code}>{d.name} ({d.code})</option>)}
+                    </optgroup>
+                    <optgroup label="Institutes">
+                      {INSTITUTES.map((i) => <option key={i.code} value={i.code}>{i.name} ({i.code})</option>)}
+                    </optgroup>
+                    <optgroup label="Basic Science & Humanities">
+                      {BASIC_SCIENCE_DEPTS.map((d) => <option key={d.code} value={d.code}>{d.name} ({d.code})</option>)}
+                    </optgroup>
+                  </select>
+                  {errors.dept && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.dept}</div>}
+                </div>
+
+                <div style={{ display: 'flex', gap: 10, marginTop: 6 }}>
+                  <button
+                    type="button"
+                    onClick={() => setStep(1)}
+                    style={{
+                      padding: '12px 16px', borderRadius: 8, border: '1px solid var(--border)',
+                      background: 'transparent', color: 'var(--text)', fontWeight: 700, fontSize: 14,
+                      cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4,
+                    }}
+                  >
+                    <ChevronLeft size={16} /> Back
+                  </button>
+                  <button
+                    type="button"
+                    onClick={goToStep3}
+                    style={{
+                      flex: 1, padding: '12px 18px', borderRadius: 8, border: 'none',
+                      background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 14, cursor: 'pointer',
+                    }}
+                  >
+                    Continue
+                  </button>
+                </div>
+              </>
+            )}
+
+            {/* ---------- STEP 3: remaining details + confirm ---------- */}
+            {step === 3 && (
+              <>
+                <div>
+                  <label style={labelStyle}>Title / Designation</label>
+                  <select
+                    style={fieldStyle}
+                    value={titleIsOther ? OTHER_TITLE : (FACULTY_TITLES.includes(form.title) ? form.title : '')}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      if (v === OTHER_TITLE) {
+                        setTitleIsOther(true);
+                        // Don't clear an existing custom title when switching into Other.
+                        setForm((f) => ({ ...f, title: FACULTY_TITLES.includes(f.title) ? '' : f.title }));
+                      } else {
+                        setTitleIsOther(false);
+                        setForm((f) => ({ ...f, title: v }));
+                      }
+                      setErrors((prev) => ({ ...prev, title: '' }));
+                    }}
+                  >
+                    <option value="">Select title / designation</option>
+                    {FACULTY_TITLE_GROUPS.map((g) => (
+                      <optgroup key={g.label} label={g.label}>
+                        {g.options.map((t) => <option key={t} value={t}>{t}</option>)}
+                      </optgroup>
+                    ))}
+                    <option value={OTHER_TITLE}>Other…</option>
+                  </select>
+                  {titleIsOther && (
+                    <input
+                      style={{ ...fieldStyle, marginTop: 8 }}
+                      value={form.title}
+                      onChange={handleChange('title')}
+                      placeholder="Enter your title / designation"
+                      autoFocus
+                    />
+                  )}
+                  {errors.title && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.title}</div>}
+                </div>
+
+                <div>
+                  <label style={labelStyle}>Phone (optional)</label>
+                  <input style={fieldStyle} value={form.phone} onChange={handleChange('phone')} placeholder="e.g. 01700000000" />
+                </div>
+
+                <div>
+                  <label style={labelStyle}>Office Room (optional)</label>
+                  <input style={fieldStyle} value={form.officeRoom} onChange={handleChange('officeRoom')} />
+                </div>
+
+                <div>
+                  <label style={labelStyle}>Preferred display name (optional, self-facing only)</label>
+                  <input style={fieldStyle} value={form.preferredName} onChange={handleChange('preferredName')} />
+                </div>
+
+                {errors._general && (
+                  <div style={{ fontSize: 12, color: '#dc2626', padding: '8px 10px', background: 'rgba(220,38,38,0.08)', borderRadius: 6 }}>
+                    {errors._general}
+                  </div>
+                )}
+
+                <div style={{ display: 'flex', gap: 10, marginTop: 6 }}>
+                  <button
+                    type="button"
+                    onClick={() => setStep(2)}
+                    disabled={saving}
+                    style={{
+                      padding: '12px 16px', borderRadius: 8, border: '1px solid var(--border)',
+                      background: 'transparent', color: 'var(--text)', fontWeight: 700, fontSize: 14,
+                      cursor: saving ? 'default' : 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4,
+                    }}
+                  >
+                    <ChevronLeft size={16} /> Back
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={saving}
+                    style={{
+                      flex: 1, padding: '12px 18px', borderRadius: 8, border: 'none',
+                      background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 14,
+                      cursor: saving ? 'wait' : 'pointer', opacity: saving ? 0.7 : 1,
+                    }}
+                  >
+                    {saving ? 'Saving…' : 'Finish Setup'}
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         )}
       </form>

@@ -80,8 +80,7 @@ import { postFacultyNotice } from '../../lib/facultyNoticeSync';
 import {
   TIME_MODELS, DAYS, isSessionalType, getPresetSessionalSlots, isSlotOverlap,
 } from '../../lib/timeModels';
-// [QB-DEPRECATED 2026-08-15] আর ব্যবহার হচ্ছে না, দেখো PROGRESS_QB_WEBSITE_INTEGRATION.md
-// import { useQuestionBankData, getR2FileUrl } from '../../hooks/useQuestionBankData';
+import { useQuestionBankData, getR2FileUrl } from '../../hooks/useQuestionBankData';
 
 // Order = real daily-use frequency (teacher's actual workflow), not a
 // setup checklist. Attendance is opened almost every class day — and now
@@ -91,9 +90,7 @@ import {
 // buttons + a "More" popover for the rest — see .faculty-tabs CSS.
 const TABS = [
   { id: 'syllabus', label: 'Syllabus', icon: 'BookMarked', enabled: true },
-  // [QB-DEPRECATED 2026-08-15] পুরনো PDF question-bank tab বন্ধ, দেখো
-  // PROGRESS_QB_WEBSITE_INTEGRATION.md
-  // { id: 'qbank', label: 'Question Bank', icon: 'FileText', enabled: true },
+  { id: 'qbank', label: 'Question Bank', icon: 'FileText', enabled: true },
   { id: 'students', label: 'Students & CR', icon: 'Users', enabled: true },
   { id: 'marks', label: 'Marks', icon: 'GraduationCap', enabled: true },
   { id: 'attendance', label: 'Attendance', icon: 'CheckSquare', enabled: true },
@@ -2162,9 +2159,6 @@ function AttendanceTab({ assignment, groupId }) {
     </div>
   );
 }
-/* [QB-DEPRECATED 2026-08-15] পুরো QuestionBankTab function আর কোথাও
-   ব্যবহার হচ্ছে না (উপরে TABS/panel থেকে সরানো হয়েছে) -- delete না,
-   দরকার হলে ফিরিয়ে আনা যাবে। দেখো PROGRESS_QB_WEBSITE_INTEGRATION.md
 // QuestionBank page reads (useQuestionBankData/getR2FileUrl), scoped to
 // THIS class's own department only: a teacher assigned to ESE shouldn't
 // have to wade through 15 other departments to find their own course's
@@ -2217,7 +2211,6 @@ function QuestionBankTab({ assignment }) {
     </div>
   );
 }
-*/
 
 function MarksSetupForm({ assignment, groupId, teacherSlot, onSaved, existingConfig, onCancel }) {
   const [attendanceWeight, setAttendanceWeight] = useState(existingConfig?.attendanceWeight ?? 15);
@@ -2778,8 +2771,7 @@ export default function FacultyClassDetail() {
                 )}
                 {t.id === 'attendance' && <AttendanceTab assignment={assignment} groupId={groupId} />}
                 {t.id === 'marks' && <MarksTab assignment={assignment} groupId={groupId} />}
-                {/* [QB-DEPRECATED 2026-08-15] tab নিজেই TABS থেকে সরানো, তাই এই লাইন আর পৌঁছানো যাবে না -- harmless, দেখো PROGRESS_QB_WEBSITE_INTEGRATION.md */}
-                {/* {t.id === 'qbank' && <QuestionBankTab assignment={assignment} />} */}
+                {t.id === 'qbank' && <QuestionBankTab assignment={assignment} />}
                 {t.id === 'notices' && <NoticesTab groupId={groupId} isVerified={isVerified} assignment={assignment} />}
               </div>
             );

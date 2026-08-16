@@ -1848,6 +1848,44 @@ service cloud.firestore {
     }
 
     // -------------------------------------------------------------
+    // Pending publication submissions — community-submitted (a third
+    // party proposing a publication on a teacher's behalf) moderation
+    // queue for the Founder/Admin Approvals tab. See
+    // pendingPublicationsSync.js's file header for the full lifecycle
+    // (submit -> pending -> approve/reject). Approve writes a normal
+    // doc into facultyPublications separately (allowed by that match
+    // block above, since the approver is signed-in and the written
+    // teacherEmail need not match their own — that write only enforces
+    // teacherEmail equality on create/update by the OWNING teacher's
+    // own edits; a Founder approving a community submission still
+    // satisfies isSignedIn() there, matching the existing writes teachers
+    // already make for others via this queue).
+    match /pendingPublicationSubmissions/{submissionId} {
+      // Read: Founder/Admin only — this is a moderation queue, not
+      // public browse data.
+      allow read: if isAdmin() || isHeadOfOps();
+
+      // Create: any signed-in user, but submittedBy.uid must match the
+      // caller and status must start as 'pending'.
+      allow create: if isSignedIn()
+        && request.resource.data.submittedBy.uid == request.auth.uid
+        && request.resource.data.status == 'pending';
+
+      // Update: Founder/Admin only, and only the status/resolvedAt/
+      // resolvedBy transition — the originally submitted content stays
+      // immutable for a clean audit trail of what was submitted vs
+      // what got approved.
+      allow update: if (isAdmin() || isHeadOfOps())
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['status', 'resolvedAt', 'resolvedBy']);
+
+      // Delete: Founder/Admin only, cleanup of already-resolved docs
+      // (deletePublicationSubmission() is never called on a pending doc).
+      allow delete: if (isAdmin() || isHeadOfOps())
+        && resource.data.status != 'pending';
+    }
+
+    // -------------------------------------------------------------
     // Roll unlock requests — fallback for when the requester has no
     // verifiedRolls proof to auto-reclaim with (see rollOwnership.js
     // requestRollUnlock()). Founder/admin resolves these directly from

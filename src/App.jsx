@@ -77,17 +77,10 @@ const Today = lazy(() => import('./pages/Today'));
 const Teachers = lazy(() => import('./pages/Teachers'));
 const Diary = lazy(() => import('./pages/Diary'));
 const Assignments = lazy(() => import('./pages/Assignments'));
-// [QB-RENAMED 2026-08-15] পুরনো PDF-upload-based QuestionBank.jsx/
-// QuestionBankViewer.jsx আর ব্যবহার হচ্ছে না — সরিয়ে archive/pages/-এ
-// রাখা হয়েছে (dead code ছিল, কোনো route ব্যবহার করছিল না)। ফিরিয়ে আনার
-// দরকার হলে দেখো: PROGRESS_QB_WEBSITE_INTEGRATION.md
-// এখন /question-bank = নতুন canonical JSON-based question browser
-// (QuestionBank.jsx, নতুন ফাইল), আর /solutions = আগের QuestionBankSolutions.jsx-ই
-// (শুধু rename হয়ে SolutionBank.jsx হয়েছে, লজিক অপরিবর্তিত) — এই দুটো
-// আসলে সম্পূর্ণ আলাদা ডেটাসেট, আগে একই ফাইলে ভুলভাবে মেশানো ছিল।
 const QuestionBank = lazy(() => import('./pages/QuestionBank'));
 const PublicationsBrowse = lazy(() => import('./pages/PublicationsBrowse'));
-const SolutionBank = lazy(() => import('./pages/SolutionBank'));
+const QuestionBankViewer = lazy(() => import('./pages/QuestionBankViewer'));
+const QuestionBankSolutions = lazy(() => import('./pages/QuestionBankSolutions'));
 const SelfStudy = lazy(() => import('./pages/SelfStudy'));
 const Namaz = lazy(() => import('./pages/Namaz'));
 const Money = lazy(() => import('./pages/Money'));
@@ -176,9 +169,6 @@ function Layout({ authState, onboardingActive }) {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const location = useLocation();
   const isMobileNav = useIsMobileNav();
-  // [QB-DEPRECATED 2026-08-15] /question-bank/view route বন্ধ (App.jsx উপরে
-  // দেখো), তাই এই flag এখন কার্যত সবসময় false -- harmless dead condition,
-  // ভাঙবে না, তাই touch করা হয়নি।
   const isQuestionBankViewer = location.pathname === '/question-bank/view';
 
   // BUGFIX: every page navigation used to land wherever the PREVIOUS
@@ -386,11 +376,10 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/syllabus" element={<RequireStudentMode><Syllabus /></RequireStudentMode>} />
             <Route path="/diary" element={<RequireStudentMode><Diary /></RequireStudentMode>} />
             <Route path="/assignments" element={<RequireStudentMode><Assignments /></RequireStudentMode>} />
-            {/* [QB-RENAMED 2026-08-15] নতুন canonical JSON-based question browser, দেখো PROGRESS_QB_WEBSITE_INTEGRATION.md */}
             <Route path="/question-bank" element={<RequireStudentMode><QuestionBank /></RequireStudentMode>} />
             <Route path="/publications" element={<RequireStudentMode><PublicationsBrowse canEdit={false} /></RequireStudentMode>} />
-            {/* পুরনো fullscreen viewer (/question-bank/view) আর নেই — archive/pages/QuestionBankViewer.jsx-এ সরানো হয়েছে, dead code ছিল */}
-            <Route path="/solutions" element={<RequireStudentMode><SolutionBank /></RequireStudentMode>} />
+            <Route path="/question-bank/view" element={<RequireStudentMode><QuestionBankViewer /></RequireStudentMode>} />
+            <Route path="/solutions" element={<RequireStudentMode><QuestionBankSolutions /></RequireStudentMode>} />
             <Route path="/self-study/academic" element={<RequireStudentMode><SelfStudy /></RequireStudentMode>} />
             <Route path="/self-study/deep-focus" element={<RequireStudentMode><SelfStudy /></RequireStudentMode>} />
             <Route path="/time" element={<RequireStudentMode><TimeTracker /></RequireStudentMode>} />
@@ -589,10 +578,7 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/faculty/meetings" element={<RequireFaculty><FacultyMeetings /></RequireFaculty>} />
             <Route path="/faculty/notices" element={<RequireFaculty><FacultyNoticeBroadcast /></RequireFaculty>} />
             <Route path="/faculty/contact" element={<RequireFaculty><FacultyContact /></RequireFaculty>} />
-            {/* [QB-RENAMED 2026-08-15] পুরনো PDF-based faculty route বন্ধ ছিল, এখনো ইচ্ছাকৃতভাবে বন্ধ —
-                student-facing /question-bank চালু হলেও faculty variant আলাদা সিদ্ধান্ত লাগবে,
-                এখনো নেওয়া হয়নি। দরকার হলে <QuestionBank /> দিয়েই আনকমেন্ট করা যাবে (একই কম্পোনেন্ট)। */}
-            {/* <Route path="/faculty/question-bank" element={<RequireFaculty><QuestionBank /></RequireFaculty>} /> */}
+            <Route path="/faculty/question-bank" element={<RequireFaculty><QuestionBank /></RequireFaculty>} />
             <Route path="/faculty/publications" element={<RequireFaculty><PublicationsBrowse canEdit={true} /></RequireFaculty>} />
             {/* Bottom-nav "More" destination — combines what used to be two
                 separate, mobile-unreachable sidebar groups (Campus →

@@ -1,2 +1,6 @@
 kuet_faculty_data.json
 kuet_scraper.log
+*firebase-adminsdk*.json
+*serviceAccount*.json
+*.pem
+*.key

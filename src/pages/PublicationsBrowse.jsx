@@ -27,6 +27,8 @@ import {
 } from '../lib/facultyPublicationsSync';
 import { notify } from '../lib/notify';
 import PublicationEditModal from '../components/PublicationEditModal';
+import TeacherDetailModal from '../components/TeacherDetailModal';
+import SuggestPublicationModal from '../components/SuggestPublicationModal';
 
 const DEPT_NAME_BY_CODE = Object.fromEntries(DEPARTMENTS.map((d) => [d.code, d.name]));
 
@@ -38,6 +40,8 @@ export default function PublicationsBrowse({ canEdit = false }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+  const [detailTeacherEmail, setDetailTeacherEmail] = useState(null);
+  const [suggestModalOpen, setSuggestModalOpen] = useState(false);
 
   const myEmail = (auth.currentUser?.email || '').trim().toLowerCase();
 
@@ -72,10 +76,23 @@ export default function PublicationsBrowse({ canEdit = false }) {
   }
 
   return (
-    <div style={{ padding: '16px 16px 80px', maxWidth: 900, margin: '0 auto' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-        <Icons.BookMarked size={22} color="var(--accent)" />
-        <h2 style={{ margin: 0, fontSize: 19, fontWeight: 900, color: 'var(--text)' }}>Publications</h2>
+    <div className="page-container">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 16, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <Icons.BookMarked size={22} color="var(--accent)" />
+          <h2 style={{ margin: 0, fontSize: 19, fontWeight: 900, color: 'var(--text)' }}>Publications</h2>
+        </div>
+        {!canEdit && (
+          <button
+            onClick={() => setSuggestModalOpen(true)}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 10,
+              border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: 'pointer',
+            }}
+          >
+            <Icons.Plus size={14} /> Suggest a publication
+          </button>
+        )}
       </div>
 
       <div style={{ display: 'flex', gap: 10, marginBottom: 16, flexWrap: 'wrap' }}>
@@ -137,10 +154,37 @@ export default function PublicationsBrowse({ canEdit = false }) {
                   <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 3 }}>
                     {[pub.venue, pub.year].filter(Boolean).join(' · ')}
                   </div>
-                  <div style={{ fontSize: 11.5, color: 'var(--accent)', marginTop: 4, fontWeight: 600 }}>
-                    {pub.teacherName || pub.teacherEmail}
-                    {pub.teacherDeptCode && DEPT_NAME_BY_CODE[pub.teacherDeptCode]
-                      ? ` · ${DEPT_NAME_BY_CODE[pub.teacherDeptCode]}` : ''}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginTop: 4 }}>
+                    <button
+                      onClick={() => pub.teacherEmail && setDetailTeacherEmail(pub.teacherEmail)}
+                      disabled={!pub.teacherEmail}
+                      style={{
+                        fontSize: 11.5, color: 'var(--accent)', fontWeight: 700, background: 'transparent',
+                        border: 'none', padding: 0, cursor: pub.teacherEmail ? 'pointer' : 'default',
+                        textDecoration: pub.teacherEmail ? 'underline' : 'none', textUnderlineOffset: 2,
+                      }}
+                      title={pub.teacherEmail ? 'View teacher details' : undefined}
+                    >
+                      {pub.teacherName || pub.teacherEmail}
+                      {pub.teacherDeptCode && DEPT_NAME_BY_CODE[pub.teacherDeptCode]
+                        ? ` · ${DEPT_NAME_BY_CODE[pub.teacherDeptCode]}` : ''}
+                    </button>
+                    {pub.link && (
+                      <a
+                        href={pub.link}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                          fontSize: 11, color: 'var(--muted)', fontWeight: 600, display: 'inline-flex',
+                          alignItems: 'center', gap: 3, textDecoration: 'none', border: '1px solid var(--border)',
+                          borderRadius: 6, padding: '2px 6px',
+                        }}
+                        title="Open the original publication link"
+                      >
+                        <Icons.ExternalLink size={10} /> Link
+                      </a>
+                    )}
                   </div>
                 </div>
                 {isMine && (
@@ -193,6 +237,17 @@ export default function PublicationsBrowse({ canEdit = false }) {
           onClose={() => setModalOpen(false)}
         />
       )}
+
+      <TeacherDetailModal
+        teacherEmail={detailTeacherEmail}
+        open={!!detailTeacherEmail}
+        onClose={() => setDetailTeacherEmail(null)}
+      />
+
+      <SuggestPublicationModal
+        open={suggestModalOpen}
+        onClose={() => setSuggestModalOpen(false)}
+      />
     </div>
   );
 }

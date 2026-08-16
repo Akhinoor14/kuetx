@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import * as Icons from 'lucide-react';
 import { auth } from '../../lib/firebase';
 import { DEPARTMENTS, INSTITUTES, BASIC_SCIENCE_DEPTS } from '../../store/store';
-import { getFacultyDoc, saveFacultyProfile } from '../../lib/facultySync';
+import { getFacultyDoc, saveFacultyProfile, getFacultyInstitutionalEmail } from '../../lib/facultySync';
 import { guessDeptFromFacultyEmail } from '../../lib/facultyEmailVerify';
 import { notify } from '../../lib/notify';
 import { getProfilePhotoURL } from '../../lib/profilePicture';
@@ -23,6 +23,9 @@ import { useIsFaculty } from '../../hooks/useIsFaculty';
 import BlueTick from '../../components/BlueTick';
 import ManualVerifyFallback from '../../components/ManualVerifyFallback';
 import PublicationsCard from '../../components/PublicationsCard';
+import EducationExperienceCard from '../../components/EducationExperienceCard';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../../lib/firebase';
 
 // ─── Shared field styles (used only inside the edit form) ─────────────────
 const inputStyle = {
@@ -104,6 +107,13 @@ export default function FacultyProfile() {
   const [officialEmail, setOfficialEmail] = useState('');
   const [saved, setSaved] = useState(false);
   const [photoURL, setPhotoURL] = useState(null);
+  // Fallback photo scraped from the teacher's own official KUET department
+  // page (facultyDirectory/{institutionalEmail}.photo_url) — same field
+  // TeacherDetailModal.jsx already shows for OTHER teachers on the public
+  // /publications browse page. Shown by DEFAULT whenever the teacher
+  // hasn't uploaded their own photo yet; a self-upload always takes
+  // priority once it exists (see the render below).
+  const [directoryPhotoURL, setDirectoryPhotoURL] = useState(null);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [verifiedAt, setVerifiedAt] = useState(null);
   const [createdAt, setCreatedAt] = useState(null);
@@ -140,6 +150,31 @@ export default function FacultyProfile() {
   // (keyed by Firebase uid) the student side uses.
   useEffect(() => {
     getProfilePhotoURL().then(setPhotoURL).catch(() => {});
+  }, []);
+
+  // Fallback: the KUET-website-scraped photo from facultyDirectory, keyed
+  // by institutional email (not the Google login email — see
+  // EducationExperienceCard.jsx's header for the same distinction).
+  // Fetched regardless of whether a self-upload exists, so switching
+  // between "uploaded" and "not uploaded" never has to wait on a second
+  // round-trip — the render below just picks whichever is available,
+  // self-upload first.
+  useEffect(() => {
+    const uid = auth.currentUser?.uid;
+    if (!uid) return;
+    let cancelled = false;
+    getFacultyInstitutionalEmail(uid)
+      .then((institutionalEmail) => {
+        const normalizedEmail = String(institutionalEmail || '').trim().toLowerCase();
+        if (!normalizedEmail) return null;
+        return getDoc(doc(db, 'facultyDirectory', normalizedEmail));
+      })
+      .then((snap) => {
+        if (cancelled) return;
+        setDirectoryPhotoURL(snap?.exists() ? (snap.data()?.photo_url || null) : null);
+      })
+      .catch(() => { if (!cancelled) setDirectoryPhotoURL(null); });
+    return () => { cancelled = true; };
   }, []);
 
   const handleSave = async () => {
@@ -200,11 +235,11 @@ export default function FacultyProfile() {
         }}>
           <div
             onClick={() => setShowAvatarModal(true)}
-            title="Click to change profile picture"
+            title={photoURL ? 'Click to change profile picture' : (directoryPhotoURL ? 'Showing your KUET directory photo — click to upload your own' : 'Click to add a profile picture')}
             className="profile-hero-avatar"
             style={{
               borderRadius: '50%',
-              background: photoURL ? 'transparent' : 'var(--accentSoft, color-mix(in srgb, var(--accent) 15%, var(--surface, var(--card))))',
+              background: (photoURL || directoryPhotoURL) ? 'transparent' : 'var(--accentSoft, color-mix(in srgb, var(--accent) 15%, var(--surface, var(--card))))',
               border: '3px solid var(--border)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontWeight: 900, color: 'var(--accent)', flexShrink: 0, cursor: 'pointer', overflow: 'hidden', position: 'relative',
@@ -213,10 +248,21 @@ export default function FacultyProfile() {
             onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.04)'; }}
             onMouseLeave={e => { e.currentTarget.style.transform = ''; }}
           >
-            {photoURL
-              ? <img src={photoURL} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              : <span>{displayName.trim().charAt(0).toUpperCase() || <Icons.User size={28} />}</span>
-            }
+            {photoURL ? (
+              <img src={photoURL} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : directoryPhotoURL ? (
+              // Default to the KUET-website photo until the teacher uploads
+              // their own — onError falls through to the initial-letter
+              // placeholder if the KUET-hosted URL ever breaks.
+              <img
+                src={directoryPhotoURL}
+                alt="Profile (from KUET directory)"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                onError={() => setDirectoryPhotoURL(null)}
+              />
+            ) : (
+              <span>{displayName.trim().charAt(0).toUpperCase() || <Icons.User size={28} />}</span>
+            )}
             {/* Camera overlay on hover */}
             <div style={{
               position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)',
@@ -506,6 +552,10 @@ export default function FacultyProfile() {
                 </button>
               </div>
             </Section>
+
+            {auth.currentUser?.uid && (
+              <EducationExperienceCard uid={auth.currentUser.uid} />
+            )}
 
             {auth.currentUser?.email && (
               <PublicationsCard teacherEmail={auth.currentUser.email} />

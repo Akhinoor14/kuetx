@@ -76,7 +76,7 @@ export const FOUNDER_CATEGORIES = [
     label: 'Approvals',
     icon: 'CheckCircle2',
     subtitle: 'Campus Lead applications, CR requests, CR leave requests',
-    getCount: (ctx) => ctx.clApplications + ctx.crRequests + ctx.leaveRequests + ctx.manualVerifyRequests + ctx.qbUploadRequests + ctx.accountDeleteRequests,
+    getCount: (ctx) => ctx.clApplications + ctx.crRequests + ctx.leaveRequests + ctx.manualVerifyRequests + ctx.qbUploadRequests + ctx.accountDeleteRequests + ctx.pendingPublications,
     subcategories: [
       { key: 'cl-apps', label: 'CL Applications', getCount: (ctx) => ctx.clApplications },
       { key: 'cr-req', label: 'CR Requests', getCount: (ctx) => ctx.crRequests },
@@ -84,6 +84,9 @@ export const FOUNDER_CATEGORIES = [
       { key: 'manual-verify', label: 'Student Manual Verification', getCount: (ctx) => ctx.manualVerifyRequests },
       { key: 'qb-uploads', label: 'Question Bank (Upload / Review)', getCount: (ctx) => ctx.qbUploadRequests },
       { key: 'account-deletion', label: 'Account Deletion', getCount: (ctx) => ctx.accountDeleteRequests },
+      // Community-submitted publications awaiting Founder review — see
+      // PendingPublicationsPanel.jsx / pendingPublicationsSync.js.
+      { key: 'publications', label: 'Publications (Community Submissions)', getCount: (ctx) => ctx.pendingPublications },
     ],
   },
   // --- 3. Academics ---
@@ -105,14 +108,6 @@ export const FOUNDER_CATEGORIES = [
     key: 'question-bank',
     label: 'Question Bank',
     icon: 'BookOpen',
-    // [QB-DEPRECATED 2026-08-15] পুরনো PDF-upload/review/delete-request
-    // workflow বন্ধ — নতুন canonical JSON-based সিস্টেম এখন /solutions
-    // এ সার্ভ হচ্ছে, ফাউন্ডার-সাইড আপলোড/রিভিউ আর দরকার নেই। ঠিক 'trust'
-    // ক্যাটাগরির মতোই hidden: true প্যাটার্ন — কিছু ডিলিট হয়নি,
-    // QuestionBankView/QBReviewQueue/DeleteRequestQueue এখনো কাজ করবে
-    // যদি সরাসরি link করা হয়, শুধু grid/chip থেকে বাদ। দেখো:
-    // PROGRESS_QB_WEBSITE_INTEGRATION.md
-    hidden: true,
     subtitle: 'Founder upload, Campus Lead review queue, delete requests',
     getCount: (ctx) => ctx.qbUploadRequests,
     subcategories: [

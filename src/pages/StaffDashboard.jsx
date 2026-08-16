@@ -17,13 +17,11 @@ import { subscribeIsAdmin } from '../lib/adminAuth';
 import { flagSuspiciousEmail, unflagEmail, summarizeEmailHealth, listPendingFlags, resolveEmailFlag } from '../lib/emailFlags';
 import { isObviouslyBadDomain } from '../lib/emailDomainCheck';
 import ClassmatesList from '../components/ClassmatesList';
-// [QB-DEPRECATED 2026-08-15] নিচের ৩টা import আর ব্যবহার হচ্ছে না,
-// দেখো PROGRESS_QB_WEBSITE_INTEGRATION.md
-// import QBUploadForm from '../components/QBUploadForm';
+import QBUploadForm from '../components/QBUploadForm';
 import { withTimeout } from '../lib/safeSnapshot';
-// import QBReviewQueue from '../components/QBReviewQueue';
+import QBReviewQueue from '../components/QBReviewQueue';
 import AnalyticsDashboard from '../components/AnalyticsDashboard';
-// import RequestDeleteButton from '../components/RequestDeleteButton';
+import RequestDeleteButton from '../components/RequestDeleteButton';
 import SectionTabs from '../components/SectionTabs';
 
 // ---------------------------------------------------------------------
@@ -268,9 +266,7 @@ function CampusLeadBlock({ groupId }) {
         tabs={[
           { key: 'approvals', label: 'Approvals', badge: pendingCount },
           { key: 'roster', label: 'Roster' },
-          // [QB-DEPRECATED 2026-08-15] পুরনো PDF upload/delete-request tab
-          // বন্ধ, দেখো PROGRESS_QB_WEBSITE_INTEGRATION.md
-          // { key: 'qb', label: 'Question Bank' },
+          { key: 'qb', label: 'Question Bank' },
         ]}
         active={activeTab}
         onChange={setActiveTab}
@@ -326,8 +322,6 @@ function CampusLeadBlock({ groupId }) {
         </>
       )}
 
-      {/* [QB-DEPRECATED 2026-08-15] tab নিজেই বন্ধ উপরে, তাই এই ব্লক আর
-          পৌঁছানো যাবে না -- harmless dead code, দেখো PROGRESS_QB_WEBSITE_INTEGRATION.md
       {activeTab === 'qb' && (
         <>
           <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>Upload a Question Bank paper</div>
@@ -340,7 +334,6 @@ function CampusLeadBlock({ groupId }) {
           <RequestDeleteButton groupId={groupId} dept={groupId.split('_')[1]} />
         </>
       )}
-      */}
     </div>
   );
 }
@@ -382,10 +375,8 @@ function SeniorCampusLeadBlock({ dept }) {
       <div style={{ fontSize: 12, fontWeight: 700, margin: '10px 0 6px' }}>Pending email flags in this department</div>
       <EmailFlagReviewBlock dept={dept} />
 
-      {/* [QB-DEPRECATED 2026-08-15] পুরনো PDF review queue বন্ধ, দেখো PROGRESS_QB_WEBSITE_INTEGRATION.md
       <div style={{ fontSize: 12, fontWeight: 700, margin: '10px 0 6px' }}>Pending Question Bank uploads</div>
       <QBReviewQueue dept={dept} />
-      */}
 
       <div style={{ fontSize: 12, fontWeight: 700, margin: '10px 0 6px' }}>Department Analytics</div>
       <AnalyticsDashboard dept={dept} />
@@ -530,12 +521,10 @@ function HeadOfOpsSection() {
 
   return (
     <Section wide title="Head of Operations">
-      {/* [QB-DEPRECATED 2026-08-15] পুরনো PDF delete-request queue বন্ধ, দেখো PROGRESS_QB_WEBSITE_INTEGRATION.md
       <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>
         Pending Question Bank delete requests
       </div>
       <DeleteRequestQueue />
-      */}
 
       <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6, marginTop: 14 }}>
         Pending email flags (fallback — covers depts with no SCL/CL, or any dept)

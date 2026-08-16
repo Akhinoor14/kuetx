@@ -32,7 +32,7 @@ const importers = {
   '/courses':        () => import('./pages/Courses'),
   '/syllabus':       () => import('./pages/Extras').then((m) => ({ default: m.Syllabus })),
   '/question-bank':  () => import('./pages/QuestionBank'),
-  '/solutions':      () => import('./pages/SolutionBank'),
+  '/solutions':      () => import('./pages/QuestionBankSolutions'),
   '/marks':          () => import('./pages/TermPlanner'),
   '/results':        () => import('./pages/Results'),
   '/alerts':         () => import('./pages/Alerts'),

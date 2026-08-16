@@ -64,6 +64,8 @@ import { SERVICE_TYPE_LABELS } from '../lib/serviceSync';
 import QBReviewQueue from '../components/QBReviewQueue';
 import DeleteRequestQueue from '../components/DeleteRequestQueue';
 import QBUploadForm from '../components/QBUploadForm';
+import PendingPublicationsPanel from '../components/PendingPublicationsPanel';
+import { subscribePendingPublicationSubmissions } from '../lib/pendingPublicationsSync';
 import { withTimeout } from '../lib/safeSnapshot';
 
 // Every role the Founder can hand out or take away from this screen —
@@ -251,6 +253,7 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   const [pendingJoinRequests, setPendingJoinRequests] = useState(null);
   const [accountDeleteRequests, setAccountDeleteRequests] = useState(null);
   const [resolvingDeleteId, setResolvingDeleteId] = useState(null);
+  const [pendingPublications, setPendingPublications] = useState(null);
   const [err, setErr] = useState('');
   const [subTab, setSubTab] = useUrlTabState('approvalsTab', 'cl-apps');
   const [loadWarning, setLoadWarning] = useState('');
@@ -262,6 +265,15 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   useEffect(() => withTimeout((cb) => subscribeAllCLApplications(cb), setClApplications, { onTimeout: flagSlowLoad }), []);
   useEffect(() => withTimeout((cb) => subscribeManualVerifyRequests(cb), setManualVerifyRequests, { onTimeout: flagSlowLoad }), []);
   useEffect(() => withTimeout((cb) => subscribeAccountDeleteRequests(cb), setAccountDeleteRequests, { onTimeout: flagSlowLoad }), []);
+  // Community-submitted publications awaiting Founder review — see
+  // pendingPublicationsSync.js / PendingPublicationsPanel.jsx. Only the
+  // count is subscribed here (for the subTab badge); the panel itself
+  // manages its own subscription/loading/error state independently.
+  useEffect(() => withTimeout(
+    (cb) => subscribePendingPublicationSubmissions(cb),
+    setPendingPublications,
+    { onTimeout: flagSlowLoad },
+  ), []);
   // BUGFIX (Approve always failed with "Missing or insufficient
   // permissions"): the manual-verify tab used to approve via
   // approveManualVerifyRequest(), which writes to the legacy
@@ -335,7 +347,7 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   // manual-verify subTab block below for why manualVerifyRequests itself
   // is no longer the approval source).
   const studentManualVerifyCount = (pendingJoinRequests || []).length;
-  const subCtx = { ...countCtx, clApplications: clApplications?.length || 0, crRequests: allCrRequests.length, leaveRequests: allLeaveRequests.length, manualVerifyRequests: studentManualVerifyCount, accountDeleteRequests: (accountDeleteRequests || []).length };
+  const subCtx = { ...countCtx, clApplications: clApplications?.length || 0, crRequests: allCrRequests.length, leaveRequests: allLeaveRequests.length, manualVerifyRequests: studentManualVerifyCount, accountDeleteRequests: (accountDeleteRequests || []).length, pendingPublications: (pendingPublications || []).length };
 
   return (
     <CategoryShell view="approvals" onSelect={onSelectCategory} countCtx={countCtx}>
@@ -447,6 +459,12 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
           </>
         );
       })()}
+
+      {subTab === 'publications' && (
+        <Section title="Publications — Community Submissions">
+          <PendingPublicationsPanel />
+        </Section>
+      )}
 
       {subTab === 'account-deletion' && (
         <Section title="Account Deletion Requests">
