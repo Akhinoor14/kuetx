@@ -709,6 +709,40 @@ function Layout({ authState, onboardingActive }) {
 const PUBLIC_PATHS = ['/', '/about', '/guest', '/guest/dashboard', '/guest/schedule', '/guest/attendance', '/guest/marks']; // kept for old bookmarks — all now just redirect into /
 const isPublicPath = (pathname) => PUBLIC_PATHS.includes(pathname);
 
+// PHASE 7 VERIFICATION NOTE (landing/auth redesign tracker, no code
+// changed here): checked whether buildQueue() needs a bypass for
+// accounts freshly created by SignUpWizard.jsx (Phase 6), since Phase
+// 6's own notes flagged a risk that the wizard's student commit leaves
+// currentTermKey/session blank and that could make isProfileComplete()
+// false, re-queuing 'profile' right after signup. Traced the actual
+// requirements and found no bypass is needed:
+//   - student: isProfileComplete() (store.js) only requires name,
+//     7-digit studentId, a valid dept, a derivable batch, and section
+//     for multi-section depts — it does NOT check currentTermKey/
+//     currentTerm/termStartDate. StudentDetailsStep collects exactly
+//     the fields isProfileComplete() checks, so commitStudentSignup's
+//     saved profile already satisfies it; the queue comes back empty.
+//   - teacher: isFacultyProfileComplete() (facultySync.js) only
+//     requires name/title/dept on the faculty/{uid} doc.
+//     FacultyDetailsStep collects exactly those, and
+//     commitFacultySignup writes them via createFacultyAccountDoc()
+//     then saveFacultyProfile() before the modal closes — queue comes
+//     back empty here too.
+//   - provider: buildQueue() never pushes a queue step for this role by
+//     design (see the 'provider' branch below) once providers/{uid}
+//     exists, which commitProviderSignup's createProviderShell() call
+//     already guarantees.
+// All three commit functions also call setAccountRole(role) (defaults
+// to auth.currentUser?.uid), which tags the local role for the
+// currently-signed-in uid — so isAccountRoleTrustedForUid(uid) is true
+// by the time buildQueue() runs right after the wizard closes, and the
+// server round-trip / role-select branches below are skipped entirely.
+// Net result: no 'role-select', 'profile', or 'faculty-profile' step
+// gets queued for a new-flow account under any of the three roles, so
+// no bypass logic was added — buildQueue() already does the right
+// thing unmodified. Not yet confirmed with a live end-to-end run (see
+// tracker Phase 6/7 notes) — this is a static trace of the field/write
+// requirements, not a runtime test.
 async function buildQueue(isAnonymous, pathname) {
   const q = [];
   let accountRole = getAccountRole();

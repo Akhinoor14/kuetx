@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   ChevronLeft, ChevronRight, FileText, Upload, Search,
   BookOpen, AlertCircle, RefreshCw, ExternalLink, Sparkles, Trash2,
@@ -43,10 +43,46 @@ export default function QuestionBank() {
   const myTermMatch = profile?.currentTermKey?.match(/^Y\dT\d$/);
   const myTerm = myTermMatch ? profile.currentTermKey : null;
 
-  const [screen, setScreen] = useState('depts');
-  const [dept, setDept] = useState(null);
-  const [term, setTerm] = useState(null);
-  const [course, setCourse] = useState(null); // { code, title }
+  // BUGFIX (browser Back always dumping you back at the dept list): screen/
+  // dept/term/course used to be plain useState, which React Router has no
+  // idea exists — drilling into ARCH -> Y3T1 -> a course never touched the
+  // URL, so hitting Back just navigated the OUTER route (away from Question
+  // Bank entirely) instead of one level up the drilldown, and reloading
+  // mid-drilldown always remounted fresh at 'depts'. Mirroring the
+  // drilldown into URL search params (?qbScreen=&qbDept=&qbTerm=&qbCourse=)
+  // gives every level its own browser-history entry for free, so Back walks
+  // papers -> courses -> terms -> depts one step at a time, and a reload or
+  // shared link lands you back exactly where you were instead of the top.
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const screen = searchParams.get('qbScreen') || 'depts';
+  const dept = searchParams.get('qbDept') || null;
+  const term = searchParams.get('qbTerm') || null;
+  const courseCode = searchParams.get('qbCourse') || null;
+  // Only the course CODE round-trips through the URL; the title is cheap to
+  // look back up from QB_COURSE_CODES so we don't need to URL-encode a
+  // second param just to carry it.
+  const course = useMemo(() => {
+    if (!dept || !courseCode) return null;
+    const match = (QB_COURSE_CODES[dept] || []).find(c => c.code === courseCode);
+    return match || { code: courseCode, title: courseCode };
+  }, [dept, courseCode]);
+
+  function setQBState(next, { push = true } = {}) {
+    setSearchParams(prev => {
+      const p = new URLSearchParams(prev);
+      const merged = {
+        qbScreen: screen, qbDept: dept, qbTerm: term, qbCourse: courseCode,
+        ...next,
+      };
+      Object.entries(merged).forEach(([k, v]) => {
+        if (v === null || v === undefined) p.delete(k);
+        else p.set(k, v);
+      });
+      return p;
+    }, { replace: !push });
+  }
+
   const [search, setSearch] = useState('');
   const [showUpload, setShowUpload] = useState(false);
 
@@ -153,27 +189,25 @@ export default function QuestionBank() {
   }, [tree, dept, term, course]);
 
   function goToDept(d) {
-    setDept(d.code);
-    setScreen('terms');
+    setQBState({ qbScreen: 'terms', qbDept: d.code, qbTerm: null, qbCourse: null });
   }
   function jumpToMyTerm() {
     if (!myDept || !myTerm) return;
-    setDept(myDept);
-    setTerm(myTerm);
-    setScreen('courses');
+    setQBState({ qbScreen: 'courses', qbDept: myDept, qbTerm: myTerm, qbCourse: null });
   }
   function goToTerm(t) {
-    setTerm(t);
-    setScreen('courses');
+    setQBState({ qbScreen: 'courses', qbTerm: t, qbCourse: null });
   }
   function goToCourse(c) {
-    setCourse(c);
-    setScreen('papers');
+    setQBState({ qbScreen: 'papers', qbCourse: c.code });
   }
+  // Each drilldown level now has its own history entry (pushed in
+  // setQBState above), so the in-app "back" chevron can just replay the
+  // browser's own Back — same one step the user would get by pressing it
+  // themselves, keeping the two in sync instead of maintaining two separate
+  // notions of "previous screen".
   function goBack() {
-    if (screen === 'papers') { setCourse(null); setScreen('courses'); }
-    else if (screen === 'courses') { setTerm(null); setScreen('terms'); }
-    else if (screen === 'terms') { setDept(null); setScreen('depts'); }
+    navigate(-1);
   }
 
   function openPaper(paper) {

@@ -56,10 +56,39 @@ function normalizeExamTypeLabel(rawType) {
 }
 
 function parseRelativePath(relPath) {
-  // relPath looks like "CSE/Y2T1/CSE2109/Regular_2023.pdf"
-  const parts = relPath.split('/');
+  // relPath is relative to whatever folder the person picked in the OS
+  // file dialog — webkitdirectory always includes that picked folder's
+  // own name as the first path segment, and OS file pickers/zip extraction
+  // can add MORE than one such wrapper level depending on how the folder
+  // was created/copied (e.g. "QuestionBank/QuestionBank/URP/Y4T2/...", or
+  // picking a folder-of-folders one level higher than expected) — not just
+  // exactly one extra level. Real shapes seen in practice:
+  //   - 4 levels: "CSE/Y2T1/CSE2109/Regular_2023.pdf" — picked folder's
+  //     immediate children ARE the dept folders.
+  //   - 5+ levels: "QuestionBank/URP/Y4T2/URP4275/Regular_2014.pdf" (or with
+  //     extra wrapper folders stacked even deeper) — one or more leading
+  //     segments before the dept code carry no meaning and get dropped.
+  // Rather than special-case exactly one extra level (which silently
+  // rejected any deeper nesting as "got 5 levels" even though the shape was
+  // completely valid, just with one more wrapper folder than expected),
+  // walk forward and drop leading segments for as long as the current
+  // first segment isn't a known dept code but a LATER one is — same
+  // "don't silently misread a genuine mistake" guard as before (a stray
+  // typo'd dept folder still won't match anything and falls through to the
+  // real "Unknown dept folder" error below), just no longer capped at one
+  // strip.
+  let parts = relPath.split('/');
+
+  while (
+    parts.length > 4 &&
+    !QB_DEPARTMENTS[parts[0]] &&
+    parts.slice(1).some((p) => QB_DEPARTMENTS[p])
+  ) {
+    parts = parts.slice(1);
+  }
+
   if (parts.length !== 4) {
-    return { ok: false, reason: `Expected DEPT/TERM/COURSE/FILE.pdf (got ${parts.length} levels)` };
+    return { ok: false, reason: `Expected DEPT/TERM/COURSE/FILE.pdf, optionally under one or more parent folders (got ${parts.length} levels)` };
   }
   const [dept, term, rawCourse, filename] = parts;
   const courseCode = rawCourse.replace(/\s+/g, '');

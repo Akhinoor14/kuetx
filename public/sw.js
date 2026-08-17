@@ -26,6 +26,23 @@ const STATIC_ASSETS = [
 const QB_CACHE_NAME = 'kuetx-qbank-v1';
 const isQuestionBankAsset = (request) => {
   try {
+    // BUGFIX (stale QB tree-listing / department counts): the app's own
+    // fetch() for the Worker's tree JSON (useQuestionBankData.js) explicitly
+    // passes { cache: 'no-store' } to force a fresh listing every load — but
+    // that option only governs the *browser's* HTTP cache, it does nothing
+    // to stop THIS service worker from intercepting the same request and
+    // answering cache-first out of QB_CACHE_NAME instead. Net effect: normal
+    // reloads kept re-serving whatever tree JSON (dept counts/order) was
+    // cached the first time a client ever hit the Worker, and only a hard
+    // reload (which bypasses the SW entirely) ever saw a fresh count. A
+    // no-store request is an explicit "don't you dare cache this" signal
+    // from the caller, so honor it here and always hit the network for it,
+    // same as any other no-store/no-cache request — this endpoint returns
+    // JSON (a listing), not a downloadable file, so cache-first was never
+    // actually appropriate for it in the first place, only for the PDFs.
+    if (request.cache === 'no-store' || request.headers.get('Cache-Control') === 'no-store') {
+      return false;
+    }
     const url = new URL(request.url);
     if (url.origin === self.location.origin) return false; // handled by the app-shell branch below instead
     // Cloudflare R2 public buckets are always served from *.r2.dev

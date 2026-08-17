@@ -133,6 +133,24 @@ export function pauseBatchUpload() {
   emit();
 }
 
+// Speed fix (owner request): the old loop uploaded exactly one file at a
+// time — each file is 2-3 sequential network round-trips (Firestore
+// addDoc, R2 /stage POST, R2 /approve POST for Founder auto-publish), so
+// a folder of 50+ files could take many minutes waiting on round-trip
+// latency alone even though each individual file is small. The Worker
+// side (cloudflare-worker/src/index.js) treats every request
+// independently, keyed by its own requestId with no shared mutable
+// state between different files' /stage or /approve calls — so nothing
+// stops multiple files from being in flight to the Worker at once.
+// CONCURRENCY controls how many files upload in parallel. Kept modest
+// (not "all of them at once") on purpose: Cloudflare Workers on the free
+// plan have real concurrent-request/CPU-time ceilings per account, and
+// blasting 50+ simultaneous multipart POSTs risks tripping those limits
+// or saturating the uploader's own connection — a small worker-pool is a
+// large, safe speedup over strictly-1-at-a-time without betting the
+// whole batch on unlimited fan-out.
+const CONCURRENCY = 4;
+
 /** Starts (or resumes) the upload loop. Safe to call repeatedly — no-ops if already running. */
 export async function startBatchUpload(onUploaded) {
   if (state.running) return;
@@ -141,16 +159,20 @@ export async function startBatchUpload(onUploaded) {
 
   const profile = state.profile;
 
-  // Loop by re-reading state.rows each iteration so edits (remove row)
-  // made mid-run are respected, and so this survives whichever
-  // component is (or isn't) mounted.
-  while (true) {
-    if (state.paused) break;
+  // Claims the next 'ready' row atomically (via updateBatchRow's status
+  // flip) and uploads it. Re-reads state.rows fresh each call so
+  // concurrent workers never grab the same row, and so mid-run edits
+  // (remove row) or a pause request are always seen. Returns nothing —
+  // callers just await it and loop again.
+  async function uploadOneRow() {
     const idx = state.rows.findIndex((r) => r.status === 'ready');
-    if (idx === -1) break;
-
-    const row = state.rows[idx];
+    if (idx === -1) return false;
+    // Claim it immediately (status -> 'uploading') before any await, so
+    // the next worker's findIndex() (running concurrently) can't also
+    // pick this same row — this is what makes the pool race-safe despite
+    // JS's single-threaded-but-interleaved async execution.
     updateBatchRow(idx, { status: 'uploading' });
+    const row = state.rows[idx];
 
     try {
       const { dept, term, courseCode, examType, examYear } = row.parsed;
@@ -165,12 +187,22 @@ export async function startBatchUpload(onUploaded) {
     } catch (e) {
       updateBatchRow(idx, { status: 'error', error: e?.message || 'Upload failed' });
     }
-
-    // A pause requested while this file was in flight takes effect now,
-    // BEFORE the next file starts — matches the "finish current file,
-    // then stop" contract.
-    if (state.paused) break;
+    return true;
   }
+
+  // Each "worker" loop keeps claiming + uploading rows until either the
+  // queue is empty or a pause was requested — "pause" still means
+  // "finish whatever's currently in flight in every lane, then stop
+  // before any lane starts a new file", same contract as before, just
+  // now across CONCURRENCY lanes instead of one.
+  async function worker() {
+    while (!state.paused) {
+      const claimed = await uploadOneRow();
+      if (!claimed) break; // no more 'ready' rows left
+    }
+  }
+
+  await Promise.all(Array.from({ length: CONCURRENCY }, () => worker()));
 
   state = { ...state, running: false };
   emit();
