@@ -490,42 +490,13 @@ function CRFeatureBlock() {
   );
 }
 
-const TAB_ROTATE_MS = 6000; // normal auto-rotate cadence between tabs
-const TAB_MANUAL_PAUSE_MS = 12000; // owner said 10-15s; pause after a manual click
-
 function FeatureBreakdown() {
   const [activeTab, setActiveTab] = useState('student');
   const tab = FEATURE_TABS.find((t) => t.id === activeTab);
   const categories = Object.entries(tab.features);
 
-  // Auto-rotate through the tabs; a manual click pauses rotation on that
-  // tab for TAB_MANUAL_PAUSE_MS, then normal auto-rotation resumes from
-  // the next tab in sequence (does not stop permanently — owner-confirmed).
-  const intervalRef = useRef(null);
-  const timeoutRef = useRef(null);
-
-  useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      setActiveTab((current) => {
-        const idx = FEATURE_TABS.findIndex((t) => t.id === current);
-        return FEATURE_TABS[(idx + 1) % FEATURE_TABS.length].id;
-      });
-    }, TAB_ROTATE_MS);
-    return () => clearInterval(intervalRef.current);
-  }, []);
-
   const handleTabClick = (tabId) => {
     setActiveTab(tabId);
-    clearInterval(intervalRef.current);
-    clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => {
-      intervalRef.current = setInterval(() => {
-        setActiveTab((current) => {
-          const idx = FEATURE_TABS.findIndex((t) => t.id === current);
-          return FEATURE_TABS[(idx + 1) % FEATURE_TABS.length].id;
-        });
-      }, TAB_ROTATE_MS);
-    }, TAB_MANUAL_PAUSE_MS);
   };
 
   return (
@@ -547,7 +518,7 @@ function FeatureBreakdown() {
             <button
               key={t.id}
               type="button"
-              onClick={() => setActiveTab(t.id)}
+              onClick={() => handleTabClick(t.id)}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
                 padding: '0.5rem 1rem', borderRadius: '999px', fontSize: '0.85rem', fontWeight: 700,
@@ -564,8 +535,8 @@ function FeatureBreakdown() {
       </div>
 
       <div style={{
-        display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        gap: '1.5rem', padding: '1.5rem', borderRadius: '18px',
+        display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+        gap: '1.25rem 1rem', padding: '1.5rem', borderRadius: '18px',
         border: '1px solid var(--border)', background: 'var(--surfaceGlass, var(--surface))',
       }}>
         {categories.map(([key, items]) => (
@@ -627,7 +598,7 @@ function MockupFrame({ mode, children, scrollHostRef }) {
     <div style={{
       margin: '0 auto',
       width: isPhone ? '340px' : '100%',
-      maxWidth: isPhone ? '340px' : '640px',
+      maxWidth: isPhone ? '340px' : '100%',
       border: isPhone ? '3px solid var(--border)' : '1.5px solid var(--border)',
       borderRadius: isPhone ? '36px' : '16px',
       background: 'var(--surface)',
@@ -689,12 +660,18 @@ function MockupFrame({ mode, children, scrollHostRef }) {
 // position: sticky so it stays in view while the visitor scrolls past it
 // (owner-confirmed: pinned, not a normal scrolling section).
 const ROLE_SEQUENCE = ['student', 'faculty', 'provider'];
-const SETTLE_MS = 1800; // brief pause before inner auto-scroll starts
-const SCROLL_MS = 4200; // duration of the inner auto-scroll sweep
-const HOLD_MS = 1200; // pause at bottom before rotating to next role
+const SETTLE_MS = 2800; // brief pause before inner auto-scroll starts
+const SCROLL_MS = 6500; // duration of the inner auto-scroll sweep
+const HOLD_MS = 2200; // pause at bottom before rotating to next role
 const MANUAL_PAUSE_MS = 12000; // owner said 10-15s; 12s split the difference
 
-function RotatingPreview({ mockupMode, setMockupMode, onSignUp }) {
+function RotatingPreview({ mockupMode, setMockupMode, onSignUp, isMobileNav }) {
+  // Mobile visitors only ever need the phone mockup — a "desktop browser
+  // window" preview inside an already-narrow mobile viewport just wastes
+  // space and looks broken. Force phone mode on mobile regardless of
+  // whatever mockupMode state holds, and hide the phone/desktop toggle
+  // buttons there since there's nothing to toggle.
+  const effectiveMode = isMobileNav ? 'phone' : mockupMode;
   const [activeRole, setActiveRole] = useState('student');
   const scrollHostRef = useRef(null);
   const timeoutsRef = useRef([]);
@@ -746,7 +723,7 @@ function RotatingPreview({ mockupMode, setMockupMode, onSignUp }) {
   };
 
   return (
-    <div style={{ position: 'sticky', top: '76px', zIndex: 3, marginBottom: '2rem' }}>
+    <div style={{ marginBottom: '2rem' }}>
       <style>{`.kuetx-mockup-scrollhost::-webkit-scrollbar { display: none; }`}</style>
       <div style={{ display: 'flex', justifyContent: 'center', gap: '0.4rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
         {ROLE_CARDS.map(role => {
@@ -770,36 +747,40 @@ function RotatingPreview({ mockupMode, setMockupMode, onSignUp }) {
             </button>
           );
         })}
-        <div style={{ width: '1px', background: 'var(--border)', margin: '0 0.2rem' }} />
-        <button
-          type="button"
-          onClick={() => setMockupMode('phone')}
-          style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
-            padding: '0.4rem 0.7rem', borderRadius: '999px', fontSize: '0.8rem', fontWeight: 700,
-            border: '1px solid var(--border)', cursor: 'pointer',
-            background: mockupMode === 'phone' ? 'var(--accent)' : 'transparent',
-            color: mockupMode === 'phone' ? '#fff' : 'var(--text)',
-          }}
-        >
-          <Smartphone size={13} />
-        </button>
-        <button
-          type="button"
-          onClick={() => setMockupMode('desktop')}
-          style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
-            padding: '0.4rem 0.7rem', borderRadius: '999px', fontSize: '0.8rem', fontWeight: 700,
-            border: '1px solid var(--border)', cursor: 'pointer',
-            background: mockupMode === 'desktop' ? 'var(--accent)' : 'transparent',
-            color: mockupMode === 'desktop' ? '#fff' : 'var(--text)',
-          }}
-        >
-          <Monitor size={13} />
-        </button>
+        {!isMobileNav && (
+          <>
+            <div style={{ width: '1px', background: 'var(--border)', margin: '0 0.2rem' }} />
+            <button
+              type="button"
+              onClick={() => setMockupMode('phone')}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+                padding: '0.4rem 0.7rem', borderRadius: '999px', fontSize: '0.8rem', fontWeight: 700,
+                border: '1px solid var(--border)', cursor: 'pointer',
+                background: mockupMode === 'phone' ? 'var(--accent)' : 'transparent',
+                color: mockupMode === 'phone' ? '#fff' : 'var(--text)',
+              }}
+            >
+              <Smartphone size={13} />
+            </button>
+            <button
+              type="button"
+              onClick={() => setMockupMode('desktop')}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+                padding: '0.4rem 0.7rem', borderRadius: '999px', fontSize: '0.8rem', fontWeight: 700,
+                border: '1px solid var(--border)', cursor: 'pointer',
+                background: mockupMode === 'desktop' ? 'var(--accent)' : 'transparent',
+                color: mockupMode === 'desktop' ? '#fff' : 'var(--text)',
+              }}
+            >
+              <Monitor size={13} />
+            </button>
+          </>
+        )}
       </div>
 
-      <MockupFrame mode={mockupMode} scrollHostRef={scrollHostRef}>
+      <MockupFrame mode={effectiveMode} scrollHostRef={scrollHostRef}>
         <DemoContent role={activeRole} />
       </MockupFrame>
 
@@ -1157,22 +1138,21 @@ export default function LandingPage() {
 
         <WhyKuetx isMobileNav={isMobileNav} />
 
+        {/* Phase 9.3: full verbatim feature breakdown, role-tabbed. */}
+        <FeatureBreakdown />
+
         {/* Always-visible, auto-rotating mockup preview — replaces the old
             click-to-open role cards entirely (owner decision, this
-            session). See RotatingPreview's own header comment for the
-            full behavior spec. */}
+            session). Moved below FeatureBreakdown (owner request): the
+            "৬২+ ফিচার" list now comes first, and the live mockup preview
+            sits right after it. See RotatingPreview's own header comment
+            for the full behavior spec. */}
         <RotatingPreview
           mockupMode={mockupMode}
           setMockupMode={setMockupMode}
           onSignUp={() => openAuth('signup')}
+          isMobileNav={isMobileNav}
         />
-
-        {/* Phase 9.3: full verbatim feature breakdown, role-tabbed. Placed
-            after the role cards/mockup rather than above them — a visitor
-            picks a role and sees the demo first (the "show, don't list"
-            moment), then this section backs that impression up with the
-            complete, real list for whichever role they want to check. */}
-        <FeatureBreakdown />
       </div>
 
       <Footer />
