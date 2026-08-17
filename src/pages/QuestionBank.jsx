@@ -8,6 +8,7 @@ import { QB_DEPARTMENTS, getDeptTerms } from '../data/questionbank/questionBankD
 import { QB_COURSE_CODES } from '../data/questionbank/qbCourseCodes';
 import { useQuestionBankData, getR2FileUrl } from '../hooks/useQuestionBankData';
 import UploadQuestionModal from '../components/UploadQuestionModal';
+import FounderQBUploadModal from '../components/FounderQBUploadModal';
 import { getProfile } from '../store/store';
 import { isMultiSectionDept, getGroupId } from '../lib/groupUtils';
 import { auth } from '../lib/firebase';
@@ -246,7 +247,7 @@ export default function QuestionBank() {
             </button>
           )}
           <button className="accent-fill-glass" style={styles.uploadBtn} onClick={() => setShowUpload(true)}>
-            <Upload size={16} /> <span className="btn-txt">Upload</span>
+            <Upload size={16} /> <span className="btn-txt">{isFounder ? 'Upload (direct)' : 'Upload'}</span>
           </button>
         </div>
       </div>
@@ -429,7 +430,20 @@ export default function QuestionBank() {
         </>
       )}
 
-      {showUpload && (
+      {showUpload && isFounder && (
+        // Founder gets the SAME direct-to-R2, auto-publish pipeline as
+        // AdminDashboard's QuestionBankView "upload" tab (QBUploadForm
+        // with isFounder) — previously this button always opened the
+        // public Google Form modal even for Founder, so Founder uploads
+        // never actually landed in R2 without a separate trip to
+        // AdminDashboard. Wiring it here too so "Upload" does what a
+        // signed-in Founder expects from this page.
+        <FounderQBUploadModal
+          onClose={() => setShowUpload(false)}
+          onUploaded={() => { refetch(); }}
+        />
+      )}
+      {showUpload && !isFounder && (
         <UploadQuestionModal
           defaultDept={dept}
           defaultTerm={term}

@@ -64,6 +64,7 @@ import { SERVICE_TYPE_LABELS } from '../lib/serviceSync';
 import QBReviewQueue from '../components/QBReviewQueue';
 import DeleteRequestQueue from '../components/DeleteRequestQueue';
 import QBUploadForm from '../components/QBUploadForm';
+import QBCoverageSummary from '../components/QBCoverageSummary';
 import PendingPublicationsPanel from '../components/PendingPublicationsPanel';
 import { subscribePendingPublicationSubmissions } from '../lib/pendingPublicationsSync';
 import { withTimeout } from '../lib/safeSnapshot';
@@ -1240,6 +1241,11 @@ function DetailRow({ label, value, href, mono }) {
 function QuestionBankView({ onBack, onSelectCategory, countCtx }) {
   const [subTab, setSubTab] = useUrlTabState('qbTab', 'upload');
   const category = getFounderCategory('question-bank');
+  // Bumped after every successful upload (single or batch) so
+  // QBCoverageSummary — which fetches the live tree once on mount — gets
+  // remounted and re-fetches. Previously onUploaded was a no-op, so this
+  // count table only ever reflected data as of the last full page load.
+  const [coverageRefreshKey, setCoverageRefreshKey] = useState(0);
 
   return (
     <CategoryShell view="question-bank" onSelect={onSelectCategory} countCtx={countCtx}>
@@ -1248,7 +1254,8 @@ function QuestionBankView({ onBack, onSelectCategory, countCtx }) {
 
       {subTab === 'upload' && (
         <Section title="Upload a paper (any department — auto-published, no review)">
-          <QBUploadForm isFounder onUploaded={() => {}} />
+          <QBCoverageSummary key={coverageRefreshKey} />
+          <QBUploadForm isFounder onUploaded={() => setCoverageRefreshKey((k) => k + 1)} />
         </Section>
       )}
 

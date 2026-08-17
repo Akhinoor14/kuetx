@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<title>Mockup — Sign Up wizard (mobile + desktop)</title>
+<style>
+  :root{
+    --surface-2:#fff; --surface-1:#f7f6f3; --border:#e5e3dc; --border-strong:#cfccc2;
+    --border-accent:#185fa5; --fill-accent:#185fa5; --on-accent:#fff; --bg-accent-muted:#e6f1fb;
+    --text-accent:#185fa5; --text-secondary:#5f5e5a; --text-muted:#888780; --text-success:#3b6d11;
+    --radius:8px;
+  }
+  body{font-family:-apple-system,'Segoe UI',sans-serif;background:#fafaf8;padding:32px;color:#1a1a18}
+</style>
+</head>
+<body>
+<div style="display:flex;flex-direction:column;gap:24px;max-width:680px;margin:0 auto">
+
+<div>
+<div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px">Mobile — full-screen step, one column, progress dots top</div>
+<div style="width:300px;background:var(--surface-2);border:0.5px solid var(--border);border-radius:16px;overflow:hidden">
+<div style="padding:14px 16px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:10px">
+<span>&larr;</span>
+<div style="display:flex;gap:5px;flex:1;justify-content:center">
+<div style="width:20px;height:4px;border-radius:2px;background:var(--fill-accent)"></div>
+<div style="width:20px;height:4px;border-radius:2px;background:var(--border-strong)"></div>
+<div style="width:20px;height:4px;border-radius:2px;background:var(--border-strong)"></div>
+</div>
+<div style="width:16px"></div>
+</div>
+<div style="padding:20px 16px">
+<p style="font-size:12px;color:var(--text-muted);margin:0 0 4px">Step 1 of 3</p>
+<p style="font-weight:600;font-size:16px;margin:0 0 16px">Who are you joining as?</p>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="border:2px solid var(--border-accent);border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px;background:var(--bg-accent-muted)">
+<span style="color:var(--text-accent)">&#127891;</span>
+<span style="font-size:14px;font-weight:600">Student</span>
+</div>
+<div style="border:0.5px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px">
+<span style="color:var(--text-secondary)">&#127979;</span>
+<span style="font-size:14px">Faculty member</span>
+</div>
+<div style="border:0.5px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px">
+<span style="color:var(--text-secondary)">&#127978;</span>
+<span style="font-size:14px">Service provider</span>
+</div>
+</div>
+</div>
+<div style="padding:14px 16px;border-top:0.5px solid var(--border)">
+<button style="width:100%;padding:12px;border-radius:var(--radius);border:none;background:var(--fill-accent);color:var(--on-accent);font-size:14px;font-weight:600">Continue</button>
+</div>
+</div>
+</div>
+
+<div>
+<div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px">Desktop — centered card, wider, horizontal step labels</div>
+<div style="background:var(--surface-2);border:0.5px solid var(--border);border-radius:16px;overflow:hidden;max-width:460px">
+<div style="padding:16px 24px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+<span style="font-size:13px;font-weight:600;color:var(--text-accent)">1 Role</span>
+<span style="font-size:13px;color:var(--text-muted)">2 Details</span>
+<span style="font-size:13px;color:var(--text-muted)">3 Confirm</span>
+</div>
+<div style="padding:24px">
+<p style="font-weight:600;font-size:16px;margin:0 0 16px">Who are you joining as?</p>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+<div style="border:2px solid var(--border-accent);border-radius:12px;padding:16px;text-align:center;background:var(--bg-accent-muted)">
+<div style="color:var(--text-accent)">&#127891;</div>
+<p style="font-size:13px;font-weight:600;margin:8px 0 0">Student</p>
+</div>
+<div style="border:0.5px solid var(--border);border-radius:12px;padding:16px;text-align:center">
+<div style="color:var(--text-secondary)">&#127979;</div>
+<p style="font-size:13px;margin:8px 0 0">Faculty</p>
+</div>
+<div style="border:0.5px solid var(--border);border-radius:12px;padding:16px;text-align:center">
+<div style="color:var(--text-secondary)">&#127978;</div>
+<p style="font-size:13px;margin:8px 0 0">Provider</p>
+</div>
+</div>
+</div>
+<div style="padding:14px 24px;border-top:0.5px solid var(--border);display:flex;justify-content:flex-end">
+<button style="padding:10px 20px;border-radius:var(--radius);border:none;background:var(--fill-accent);color:var(--on-accent);font-size:13px;font-weight:600">Continue</button>
+</div>
+</div>
+</div>
+
+<div style="border-top:0.5px solid var(--border);padding-top:20px">
+<div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px">Final step — same on both, Google button only appears here</div>
+<div style="background:var(--surface-1);border-radius:12px;padding:20px;max-width:340px;text-align:center">
+<div style="color:var(--text-success);font-size:22px">&#10003;</div>
+<p style="font-weight:600;font-size:15px;margin:10px 0 4px">All set, Rifat</p>
+<p style="font-size:12px;color:var(--text-secondary);margin:0 0 16px">Roll 2313014 &middot; Energy Science &amp; Engineering &middot; Session 2024-25</p>
+<button style="width:100%;padding:12px;border-radius:var(--radius);border:0.5px solid var(--border-strong);background:var(--surface-2);font-size:14px;font-weight:600">Sign up with Google</button>
+</div>
+</div>
+
+</div>
+</body>
+</html>

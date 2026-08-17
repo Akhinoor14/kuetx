@@ -13,14 +13,54 @@ import { Upload, Pause, Play, X } from 'lucide-react';
 import {
   subscribeBatchUpload, pauseBatchUpload, startBatchUpload,
   getBatchProgress, getBatchDepts, clearBatch,
+  getInterruptedBatchSummary,
 } from '../lib/batchUploadManager';
 
 export default function FloatingUploadBar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [batchState, setBatchState] = useState(() => ({ rows: [], running: false, paused: false, active: false }));
+  // One-time notice shown after a page reload that interrupted a batch
+  // still in progress — the live queue itself can't survive a reload
+  // (see batchUploadManager.js), so this is the last known progress
+  // snapshot instead of silently showing nothing.
+  const [interrupted, setInterrupted] = useState(() => getInterruptedBatchSummary());
 
   useEffect(() => subscribeBatchUpload(setBatchState), []);
+
+  if (interrupted) {
+    return (
+      <div
+        style={{
+          position: 'fixed', left: '50%', transform: 'translateX(-50%)', bottom: 78, zIndex: 1200,
+          width: 'min(420px, calc(100vw - 24px))', background: 'var(--card, #fff)',
+          border: '1px solid var(--border)', borderRadius: 14, boxShadow: '0 8px 28px rgba(0,0,0,0.18)',
+          padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: 6,
+        }}
+        role="status"
+        aria-live="polite"
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <Upload size={16} style={{ color: 'var(--accent, #2563eb)', flexShrink: 0 }} />
+          <div style={{ flex: 1, minWidth: 0, fontSize: 12.5, fontWeight: 700, color: 'var(--text)' }}>
+            Page reloaded mid-batch — {interrupted.doneCount}/{interrupted.total} published before that
+            {interrupted.errorCount > 0 && `, ${interrupted.errorCount} failed`}
+          </div>
+          <button
+            type="button"
+            onClick={() => setInterrupted(null)}
+            aria-label="Dismiss"
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)', padding: 2, flexShrink: 0 }}
+          >
+            <X size={15} />
+          </button>
+        </div>
+        <div style={{ fontSize: 11, color: 'var(--muted)' }}>
+          The remaining {interrupted.total - interrupted.doneCount - interrupted.errorCount} file(s) were not uploaded — re-select the folder and re-run to pick up where it left off (already-published files will be skipped as duplicates).
+        </div>
+      </div>
+    );
+  }
 
   if (!batchState.active || batchState.rows.length === 0) return null;
 

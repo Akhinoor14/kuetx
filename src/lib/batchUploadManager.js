@@ -27,8 +27,66 @@ let state = {
 
 const listeners = new Set();
 
+// ---------------------------------------------------------------------
+// Reload-survival: `state.rows[].file` is a raw File object and can't be
+// JSON-serialized, so the live queue itself can't be restored after a
+// page reload — an in-flight fetch also dies with the reload regardless.
+// What we CAN and DO persist is a lightweight progress summary (counts +
+// which rows finished/failed, by relPath, not the File blobs). On boot,
+// if a summary exists and looks like a batch was interrupted mid-run
+// (running/paused with an incomplete count), we surface it once via
+// getInterruptedBatchSummary() so the UI can show "37/50 published
+// before the page reloaded" instead of silently showing nothing, which
+// is what caused the confusion this was written to fix.
+// ---------------------------------------------------------------------
+const SUMMARY_KEY = 'kuetx_qb_batch_summary_v1';
+
+function persistSummary() {
+  if (!state.active) {
+    sessionStorage.removeItem(SUMMARY_KEY);
+    return;
+  }
+  try {
+    const summary = {
+      total: state.rows.length,
+      doneCount: state.rows.filter((r) => r.status === 'done').length,
+      errorCount: state.rows.filter((r) => r.status === 'error').length,
+      running: state.running,
+      paused: state.paused,
+      savedAt: Date.now(),
+    };
+    sessionStorage.setItem(SUMMARY_KEY, JSON.stringify(summary));
+  } catch {
+    // sessionStorage unavailable (private mode, quota, etc.) — best-effort only
+  }
+}
+
+/**
+ * Called once at load time by FloatingUploadBar/BatchQBUpload to check
+ * whether a previous batch in this tab was interrupted (page reloaded
+ * while `running` or `paused` was true, so it never reached a clean
+ * finish). Returns null if nothing relevant was saved, or if the saved
+ * summary already reached completion cleanly (nothing to report).
+ * Clears the saved summary after reading — this is a one-time notice.
+ */
+export function getInterruptedBatchSummary() {
+  try {
+    const raw = sessionStorage.getItem(SUMMARY_KEY);
+    if (!raw) return null;
+    sessionStorage.removeItem(SUMMARY_KEY);
+    const summary = JSON.parse(raw);
+    // Only interesting if the batch was still going (running/paused) —
+    // a summary saved after a clean finish isn't an "interruption".
+    if (!summary.running && !summary.paused) return null;
+    return summary;
+  } catch {
+    return null;
+  }
+}
+
 function emit() {
   const snapshot = state;
+  persistSummary();
   listeners.forEach((cb) => cb(snapshot));
 }
 

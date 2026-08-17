@@ -194,6 +194,14 @@ export default function LandingPage() {
   // appearing with no lead-in. Confirming inside SignInPrompt swaps to
   // AuthModal; "পরে করবো" just closes it.
   const [showSignInPrompt, setShowSignInPrompt] = useState(false);
+  // Phase 1 (landing redesign): navbar now offers separate Sign In / Sign Up
+  // entry points so a new visitor doesn't have to guess which one applies to
+  // them. This is UI-only — AuthModal itself has no Login/Register branch
+  // (Google Sign-In only, mode prop is a no-op), so both intents open the
+  // exact same modal; this just changes the SignInPrompt copy/button label
+  // shown first, to set the right expectation before Google's redirect.
+  const [authIntent, setAuthIntent] = useState('signin'); // 'signin' | 'signup'
+  const openAuth = (intent) => { setAuthIntent(intent); setShowSignInPrompt(true); };
   const [mockupMode, setMockupMode] = useState('desktop'); // desktop visitor default, per plan §3.2
 
   const selectedRole = searchParams.get('role');
@@ -253,11 +261,13 @@ export default function LandingPage() {
               desktop return's SignInPrompt/AuthModal block further down —
               so this branch needs its own Sign In entry point, not just
               the desktop one. Small icon-only button here (space is
-              tight in this sticky bar) rather than the full "Sign In"
-              label button the desktop navbar uses. */}
+              tight in this sticky bar) rather than the full Sign In/Sign Up
+              label buttons the main navbar uses below — this is a secondary,
+              mid-demo entry point, not the primary §11.1 navbar, so it stays
+              a single combined icon (Phase 1) rather than splitting into two. */}
           <button
             type="button"
-            onClick={() => setShowSignInPrompt(true)}
+            onClick={() => openAuth('signin')}
             aria-label="Sign In"
             style={{
               flexShrink: 0, display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
@@ -271,6 +281,7 @@ export default function LandingPage() {
         <DemoContent role={selectedRole} />
         {showSignInPrompt && (
           <SignInPrompt
+            intent={authIntent}
             onSignIn={() => { setShowSignInPrompt(false); setShowAuthModal(true); }}
             onClose={() => setShowSignInPrompt(false)}
           />
@@ -278,6 +289,7 @@ export default function LandingPage() {
         {showAuthModal && (
           <AuthModal
             mode="login"
+            intent={authIntent}
             onClose={() => setShowAuthModal(false)}
             onSuccess={() => setShowAuthModal(false)}
           />
@@ -288,7 +300,14 @@ export default function LandingPage() {
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
-      {/* Navbar — logo + Sign In, sticky, non-forcing */}
+      {/* Navbar — logo + Sign In/Sign Up, sticky, non-forcing.
+          Phase 1 (landing redesign, §11.1): split the single "Sign In"
+          button into two separate entry points so a new visitor doesn't
+          have to guess which one applies to them. Both open the exact
+          same AuthModal (Google-only, no Login/Register branch) — see
+          authIntent state above — this only changes the SignInPrompt
+          copy shown first. Sign Up is visually primary (filled) since
+          most navbar visitors are new; Sign In is secondary (outlined). */}
       <div style={{
         position: 'sticky', top: 0, zIndex: 5, display: 'flex',
         alignItems: 'center', justifyContent: 'space-between',
@@ -296,18 +315,33 @@ export default function LandingPage() {
         backdropFilter: 'blur(10px)', borderBottom: '1px solid var(--border)',
       }}>
         <Wordmark height={22} />
-        <button
-          type="button"
-          onClick={() => setShowSignInPrompt(true)}
-          style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-            padding: '0.55rem 1rem', borderRadius: '12px',
-            background: 'var(--accent)', color: '#fff', border: 'none',
-            fontSize: '0.85rem', fontWeight: 800, cursor: 'pointer',
-          }}
-        >
-          <LogIn size={15} /> Sign In
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <button
+            type="button"
+            onClick={() => openAuth('signin')}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+              padding: '0.55rem 0.9rem', borderRadius: '12px',
+              background: 'transparent', color: 'var(--text)',
+              border: '1px solid var(--border)',
+              fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer',
+            }}
+          >
+            Sign In
+          </button>
+          <button
+            type="button"
+            onClick={() => openAuth('signup')}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+              padding: '0.55rem 1rem', borderRadius: '12px',
+              background: 'var(--accent)', color: '#fff', border: 'none',
+              fontSize: '0.85rem', fontWeight: 800, cursor: 'pointer',
+            }}
+          >
+            <LogIn size={15} /> Sign Up
+          </button>
+        </div>
       </div>
 
       <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '2.5rem 1.25rem 4rem' }}>
@@ -411,6 +445,7 @@ export default function LandingPage() {
 
       {showSignInPrompt && (
         <SignInPrompt
+          intent={authIntent}
           onSignIn={() => { setShowSignInPrompt(false); setShowAuthModal(true); }}
           onClose={() => setShowSignInPrompt(false)}
         />
@@ -418,6 +453,7 @@ export default function LandingPage() {
       {showAuthModal && (
         <AuthModal
           mode="login"
+          intent={authIntent}
           onClose={() => setShowAuthModal(false)}
           onSuccess={() => setShowAuthModal(false)}
         />

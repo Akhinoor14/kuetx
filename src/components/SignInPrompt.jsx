@@ -23,7 +23,16 @@
 // so that IF a future write-trigger is added to any demo view, there's
 // already a ready-made prompt to wire it to instead of building one
 // ad hoc at that point.
-export default function SignInPrompt({ onSignIn, onClose, reason }) {
+//
+// Phase 1 (landing redesign): `intent` ('signin' | 'signup', default
+// 'signin') only changes the heading/button copy here — it does NOT
+// change what happens on confirm. AuthModal has a single Google-only
+// flow (no Login/Register branch), so both intents call the same
+// onSignIn(). This exists purely so a visitor who clicked "Sign Up"
+// isn't shown "সাইন ইন করা লাগবে" copy that implies they already have
+// an account.
+export default function SignInPrompt({ onSignIn, onClose, reason, intent = 'signin' }) {
+  const isSignUp = intent === 'signup';
   return (
     <>
       <div
@@ -48,10 +57,12 @@ export default function SignInPrompt({ onSignIn, onClose, reason }) {
             🔐
           </div>
           <div style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text)', marginBottom: '0.4rem' }}>
-            সাইন ইন করা লাগবে
+            {isSignUp ? 'নতুন অ্যাকাউন্ট বানান' : 'সাইন ইন করা লাগবে'}
           </div>
           <div style={{ fontSize: '0.85rem', color: 'var(--muted)', lineHeight: 1.6, marginBottom: '1.2rem' }}>
-            {reason || 'এই অংশটা ব্যবহার করতে একটা KUETx অ্যাকাউন্ট লাগবে — মাত্র কয়েক সেকেন্ড লাগে।'}
+            {reason || (isSignUp
+              ? 'Google দিয়ে মাত্র কয়েক সেকেন্ডে KUETx অ্যাকাউন্ট বানাও।'
+              : 'এই অংশটা ব্যবহার করতে একটা KUETx অ্যাকাউন্ট লাগবে — মাত্র কয়েক সেকেন্ড লাগে।')}
           </div>
           <button
             type="button"
@@ -62,7 +73,7 @@ export default function SignInPrompt({ onSignIn, onClose, reason }) {
               fontSize: '0.9rem', fontWeight: 800, cursor: 'pointer', marginBottom: '0.5rem',
             }}
           >
-            Sign In / Sign Up
+            {isSignUp ? 'Sign Up with Google' : 'Sign In / Sign Up'}
           </button>
           <button
             type="button"

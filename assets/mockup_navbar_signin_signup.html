@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<title>Mockup — Navbar Sign In / Sign Up (desktop + mobile)</title>
+<style>
+  :root{
+    --surface-2:#fff; --surface-1:#f7f6f3; --border:#e5e3dc; --border-strong:#cfccc2;
+    --fill-accent:#185fa5; --on-accent:#fff; --bg-accent-muted:#e6f1fb;
+    --text-accent:#185fa5; --text-secondary:#5f5e5a; --text-success:#3b6d11; --bg-success:#eaf3de;
+    --text-pro:#534ab7; --bg-pro:#eeedfe; --radius:8px;
+  }
+  body{font-family:-apple-system,'Segoe UI',sans-serif;background:#fafaf8;padding:32px;color:#1a1a18}
+  .ti{font-style:normal}
+</style>
+</head>
+<body>
+<div style="display:flex;flex-direction:column;gap:24px;max-width:680px;margin:0 auto">
+
+<div>
+<div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px">Desktop navbar (sticky, &ge;768px)</div>
+<div style="background:var(--surface-2);border:0.5px solid var(--border);border-radius:12px;padding:14px 20px;display:flex;align-items:center;justify-content:space-between">
+<div style="font-weight:600;font-size:16px">KUETx</div>
+<div style="display:flex;gap:10px">
+<button style="padding:8px 16px;border-radius:var(--radius);border:1px solid var(--border-strong);background:transparent;font-size:13px;font-weight:500">Sign in</button>
+<button style="padding:8px 16px;border-radius:var(--radius);border:none;background:var(--fill-accent);color:var(--on-accent);font-size:13px;font-weight:500">Sign up</button>
+</div>
+</div>
+</div>
+
+<div>
+<div style="font-size:13px;color:var(--text-secondary);margin-bottom:8px">Mobile navbar (&lt;768px, compact icons)</div>
+<div style="width:280px;background:var(--surface-2);border:0.5px solid var(--border);border-radius:12px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between">
+<div style="font-weight:600;font-size:14px">KUETx</div>
+<div style="display:flex;gap:6px">
+<button style="width:34px;height:34px;border-radius:10px;border:1px solid var(--border-strong);background:transparent" aria-label="Sign in">&#8594;]</button>
+<button style="width:34px;height:34px;border-radius:10px;border:none;background:var(--fill-accent);color:var(--on-accent)" aria-label="Sign up">+</button>
+</div>
+</div>
+</div>
+
+<div style="border-top:0.5px solid var(--border);padding-top:20px">
+<div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Sign in path (fast, no form)</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+<div style="background:var(--surface-1);border-radius:var(--radius);padding:12px;text-align:center">Tap Sign in</div>
+<div style="background:var(--surface-1);border-radius:var(--radius);padding:12px;text-align:center">Google popup</div>
+<div style="background:var(--bg-success);border-radius:var(--radius);padding:12px;text-align:center;color:var(--text-success)">Dashboard</div>
+</div>
+</div>
+
+<div>
+<div style="font-size:13px;color:var(--text-secondary);margin-bottom:12px">Sign up path (form first, Google last)</div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+<div style="background:var(--surface-1);border-radius:var(--radius);padding:12px;text-align:center">Tap Sign up</div>
+<div style="background:var(--bg-pro);border-radius:var(--radius);padding:12px;text-align:center;color:var(--text-pro)">Role + profile form</div>
+<div style="background:var(--surface-1);border-radius:var(--radius);padding:12px;text-align:center">Google popup</div>
+<div style="background:var(--bg-success);border-radius:var(--radius);padding:12px;text-align:center;color:var(--text-success)">Dashboard, instantly ready</div>
+</div>
+</div>
+
+</div>
+</body>
+</html>
