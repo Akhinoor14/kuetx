@@ -675,6 +675,46 @@ def scrape_all_departments(only_department: Optional[str] = None) -> list[Teache
 # FIRESTORE PUSH
 # ----------------------------------------------------------------------
 
+# ----------------------------------------------------------------------
+# DIFF HELPERS — write only when scraped data actually differs from
+# what's already in Firestore. See NOTE in push_to_firestore() above.
+# ----------------------------------------------------------------------
+
+# scraped_at ছাড়া বাকি সব ফিল্ড compare হয়, কারণ এটা প্রতিবার scrape-এ
+# বদলায় (current timestamp) even when কোনো real content বদলায়নি —
+# এটাকে compare-এ ধরলে diff logic কার্যত অকেজো হয়ে যেত (সবসময় "changed"
+# দেখাত)।
+_IGNORE_KEYS_FOR_DIFF = {"scraped_at"}
+
+
+def _normalize_for_diff(value):
+    """
+    Firestore round-trip আর Python dataclass value-এর মধ্যে ছোটখাটো টাইপ
+    পার্থক্য (যেমন tuple vs list, বা nested dict-এর key order) থাকতে
+    পারে যেগুলো আসল content বদলায় না। Recursively normalize করে দুটো
+    dict নিরাপদে compare করা যায়।
+    """
+    if isinstance(value, dict):
+        return {k: _normalize_for_diff(v) for k, v in sorted(value.items()) if k not in _IGNORE_KEYS_FOR_DIFF}
+    if isinstance(value, (list, tuple)):
+        return [_normalize_for_diff(v) for v in value]
+    return value
+
+
+def _teacher_doc_unchanged(existing: dict, new_data: dict) -> bool:
+    """existing (Firestore থেকে) আর new_data (এই run-এ scraped) content-এ
+    হুবহু এক কিনা — এক হলে write skip করা নিরাপদ।"""
+    return _normalize_for_diff(existing) == _normalize_for_diff(new_data)
+
+
+def _publication_doc_unchanged(existing: dict, new_data: dict) -> bool:
+    """একই যুক্তি publication doc-এর জন্য। isManuallyEdited/source-এর মতো
+    scraper-controlled meta ফিল্ডও তুলনায় ধরা হয় — কারণ সেগুলো বদলালে
+    (যেমন এই migration-এর মতো একটা fix) সেটাও একটা real write হওয়া
+    উচিত, স্কিপ করা উচিত না।"""
+    return _normalize_for_diff(existing) == _normalize_for_diff(new_data)
+
+
 def push_to_firestore(teachers: list[Teacher], profiles: dict[str, ProfileDetails], publications: list[Publication]) -> dict:
     """
     Writes to two places (see module docstring points 2-4 for rationale):
@@ -717,7 +757,7 @@ def push_to_firestore(teachers: list[Teacher], profiles: dict[str, ProfileDetail
 
     db = firestore.client()
     batch = db.batch()
-    written, skipped_no_email = 0, 0
+    written, skipped_no_email, skipped_unchanged = 0, 0, 0
     batch_ops = 0
 
     def _commit_if_full():
@@ -727,6 +767,21 @@ def push_to_firestore(teachers: list[Teacher], profiles: dict[str, ProfileDetail
             batch.commit()
             batch = db.batch()
             batch_ops = 0
+
+    # ------------------------------------------------------------------
+    # Diff-based write: প্রতিবার পুরো collection re-write করলে (৪৩৬ teacher
+    # + ৬০০০+ publication) Firestore Spark plan-এর দৈনিক write quota
+    # (20,000) সহজেই শেষ হয়ে যায় — অথচ বেশিরভাগ document run-to-run
+    # অপরিবর্তিতই থাকে (scraper শুধু publicly listed তথ্য টানে, যেটা
+    # নিয়মিত বদলায় না)। তাই write করার আগে existing document read করে
+    # compare করা হয় — একই হলে write skip, শুধু আসল পরিবর্তন হলেই write।
+    # এতে reads বাড়ে (free quota 50,000/day — অনেক জায়গা আছে) কিন্তু
+    # writes নাটকীয়ভাবে কমে।
+    logger.info("Bulk-fetching existing facultyDirectory docs for diff comparison...")
+    existing_teacher_docs = {}
+    for snap in db.collection("facultyDirectory").stream():
+        existing_teacher_docs[snap.id] = snap.to_dict() or {}
+    logger.info(f"Fetched {len(existing_teacher_docs)} existing teacher docs.")
 
     for t in teachers:
         doc_id = t.doc_id()
@@ -738,6 +793,12 @@ def push_to_firestore(teachers: list[Teacher], profiles: dict[str, ProfileDetail
         prof = profiles.get(doc_id)
         if prof is not None:
             doc_data["profileDetails"] = asdict(prof)
+
+        existing = existing_teacher_docs.get(doc_id)
+        if existing is not None and _teacher_doc_unchanged(existing, doc_data):
+            skipped_unchanged += 1
+            continue
+
         batch.set(ref, doc_data, merge=True)
         written += 1
         batch_ops += 1
@@ -771,6 +832,7 @@ def push_to_firestore(teachers: list[Teacher], profiles: dict[str, ProfileDetail
     teacher_by_email = {t.doc_id(): t for t in teachers if t.doc_id()}
 
     manually_edited_ids = set()
+    existing_pub_docs = {}
     pubs_col = db.collection("facultyPublications")
     for i in range(0, len(all_pub_ids), 30):
         chunk = all_pub_ids[i:i + 30]
@@ -783,8 +845,9 @@ def push_to_firestore(teachers: list[Teacher], profiles: dict[str, ProfileDetail
             data = d.to_dict() or {}
             if data.get("isManuallyEdited"):
                 manually_edited_ids.add(d.id)
+            existing_pub_docs[d.id] = data
 
-    pubs_written, pubs_skipped_manual = 0, 0
+    pubs_written, pubs_skipped_manual, pubs_skipped_unchanged = 0, 0, 0
     for doc_id, pub in id_to_pub.items():
         if doc_id in manually_edited_ids:
             pubs_skipped_manual += 1
@@ -813,19 +876,30 @@ def push_to_firestore(teachers: list[Teacher], profiles: dict[str, ProfileDetail
         if matching_teacher is not None:
             pub_data["teacherName"] = matching_teacher.name
             pub_data["teacherDeptCode"] = matching_teacher.department
+
+        existing = existing_pub_docs.get(doc_id)
+        if existing is not None and _publication_doc_unchanged(existing, pub_data):
+            pubs_skipped_unchanged += 1
+            continue
+
         batch.set(ref, pub_data, merge=True)
         pubs_written += 1
         batch_ops += 1
         _commit_if_full()
 
     batch.commit()
-    logger.info(f"Firestore push done: faculty written={written} skipped(no-email)={skipped_no_email} "
-                f"publications written={pubs_written} publications skipped(manual-edit)={pubs_skipped_manual}")
+    logger.info(
+        f"Firestore push done: faculty written={written} skipped(no-email)={skipped_no_email} "
+        f"skipped(unchanged)={skipped_unchanged} | publications written={pubs_written} "
+        f"skipped(manual-edit)={pubs_skipped_manual} skipped(unchanged)={pubs_skipped_unchanged}"
+    )
     return {
         "written": written,
         "skipped_no_email": skipped_no_email,
+        "skipped_unchanged": skipped_unchanged,
         "publications_written": pubs_written,
         "publications_skipped_manual": pubs_skipped_manual,
+        "publications_skipped_unchanged": pubs_skipped_unchanged,
     }
 
 
