@@ -706,7 +706,17 @@ function Layout({ authState, onboardingActive }) {
 // they never hit the isPublicPath() branch inside buildQueue() below in
 // the first place, since that branch only fires when
 // isAnonymous || !auth.currentUser?.uid is true.
-const PUBLIC_PATHS = ['/', '/about', '/guest', '/guest/dashboard', '/guest/schedule', '/guest/attendance', '/guest/marks']; // kept for old bookmarks — all now just redirect into /
+// FIX (this session): '/privacy' was missing from this list even though
+// its own <Route> (App.jsx, above) has no guard and is explicitly
+// commented "Publicly reachable (no route guard)" — a brand-new account
+// mid-signup, or the Footer's Privacy Policy link, needs to open it
+// without ever hitting the AuthModal. Route-level and queue-level public
+// access had drifted apart: the route rendered fine, but buildQueue()
+// below still saw '/privacy' as "not public" and pushed 'auth', so a
+// signed-out visitor got AuthModal covering the page as an opaque
+// overlay instead of the actual policy text. Same fix pattern as '/about'
+// and '/' already had.
+const PUBLIC_PATHS = ['/', '/about', '/privacy', '/guest', '/guest/dashboard', '/guest/schedule', '/guest/attendance', '/guest/marks']; // kept for old bookmarks — all now just redirect into /
 const isPublicPath = (pathname) => PUBLIC_PATHS.includes(pathname);
 
 // PHASE 7 VERIFICATION NOTE (landing/auth redesign tracker, no code

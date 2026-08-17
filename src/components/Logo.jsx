@@ -24,16 +24,22 @@ export function Logo({ size = 32 }) {
   );
 }
 
-// Horizontal wordmark: turtle icon + KUETx text
+// Horizontal wordmark: turtle icon + KUETx text.
+// The icon is sized larger than the text's own line-height (1.7x `height`
+// instead of 1:1) so the turtle mascot — the actual brand identifier — is
+// clearly visible instead of shrinking to an illegible dot next to the
+// text. Text baseline size (`height`-driven) is unchanged so this doesn't
+// blow up the navbar row height, only the icon.
 export function Wordmark({ height = 28 }) {
+  const iconPx = Math.round(height * 1.7);
   return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: height * 0.28 }}>
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: height * 0.22 }}>
       <img
-        src={iconSrcFor(height)}
-        width={height}
-        height={height}
+        src={iconSrcFor(iconPx)}
+        width={iconPx}
+        height={iconPx}
         alt="KUETx"
-        style={{ display: 'block', flexShrink: 0 }}
+        style={{ display: 'block', flexShrink: 0, marginBlock: -(iconPx - height) / 2 }}
       />
       <span
         style={{

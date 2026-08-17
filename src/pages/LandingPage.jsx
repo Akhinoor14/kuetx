@@ -30,8 +30,8 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { Wordmark } from '../components/Logo';
 import {
   LogIn, GraduationCap, Presentation, Store, CheckCircle2,
-  Monitor, Smartphone, ArrowLeft, Truck, Crown,
-  Layers, ShieldCheck, Users, Sparkles, Mail, MessageSquare,
+  Monitor, Smartphone, Truck, Crown,
+  Layers, ShieldCheck, Users, Sparkles, Mail, MessageSquare, X,
 } from 'lucide-react';
 import usePageMeta from '../hooks/usePageMeta';
 import { useIsMobileNav } from '../components/BottomNav';
@@ -74,6 +74,7 @@ const ROLE_CARDS = [
     icon: GraduationCap,
     emoji: '🎓',
     title: 'Student',
+    color: '#2563eb', // blue
     bullets: [
       'ক্লাস রুটিন, উপস্থিতি ও মার্কস ট্র্যাকিং — এক জায়গায়',
       'CR-পরিচালিত ক্লাস নোটিশ, roster, ও group কানেকশন',
@@ -86,6 +87,7 @@ const ROLE_CARDS = [
     icon: Presentation,
     emoji: '👨‍🏫',
     title: 'Faculty',
+    color: '#d97706', // amber
     bullets: [
       'ক্লাস অ্যাটেন্ডেন্স ও মার্কস এন্ট্রি ডিজিটালি',
       'সরাসরি নোটিশ ব্রডকাস্ট নিজের ক্লাসে',
@@ -98,6 +100,7 @@ const ROLE_CARDS = [
     icon: Store,
     emoji: '🏪',
     title: 'Provider',
+    color: '#7c3aed', // violet
     bullets: [
       'ক্যাম্পাসের ভেতরেই নিজের শপ/সার্ভিস চালু রাখা',
       'অর্ডার ও বুকিং রিয়েল-টাইমে ম্যানেজ করা',
@@ -179,7 +182,9 @@ const STATS = [
   { id: 'free', value: 100, display: '১০০%', label: 'ফ্রি, চিরকাল' },
 ];
 
-function StatCard({ stat }) {
+
+
+function StatCard({ stat, isMobileNav }) {
   const { value, ref } = useCountUp(stat.value);
   // Bangla-digit stats (৬২+, ১০০%) don't have a clean way to animate the
   // trailing symbol through the count, so once the count-up reaches its
@@ -187,29 +192,30 @@ function StatCard({ stat }) {
   // mid-animation we show the plain rounded number.
   const atTarget = value >= stat.value;
   return (
-    <div ref={ref} style={{ textAlign: 'center', padding: '0.75rem 0.5rem' }}>
+    <div ref={ref} style={{ textAlign: 'center', padding: isMobileNav ? '0.4rem 0.25rem' : '0.75rem 0.5rem' }}>
       <div style={{
-        fontSize: 'clamp(1.6rem, 4vw, 2.1rem)', fontWeight: 800, color: 'var(--accent)',
+        fontSize: isMobileNav ? 'clamp(1.15rem, 5vw, 1.5rem)' : 'clamp(1.6rem, 4vw, 2.1rem)',
+        fontWeight: 800, color: 'var(--accent)',
         letterSpacing: '-0.02em', fontVariantNumeric: 'tabular-nums',
       }}>
         {atTarget ? stat.display : value}
       </div>
-      <div style={{ fontSize: '0.78rem', color: 'var(--muted)', marginTop: '0.15rem' }}>
+      <div style={{ fontSize: isMobileNav ? '0.68rem' : '0.78rem', color: 'var(--muted)', marginTop: '0.15rem' }}>
         {stat.label}
       </div>
     </div>
   );
 }
 
-function StatsStrip() {
+function StatsStrip({ isMobileNav }) {
   return (
     <div style={{
       display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
-      gap: '0.5rem', maxWidth: '520px', margin: '0 auto 2.5rem',
-      padding: '1rem 0.5rem', borderTop: '1px solid var(--border)',
-      borderBottom: '1px solid var(--border)',
+      gap: '0.5rem', maxWidth: '520px', margin: isMobileNav ? '0 auto 1.25rem' : '0 auto 2.5rem',
+      padding: isMobileNav ? '0.6rem 0.5rem' : '1rem 0.5rem',
+      borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)',
     }}>
-      {STATS.map((stat) => <StatCard key={stat.id} stat={stat} />)}
+      {STATS.map((stat) => <StatCard key={stat.id} stat={stat} isMobileNav={isMobileNav} />)}
     </div>
   );
 }
@@ -284,14 +290,15 @@ function useRevealOnVisible() {
   return { ref, visible };
 }
 
-function WhyKuetxCard({ card, index }) {
+function WhyKuetxCard({ card, index, isMobileNav }) {
   const Icon = card.icon;
   const { ref, visible } = useRevealOnVisible();
   return (
     <div
       ref={ref}
       style={{
-        padding: '1.25rem', borderRadius: '16px', border: '1px solid var(--border)',
+        padding: isMobileNav ? '0.85rem' : '1.25rem', borderRadius: isMobileNav ? '13px' : '16px',
+        border: '1px solid var(--border)',
         background: 'var(--surface)',
         opacity: visible ? 1 : 0,
         transform: visible ? 'translateY(0)' : 'translateY(14px)',
@@ -300,34 +307,44 @@ function WhyKuetxCard({ card, index }) {
     >
       <div style={{
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-        width: '40px', height: '40px', borderRadius: '11px',
-        background: 'rgba(var(--accentRGB),0.10)', marginBottom: '0.75rem',
+        width: isMobileNav ? '30px' : '40px', height: isMobileNav ? '30px' : '40px',
+        borderRadius: isMobileNav ? '9px' : '11px',
+        background: 'rgba(var(--accentRGB),0.10)', marginBottom: isMobileNav ? '0.5rem' : '0.75rem',
       }}>
-        <Icon size={20} style={{ color: 'var(--accent)' }} />
+        <Icon size={isMobileNav ? 15 : 20} style={{ color: 'var(--accent)' }} />
       </div>
-      <div style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--text)', marginBottom: '0.4rem' }}>
+      <div style={{ fontSize: isMobileNav ? '0.82rem' : '0.95rem', fontWeight: 800, color: 'var(--text)', marginBottom: isMobileNav ? '0.3rem' : '0.4rem' }}>
         {card.title}
       </div>
-      <p style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: 1.55, margin: 0 }}>
-        {card.body}
-      </p>
+      {/* Body copy dropped on mobile — this section is a value-prop
+          appetizer, not reference material a mobile visitor needs to
+          read in full; title + icon carries the point in far less
+          vertical space, and the desktop branch keeps the full body. */}
+      {!isMobileNav && (
+        <p style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: 1.55, margin: 0 }}>
+          {card.body}
+        </p>
+      )}
     </div>
   );
 }
 
-function WhyKuetx() {
+function WhyKuetx({ isMobileNav }) {
   return (
-    <div style={{ marginBottom: '3rem' }}>
-      <div style={{ textAlign: 'center', marginBottom: '1.25rem' }}>
+    <div style={{ marginBottom: isMobileNav ? '1.5rem' : '3rem' }}>
+      <div style={{ textAlign: 'center', marginBottom: isMobileNav ? '0.75rem' : '1.25rem' }}>
         <h2 style={{ fontSize: 'clamp(1.35rem, 3.5vw, 1.7rem)', fontWeight: 900, color: 'var(--text)', letterSpacing: '-0.02em' }}>
           কেন KUETx?
         </h2>
       </div>
       <div style={{
-        display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-        gap: '1rem',
+        display: 'grid',
+        gridTemplateColumns: isMobileNav ? 'repeat(2, 1fr)' : 'repeat(auto-fit, minmax(220px, 1fr))',
+        gap: isMobileNav ? '0.6rem' : '1rem',
       }}>
-        {WHY_KUETX_CARDS.map((card, i) => <WhyKuetxCard key={card.title} card={card} index={i} />)}
+        {WHY_KUETX_CARDS.map((card, i) => (
+          <WhyKuetxCard key={card.title} card={card} index={i} isMobileNav={isMobileNav} />
+        ))}
       </div>
     </div>
   );
@@ -372,7 +389,22 @@ const FEATURE_TABS = [
 // on just that one item, rather than a whole separate section, keeps it
 // inside its real category (still a campus service) while still making
 // it impossible to skim past.
-function FeatureItem({ name, highlight }) {
+//
+// This session: extended from a single hardcoded 'Pick and Drop' check
+// to a small tag map covering a few more high-traffic/high-value
+// features per role (owner asked for suggestions, picked which to use).
+// Kept as one flat name -> label lookup rather than per-role duplicate
+// logic, since feature names are unique across the whole inventory.
+const HIGHLIGHTED_FEATURES = {
+  'Pick and Drop': 'জনপ্রিয়',
+  'Attendance': 'সবচেয়ে বেশি ব্যবহৃত',
+  'Question Bank': 'সবচেয়ে বেশি ব্যবহৃত',
+  'Results & GPA': 'জনপ্রিয়',
+  'Broadcast Notice': 'জনপ্রিয়',
+  'My Shop': 'জনপ্রিয়',
+};
+
+function FeatureItem({ name, highlight, highlightLabel }) {
   return (
     <li style={{
       display: 'flex', alignItems: 'center', gap: '0.4rem',
@@ -389,9 +421,9 @@ function FeatureItem({ name, highlight }) {
         <span style={{
           fontSize: '0.66rem', fontWeight: 800, color: 'var(--accent)',
           background: 'rgba(var(--accentRGB),0.10)', borderRadius: '999px',
-          padding: '0.1rem 0.45rem', marginLeft: 'auto',
+          padding: '0.1rem 0.45rem', marginLeft: 'auto', whiteSpace: 'nowrap',
         }}>
-          জনপ্রিয়
+          {highlightLabel}
         </span>
       )}
     </li>
@@ -409,7 +441,12 @@ function FeatureCategoryBlock({ label, items }) {
       </div>
       <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
         {items.map((name) => (
-          <FeatureItem key={name} name={name} highlight={name === 'Pick and Drop'} />
+          <FeatureItem
+            key={name}
+            name={name}
+            highlight={Boolean(HIGHLIGHTED_FEATURES[name])}
+            highlightLabel={HIGHLIGHTED_FEATURES[name]}
+          />
         ))}
       </ul>
     </div>
@@ -453,10 +490,43 @@ function CRFeatureBlock() {
   );
 }
 
+const TAB_ROTATE_MS = 6000; // normal auto-rotate cadence between tabs
+const TAB_MANUAL_PAUSE_MS = 12000; // owner said 10-15s; pause after a manual click
+
 function FeatureBreakdown() {
   const [activeTab, setActiveTab] = useState('student');
   const tab = FEATURE_TABS.find((t) => t.id === activeTab);
   const categories = Object.entries(tab.features);
+
+  // Auto-rotate through the tabs; a manual click pauses rotation on that
+  // tab for TAB_MANUAL_PAUSE_MS, then normal auto-rotation resumes from
+  // the next tab in sequence (does not stop permanently — owner-confirmed).
+  const intervalRef = useRef(null);
+  const timeoutRef = useRef(null);
+
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      setActiveTab((current) => {
+        const idx = FEATURE_TABS.findIndex((t) => t.id === current);
+        return FEATURE_TABS[(idx + 1) % FEATURE_TABS.length].id;
+      });
+    }, TAB_ROTATE_MS);
+    return () => clearInterval(intervalRef.current);
+  }, []);
+
+  const handleTabClick = (tabId) => {
+    setActiveTab(tabId);
+    clearInterval(intervalRef.current);
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      intervalRef.current = setInterval(() => {
+        setActiveTab((current) => {
+          const idx = FEATURE_TABS.findIndex((t) => t.id === current);
+          return FEATURE_TABS[(idx + 1) % FEATURE_TABS.length].id;
+        });
+      }, TAB_ROTATE_MS);
+    }, TAB_MANUAL_PAUSE_MS);
+  };
 
   return (
     <div style={{ marginTop: '3.5rem', marginBottom: '3rem' }}>
@@ -551,7 +621,7 @@ function DemoContent({ role }) {
 // specific detail ("traffic-light dot bar") is named in the plan's own
 // desktop-mockup description, previous pass's gray dots didn't quite
 // match it.
-function MockupFrame({ mode, children }) {
+function MockupFrame({ mode, children, scrollHostRef }) {
   const isPhone = mode === 'phone';
   return (
     <div style={{
@@ -586,8 +656,165 @@ function MockupFrame({ mode, children }) {
           <div style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#28c840' }} />
         </div>
       )}
-      <div style={{ minHeight: isPhone ? '480px' : '360px' }}>
+      <div
+        ref={scrollHostRef}
+        style={{
+          minHeight: isPhone ? '480px' : '360px',
+          maxHeight: isPhone ? '480px' : '420px',
+          overflowY: 'auto',
+          // Auto-scroll is driven programmatically (RotatingPreview), so
+          // hide the scrollbar for a cleaner "someone else is scrolling
+          // this" look rather than an obviously-draggable native bar.
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+        }}
+        className="kuetx-mockup-scrollhost"
+      >
         {children}
+      </div>
+    </div>
+  );
+}
+
+// ─── Rotating hero preview (replaces the old click-to-open role cards) ──
+// Owner brief (this session): the three role cards with bullet lists are
+// gone entirely — the mockup preview is now ALWAYS visible, auto-rotating
+// Student -> Faculty -> Provider on a loop. Each role's dwell has three
+// phases: (1) sit still briefly, (2) auto-scroll the mockup's own inner
+// content slowly top-to-bottom (like someone scrolling a real phone/
+// laptop), (3) rotate to the next role. A small role-tab row above the
+// frame lets a visitor manually jump to a role — doing so pauses
+// auto-rotate for ROLE_PAUSE_MS, then normal rotation resumes from
+// wherever the sequence naturally continues. The frame itself is
+// position: sticky so it stays in view while the visitor scrolls past it
+// (owner-confirmed: pinned, not a normal scrolling section).
+const ROLE_SEQUENCE = ['student', 'faculty', 'provider'];
+const SETTLE_MS = 1800; // brief pause before inner auto-scroll starts
+const SCROLL_MS = 4200; // duration of the inner auto-scroll sweep
+const HOLD_MS = 1200; // pause at bottom before rotating to next role
+const MANUAL_PAUSE_MS = 12000; // owner said 10-15s; 12s split the difference
+
+function RotatingPreview({ mockupMode, setMockupMode, onSignUp }) {
+  const [activeRole, setActiveRole] = useState('student');
+  const scrollHostRef = useRef(null);
+  const timeoutsRef = useRef([]);
+  const manualUntilRef = useRef(0);
+
+  const clearTimers = () => {
+    timeoutsRef.current.forEach(clearTimeout);
+    timeoutsRef.current = [];
+  };
+
+  // Single recursive scheduler driving the whole loop: show role -> settle
+  // -> inner auto-scroll to bottom -> hold -> (wait out any active manual
+  // pause) -> reset scroll -> advance to next role -> repeat. Both the
+  // initial mount and a manual pick funnel through this one function so
+  // there's exactly one source of truth for the cadence.
+  const scheduleRole = (roleId) => {
+    setActiveRole(roleId);
+
+    const t1 = setTimeout(() => {
+      const host = scrollHostRef.current;
+      if (host) host.scrollTo({ top: host.scrollHeight - host.clientHeight, behavior: 'smooth' });
+
+      const t2 = setTimeout(() => {
+        const wait = Math.max(0, manualUntilRef.current - Date.now());
+        const t3 = setTimeout(() => {
+          if (scrollHostRef.current) scrollHostRef.current.scrollTo({ top: 0, behavior: 'auto' });
+          const idx = ROLE_SEQUENCE.indexOf(roleId);
+          const next = ROLE_SEQUENCE[(idx + 1) % ROLE_SEQUENCE.length];
+          scheduleRole(next);
+        }, wait);
+        timeoutsRef.current.push(t3);
+      }, SCROLL_MS + HOLD_MS);
+      timeoutsRef.current.push(t2);
+    }, SETTLE_MS);
+    timeoutsRef.current.push(t1);
+  };
+
+  useEffect(() => {
+    scheduleRole('student');
+    return clearTimers;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleManualSelect = (roleId) => {
+    clearTimers();
+    manualUntilRef.current = Date.now() + MANUAL_PAUSE_MS;
+    if (scrollHostRef.current) scrollHostRef.current.scrollTo({ top: 0, behavior: 'auto' });
+    scheduleRole(roleId);
+  };
+
+  return (
+    <div style={{ position: 'sticky', top: '76px', zIndex: 3, marginBottom: '2rem' }}>
+      <style>{`.kuetx-mockup-scrollhost::-webkit-scrollbar { display: none; }`}</style>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '0.4rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
+        {ROLE_CARDS.map(role => {
+          const Icon = role.icon;
+          const active = activeRole === role.id;
+          return (
+            <button
+              key={role.id}
+              type="button"
+              onClick={() => handleManualSelect(role.id)}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+                padding: '0.4rem 0.85rem', borderRadius: '999px', fontSize: '0.8rem', fontWeight: 700,
+                border: active ? '1px solid var(--accent)' : '1px solid var(--border)',
+                cursor: 'pointer', transition: 'all 0.15s',
+                background: active ? 'var(--accent)' : 'var(--surfaceGlassStrong, var(--surface))',
+                color: active ? '#fff' : 'var(--text)',
+              }}
+            >
+              <Icon size={13} /> {role.title}
+            </button>
+          );
+        })}
+        <div style={{ width: '1px', background: 'var(--border)', margin: '0 0.2rem' }} />
+        <button
+          type="button"
+          onClick={() => setMockupMode('phone')}
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+            padding: '0.4rem 0.7rem', borderRadius: '999px', fontSize: '0.8rem', fontWeight: 700,
+            border: '1px solid var(--border)', cursor: 'pointer',
+            background: mockupMode === 'phone' ? 'var(--accent)' : 'transparent',
+            color: mockupMode === 'phone' ? '#fff' : 'var(--text)',
+          }}
+        >
+          <Smartphone size={13} />
+        </button>
+        <button
+          type="button"
+          onClick={() => setMockupMode('desktop')}
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+            padding: '0.4rem 0.7rem', borderRadius: '999px', fontSize: '0.8rem', fontWeight: 700,
+            border: '1px solid var(--border)', cursor: 'pointer',
+            background: mockupMode === 'desktop' ? 'var(--accent)' : 'transparent',
+            color: mockupMode === 'desktop' ? '#fff' : 'var(--text)',
+          }}
+        >
+          <Monitor size={13} />
+        </button>
+      </div>
+
+      <MockupFrame mode={mockupMode} scrollHostRef={scrollHostRef}>
+        <DemoContent role={activeRole} />
+      </MockupFrame>
+
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+        <button
+          type="button"
+          onClick={onSignUp}
+          style={{
+            padding: '0.75rem 1.5rem', borderRadius: '12px',
+            background: 'var(--accent)', color: '#fff', border: 'none',
+            fontSize: '0.85rem', fontWeight: 800, cursor: 'pointer',
+          }}
+        >
+          {ROLE_CARDS.find(r => r.id === activeRole)?.title || ''} হিসেবে Sign Up করো
+        </button>
       </div>
     </div>
   );
@@ -687,17 +914,38 @@ export default function LandingPage() {
 
   const selectedRole = searchParams.get('role');
 
+  // Mobile: the full-screen demo branch below replaces the whole scrolled
+  // role-picker page, so the browser's own scroll position is lost the
+  // moment that branch renders. Save it on the way in, restore it on the
+  // way back out ("ফিরুন" / cross button) so a visitor who scrolled down
+  // to a role card doesn't land back at the very top of the page.
+  const savedScrollY = useRef(0);
+
   // Bookmark-redirect handling (plan §3.4): old /guest/* paths already
   // resolve on their own via App.jsx's existing PUBLIC_PATHS routes —
   // this component does not need to know about them. If Phase H's
   // cleanup step removes those routes, add the /guest/* → /?role=...
   // <Navigate> redirects there, not here.
 
+  // Toggle behaviour: clicking the already-selected role's card again
+  // collapses the preview (same as tapping "ফিরুন") instead of doing
+  // nothing — needed on mobile so a mis-tap or "let me close this" tap
+  // doesn't require hunting for the back button.
   const selectRole = (roleId) => {
-    setSearchParams(roleId ? { role: roleId } : {}, { replace: false });
+    const next = selectedRole === roleId ? null : roleId;
+    if (next && isMobileNav) savedScrollY.current = window.scrollY;
+    setSearchParams(next ? { role: next } : {}, { replace: false });
   };
 
-  const backToSelection = () => selectRole(null);
+  const backToSelection = () => {
+    selectRole(null);
+    if (isMobileNav) {
+      // Wait a tick for the picker view to re-mount before scrolling —
+      // jumping immediately would scroll the (still-rendering) full-screen
+      // demo view instead of the page that's about to come back.
+      requestAnimationFrame(() => window.scrollTo(0, savedScrollY.current));
+    }
+  };
 
   // Mobile: selecting a role goes full-screen (no phone-mockup — see
   // plan §3.2's reasoning: a fake phone frame inside an already-small
@@ -710,34 +958,6 @@ export default function LandingPage() {
           alignItems: 'center', gap: '0.5rem', padding: '0.6rem 0.8rem',
           background: 'var(--surface)', borderBottom: '1px solid var(--border)',
         }}>
-          <button
-            type="button"
-            onClick={backToSelection}
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.3rem',
-              background: 'transparent', border: 'none', color: 'var(--text)',
-              fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer', padding: '0.4rem',
-            }}
-          >
-            <ArrowLeft size={16} /> ফিরুন
-          </button>
-          <div style={{ display: 'flex', gap: '0.35rem', flex: 1, justifyContent: 'center' }}>
-            {ROLE_CARDS.map(r => (
-              <button
-                key={r.id}
-                type="button"
-                onClick={() => selectRole(r.id)}
-                style={{
-                  padding: '0.35rem 0.7rem', borderRadius: '999px', fontSize: '0.78rem',
-                  fontWeight: 700, border: '1px solid var(--border)', cursor: 'pointer',
-                  background: selectedRole === r.id ? 'var(--accent)' : 'transparent',
-                  color: selectedRole === r.id ? '#fff' : 'var(--text)',
-                }}
-              >
-                {r.emoji} {r.title}
-              </button>
-            ))}
-          </div>
           {/* Phase H: mobile full-screen branch returns early, before the
               desktop return's SignInPrompt/AuthModal block further down —
               so this branch needs its own Sign In entry point, not just
@@ -757,6 +977,44 @@ export default function LandingPage() {
             }}
           >
             <LogIn size={15} />
+          </button>
+          <div style={{ display: 'flex', gap: '0.35rem', flex: 1, justifyContent: 'center', overflow: 'hidden' }}>
+            {ROLE_CARDS.map(r => (
+              <button
+                key={r.id}
+                type="button"
+                onClick={() => selectRole(r.id)}
+                style={{
+                  padding: '0.35rem 0.7rem', borderRadius: '999px', fontSize: '0.78rem',
+                  fontWeight: 700, border: '1px solid var(--border)', cursor: 'pointer',
+                  background: selectedRole === r.id ? 'var(--accent)' : 'transparent',
+                  color: selectedRole === r.id ? '#fff' : 'var(--text)',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {r.emoji} {r.title}
+              </button>
+            ))}
+          </div>
+          {/* Close (✕) — replaces the old "ফিরুন" text link. A plain
+              corner ✕ is the pattern visitors already expect from a
+              full-screen modal/demo view, and reads instantly without
+              needing to parse Bangla text under time pressure. Same
+              backToSelection() handler as before, so scroll-restore
+              (see savedScrollY above) and the URL param cleanup are
+              unchanged — only the affordance changed. */}
+          <button
+            type="button"
+            onClick={backToSelection}
+            aria-label="বন্ধ করো"
+            style={{
+              flexShrink: 0, display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              width: '34px', height: '34px', borderRadius: '10px',
+              background: 'var(--surfaceGlass, var(--surface))', border: '1px solid var(--border)',
+              color: 'var(--text)', cursor: 'pointer',
+            }}
+          >
+            <X size={17} />
           </button>
         </div>
         <DemoContent role={selectedRole} />
@@ -828,7 +1086,7 @@ export default function LandingPage() {
         padding: '0.85rem 1.25rem', background: 'var(--surfaceGlassStrong)',
         backdropFilter: 'blur(10px)', borderBottom: '1px solid var(--border)',
       }}>
-        <Wordmark height={22} />
+        <Wordmark height={isMobileNav ? 26 : 28} />
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <button
             type="button"
@@ -858,7 +1116,10 @@ export default function LandingPage() {
         </div>
       </div>
 
-      <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '2.5rem 1.25rem 4rem' }}>
+      <div style={{
+        maxWidth: '1080px', margin: '0 auto',
+        padding: isMobileNav ? '1.25rem 1rem 2.5rem' : '2.5rem 1.25rem 4rem',
+      }}>
         {/* Hero — Phase 9.2 visual pass: no external font added (index.html's
             own "offline: no external preconnect to fonts" / "Use system
             fonts for full offline support" comment is a documented product
@@ -872,132 +1133,39 @@ export default function LandingPage() {
             Segoe UI/Roboto/Noto Sans/Helvetica Neue/Arial — all of which
             carry a genuine 800-900 weight, so the heavier heading below
             isn't faking boldness the way an underweight webfont would). */}
-        <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
-            padding: '0.3rem 0.75rem', borderRadius: '999px',
-            background: 'var(--surfaceGlass, var(--surface))', border: '1px solid var(--border)',
-            fontSize: '0.72rem', fontWeight: 700, color: 'var(--accent)',
-            letterSpacing: '0.02em', marginBottom: '1rem',
-          }}>
-            KUET-এর জন্য বানানো, KUET-এর ছাত্রছাত্রীদের দিয়ে
-          </div>
+        <div style={{ textAlign: 'center', marginBottom: isMobileNav ? '0.9rem' : '1.5rem' }}>
+          {/* "KUET-এর জন্য বানানো..." kicker badge removed — it duplicated
+              the footer's "KUETx — KUET-এর ছাত্রছাত্রীদের বানানো, KUET-এর
+              জন্য" line for no added value at the top of the page. */}
           <h1 style={{
-            fontSize: 'clamp(1.9rem, 6vw, 3.1rem)', fontWeight: 900,
-            color: 'var(--text)', marginBottom: '0.75rem', letterSpacing: '-0.04em',
+            fontSize: isMobileNav ? 'clamp(1.5rem, 7vw, 2rem)' : 'clamp(1.9rem, 6vw, 3.1rem)', fontWeight: 900,
+            color: 'var(--text)', marginBottom: isMobileNav ? '0.5rem' : '0.75rem', letterSpacing: '-0.04em',
             lineHeight: 1.08,
           }}>
             The Digital Ecosystem<br />for KUET
           </h1>
-          <p style={{ fontSize: '1.02rem', color: 'var(--muted)', maxWidth: '560px', margin: '0 auto' }}>
+          <p style={{
+            fontSize: isMobileNav ? '0.85rem' : '1.02rem', color: 'var(--muted)',
+            maxWidth: '560px', margin: '0 auto',
+          }}>
             Student, Faculty, আর Service Provider — তিন role-ই একটা কার্ডে ক্লিক করে দেখো
             KUETx-এ তোমার জন্য কী আছে।
           </p>
         </div>
 
-        <StatsStrip />
+        <StatsStrip isMobileNav={isMobileNav} />
 
-        <WhyKuetx />
+        <WhyKuetx isMobileNav={isMobileNav} />
 
-        {/* Role cards */}
-        <div style={{
-          display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-          gap: '1rem', marginBottom: selectedRole ? '2rem' : 0,
-        }}>
-          {ROLE_CARDS.map(role => {
-            const Icon = role.icon;
-            const active = selectedRole === role.id;
-            return (
-              <button
-                key={role.id}
-                type="button"
-                onClick={() => selectRole(role.id)}
-                style={{
-                  textAlign: 'left', cursor: 'pointer', padding: '1.25rem',
-                  borderRadius: '18px', border: active ? '2px solid var(--accent)' : '1px solid var(--border)',
-                  background: active
-                    ? 'linear-gradient(180deg, rgba(var(--accentRGB),0.08), rgba(var(--accentRGB),0.02))'
-                    : 'linear-gradient(180deg, var(--surfaceGlassStrong), var(--surfaceGlass))',
-                  boxShadow: active ? '0 8px 24px rgba(var(--accentRGB),0.15)' : '0 4px 12px rgba(0,0,0,0.06)',
-                  transition: 'all 0.2s',
-                }}
-              >
-                <div style={{
-                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                  width: '44px', height: '44px', borderRadius: '12px',
-                  background: 'rgba(var(--accentRGB),0.10)', marginBottom: '0.75rem',
-                }}>
-                  <Icon size={22} style={{ color: 'var(--accent)' }} />
-                </div>
-                <div style={{ fontSize: '1.02rem', fontWeight: 800, color: 'var(--text)', marginBottom: '0.6rem' }}>
-                  {role.emoji} {role.title}
-                </div>
-                <ul style={{ listStyle: 'none', display: 'grid', gap: '0.4rem', margin: 0, padding: 0 }}>
-                  {role.bullets.map((b, i) => (
-                    <li key={i} style={{ display: 'flex', gap: '0.4rem', fontSize: '0.82rem', color: 'var(--muted)', lineHeight: 1.5 }}>
-                      <CheckCircle2 size={14} style={{ color: 'var(--accent)', flexShrink: 0, marginTop: '0.15rem' }} />
-                      <span>{b}</span>
-                    </li>
-                  ))}
-                </ul>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Mockup preview (desktop only — mobile branches out above this point) */}
-        {selectedRole && (
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-              <button
-                type="button"
-                onClick={() => setMockupMode('phone')}
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
-                  padding: '0.45rem 0.85rem', borderRadius: '999px', fontSize: '0.8rem', fontWeight: 700,
-                  border: '1px solid var(--border)', cursor: 'pointer',
-                  background: mockupMode === 'phone' ? 'var(--accent)' : 'transparent',
-                  color: mockupMode === 'phone' ? '#fff' : 'var(--text)',
-                }}
-              >
-                <Smartphone size={14} /> Mobile
-              </button>
-              <button
-                type="button"
-                onClick={() => setMockupMode('desktop')}
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
-                  padding: '0.45rem 0.85rem', borderRadius: '999px', fontSize: '0.8rem', fontWeight: 700,
-                  border: '1px solid var(--border)', cursor: 'pointer',
-                  background: mockupMode === 'desktop' ? 'var(--accent)' : 'transparent',
-                  color: mockupMode === 'desktop' ? '#fff' : 'var(--text)',
-                }}
-              >
-                <Monitor size={14} /> Desktop
-              </button>
-            </div>
-            <MockupFrame mode={mockupMode}>
-              <DemoContent role={selectedRole} />
-            </MockupFrame>
-            {/* Phase 8 (§11.4): same "convinced by the demo" bridge as the
-                mobile branch above — see that comment for the reasoning.
-                Centered/max-width here since desktop has room, unlike the
-                full-width mobile button. */}
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1.25rem' }}>
-              <button
-                type="button"
-                onClick={() => openAuth('signup')}
-                style={{
-                  padding: '0.85rem 1.75rem', borderRadius: '12px',
-                  background: 'var(--accent)', color: '#fff', border: 'none',
-                  fontSize: '0.9rem', fontWeight: 800, cursor: 'pointer',
-                }}
-              >
-                {ROLE_CARDS.find(r => r.id === selectedRole)?.title || ''} হিসেবে Sign Up করো
-              </button>
-            </div>
-          </div>
-        )}
+        {/* Always-visible, auto-rotating mockup preview — replaces the old
+            click-to-open role cards entirely (owner decision, this
+            session). See RotatingPreview's own header comment for the
+            full behavior spec. */}
+        <RotatingPreview
+          mockupMode={mockupMode}
+          setMockupMode={setMockupMode}
+          onSignUp={() => openAuth('signup')}
+        />
 
         {/* Phase 9.3: full verbatim feature breakdown, role-tabbed. Placed
             after the role cards/mockup rather than above them — a visitor
