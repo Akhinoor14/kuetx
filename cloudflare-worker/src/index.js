@@ -25,7 +25,9 @@ const DEPARTMENTS = new Set([
   'ESE', 'IPE', 'LE', 'MSE', 'ME', 'MTE', 'TE', 'URP',
 ]);
 const EXAM_TYPES = new Set(['Regular', 'Backlog', 'Special_Backlog', 'Online']);
-const TERM_RE = /^Y[1-4]T[0-2]$/;
+// ARCH is a 5-year B.Arch program (Y5T1/Y5T2 exist), every other dept
+// currently tops out at Y4 — so the ceiling has to allow Y5.
+const TERM_RE = /^Y[1-5]T[0-2]$/;
 
 function cors(env) {
   return {

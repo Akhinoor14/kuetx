@@ -56,8 +56,18 @@ function normalizeExamTypeLabel(rawType) {
 }
 
 function parseRelativePath(relPath) {
-  // relPath looks like "CSE/Y2T1/CSE2109/Regular_2023.pdf"
-  const parts = relPath.split('/');
+  // relPath looks like "CSE/Y2T1/CSE2109/Regular_2023.pdf" (4 levels), but
+  // the picker's root can also be one level higher — e.g. selecting a
+  // "QuestionBank" wrapper folder that itself contains the dept folders —
+  // which gives "QuestionBank/CSE/Y2T1/CSE2109/Regular_2023.pdf" (5 levels).
+  // Rather than force everyone to always select exactly the dept-parent
+  // folder, accept an optional single leading wrapper segment: if there
+  // are 5 parts and the first one isn't a known dept, drop it and parse
+  // the remaining 4 normally.
+  let parts = relPath.split('/');
+  if (parts.length === 5 && !QB_DEPARTMENTS[parts[0]]) {
+    parts = parts.slice(1);
+  }
   if (parts.length !== 4) {
     return { ok: false, reason: `Expected DEPT/TERM/COURSE/FILE.pdf (got ${parts.length} levels)` };
   }
@@ -158,7 +168,9 @@ export default function BatchQBUpload({ profile, onUploaded }) {
         Select a folder shaped like <code>DEPT/TERM/CourseCode/ExamType_Year.pdf</code> (e.g.{' '}
         <code>CSE/Y2T1/CSE2109/Regular_2023.pdf</code>). Every PDF inside is parsed automatically —
         nothing is retyped. A folder that contains more than one department at the top level
-        works too — every file is parsed independently. Publishes straight to live, same as
+        works too — every file is parsed independently. You can also select one level higher
+        (a wrapper folder that just contains the dept folders, e.g. <code>QuestionBank/</code>) —
+        that extra top segment is detected and skipped automatically. Publishes straight to live, same as
         single Founder uploads. Once started, the upload keeps running even if you leave this
         page — check the floating progress bar.
       </p>
