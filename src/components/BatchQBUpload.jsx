@@ -32,10 +32,28 @@ import {
   startBatchUpload, pauseBatchUpload, getBatchProgress, getBatchDepts,
 } from '../lib/batchUploadManager';
 
-const TERM_RE = /^Y[1-4]T[0-2]$/;
+const TERM_RE = /^Y[1-5]T[0-2]$/;
 // Accepts "Regular_2023.pdf", "Special_Backlog_2022.pdf" etc. — anything
 // ending in _<4-digit-year>.pdf, exam type is whatever's left of that.
 const FILE_RE = /^(.+)_(\d{4})\.pdf$/i;
+
+// Older/manually-organized batches sometimes label the "special backlog"
+// exam type just "Special" (missing the "_Backlog" suffix the canonical
+// EXAM_TYPES list uses). Rather than reject those files and force a manual
+// rename, normalize known aliases to the canonical EXAM_TYPES spelling
+// before matching. Keys are lowercase with separators stripped so
+// "Special", "special_backlog", "Special Backlog", "SpecialBacklog" etc.
+// all resolve the same way. Add more aliases here if other variants show
+// up in future batches.
+const EXAM_TYPE_ALIASES = {
+  special: 'Special_Backlog',
+  specialbacklog: 'Special_Backlog',
+};
+
+function normalizeExamTypeLabel(rawType) {
+  const stripped = rawType.toLowerCase().replace(/[\s_-]+/g, '');
+  return EXAM_TYPE_ALIASES[stripped] || rawType;
+}
 
 function parseRelativePath(relPath) {
   // relPath looks like "CSE/Y2T1/CSE2109/Regular_2023.pdf"
@@ -59,13 +77,15 @@ function parseRelativePath(relPath) {
   if (!m) {
     return { ok: false, reason: `Filename must be ExamType_Year.pdf (got "${filename}")` };
   }
-  const [, rawType, examYear] = m;
+  const [, rawTypeOriginal, examYear] = m;
+  const rawType = normalizeExamTypeLabel(rawTypeOriginal);
   const examType = EXAM_TYPES.find((t) => t.toLowerCase() === rawType.toLowerCase());
   if (!examType) {
-    return { ok: false, reason: `Unknown exam type "${rawType}" (expected one of ${EXAM_TYPES.join(', ')})` };
+    return { ok: false, reason: `Unknown exam type "${rawTypeOriginal}" (expected one of ${EXAM_TYPES.join(', ')})` };
   }
+  const normalized = examType !== rawTypeOriginal;
 
-  return { ok: true, dept, term, courseCode, examType, examYear };
+  return { ok: true, dept, term, courseCode, examType, examYear, normalized, rawTypeOriginal };
 }
 
 export default function BatchQBUpload({ profile, onUploaded }) {
@@ -195,7 +215,14 @@ export default function BatchQBUpload({ profile, onUploaded }) {
                     <td style={cellStyle}>{r.parsed?.dept || '—'}</td>
                     <td style={cellStyle}>{r.parsed?.term || '—'}</td>
                     <td style={cellStyle}>{r.parsed?.courseCode || '—'}</td>
-                    <td style={cellStyle}>{r.parsed ? `${r.parsed.examType} ${r.parsed.examYear}` : '—'}</td>
+                    <td style={cellStyle}>
+                      {r.parsed ? `${r.parsed.examType} ${r.parsed.examYear}` : '—'}
+                      {r.parsed?.normalized && (
+                        <div style={{ fontSize: 10.5, opacity: 0.75 }} title={`Original filename said "${r.parsed.rawTypeOriginal}"`}>
+                          (normalized from "{r.parsed.rawTypeOriginal}")
+                        </div>
+                      )}
+                    </td>
                     <td style={{ ...cellStyle, color: statusColor[r.status] }}>
                       {statusLabel[r.status]}
                       {r.error && r.status === 'error' && (

@@ -22,7 +22,7 @@ import { QB_COURSE_CODES } from '../data/questionbank/qbCourseCodes';
 import { submitQBUpload, toQBDeptCode, EXAM_TYPES } from '../lib/qbUploadRequests';
 import BatchQBUpload from './BatchQBUpload';
 
-const TERMS = ['Y1T1', 'Y1T2', 'Y2T1', 'Y2T2', 'Y3T1', 'Y3T2', 'Y4T1', 'Y4T2'];
+const TERMS = ['Y1T1', 'Y1T2', 'Y2T1', 'Y2T2', 'Y3T1', 'Y3T2', 'Y4T1', 'Y4T2', 'Y5T1', 'Y5T2'];
 const CURRENT_YEAR = new Date().getFullYear();
 const MIN_EXAM_YEAR = 2010;
 const MAX_EXAM_YEAR = CURRENT_YEAR + 1;

@@ -121,6 +121,18 @@ const RAW_QB = [
   ...makeEntries('ARCH', 4, 1, 'B. Arch', [2023]),
   ...makeEntries('ARCH', 4, 2, 'B. Arch', [2022]),
   ...makeEntries('ARCH', 5, 1, 'B. Arch', [2023]),
+  // Y5T2 was missing entirely (only Y5T1/Y5T0 existed) even though ARCH's
+  // real curriculum has a Year 5 Term 2 (Design Studio X, Arch 5202/5204/
+  // 5243/5223/5253, etc. — confirmed against the official KUET ARCH
+  // curriculum page). No paper years confirmed uploaded yet. makeEntries()
+  // needs at least one examYear to produce an entry (an empty array maps
+  // to nothing), so this uses a single placeholder examYear purely so the
+  // Y5T2 term tile exists and is browsable/uploadable — it stays
+  // unavailable (available: false, the makeEntries() default) until a real
+  // paper is uploaded and QB_OVERRIDES flips it to available: true, same
+  // as every other not-yet-uploaded slot in this file. Replace/extend the
+  // year list here once real Y5T2 papers exist.
+  ...makeEntries('ARCH', 5, 2, 'B. Arch', [2023]),
   // Backlog
   ...makeEntries('ARCH', 1, 0, 'B. Arch', [2017, 2018, 2022],       'Backlog'),
   ...makeEntries('ARCH', 1, 0, 'B. Arch', [2022],                   'Special Backlog'),
@@ -385,6 +397,34 @@ export function hasQBForTerm(dept, year, term){ return QUESTION_BANK.some(q => q
 export function getAvailableQB(dept = null)  {
   const items = dept ? QUESTION_BANK.filter(q => q.dept === dept) : QUESTION_BANK;
   return items.filter(q => q.available);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TERMS PER DEPARTMENT  (derived, not hardcoded — most depts are 4 years,
+// but e.g. ARCH (B.Arch) is a 5-year program with Y5T1/Y5T2. Rather than
+// hardcode "ARCH = 5 years" in every screen that lists terms, derive the
+// real Y{year}T{term} set straight from RAW_QB's own entries (term 0 /
+// backlog rows excluded — those aren't term-list tiles). Any future
+// program-length change (a dept adding/dropping a year) just needs new
+// makeEntries() rows here and every screen using getDeptTerms() picks it
+// up automatically — no separate list to remember to update.
+// ─────────────────────────────────────────────────────────────────────────────
+const DEPT_TERM_SET = QUESTION_BANK.reduce((acc, q) => {
+  if (q.term === 0) return acc; // year-level backlog, not a term tile
+  (acc[q.dept] || (acc[q.dept] = new Set())).add(`Y${q.year}T${q.term}`);
+  return acc;
+}, {});
+
+const TERM_SORT_ORDER = (t) => {
+  const [, y, term] = t.match(/^Y(\d+)T(\d+)$/) || [];
+  return Number(y) * 10 + Number(term);
+};
+
+/** Real Y{year}T{term} list for a dept, sorted, derived from actual QB coverage data. */
+export function getDeptTerms(dept) {
+  const set = DEPT_TERM_SET[dept];
+  if (!set || set.size === 0) return [];
+  return [...set].sort((a, b) => TERM_SORT_ORDER(a) - TERM_SORT_ORDER(b));
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

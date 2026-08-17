@@ -486,6 +486,12 @@ export const isAllowedDeptCode = (value) => Boolean(getCanonicalDeptCode(value))
 
 // ─── Curriculum Term Helpers ─────────────────────────────────────────────
 export const TERM_KEYS = ['Y1T1', 'Y1T2', 'Y2T1', 'Y2T2', 'Y3T1', 'Y3T2', 'Y4T1', 'Y4T2'];
+const ARCH_TERM_KEYS = [...TERM_KEYS, 'Y5T1', 'Y5T2'];
+
+export const getTermKeysForDept = (deptCode) => {
+  if (String(deptCode || '').trim().toLowerCase() === 'arch') return ARCH_TERM_KEYS;
+  return TERM_KEYS;
+};
 
 // ─── KUET Grading Scale (Art. 13.1) ───────────────────────────────────────
 export const GRADE_SCALE = [
@@ -1367,7 +1373,14 @@ export const getTermKeyFromLabel = (label) => {
   return `Y${Number(match[1])}T${Number(match[2])}`;
 };
 
-export const getTermIndex = (termKey) => TERM_KEYS.indexOf(termKey);
+export const getTermIndex = (termKey) => {
+  const match = String(termKey || '').match(/^Y(\d+)T(\d+)$/);
+  if (!match) return -1;
+  const year = Number(match[1]);
+  const term = Number(match[2]);
+  if (!Number.isFinite(year) || !Number.isFinite(term) || year < 1 || term < 1 || term > 2) return -1;
+  return ((year - 1) * 2) + (term - 1);
+};
 
 const parseTermKey = (termKey) => {
   const match = String(termKey || '').match(/Y(\d+)T(\d+)/);
@@ -1393,7 +1406,7 @@ const extractYearTermFromCode = (code) => {
   const year = parseInt(numPart[0], 10);
   const term = parseInt(numPart[1], 10);
   return { 
-    year: (year >= 1 && year <= 4) ? year : null,
+    year: (year >= 1 && year <= 9) ? year : null,
     term: (term >= 1 && term <= 2) ? term : null
   };
 };

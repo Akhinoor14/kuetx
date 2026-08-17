@@ -6,6 +6,8 @@ import { Y3T1 } from './Y3T1.js';
 import { Y3T2 } from './Y3T2.js';
 import { Y4T1 } from './Y4T1.js';
 import { Y4T2 } from './Y4T2.js';
+import { Y5T1 } from './Y5T1.js';
+import { Y5T2 } from './Y5T2.js';
 
 export const Arch_TERMS = {
   Y1T1,
@@ -16,6 +18,8 @@ export const Arch_TERMS = {
   Y3T2,
   Y4T1,
   Y4T2,
+  Y5T1,
+  Y5T2,
 };
 
 export default Arch_TERMS;

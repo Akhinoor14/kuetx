@@ -49,6 +49,13 @@ const parseTermKey = (termKey) => {
   return { year: Number(match[1]), term: Number(match[2]) };
 };
 
+const getOrderedTermKeysForDept = (deptCode) => {
+  const deptTerms = getDeptTerms(deptCode);
+  const keys = Object.keys(deptTerms || {}).filter((key) => /^Y\d+T[12]$/.test(String(key)));
+  if (!keys.length) return TERM_KEYS;
+  return keys.sort((a, b) => getTermIndex(a) - getTermIndex(b));
+};
+
 const getDeptCurriculum = (deptCode) => {
   const found = getDeptCurriculumSync(deptCode);
   if (found) return found;
@@ -163,12 +170,13 @@ const buildBaseCoursesFromSyllabus = (termObj) => {
 export const syncCurriculumCourses = (profile) => {
   const current = profile || {};
   if (!current?.dept) return getCustomCourses();
-  const termKey = getCurrentTermKey(current) || TERM_KEYS[0];
-  const currentIndex = Math.max(0, getTermIndex(termKey));
+  const termKeysForDept = getOrderedTermKeysForDept(current.dept);
+  const termKey = getCurrentTermKey(current) || termKeysForDept[0] || TERM_KEYS[0];
+  const currentIndex = Math.max(0, termKeysForDept.indexOf(termKey));
   const deptTerms = getDeptTerms(current.dept);
   const deptSyllabus = getDeptSyllabus(current.dept) || { terms: {} };
 
-  const curriculumCourses = TERM_KEYS
+  const curriculumCourses = termKeysForDept
     .filter((key, index) => index <= currentIndex)
     .flatMap((key, index) => {
       let baseCourses = Array.isArray(deptTerms[key]) ? deptTerms[key] : [];

@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 import { GraduationCap, ChevronDown, Pencil } from 'lucide-react';
-import { TERM_KEYS, getTermLabelFromKey } from '../store/store';
+import { getTermKeysForDept, getTermLabelFromKey } from '../store/store';
 import { getCoursesForTerm } from '../store/curriculumStore';
 import CourseTeacherDialog from './CourseTeacherDialog';
 import { resolveTeacherNames } from '../lib/teacherRegistry';
@@ -55,6 +55,7 @@ export default function ClassSetupTermCourses({
     appearance: 'none', WebkitAppearance: 'none', fontWeight: 700, cursor: 'pointer',
   };
   const labelStyle = { fontSize: 11.5, fontWeight: 700, color: 'var(--muted)', marginBottom: 4, display: 'block' };
+  const termKeys = useMemo(() => getTermKeysForDept(dept), [dept]);
 
   const CourseRow = ({ course }) => {
     // courseTeacherMap[course.id] is now an array of teacherIds — resolve
@@ -110,7 +111,7 @@ export default function ClassSetupTermCourses({
             style={inputStyle}
           >
             <option value="" disabled>Select current term</option>
-            {TERM_KEYS.map((key) => (
+            {termKeys.map((key) => (
               <option key={key} value={key}>{getTermLabelFromKey(key) || key}</option>
             ))}
           </select>

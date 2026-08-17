@@ -5,7 +5,7 @@ const inputPath = path.resolve('samplesourcejustforreference/archcurriculumn.jso
 const outputRoot = path.resolve('src/data/curriculum/departments/Arch');
 const termsDir = path.join(outputRoot, 'terms');
 const syllabusDir = path.join(outputRoot, 'syllabus');
-const termOrder = ['Y1T1', 'Y1T2', 'Y2T1', 'Y2T2', 'Y3T1', 'Y3T2', 'Y4T1', 'Y4T2'];
+const termOrder = ['Y1T1', 'Y1T2', 'Y2T1', 'Y2T2', 'Y3T1', 'Y3T2', 'Y4T1', 'Y4T2', 'Y5T1', 'Y5T2'];
 const PLACEHOLDER = 'Sorry, we cannot collect only this dept course syllabus. Please help us and contact with founder.';
 
 const ensureDir = dir => fs.mkdirSync(dir, { recursive: true });

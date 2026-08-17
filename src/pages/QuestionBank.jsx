@@ -4,7 +4,7 @@ import {
   ChevronLeft, ChevronRight, FileText, Upload, Search,
   BookOpen, AlertCircle, RefreshCw, ExternalLink, Sparkles, Trash2,
 } from 'lucide-react';
-import { QB_DEPARTMENTS } from '../data/questionbank/questionBankData';
+import { QB_DEPARTMENTS, getDeptTerms } from '../data/questionbank/questionBankData';
 import { QB_COURSE_CODES } from '../data/questionbank/qbCourseCodes';
 import { useQuestionBankData, getR2FileUrl } from '../hooks/useQuestionBankData';
 import UploadQuestionModal from '../components/UploadQuestionModal';
@@ -16,11 +16,16 @@ import { subscribeMyRoles } from '../lib/staffSync';
 import { founderDeletePapers, submitDeleteRequest } from '../lib/deleteRequests';
 import { notify } from '../lib/notify';
 
-const TERMS = ['Y1T1', 'Y1T2', 'Y2T1', 'Y2T2', 'Y3T1', 'Y3T2', 'Y4T1', 'Y4T2'];
+// Fallback only — used if a dept somehow has zero QB coverage entries yet
+// (shouldn't normally happen; every dept in QB_DEPARTMENTS gets at least
+// placeholder makeEntries() rows). Real per-dept term list comes from
+// getDeptTerms(dept), which is derived from actual data so a 5-year
+// program like ARCH shows Y5T1/Y5T2 without hardcoding it here.
+const FALLBACK_TERMS = ['Y1T1', 'Y1T2', 'Y2T1', 'Y2T2', 'Y3T1', 'Y3T2', 'Y4T1', 'Y4T2'];
 
 function termLabel(term) {
   // "Y2T1" -> "2nd Year 1st Term"
-  const yMap = { 1: '1st', 2: '2nd', 3: '3rd', 4: '4th' };
+  const yMap = { 1: '1st', 2: '2nd', 3: '3rd', 4: '4th', 5: '5th' };
   const tMap = { 1: '1st', 2: '2nd' };
   const y = term[1];
   const t = term[3];
@@ -293,7 +298,10 @@ export default function QuestionBank() {
       {/* TERM LIST */}
       {screen === 'terms' && (
         <div style={styles.grid}>
-          {TERMS.map((t) => (
+          {(() => {
+            const deptTerms = getDeptTerms(dept);
+            return deptTerms.length ? deptTerms : FALLBACK_TERMS;
+          })().map((t) => (
             <button key={t} style={styles.card} onClick={() => goToTerm(t)}>
               <div style={styles.cardCode}>{t}</div>
               <div style={styles.cardSub}>{termLabel(t)}</div>

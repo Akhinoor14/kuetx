@@ -10,7 +10,8 @@
 // Batch list + start dates: appConfigSync.js's live config/batches doc
 // (Founder-editable — see FounderBatchSettings.jsx), falling back to
 // store.js's BATCH_START_DATES seed until that doc exists.
-// Term list: store.js's TERM_KEYS (Y1T1..Y4T2).
+// Term list: derived from curriculumStore.js's getDeptTerms(deptCode),
+// with TERM_KEYS as fallback while a department's curriculum is loading.
 // Course list per dept+term: curriculumStore.js's getDeptTerms(deptCode) —
 // deliberately NOT getAllCourses(profile), which is keyed to a STUDENT's
 // own current term and can't list an arbitrary dept+term a teacher picks.
@@ -128,6 +129,13 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
     const terms = getDeptTerms(dept);
     return terms[term] || [];
   }, [dept, term]);
+
+  const termOptions = useMemo(() => {
+    if (!dept) return TERM_KEYS;
+    const termKeys = Object.keys(getDeptTerms(dept) || {}).filter((k) => /^Y\d+T[12]$/.test(String(k)));
+    if (!termKeys.length) return TERM_KEYS;
+    return termKeys.sort((a, b) => getTermIndex(a) - getTermIndex(b));
+  }, [dept]);
 
   const selectedCourse = termCourses.find((c) => c.code === courseCode) || null;
   const isSessionalCourse = isSessionalType(selectedCourse?.type);
@@ -355,7 +363,7 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
             <label style={labelStyle}>Term</label>
             <select style={inputStyle} value={term} onChange={(e) => { setTerm(e.target.value); setCourseCode(''); }} disabled={!dept}>
               <option value="">Select term</option>
-              {TERM_KEYS.map((t) => <option key={t} value={t}>{t}</option>)}
+              {termOptions.map((t) => <option key={t} value={t}>{t}</option>)}
             </select>
           </div>
 

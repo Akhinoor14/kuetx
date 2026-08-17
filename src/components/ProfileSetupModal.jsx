@@ -3,7 +3,7 @@ import { Lightbulb, Crown, Gem } from 'lucide-react';
 import Modal from './Modal';
 import ManualVerifyFallback from './ManualVerifyFallback';
 import { isKuetEmailFormat, emailRollMatchesProfile } from '../lib/kuetEmailVerify';
-import { DEPARTMENTS, DEPT_CODES, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey, extractBatchFromRoll, getDeptCodeFromRoll, normalizeProfileForSave } from '../store/store';
+import { DEPARTMENTS, DEPT_CODES, DEFAULT_PROFILE, getTermKeysForDept, getTermLabelFromKey, extractBatchFromRoll, getDeptCodeFromRoll, normalizeProfileForSave } from '../store/store';
 import { getBatchStartDates } from '../lib/appConfigSync';
 import { claimRoll, requestRollUnlock } from '../lib/rollOwnership';
 import { ensureManualVerifyRequest } from '../lib/manualVerifyRequests';
@@ -311,6 +311,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
 
   const autoCalculatedBatch = extractBatchFromRoll(form.studentId);
   const autoCalculatedDept = extractDeptCodeFromRoll(form.studentId);
+  const termKeys = getTermKeysForDept(form.dept || autoCalculatedDept);
 
   const validateStep = (index) => {
     const stepFields = requiredFieldMap[index] || [];
@@ -728,7 +729,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                       ) : (
                         <select ref={registerFieldRef('currentTermKey')} value={form.currentTermKey || ''} onChange={handleChange('currentTermKey')} style={fieldStyle}>
                           <option value="">Select current term</option>
-                          {TERM_KEYS.map(termKey => (
+                          {termKeys.map(termKey => (
                             <option key={termKey} value={termKey}>{termKey} - {getTermLabelFromKey(termKey)}</option>
                           ))}
                         </select>
@@ -903,7 +904,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                       ) : (
                         <select ref={registerFieldRef('currentTermKey')} value={form.currentTermKey || ''} onChange={handleChange('currentTermKey')} style={fieldStyle}>
                           <option value="">Select current term</option>
-                          {TERM_KEYS.map(termKey => (
+                          {termKeys.map(termKey => (
                             <option key={termKey} value={termKey}>{termKey} - {getTermLabelFromKey(termKey)}</option>
                           ))}
                         </select>

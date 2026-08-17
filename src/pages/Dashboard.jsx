@@ -4,7 +4,7 @@ import LazyRechartsArea from '../components/LazyRechartsArea';
 import { TrendingUp, Award, AlertTriangle, BookOpen, CalendarCheck, Clock, Wallet, Star, UserCircle, GraduationCap, ClipboardList, Medal, CheckCircle2, Store } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAttendance, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, computeCourseGrade, deriveAcademicMetaFromCourses, syncProfileAcademicMeta, getProfile, getTermLabelFromKey, getCurrentTermKey, getTermProgress, getTermTimeline, getTermIndex, TERM_KEYS, getTimerActiveState, formatDurationMs, PRODUCTIVE_TIME_CATEGORIES, getBDNow } from '../store/store';
-import { getAllCourses } from '../store/curriculumStore';
+import { getAllCourses, getDeptTerms } from '../store/curriculumStore';
 import { NAV } from '../nav';
 import ticker from '../lib/ticker';
 import usePageMeta from '../hooks/usePageMeta';
@@ -157,6 +157,11 @@ export default function Dashboard() {
   const { batch: derivedBatch, currentTerm: derivedTermLabel, latestTermKey } = deriveAcademicMetaFromCourses(courses, profile);
 
   const currentTermKey = getCurrentTermKey(profile) || latestTermKey;
+  const deptTermKeys = (() => {
+    const keys = Object.keys(getDeptTerms(profile?.dept) || {}).filter((k) => /^Y\d+T[12]$/.test(String(k)));
+    if (!keys.length) return TERM_KEYS;
+    return keys.sort((a, b) => getTermIndex(a) - getTermIndex(b));
+  })();
   const currentTermLabel = getTermLabelFromKey(currentTermKey) || derivedTermLabel || profile.currentTerm || '';
   const inferredBatch = profile.batch || derivedBatch;
   const scheduleSettings = store.get('scheduleSettings') || {};
@@ -175,7 +180,7 @@ export default function Dashboard() {
     : localRoadmapConfig;
   const currentTermTimeline = currentTermKey && effectiveTermStartDate ? getTermTimeline(effectiveTermStartDate, profile?.dept, currentTermKey, effectiveRoadmapConfig) : null;
   const currentTermProgress = currentTermTimeline ? getTermProgress(effectiveTermStartDate, scheduleSettings.holidayDates || []) : 0;
-  const completedTerms = currentTermKey ? Math.max(0, Math.min(TERM_KEYS.length - 1, getTermIndex(currentTermKey))) : 0;
+  const completedTerms = currentTermKey ? Math.max(0, Math.min(deptTermKeys.length - 1, getTermIndex(currentTermKey))) : 0;
   const shortDate = (d) => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   const classEndLabel = currentTermTimeline?.classEndDate ? shortDate(currentTermTimeline.classEndDate) : '';
   const prepLeaveLabel = currentTermTimeline ? `${shortDate(currentTermTimeline.prepLeaveStart)} → ${shortDate(currentTermTimeline.prepLeaveEnd)}` : '';
@@ -212,7 +217,7 @@ export default function Dashboard() {
   // 100% finished just because a later term was selected — inflating the
   // percentage even if the semester barely started or dates were never set.
   const termJourneyPct = currentTermKey && effectiveTermStartDate
-    ? Math.min(100, Math.round(((completedTerms + (currentTermProgress / 100)) / TERM_KEYS.length) * 100))
+    ? Math.min(100, Math.round(((completedTerms + (currentTermProgress / 100)) / deptTermKeys.length) * 100))
     : creditPct;
   const cgpaStr = cgpa !== null ? cgpa.toFixed(2) : null;
   const cgpaColor = cgpaStr ? (parseFloat(cgpaStr) >= 3.75 ? 'var(--success)' : parseFloat(cgpaStr) < 2.20 ? 'var(--danger)' : 'var(--text)') : 'var(--muted)';
@@ -399,7 +404,7 @@ export default function Dashboard() {
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', marginBottom: 10, flexWrap: 'wrap' }}>
           <div>
             <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--muted)' }}>Academic Journey</div>
-            <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 4 }}>8 terms total. Each term contributes 12.5%.</div>
+            <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 4 }}>{deptTermKeys.length} terms total. Each term contributes {(100 / deptTermKeys.length).toFixed(1)}%.</div>
           </div>
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontSize: 30, fontWeight: 900, letterSpacing: '-0.04em', color: 'var(--text)', lineHeight: 1 }}>{termJourneyPct}%</div>
@@ -407,8 +412,8 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: `repeat(${TERM_KEYS.length}, 1fr)`, gap: 5, marginBottom: 12 }}>
-          {TERM_KEYS.map((termKey, index) => {
+        <div style={{ display: 'grid', gridTemplateColumns: `repeat(${deptTermKeys.length}, 1fr)`, gap: 5, marginBottom: 12 }}>
+          {deptTermKeys.map((termKey, index) => {
             const isCurrent = termKey === currentTermKey;
             const isDone = index < completedTerms;
             const fill = isDone ? 100 : isCurrent ? Math.max(8, currentTermProgress) : 0;

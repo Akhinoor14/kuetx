@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect } from 'react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, ReferenceLine, LabelList } from 'recharts';
 import { Sparkles, Target, TrendingUp, ArrowRight, AlertTriangle, CheckCircle2, GraduationCap, ClipboardList, Medal } from 'lucide-react';
-import { store, GRADE_SCALE, cgpaToPercent, computeCourseGrade, getLegacyTermResults, getProfile, setLegacyTermResults, TERM_KEYS, getCurrentTermKey, getTermTimeline, recordAudit } from '../store/store';
+import { store, GRADE_SCALE, cgpaToPercent, computeCourseGrade, getLegacyTermResults, getProfile, setLegacyTermResults, getTermKeysForDept, getCurrentTermKey, getTermTimeline, recordAudit } from '../store/store';
 import { getAllCourses, getTermCreditsFromCurriculum } from '../store/curriculumStore';
 import Collapsible from '../components/Collapsible';
 import { alertDialog } from '../lib/dialog';
@@ -20,6 +20,7 @@ export default function Results() {
 
   const profile = getProfile();
   const courses = getAllCourses(profile);
+  const termKeys = getTermKeysForDept(profile?.dept);
   const currentTermKey = getCurrentTermKey(profile);
   const currentTermTimeline = useMemo(
     () => (currentTermKey ? getTermTimeline(profile?.termStartDate, profile?.dept, currentTermKey) : null),
@@ -29,8 +30,8 @@ export default function Results() {
     (currentTermTimeline && new Date() <= currentTermTimeline.classEndDate) ||
     (currentTermKey && courses.some(c => `Y${c.year}T${c.term}` === currentTermKey && (c.status === 'active' || c.status === 'backlog')))
   );
-  const currentTermIndex = currentTermKey ? TERM_KEYS.indexOf(currentTermKey) : -1;
-  const previousTermKey = currentTermIndex > 0 ? TERM_KEYS[currentTermIndex - 1] : null;
+  const currentTermIndex = currentTermKey ? termKeys.indexOf(currentTermKey) : -1;
+  const previousTermKey = currentTermIndex > 0 ? termKeys[currentTermIndex - 1] : null;
   const addMonths = (date, months) => {
     const next = new Date(date.getTime());
     next.setMonth(next.getMonth() + months);
@@ -98,7 +99,7 @@ export default function Results() {
 
   const addLegacyRow = () => {
     const used = new Set(legacyTerms.map(r => r.termKey));
-    const free = TERM_KEYS.find(k => !used.has(k)) || '';
+    const free = termKeys.find(k => !used.has(k)) || '';
     const next = [...legacyTerms, { termKey: free, gpa: '', credits: '' }];
     setLegacyTerms(next);
     setLegacyTermResults(next);
@@ -130,8 +131,8 @@ export default function Results() {
       coursesByTerm[termKey].push(c);
     });
 
-    // Loop through all 8 curriculum terms
-    TERM_KEYS.forEach(termKey => {
+    // Loop through all curriculum terms for this department
+    termKeys.forEach(termKey => {
       const curriculumCredits = getTermCreditsFromCurriculum(deptCode, termKey);
       if (curriculumCredits <= 0) return;
 
