@@ -20,11 +20,19 @@
 
 name: KUET Faculty Directory Scrape
 
+# NOTE (biweekly schedule): GitHub Actions cron-এ সরাসরি "প্রতি ২ সপ্তাহে
+# একবার" বলার কোনো syntax নেই (cron শুধু day-of-month/day-of-week বোঝে,
+# "every N weeks" বোঝে না)। তাই workflow প্রতি বৃহস্পতিবার রাতেই ট্রিগার
+# হয়, কিন্তু "Check if this is a scrape week" step-এ মাসের সপ্তাহ-সংখ্যা
+# হিসাব করে জোড়/বিজোড় বৃহস্পতিবার বাদ দেওয়া হয় — ফলে কার্যত মাসে ২ বার
+# (প্রতি ২ সপ্তাহ পরপর) স্ক্র্যাপ চলে। Firestore quota বাঁচাতে এই gate;
+# scraper.py-এর নিজস্ব diff-based write logic (শুধু বদলানো ডেটা লেখা)-এর
+# পাশাপাশি এটা দ্বিতীয় স্তরের সুরক্ষা।
 on:
   schedule:
-    # প্রতিদিন রাত ৩টা (Bangladesh time, UTC+6) => UTC 21:00 আগের দিন
-    - cron: "0 21 * * *"
-  workflow_dispatch: {} # Actions tab থেকে ম্যানুয়ালি "Run workflow" চাপার অপশন
+    # প্রতি বৃহস্পতিবার রাত ৩টা (Bangladesh time, UTC+6) => UTC 21:00 বুধবার
+    - cron: "0 21 * * 3"
+  workflow_dispatch: {} # Actions tab থেকে ম্যানুয়ালি "Run workflow" চাপার অপশন — এটা সবসময় চলে, gate এড়িয়ে
 
 jobs:
   scrape:
@@ -33,22 +41,48 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Check if this is a scrape week (biweekly gate)
+        id: gate
+        run: |
+          # workflow_dispatch (ম্যানুয়াল রান) হলে gate সবসময় pass —
+          # কেউ ইচ্ছে করে চালালে তাকে থামানো উচিত না।
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            echo "Manual run — skipping biweekly check."
+            exit 0
+          fi
+          # মাসের ১ম দিন থেকে আজকের দিন-সংখ্যা গুনে, প্রতি ১৪ দিনে
+          # একবার (day 1-14 => run, day 15-28 => skip, ইত্যাদি) হিসাব।
+          day_of_month=$(date +%-d)
+          week_block=$(( (day_of_month - 1) / 14 % 2 ))
+          if [ "$week_block" = "0" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            echo "Day $day_of_month — scrape week, running."
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "Day $day_of_month — off week, skipping to save Firestore quota."
+          fi
+
       - name: Set up Python
+        if: steps.gate.outputs.run == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
       - name: Install dependencies
+        if: steps.gate.outputs.run == 'true'
         working-directory: scripts
         run: pip install -r requirements.txt
 
       - name: Run scraper (scrape + push to Firestore)
+        if: steps.gate.outputs.run == 'true'
         working-directory: scripts
         env:
           FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
         run: python kuet_faculty_scraper.py
 
       - name: Upload JSON snapshot as run artifact
+        if: steps.gate.outputs.run == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: kuet-faculty-data
