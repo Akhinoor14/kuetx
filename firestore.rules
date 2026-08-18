@@ -3076,6 +3076,23 @@ service cloud.firestore {
           allow write: if isFacultyFor(groupId, assignmentId) || isAdmin();
         }
 
+        // BUGFIX (build failure — facultyMarksSync.js's
+        // setStudentDiscontinued/clearStudentDiscontinued/
+        // subscribeDiscontinuedStudents were referenced throughout
+        // FacultyClassDetail.jsx with no matching rule for this
+        // subcollection, alongside that file never having defined those
+        // three functions either — see facultyMarksSync.js's own comment
+        // on discontinuedStudentsCollection). Same shape/authority tier
+        // as backlogStudents directly above: a persistent per-assignment
+        // student-status doc, doc id = roll, only the assigned teacher(s)
+        // or Admin can write, teacher/CR/ACR/Admin can read (CR/ACR need
+        // read since the discontinued set is what filters the roster
+        // they see on the grid/marks views too).
+        match /discontinuedStudents/{roll} {
+          allow read: if isFacultyFor(groupId, assignmentId) || isGroupCR(groupId) || isGroupACR(groupId) || isAdmin();
+          allow write: if isFacultyFor(groupId, assignmentId) || isAdmin();
+        }
+
         // Phase I (ATTENDANCE_REBUILD_PLAN.md §7's Phase I entry) —
         // co-teacher invite codes. Deliberately NOT the same read tier as
         // backlogStudents/sessions above: a code is a bearer credential

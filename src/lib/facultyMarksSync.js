@@ -175,6 +175,55 @@ export function subscribeBacklogStudents(groupId, assignmentId, callback) {
   }, () => callback([]));
 }
 
+// ── Discontinued students (persistent per-assignment/term status) ──────
+//
+// BUGFIX (build failure — subscribeDiscontinuedStudents/setStudentDiscontinued/
+// clearStudentDiscontinued were imported and used throughout
+// FacultyClassDetail.jsx's discontinue-toggle UI, firestore.rules already
+// had no matching subcollection, and this file never actually defined any
+// of the three — the whole data layer was missing while the UI shipped
+// ahead of it). Mirrors backlogStudents' exact shape one collection over,
+// since the two are structurally identical (a per-assignment,
+// doc-id-by-roll student-status subcollection): a persistent flag that a
+// given roll has stopped taking this course this term, independent of any
+// single day's attendance mark. Once set, FacultyClassDetail.jsx drops
+// that roll from markableRoster (daily marking) and every attendance %/
+// summary calculation for this assignment — see that file's own comment
+// on handleToggleDiscontinue for the full UI-side behavior this backs.
+function discontinuedStudentsCollection(groupId, assignmentId) {
+  return collection(db, 'groups', groupId, 'facultyAssignments', assignmentId, 'discontinuedStudents');
+}
+
+/** Marks a roll discontinued for this assignment/term. Doc id = roll, so
+ * re-marking an already-discontinued roll naturally overwrites rather
+ * than duplicating (matches addBacklogStudent's own re-add behavior). */
+export async function setStudentDiscontinued(groupId, assignmentId, { roll, name, setBy }) {
+  const cleanRoll = String(roll || '').trim();
+  if (!ROLL_PATTERN.test(cleanRoll)) {
+    throw new Error('Roll must be exactly 7 digits (standard KUET roll format).');
+  }
+  await setDoc(doc(discontinuedStudentsCollection(groupId, assignmentId), cleanRoll), {
+    roll: cleanRoll,
+    name: name || cleanRoll,
+    setBy: setBy || null,
+    setAt: serverTimestamp(),
+  });
+  return cleanRoll;
+}
+
+/** Clears a roll's discontinued flag — the student returns to normal
+ * daily marking / attendance calculations immediately. */
+export async function clearStudentDiscontinued(groupId, assignmentId, roll) {
+  await deleteDoc(doc(discontinuedStudentsCollection(groupId, assignmentId), roll));
+}
+
+export function subscribeDiscontinuedStudents(groupId, assignmentId, callback) {
+  if (!groupId || !assignmentId) { callback([]); return () => {}; }
+  return onSnapshot(discontinuedStudentsCollection(groupId, assignmentId), (snap) => {
+    callback(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+  }, () => callback([]));
+}
+
 // ── §8.9 Attendance ─────────────────────────────────────────────────────
 
 /** One row per class meeting for this assignment — a teacher creates this
