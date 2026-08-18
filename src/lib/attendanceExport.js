@@ -33,9 +33,33 @@ const MARK_ABBR = { present: 'P', absent: 'A', late: 'L', excused: 'E' };
 
 // Sessions sorted oldest -> newest, matching a physical register's
 // left-to-right date order (a teacher scanning a printed sheet expects the
-// term to read left-to-right chronologically, not newest-first).
+// term to read left-to-right chronologically, not newest-first). When two
+// sessions share the same date (e.g. theory + lab, or two labs held the
+// same day — see "+ Add another session" in AttendanceTab), ties break by
+// createdAt so the earlier-taken session of the day comes first.
 function sortedSessions(sessions) {
-  return [...(sessions || [])].sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+  return [...(sessions || [])].sort((a, b) => {
+    if (a.date !== b.date) return a.date < b.date ? -1 : 1;
+    const at = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
+    const bt = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
+    return at - bt;
+  });
+}
+
+// Column label for one session. Most dates only ever have one session, so
+// the label is just the date — but once a date has more than one (same-day
+// extra session), each of that date's columns gets a "(1)"/"(2)" suffix so
+// they're distinguishable in the export instead of two identical-looking
+// columns with no way to tell them apart.
+function labelSessions(sessionsAsc) {
+  const countByDate = {};
+  sessionsAsc.forEach((s) => { countByDate[s.date] = (countByDate[s.date] || 0) + 1; });
+  const seenByDate = {};
+  return sessionsAsc.map((s) => {
+    if (countByDate[s.date] <= 1) return s.date;
+    seenByDate[s.date] = (seenByDate[s.date] || 0) + 1;
+    return `${s.date} (${seenByDate[s.date]})`;
+  });
 }
 
 // Per-student overall stats across the FULL session set, same calc
@@ -88,7 +112,8 @@ export function exportAttendanceExcel(assignment, fullMergedRoster, sessions, fa
   const colHeader = [];
   if (multiSection) colHeader.push('Section');
   colHeader.push('Roll', 'Name');
-  sessionsAsc.forEach((s) => colHeader.push(s.date));
+  const sessionLabels = labelSessions(sessionsAsc);
+  sessionLabels.forEach((label) => colHeader.push(label));
   colHeader.push('Present', 'Held', '%');
   aoa.push(colHeader);
 
@@ -161,8 +186,9 @@ export async function exportAttendancePdf(assignment, fullMergedRoster, sessions
   container.style.padding = '28px';
   document.body.appendChild(container);
 
-  const dateHeaders = sessionsAsc.map((s) => `
-    <th style="padding:5px 3px; background:${BRAND.accent}22; font-size:8px; white-space:nowrap;">${s.date.slice(5)}</th>
+  const sessionLabelsPdf = labelSessions(sessionsAsc).map((label) => label.slice(5)); // "08-18" or "08-18 (2)"
+  const dateHeaders = sessionLabelsPdf.map((label) => `
+    <th style="padding:5px 3px; background:${BRAND.accent}22; font-size:8px; white-space:nowrap;">${label}</th>
   `).join('');
 
   const rows = fullMergedRoster.map((m) => {

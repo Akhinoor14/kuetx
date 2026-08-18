@@ -1200,7 +1200,17 @@ export default function LandingPage() {
   // as Sign In. authIntent below drives both which modal renders AND the
   // SignInPrompt copy/button label shown first.
   const [authIntent, setAuthIntent] = useState('signin'); // 'signin' | 'signup'
-  const openAuth = (intent) => { setAuthIntent(intent); setShowSignInPrompt(true); };
+  // Sign Up skips SignInPrompt entirely — it's a redundant extra click
+  // before SignUpWizard's own role-select step. Only Sign In goes
+  // through SignInPrompt first.
+  const openAuth = (intent) => {
+    setAuthIntent(intent);
+    if (intent === 'signup') {
+      setShowAuthModal(true);
+    } else {
+      setShowSignInPrompt(true);
+    }
+  };
   const [mockupMode, setMockupMode] = useState('desktop'); // desktop visitor default, per plan §3.2
 
   const selectedRole = searchParams.get('role');

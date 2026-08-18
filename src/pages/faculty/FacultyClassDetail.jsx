@@ -1201,6 +1201,7 @@ function AttendanceTab({ assignment, groupId }) {
     const existing = (sessions || []).find((s) => s.date === date);
     setDraftMarks(existing?.attendance || {});
     setUnlockedForEdit(false);
+    setAddingExtraSession(false);
   }, [date, sessions]);
 
   // Phase H fix (see ATTENDANCE_REBUILD_PLAN.md §7's hand-off entry) — a
@@ -1212,9 +1213,22 @@ function AttendanceTab({ assignment, groupId }) {
   // session for this date — this is "my session to edit/save."
   // `allSessionsForDate` holds every session (any teacher) for the merged
   // "All sessions" read-only view below.
+  //
+  // Same-day, second-session support ("+ Add another session for
+  // today") — one teacher can already have MORE THAN ONE of their own
+  // sessions on the same date once addingExtraSession has been used
+  // (e.g. theory + lab, or two lab batches, same day). `mySessionsForDate`
+  // holds all of them; `existingSessionForDate` picks the one this view
+  // is currently pointed at — the latest one by default, or a fresh
+  // (unsaved) target while addingExtraSession is true so Save creates a
+  // new doc instead of editing an already-locked one.
+  const [addingExtraSession, setAddingExtraSession] = useState(false);
   const myUid = auth.currentUser?.uid;
   const allSessionsForDate = (sessions || []).filter((s) => s.date === date);
-  const existingSessionForDate = allSessionsForDate.find((s) => s.loggedBy?.uid === myUid);
+  const mySessionsForDate = allSessionsForDate.filter((s) => s.loggedBy?.uid === myUid);
+  const existingSessionForDate = addingExtraSession
+    ? null
+    : mySessionsForDate[mySessionsForDate.length - 1];
 
   // My/All toggle for the summary stats + per-row columns below. Defaults
   // to 'mine' — a teacher's own numbers are what they expect to see when
@@ -1464,7 +1478,7 @@ function AttendanceTab({ assignment, groupId }) {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const wasFirstSaveForDate = !existingSessionForDate;
+      const wasFirstSaveForDate = mySessionsForDate.length === 0;
       const isCorrection = !!existingSessionForDate?.locked && unlockedForEdit;
       // §3d's default-present-on-save rule: a row with NO explicit mark
       // (never clicked at all — the common "just click absentees" case)
@@ -1503,6 +1517,7 @@ function AttendanceTab({ assignment, groupId }) {
         isCorrection,
       });
       setUnlockedForEdit(false);
+      setAddingExtraSession(false);
 
       // Auto-link to Sessions & Count: taking attendance for a date IS
       // strong proof a class was actually held that day, so the first
@@ -2512,18 +2527,32 @@ function AttendanceTab({ assignment, groupId }) {
               <span style={{ fontSize: 12.5, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
                 🔒 Attendance already saved for this date.
               </span>
-              <button
-                onClick={() => setUnlockedForEdit(true)}
-                style={{ padding: '7px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--accent)', fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}
-              >
-                Edit this date
-              </button>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                <button
+                  onClick={() => setUnlockedForEdit(true)}
+                  style={{ padding: '7px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--accent)', fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}
+                >
+                  Edit this date
+                </button>
+                <button
+                  onClick={() => { setAddingExtraSession(true); setDraftMarks({}); }}
+                  title="Same day, another class period (e.g. theory + lab) — kept as a separate attendance record."
+                  style={{ padding: '7px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--accent)', fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}
+                >
+                  + Add another session
+                </button>
+              </div>
             </div>
           );
         }
         const isCorrectionMode = isLocked && unlockedForEdit;
         return (
           <div className="faculty-summary-card" style={{ marginTop: 14 }}>
+            {addingExtraSession && (
+              <div style={{ fontSize: 11.5, color: 'var(--accent)', marginBottom: 10, textAlign: 'center' }}>
+                ➕ এই তারিখের দ্বিতীয় সেশন — আলাদাভাবে সেভ হবে, আগের সেশনটা অপরিবর্তিত থাকবে।
+              </div>
+            )}
             {isCorrectionMode && (
               <div style={{ fontSize: 11.5, color: '#d97706', marginBottom: 10, textAlign: 'center' }}>
                 ⚠️ Correcting a locked date — every change is recorded in the audit trail.

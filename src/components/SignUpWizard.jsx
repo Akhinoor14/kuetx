@@ -47,6 +47,7 @@ import { loginWithGoogle } from '../lib/firebaseAuth';
 import { isBrandNewAccount } from '../lib/accountLifecycle';
 import { setAccountRole, persistAccountRoleToServer } from '../lib/accountRole';
 import { createFacultyAccountDoc, saveFacultyProfile, setFacultyInstitutionalEmail } from '../lib/facultySync';
+import { lookupFacultyDirectoryEntry } from '../lib/facultyDirectoryMatch';
 import { createProviderShell } from '../lib/providerSync';
 import { pushProfile } from '../lib/firebaseSync';
 import { syncBloodDonorEntry } from '../lib/bloodDonorSync';
@@ -352,16 +353,130 @@ function FacultyDetailsStep({ form, setForm, errors, setErrors }) {
     setErrors((prev) => ({ ...prev, [key]: '' }));
   };
 
+  const emailTrimmed = String(form.institutionalEmail || '').trim();
+  const isKuetEmail = !!emailTrimmed && isFacultyEmailFormat(emailTrimmed);
+  const isGuestEmail = !!emailTrimmed && !isKuetEmail;
+  // Sub-stage gate: email must be confirmed (KUET match checked against
+  // the directory, or guest checkbox ticked) before the rest of the
+  // profile fields appear. `emailConfirmed` flips true once the visitor
+  // clicks "Confirm & Continue" below — form.institutionalEmail changing
+  // after that resets it, so editing the email re-triggers the check.
+  const emailConfirmed = !!form._emailConfirmed && form._emailConfirmedFor === emailTrimmed;
+
+  const [checking, setChecking] = useState(false);
+  const [directoryHit, setDirectoryHit] = useState(null); // null = not checked, entry object = match, false = checked no match
+
+  const runDirectoryCheck = async () => {
+    if (!isKuetEmail) return;
+    setChecking(true);
+    try {
+      const entry = await lookupFacultyDirectoryEntry(emailTrimmed);
+      setDirectoryHit(entry || false);
+    } catch {
+      setDirectoryHit(false);
+    } finally {
+      setChecking(false);
+    }
+  };
+
+  const confirmEmailStage = () => {
+    if (!emailTrimmed) {
+      setErrors((prev) => ({ ...prev, institutionalEmail: 'Email is required' }));
+      return;
+    }
+    if (isGuestEmail && !form.guestTeacherAck) {
+      setErrors((prev) => ({ ...prev, guestTeacherAck: 'Please confirm you understand this account will need manual verification' }));
+      return;
+    }
+    setForm((prev) => ({
+      ...prev,
+      _emailConfirmed: true,
+      _emailConfirmedFor: emailTrimmed,
+      // Directory-matched name auto-fills but stays editable below.
+      name: prev.name || (directoryHit ? directoryHit.name : ''),
+      dept: prev.dept || (directoryHit ? prev.dept : prev.dept),
+    }));
+  };
+
+  if (!emailConfirmed) {
+    return (
+      <div style={{ display: 'grid', gap: 12 }}>
+        <div>
+          <label style={labelStyle}>Institutional / Contact Email</label>
+          <input
+            type="email" style={fieldStyle} value={form.institutionalEmail || ''}
+            onChange={(e) => {
+              setForm((prev) => ({ ...prev, institutionalEmail: e.target.value }));
+              setErrors((prev) => ({ ...prev, institutionalEmail: '', guestTeacherAck: '' }));
+              setDirectoryHit(null);
+            }}
+            onBlur={runDirectoryCheck}
+            placeholder="e.g. yourname@dept.kuet.ac.bd"
+          />
+          {errors.institutionalEmail && <div style={errorStyle}>{errors.institutionalEmail}</div>}
+          <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>
+            KUET faculty (@*.kuet.ac.bd) — directory-এ ম্যাচ পেলে সাথে সাথে ভেরিফাইড হয়ে যাবেন এবং ফুল অ্যাক্সেস পাবেন।
+            KUET-এর বাইরের/গেস্ট টিচার হলে যেকোনো ইমেইল দিতে পারেন — সেক্ষেত্রে Founder ম্যানুয়ালি ভেরিফাই করার আগ পর্যন্ত অ্যাকাউন্ট pending থাকবে।
+          </div>
+          {checking && <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>যাচাই করা হচ্ছে…</div>}
+          {!checking && isKuetEmail && directoryHit && (
+            <div style={{ fontSize: 11, fontWeight: 700, color: '#16a34a', marginTop: 6 }}>
+              ✓ KUET directory-তে পাওয়া গেছে ({directoryHit.name}) — auto-verified, full access instantly.
+            </div>
+          )}
+          {!checking && isKuetEmail && directoryHit === false && (
+            <div style={{ fontSize: 11, fontWeight: 700, color: '#16a34a', marginTop: 6 }}>
+              ✓ KUET institutional email — auto-verified, full access instantly.
+            </div>
+          )}
+          {isGuestEmail && (
+            <div style={{ fontSize: 11, fontWeight: 700, color: '#d97706', marginTop: 6 }}>
+              ⚠ এটা KUET ইমেইল না। Guest teacher হিসেবে সাইন আপ করছেন — Founder ম্যানুয়ালি ভেরিফাই না করা পর্যন্ত আপনাকে অপেক্ষা করতে হবে।
+            </div>
+          )}
+        </div>
+        {isGuestEmail && (
+          <div style={{
+            display: 'flex', alignItems: 'flex-start', gap: 8, padding: '10px 12px',
+            border: '1px solid var(--border)', borderRadius: 10, background: 'rgba(217,119,6,0.06)',
+          }}>
+            <input
+              type="checkbox" id="guestTeacherAck" checked={!!form.guestTeacherAck}
+              onChange={(e) => {
+                setForm((prev) => ({ ...prev, guestTeacherAck: e.target.checked }));
+                setErrors((prev) => ({ ...prev, guestTeacherAck: '' }));
+              }}
+              style={{ marginTop: 2 }}
+            />
+            <label htmlFor="guestTeacherAck" style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.5, cursor: 'pointer' }}>
+              আমি একজন guest teacher / আমার ইমেইলটি KUET institutional ইমেইল না — আমি জানি Founder ম্যানুয়ালি ভেরিফাই না করা পর্যন্ত আমার অ্যাকাউন্ট pending থাকবে।
+            </label>
+          </div>
+        )}
+        {errors.guestTeacherAck && <div style={errorStyle}>{errors.guestTeacherAck}</div>}
+        <button
+          type="button"
+          onClick={confirmEmailStage}
+          style={{
+            width: '100%', padding: '0.7rem', borderRadius: 12,
+            background: 'var(--accent)', color: '#fff', border: 'none',
+            fontSize: '0.9rem', fontWeight: 800, cursor: 'pointer',
+          }}
+        >
+          Confirm & Continue
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div style={{ display: 'grid', gap: 12 }}>
-      <div>
-        <label style={labelStyle}>Institutional Email</label>
-        <input
-          type="email" style={fieldStyle} value={form.institutionalEmail || ''} onChange={handleChange('institutionalEmail')}
-          placeholder="e.g. yourname@dept.kuet.ac.bd"
-        />
-        {errors.institutionalEmail && <div style={errorStyle}>{errors.institutionalEmail}</div>}
-        <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>A Founder reviews this to verify your account</div>
+      <div style={{
+        padding: '8px 12px', borderRadius: 10, fontSize: 12, fontWeight: 700,
+        background: isKuetEmail ? 'rgba(22,163,74,0.08)' : 'rgba(217,119,6,0.08)',
+        color: isKuetEmail ? '#16a34a' : '#d97706',
+      }}>
+        {isKuetEmail ? `✓ ${emailTrimmed} — auto-verified` : `⚠ ${emailTrimmed} — guest teacher, pending manual verification`}
       </div>
       <div>
         <label style={labelStyle}>Full Name</label>
@@ -416,8 +531,16 @@ function FacultyDetailsStep({ form, setForm, errors, setErrors }) {
 function validateFacultyStep(form) {
   const errors = {};
   const email = String(form.institutionalEmail || '').trim();
-  if (!email) errors.institutionalEmail = 'Institutional email is required';
-  else if (!isFacultyEmailFormat(email)) errors.institutionalEmail = 'Must be a valid KUET institutional email';
+  if (!email) errors.institutionalEmail = 'Email is required';
+  // Non-KUET (guest teacher) emails are allowed, but require the
+  // explicit acknowledgment checkbox — they go to manual review instead
+  // of directory auto-verify. KUET emails need no checkbox.
+  else if (!isFacultyEmailFormat(email) && !form.guestTeacherAck) {
+    errors.guestTeacherAck = 'Please confirm you understand this account will need manual verification';
+  }
+  if (!form._emailConfirmed || form._emailConfirmedFor !== email) {
+    errors.institutionalEmail = errors.institutionalEmail || 'Please confirm your email first';
+  }
   if (!String(form.name || '').trim()) errors.name = 'Name is required';
   if (!String(form.dept || '').trim()) errors.dept = 'Department is required';
   if (!String(form.title || '').trim()) errors.title = 'Title / designation is required';
