@@ -15,7 +15,7 @@
 // page's header intentionally only shows read-only assignment info for now.
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useParams, useSearchParams, Link } from 'react-router-dom';
+import { useParams, useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { CalendarClock, Circle, Clock, ExternalLink, FileText, GraduationCap, Pencil, Plus, Trash2, X } from 'lucide-react';
 import { ICONS } from '../../lib/iconRegistry';
 import { confirmDialog, alertDialog } from '../../lib/dialog';
@@ -2670,12 +2670,26 @@ function AttendanceTab({ assignment, groupId }) {
 // term/course within the SAME dept — never cross-department.
 function QuestionBankTab({ assignment }) {
   const { tree, loading, error } = useQuestionBankData();
+  const navigate = useNavigate();
   const dept = assignment?.dept;
   const term = assignment?.term;
   const courseCode = assignment?.courseCode;
   const activeCourseKey = courseCode?.replace(/\s+/g, '');
 
   const papers = (dept && term && activeCourseKey) ? (tree?.[dept]?.[term]?.[activeCourseKey] || []) : [];
+
+  // BUGFIX: this used to be a raw <a href target="_blank"> straight to the
+  // R2 file URL, which bypassed the in-app PDF reader entirely (opened a
+  // new browser tab / triggered a raw-file download instead) — the same
+  // in-app viewer the student-side QuestionBank.jsx page already uses via
+  // its own openPaper(). Mirrored that exact navigate() pattern here so
+  // faculty gets the same in-app reading experience instead of a second,
+  // inconsistent code path. (Paired with App.jsx's allowFaculty fix on the
+  // /question-bank/view route itself, which was student-only until now.)
+  function openPaper(paper) {
+    const url = getR2FileUrl(paper.key);
+    navigate(`/question-bank/view?src=${encodeURIComponent(url)}&title=${encodeURIComponent(paper.label)}`);
+  }
 
   if (loading) {
     return <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0' }}>Loading question bank…</div>;
@@ -2695,19 +2709,17 @@ function QuestionBankTab({ assignment }) {
       ) : (
         <div style={{ display: 'grid', gap: 6 }}>
           {papers.map((p) => (
-            <a
+            <button
               key={p.key}
-              href={getR2FileUrl(p.key)}
-              target="_blank"
-              rel="noreferrer"
+              onClick={() => openPaper(p)}
               className="faculty-row"
-              style={{ textDecoration: 'none' }}
+              style={{ textDecoration: 'none', textAlign: 'left', font: 'inherit', color: 'inherit', cursor: 'pointer', width: '100%' }}
             >
               <span style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, color: 'var(--text)', fontWeight: 600 }}>
                 <FileText size={14} color="var(--accent)" /> {p.label}
               </span>
               <ExternalLink size={13} color="var(--muted)" />
-            </a>
+            </button>
           ))}
         </div>
       )}

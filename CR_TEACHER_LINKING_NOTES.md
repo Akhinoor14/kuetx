@@ -296,15 +296,24 @@ match /{path=**}/facultyAssignments/{assignmentId} {
 ---
 
 ### Phase 5 — End-to-End Testing + Final Cleanup
-**Status: ⬜ NOT STARTED**
+**Status: ✅ DONE (emulator-based live regression deliberately skipped, your call — see below)**
 
-- [ ] End-to-end টেস্ট: CR invite → teacher accept → grid badge → CR summary view
-- [ ] End-to-end টেস্ট: teacher creates class → CR notified → accept → link, decline path
-- [ ] End-to-end টেস্ট: `joinFacultyAssignment` consent flow (Phase 1 থেকে)
-- [ ] Firestore rules-এর পূর্ণ emulator regression টেস্ট (সব phase-এর rules একসাথে)
-- [ ] সব phase-এর checklist ক্রস-চেক করে কিছু বাদ পড়েছে কিনা দেখা, ডকুমেন্টেশন (CURRENT.md ফাইলগুলো) final আপডেট
+**Emulator note:** Firestore emulator could not run in this sandbox — the emulator jar download needs `storage.googleapis.com`, which isn't on this environment's network allowlist. Decision (confirmed with you): not worth opening that domain for a one-time regression pass. Code-level trace (same method Phase 0/1 used) plus a real deploy-time smoke test (CR account + teacher account, one full invite→accept→badge pass) is the practical path instead of a sandboxed emulator run.
+
+- [x] Checklist cross-check (Phase 0–4 DONE items vs. actual code) — **DONE**. Traced every claimed fix against the live `firestore.rules`/`teacherLinkRequests.js`/`facultyDisambiguation.js`/`TeacherClaimBanner.jsx`/`FacultyClassDetail.jsx`/`facultyClassSync.js`/`facultyMarksSync.js`/`Schedule.jsx`. Two real, previously-unflagged findings below; everything else checked out exactly as documented (including two initial false alarms — noted below so the reasoning isn't lost).
+
+  **🟡 Finding 1 — `acceptRequest()`'s sibling auto-decline can silently fail across CRs on `teacher_to_cr`, not just `cr_to_teacher`.** Re-traced: for `teacher_to_cr`, the accepting CR/ACR always passes the rule (`isGroupCR/ACR` is group-scoped, not per-request), so this one's actually fine — no gap. For `cr_to_teacher`, confirmed the UI (`findMatchingFacultyForSchedule`) can only ever produce ONE match per entryId per group (single deterministic `byNormalizedName` Map, same for every CR's client), so two different CRs can never invite two different faculty for the same entry through the normal flow either — no live gap reachable through the app as built. **Downgraded from suspected bug to a documented non-issue** — leaving this note here so a future reviewer doesn't have to re-derive it.
+
+  **🔴 Finding 2 — RESOLVED.** `LinkedTeacherBadge` (in `Schedule.jsx`) now takes a `canSeeSummary` prop, wired from the same `canEditGroupSchedule` permission `TeacherClaimBanner.jsx` already uses elsewhere in this feature (CR/ACR-equivalent). Non-CR viewers (ordinary students) no longer fetch or see the `marksSummary` popover line at all — the fetch itself is gated, not just the render, so a non-CR client never even issues that read. The verified-teacher name reveal stays visible to everyone (never marks-related, no privacy concern). Both grid render call sites (desktop/mobile week-grid, mobile day-detail list) updated. esbuild syntax-check passed.
+
+- [x] `wasDeclinedFor`/`applyLinkAfterAccept`/`isFaculty()` vs `isVerifiedFaculty()` inconsistency on `facultyAssignments`'s nested read rule — **checked, confirmed NOT a bug**. Initially looked like Phase 1 missed tightening the nested per-group read (still plain `isFaculty()`, unverified-inclusive) while fixing the collectionGroup variant (`isVerifiedFaculty()`). Traced further: this is intentional and consistent with the app's documented policy (see `firestore.rules`' own comment near `members/{memberUid}`, mirroring `RequireFaculty.jsx`) that unverified faculty can browse read-only everywhere within a group they're viewing — only WRITE actions require verification. The collectionGroup variant was different in kind (cross-group enumeration, no membership boundary at all), which is why only that one needed tightening. No inconsistency; noting this here so a future pass doesn't re-flag it.
+- [x] Syntax/brace-balance regression on all Phase 3–5 touched files — **DONE, all pass**. esbuild parse-checked `teacherLinkRequests.js`, `facultyDisambiguation.js`, `TeacherClaimBanner.jsx`, `FacultyClassDetail.jsx`, `facultyClassSync.js`, `facultyMarksSync.js`, `Schedule.jsx` (both before and after the Finding 2 fix) — zero errors. `firestore.rules` brace count: 354 open / 354 close, balanced.
+- [x] সব phase-এর checklist ক্রস-চেক করে কিছু বাদ পড়েছে কিনা দেখা — **DONE** (this session, see findings above).
+- [ ] End-to-end live regression (CR invite → teacher accept → grid badge → CR-only summary view; teacher creates class → CR notified → accept/decline; `joinFacultyAssignment` consent flow) — **deliberately deferred to a real deploy-time smoke test**, not run in this sandbox (see emulator note above). Recommend doing this once after your next deploy: one CR account + one teacher account, walk through both invite directions once, confirm a non-CR student account does NOT see the marks-summary line on a linked badge.
+- [x] ডকুমেন্টেশন (CURRENT.md ফাইলগুলো) final আপডেট — **DONE**। `documentation/03-features/faculty-module/CURRENT.md`-এ নতুন "CR ↔ Teacher Linking" সেকশন যোগ হয়েছে — কী তৈরি হলো, security hardening summary, Phase 5-এর finding + resolution, আর বাকি থাকা deploy-নির্ভর কাজ (live smoke test, emulator regression) স্পষ্টভাবে আলাদা করে লেখা।
 
 ---
+
 
 **পরবর্তী মেসেজে বলবে কোন Phase দিয়ে শুরু করতে চাও। Phase 0 → 5 ক্রমানুসারে করাই সবচেয়ে নিরাপদ (প্রতিটা পরের ধাপ আগেরটার উপর নির্ভর করে), কিন্তু চাইলে যেকোনো একটা phase আলাদাভাবেও শুরু করতে পারো।**
 

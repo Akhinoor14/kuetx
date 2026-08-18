@@ -421,7 +421,24 @@ const getRoutineLabel = (course, item) => {
 // on-demand (not prefetched for every grid cell) since a click is rare
 // relative to renders, and faculty/{uid} is a top-level doc, not
 // something already denormalized onto routineEntries.
-function LinkedTeacherBadge({ linkedFacultyUid, linkedAssignmentId, groupId, size = 13 }) {
+//
+// PHASE 5 REGRESSION FIX (CR_TEACHER_LINKING_NOTES.md, Phase 5 Finding 2):
+// Phase 4's plan explicitly called this a "CR-side summary view" — but
+// this badge renders inside the shared Schedule.jsx grid, which EVERY
+// group member (ordinary students included, via isGroupMember() on the
+// facultyAssignments read rule) can open. The marksSummary data itself
+// was never a real privacy leak (count-only — draft/reviewed/sent/total,
+// no grade values, no per-student breakdown, matching Phase 0's own
+// constraint) — but showing it to non-CR viewers was still wider than
+// the feature was ever scoped or intended to be. Narrowed here:
+// canSeeSummary (passed down from Schedule()'s own canEditGroupSchedule,
+// the same permission gate TeacherClaimBanner already uses for the
+// CR-only invite/accept UI elsewhere in this feature) now gates BOTH the
+// marksSummary fetch itself (so a non-CR viewer's client never even
+// requests it) and its render. The verified-teacher name reveal stays
+// available to everyone — that part was never marks-related and has no
+// privacy concern.
+function LinkedTeacherBadge({ linkedFacultyUid, linkedAssignmentId, groupId, size = 13, canSeeSummary = false }) {
   const [revealedName, setRevealedName] = useState(null); // null = not fetched yet, '' = fetched but empty
   const [summary, setSummary] = useState(undefined); // undefined = not fetched, null = fetched but no summary yet, {} = summary object
   const [loading, setLoading] = useState(false);
@@ -444,7 +461,11 @@ function LinkedTeacherBadge({ linkedFacultyUid, linkedAssignmentId, groupId, siz
         // grade values) — CR/ACR already have ordinary read access to
         // this parent doc via isGroupMember(), unlike studentRecords
         // itself which stays closed to them per Phase 0.
-        if (groupId && linkedAssignmentId) {
+        //
+        // PHASE 5: only fetch this at all when canSeeSummary is true —
+        // see this component's header comment. A non-CR viewer's client
+        // never issues this read to begin with, not just hides it in the UI.
+        if (canSeeSummary && groupId && linkedAssignmentId) {
           const assignment = await getFacultyAssignment(groupId, linkedAssignmentId);
           setSummary(assignment?.marksSummary || null);
         } else {
@@ -478,7 +499,7 @@ function LinkedTeacherBadge({ linkedFacultyUid, linkedAssignmentId, groupId, siz
           display: 'grid', gap: 3,
         }}>
           <span>{loading ? 'Loading…' : (revealedName || 'Verified profile')}</span>
-          {!loading && summary && summary.total > 0 && (
+          {canSeeSummary && !loading && summary && summary.total > 0 && (
             <span style={{ fontSize: 10, fontWeight: 500, color: 'var(--muted)' }}>
               Marks: {summary.sent || 0} sent · {summary.reviewed || 0} reviewed · {summary.draft || 0} draft
               {' '}(of {summary.total})
@@ -1762,7 +1783,7 @@ export default function Schedule() {
                                   <span style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                                     Teacher: {teacherDisplayLabel(s.teacherName, 'Not set')}
                                   </span>
-                                  <LinkedTeacherBadge linkedFacultyUid={s.linkedFacultyUid} linkedAssignmentId={s.linkedAssignmentId} groupId={groupId} size={11} />
+                                  <LinkedTeacherBadge linkedFacultyUid={s.linkedFacultyUid} linkedAssignmentId={s.linkedAssignmentId} groupId={groupId} size={11} canSeeSummary={canEditGroupSchedule} />
                                 </div>
                               )}
                               {canEditSchedule && (
@@ -2050,7 +2071,7 @@ export default function Schedule() {
                       <div style={{ fontWeight: '700', fontSize: '13px', color: 'var(--text)', marginBottom: '3px' }}>{courseCode}</div>
                       <div style={{ fontSize: '11px', color: 'var(--text)', opacity: 0.8, wordBreak: 'break-word', display: 'flex', alignItems: 'center', gap: 5 }}>
                         <span>→ {teacherName}</span>
-                        <LinkedTeacherBadge linkedFacultyUid={item.linkedFacultyUid} linkedAssignmentId={item.linkedAssignmentId} groupId={groupId} />
+                        <LinkedTeacherBadge linkedFacultyUid={item.linkedFacultyUid} linkedAssignmentId={item.linkedAssignmentId} groupId={groupId} canSeeSummary={canEditGroupSchedule} />
                       </div>
                     </div>
                   </div>

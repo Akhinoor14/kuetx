@@ -48,7 +48,7 @@ import { useIsFaculty } from '../hooks/useIsFaculty';
 import { useIsProvider } from '../hooks/useIsProvider';
 import { perfStart, perfEnd } from '../lib/perfLog';
 
-export default function RequireStudentMode({ children }) {
+export default function RequireStudentMode({ children, allowFaculty = false }) {
   const { isFaculty, isFounderBypass, isResolved: isFacultyResolved } = useIsFaculty();
   const { isProvider, isResolved: isProviderResolved } = useIsProvider();
   const startedRef = useRef(false);
@@ -75,7 +75,12 @@ export default function RequireStudentMode({ children }) {
     );
   }
 
-  const isGenuineFaculty = isFaculty && !isFounderBypass;
+  // allowFaculty: opt-in escape hatch for the handful of routes (currently
+  // just /question-bank/view — see App.jsx's comment on that route) that
+  // are genuinely shared between student and faculty shells rather than
+  // student-only. Every other student route leaves this false and keeps
+  // blocking genuine faculty exactly as before.
+  const isGenuineFaculty = isFaculty && !isFounderBypass && !allowFaculty;
 
   if (isGenuineFaculty) {
     return (

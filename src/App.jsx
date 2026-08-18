@@ -387,7 +387,21 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/assignments" element={<RequireStudentMode><Assignments /></RequireStudentMode>} />
             <Route path="/question-bank" element={<RequireStudentMode><QuestionBank /></RequireStudentMode>} />
             <Route path="/publications" element={<RequireStudentMode><PublicationsBrowse canEdit={false} /></RequireStudentMode>} />
-            <Route path="/question-bank/view" element={<RequireStudentMode><QuestionBankViewer /></RequireStudentMode>} />
+            {/* BUGFIX (faculty QB viewer 404/block): this route is the SHARED
+                in-app PDF reader for BOTH student (/question-bank) and
+                faculty (/faculty/question-bank, FacultyClassDetail's
+                QuestionBankTab) browse screens — there is only ever one
+                viewer route, unlike student vs faculty having separate
+                /question-bank vs /faculty/question-bank list pages. Wrapping
+                it in RequireStudentMode (like every other student-only page)
+                meant a genuine faculty account's openPaper() navigation here
+                hit RequireStudentMode's "wrong shell" block screen instead
+                of the PDF. Fixed the same way RequireStudentMode already
+                carves out the Founder's faculty-mode bypass: pass
+                allowFaculty so a real faculty account also passes through,
+                without opening this route to provider accounts or weakening
+                any other student page. */}
+            <Route path="/question-bank/view" element={<RequireStudentMode allowFaculty><QuestionBankViewer /></RequireStudentMode>} />
             <Route path="/solutions" element={<RequireStudentMode><QuestionBankSolutions /></RequireStudentMode>} />
             <Route path="/self-study/academic" element={<RequireStudentMode><SelfStudy /></RequireStudentMode>} />
             <Route path="/self-study/deep-focus" element={<RequireStudentMode><SelfStudy /></RequireStudentMode>} />
