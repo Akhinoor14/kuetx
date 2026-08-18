@@ -49,12 +49,21 @@ notices, admin-driven verification flow।
   superseded — উপরের নতুন directory auto-verify feature-টা একটা নতুন,
   স্বতন্ত্র trust source (KUET-এর নিজস্ব official directory) থেকে
   আসছে, পুরনো ভাঙা magic-link mechanism থেকে না।
-- **Known security gap (এখনো fix হয়নি):** `verifiedFacultyEmails`
-  collection-এ `allow write: if isSignedIn()` — যেকোনো signed-in
-  account (student সহ) সরাসরি লিখতে পারে, directory match ছাড়াই।
-  আসল fix-এর জন্য server-side (Cloud Function) validation লাগবে, যেটার
-  জন্য Blaze plan দরকার — এই প্রজেক্ট Spark (free)-এ থাকার সিদ্ধান্ত
-  নিয়েছে, তাই এখন এটা client-trust-এর উপর নির্ভরশীল।
+- **Security gap — narrowed (Phase 2, defense-in-depth), root cause still open:**
+  `verifiedFacultyEmails` collection-এর write rule আগে ছিল
+  `allow write: if isSignedIn()` — যেকোনো signed-in account (student সহ)
+  **যেকোনো ইমেইল-এর জন্য** সরাসরি লিখতে পারত, directory match ছাড়াই।
+  এখন rule tighten করা হয়েছে: শুধু Admin (manual-approval path,
+  অন্য কারো email-এর জন্য লেখে) অথবা signed-in user নিজের
+  `request.auth.token.email`-এর সাথে মিলে এমন doc (auto-verify path,
+  নিজের email-এর জন্য লেখে) লিখতে পারবে। **এটা পুরোপুরি resolved না** —
+  একজন malicious/compromised faculty session এখনো নিজের email-এর জন্য
+  ভুয়া `autoVerified: true` doc লিখতে পারে directory-তে আসল match ছাড়াই,
+  কারণ directory-match validation টা এখনও শুধু client JS-এ
+  (`facultyDirectoryMatch.js`)। যেটা বন্ধ হয়েছে সেটা হলো এক account
+  অন্য কারো email-এর জন্য claim লেখার সুযোগ। আসল fix-এর জন্য এখনো
+  server-side (Cloud Function) validation লাগবে, যেটার জন্য Blaze plan
+  দরকার — এই প্রজেক্ট Spark (free)-এ থাকার সিদ্ধান্ত নিয়েছে।
 
 ## সর্বশেষ অবস্থা
 

@@ -12,6 +12,9 @@ import { subscribeCRStatus, subscribeRoutine, addRoutineEntry, updateRoutineEntr
 import { subscribeGroupTermStartDate } from '../lib/termStartDateSync';
 import { useCanEditGroup } from '../hooks/useCanEditGroup';
 import TeacherClaimBanner from '../components/TeacherClaimBanner';
+import BlueTick from '../components/BlueTick';
+import { getFacultyProfile } from '../lib/facultySync';
+import { getFacultyAssignment } from '../lib/facultyClassSync';
 import { resolveTeacherIdsForNames, resolveTeacherNames } from '../lib/teacherRegistry';
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
@@ -407,6 +410,85 @@ const getRoutineLabel = (course, item) => {
   const teacherLabel = teacherDisplayLabel(item.teacherName);
   return `${courseLabel} · ${teacherLabel}`;
 };
+
+// PHASE 4 (CR_TEACHER_LINKING_NOTES.md §12 Phase 4) — verified-teacher
+// badge for the grid. The CR's own free-text teacherName always stays
+// the PRIMARY label everywhere on the grid (never replaced) — this badge
+// is purely additive: it only renders when routineEntries.linkedFacultyUid
+// is set (written by teacherLinkRequests.js's applyLinkAfterAccept after
+// an accepted link, either direction), and tapping/clicking it reveals
+// the real verified faculty account's profile name — lazy-fetched
+// on-demand (not prefetched for every grid cell) since a click is rare
+// relative to renders, and faculty/{uid} is a top-level doc, not
+// something already denormalized onto routineEntries.
+function LinkedTeacherBadge({ linkedFacultyUid, linkedAssignmentId, groupId, size = 13 }) {
+  const [revealedName, setRevealedName] = useState(null); // null = not fetched yet, '' = fetched but empty
+  const [summary, setSummary] = useState(undefined); // undefined = not fetched, null = fetched but no summary yet, {} = summary object
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  if (!linkedFacultyUid) return null;
+
+  const handleClick = async (e) => {
+    e.stopPropagation();
+    setOpen((prev) => !prev);
+    if (revealedName === null && !loading) {
+      setLoading(true);
+      try {
+        const profile = await getFacultyProfile(linkedFacultyUid);
+        setRevealedName(profile?.name || profile?.displayName || '');
+        // PHASE 4 (§12 Phase 4's "CR-side summary view", Phase 0's own
+        // "count/status only, never the marks themselves" constraint):
+        // the assignment doc's marksSummary field (written by
+        // facultyMarksSync.js's recomputeMarksSummary, count-only, no
+        // grade values) — CR/ACR already have ordinary read access to
+        // this parent doc via isGroupMember(), unlike studentRecords
+        // itself which stays closed to them per Phase 0.
+        if (groupId && linkedAssignmentId) {
+          const assignment = await getFacultyAssignment(groupId, linkedAssignmentId);
+          setSummary(assignment?.marksSummary || null);
+        } else {
+          setSummary(null);
+        }
+      } catch {
+        setRevealedName('');
+        setSummary(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  return (
+    <span style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
+      <button
+        type="button"
+        onClick={handleClick}
+        title="Verified teacher — tap to see their profile and class status"
+        style={{ background: 'none', border: 'none', padding: 0, margin: 0, cursor: 'pointer', display: 'inline-flex', lineHeight: 0 }}
+      >
+        <BlueTick size={size} color="green" title="Verified teacher account linked" />
+      </button>
+      {open && (
+        <span style={{
+          position: 'absolute', top: '120%', left: 0, zIndex: 5, whiteSpace: 'nowrap',
+          fontSize: 11, fontWeight: 600, color: 'var(--text)',
+          background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 6,
+          padding: '6px 10px', boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+          display: 'grid', gap: 3,
+        }}>
+          <span>{loading ? 'Loading…' : (revealedName || 'Verified profile')}</span>
+          {!loading && summary && summary.total > 0 && (
+            <span style={{ fontSize: 10, fontWeight: 500, color: 'var(--muted)' }}>
+              Marks: {summary.sent || 0} sent · {summary.reviewed || 0} reviewed · {summary.draft || 0} draft
+              {' '}(of {summary.total})
+            </span>
+          )}
+        </span>
+      )}
+    </span>
+  );
+}
 
 export default function Schedule() {
   const navigate = useNavigate();
@@ -1676,8 +1758,11 @@ export default function Schedule() {
                                 {s.displayName || c?.code || c?.name || '?'}
                               </div>
                               {!hideTeacherInGrid && (
-                                <div style={{ fontSize: 'clamp(9px, 2vw, 11px)', fontWeight: 600, marginTop: 'clamp(2px, 0.5vw, 4px)', color: 'var(--text)', opacity: 0.95, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                                  Teacher: {teacherDisplayLabel(s.teacherName, 'Not set')}
+                                <div style={{ fontSize: 'clamp(9px, 2vw, 11px)', fontWeight: 600, marginTop: 'clamp(2px, 0.5vw, 4px)', color: 'var(--text)', opacity: 0.95, display: 'flex', alignItems: 'center', gap: 4, overflow: 'hidden' }}>
+                                  <span style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                                    Teacher: {teacherDisplayLabel(s.teacherName, 'Not set')}
+                                  </span>
+                                  <LinkedTeacherBadge linkedFacultyUid={s.linkedFacultyUid} linkedAssignmentId={s.linkedAssignmentId} groupId={groupId} size={11} />
                                 </div>
                               )}
                               {canEditSchedule && (
@@ -1786,7 +1871,7 @@ export default function Schedule() {
           declining/dismissing changes nothing about how the schedule
           itself works. Does not touch any of this file's own schedule/
           teacher logic above. */}
-      {isGroupMode && <TeacherClaimBanner groupId={groupId} />}
+      {isGroupMode && <TeacherClaimBanner groupId={groupId} profile={profile} canEdit={canEditGroupSchedule} />}
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 14, marginBottom: 14 }}>
         {showSettingsPanel && (
@@ -1963,7 +2048,10 @@ export default function Schedule() {
                     <div style={{ fontWeight: '700', fontSize: '11px', color: 'var(--accent)', lineHeight: 1.3, wordBreak: 'break-word' }}>{timeRange}</div>
                     <div style={{ minWidth: '0' }}>
                       <div style={{ fontWeight: '700', fontSize: '13px', color: 'var(--text)', marginBottom: '3px' }}>{courseCode}</div>
-                      <div style={{ fontSize: '11px', color: 'var(--text)', opacity: 0.8, wordBreak: 'break-word' }}>→ {teacherName}</div>
+                      <div style={{ fontSize: '11px', color: 'var(--text)', opacity: 0.8, wordBreak: 'break-word', display: 'flex', alignItems: 'center', gap: 5 }}>
+                        <span>→ {teacherName}</span>
+                        <LinkedTeacherBadge linkedFacultyUid={item.linkedFacultyUid} linkedAssignmentId={item.linkedAssignmentId} groupId={groupId} />
+                      </div>
                     </div>
                   </div>
                 );

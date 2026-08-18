@@ -62,11 +62,21 @@ export default function QuestionBank() {
   // Only the course CODE round-trips through the URL; the title is cheap to
   // look back up from QB_COURSE_CODES so we don't need to URL-encode a
   // second param just to carry it.
+  // BUGFIX (production crash, live site): QB_COURSE_CODES is keyed
+  // { DEPT: { TERM: [ {code,title} ] } } — see qbCourseCodes.js's own
+  // header, and courseList's correct usage two blocks below
+  // (QB_COURSE_CODES[dept]?.[term]). This useMemo was missing the [term]
+  // level entirely, so QB_COURSE_CODES[dept] resolved to the whole
+  // per-term OBJECT (truthy, so `|| []` never kicked in) and .find()
+  // threw immediately. Only reachable once `qbCourse` is present in the
+  // URL directly (a bookmarked/shared/reloaded "papers" screen link,
+  // bypassing goToCourse()'s own click path) — silent in normal
+  // navigation, which is why it shipped unnoticed.
   const course = useMemo(() => {
-    if (!dept || !courseCode) return null;
-    const match = (QB_COURSE_CODES[dept] || []).find(c => c.code === courseCode);
+    if (!dept || !term || !courseCode) return null;
+    const match = (QB_COURSE_CODES[dept]?.[term] || []).find(c => c.code === courseCode);
     return match || { code: courseCode, title: courseCode };
-  }, [dept, courseCode]);
+  }, [dept, term, courseCode]);
 
   function setQBState(next, { push = true } = {}) {
     setSearchParams(prev => {

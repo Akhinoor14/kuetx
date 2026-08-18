@@ -15,7 +15,15 @@
 // mid-session CR handoff instantly — reopening the page is enough. Uses
 // getGroupMembersOnce (groupSync.js), which Firestore rules already allow
 // any faculty account to read per-group (see members/{memberUid}'s
-// isFaculty(...) branch) — no rules change needed.
+// isFaculty(...) branch) — no rules change needed for name/roll/dept/batch.
+//
+// PHASE 2 (CR_TEACHER_LINKING_NOTES.md item 5): `mobile` no longer comes
+// back on the member doc itself — it's split into
+// members/{uid}/private/mobile, readable only by a VERIFIED faculty
+// account (plus CR/ACR/CL/Admin/the owner). Fetched separately below, one
+// call per CR/ACR row (a small, bounded set — not the whole roster), so
+// an unverified faculty signup viewing this page simply sees
+// "No mobile number on file" for everyone rather than a permission error.
 
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -25,7 +33,7 @@ import { DEPARTMENTS } from '../../store/store';
 import { getBatchColor, sortBatches } from '../../lib/timeModels';
 import { getActiveBatches } from '../../lib/appConfigSync';
 import { subscribeMyClassIndex } from '../../lib/facultyClassSync';
-import { getGroupMembersOnce } from '../../lib/groupSync';
+import { getGroupMembersOnce, getMemberMobileOnce } from '../../lib/groupSync';
 
 const getDeptName = (code) => (DEPARTMENTS.find((d) => d.code === code)?.name || code);
 
@@ -99,6 +107,32 @@ export default function FacultyAllCR() {
     });
     return rows;
   }, [membersByGroup, classIndex]);
+
+  // PHASE 2 (CR_TEACHER_LINKING_NOTES.md item 5): mobile numbers, fetched
+  // separately per CR/ACR row (groupId:uid -> mobile string) now that they
+  // no longer come back on the member doc itself. Only fetched for actual
+  // CR/ACR rows (crRows), never the full roster — same small, bounded set
+  // this page always dealt with. A denied read (unverified faculty
+  // account — see firestore.rules) is swallowed to '' here, same as a
+  // genuinely-empty number, so an unverified viewer just sees "No mobile
+  // number on file" instead of a console error.
+  const [mobileByKey, setMobileByKey] = useState({});
+  useEffect(() => {
+    if (crRows.length === 0) { setMobileByKey({}); return; }
+    let cancelled = false;
+    Promise.all(crRows.map((r) =>
+      getMemberMobileOnce(r.groupId, r.id)
+        .then((mobile) => [`${r.groupId}:${r.id}`, mobile])
+        .catch(() => [`${r.groupId}:${r.id}`, ''])
+    )).then((pairs) => {
+      if (cancelled) return;
+      const map = {};
+      pairs.forEach(([key, mobile]) => { map[key] = mobile; });
+      setMobileByKey(map);
+    });
+    return () => { cancelled = true; };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [crRows.map((r) => `${r.groupId}:${r.id}`).join(',')]);
 
   // Group -> batch (colored header) -> dept, sorted the same way "My
   // Classes" orders its batch groups, so the two pages feel consistent.
@@ -185,7 +219,7 @@ export default function FacultyAllCR() {
                 {items.map((m) => (
                   <div
                     key={`${m.groupId}:${m.id}`}
-                    onClick={() => setSelected(m)}
+                    onClick={() => setSelected({ ...m, mobile: mobileByKey[`${m.groupId}:${m.id}`] || '' })}
                     style={{
                       cursor: 'pointer', border: `1px solid ${color.border}`, background: color.bg,
                       borderRadius: 14, padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 6,
@@ -215,7 +249,7 @@ export default function FacultyAllCR() {
                       </span>
                       <span style={{ fontSize: 11, color: 'var(--muted)' }}>{getDeptName(m.dept)}</span>
                     </div>
-                    {!m.mobile && (
+                    {!mobileByKey[`${m.groupId}:${m.id}`] && (
                       <div style={{ fontSize: 10.5, color: 'var(--warning, #b45309)', marginTop: 2 }}>
                         No mobile number on file yet
                       </div>

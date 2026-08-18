@@ -1780,21 +1780,30 @@ service cloud.firestore {
     // syncFacultyVerificationStatus() for what actually flips
     // faculty/{uid}.verifiedAt.
     //
-    // KNOWN GAP (not introduced or widened by the auto-verify change,
-    // just documenting it here since this is exactly the rule an
-    // attacker would target): `allow write: if isSignedIn()` lets ANY
-    // signed-in account — including a student one — write here directly,
-    // bypassing the directory-match check entirely, since that check
-    // only lives in client JS (facultyDirectoryMatch.js), not in these
-    // rules. A real fix needs a server-side check (Cloud Function
-    // verifying the write against facultyDirectory), which needs the
-    // Blaze plan — see functions/index.js's header on why this project
-    // is staying on Spark. Until that's affordable, this collection is
-    // trust-the-client for both the manual-approval path (has been since
-    // before this change) and the new auto-verify path.
+    // FORMERLY a known gap, now narrowed as defense-in-depth (see
+    // documentation/03-features/faculty-module/CURRENT.md): the real fix
+    // still needs a server-side check (Cloud Function verifying the write
+    // against facultyDirectory), which needs the Blaze plan — see
+    // functions/index.js's header on why this project is staying on
+    // Spark. Until that's affordable, this rule at least removes the
+    // "any signed-in account, including a student one, can write ANY
+    // faculty's email here" exposure by requiring the writer to either
+    // be Admin (manualVerifyRequests.js's approveManualVerifyRequest(),
+    // which writes on behalf of someone else's email after reviewing a
+    // pending request) or be writing their OWN token email
+    // (facultyDirectoryMatch.js's tryAutoVerifyFacultyFromDirectory(),
+    // which self-verifies the signed-in user against the directory).
+    // This does NOT re-validate the directory match itself — a
+    // compromised/malicious faculty session could still self-write an
+    // autoVerified doc for its own email without an actual directory
+    // hit — that part of the gap still needs the Cloud Function. What
+    // this closes is one account writing arbitrary verification claims
+    // about a DIFFERENT email.
     match /verifiedFacultyEmails/{email} {
       allow read: if isSignedIn();
-      allow write: if isSignedIn(); // the secondary app's own authenticated session
+      allow write: if isAdmin()
+        || (isSignedIn() && request.auth.token.email != null
+            && request.auth.token.email.lower() == email);
     }
 
     // -------------------------------------------------------------
@@ -1841,11 +1850,32 @@ service cloud.firestore {
     // -------------------------------------------------------------
     match /facultyPublications/{docId} {
       allow read: if isSignedIn();
+      // Owning teacher/self-submitter can create/update/delete their own
+      // doc, OR a Founder/Admin can update/delete ANY doc here. The
+      // Founder path exists specifically for the "সম্প্রতি নিজে প্রকাশিত"
+      // audit panel (PendingPublicationsPanel.jsx) — self-submitted
+      // publications are instant-published with no approval gate, so a
+      // Founder needs to be able to Edit/Delete a bad entry that belongs
+      // to someone else after the fact. See facultyPublicationsSync.js
+      // module header for the instant-publish + post-hoc-audit design.
       allow create, update: if isSignedIn()
-        && request.resource.data.teacherEmail == request.auth.token.email;
+        && (request.resource.data.teacherEmail == request.auth.token.email
+            || isAdmin() || isHeadOfOps());
       allow delete: if isSignedIn()
-        && resource.data.teacherEmail == request.auth.token.email;
+        && (resource.data.teacherEmail == request.auth.token.email
+            || isAdmin() || isHeadOfOps());
     }
+
+    // -------------------------------------------------------------
+    // NOTE: courseTeacherLinks (per-CR personal teacher notes) from an
+    // earlier pass of this rewrite was REPLACED by groups/{groupId}/
+    // teacherProfiles below, per owner's explicit correction — "My
+    // Current Term Teachers" is class-wide shared (CR/ACR write, every
+    // class member reads), not personal-per-CR. See PROMPT.md Phase 2
+    // Progress Log for the full history. No top-level match block here
+    // anymore; see match /groups/{groupId}/teacherProfiles/{teacherId}
+    // further down, right after assignmentEntries.
+    // -------------------------------------------------------------
 
     // -------------------------------------------------------------
     // Pending publication submissions — community-submitted (a third
@@ -2493,7 +2523,18 @@ service cloud.firestore {
         // for a class they're on — seeing a roster is harmless; the
         // manual verification gate is about actually teaching/writing
         // (creating an assignment, logging sessions, posting notices,
-        // entering marks), not about read-only visibility.
+        // entering marks), not about read-only visibility. See
+        // RequireFaculty.jsx for the app's documented policy this
+        // mirrors — unverified faculty can browse everything read-only.
+        //
+        // PHASE 2 (CR_TEACHER_LINKING_NOTES.md item 5): `mobile` used to
+        // live right on this doc, meaning the isFaculty() branch below
+        // (any signed-up faculty account, even unverified) could read a
+        // CR/ACR's phone number along with everything else. That's now
+        // split out to members/{memberUid}/private/mobile below, with
+        // its own tighter read rule — this parent doc's `mobile` field
+        // is no longer written at all (see groupSync.js). This read
+        // rule itself is otherwise unchanged from before.
         //
         // hasOwnJoinRequest(groupId): someone who has FILED a join
         // request (pending, approved, or rejected — any status) for this
@@ -2687,6 +2728,50 @@ service cloud.firestore {
             resource.data.role != 'cr' && resource.data.role != 'acr' &&
             request.auth.uid != memberUid) ||
           (isSignedIn() && request.auth.uid == memberUid && resource.data.role == 'member');
+
+        // PHASE 2 (CR_TEACHER_LINKING_NOTES.md item 5) —
+        // members/{memberUid}/private/mobile. `mobile` used to live
+        // directly on the parent members/{memberUid} doc, so the parent
+        // read rule's isFaculty(uid) branch (ANY signed-up faculty
+        // account, even one still awaiting Admin verification — see
+        // RequireFaculty.jsx's documented "unverified can browse
+        // read-only" policy, which this Phase deliberately does NOT
+        // change) meant a CR/ACR's own phone number was readable by
+        // literally any faculty signup, verified or not, the moment they
+        // opened FacultyAllCR.jsx. Firestore can't selectively hide one
+        // field from some readers within a single document read, so the
+        // only real fix is this separate sub-document with its own
+        // tighter read rule, leaving the parent doc's broader
+        // roster-browse behavior completely untouched.
+        //
+        // Read: the owning member themself, CL/Admin/Head of Ops/that
+        // dept's SCL (same tier that can see/manage the roster's
+        // sensitive fields), the group's own CR/ACR (they already see
+        // this number in the UI today — ClassRoster.jsx's contact
+        // display — nothing removed there), or a VERIFIED faculty
+        // account (FacultyAllCR.jsx's actual consumer — this is the one
+        // populations for whom verification is now required for this
+        // number specifically, while the parent doc stays open to any
+        // faculty signup for name/roll/dept/batch).
+        allow read: if isAdmin() || request.auth.uid == memberUid
+          || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId)
+          || isGroupCR(groupId) || isGroupACR(groupId)
+          || isVerifiedFaculty(request.auth.uid);
+
+        // Write: mirrors the exact same authority tiers as the parent
+        // doc's own `mobile`-touching branches above (create's CR-
+        // approval/CL-bootstrap/self-join branches, update's CL/Admin/
+        // Head of Ops/SCL branch, the CR-on-others handoff/ACR-appoint
+        // branch, and the member's own self-update branch) — this
+        // sub-doc is written by exactly the same actors who were already
+        // trusted to write `mobile` before the split, just now as a
+        // second, separate write rather than a bundled field. Value-only
+        // shape (single `value` key), same pattern as
+        // providers/{uid}/contact/phone above.
+        allow write: if request.resource.data.keys().hasOnly(['value']) &&
+          (isAdmin() || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId)
+            || isGroupCR(groupId) || isGroupACR(groupId)
+            || (isSignedIn() && request.auth.uid == memberUid));
       }
 
       match /crRequests/{requestUid} {
@@ -2817,6 +2902,33 @@ service cloud.firestore {
         allow delete: if false; // soft-delete only, via update
       }
 
+      // "My Current Term Teachers" — class-wide shared teacher info
+      // (phone, office room, CR's rating/notes, optionally linked to a
+      // real facultyDirectory record). teacherId matches
+      // meta/plannerSettings.teacherRegistry's IDs when this profile is
+      // for a teacher already assigned to a course via
+      // CourseTeacherDialog — see crCourseTeachers.js module header for
+      // the full field contract and why this stays a separate
+      // subcollection instead of growing plannerSettings itself.
+      //
+      // Deliberately scoped to THIS group only — never readable by
+      // another group, and never surfaced on the teacher's own faculty
+      // account (facultyDirectory/facultyPublications are entirely
+      // separate collections this never touches or writes to).
+      //
+      // Read: any member of this specific class (isGroupMember also
+      // covers CL/SCL/Admin for their own class — see that function's
+      // header). Write: CR/ACR/CL/Admin only, same authority as
+      // plannerSettings/routineEntries/assignmentEntries above — never
+      // an ordinary student, and never the teacher themselves (a teacher
+      // account has no notion of "this group's admin" here at all).
+      match /teacherProfiles/{teacherId} {
+        allow read: if isAdmin() || isGroupMember(groupId);
+        allow create, update: if isContentEditor(groupId)
+          && request.resource.data.updatedBy.uid == request.auth.uid;
+        allow delete: if false; // soft-delete only, via update
+      }
+
       // Manual "+1" class-log entries for the Class Planner. One doc per
       // logged class (not an array-in-one-doc) so multiple CR/ACR logging
       // at the same time never collide — mirrors routineEntries/
@@ -2926,19 +3038,26 @@ service cloud.firestore {
         // assignment (§4 item 1, the primary teacher-initiated on-ramp) —
         // manual verification policy: an unverified faculty account can
         // complete its profile and see the dashboard, but cannot start
-        // actually teaching a class until Admin approves it. Or CR/ACR/
-        // CL/Admin (forward-compatible: the CR-initiated path, §4 item 2,
-        // only writes routineEntries from the client today, but this
-        // allowance means a future CR-facing "create the real assignment"
-        // action wouldn't need another rules edit).
-        allow create: if isVerifiedFaculty(request.auth.uid)
-          || isGroupCR(groupId) || isGroupACR(groupId) || isCLFor(groupId) || isAdmin();
+        // actually teaching a class until Admin approves it. Or Admin.
+        //
+        // PHASE 1 (CR_TEACHER_LINKING_NOTES.md): removed the CR/ACR/CL
+        // direct create/update grant that used to sit here. It was never
+        // exercised by any CR-facing page (the CR-initiated path only
+        // ever wrote routineEntries from the client) — a pure unused
+        // rules-level attack surface, kept "forward-compatible" for a
+        // feature that never arrived on this path. The real CR-initiated
+        // linking flow (Phase 3) uses its own dedicated
+        // teacherLinkRequests collection instead, with its own narrow
+        // rules — it does not need or use this grant. If a genuine
+        // CR-direct-write need ever appears, it should get its own
+        // explicit, reviewed rule rather than reusing this broad one.
+        allow create: if isVerifiedFaculty(request.auth.uid) || isAdmin();
 
         // Update: either teacher already on the assignment (joining as
         // the 2nd slot, editing day/time, ending/soft-deleting per §8.6),
-        // or the same CR/staff tier that can create one.
-        allow update: if isFacultyFor(groupId, assignmentId)
-          || isGroupCR(groupId) || isGroupACR(groupId) || isCLFor(groupId) || isAdmin();
+        // or Admin. See PHASE 1 note above — CR/ACR/CL direct-write
+        // removed, unused and unneeded.
+        allow update: if isFacultyFor(groupId, assignmentId) || isAdmin();
 
         allow delete: if isAdmin(); // soft-delete via status flag is the normal path, not a real delete
 
@@ -2980,12 +3099,79 @@ service cloud.firestore {
           allow delete: if isFacultyFor(groupId, assignmentId) || isAdmin();
         }
 
+        // PHASE 1 (CR_TEACHER_LINKING_NOTES.md §3/§12 Phase 1) — consent
+        // gate for the auto-match "join as 2nd teacher" flow
+        // (findJoinableAssignment/joinFacultyAssignment). Previously that
+        // flow wrote straight into teacherUids with no notice to Teacher
+        // A at all. Now the auto-match path creates a pending request
+        // here instead; only Teacher A (teacherUids[0], the sole
+        // existing teacher — this subcollection is only ever relevant
+        // while the assignment still has exactly one teacher) can accept
+        // or decline it, and only accepting is what actually appends to
+        // teacherUids (done via the existing isFacultyFor()-gated update
+        // rule above, from the client after Teacher A's Accept click).
+        // The invite-code path (inviteCodes/{code} above) is deliberately
+        // UNCHANGED by this — sharing a code is itself the consent, so it
+        // still writes teacherUids directly.
+        match /joinRequests/{requestingUid} {
+          // Create: only the requesting (verified) teacher, only their
+          // own uid as the doc ID and as requestedBy — can't file a
+          // request on someone else's behalf.
+          allow create: if isVerifiedFaculty(request.auth.uid)
+            && request.auth.uid == requestingUid
+            && request.resource.data.requestedBy == request.auth.uid;
+
+          // Read: the requester (to see their own pending/declined
+          // status), Teacher A (the existing sole teacher on this
+          // assignment — the one who needs to see and act on it), or
+          // Admin.
+          allow read: if isAdmin()
+            || request.auth.uid == requestingUid
+            || isFacultyFor(groupId, assignmentId);
+
+          // Update: ONLY Teacher A, and only to flip status to
+          // accepted/declined — never touching requestedBy or the
+          // original request content. Teacher A accepting still has to
+          // go through the separate teacherUids update above; this write
+          // alone never grants class access by itself.
+          allow update: if isFacultyFor(groupId, assignmentId)
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'resolvedAt']);
+
+          // Delete: the requester can withdraw their own pending
+          // request, Teacher A or Admin can clear a resolved one.
+          allow delete: if isAdmin()
+            || request.auth.uid == requestingUid
+            || isFacultyFor(groupId, assignmentId);
+        }
+
         match /studentRecords/{studentUid} {
-          // Read: the student themself, either assigned teacher, or the
-          // group's CR/staff tier.
+          // Read: the student themself, or either teacher actually
+          // assigned to THIS course offering. Admin keeps full access
+          // for support/moderation.
+          //
+          // SECURITY FIX (Phase 0 of CR_TEACHER_LINKING_NOTES.md): this
+          // used to also grant isContentEditor(groupId) — meaning any
+          // CR/ACR/CL (and, whenever a group had zero CR, ANY verified
+          // regular student in that class, via isContentEditor's
+          // crCount(groupId)<=0 fallback branch) could read every
+          // individual student's full graded marks doc
+          // (teacher1Marks/teacher2Marks) in the class, not just their
+          // own. That was never exercised by any CR-facing page in this
+          // codebase (grep confirmed: studentRecords is only touched by
+          // facultyMarksSync.js / FacultyClassDetail.jsx / RequireFaculty
+          // .jsx, all teacher-side, gated behind RequireFaculty) — it was
+          // a pure rules-level over-grant with a real student-privacy
+          // consequence and zero product benefit. Removed outright rather
+          // than narrowed, since nothing in the app relied on it.
+          //
+          // If a future CR-facing "class progress" view is ever built,
+          // it should read from a separate summary-only doc/field (e.g.
+          // "how many students have marks submitted", not the marks
+          // themselves) rather than re-adding CR/ACR here — see
+          // CR_TEACHER_LINKING_NOTES.md Phase 4 for the planned shape.
           allow read: if (isSignedIn() && request.auth.uid == studentUid)
             || isFacultyFor(groupId, assignmentId)
-            || isContentEditor(groupId) || isAdmin();
+            || isAdmin();
 
           // Write: ONLY an assigned, VERIFIED (Blue Tick) teacher, and
           // only their OWN quota slot (§9.2's independent-45-per-teacher
@@ -3028,6 +3214,87 @@ service cloud.firestore {
         }
       }
 
+      // -----------------------------------------------------------
+      // PHASE 3 (CR_TEACHER_LINKING_NOTES.md §4/§12 Phase 3) — CR<->Teacher
+      // identity linking. A request here NEVER carries or merges
+      // schedule/slot data — routineEntries.teacherName (CR's free text)
+      // and facultyAssignments.dayTimeSlots (teacher's own schedule) stay
+      // fully independent always. This collection only ever produces an
+      // identity pointer (linkedFacultyUid/linkedAssignmentId, written by
+      // the client onto the routineEntries doc after accept, via the
+      // existing isContentEditor(groupId)-gated routineEntries update
+      // rule above — this collection itself never writes routineEntries).
+      //
+      // Two directions share this same doc shape, distinguished by
+      // `direction`:
+      //   'cr_to_teacher' — CR clicked "Invite this teacher" on a
+      //     facultyDisambiguation.js match (see TeacherClaimBanner.jsx).
+      //     initiatedBy is the CR's uid; targetFacultyUid is who must
+      //     accept.
+      //   'teacher_to_cr' — a teacher created/joined a facultyAssignment
+      //     that matches an existing routineEntry; initiatedBy is the
+      //     teacher's uid; any CR/ACR of this group may accept.
+      //
+      // Accept/decline never happens here directly — status flips are the
+      // ONLY write this collection allows post-create (mirrors
+      // facultyAssignments/{id}/joinRequests's pattern exactly), and the
+      // actual link (routineEntries.linkedFacultyUid/linkedAssignmentId)
+      // is a separate write the client makes afterward under its own
+      // existing rule. This keeps "who can flip a request's status" and
+      // "who can actually change a routine entry" as two independently
+      // auditable gates rather than one combined permission.
+      match /teacherLinkRequests/{requestId} {
+        // Create: either a CR/ACR of this group inviting a specific
+        // verified faculty account (cr_to_teacher), or that same verified
+        // faculty account proposing a link back (teacher_to_cr) — never
+        // on someone else's behalf in either direction.
+        allow create: if
+          (
+            (isGroupCR(groupId) || isGroupACR(groupId))
+            && request.resource.data.direction == 'cr_to_teacher'
+            && request.resource.data.initiatedBy == request.auth.uid
+            && isVerifiedFaculty(request.resource.data.targetFacultyUid)
+          ) || (
+            isVerifiedFaculty(request.auth.uid)
+            && request.resource.data.direction == 'teacher_to_cr'
+            && request.resource.data.initiatedBy == request.auth.uid
+          ) || isAdmin();
+
+        // Read: any CR/ACR/CL of this group (so all of them see a pending
+        // teacher_to_cr request, or their own sent cr_to_teacher one), the
+        // targeted/initiating faculty account, or Admin.
+        allow read: if isAdmin()
+          || isGroupCR(groupId) || isGroupACR(groupId) || isCLFor(groupId)
+          || (isSignedIn() && (
+              request.auth.uid == resource.data.initiatedBy
+              || request.auth.uid == resource.data.targetFacultyUid
+          ));
+
+        // Update: ONLY the accepting side, and ONLY the status/resolvedAt/
+        // resolvedBy fields — never the original request content
+        // (initiatedBy/direction/targetFacultyUid/course identifiers).
+        // cr_to_teacher is accepted by the targeted faculty account;
+        // teacher_to_cr is accepted by any CR/ACR of this group (§4's
+        // "multi-CR" case — first to act resolves it; a later accept/
+        // decline on an already-resolved doc is blocked by the status
+        // guard on resource.data.status below).
+        allow update: if resource.data.status == 'pending'
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'resolvedAt', 'resolvedBy'])
+          && (request.resource.data.status == 'accepted' || request.resource.data.status == 'declined')
+          && (
+            (resource.data.direction == 'cr_to_teacher' && request.auth.uid == resource.data.targetFacultyUid)
+            || (resource.data.direction == 'teacher_to_cr' && (isGroupCR(groupId) || isGroupACR(groupId)))
+            || isAdmin()
+          );
+
+        // Delete: the initiator can withdraw their own still-pending
+        // request; the other side or Admin can clear a resolved one.
+        allow delete: if isAdmin()
+          || (isSignedIn() && request.auth.uid == resource.data.initiatedBy && resource.data.status == 'pending')
+          || (resource.data.direction == 'cr_to_teacher' && request.auth.uid == resource.data.targetFacultyUid)
+          || (resource.data.direction == 'teacher_to_cr' && (isGroupCR(groupId) || isGroupACR(groupId)));
+      }
+
       // NOTE: no `resources` subcollection here by design — see the
       // comment in groupSync.js. Content moderation belongs in the
       // existing Question Bank system, not a parallel one.
@@ -3052,7 +3319,17 @@ service cloud.firestore {
     // it only makes that already-intended access work for this query
     // shape.
     match /{path=**}/facultyAssignments/{assignmentId} {
-      allow read: if isAdmin() || isFaculty(request.auth.uid);
+      // PHASE 1 (CR_TEACHER_LINKING_NOTES.md): tightened from isFaculty()
+      // (unverified-signup accounts included) to isVerifiedFaculty() — an
+      // account that has only signed up but not yet been Admin-verified
+      // has no legitimate reason to read every group's assignment data
+      // across the whole app. The nested per-group rule above already
+      // uses isFacultyFor(), which requires verification; this
+      // collectionGroup variant existed only to make the same two
+      // legitimate callers' (Admin dashboard, a faculty member's own "My
+      // Classes") query shape work, and neither caller relies on
+      // unverified access.
+      allow read: if isAdmin() || isVerifiedFaculty(request.auth.uid);
     }
 
     // Phase I — Teacher B's code-entry lookup (joinViaInviteCode) has no

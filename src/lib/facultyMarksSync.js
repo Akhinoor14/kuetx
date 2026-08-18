@@ -51,6 +51,37 @@ function sessionsCollection(groupId, assignmentId) {
 function studentRecordsCollection(groupId, assignmentId) {
   return collection(db, 'groups', groupId, 'facultyAssignments', assignmentId, 'studentRecords');
 }
+
+/**
+ * PHASE 4 (CR_TEACHER_LINKING_NOTES.md §12 Phase 4's "CR-side summary
+ * view", Phase 0's own constraint restated there: count/status ONLY,
+ * never the marks themselves). Recomputes a tiny COUNT-ONLY aggregate —
+ * how many students have a draft/reviewed/sent record, never any grade
+ * value or per-student breakdown — and writes it onto the PARENT
+ * facultyAssignments doc (a doc CR/ACR already has ordinary read access
+ * to via isGroupMember(), unlike studentRecords itself which Phase 0
+ * deliberately closed off to them). Called after every write that could
+ * change a status (saveStudentMarks, sendAllReviewed) so it stays live;
+ * best-effort and non-blocking — if this aggregate write fails, the
+ * actual marks write it followed has already succeeded, so the caller
+ * doesn't need to know or retry.
+ */
+async function recomputeMarksSummary(groupId, assignmentId) {
+  try {
+    const snap = await getDocs(studentRecordsCollection(groupId, assignmentId));
+    const summary = { draft: 0, reviewed: 0, sent: 0, total: snap.size };
+    snap.docs.forEach((d) => {
+      const status = d.data().status || 'draft';
+      if (status in summary) summary[status] += 1;
+    });
+    await updateDoc(assignmentDocRef(groupId, assignmentId), {
+      marksSummary: summary,
+      marksSummaryUpdatedAt: serverTimestamp(),
+    });
+  } catch (e) {
+    console.warn('[facultyMarksSync] recomputeMarksSummary failed (non-fatal):', e);
+  }
+}
 function backlogStudentsCollection(groupId, assignmentId) {
   return collection(db, 'groups', groupId, 'facultyAssignments', assignmentId, 'backlogStudents');
 }
@@ -389,6 +420,8 @@ export async function saveStudentMarks(groupId, assignmentId, studentUid, teache
     history: [...(existing.history || []), ...historyEntries],
   }, { merge: true });
 
+  recomputeMarksSummary(groupId, assignmentId); // fire-and-forget, see doc comment above
+
   return { wasReSend: wasSentBefore && nextStatus === 'sent' };
 }
 
@@ -408,6 +441,7 @@ export async function sendAllReviewed(groupId, assignmentId, studentUids) {
   await Promise.all(reviewedIds.map((uid) =>
     updateDoc(doc(studentRecordsCollection(groupId, assignmentId), uid), { status: 'sent', lastSentAt: serverTimestamp() })
   ));
+  recomputeMarksSummary(groupId, assignmentId); // fire-and-forget, see doc comment above
   return reviewedIds.length;
 }
 

@@ -8,7 +8,8 @@ import PromptDialog from './PromptDialog';
  * Migration nudge for CR/ACRs who became CR BEFORE the mobile-number
  * requirement existed (see ClaimCRCard.jsx — new claims already enforce
  * this at request time, so this banner only ever fires for pre-existing
- * CR/ACR whose members/{uid}.mobile field is still empty/missing).
+ * CR/ACR whose members/{uid}/private/mobile sub-doc is still empty/missing —
+ * PHASE 2 split this out of the parent members/{uid} doc, see groupSync.js).
  *
  * Renders nothing for plain members, and nothing once a mobile number is
  * on file — this is a one-time catch-up prompt, not a permanent fixture.
@@ -24,9 +25,9 @@ export default function CRMobileNumberBanner({ groupId, ownRole }) {
       setMobileOnFile(null);
       return;
     }
-    const ref = doc(db, 'groups', groupId, 'members', uid);
+    const ref = doc(db, 'groups', groupId, 'members', uid, 'private', 'mobile');
     return onSnapshot(ref, (snap) => {
-      setMobileOnFile(snap.exists() ? (snap.data().mobile || '') : '');
+      setMobileOnFile(snap.exists() ? (snap.data().value || '') : '');
     }, () => setMobileOnFile(''));
   }, [groupId, ownRole]);
 

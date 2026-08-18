@@ -3,14 +3,19 @@
 // Standalone "all publications, every teacher" browse page. Mounted at
 // TWO routes with one `canEdit` prop difference:
 //   /publications          (student side, Academic Core subgroup) — canEdit=false
-//   /faculty/publications  (faculty side, Resources subgroup)     — canEdit=true, own-only
+//   /faculty/publications  (faculty side, Resources subgroup)     — canEdit=true
 //
-// canEdit does NOT mean "edit everyone's publications" — a faculty viewer
-// only ever sees edit/delete controls on rows where pub.teacherEmail
-// matches their own signed-in email (firestore.rules enforces the same
-// boundary server-side regardless, this is just the UI reflecting it).
-// Browsing every other teacher's publications is read-only for everyone,
-// faculty included.
+// canEdit only controls whether the "Suggest a publication" button
+// shows (student-side entry point into SuggestPublicationModal — see
+// below). Edit/delete controls on a row are governed separately by
+// isMine (pub.teacherEmail === the viewer's own signed-in email),
+// regardless of route or canEdit — a student who self-submitted their
+// own publication (SuggestPublicationModal's "own publication" toggle)
+// owns that doc exactly the way a teacher owns their own, and needs
+// the same edit/delete affordance to manage it afterward. firestore.rules
+// enforces the same ownership boundary server-side regardless, this is
+// just the UI reflecting it. Browsing everyone else's publications stays
+// read-only for everyone.
 //
 // Search is client-side over the already-subscribed collection (see
 // facultyPublicationsSync.js's subscribeToAllPublications header for why
@@ -18,30 +23,49 @@
 // or department in one free-text box, plus a department dropdown.
 
 import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as Icons from 'lucide-react';
 import { auth } from '../lib/firebase';
-import { DEPARTMENTS } from '../store/store';
+import { DEPARTMENTS, INSTITUTES, BASIC_SCIENCE_DEPTS } from '../store/store';
 import {
   subscribeToAllPublications,
   deletePublication,
 } from '../lib/facultyPublicationsSync';
 import { notify } from '../lib/notify';
 import PublicationEditModal from '../components/PublicationEditModal';
-import TeacherDetailModal from '../components/TeacherDetailModal';
 import SuggestPublicationModal from '../components/SuggestPublicationModal';
+import PaperViewerPanel from '../components/PaperViewerPanel';
 
-const DEPT_NAME_BY_CODE = Object.fromEntries(DEPARTMENTS.map((d) => [d.code, d.name]));
+// Includes Institutes (IICT/IDM/IEPT) and Basic Science/Humanities depts
+// (MATH/CHEM/PHY/HUM) alongside the 16 engineering Departments — without
+// this, teachers in those units (e.g. Dr. Jamali in MATH) show a blank
+// department name and can't be filtered to.
+const DEPT_NAME_BY_CODE = Object.fromEntries(
+  [...DEPARTMENTS, ...INSTITUTES, ...BASIC_SCIENCE_DEPTS].map((d) => [d.code, d.name])
+);
 
 export default function PublicationsBrowse({ canEdit = false }) {
+  const navigate = useNavigate();
   const [pubs, setPubs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
   const [deptFilter, setDeptFilter] = useState('');
+  const [mineOnly, setMineOnly] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
-  const [detailTeacherEmail, setDetailTeacherEmail] = useState(null);
   const [suggestModalOpen, setSuggestModalOpen] = useState(false);
+
+  // In-app paper viewer for the "Paper" button on each list row — same
+  // in-app-first / external-tab-fallback pattern as TeacherDetail.jsx's
+  // "View paper" link, via the shared PaperViewerPanel.jsx component.
+  const [viewingPaper, setViewingPaper] = useState(null);
+  function openPaperInApp(pub) {
+    setViewingPaper({ title: pub.title || pub.raw_citation, link: pub.link });
+  }
+  function closePaperPanel() {
+    setViewingPaper(null);
+  }
 
   const myEmail = (auth.currentUser?.email || '').trim().toLowerCase();
 
@@ -56,6 +80,7 @@ export default function PublicationsBrowse({ canEdit = false }) {
   const filtered = useMemo(() => {
     const text = searchText.trim().toLowerCase();
     const matches = pubs.filter((pub) => {
+      if (mineOnly && (!myEmail || pub.teacherEmail !== myEmail)) return false;
       if (deptFilter && pub.teacherDeptCode !== deptFilter) return false;
       if (!text) return true;
       const haystack = [pub.title, pub.authors, pub.venue, pub.teacherName, pub.raw_citation]
@@ -70,7 +95,7 @@ export default function PublicationsBrowse({ canEdit = false }) {
       const bHasLink = b.link ? 0 : 1;
       return aHasLink - bHasLink;
     });
-  }, [pubs, searchText, deptFilter]);
+  }, [pubs, searchText, deptFilter, mineOnly, myEmail]);
 
   async function handleDelete(id) {
     try {
@@ -125,17 +150,47 @@ export default function PublicationsBrowse({ canEdit = false }) {
           }}
         >
           <option value="">All departments</option>
-          {DEPARTMENTS.map((d) => (
-            <option key={d.code} value={d.code}>{d.name}</option>
-          ))}
+          <optgroup label="Departments">
+            {DEPARTMENTS.map((d) => (
+              <option key={d.code} value={d.code}>{d.name}</option>
+            ))}
+          </optgroup>
+          <optgroup label="Institutes">
+            {INSTITUTES.map((i) => (
+              <option key={i.code} value={i.code}>{i.name}</option>
+            ))}
+          </optgroup>
+          <optgroup label="Basic Sciences">
+            {BASIC_SCIENCE_DEPTS.map((d) => (
+              <option key={d.code} value={d.code}>{d.name}</option>
+            ))}
+          </optgroup>
         </select>
+        {myEmail && (
+          <button
+            type="button"
+            onClick={() => setMineOnly((v) => !v)}
+            title="Show only publications under your own account"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6, padding: '0 14px', borderRadius: 10,
+              border: mineOnly ? 'none' : '1px solid var(--border)',
+              background: mineOnly ? 'var(--accent)' : 'var(--bg)',
+              color: mineOnly ? '#fff' : 'var(--text)',
+              fontSize: 13, fontWeight: 700, height: 40, cursor: 'pointer', whiteSpace: 'nowrap',
+            }}
+          >
+            <Icons.User size={14} /> আমার publications
+          </button>
+        )}
       </div>
 
       {loading && <div style={{ fontSize: 13, color: 'var(--muted)' }}>Loading publications…</div>}
 
       {!loading && filtered.length === 0 && (
         <div style={{ fontSize: 13, color: 'var(--muted)', padding: '30px 0', textAlign: 'center' }}>
-          No publications match your search.
+          {mineOnly
+            ? "You don't have any publications under your account yet."
+            : 'No publications match your search.'}
         </div>
       )}
 
@@ -154,7 +209,14 @@ export default function PublicationsBrowse({ canEdit = false }) {
       `}</style>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {filtered.map((pub) => {
-          const isMine = canEdit && myEmail && pub.teacherEmail === myEmail;
+          // "Mine" now means "I own this doc" (teacherEmail matches my
+          // signed-in email), independent of the canEdit route prop.
+          // canEdit historically gated this to the faculty route only,
+          // but a student can now own a doc too (self-submitted via
+          // SuggestPublicationModal's "own publication" path) and needs
+          // the same edit/delete controls to manage what they published
+          // — not just faculty managing their own scraped/added entries.
+          const isMine = myEmail && pub.teacherEmail === myEmail;
           return (
             <div
               key={pub.id}
@@ -200,13 +262,13 @@ export default function PublicationsBrowse({ canEdit = false }) {
                     row. Mobile (<560px, see .pub-actions above): drops to
                     a full-width row directly under the text block. */}
                 <div className="pub-actions">
-                  {/* "View" — opens TeacherDetailModal, on-site: teacher's
-                      photo/education/experience plus every publication of
-                      theirs (see TeacherDetailModal.jsx). Never navigates
-                      away from our site. Disabled (not hidden) when a doc
-                      has no teacherEmail, so the row still explains why. */}
+                  {/* "View" — navigates to /teachers/:email (TeacherDetail.jsx),
+                      on-site: teacher's photo/education/experience plus
+                      every publication of theirs. Never navigates away
+                      from our site. Disabled (not hidden) when a doc has
+                      no teacherEmail, so the row still explains why. */}
                   <button
-                    onClick={() => pub.teacherEmail && setDetailTeacherEmail(pub.teacherEmail)}
+                    onClick={() => pub.teacherEmail && navigate(`/teachers/${pub.teacherEmail}`)}
                     disabled={!pub.teacherEmail}
                     style={{
                       fontSize: 11.5, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 5,
@@ -219,28 +281,28 @@ export default function PublicationsBrowse({ canEdit = false }) {
                   >
                     <Icons.User size={12} /> View
                   </button>
-                  {/* "Paper" — direct external link to the source (DOI /
-                      publisher page). Only a real link when pub.link
+                  {/* "Paper" — opens in-app first (same PaperViewerPanel
+                      used by TeacherDetail.jsx's "View paper" link),
+                      falling back to an external tab only if embedding
+                      is blocked. Only a real button when pub.link
                       exists; most scraped citations don't have one
                       because the original KUET page didn't hyperlink the
                       title — not a bug, just missing source data. Shown
                       faded/disabled rather than hidden so the two-button
                       layout stays consistent row to row. */}
                   {pub.link ? (
-                    <a
-                      href={pub.link}
-                      target="_blank"
-                      rel="noreferrer"
-                      onClick={(e) => e.stopPropagation()}
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); openPaperInApp(pub); }}
                       style={{
                         fontSize: 11.5, color: 'var(--muted)', fontWeight: 700, display: 'inline-flex',
                         alignItems: 'center', gap: 5, textDecoration: 'none', border: '1px solid var(--border)',
-                        borderRadius: 6, padding: '5px 10px',
+                        borderRadius: 6, padding: '5px 10px', background: 'transparent', cursor: 'pointer',
                       }}
                       title="Open the original publication page"
                     >
                       <Icons.ExternalLink size={12} /> Paper
-                    </a>
+                    </button>
                   ) : (
                     <span
                       style={{
@@ -278,25 +340,19 @@ export default function PublicationsBrowse({ canEdit = false }) {
         })}
       </div>
 
-      {canEdit && (
-        <PublicationEditModal
-          teacherEmail={myEmail}
-          existing={editing}
-          open={modalOpen}
-          onClose={() => setModalOpen(false)}
-        />
-      )}
-
-      <TeacherDetailModal
-        teacherEmail={detailTeacherEmail}
-        open={!!detailTeacherEmail}
-        onClose={() => setDetailTeacherEmail(null)}
+      <PublicationEditModal
+        teacherEmail={myEmail}
+        existing={editing}
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
       />
 
       <SuggestPublicationModal
         open={suggestModalOpen}
         onClose={() => setSuggestModalOpen(false)}
       />
+
+      <PaperViewerPanel paper={viewingPaper} onClose={closePaperPanel} />
     </div>
   );
 }

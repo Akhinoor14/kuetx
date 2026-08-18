@@ -1,14 +1,10 @@
-// SignUpWizard.jsx — LANDING_PAGE_REDESIGN_PROMPT.md, Phase 4.
+// SignUpWizard.jsx — LANDING_PAGE_REDESIGN_PROMPT.md, Phase 4/5/6.
 //
-// New multi-step Sign Up wizard (§11.3). This phase only builds the
-// wizard SHELL (header/progress/footer chrome, mobile vs desktop layout)
-// and STEP 1 (Role select — Student/Faculty/Provider cards, local state
-// only, no Firestore write yet). Steps 2 (role-specific profile form)
-// and 3 (Confirm/Summary + Google popup + Firestore commit) are Phase 5
-// and Phase 6's job respectively — this file renders lightweight
-// placeholders for those steps for now, wired into the same shell/
-// progress-indicator/Continue-button chrome so Phase 5/6 only need to
-// fill in the step content, not rebuild the wizard around it.
+// New multi-step Sign Up wizard (§11.3), fully built as of Phase 6:
+// Step 1 (Role select), Step 2 (role-specific profile form, local state
+// only, no Firestore write), Step 3 (Confirm/Summary + "Sign Up with
+// Google" button — Google popup + Firestore commit happen here, last).
+// See handleGoogleSignUp() below for the actual commit logic.
 //
 // Layout split per §11.3.1 (mobile) / §11.3.2 (desktop):
 // - Mobile (< 768px, same MOBILE_NAV_QUERY breakpoint as useIsMobileNav):
@@ -91,17 +87,28 @@ function DesktopStepLabels({ step }) {
   return (
     <div style={{
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      padding: '16px 24px', borderBottom: '1px solid var(--border)',
+      padding: '18px 52px 18px 28px', borderBottom: '1px solid var(--border)',
+      gap: 8,
     }}>
       {STEP_LABELS.map((label, i) => (
         <span
           key={label}
           style={{
-            fontSize: 13, fontWeight: i === step ? 700 : 500,
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            fontSize: 14, fontWeight: i === step ? 800 : 600,
             color: i === step ? 'var(--accent)' : 'var(--muted)',
           }}
         >
-          {i + 1} {label}
+          <span style={{
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
+            fontSize: 11, fontWeight: 800,
+            background: i === step ? 'var(--accent)' : 'var(--border)',
+            color: i === step ? '#fff' : 'var(--muted)',
+          }}>
+            {i + 1}
+          </span>
+          {label}
         </span>
       ))}
     </div>
@@ -118,14 +125,14 @@ function DesktopStepLabels({ step }) {
 function RoleSelectStep({ selectedRole, onSelect, isMobileNav }) {
   return (
     <div>
-      <p style={{ fontWeight: 700, fontSize: 16, color: 'var(--text)', margin: '0 0 16px' }}>
+      <p style={{ fontWeight: 800, fontSize: 18, color: 'var(--text)', margin: '0 0 18px' }}>
         তুমি কোন role হিসেবে যোগ দিচ্ছো?
       </p>
       <div style={{
         display: isMobileNav ? 'flex' : 'grid',
         flexDirection: isMobileNav ? 'column' : undefined,
         gridTemplateColumns: isMobileNav ? undefined : 'repeat(3, 1fr)',
-        gap: 10,
+        gap: 12,
       }}>
         {ROLES.map((role) => {
           const Icon = role.icon;
@@ -139,27 +146,30 @@ function RoleSelectStep({ selectedRole, onSelect, isMobileNav }) {
                 display: 'flex',
                 flexDirection: isMobileNav ? 'row' : 'column',
                 alignItems: 'center',
-                gap: isMobileNav ? 12 : 10,
-                padding: isMobileNav ? '14px' : '20px 14px',
-                borderRadius: 12,
+                gap: isMobileNav ? 14 : 12,
+                padding: isMobileNav ? '16px' : '26px 16px',
+                borderRadius: 14,
                 border: active ? '2px solid var(--accent)' : '1px solid var(--border)',
                 background: active ? 'var(--accentSoft)' : 'var(--card)',
+                boxShadow: active ? '0 6px 18px rgba(var(--accentRGB),0.18)' : 'none',
                 cursor: 'pointer',
                 textAlign: isMobileNav ? 'left' : 'center',
-                transition: 'border-color 0.15s ease, background 0.15s ease',
+                transition: 'border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease',
               }}
+              onMouseEnter={(e) => { if (!isMobileNav && !active) e.currentTarget.style.borderColor = 'var(--accent)'; }}
+              onMouseLeave={(e) => { if (!isMobileNav && !active) e.currentTarget.style.borderColor = 'var(--border)'; }}
             >
               <div style={{
-                width: isMobileNav ? 36 : 44, height: isMobileNav ? 36 : 44,
+                width: isMobileNav ? 42 : 56, height: isMobileNav ? 42 : 56,
                 borderRadius: '50%', flexShrink: 0,
-                background: active ? 'rgba(255,255,255,0.5)' : 'var(--accentSoft)',
+                background: active ? 'rgba(255,255,255,0.55)' : 'var(--accentSoft)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
-                <Icon size={isMobileNav ? 18 : 22} color="var(--accent)" />
+                <Icon size={isMobileNav ? 20 : 26} color="var(--accent)" />
               </div>
               <span style={{
-                fontSize: isMobileNav ? 14 : 13,
-                fontWeight: active ? 700 : 600,
+                fontSize: isMobileNav ? 15 : 15,
+                fontWeight: active ? 800 : 700,
                 color: 'var(--text)',
               }}>
                 {role.label}
@@ -772,18 +782,23 @@ export default function SignUpWizard({ onClose, initialRole = null, onDone }) {
       }}>
         <div style={{
           flexShrink: 0, display: 'flex', alignItems: 'center', gap: 10,
-          padding: '14px 16px', borderBottom: '1px solid var(--border)',
+          padding: '12px 12px', borderBottom: '1px solid var(--border)',
         }}>
           <button
             type="button"
             onClick={handleBack}
-            aria-label="Back"
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text)', padding: 4, display: 'flex' }}
+            aria-label={step === 0 ? 'Close' : 'Back'}
+            style={{
+              width: 36, height: 36, borderRadius: '50%', flexShrink: 0,
+              background: 'var(--surface, var(--card))', border: '1px solid var(--border)',
+              cursor: 'pointer', color: 'var(--text)', display: 'flex',
+              alignItems: 'center', justifyContent: 'center',
+            }}
           >
-            <ArrowLeft size={18} />
+            {step === 0 ? <X size={17} /> : <ArrowLeft size={17} />}
           </button>
           <MobileProgressDots step={step} />
-          <div style={{ width: 26 }} />
+          <div style={{ width: 36 }} />
         </div>
 
         <div style={{ flex: 1, overflowY: 'auto', padding: '20px 16px' }}>
@@ -833,10 +848,10 @@ export default function SignUpWizard({ onClose, initialRole = null, onDone }) {
         style={{
           background: 'var(--surfaceGlassStrong, var(--card))',
           backdropFilter: 'blur(6px)',
-          borderRadius: 18,
-          width: '100%', maxWidth: 480,
+          borderRadius: 22,
+          width: '100%', maxWidth: 560,
           border: '1px solid var(--border)',
-          boxShadow: '0 32px 80px rgba(0,0,0,0.16)',
+          boxShadow: '0 40px 100px rgba(0,0,0,0.22)',
           overflow: 'hidden',
           position: 'relative',
         }}
@@ -848,23 +863,26 @@ export default function SignUpWizard({ onClose, initialRole = null, onDone }) {
             disabled={busy}
             aria-label="Close"
             style={{
-              position: 'absolute', top: 14, right: 14, zIndex: 1,
-              background: 'none', border: 'none', cursor: busy ? 'not-allowed' : 'pointer',
-              color: 'var(--muted)', padding: 4, display: 'flex', opacity: busy ? 0.4 : 1,
+              position: 'absolute', top: 12, right: 12, zIndex: 2,
+              width: 32, height: 32, borderRadius: '50%',
+              background: 'var(--surface, var(--card))', border: '1px solid var(--border)',
+              cursor: busy ? 'not-allowed' : 'pointer',
+              color: 'var(--muted)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              opacity: busy ? 0.4 : 1,
             }}
           >
-            <X size={18} />
+            <X size={16} />
           </button>
         )}
 
         <DesktopStepLabels step={step} />
 
-        <div style={{ padding: 24, maxHeight: '60vh', overflowY: 'auto' }}>
+        <div style={{ padding: 28, maxHeight: '62vh', overflowY: 'auto' }}>
           {stepContent}
         </div>
 
         <div style={{
-          padding: '14px 24px', borderTop: '1px solid var(--border)',
+          padding: '16px 28px', borderTop: '1px solid var(--border)',
           display: 'flex', justifyContent: 'flex-end', gap: 10,
         }}>
           {step > 0 && (
@@ -872,8 +890,8 @@ export default function SignUpWizard({ onClose, initialRole = null, onDone }) {
               type="button"
               onClick={handleBack}
               style={{
-                padding: '10px 18px', borderRadius: 8, border: '1px solid var(--border)',
-                background: 'transparent', color: 'var(--text)', fontSize: 13, fontWeight: 600, cursor: 'pointer',
+                padding: '11px 20px', borderRadius: 10, border: '1px solid var(--border)',
+                background: 'transparent', color: 'var(--text)', fontSize: 14, fontWeight: 700, cursor: 'pointer',
               }}
             >
               Back
@@ -884,10 +902,10 @@ export default function SignUpWizard({ onClose, initialRole = null, onDone }) {
             onClick={handleContinue}
             disabled={!canContinue}
             style={{
-              padding: '10px 20px', borderRadius: 8, border: 'none',
+              padding: '11px 24px', borderRadius: 10, border: 'none',
               background: canContinue ? 'var(--accent)' : 'var(--border)',
               color: canContinue ? '#fff' : 'var(--muted)',
-              fontSize: 13, fontWeight: 700,
+              fontSize: 14, fontWeight: 800,
               cursor: canContinue ? 'pointer' : 'not-allowed',
             }}
           >

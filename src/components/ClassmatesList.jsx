@@ -4,7 +4,7 @@ import { confirmDialog } from '../lib/dialog';
 import {
   subscribeMembers, verifyMember, revokeVerification,
   clAppointCR, clRevokeCR, assignACR, revokeACR, handoffCR, removeMember,
-  clDismissLegacyCRClaim,
+  clDismissLegacyCRClaim, getMemberMobileOnce,
   MAX_CR, MAX_ACR,
 } from '../lib/groupSync';
 import BlueTick from './BlueTick';
@@ -235,13 +235,19 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
         actions.push({
           key: 'make-cr', label: m.id === currentUid ? 'Make yourself CR' : 'Make CR', disabled: crSlotsFull,
           title: crSlotsFull ? `The CR slot is full (max ${MAX_CR}) — revoke it first` : undefined,
-          run: () => {
+          // PHASE 2: mobile now lives in members/{uid}/private/mobile,
+          // no longer denormalized onto the roster doc this component
+          // already subscribes to — fetched on demand right as the
+          // prompt opens, same one-off pattern as any other single-doc
+          // read in this file.
+          run: async () => {
             setMobilePromptError('');
+            const existingMobile = await getMemberMobileOnce(groupId, m.id).catch(() => '');
             setMobilePromptAction({
               key: 'make-cr',
               title: `Mobile number for ${m.id === currentUid ? 'yourself' : (m.name || 'this classmate')}`,
               message: 'A mobile number is required to appoint CR — Faculty will be able to see it.',
-              defaultValue: m.mobile || '',
+              defaultValue: existingMobile,
               run: (mobile) => clAppointCR(groupId, m.id, mobile),
             });
           },
@@ -268,11 +274,13 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
           run: async () => {
             if (!(await confirmDialog(`Hand off CR to ${m.name || 'this classmate'}? You'll no longer be CR.`))) return;
             setMobilePromptError('');
+            // PHASE 2: fetched on demand, see make-cr's comment above.
+            const existingMobile = await getMemberMobileOnce(groupId, m.id).catch(() => '');
             setMobilePromptAction({
               key: 'handoff-cr',
               title: `Mobile number for ${m.name || 'this classmate'}`,
               message: 'A mobile number is required for the new CR — Faculty will be able to see it.',
-              defaultValue: m.mobile || '',
+              defaultValue: existingMobile,
               run: (mobile) => handoffCR(groupId, currentUid, m.id, null, mobile),
             });
           },
@@ -284,13 +292,15 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
         actions.push({
           key: 'make-acr', label: 'Make ACR', disabled: acrSlotsFull,
           title: acrSlotsFull ? `The ACR slot is full (max ${MAX_ACR})` : undefined,
-          run: () => {
+          // PHASE 2: fetched on demand, see make-cr's comment above.
+          run: async () => {
             setMobilePromptError('');
+            const existingMobile = await getMemberMobileOnce(groupId, m.id).catch(() => '');
             setMobilePromptAction({
               key: 'make-acr',
               title: `Mobile number for ${m.name || 'this classmate'}`,
               message: 'A mobile number is required to appoint them ACR — Faculty will be able to see it.',
-              defaultValue: m.mobile || '',
+              defaultValue: existingMobile,
               run: (mobile) => assignACR(groupId, m.id, mobile),
             });
           },

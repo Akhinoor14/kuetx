@@ -25,12 +25,13 @@
 // ad hoc at that point.
 //
 // Phase 1 (landing redesign): `intent` ('signin' | 'signup', default
-// 'signin') only changes the heading/button copy here — it does NOT
-// change what happens on confirm. AuthModal has a single Google-only
-// flow (no Login/Register branch), so both intents call the same
-// onSignIn(). This exists purely so a visitor who clicked "Sign Up"
-// isn't shown "সাইন ইন করা লাগবে" copy that implies they already have
-// an account.
+// 'signin') changes the heading/button copy here. As of Phase 4/5/6,
+// it ALSO changes what happens on confirm at the LandingPage level —
+// intent='signup' routes onSignIn's caller to open SignUpWizard instead
+// of AuthModal (see LandingPage.jsx's showAuthModal && authIntent
+// branch). This component itself doesn't know which modal opens next —
+// it only calls the onSignIn callback passed in — so it stays correct
+// regardless of which modal the caller wires it to.
 export default function SignInPrompt({ onSignIn, onClose, reason, intent = 'signin' }) {
   const isSignUp = intent === 'signup';
   return (

@@ -10518,3 +10518,23 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
   margin-top: 4px;
   opacity: 0.7;
 }
+
+/* Spreadsheet history strip — per-session P/A cells, one row on desktop
+   (between the % and Mark columns) and one row on mobile (next to the
+   pinned Mark button). Purely a horizontal-scroll list of small cells;
+   touch-action: pan-x so a horizontal drag inside the strip doesn't get
+   fought by the page's own vertical scroll (the .attendance-mrow parent
+   above is pan-y for the same reason, in the other direction). Thin
+   scrollbar so it reads as "more to scroll" without eating space when
+   idle. */
+.attendance-history-scroll {
+  touch-action: pan-x;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.attendance-history-scroll::-webkit-scrollbar { height: 4px; }
+.attendance-history-scroll::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+.attendance-history-scroll::-webkit-scrollbar-track { background: transparent; }

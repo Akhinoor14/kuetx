@@ -30,8 +30,9 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { Wordmark } from '../components/Logo';
 import {
   LogIn, GraduationCap, Presentation, Store, CheckCircle2,
-  Monitor, Smartphone, Truck, Crown,
+  Monitor, Smartphone, Crown,
   Layers, ShieldCheck, Users, Sparkles, Mail, MessageSquare, X,
+  Flame, TrendingUp, Star, Zap,
 } from 'lucide-react';
 import usePageMeta from '../hooks/usePageMeta';
 import { useIsMobileNav } from '../components/BottomNav';
@@ -50,6 +51,14 @@ import {
   TOTAL_FEATURE_COUNT, FEATURE_COUNT_DISPLAY,
   STUDENT_FEATURES, CR_FEATURES, FACULTY_FEATURES, PROVIDER_FEATURES,
 } from '../data/landingFeatureInventory';
+// Rotating-stat-card feature (this session, owner request): reuses the
+// same public Worker call useQuestionBankData.js already makes elsewhere
+// in the app (student/faculty Question Bank page) to pull in one real,
+// live QB number (dept-wise paper counts) as one of the rotating cards
+// alongside the other two always-true facts (3 roles, 100% free). See
+// that hook's own header comment — no auth needed, Worker CORS is public.
+import { useQuestionBankData } from '../hooks/useQuestionBankData';
+import { deriveQBShowcaseStats } from '../hooks/useQBShowcaseStats';
 // Phase C of DEMO_MODE_FULL_PLAN_PROMPT.md — student role now renders the
 // real demo dashboard instead of the placeholder. Phase D (D.2-D.6) added
 // the faculty demo dashboard. Phase E adds the provider demo dashboard —
@@ -122,51 +131,6 @@ const ROLE_CARDS = [
 const LANDING_ROLE_TO_WIZARD_ROLE = { student: 'student', faculty: 'teacher', provider: 'provider' };
 const wizardRoleFor = (landingRoleId) => LANDING_ROLE_TO_WIZARD_ROLE[landingRoleId] || null;
 
-// Phase 9.2 (§8 owner-confirm: CSS/IntersectionObserver over a motion
-// library — no framer-motion added, this app has no motion dependency
-// anywhere else and stays on the free/Spark plan's "as light as
-// possible" footprint per the tracker's own recurring notes; a 3-number
-// count-up doesn't need a general-purpose animation library). Runs the
-// animation once, when the stats strip first scrolls into view, using
-// requestAnimationFrame directly rather than a timer loop — no new
-// dependency, no CSS keyframes needed since the displayed value itself
-// changes (keyframes can't animate text content).
-function useCountUp(target, { duration = 1200, startWhenVisible = true } = {}) {
-  const [value, setValue] = useState(startWhenVisible ? 0 : target);
-  const [started, setStarted] = useState(!startWhenVisible);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    if (!startWhenVisible || started || !ref.current) return undefined;
-    const node = ref.current;
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0]?.isIntersecting) {
-        setStarted(true);
-        observer.disconnect();
-      }
-    }, { threshold: 0.4 });
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [startWhenVisible, started]);
-
-  useEffect(() => {
-    if (!started) return undefined;
-    const start = performance.now();
-    let frameId;
-    const tick = (now) => {
-      const progress = Math.min(1, (now - start) / duration);
-      // ease-out cubic — fast start, gentle settle, no external easing lib
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setValue(Math.round(target * eased));
-      if (progress < 1) frameId = requestAnimationFrame(tick);
-    };
-    frameId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frameId);
-  }, [started, target, duration]);
-
-  return { value, ref };
-}
-
 // Phase 9.2 §8 owner-confirm: 4th stat is the real, verified feature
 // count from landingFeatureInventory.js (Phase 9.1) — owner's explicit
 // instruction was that this number must be real ("EI TA KINTU RAL
@@ -174,33 +138,107 @@ function useCountUp(target, { duration = 1200, startWhenVisible = true } = {}) {
 // should clearly outnumber routes since several routes bundle multiple
 // features. The other two numbers here are simple, already-true facts
 // (3 roles, 100% free) rather than anything needing its own
-// verification pass — kept structurally identical (same StatCard, same
-// count-up) so any of the three can be swapped independently later.
-const STATS = [
-  { id: 'features', value: TOTAL_FEATURE_COUNT, display: FEATURE_COUNT_DISPLAY, label: 'রিয়েল ফিচার' },
-  { id: 'roles', value: 3, display: '৩', label: 'Role — Student, Faculty, Provider' },
-  { id: 'free', value: 100, display: '১০০%', label: 'ফ্রি, চিরকাল' },
+// verification pass.
+//
+// Owner request (this session): the old strip showed all 3 side by
+// side, static, forever — owner asked to reconsider whether that's
+// still the best use of this exact spot on the page (screenshot
+// provided: hero -> ৬২+/৩/১০০% row -> "কেন KUETx?"). Decision: keep the
+// position, but turn it into ONE auto-rotating card that cycles through
+// these 3 facts plus a 4th, live QB fact — one big number + label at a
+// time reads as more confident/intentional than three small numbers
+// competing for attention, and it makes room to fold in the one truly
+// live, publicly-fetchable number the app has (QB dept-wise paper
+// count via the public Cloudflare Worker) without inflating the strip
+// to 4 static columns.
+//
+// QB slot is appended by StatsStrip itself (needs live data from the
+// Worker), not hardcoded here — this array is only static, always-true
+// facts (3 original + 7 qualitative feature cards added later, see
+// ROTATING_STATS_CARD_PROMPT.md).
+const BASE_STATS = [
+  { id: 'features', display: FEATURE_COUNT_DISPLAY, label: 'রিয়েল ফিচার' },
+  { id: 'roles', display: '৩', label: 'Role — Student, Faculty, Provider' },
+  { id: 'free', display: '১০০%', label: 'ফ্রি, চিরকাল' },
+  {
+    id: 'publications',
+    display: '৫,৮৫৬',
+    label: '৪৩৬ জন শিক্ষকের ৫,৮৫৬টি রিসার্চ পাবলিকেশন, ২৪টি ডিপার্টমেন্ট জুড়ে — যে কেউ নিজের বা অন্য কারো পাবলিকেশন যোগ করতে পারে',
+  },
+  {
+    id: 'pick-and-drop',
+    display: 'কাজ করিয়ে নিন',
+    label: 'Student বা Faculty যে কেউ কাজ করিয়ে নেওয়ার জন্য পোস্ট করতে পারে (কিছু কিনে আনা, ডেলিভারি করা, ছোটখাটো কাজ), সব student-এর কাছে যায় — যেকোনো student accept করতে পারে, নিজেই দাম প্রস্তাব করা যায় বা ফ্রিও রাখা যায় — ফাঁকা সময়ে টাকা আয়েরও একটা উপায়',
+  },
+  {
+    id: 'solution-bank',
+    display: 'ধাপে ধাপে',
+    label: 'এখন পর্যন্ত ESE ডিপার্টমেন্টের Y2T1-এ Computer Programming ও Fluid Mechanics-এর ধাপে ধাপে সমাধান আছে — ধীরে ধীরে আরও কোর্স ও ডিপার্টমেন্ট যোগ হচ্ছে',
+  },
+  {
+    id: 'attendance',
+    display: 'ট্র্যাকিং',
+    label: 'Student নিজে নিজের personal attendance ট্র্যাক করতে পারে — আর Faculty অফিসিয়াল ক্লাস attendance নেয় (মূলত Present/Absent, প্রয়োজনে Late/Excused-ও সেট করা যায়), যেটা মার্কসের সাথে যুক্ত হয়ে যায়',
+  },
+  {
+    id: 'cr-toolset',
+    display: '৫+',
+    label: 'CR হলে Class Setup, Routine, Class Planner, CT & Quiz Planner, Class Announcements-সহ ৫+ এক্সট্রা টুল পাওয়া যায়',
+  },
+  {
+    id: 'my-classes-faculty',
+    display: '৭',
+    label: 'একটা ক্লাসে ৭টা রিয়েল টুল — Syllabus, Question Bank, Students & CR, Marks, Attendance, Schedule, Notices',
+  },
+  {
+    id: 'online-mart',
+    display: 'উদ্যোক্তা',
+    label: 'Student চাইলে আলাদা একটা Provider account খুলে নিজের Online Mart চালু করতে পারে — student account থেকে সরাসরি না, শর্ত মেনে আলাদাভাবে provider হিসেবে যোগ দিতে হয়',
+  },
 ];
 
+const ROTATE_MS = 4500;
 
+// One large stat + label, fading/sliding in on change. Deliberately
+// re-fires the same useCountUp-style ease-out on every rotation (not
+// just once on first scroll-into-view like the old StatCard) — a card
+// that visibly counts up each time it appears reads as "alive" rather
+// than a plain text swap, and this is a single number so the animation
+// is cheap.
+function RotatingStatCard({ stat, isMobileNav }) {
+  const [displayValue, setDisplayValue] = useState(stat.display);
+  const [animating, setAnimating] = useState(false);
 
-function StatCard({ stat, isMobileNav }) {
-  const { value, ref } = useCountUp(stat.value);
-  // Bangla-digit stats (৬২+, ১০০%) don't have a clean way to animate the
-  // trailing symbol through the count, so once the count-up reaches its
-  // target we swap to the exact display string (with the % / + intact);
-  // mid-animation we show the plain rounded number.
-  const atTarget = value >= stat.value;
+  useEffect(() => {
+    setAnimating(true);
+    const t = setTimeout(() => setAnimating(false), 350);
+    setDisplayValue(stat.display);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stat.id, stat.display]);
+
   return (
-    <div ref={ref} style={{ textAlign: 'center', padding: isMobileNav ? '0.4rem 0.25rem' : '0.75rem 0.5rem' }}>
+    <div
+      key={stat.id}
+      style={{
+        textAlign: 'center', width: '100%',
+        opacity: animating ? 0.35 : 1,
+        transform: animating ? 'translateY(4px)' : 'translateY(0)',
+        transition: 'opacity 0.35s ease, transform 0.35s ease',
+      }}
+    >
       <div style={{
-        fontSize: isMobileNav ? 'clamp(1.15rem, 5vw, 1.5rem)' : 'clamp(1.6rem, 4vw, 2.1rem)',
+        fontSize: isMobileNav ? 'clamp(1.3rem, 7vw, 1.7rem)' : 'clamp(1.9rem, 4.5vw, 2.5rem)',
         fontWeight: 800, color: 'var(--accent)',
         letterSpacing: '-0.02em', fontVariantNumeric: 'tabular-nums',
+        lineHeight: 1.15,
       }}>
-        {atTarget ? stat.display : value}
+        {displayValue}
       </div>
-      <div style={{ fontSize: isMobileNav ? '0.68rem' : '0.78rem', color: 'var(--muted)', marginTop: '0.15rem' }}>
+      <div style={{
+        fontSize: isMobileNav ? '0.72rem' : '0.85rem', color: 'var(--muted)',
+        marginTop: '0.2rem', maxWidth: '380px', marginLeft: 'auto', marginRight: 'auto',
+      }}>
         {stat.label}
       </div>
     </div>
@@ -208,14 +246,84 @@ function StatCard({ stat, isMobileNav }) {
 }
 
 function StatsStrip({ isMobileNav }) {
+  // Same public Worker call the Question Bank pages already make — see
+  // useQBShowcaseStats.js header comment. If the Worker isn't reachable
+  // (e.g. env var missing in some deploy), qbTree/qbCount just stay at
+  // their defaults and the QB card is skipped entirely rather than
+  // showing a fake or zeroed number.
+  const { tree: qbTree, count: qbCount, error: qbError } = useQuestionBankData();
+  const qbStats = deriveQBShowcaseStats(qbTree, qbCount);
+
+  const stats = [...BASE_STATS];
+  if (!qbError && qbStats.totalPapers > 0) {
+    stats.push({
+      id: 'qb-total',
+      display: qbStats.totalPapers.toLocaleString('bn-BD'),
+      label: `প্রশ্নব্যাংকে ${qbStats.deptCount}টি ডিপার্টমেন্টের রিয়েল প্রশ্নপত্র — লাইভ`,
+    });
+    if (qbStats.topDept) {
+      stats.push({
+        id: 'qb-top-dept',
+        display: qbStats.topDept.total.toLocaleString('bn-BD'),
+        label: `সবচেয়ে বেশি প্রশ্নপত্র আছে ${qbStats.topDept.dept} ডিপার্টমেন্টে — লাইভ কাউন্ট`,
+      });
+    }
+  }
+
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const prefersReducedMotion = typeof window !== 'undefined'
+    && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+  useEffect(() => {
+    if (paused || prefersReducedMotion || stats.length <= 1) return undefined;
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % stats.length);
+    }, ROTATE_MS);
+    return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paused, prefersReducedMotion, stats.length]);
+
+  // Guard against index momentarily pointing past the array right after
+  // the QB cards get appended/removed (data arrives async after first
+  // render).
+  const safeIndex = index % stats.length;
+  const current = stats[safeIndex];
+
   return (
-    <div style={{
-      display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
-      gap: '0.5rem', maxWidth: '520px', margin: isMobileNav ? '0 auto 1.25rem' : '0 auto 2.5rem',
-      padding: isMobileNav ? '0.6rem 0.5rem' : '1rem 0.5rem',
-      borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)',
-    }}>
-      {STATS.map((stat) => <StatCard key={stat.id} stat={stat} isMobileNav={isMobileNav} />)}
+    <div
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onTouchStart={() => setPaused(true)}
+      style={{
+        maxWidth: '520px', margin: isMobileNav ? '0 auto 1.25rem' : '0 auto 2.5rem',
+        padding: isMobileNav ? '0.7rem 0.5rem' : '1.15rem 0.5rem',
+        borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)',
+      }}
+    >
+      <RotatingStatCard stat={current} isMobileNav={isMobileNav} />
+
+      {stats.length > 1 && (
+        <div style={{
+          display: 'flex', justifyContent: 'center', gap: '0.35rem',
+          marginTop: isMobileNav ? '0.5rem' : '0.75rem',
+        }}>
+          {stats.map((s, i) => (
+            <button
+              key={s.id}
+              type="button"
+              aria-label={s.label}
+              onClick={() => setIndex(i)}
+              style={{
+                width: i === safeIndex ? '1.1rem' : '0.4rem', height: '0.4rem',
+                borderRadius: '999px', border: 'none', padding: 0,
+                background: i === safeIndex ? 'var(--accent)' : 'var(--border)',
+                cursor: 'pointer', transition: 'width 0.25s ease, background 0.25s ease',
+              }}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -383,6 +491,58 @@ const FEATURE_TABS = [
   { id: 'provider', title: 'Provider', icon: Store, features: PROVIDER_FEATURES, labels: PROVIDER_CATEGORY_LABELS },
 ];
 
+// Owner request (this session): a few top-level feature names in the
+// breakdown above are really a whole sub-system, not a single page —
+// "My Classes" opens into 7 real tabs per class, "My Shop" covers 6
+// real, distinct provider categories. A flat bullet with just the name
+// undersells that. This map supplies the verified sub-detail for JUST
+// those entries — every line traces to real code, not invented copy:
+//   - My Classes tabs: src/pages/faculty/FacultyClassDetail.jsx's own
+//     `TABS` array (Syllabus / Question Bank / Students & CR / Marks /
+//     Attendance / Schedule / Notices). "Students & CR" sub-note is
+//     deliberately read-only-scoped: that tab renders ClassmatesList
+//     with `showActions={false}` for faculty (line ~2767) — a faculty
+//     member can SEE roll-ordered roster + who's verified + who's CR/
+//     ACR, but cannot appoint/revoke/verify from here (that authority
+//     belongs to CL/CR themselves, a different screen). Marks/
+//     Attendance sub-bullets trace to MarksTab's component-based
+//     breakdown + PDF export, and AttendanceTab's Present/Absent/Late/
+//     Excused marks + session log + Excel/PDF export.
+//   - My Shop categories: src/lib/serviceCategoryConfig.js's
+//     CATEGORY_SETUP_CONFIG keys (salon / hotel / medicine / bookstore
+//     / onlinemart / errand) — each is a real, separately-configured
+//     provider category with its own item vocabulary and availability
+//     model (stock-based vs daily-available vs no fixed catalog for
+//     Errand).
+// Keys must exactly match a name string already present in
+// STUDENT_FEATURES/FACULTY_FEATURES/PROVIDER_FEATURES above.
+const FEATURE_SUBDETAIL = {
+  'My Classes': {
+    introBn: 'একটা ক্লাস খুললে ভিতরে ৭টা রিয়েল ট্যাব থাকে —',
+    items: [
+      { nameBn: 'Syllabus', descBn: 'ডিপার্টমেন্টের নির্ধারিত সিলেবাস' },
+      { nameBn: 'Question Bank', descBn: 'ওই কোর্স ও টার্মের রিয়েল আগের প্রশ্নপত্র' },
+      { nameBn: 'Students & CR', descBn: 'রোল অনুসারে ক্লাসমেট লিস্ট — কে ভেরিফায়েড, কে CR/ACR তা দেখা যায় (এখান থেকে অ্যাপয়েন্ট/ভেরিফাই করা যায় না, সেটা CL/CR-এর কাজ)' },
+      { nameBn: 'Marks', descBn: 'নিজের কম্পোনেন্ট (CT ইত্যাদি) সেটআপ করে মার্কস এন্ট্রি, PDF এক্সপোর্ট' },
+      { nameBn: 'Attendance', descBn: 'Present/Absent/Late/Excused, প্রতিদিনের সেশন লগ, Excel/PDF এক্সপোর্ট' },
+      { nameBn: 'Schedule', descBn: 'দিন/সময় স্লট, কনফ্লিক্ট-চেক সহ' },
+      { nameBn: 'Notices', descBn: 'সরাসরি ওই ক্লাসে নোটিশ ব্রডকাস্ট' },
+    ],
+  },
+  'My Shop': {
+    introBn: '৬টা রিয়েল ক্যাটাগরি, প্রতিটার নিজস্ব সেটআপ —',
+    items: [
+      { nameBn: 'Salon', descBn: 'সার্ভিস লিস্ট (হেয়ারকাট ইত্যাদি), এখন করানো যাচ্ছে/বন্ধ টগল' },
+      { nameBn: 'Food / Hotel', descBn: 'মেনু আইটেম, আজ পাওয়া যাচ্ছে/নাই টগল' },
+      { nameBn: 'Pharmacy', descBn: 'প্রোডাক্ট, স্টকে আছে/নাই স্ট্যাটাস' },
+      { nameBn: 'Stationery', descBn: 'বই-খাতা-ফটোকপি জাতীয় প্রোডাক্ট, স্টক স্ট্যাটাস' },
+      { nameBn: 'Online Mart', descBn: 'দৈনন্দিন প্রয়োজনীয় জিনিস, শুধু ডেলিভারি' },
+      { nameBn: 'Errand (Pick and Drop)', descBn: 'কোনো ফিক্সড ক্যাটালগ নেই — student/faculty যা চায় তা ফেচ/ডেলিভারি' },
+    ],
+  },
+};
+
+
 // Owner note (Phase 9 kickoff, carried into 9.3): Pick and Drop should
 // read as more prominent than the other Services items wherever
 // Services is rendered, not sorted away alphabetically — a small badge
@@ -395,58 +555,169 @@ const FEATURE_TABS = [
 // features per role (owner asked for suggestions, picked which to use).
 // Kept as one flat name -> label lookup rather than per-role duplicate
 // logic, since feature names are unique across the whole inventory.
-const HIGHLIGHTED_FEATURES = {
-  'Pick and Drop': 'জনপ্রিয়',
-  'Attendance': 'সবচেয়ে বেশি ব্যবহৃত',
-  'Question Bank': 'সবচেয়ে বেশি ব্যবহৃত',
-  'Results & GPA': 'জনপ্রিয়',
-  'Broadcast Notice': 'জনপ্রিয়',
-  'My Shop': 'জনপ্রিয়',
+//
+// Owner follow-up: more highlighted features, and each one needed its
+// own flavor rather than every tag repeating "সবচেয়ে বেশি ব্যবহৃত" /
+// "জনপ্রিয়" back to back down the list. Each entry below is now
+// { label, tone, Icon } — tone picks a distinct color+icon combo
+// (TAG_TONES) so a visitor scanning the grid sees varied signals
+// ("most used" vs "popular" vs "new" vs "student favorite") instead of
+// the same badge stamped on six different items.
+const TAG_TONES = {
+  hot: { color: '#b8860b', bg: 'rgba(184,134,11,0.14)', Icon: Flame },       // most-used / high-traffic
+  popular: { color: '#0d9488', bg: 'rgba(13,148,136,0.14)', Icon: TrendingUp }, // rising / popular
+  favorite: { color: '#c026d3', bg: 'rgba(192,38,211,0.14)', Icon: Star },      // student/community favorite
+  fresh: { color: '#2563eb', bg: 'rgba(37,99,235,0.14)', Icon: Zap },           // newly added / fast
 };
 
-function FeatureItem({ name, highlight, highlightLabel }) {
+const HIGHLIGHTED_FEATURES = {
+  'Attendance': { label: 'সবচেয়ে বেশি ব্যবহৃত', tone: 'hot' },
+  'Question Bank': { label: 'সবচেয়ে বেশি ব্যবহৃত', tone: 'hot' },
+  'Pick and Drop': { label: 'জনপ্রিয়', tone: 'popular' },
+  'Results & GPA': { label: 'জনপ্রিয়', tone: 'popular' },
+  'Broadcast Notice': { label: 'সবার পছন্দ', tone: 'favorite' },
+  'My Shop': { label: 'সবার পছন্দ', tone: 'favorite' },
+  'Term Planner': { label: 'নতুন', tone: 'fresh' },
+  'Class Planner': { label: 'নতুন', tone: 'fresh' },
+  'Class Setup': { label: 'CR-দের প্রিয়', tone: 'favorite' },
+  'Food': { label: 'দ্রুততম ডেলিভারি', tone: 'fresh' },
+};
+
+// GOLD kept as the default/fallback tone tint only — actual highlighted
+// items now resolve their own color via TAG_TONES (see HIGHLIGHTED_FEATURES
+// above), so the grid reads as several distinct signals instead of one
+// repeated color. No badge text on mobile card items themselves (that's
+// what cramped two-column rows before) — the tint + icon carry the
+// "notable" signal there; the label text shows as a small pill on desktop
+// and inside CRFeatureBlock, where there's room for it.
+const GOLD = '#b8860b';
+const GOLD_BG = 'rgba(184,134,11,0.12)';
+
+function FeatureItem({ name, isMobileNav }) {
+  const tag = HIGHLIGHTED_FEATURES[name];
+  const tone = tag ? (TAG_TONES[tag.tone] || TAG_TONES.hot) : null;
+  const color = tone?.color || GOLD;
+  const bg = tone?.bg || GOLD_BG;
+  const TagIcon = tone?.Icon || Sparkles;
+
+  // Owner request (this session, refined): "My Classes" / "My Shop" are
+  // whole sub-systems, not a single page — their verified nested
+  // sub-list (see FEATURE_SUBDETAIL's header comment for where each line
+  // traces back to in the actual app code) is ALWAYS shown open, no
+  // click needed — owner's explicit call after trying click-to-expand
+  // first: this is promotional content on a landing page, an extra tap
+  // just to see it works against that goal. Only items present in
+  // FEATURE_SUBDETAIL get this always-open sub-list; every other item
+  // renders exactly as before (plain bullet, no chevron, nothing to
+  // toggle).
+  const subDetail = FEATURE_SUBDETAIL[name];
+
   return (
     <li style={{
-      display: 'flex', alignItems: 'center', gap: '0.4rem',
-      fontSize: '0.84rem', color: 'var(--text)', lineHeight: 1.5,
-      padding: '0.3rem 0', borderBottom: '1px dashed var(--border)',
+      display: 'flex', flexDirection: 'column',
+      padding: isMobileNav ? '0.4rem 0.4rem' : '0.5rem 0',
+      borderBottom: '1px dashed var(--border)',
+      borderRadius: tag ? '6px' : 0,
+      minHeight: isMobileNav ? '2.4rem' : undefined,
     }}>
-      {highlight ? (
-        <Truck size={13} style={{ color: 'var(--accent)', flexShrink: 0 }} />
-      ) : (
-        <CheckCircle2 size={13} style={{ color: 'var(--muted)', flexShrink: 0 }} />
-      )}
-      <span>{name}</span>
-      {highlight && (
-        <span style={{
-          fontSize: '0.66rem', fontWeight: 800, color: 'var(--accent)',
-          background: 'rgba(var(--accentRGB),0.10)', borderRadius: '999px',
-          padding: '0.1rem 0.45rem', marginLeft: 'auto', whiteSpace: 'nowrap',
-        }}>
-          {highlightLabel}
+      <div
+        style={{
+          display: 'flex', alignItems: 'flex-start', gap: '0.4rem',
+          fontSize: isMobileNav ? '0.86rem' : '0.95rem',
+          fontWeight: tag ? 800 : 700,
+          color: tag ? color : 'var(--text)', lineHeight: 1.4,
+          background: tag
+            ? `linear-gradient(135deg, ${bg}, transparent 70%)`
+            : 'transparent',
+          borderRadius: tag ? '6px' : 0,
+          padding: tag ? '0.05rem 0.2rem' : 0,
+          boxShadow: tag && !isMobileNav ? `inset 0 1px 0 rgba(255,255,255,0.35)` : undefined,
+        }}
+      >
+        {tag ? (
+          <TagIcon size={13} style={{ color, flexShrink: 0, marginTop: '0.15rem', filter: `drop-shadow(0 0 3px ${bg})` }} />
+        ) : (
+          <CheckCircle2 size={13} style={{ color: 'var(--muted)', flexShrink: 0, marginTop: '0.15rem' }} />
+        )}
+        <span style={{ overflowWrap: 'anywhere', display: 'flex', flexDirection: 'column', gap: '0.15rem', flex: 1 }}>
+          {name}
+          {tag && !isMobileNav && (
+            <span style={{
+              fontSize: '0.66rem', fontWeight: 800, color,
+              background: bg, padding: '0.1rem 0.45rem', borderRadius: '999px',
+              width: 'fit-content', letterSpacing: '0.01em',
+            }}>
+              {tag.label}
+            </span>
+          )}
         </span>
+      </div>
+
+      {subDetail && (
+        <div style={{
+          marginTop: '0.5rem', marginLeft: isMobileNav ? '0' : '1.25rem',
+          padding: isMobileNav ? '0.6rem 0.65rem' : '0.7rem 0.85rem',
+          borderLeft: isMobileNav ? 'none' : '2px solid var(--border)',
+          borderRadius: '10px',
+          background: 'var(--bg)',
+        }}>
+          <div style={{ fontSize: '0.72rem', color: 'var(--muted)', marginBottom: '0.45rem', fontWeight: 600 }}>
+            {subDetail.introBn}
+          </div>
+          <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: '0.4rem' }}>
+            {subDetail.items.map((sub) => (
+              <li key={sub.nameBn} style={{ display: 'flex', flexDirection: 'column', gap: '0.1rem' }}>
+                <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--text)' }}>{sub.nameBn}</span>
+                <span style={{ fontSize: '0.72rem', color: 'var(--muted)', lineHeight: 1.5 }}>{sub.descBn}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </li>
   );
 }
 
-function FeatureCategoryBlock({ label, items }) {
+// Each category now renders as its own visually distinct sub-card
+// (border + subtle surface tint + its own rounded corners) instead of
+// being a flat, borderless list sitting directly in the shared grid —
+// owner feedback: categories were blurring into each other since only
+// the uppercase label separated them. The label also gets a small
+// accent-colored rule beside it so it reads as a card header, not just
+// a caption.
+function FeatureCategoryBlock({ label, items, isMobileNav }) {
   return (
-    <div>
+    <div style={{
+      border: '1px solid var(--border)',
+      borderRadius: '14px',
+      background: 'var(--surface)',
+      padding: isMobileNav ? '0.85rem 0.9rem' : '1.1rem 1.25rem',
+    }}>
       <div style={{
-        fontSize: '0.72rem', fontWeight: 800, color: 'var(--muted)',
-        textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.4rem',
+        display: 'flex', alignItems: 'center', gap: '0.5rem',
+        marginBottom: isMobileNav ? '0.55rem' : '0.75rem',
       }}>
-        {label}
+        <span style={{
+          width: '3px', height: isMobileNav ? '0.85rem' : '1rem',
+          borderRadius: '999px', background: 'var(--accent)', flexShrink: 0,
+        }} />
+        <span style={{
+          fontSize: isMobileNav ? '0.74rem' : '0.82rem', fontWeight: 800, color: 'var(--muted)',
+          textTransform: 'uppercase', letterSpacing: '0.04em',
+        }}>
+          {label}
+        </span>
       </div>
-      <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+      <ul style={{
+        listStyle: 'none', margin: 0, padding: 0,
+        display: isMobileNav ? 'grid' : 'block',
+        gridTemplateColumns: isMobileNav ? 'repeat(2, minmax(0, 1fr))' : undefined,
+        gridAutoRows: isMobileNav ? '1fr' : undefined,
+        gap: isMobileNav ? '0.15rem 0.6rem' : 0,
+        alignItems: isMobileNav ? 'stretch' : undefined,
+      }}>
         {items.map((name) => (
-          <FeatureItem
-            key={name}
-            name={name}
-            highlight={Boolean(HIGHLIGHTED_FEATURES[name])}
-            highlightLabel={HIGHLIGHTED_FEATURES[name]}
-          />
+          <FeatureItem key={name} name={name} isMobileNav={isMobileNav} />
         ))}
       </ul>
     </div>
@@ -477,20 +748,33 @@ function CRFeatureBlock() {
       </p>
       <ul style={{
         listStyle: 'none', margin: 0, padding: 0,
-        display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '0.3rem 1rem',
+        display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '0.4rem 1rem',
       }}>
-        {CR_FEATURES.map((name) => (
-          <li key={name} style={{ display: 'flex', gap: '0.35rem', fontSize: '0.8rem', color: 'var(--text)' }}>
-            <CheckCircle2 size={13} style={{ color: 'var(--accent)', flexShrink: 0, marginTop: '0.15rem' }} />
-            <span>{name}</span>
-          </li>
-        ))}
+        {CR_FEATURES.map((name) => {
+          const tag = HIGHLIGHTED_FEATURES[name];
+          const tone = tag ? (TAG_TONES[tag.tone] || TAG_TONES.hot) : null;
+          const TagIcon = tone?.Icon || CheckCircle2;
+          return (
+            <li key={name} style={{
+              display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8rem',
+              fontWeight: tag ? 800 : 700,
+              color: tag ? tone.color : 'var(--text)',
+              background: tag ? `linear-gradient(135deg, ${tone.bg}, transparent 70%)` : 'transparent',
+              padding: tag ? '0.2rem 0.4rem' : 0,
+              borderRadius: tag ? '6px' : 0,
+              boxShadow: tag ? 'inset 0 1px 0 rgba(255,255,255,0.35)' : undefined,
+            }}>
+              <TagIcon size={13} style={{ color: tag ? tone.color : 'var(--accent)', flexShrink: 0 }} />
+              <span>{name}</span>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
 }
 
-function FeatureBreakdown() {
+function FeatureBreakdown({ isMobileNav }) {
   const [activeTab, setActiveTab] = useState('student');
   const tab = FEATURE_TABS.find((t) => t.id === activeTab);
   const categories = Object.entries(tab.features);
@@ -510,7 +794,17 @@ function FeatureBreakdown() {
         </p>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+      {/* Tabs — sticky on mobile so the Student/Faculty/Provider context
+          stays visible once the visitor scrolls past it into the long
+          feature list below (owner feedback: it scrolled out of view
+          and the two-column list lost its role context). */}
+      <div style={{
+        display: 'flex', justifyContent: 'center', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap',
+        position: isMobileNav ? 'sticky' : 'static', top: isMobileNav ? '0' : undefined,
+        zIndex: isMobileNav ? 5 : undefined,
+        padding: isMobileNav ? '0.5rem 0' : 0,
+        background: isMobileNav ? 'var(--bg)' : undefined,
+      }}>
         {FEATURE_TABS.map((t) => {
           const Icon = t.icon;
           const active = t.id === activeTab;
@@ -534,13 +828,26 @@ function FeatureBreakdown() {
         })}
       </div>
 
+      {/* Card removed as a single bordered wrapper — each category is now
+          its own sub-card (see FeatureCategoryBlock), so this outer
+          container is just a responsive grid, no border/background of
+          its own. Desktop: auto-fit columns sized off a minimum card
+          width, so the grid actually uses the available page width
+          (student tab's 7 categories now spread 3–4 wide on a normal
+          desktop viewport instead of being capped at a narrow 2-column,
+          860px-wide strip with dead space on both sides). Mobile keeps
+          the previous 2-column-per-category-block behavior untouched. */}
       <div style={{
-        display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-        gap: '1.25rem 1rem', padding: '1.5rem', borderRadius: '18px',
-        border: '1px solid var(--border)', background: 'var(--surfaceGlass, var(--surface))',
+        display: 'grid',
+        gridTemplateColumns: isMobileNav
+          ? 'minmax(0, 1fr)'
+          : 'repeat(auto-fit, minmax(300px, 1fr))',
+        gap: isMobileNav ? '0.85rem' : '1.25rem',
+        maxWidth: isMobileNav ? undefined : '1080px',
+        margin: isMobileNav ? undefined : '0 auto',
       }}>
         {categories.map(([key, items]) => (
-          <FeatureCategoryBlock key={key} label={tab.labels[key] || key} items={items} />
+          <FeatureCategoryBlock key={key} label={tab.labels[key] || key} items={items} isMobileNav={isMobileNav} />
         ))}
       </div>
 
@@ -881,14 +1188,17 @@ export default function LandingPage() {
   // write-trigger touched inside a demo view) opens SignInPrompt FIRST —
   // a short "why sign in" step — rather than AuthModal's full form
   // appearing with no lead-in. Confirming inside SignInPrompt swaps to
-  // AuthModal; "পরে করবো" just closes it.
+  // AuthModal for Sign In intent, or SignUpWizard for Sign Up intent
+  // (see the render logic below); "পরে করবো" just closes it.
   const [showSignInPrompt, setShowSignInPrompt] = useState(false);
   // Phase 1 (landing redesign): navbar now offers separate Sign In / Sign Up
   // entry points so a new visitor doesn't have to guess which one applies to
-  // them. This is UI-only — AuthModal itself has no Login/Register branch
-  // (Google Sign-In only, mode prop is a no-op), so both intents open the
-  // exact same modal; this just changes the SignInPrompt copy/button label
-  // shown first, to set the right expectation before Google's redirect.
+  // them. Sign In still opens the single Google-only AuthModal (no Login/
+  // Register branch there). Sign Up is different as of Phase 4/5/6: it opens
+  // SignUpWizard instead (role -> profile details -> confirm -> Google last,
+  // see the render logic below and SignUpWizard.jsx) — NOT the same AuthModal
+  // as Sign In. authIntent below drives both which modal renders AND the
+  // SignInPrompt copy/button label shown first.
   const [authIntent, setAuthIntent] = useState('signin'); // 'signin' | 'signup'
   const openAuth = (intent) => { setAuthIntent(intent); setShowSignInPrompt(true); };
   const [mockupMode, setMockupMode] = useState('desktop'); // desktop visitor default, per plan §3.2
@@ -1023,7 +1333,7 @@ export default function LandingPage() {
         {/* Phase 9.3: same feature breakdown as the desktop branch, just
             padded for the full-screen mobile view this branch is in. */}
         <div style={{ padding: '0 0.8rem' }}>
-          <FeatureBreakdown />
+          <FeatureBreakdown isMobileNav />
         </div>
         <Footer />
         {showSignInPrompt && (
@@ -1056,11 +1366,12 @@ export default function LandingPage() {
       {/* Navbar — logo + Sign In/Sign Up, sticky, non-forcing.
           Phase 1 (landing redesign, §11.1): split the single "Sign In"
           button into two separate entry points so a new visitor doesn't
-          have to guess which one applies to them. Both open the exact
-          same AuthModal (Google-only, no Login/Register branch) — see
-          authIntent state above — this only changes the SignInPrompt
-          copy shown first. Sign Up is visually primary (filled) since
-          most navbar visitors are new; Sign In is secondary (outlined). */}
+          have to guess which one applies to them. Sign In opens the plain
+          Google AuthModal; Sign Up opens SignUpWizard instead (as of
+          Phase 4/5/6) — role select -> profile details -> confirm ->
+          Google last — see authIntent state above and the render logic
+          further down. Sign Up is visually primary (filled) since most
+          navbar visitors are new; Sign In is secondary (outlined). */}
       <div style={{
         position: 'sticky', top: 0, zIndex: 5, display: 'flex',
         alignItems: 'center', justifyContent: 'space-between',
@@ -1139,7 +1450,7 @@ export default function LandingPage() {
         <WhyKuetx isMobileNav={isMobileNav} />
 
         {/* Phase 9.3: full verbatim feature breakdown, role-tabbed. */}
-        <FeatureBreakdown />
+        <FeatureBreakdown isMobileNav={isMobileNav} />
 
         {/* Always-visible, auto-rotating mockup preview — replaces the old
             click-to-open role cards entirely (owner decision, this

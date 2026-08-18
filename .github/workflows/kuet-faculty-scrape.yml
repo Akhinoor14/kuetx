@@ -20,18 +20,23 @@
 
 name: KUET Faculty Directory Scrape
 
-# NOTE (biweekly schedule): GitHub Actions cron-এ সরাসরি "প্রতি ২ সপ্তাহে
-# একবার" বলার কোনো syntax নেই (cron শুধু day-of-month/day-of-week বোঝে,
-# "every N weeks" বোঝে না)। তাই workflow প্রতি বৃহস্পতিবার রাতেই ট্রিগার
-# হয়, কিন্তু "Check if this is a scrape week" step-এ মাসের সপ্তাহ-সংখ্যা
-# হিসাব করে জোড়/বিজোড় বৃহস্পতিবার বাদ দেওয়া হয় — ফলে কার্যত মাসে ২ বার
-# (প্রতি ২ সপ্তাহ পরপর) স্ক্র্যাপ চলে। Firestore quota বাঁচাতে এই gate;
-# scraper.py-এর নিজস্ব diff-based write logic (শুধু বদলানো ডেটা লেখা)-এর
-# পাশাপাশি এটা দ্বিতীয় স্তরের সুরক্ষা।
+# NOTE (twice-a-month schedule): GitHub Actions cron-এ সরাসরি "মাসে ২ বার,
+# ১ম আর ৩য় শুক্রবার" বলার কোনো syntax নেই (cron শুধু day-of-month/
+# day-of-week বোঝে, "nth weekday of month" বোঝে না)। তাই workflow প্রতি
+# বৃহস্পতিবার রাতেই (UTC) ট্রিগার হয় — যেটা Bangladesh সময়ে (UTC+6)
+# শুক্রবার ভোর ৩টায় পড়ে — কিন্তু "Check if this is a scrape week"
+# step-এ আসল BD-local তারিখ হিসাব করে সেই তারিখটা মাসের ১ম না ৩য়
+# শুক্রবার কিনা যাচাই করা হয়, বাকি শুক্রবারগুলো (২য়/৪র্থ/৫ম) বাদ দেওয়া
+# হয় — ফলে কার্যত মাসে ঠিক ২ বার (১ম ও ৩য় শুক্রবার, BD রাত ৩টা) স্ক্র্যাপ
+# চলে। Firestore quota বাঁচাতে এই gate; scraper.py-এর নিজস্ব diff-based
+# write logic (শুধু বদলানো ডেটা লেখা)-এর পাশাপাশি এটা দ্বিতীয় স্তরের
+# সুরক্ষা।
 on:
   schedule:
-    # প্রতি বৃহস্পতিবার রাত ৩টা (Bangladesh time, UTC+6) => UTC 21:00 বুধবার
-    - cron: "0 21 * * 3"
+    # প্রতি বৃহস্পতিবার রাত ৯টা UTC => বাংলাদেশ সময় (UTC+6) শুক্রবার
+    # ভোর ৩টা — gate step এই ট্রিগারগুলোর মধ্যে শুধু ১ম/৩য়
+    # শুক্রবারগুলোতেই আসল scrape চালায়, বাকিগুলোতে skip করে।
+    - cron: "0 21 * * 4"
   workflow_dispatch: {} # Actions tab থেকে ম্যানুয়ালি "Run workflow" চাপার অপশন — এটা সবসময় চলে, gate এড়িয়ে
 
 jobs:
@@ -41,26 +46,30 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Check if this is a scrape week (biweekly gate)
+      - name: Check if this is a scrape week (1st/3rd Friday gate)
         id: gate
         run: |
           # workflow_dispatch (ম্যানুয়াল রান) হলে gate সবসময় pass —
           # কেউ ইচ্ছে করে চালালে তাকে থামানো উচিত না।
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "run=true" >> "$GITHUB_OUTPUT"
-            echo "Manual run — skipping biweekly check."
+            echo "Manual run — skipping 1st/3rd-Friday check."
             exit 0
           fi
-          # মাসের ১ম দিন থেকে আজকের দিন-সংখ্যা গুনে, প্রতি ১৪ দিনে
-          # একবার (day 1-14 => run, day 15-28 => skip, ইত্যাদি) হিসাব।
-          day_of_month=$(date +%-d)
-          week_block=$(( (day_of_month - 1) / 14 % 2 ))
-          if [ "$week_block" = "0" ]; then
+          # Runner UTC সময়ে চলে, কিন্তু আমাদের দরকার Bangladesh-local
+          # (UTC+6) তারিখ — কারণ ট্রিগারটা UTC বৃহস্পতিবার রাতে হলেও
+          # সেটা BD সময়ে ইতিমধ্যে শুক্রবার ভোর হয়ে গেছে। ৬ ঘন্টা যোগ
+          # করে BD-local তারিখ বের করা হচ্ছে।
+          bd_day=$(date -u -d '+6 hours' +%-d)
+          # মাসের কোন সংখ্যক শুক্রবার এটা (1st, 2nd, 3rd, ...)? দিন ১-৭
+          # => 1st, ৮-১৪ => 2nd, ১৫-২১ => 3rd, ২২-২৮ => 4th, ২৯+ => 5th।
+          nth_friday=$(( (bd_day - 1) / 7 + 1 ))
+          if [ "$nth_friday" = "1" ] || [ "$nth_friday" = "3" ]; then
             echo "run=true" >> "$GITHUB_OUTPUT"
-            echo "Day $day_of_month — scrape week, running."
+            echo "BD date day $bd_day — the ${nth_friday}th Friday of the month, scraping."
           else
             echo "run=false" >> "$GITHUB_OUTPUT"
-            echo "Day $day_of_month — off week, skipping to save Firestore quota."
+            echo "BD date day $bd_day — the ${nth_friday}th Friday of the month, skipping to save Firestore quota."
           fi
 
       - name: Set up Python

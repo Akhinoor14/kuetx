@@ -18,6 +18,12 @@ import { useCanEditGroup } from '../hooks/useCanEditGroup';
 // moved to components/shared so LandingPage's student demo (Phase C) can
 // reuse the exact same component with demo-data props.
 import AttendanceHero from '../components/shared/AttendanceHero';
+import AttendanceMarkModal from '../components/shared/AttendanceMarkModal';
+import {
+  slotKey, getTeachersForCourse, recordSlotTeacherSighting, getRotationOverride,
+  setRotationOverride, resolveTeachersForDate, getDisplayCourseName,
+  getScheduleCoursesForDate, markAttendance, moveAttendanceStatus,
+} from '../lib/attendanceCore';
 
 // ── Utils ──────────────────────────────────────────────────────────────────
 // BUGFIX: was `new Date()` (device timezone) — "today" for the Daily Log
@@ -75,29 +81,6 @@ function classesNeededForNextSlab(attended, held, pct) {
 function isAutoFull(courseType) {
   return courseType && (courseType.toLowerCase().includes('session') || courseType.toLowerCase().includes('lab'));
 }
-function getTeachersForCourse(settings, schedule, courseId, teacherRegistry) {
-  const norm = v => String(v || '').trim().replace(/\s{2,}/g, ' ');
-  const rawCourseMap = Array.isArray(settings?.courseTeacherMap?.[courseId])
-    ? settings.courseTeacherMap[courseId]
-    : [];
-  // In group mode, courseTeacherMap entries are teacherIds (see
-  // teacherRegistry.js) — resolve to display names before this fallback
-  // is used. teacherRegistry is undefined/{} in local mode, where
-  // resolveTeacherNames falls back to the raw string, so local mode's
-  // name-based courseTeacherMap still passes straight through.
-  const resolvedCourseMap = teacherRegistry
-    ? resolveTeacherNames(teacherRegistry, rawCourseMap)
-    : rawCourseMap;
-  const mapped = resolvedCourseMap.map(norm).filter(Boolean);
-  if (mapped.length > 0) return [...new Set(mapped)];
-  return [...new Set(
-    (schedule || [])
-      .filter(s => s.courseId === courseId)
-      .flatMap(s => Array.isArray(s.teacherNames) && s.teacherNames.length ? s.teacherNames : [s.teacherName])
-      .map(norm)
-      .filter(Boolean)
-  )];
-}
 function getTeachersForCourseOnDate(schedule, courseId, date) {
   const dayName = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' });
   return [...new Set(
@@ -106,107 +89,11 @@ function getTeachersForCourseOnDate(schedule, courseId, date) {
       .map(s => s.teacherName).filter(Boolean)
   )];
 }
-// BUGFIX (rotating/alternate teacher slots): a routine entry only stores
-// ONE teacherName per (course, weekday, slot) — a timeless template, no
-// actual calendar date. For most courses that's fine (2 fixed teachers,
-// each on their own fixed weekday). But for 3-credit courses where one of
-// the 3 weekly slots rotates between teachers with no fixed pattern (any
-// teacher could show up on any given week), getTeachersForCourseOnDate()
-// used to just resolve the weekday name and hand back whatever teacher is
-// CURRENTLY set in the routine for that slot — regardless of which date
-// attendance is being marked for. Marking attendance for a past date would
-// silently file it under today's routine teacher, not the one who actually
-// taught that day; and editing the routine's teacher later would retroactively
-// "reassign" all old logs to the new name.
-//
-// Fix: every routine entry gets a stable per-slot identity key
-// (course+day+slot, NOT the Firestore doc id, so it survives entry
-// recreation/sync). We track, locally, the full set of distinct teacher
-// names that have EVER been marked for that slot key (`attSlotTeacherPool`).
-// If more than one teacher has ever appeared for a slot, we treat it as a
-// rotating slot: instead of guessing, the Daily Log asks the user which
-// teacher taught THAT SPECIFIC DATE, and stores the answer keyed by
-// (slot key + date) in `attRotationLog` — independent of whatever the
-// routine's teacherName is set to today.
-const slotKey = (s) => `${s.courseId}::${s.day}::${s.slot}`;
-
-// Merge in any teacher name observed for a slot, so the pool grows as
-// routine edits happen over the term (append-only; never removes names,
-// since a rotated-away teacher may still own historical logs).
-// Ignores ALTERNATE_TEACHER — that's a rotating-slot marker, not a real
-// teacher name; resolveTeachersForDate expands it into the course's real
-// two names on its own (see there), so recording it here would just leak
-// the raw sentinel into the pool as a fake "teacher".
-function recordSlotTeacherSighting(courseId, day, slot, teacherName) {
-  const name = String(teacherName || '').trim();
-  if (!name || name === ALTERNATE_TEACHER) return;
-  const key = `${courseId}::${day}::${slot}`;
-  const pool = store.get('attSlotTeacherPool') || {};
-  const existing = Array.isArray(pool[key]) ? pool[key] : [];
-  if (!existing.includes(name)) {
-    store.set('attSlotTeacherPool', { ...pool, [key]: [...existing, name] });
-  }
-}
-
-function getRotationOverride(courseId, day, slot, date) {
-  const log = store.get('attRotationLog') || {};
-  return log[date]?.[`${courseId}::${day}::${slot}`] || '';
-}
-
-function setRotationOverride(courseId, day, slot, date, teacherName) {
-  const log = store.get('attRotationLog') || {};
-  const dayLog = { ...(log[date] || {}), [`${courseId}::${day}::${slot}`]: teacherName };
-  store.set('attRotationLog', { ...log, [date]: dayLog });
-}
-
-// Resolves teacher(s) for a specific course on a specific date, aware of
-// rotation. Returns { teachers, isRotating, slotEntries } where teachers is
-// the list to render/mark against for that date (falls back to the plain
-// routine teacher when there's no ambiguity), isRotating flags whether a
-// per-date choice is needed/was made, and slotEntries are the raw routine
-// rows (one per weekly slot) this course has on that weekday.
-//
-// ALTERNATE_TEACHER support: a routine slot explicitly marked "Alternative"
-// in Schedule (s.teacherName === ALTERNATE_TEACHER) is rotating BY
-// DEFINITION — the CR already told us both course teachers can show up, so
-// there's no need to wait for a manual Switch to build up attSlotTeacherPool
-// (the old auto-learn path, still used for organically-discovered rotation).
-// settings/teacherRegistry are passed through to getTeachersForCourse so
-// the pool can be seeded with the course's real two names immediately.
-function resolveTeachersForDate(schedule, courseId, date, settings, teacherRegistry) {
-  const dayName = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' });
-  const slotEntries = (schedule || []).filter(s => s.courseId === courseId && s.day === dayName);
-  const pool = store.get('attSlotTeacherPool') || {};
-  const results = slotEntries.map(s => {
-    const key = slotKey(s);
-    const seenTeachers = Array.isArray(pool[key]) ? pool[key] : [];
-    const isAlternate = s.teacherName === ALTERNATE_TEACHER;
-    const currentTeacher = isAlternate ? '' : String(s.teacherName || '').trim();
-    const alternatePool = isAlternate ? getTeachersForCourse(settings, schedule, courseId, teacherRegistry) : [];
-    const knownPool = [...new Set([...seenTeachers, currentTeacher, ...alternatePool].filter(Boolean))];
-    const isRotating = isAlternate || knownPool.length > 1;
-    // Manual per-date override (rotating-slot pick OR a Switch-teacher
-    // choice from the Daily Log modal) — read regardless of isRotating so
-    // Switch works uniformly for every course, not just rotating slots.
-    const override = getRotationOverride(courseId, s.day, s.slot, date);
-    return {
-      slot: s.slot, day: s.day, key,
-      isRotating,
-      pool: knownPool,
-      resolvedTeacher: override || currentTeacher,
-      needsPick: isRotating && !override,
-    };
-  });
-  return results;
-}
-
-function getDisplayCourseName(course) {
-  if (!course) return '';
-  return (course.name || '')
-    .replace(/^\s*[A-Z]{2,6}\s*\d{3,4}\s*[-—:]\s*/i, '')
-    .replace(/\b[A-Z]{2,6}\s*\d{3,4}\b/g, '')
-    .replace(/\s{2,}/g, ' ').trim() || course.name || '';
-}
+// NOTE: slotKey / recordSlotTeacherSighting / getRotationOverride /
+// setRotationOverride / resolveTeachersForDate / getDisplayCourseName
+// moved to lib/attendanceCore.js (imported above) so Dashboard's Today's
+// Actions can share the exact same rotation-resolution logic. See that
+// file for the original BUGFIX comments — unchanged, just relocated.
 function getEffective(courseId, teacherName, logs) {
   const key = `${courseId}_${teacherName || ''}`;
   let held = 0, attended = 0;
@@ -256,39 +143,8 @@ function attBorder(pct, dark) {
   if (pct < SCHOLARSHIP_ATTENDANCE_PCT) return dark ? 'rgba(217,119,6,0.30)' : 'rgba(217,119,6,0.18)';
   return dark ? 'rgba(22,163,74,0.30)' : 'rgba(22,163,74,0.18)';
 }
-function getScheduleCoursesForDate(schedule, date, groupOverrides = null) {
-  const dayName = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' });
-  const sessionalCadence = (store.get('scheduleSettings') || {}).sessionalCadence || {};
-  const byCourse = new Map();
-  (schedule || [])
-    .filter(s => s.day === dayName)
-    // CR-triggered on/off toggle (Class Routine page) — a slot the CR
-    // marked off for THIS specific date shouldn't show up as something to
-    // mark attendance for. This is intentionally different from a
-    // holiday: it's "not scheduled this particular occurrence", not "no
-    // class today at all" — see store.js's isClassOff().
-    //
-    // BUGFIX (group-mode classOverrides were never actually read here):
-    // groupOverrides (passed in from Attendance's own
-    // subscribePlannerSettings-backed state) is threaded through so a
-    // CR's on/off toggle actually hides the class here — see isClassOff's
-    // updated doc comment in store.js for the full explanation.
-    .filter(s => !isClassOff(date, classOverrideSlotKey(s.courseId, s.day, s.slot), groupOverrides))
-    // Sessional/Lab alternating-week cadence (see sessionalCadence.js) —
-    // a slot with no sessionalCadence entry runs every week, unaffected.
-    // A slot whose effective occurrence for this date is 'off' (an
-    // alternating "off" week, or an ad-hoc cancellation) shouldn't appear
-    // as something to mark attendance for either — not a holiday, just
-    // "not scheduled this particular week".
-    .filter(s => getEffectiveOccurrence(sessionalCadence[classOverrideSlotKey(s.courseId, s.day, s.slot)], date) !== 'off')
-    .forEach(s => {
-      if (!byCourse.has(s.courseId)) byCourse.set(s.courseId, []);
-      byCourse.get(s.courseId).push(s);
-    });
-  return [...byCourse.entries()].map(([courseId, items]) => ({
-    courseId, items: items.slice().sort((a, b) => a.slot.localeCompare(b.slot)),
-  }));
-}
+// NOTE: getScheduleCoursesForDate moved to lib/attendanceCore.js too —
+// same reasoning as above.
 
 // ── Priority hint — ONE per card ───────────────────────────────────────────
 function getHint(pct, canMiss, needNext) {
@@ -531,32 +387,17 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
     if (idx < pastDates.length - 1) setDate(pastDates[idx + 1]);
   };
 
+  // mark/moveAttendanceStatus now live in lib/attendanceCore.js (shared
+  // with Dashboard's Today's Actions) — these wrappers just also sync
+  // DailyLog's own local `logs` state, which the core functions don't
+  // know about.
   const mark = useCallback((courseId, teacher, val) => {
-    const key = `${courseId}_${teacher || ''}`;
-    const cur = dayLog[key];
-    const next = cur === val ? undefined : val;
-    const updated = { ...logs, [date]: { ...dayLog, [key]: next } };
-    if (next === undefined) delete updated[date][key];
-    if (!Object.keys(updated[date] || {}).length) delete updated[date];
-    setLogs(updated);
-    store.set('attLogs', updated);
-  }, [dayLog, logs, date, setLogs]);
+    setLogs(markAttendance(logs, date, courseId, teacher, val));
+  }, [logs, date, setLogs]);
 
-  // Moves a marked status (if any) from the old-teacher key to the
-  // new-teacher key for this date, so switching teachers never orphans an
-  // already-marked Present/Absent. No-op if nothing was marked yet.
-  const moveAttendanceStatus = useCallback((courseId, oldTeacher, newTeacher) => {
-    if (oldTeacher === newTeacher) return;
-    const oldKey = `${courseId}_${oldTeacher || ''}`;
-    const newKey = `${courseId}_${newTeacher || ''}`;
-    const cur = dayLog[oldKey];
-    if (cur === undefined) return;
-    const nextDayLog = { ...dayLog, [newKey]: cur };
-    delete nextDayLog[oldKey];
-    const updated = { ...logs, [date]: nextDayLog };
-    setLogs(updated);
-    store.set('attLogs', updated);
-  }, [dayLog, logs, date, setLogs]);
+  const moveStatus = useCallback((courseId, oldTeacher, newTeacher) => {
+    setLogs(moveAttendanceStatus(logs, date, courseId, oldTeacher, newTeacher));
+  }, [logs, date, setLogs]);
 
   const holidayLabel = (d) => {
     const labels = settings?.holidayLabels || {};
@@ -590,10 +431,10 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
   // old teacher already had a status marked for this date, it's moved to
   // the new teacher's key so nothing is orphaned.
   const switchTeacher = useCallback((courseId, day, slot, oldTeacher, newTeacherName) => {
-    moveAttendanceStatus(courseId, oldTeacher, newTeacherName);
+    moveStatus(courseId, oldTeacher, newTeacherName);
     setRotationOverride(courseId, day, slot, date, newTeacherName);
     setRotationTick(t => t + 1);
-  }, [date, moveAttendanceStatus]);
+  }, [date, moveStatus]);
 
   // Which teacher-row card has its modal open: { courseId, teacher }.
   // Always re-derived from live cardData below (never a stale snapshot),
@@ -821,130 +662,22 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
         if (!row) { setOpenCard(null); return null; }
         const slotEntry = cd.resolved.find(r => r.resolvedTeacher === row.teacher);
         const defaultTeachers = getTeachersForCourse(settings, schedule, cd.course.id, teacherRegistry);
-        const switchOptions = defaultTeachers.filter(t => t !== row.teacher);
+        const switchOptions = slotEntry ? defaultTeachers.filter(t => t !== row.teacher) : [];
         return (
-          <Modal onClose={() => setOpenCard(null)} contentStyle={{ width: 'min(calc(100vw - 24px), 360px)', maxWidth: '100%', padding: 16, background: 'var(--bg)' }}>
-            <div className="card" style={{ background: 'transparent', width: '100%' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, marginBottom: 4 }}>
-                <div style={{ fontWeight: 800, fontSize: 14, lineHeight: 1.3 }}>{getDisplayCourseName(cd.course)}</div>
-                <button onClick={() => setOpenCard(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, opacity: 0.6, display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-                  <X size={18} />
-                </button>
-              </div>
-              <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 10 }}>{fmtDate(date)}</div>
-
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 12, padding: '10px 12px', background: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)', borderRadius: 10 }}>
-                <div style={{ minWidth: 0, flex: 1 }}>
-                  <div style={{ fontSize: 9, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'flex', alignItems: 'center', gap: 4, marginBottom: 3 }}>
-                    <Users size={10} /> Teacher
-                  </div>
-                  <div style={{ fontSize: 18, fontWeight: 900, lineHeight: 1.25, color: 'var(--text)', overflowWrap: 'break-word' }}>
-                    {row.teacher || 'Unknown teacher'}
-                  </div>
-                </div>
-                {slotEntry && switchOptions.length === 1 && (
-                  <button
-                    onClick={() => {
-                      switchTeacher(cd.course.id, slotEntry.day, slotEntry.slot, row.teacher, switchOptions[0]);
-                      setOpenCard({ courseId: cd.course.id, teacher: switchOptions[0] });
-                    }}
-                    style={{
-                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, padding: '7px 10px', borderRadius: 8,
-                      border: '1.5px solid var(--accent)', background: 'transparent', color: 'var(--accent)',
-                      cursor: 'pointer', fontSize: 10.5, fontWeight: 800, flexShrink: 0, WebkitTapHighlightColor: 'transparent',
-                      maxWidth: 110,
-                    }}
-                  >
-                    <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><RefreshCw size={11} /> Switch to</span>
-                    <span style={{ fontWeight: 900, fontSize: 11.5, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 100 }}>{switchOptions[0]}</span>
-                  </button>
-                )}
-                {slotEntry && switchOptions.length > 1 && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setOpenCard(c => ({ ...c, switching: !c.switching }));
-                    }}
-                    style={{
-                      display: 'flex', alignItems: 'center', gap: 4, padding: '7px 10px', borderRadius: 8,
-                      border: '1.5px solid var(--accent)',
-                      background: openCard.switching ? 'var(--accent)' : 'transparent',
-                      color: openCard.switching ? 'white' : 'var(--accent)',
-                      cursor: 'pointer', fontSize: 11, fontWeight: 800, flexShrink: 0, WebkitTapHighlightColor: 'transparent',
-                    }}
-                  >
-                    <RefreshCw size={11} />
-                    Switch
-                    {openCard.switching ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-                  </button>
-                )}
-              </div>
-
-              {openCard.switching && slotEntry && switchOptions.length > 1 && (
-                <div style={{ marginBottom: 12, padding: '9px 10px', background: dark ? 'rgba(59,130,246,0.08)' : 'rgba(59,130,246,0.05)', border: '1px solid rgba(59,130,246,0.20)', borderRadius: 9 }}>
-                  <div style={{ fontSize: 10.5, color: 'var(--accent)', fontWeight: 700, marginBottom: 7 }}>
-                    Only for {fmtDate(date)} — pick who actually taught:
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                    {switchOptions.map(name => (
-                      <button
-                        key={name}
-                        onClick={() => {
-                          switchTeacher(cd.course.id, slotEntry.day, slotEntry.slot, row.teacher, name);
-                          setOpenCard({ courseId: cd.course.id, teacher: name });
-                        }}
-                        style={{
-                          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8,
-                          padding: '9px 12px', borderRadius: 8, fontSize: 13, fontWeight: 700,
-                          border: '1.5px solid var(--accent)', background: dark ? 'rgba(255,255,255,0.04)' : 'white',
-                          color: 'var(--text)', cursor: 'pointer', width: '100%', textAlign: 'left', WebkitTapHighlightColor: 'transparent',
-                        }}
-                      >
-                        {name}
-                        <RefreshCw size={13} color="var(--accent)" style={{ flexShrink: 0 }} />
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>
-                Mark attendance
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                {[
-                  { val: 'present', label: 'Present', icon: '✓', col: '#10b981' },
-                  { val: 'absent',  label: 'Absent',  icon: '✗', col: '#ef4444' },
-                ].map(opt => {
-                  const active = row.status === opt.val;
-                  return (
-                    <button
-                      key={opt.val}
-                      onClick={() => {
-                        mark(cd.course.id, row.teacher, opt.val);
-                        setOpenCard(null);
-                      }}
-                      style={{
-                        padding: '12px 6px', borderRadius: 9, cursor: 'pointer', fontWeight: 700, fontSize: 13,
-                        background: active ? opt.col : dark ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.80)',
-                        color: active ? 'white' : 'var(--muted)',
-                        border: `2px solid ${active ? opt.col : dark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.07)'}`,
-                        transition: 'all 0.14s', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3,
-                        WebkitTapHighlightColor: 'transparent',
-                      }}
-                    >
-                      <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>{opt.icon} {opt.label}</span>
-                      {active && (
-                        <span style={{ display: 'flex', alignItems: 'center', gap: 3, fontSize: 9.5, fontWeight: 700, opacity: 0.9 }}>
-                          <RotateCcw size={9} /> tap to undo
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </Modal>
+          <AttendanceMarkModal
+            course={cd.course}
+            teacher={row.teacher}
+            status={row.status}
+            dateLabel={fmtDate(date)}
+            switchOptions={switchOptions}
+            dark={dark}
+            onClose={() => setOpenCard(null)}
+            onMark={(val) => { mark(cd.course.id, row.teacher, val); setOpenCard(null); }}
+            onSwitch={(name) => {
+              switchTeacher(cd.course.id, slotEntry.day, slotEntry.slot, row.teacher, name);
+              setOpenCard({ courseId: cd.course.id, teacher: name });
+            }}
+          />
         );
       })()}
     </div>

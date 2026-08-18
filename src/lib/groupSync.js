@@ -475,11 +475,36 @@ export async function waitForOwnMembership(groupId, retries = 5, delayMs = 400) 
  * has one active groupId at a time (their own batch+dept), so this reads
  * like a single number in the UI even though it's stored per-group.
  */
+/**
+ * PHASE 2 (CR_TEACHER_LINKING_NOTES.md item 5) --
+ * members/{memberUid}/private/mobile. `mobile` used to live directly on
+ * the parent members/{memberUid} doc; it's now split into its own
+ * sub-document so Firestore rules can gate its read separately from the
+ * rest of the roster (see firestore.rules for why -- the parent doc stays
+ * readable by any faculty signup for name/roll/dept/batch, but this
+ * number now requires verified faculty, CR/ACR, CL/Admin/Head of Ops/SCL,
+ * or the owning member themself). Every write site that used to bundle
+ * `mobile` into a members/{uid} create/update now calls this as a
+ * second, separate write instead -- same authority in practice (the
+ * caller already had to be authorized for the parent write to get this
+ * far), just no longer sharing one Firestore write with role/verified.
+ */
+async function writeMemberMobile(groupId, memberUid, mobile) {
+  const trimmed = String(mobile || '').trim();
+  await setDoc(doc(db, 'groups', groupId, 'members', memberUid, 'private', 'mobile'), { value: trimmed });
+}
+
+/** Reads a single member's mobile sub-doc. Returns '' if missing/unset. */
+export async function getMemberMobileOnce(groupId, memberUid) {
+  if (!groupId || !memberUid) return '';
+  const snap = await getDoc(doc(db, 'groups', groupId, 'members', memberUid, 'private', 'mobile'));
+  return snap.exists() ? (snap.data().value || '') : '';
+}
+
 export async function updateOwnMobile(groupId, mobile) {
   const uid = auth.currentUser?.uid;
   if (!uid || !groupId) return;
-  const trimmed = String(mobile || '').trim();
-  await updateDoc(doc(db, 'groups', groupId, 'members', uid), { mobile: trimmed });
+  await writeMemberMobile(groupId, uid, mobile);
 }
 
 /** Admin-only: list every group summary doc (batch/dept/lastActivityAt). */
@@ -944,14 +969,17 @@ export async function clApproveCRRequest(groupId, targetUid) {
     isAnonymous: false,
     joinedAt: serverTimestamp(),
     legacyCRClaim: false,
-    // Bootstrap path only (see requestCR's comment on why `mobile` is
-    // stored on the request doc): if the requester was already a member,
-    // their mobile was already set via updateOwnMobile and this merge
-    // just re-writes the same value; harmless either way. Falls back to
-    // leaving the field untouched (via merge) if the request doc never
-    // had one, rather than ever overwriting a real number with ''.
-    ...(req.mobile ? { mobile: req.mobile } : {}),
   }, { merge: true });
+  // PHASE 2: mobile now lives in the private/mobile sub-doc (see
+  // writeMemberMobile above), written as a separate batch entry --
+  // bootstrap path only (see requestCR's comment on why `mobile` is
+  // stored on the request doc). If the requester was already a member,
+  // their mobile was already set via updateOwnMobile and this re-writes
+  // the same value; harmless either way. Only written when the request
+  // doc actually had one, same as the old merge-omit behavior.
+  if (req.mobile) {
+    batch.set(doc(db, 'groups', groupId, 'members', targetUid, 'private', 'mobile'), { value: String(req.mobile).trim() });
+  }
   batch.update(doc(db, 'groups', groupId, 'crRequests', targetUid), { status: 'approved' });
   // Auto-reject every other pending request for this group — the slot
   // they were queued for has just been taken.
@@ -1005,7 +1033,9 @@ export async function clAppointCR(groupId, targetUid, mobile) {
     throw new Error(`The CR slot for this class is already full (max ${MAX_CR}).`);
   }
   const batch = writeBatch(db);
-  batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'cr', verified: true, mobile: trimmedMobile });
+  batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'cr', verified: true });
+  // PHASE 2: mobile now lives in the private/mobile sub-doc.
+  batch.set(doc(db, 'groups', groupId, 'members', targetUid, 'private', 'mobile'), { value: trimmedMobile });
   // Same cleanup as clApproveCRRequest: a slot just filled outside the
   // queue, so any still-pending "fresh CR" request for this group was
   // queued for a slot that no longer exists. Leave requests (type ===
@@ -1026,7 +1056,9 @@ export async function clRevokeCR(groupId, targetUid) {
   const batch = writeBatch(db);
   // legacyCRClaim cleared alongside role — see note in clApproveLeaveCR;
   // same "Claims CR" badge bug applies to a CL-forced revoke too.
-  batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'member', legacyCRClaim: false, mobile: '' });
+  batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'member', legacyCRClaim: false });
+  // PHASE 2: clear the private/mobile sub-doc instead of the old bundled field.
+  batch.set(doc(db, 'groups', groupId, 'members', targetUid, 'private', 'mobile'), { value: '' });
   const reqRef = doc(db, 'groups', groupId, 'crRequests', targetUid);
   // getDocFromServer, not getDoc: a stale/cached "doesn't exist" read here
   // would skip marking a genuinely-existing request 'revoked', leaving it
@@ -1089,8 +1121,12 @@ export async function handoffCR(groupId, currentUid, successorUid, currentProfil
   const batch = writeBatch(db);
   // legacyCRClaim cleared alongside role — see note in clApproveLeaveCR;
   // same "Claims CR" badge bug applies to a direct CR-to-CR handoff too.
-  batch.update(doc(db, 'groups', groupId, 'members', currentUid), { role: 'member', legacyCRClaim: false, mobile: '' });
-  batch.update(doc(db, 'groups', groupId, 'members', successorUid), { role: 'cr', mobile: trimmedMobile });
+  batch.update(doc(db, 'groups', groupId, 'members', currentUid), { role: 'member', legacyCRClaim: false });
+  batch.update(doc(db, 'groups', groupId, 'members', successorUid), { role: 'cr' });
+  // PHASE 2: mobile now lives in the private/mobile sub-doc -- clear the
+  // outgoing CR's, set the incoming successor's.
+  batch.set(doc(db, 'groups', groupId, 'members', currentUid, 'private', 'mobile'), { value: '' });
+  batch.set(doc(db, 'groups', groupId, 'members', successorUid, 'private', 'mobile'), { value: trimmedMobile });
   // If the departing CR also had a pending "leave CR" request queued
   // (asked to step down, then handed off directly before CL acted on it),
   // close it out here. Otherwise it lingers as pending forever, and if a
@@ -1143,7 +1179,9 @@ export async function assignACR(groupId, targetUid, mobile) {
   if (acrCount >= MAX_ACR) {
     throw new Error(`The ACR slot for this class is already full (max ${MAX_ACR}).`);
   }
-  await updateDoc(doc(db, 'groups', groupId, 'members', targetUid), { role: 'acr', mobile: trimmedMobile });
+  await updateDoc(doc(db, 'groups', groupId, 'members', targetUid), { role: 'acr' });
+  // PHASE 2: mobile now lives in the private/mobile sub-doc.
+  await setDoc(doc(db, 'groups', groupId, 'members', targetUid, 'private', 'mobile'), { value: trimmedMobile });
 }
 export async function revokeACR(groupId, targetUid) {
   await updateDoc(doc(db, 'groups', groupId, 'members', targetUid), { role: 'member' });
@@ -1186,7 +1224,9 @@ export async function clApproveLeaveCR(groupId, requestDocId, targetUid) {
   // ClassmatesList's "Claims CR" badge actually checks (role !== 'cr' &&
   // legacyCRClaim), so leaving it untouched here left the badge stuck on
   // ex-CRs forever even after their role correctly flipped to 'member'.
-  batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'member', legacyCRClaim: false, mobile: '' });
+  batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'member', legacyCRClaim: false });
+  // PHASE 2: mobile now lives in the private/mobile sub-doc.
+  batch.set(doc(db, 'groups', groupId, 'members', targetUid, 'private', 'mobile'), { value: '' });
   await batch.commit();
 }
 

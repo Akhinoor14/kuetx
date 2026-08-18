@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import LazyRechartsArea from '../components/LazyRechartsArea';
-import { TrendingUp, Award, AlertTriangle, BookOpen, CalendarCheck, Clock, Wallet, Star, UserCircle, GraduationCap, ClipboardList, Medal, CheckCircle2, Store } from 'lucide-react';
+import { TrendingUp, Award, AlertTriangle, BookOpen, CalendarCheck, Clock, Wallet, Star, UserCircle, GraduationCap, ClipboardList, Medal, CheckCircle2, Store, Sunrise } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAttendance, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, computeCourseGrade, deriveAcademicMetaFromCourses, syncProfileAcademicMeta, getProfile, getTermLabelFromKey, getCurrentTermKey, getTermProgress, getTermTimeline, getTermIndex, TERM_KEYS, getTimerActiveState, formatDurationMs, PRODUCTIVE_TIME_CATEGORIES, getBDNow } from '../store/store';
 import { getAllCourses, getDeptTerms } from '../store/curriculumStore';
@@ -13,7 +13,8 @@ import { subscribeClassSetup } from '../lib/groupSync';
 import { subscribeGroupTermStartDate } from '../lib/termStartDateSync';
 import { getGroupId } from '../lib/groupUtils';
 import { CATEGORY_ICONS } from './Services';
-import TodayCard from '../components/TodayCard';
+import TodayFullList from '../components/shared/TodayFullList';
+import TodaysActions from '../components/shared/TodaysActions';
 // Phase B (student slice) of DEMO_MODE_FULL_PLAN_PROMPT.md — StatCard
 // moved to components/shared so LandingPage's student demo (Phase C) can
 // reuse the exact same component with demo-data props. Verified pure
@@ -296,7 +297,25 @@ export default function Dashboard() {
 
       {/* Quick Access removed */}
 
-      <TodayCard />
+      {/* Today — 2-column: left = full read-only "Today" list, right =
+          "Today's Actions" (things the student can actually DO).
+          Same grid/card pattern as FacultyDashboard.jsx's Today's
+          Classes | Alerts & Notices row — auto-fit collapses to a
+          single stacked column on narrow/mobile viewports automatically,
+          no separate mobile-summary variant (handoff decision #1). */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 12, marginBottom: 14, alignItems: 'stretch' }}>
+        <div className="card" style={{ padding: '14px 16px', borderRadius: 14, margin: 0, height: '100%', minHeight: 260, display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Sunrise size={13} /> Today
+            </div>
+            <Link to="/today" style={{ fontSize: 11, color: 'var(--accent)', textDecoration: 'none', fontWeight: 700 }}>Full day →</Link>
+          </div>
+          <TodayFullList />
+        </div>
+
+        <TodaysActions />
+      </div>
 
       {/* Setup prompt */}
       {!profile.name && (

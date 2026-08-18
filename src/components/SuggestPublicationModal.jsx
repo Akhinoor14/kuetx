@@ -2,13 +2,20 @@
 //
 // "Suggest a publication" form for the public /publications browse page
 // (student side only — see canEdit=false in PublicationsBrowse.jsx).
-// Lets any signed-in user submit a publication on a teacher's behalf;
-// this NEVER writes to facultyPublications directly — it always goes
-// through pendingPublicationsSync.js's submitPublicationForReview,
-// landing in the Founder/Admin Approvals queue first. Contrast with
-// PublicationEditModal.jsx, which a teacher uses on their OWN profile to
-// add/edit unmoderated (that's the teacher asserting authorship of their
-// own record; this is a third party proposing an addition).
+// Lets any signed-in user submit a publication for someone ELSE (a
+// teacher, a senior, anyone) OR for themselves.
+//   - Someone else's publication: goes through pendingPublicationsSync.js's
+//     submitPublicationForReview, landing in the Founder/Admin Approvals
+//     queue first, same as always.
+//   - The submitter's OWN publication (row.isOwn toggle, or
+//     is_own_publication=yes in a CSV import): writes DIRECTLY to
+//     facultyPublications via addPublication() from
+//     facultyPublicationsSync.js — same unmoderated, instant-write path
+//     PublicationEditModal.jsx uses. teacherEmail is locked to
+//     auth.currentUser.email in this case (never free-typed), and
+//     firestore.rules already allows any signed-in account to write a
+//     facultyPublications doc as long as teacherEmail matches their own
+//     auth token email — no rules change needed for this.
 //
 // v2 changes (previously: single free-text teacherEmail field, no
 // verification, only title/authors/venue/year/link):
@@ -37,12 +44,18 @@
 //      this becomes a real bottleneck for someone submitting many at
 //      once.
 
-//   4. CSV import — a "download template" link gives a starting .csv
-//      with the right column headers; "Import CSV" parses it (Papaparse)
-//      client-side and pours every row into the exact same row state
-//      used by "+ Add another publication" above, so it goes through
-//      the identical per-row directory-verification + preview + submit
-//      path — no separate bulk-write code path to keep in sync. Column
+//   4. Bulk import — "Download template" gives a styled, branded .xlsx
+//      (built with xlsx-js-style; see downloadCsvTemplate) with real
+//      column widths and a colored header row — a plain .csv can't
+//      carry any of that styling, Excel just renders raw comma-text
+//      with cramped default columns, which is why this moved off CSV.
+//      "Import file" accepts that .xlsx back (parsed via SheetJS'
+//      xlsx-js-style build, sheet_to_json) OR a plain .csv (still
+//      parsed via Papaparse) — either way rows funnel through the same
+//      applyImportedRows() into the exact row state used by "+ Add
+//      another publication" above, so both import paths go through the
+//      identical per-row directory-verification + preview + submit
+//      flow — no separate bulk-write code path to keep in sync. Column
 //      names are matched case-insensitively; unrecognized columns are
 //      ignored, missing optional columns just leave that field blank.
 //      quartile (Q1-Q4) was added to the schema alongside category for
@@ -51,13 +64,25 @@
 //      author records (each author having their own department is a
 //      bigger data-model change than this pass covers; flagged for a
 //      future revision if that granularity turns out to matter).
+//   5. is_own_publication column (self-submission, see the header note
+//      above) is wired into the same CSV_COLUMN_MAP / applyImportedRows
+//      path, for both .xlsx and .csv imports.
 
 import { useState, useRef } from 'react';
 import Papa from 'papaparse';
+// xlsx-js-style, not the plain xlsx package (which is still used
+// elsewhere, e.g. attendanceExport.js, for un-styled export) — the
+// community xlsx build silently ignores cell .s style objects on
+// write, which is exactly why the earlier CSV-based template had no
+// coloring at all. xlsx-js-style is a maintained fork that actually
+// applies fill/font/alignment when writing .xlsx.
+import * as XLSX from 'xlsx-js-style';
 import Modal from './Modal';
 import { submitPublicationForReview } from '../lib/pendingPublicationsSync';
+import { addPublication } from '../lib/facultyPublicationsSync';
 import { lookupFacultyDirectoryEntry } from '../lib/facultyDirectoryMatch';
 import { notify } from '../lib/notify';
+import { auth } from '../lib/firebase';
 
 const inputStyle = {
   width: '100%', padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border)',
@@ -90,10 +115,33 @@ const CSV_COLUMN_MAP = {
   pages: 'pages',
   link: 'link',
   doi: 'link',
+  isownpublication: 'isOwn',
+  isown: 'isOwn',
+  own: 'isOwn',
 };
 
-const CSV_TEMPLATE_HEADER = 'teacher_email,title,authors,venue,year,category,quartile,volume,issue,pages,link';
-const CSV_TEMPLATE_EXAMPLE = 'jamali@ese.kuet.ac.bd,A study on maximin LHDs,Jamali A; Rahman S,Journal of Engineering Science,2023,Journal,Q1,12,3,45-60,https://doi.org/example';
+// Values in the is_own_publication CSV column that count as "yes".
+const CSV_TRUTHY = new Set(['yes', 'y', 'true', '1']);
+
+// CSV_TEMPLATE_HEADER / CSV_TEMPLATE_EXAMPLES define the column order and
+// sample data. The downloadable TEMPLATE itself is a real .xlsx (built
+// below with SheetJS, already a project dependency) — not a plain .csv —
+// because plain CSV has no cell styling at all: no colored header, no
+// column widths, no branding. Excel just renders raw comma-text with
+// default 8-char-wide columns, which is exactly the "cramped, no
+// polish" problem being fixed here. Import still accepts .csv OR .xlsx
+// (see handleCsvFile below) so nothing about the import path changes —
+// only the template Excel actually gets to open changed format.
+const CSV_TEMPLATE_HEADER_COLS = [
+  'teacher_email', 'title', 'authors', 'venue', 'year', 'category',
+  'quartile', 'volume', 'issue', 'pages', 'link', 'is_own_publication',
+];
+const CSV_TEMPLATE_EXAMPLE_ROWS = [
+  ['jamali@ese.kuet.ac.bd', 'A study on maximin LHDs', 'Jamali A; Rahman S', 'Journal of Engineering Science', 2023, 'Journal', 'Q1', 12, 3, '45-60', 'https://doi.org/example', 'no'],
+  ['rahman@cse.kuet.ac.bd', 'Deep learning for traffic sign recognition', 'Rahman M; Hasan T', 'IEEE Access', 2024, 'Journal', 'Q2', 10, '', '1-15', 'https://doi.org/example2', 'no'],
+  ['yourown7@stud.kuet.ac.bd', 'Design of a low-cost solar tracker', 'Your Name', 'ICEEE 2024', 2024, 'Conference', '', '', '', '', '', 'yes'],
+  ['kabir@math.kuet.ac.bd', 'A note on maximin distance designs', 'Kabir S', 'Undergraduate Thesis', 2022, 'Thesis', '', '', '', '', '', 'no'],
+];
 
 function emptyRow() {
   return {
@@ -103,20 +151,78 @@ function emptyRow() {
     volume: '', issue: '', pages: '', category: 'Journal', quartile: '',
     // directory match state for this row: 'idle' | 'checking' | 'matched' | 'no-match'
     matchState: 'idle',
+    // true = this is the submitter's OWN publication -> auto-published
+    // directly via addPublication(), no moderation queue. false (default)
+    // = someone else's -> unchanged pending-review flow.
+    isOwn: false,
   };
 }
 
 function downloadCsvTemplate() {
-  const instructions = '# teacher_email = the teacher this publication belongs to (their KUET email) - NOT your own email. Delete this line before importing.';
-  const blob = new Blob([`${instructions}\n${CSV_TEMPLATE_HEADER}\n${CSV_TEMPLATE_EXAMPLE}\n`], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'kuetx_publications_template.csv';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  // Row 1: short instructions (kept to one line, subtle KUETx branding
+  // touch via the accent color — not a big banner, just a colored note
+  // row so it reads as "from KUETx" without being loud).
+  // Row 2: real header row, bold + colored fill so it's visually
+  // distinct from the data beneath it.
+  // Rows 3-6: the 4 example rows.
+  const instructionText =
+    'KUETx publications import — teacher_email = whose publication this is (their KUET email). ' +
+    'is_own_publication = yes only for YOUR OWN work (auto-published instantly); no/blank for anyone else\'s (goes to Founder review). Delete this row before importing.';
+
+  const aoa = [
+    [instructionText],
+    CSV_TEMPLATE_HEADER_COLS,
+    ...CSV_TEMPLATE_EXAMPLE_ROWS,
+  ];
+
+  const ws = XLSX.utils.aoa_to_sheet(aoa);
+
+  // Merge the instructions row across all columns so it reads as one
+  // banner instead of overflowing into column B onward.
+  ws['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: CSV_TEMPLATE_HEADER_COLS.length - 1 } }];
+
+  // Column widths sized to the actual content — this is the concrete
+  // fix for "columns too narrow, data overflows" from the screenshot.
+  ws['!cols'] = [
+    { wch: 26 }, // teacher_email
+    { wch: 42 }, // title
+    { wch: 26 }, // authors
+    { wch: 30 }, // venue
+    { wch: 7 },  // year
+    { wch: 12 }, // category
+    { wch: 9 },  // quartile
+    { wch: 8 },  // volume
+    { wch: 7 },  // issue
+    { wch: 9 },  // pages
+    { wch: 30 }, // link
+    { wch: 16 }, // is_own_publication
+  ];
+  ws['!rows'] = [{ hpt: 20 }];
+
+  // Cell styling — xlsx-js-style (not the plain xlsx package) honors
+  // these .s style objects (fill/font/alignment) when writing .xlsx.
+  const instructionsCellRef = XLSX.utils.encode_cell({ r: 0, c: 0 });
+  if (ws[instructionsCellRef]) {
+    ws[instructionsCellRef].s = {
+      font: { bold: true, color: { rgb: 'FFFFFF' }, sz: 11 },
+      fill: { fgColor: { rgb: '5B4FE9' } }, // KUETx accent purple
+      alignment: { vertical: 'center', wrapText: true },
+    };
+  }
+  CSV_TEMPLATE_HEADER_COLS.forEach((_, colIdx) => {
+    const ref = XLSX.utils.encode_cell({ r: 1, c: colIdx });
+    if (ws[ref]) {
+      ws[ref].s = {
+        font: { bold: true, color: { rgb: 'FFFFFF' } },
+        fill: { fgColor: { rgb: '2D2A6E' } }, // darker KUETx accent
+        alignment: { vertical: 'center' },
+      };
+    }
+  });
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Publications');
+  XLSX.writeFile(wb, 'kuetx_publications_template.xlsx');
 }
 
 export default function SuggestPublicationModal({ open, onClose }) {
@@ -160,6 +266,25 @@ export default function SuggestPublicationModal({ open, onClose }) {
     runDirectoryCheck(key, value);
   }
 
+  // Toggle "this is my own publication". When turning ON: lock the email
+  // to the signed-in account's own email (no way to type a different one
+  // — same reasoning as the handoff doc: Firebase auth email is already
+  // the source of truth, so don't let the field lie about it) and skip
+  // directory verification entirely, since we're not claiming to be
+  // anyone else. When turning OFF: clear back to free-text mode.
+  function toggleOwn(key, checked) {
+    if (checked) {
+      const myEmail = auth.currentUser?.email || '';
+      updateRow(key, {
+        isOwn: true,
+        teacherEmail: myEmail,
+        matchState: 'idle',
+      });
+    } else {
+      updateRow(key, { isOwn: false, teacherEmail: '', teacherName: '', teacherDeptCode: '', matchState: 'idle' });
+    }
+  }
+
   function addRow() {
     setRows((prev) => [...prev, emptyRow()]);
   }
@@ -168,11 +293,81 @@ export default function SuggestPublicationModal({ open, onClose }) {
     setRows((prev) => (prev.length > 1 ? prev.filter((r) => r._key !== key) : prev));
   }
 
+  // Shared by both the .csv (Papa.parse) and .xlsx (SheetJS) import
+  // paths below — takes an array of plain {columnName: value} row
+  // objects (however they were parsed) and turns them into row state,
+  // applying the same field-mapping, category/quartile fallback, and
+  // "own" email-lock logic either way. One conversion function to keep
+  // in sync, not two.
+  function applyImportedRows(rawRows) {
+    const myEmail = auth.currentUser?.email || '';
+    const parsedRows = rawRows.map((csvRow) => {
+      const row = emptyRow();
+      for (const [rawKey, rawValue] of Object.entries(csvRow)) {
+        const normalizedKey = String(rawKey || '').trim().toLowerCase().replace(/[\s_]/g, '');
+        const field = CSV_COLUMN_MAP[normalizedKey];
+        if (!field || rawValue == null || rawValue === '') continue;
+        if (field === 'isOwn') {
+          row.isOwn = CSV_TRUTHY.has(String(rawValue).trim().toLowerCase());
+        } else {
+          row[field] = String(rawValue).trim();
+        }
+      }
+      if (!CATEGORIES.includes(row.category)) row.category = 'Journal';
+      if (!QUARTILES.includes(row.quartile)) row.quartile = '';
+      // Same lock as the manual toggle: an "own" row always uses the
+      // signed-in account's real email, never whatever the file said.
+      if (row.isOwn) row.teacherEmail = myEmail;
+      return row;
+    }).filter((r) => r.teacherEmail || r.title);
+
+    if (!parsedRows.length) {
+      setCsvError('Could not find a teacher_email or title column — check the template.');
+      return;
+    }
+
+    setRows(parsedRows);
+    parsedRows.forEach((r) => { if (!r.isOwn) runDirectoryCheck(r._key, r.teacherEmail); });
+    notify(`Imported ${parsedRows.length} row${parsedRows.length === 1 ? '' : 's'} — review before submitting.`, 'success');
+  }
+
   function handleCsvFile(e) {
     const file = e.target.files?.[0];
     e.target.value = '';
     if (!file) return;
     setCsvError('');
+
+    const isExcel = /\.xlsx?$/i.test(file.name);
+
+    if (isExcel) {
+      // The downloadable template is now itself an .xlsx (see
+      // downloadCsvTemplate above), so this is the common path — read
+      // it as binary, take the first sheet, convert to the same
+      // {header: value} row-object shape Papa.parse would give a CSV.
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        try {
+          const wb = XLSX.read(evt.target.result, { type: 'array' });
+          const firstSheet = wb.Sheets[wb.SheetNames[0]];
+          // range: 1 skips row 0 (the merged instructions banner) and
+          // reads row 1 onward as header + data, same as sheet_to_json's
+          // default header-row behavior would if the banner weren't
+          // there.
+          const rawRows = XLSX.utils.sheet_to_json(firstSheet, { range: 1, defval: '' });
+          if (!rawRows.length) {
+            setCsvError('No rows found in that file.');
+            return;
+          }
+          applyImportedRows(rawRows);
+        } catch {
+          setCsvError('Could not read that file — make sure it is a valid Excel (.xlsx) file.');
+        }
+      };
+      reader.onerror = () => setCsvError('Could not read that file.');
+      reader.readAsArrayBuffer(file);
+      return;
+    }
+
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
@@ -182,33 +377,14 @@ export default function SuggestPublicationModal({ open, onClose }) {
           setCsvError('No rows found in that file.');
           return;
         }
-        const parsedRows = result.data.map((csvRow) => {
-          const row = emptyRow();
-          for (const [rawKey, rawValue] of Object.entries(csvRow)) {
-            const normalizedKey = String(rawKey || '').trim().toLowerCase().replace(/[\s_]/g, '');
-            const field = CSV_COLUMN_MAP[normalizedKey];
-            if (field && rawValue != null) row[field] = String(rawValue).trim();
-          }
-          if (!CATEGORIES.includes(row.category)) row.category = 'Journal';
-          if (!QUARTILES.includes(row.quartile)) row.quartile = '';
-          return row;
-        }).filter((r) => r.teacherEmail || r.title);
-
-        if (!parsedRows.length) {
-          setCsvError('Could not find a teacher_email or title column — check the template.');
-          return;
-        }
-
-        setRows(parsedRows);
-        parsedRows.forEach((r) => runDirectoryCheck(r._key, r.teacherEmail));
-        notify(`Imported ${parsedRows.length} row${parsedRows.length === 1 ? '' : 's'} from CSV — review before submitting.`, 'success');
+        applyImportedRows(result.data);
       },
       error: () => setCsvError('Could not read that file — make sure it is a valid CSV.'),
     });
   }
 
   function validate(row) {
-    if (!row.teacherEmail.trim()) return 'Teacher email is required.';
+    if (!row.teacherEmail.trim()) return row.isOwn ? 'You must be signed in.' : 'Teacher email is required.';
     if (!row.title.trim()) return 'Title is required.';
     return null;
   }
@@ -226,37 +402,63 @@ export default function SuggestPublicationModal({ open, onClose }) {
     }
 
     setSaving(true);
-    let successCount = 0;
+    let publishedCount = 0;
+    let queuedCount = 0;
     try {
       for (const row of rows) {
-        await submitPublicationForReview({
-          teacherEmail: row.teacherEmail,
-          teacherName: row.teacherName,
-          teacherDeptCode: row.teacherDeptCode,
-          title: row.title,
-          authors: row.authors,
-          venue: row.venue,
-          year: row.year,
-          link: row.link,
-          volume: row.volume,
-          issue: row.issue,
-          pages: row.pages,
-          category: row.category,
-          quartile: row.quartile,
-        });
-        successCount += 1;
+        if (row.isOwn) {
+          // Own publication -> instant, unmoderated write straight into
+          // facultyPublications via the same direct path
+          // PublicationEditModal.jsx uses for a teacher's own entries.
+          // No queue, no Founder approval needed.
+          await addPublication(row.teacherEmail, {
+            title: row.title,
+            authors: row.authors,
+            venue: row.venue,
+            year: row.year,
+            link: row.link,
+            volume: row.volume,
+            issue: row.issue,
+            pages: row.pages,
+            category: row.category,
+            // Marks this doc for the Founder-facing "Self-published
+            // (recent)" audit feed (see subscribeToSelfSubmittedPublications
+            // in facultyPublicationsSync.js). Instant-publish stays instant;
+            // this just makes it auditable after the fact.
+            selfSubmitted: true,
+          });
+          publishedCount += 1;
+        } else {
+          await submitPublicationForReview({
+            teacherEmail: row.teacherEmail,
+            teacherName: row.teacherName,
+            teacherDeptCode: row.teacherDeptCode,
+            title: row.title,
+            authors: row.authors,
+            venue: row.venue,
+            year: row.year,
+            link: row.link,
+            volume: row.volume,
+            issue: row.issue,
+            pages: row.pages,
+            category: row.category,
+            quartile: row.quartile,
+          });
+          queuedCount += 1;
+        }
       }
-      notify(
-        successCount === 1
-          ? 'Thanks! Sent to the Founder for review — it will appear once approved.'
-          : `Thanks! ${successCount} publications sent to the Founder for review.`,
-        'success'
-      );
+
+      const parts = [];
+      if (publishedCount) parts.push(`${publishedCount} publication${publishedCount === 1 ? '' : 's'} published immediately`);
+      if (queuedCount) parts.push(`${queuedCount} sent to the Founder for review`);
+      notify(`Thanks! ${parts.join(', ')}.`, 'success');
+
       setRows([emptyRow()]);
       onClose();
     } catch (err) {
+      const doneCount = publishedCount + queuedCount;
       notify(
-        `${err?.message || 'Could not submit — please try again.'} (${successCount} of ${rows.length} were sent before this failed.)`,
+        `${err?.message || 'Could not submit — please try again.'} (${doneCount} of ${rows.length} were sent before this failed.)`,
         'error'
       );
     } finally {
@@ -269,7 +471,7 @@ export default function SuggestPublicationModal({ open, onClose }) {
       <form onSubmit={handleSubmit} style={{ padding: 20 }}>
         <h3 style={{ margin: '0 0 4px', fontSize: 17, fontWeight: 800, color: 'var(--text)' }}>Suggest publications</h3>
         <p style={{ margin: '0 0 14px', fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.5 }}>
-          Know a teacher's publication that's missing? Add as many as you like below — each is reviewed by the Founder before it appears. Adding a senior's or your own department's publications works the same way, one row per publication.
+          Know a teacher's publication that's missing — or have your own thesis or paper to add? Add as many as you like below. Someone else's publication is reviewed by the Founder before it appears; mark a row as your own to publish it instantly.
         </p>
 
         <div style={{
@@ -277,7 +479,7 @@ export default function SuggestPublicationModal({ open, onClose }) {
           border: '1px dashed var(--border)', borderRadius: 10, padding: '10px 12px', marginBottom: 16,
         }}>
           <span style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 700, flex: 1, minWidth: 160 }}>
-            Have a list already? Import a CSV instead of typing each row.
+            Have a list already? Import an Excel or CSV file instead of typing each row.
           </span>
           <button
             type="button"
@@ -287,7 +489,7 @@ export default function SuggestPublicationModal({ open, onClose }) {
               border: '1px solid var(--border)', borderRadius: 8, padding: '6px 10px', cursor: 'pointer',
             }}
           >
-            Download template
+            Download template (.xlsx)
           </button>
           <button
             type="button"
@@ -297,9 +499,9 @@ export default function SuggestPublicationModal({ open, onClose }) {
               border: 'none', borderRadius: 8, padding: '6px 10px', cursor: 'pointer',
             }}
           >
-            Import CSV
+            Import file
           </button>
-          <input ref={fileInputRef} type="file" accept=".csv,text/csv" onChange={handleCsvFile} style={{ display: 'none' }} />
+          <input ref={fileInputRef} type="file" accept=".csv,.xlsx,.xls,text/csv" onChange={handleCsvFile} style={{ display: 'none' }} />
         </div>
         {csvError && (
           <div style={{ fontSize: 12, color: '#e53e3e', fontWeight: 700, marginBottom: 14, marginTop: -8 }}>{csvError}</div>
@@ -326,43 +528,74 @@ export default function SuggestPublicationModal({ open, onClose }) {
               )}
             </div>
 
+            <label
+              style={{
+                display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer',
+                fontSize: 12.5, fontWeight: 700, color: 'var(--text)',
+                border: '1px solid var(--border)', borderRadius: 10, padding: '9px 12px', marginBottom: 12,
+                background: row.isOwn ? 'rgba(56,161,105,0.08)' : 'transparent',
+              }}
+            >
+              <input
+                type="checkbox"
+                checked={row.isOwn}
+                onChange={(e) => toggleOwn(row._key, e.target.checked)}
+                style={{ width: 16, height: 16, cursor: 'pointer' }}
+              />
+              এটা কি আপনার নিজের publication? (Is this your own publication?)
+            </label>
+
             <div style={fieldWrap}>
-              <label style={labelStyle}>The teacher's KUET email (not your own) *</label>
+              <label style={labelStyle}>
+                {row.isOwn ? 'Your KUET email *' : "Their KUET email (not your own) *"}
+              </label>
               <input
                 type="email"
                 value={row.teacherEmail}
                 onChange={(e) => handleEmailChange(row._key, e.target.value)}
                 placeholder="teacher@dept.kuet.ac.bd"
+                disabled={row.isOwn}
                 style={{
                   ...inputStyle,
+                  opacity: row.isOwn ? 0.75 : 1,
                   borderColor: row.matchState === 'matched' ? '#38a169'
                     : row.matchState === 'no-match' ? '#e53e3e' : 'var(--border)',
                 }}
                 required
               />
-              <div style={{ fontSize: 11, marginTop: 4, color: 'var(--muted)' }}>
-                Whose publication is this? Your own supervisor's, a senior's, anyone's — just enter their KUET email, not yours. Your account is recorded separately as the submitter.
-              </div>
-              <div style={{ fontSize: 11, marginTop: 4, fontWeight: 700 }}>
-                {row.matchState === 'checking' && <span style={{ color: 'var(--muted)' }}>Checking directory…</span>}
-                {row.matchState === 'matched' && (
-                  <span style={{ color: '#38a169' }}>Matched: {row.teacherName || 'directory record found'}</span>
-                )}
-                {row.matchState === 'no-match' && (
-                  <span style={{ color: '#e53e3e' }}>No directory match — double-check the email, or continue if you're sure it's correct.</span>
-                )}
-              </div>
+              {row.isOwn ? (
+                <div style={{ fontSize: 11, marginTop: 4, color: '#38a169', fontWeight: 700 }}>
+                  This is your own publication — it publishes immediately, no review needed.
+                </div>
+              ) : (
+                <>
+                  <div style={{ fontSize: 11, marginTop: 4, color: 'var(--muted)' }}>
+                    Whose publication is this? Your supervisor's, a senior's, anyone's — enter their KUET email. It goes to the Founder for review before it appears.
+                  </div>
+                  <div style={{ fontSize: 11, marginTop: 4, fontWeight: 700 }}>
+                    {row.matchState === 'checking' && <span style={{ color: 'var(--muted)' }}>Checking directory…</span>}
+                    {row.matchState === 'matched' && (
+                      <span style={{ color: '#38a169' }}>Matched: {row.teacherName || 'directory record found'}</span>
+                    )}
+                    {row.matchState === 'no-match' && (
+                      <span style={{ color: '#e53e3e' }}>No directory match — double-check the email, or continue if you're sure it's correct.</span>
+                    )}
+                  </div>
+                </>
+              )}
             </div>
 
-            <div style={fieldWrap}>
-              <label style={labelStyle}>Teacher's name</label>
-              <input
-                value={row.teacherName}
-                onChange={(e) => updateRow(row._key, { teacherName: e.target.value })}
-                placeholder="Dr. ..."
-                style={inputStyle}
-              />
-            </div>
+            {!row.isOwn && (
+              <div style={fieldWrap}>
+                <label style={labelStyle}>Teacher's name</label>
+                <input
+                  value={row.teacherName}
+                  onChange={(e) => updateRow(row._key, { teacherName: e.target.value })}
+                  placeholder="Dr. ..."
+                  style={inputStyle}
+                />
+              </div>
+            )}
 
             <div style={fieldWrap}>
               <label style={labelStyle}>Publication title *</label>
@@ -485,7 +718,11 @@ export default function SuggestPublicationModal({ open, onClose }) {
               opacity: saving ? 0.7 : 1,
             }}
           >
-            {saving ? 'Submitting...' : rows.length === 1 ? 'Submit for review' : `Submit all ${rows.length} for review`}
+            {saving
+              ? 'Submitting...'
+              : rows.length === 1
+                ? (rows[0].isOwn ? 'Publish' : 'Submit for review')
+                : `Submit all ${rows.length}`}
           </button>
         </div>
       </form>

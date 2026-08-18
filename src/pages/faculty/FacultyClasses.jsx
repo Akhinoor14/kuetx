@@ -36,7 +36,7 @@ import {
 } from '../../lib/timeModels';
 import { getActiveBatches, getBatchStartDates } from '../../lib/appConfigSync';
 import {
-  subscribeMyClassIndex, createFacultyAssignment, findJoinableAssignment, joinFacultyAssignment,
+  subscribeMyClassIndex, createFacultyAssignment, findJoinableAssignment, requestToJoinFacultyAssignment,
   findConflictingAssignment, joinViaInviteCode,
 } from '../../lib/facultyClassSync';
 import { notify } from '../../lib/notify';
@@ -175,15 +175,23 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
     return () => { cancelled = true; };
   }, [dept, batch, section, term, courseCode]);
 
+  // PHASE 1 (CR_TEACHER_LINKING_NOTES.md) — this used to call
+  // joinFacultyAssignment() directly, silently adding this teacher to
+  // someone else's class with no notice to them at all. It now files a
+  // pending request instead; the existing teacher on the assignment has
+  // to accept it from their own Class Detail page before this account
+  // actually joins.
   const handleJoin = async () => {
     if (!joinOffer) return;
     setSaving(true);
     try {
-      await joinFacultyAssignment(auth.currentUser.uid, joinOffer.groupId, joinOffer.id);
-      notify('Joined the existing class assignment.', 'success');
+      await requestToJoinFacultyAssignment(auth.currentUser.uid, joinOffer.groupId, joinOffer.id, {
+        requestedByName: auth.currentUser.displayName || null,
+      });
+      notify('Request sent — the class stays with the current teacher until they accept.', 'success');
       onCreated();
     } catch (e) {
-      notify(e.message || 'Could not join this class.', 'error');
+      notify(e.message || 'Could not send a join request.', 'error');
     } finally {
       setSaving(false);
     }
@@ -391,9 +399,9 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
             }}>
               This course already has an open teacher slot for this batch and term.{' '}
               <button onClick={handleJoin} disabled={saving} style={{ color: 'var(--accent)', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
-                Join it instead
+                Request to join it instead
               </button>{' '}
-              — or continue below to create a separate one.
+              — the other teacher will need to accept — or continue below to create a separate one.
             </div>
           )}
 

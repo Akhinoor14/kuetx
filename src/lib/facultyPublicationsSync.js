@@ -83,6 +83,29 @@ export function subscribeToAllPublications(onChange, onError) {
 }
 
 /**
+ * Live-subscribe to self-submitted publications only (selfSubmitted ==
+ * true), newest first — backs the Founder-facing "Self-published
+ * (recent)" audit list in PendingPublicationsPanel.jsx. These docs are
+ * already LIVE on facultyPublications (instant-publish, no approval
+ * gate) — this is a post-hoc visibility/audit feed, not a queue. There
+ * is intentionally no approve/reject action for these; Founders can
+ * Edit (PublicationEditModal.jsx) or Delete (deletePublication below)
+ * if something's wrong, same as a teacher managing their own row.
+ */
+export function subscribeToSelfSubmittedPublications(onChange, onError) {
+  const q = query(
+    collection(db, PUBLICATIONS_COLLECTION),
+    where('selfSubmitted', '==', true),
+    orderBy('createdAt', 'desc')
+  );
+  return onSnapshot(
+    q,
+    (snap) => onChange(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+    onError
+  );
+}
+
+/**
  * Add a brand-new publication the teacher typed in themselves (not
  * present on the KUET site at all). Always flagged isManuallyEdited so
  * the scraper never touches or dedupes against it.
@@ -128,6 +151,14 @@ export async function addPublication(teacherEmail, fields) {
     raw_citation: fields.raw_citation || fields.title || '',
     source: 'manual',
     isManuallyEdited: true,
+    // True only when this doc came from a student/self self-submission
+    // via SuggestPublicationModal.jsx's "is this your own publication?"
+    // toggle (instant-publish path). NOT set true for a teacher editing
+    // their own profile entry through PublicationEditModal.jsx — that's
+    // routine profile upkeep, not the thing the audit feed below needs
+    // to surface. See subscribeToSelfSubmittedPublications() and
+    // PendingPublicationsPanel.jsx for the Founder-facing audit UI.
+    selfSubmitted: !!fields.selfSubmitted,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
   });

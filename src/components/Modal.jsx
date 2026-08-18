@@ -62,7 +62,17 @@ export default function Modal({
     >
       <div
         className={contentClassName}
-        style={{ pointerEvents: 'auto', ...contentStyle }}
+        style={{
+          position: 'relative',
+          background: 'var(--surfaceGlassStrong, var(--card))',
+          backdropFilter: 'blur(6px)',
+          border: '1px solid var(--border)',
+          borderRadius: 18,
+          boxShadow: '0 24px 60px rgba(0,0,0,0.22)',
+          color: 'var(--text)',
+          pointerEvents: 'auto',
+          ...contentStyle,
+        }}
         onClick={(e) => e.stopPropagation()}
         {...contentProps}
       >

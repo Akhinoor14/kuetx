@@ -75,6 +75,7 @@ const Results = lazy(() => import('./pages/Results'));
 const Schedule = lazy(() => import('./pages/Schedule'));
 const Today = lazy(() => import('./pages/Today'));
 const Teachers = lazy(() => import('./pages/Teachers'));
+const TeacherDetail = lazy(() => import('./pages/TeacherDetail'));
 const Diary = lazy(() => import('./pages/Diary'));
 const Assignments = lazy(() => import('./pages/Assignments'));
 const QuestionBank = lazy(() => import('./pages/QuestionBank'));
@@ -373,6 +374,14 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/schedule" element={<RequireStudentMode><Schedule /></RequireStudentMode>} />
             <Route path="/today" element={<RequireStudentMode><Today /></RequireStudentMode>} />
             <Route path="/teachers" element={<RequireStudentMode><Teachers /></RequireStudentMode>} />
+            {/* /teachers/:email deliberately NOT wrapped in RequireStudentMode
+                — same reasoning as /services below: it's reached from BOTH
+                student mode (Teachers.jsx, /publications) and faculty mode
+                (/faculty/publications), so a single role-gate would lock out
+                one side or the other. facultyDirectory read access itself is
+                the real boundary (see firestore.rules), enforced regardless
+                of which route got the visitor here. */}
+            <Route path="/teachers/:email" element={<TeacherDetail />} />
             <Route path="/syllabus" element={<RequireStudentMode><Syllabus /></RequireStudentMode>} />
             <Route path="/diary" element={<RequireStudentMode><Diary /></RequireStudentMode>} />
             <Route path="/assignments" element={<RequireStudentMode><Assignments /></RequireStudentMode>} />
@@ -786,7 +795,23 @@ async function buildQueue(isAnonymous, pathname) {
     if (isPublicPath(pathname)) {
       return q; // empty queue: render the real route, no auth gate
     }
-    q.push('auth');
+    // UPDATE (always land signed-out visitors on the real landing page,
+    // never a bare route-specific auth wall): this used to push 'auth',
+    // which renders nothing but AuthModal on a blank shell (see the
+    // `current === 'auth'` branch below) — no landing page content, no
+    // context, just a sign-in box floating on an empty screen, and the
+    // URL stayed on whatever protected path the visitor originally hit
+    // (e.g. /class-rep). Fix: signal the caller to redirect to '/' (the
+    // real LandingPage route — see the `!auth.currentUser` branch
+    // further down in App()'s own return) via React Router's own
+    // navigate(), not a raw history.replaceState — BrowserRouter doesn't
+    // pick up programmatic replaceState calls (no popstate fires), so
+    // <Routes> would keep matching the old path even after the URL bar
+    // changed. Empty queue returned alongside so nothing here blocks
+    // rendering while the redirect is in flight.
+    if (pathname !== '/') {
+      q.push('__redirect_home__');
+    }
     return q;
   }
 
@@ -1067,6 +1092,26 @@ export default function App() {
   const [queue, setQueue] = useState([]);
   const [queueBuilt, setQueueBuilt] = useState(false);
   const current = queue[0] || null;
+
+  // UPDATE (always land signed-out visitors on the real landing page,
+  // never a bare route-specific auth wall): buildQueue() pushes the
+  // sentinel '__redirect_home__' (instead of the old 'auth' step) when a
+  // signed-out visitor hits any protected, non-public path. Handle it in
+  // exactly one place regardless of which of buildQueue's four call
+  // sites produced it. Uses window.location.replace rather than React
+  // Router's navigate(): this effect lives at the top of App(), above
+  // the <BrowserRouter> that's only established further down in this
+  // same component's own return — so there's no Router context yet for
+  // useNavigate() to attach to here. location.replace('/') is a full,
+  // Router-agnostic navigation (works from anywhere, no context needed)
+  // and — like history.replaceState — doesn't add a browser-history
+  // entry, so back-button won't bounce the visitor straight back into
+  // the same protected path.
+  useEffect(() => {
+    if (current === '__redirect_home__') {
+      window.location.replace('/');
+    }
+  }, [current]);
 
   // BUGFIX(F): Term Start Date is now CR/ACR-set once per dept+batch class
   // (see src/lib/termStartDateSync.js and ClassRoutine's term-date widget)

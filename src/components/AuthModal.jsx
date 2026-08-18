@@ -8,15 +8,14 @@
  * still happens, but as a separate step AFTER sign-in (RoleSelectScreen.jsx),
  * not here.
  *
- * Both loginWithGoogle() and upgradeWithGoogle() (firebaseAuth.js) are
- * redirect-based — clicking the button navigates the whole page to Google
- * and back, it does not resolve with a user directly. This component only
- * shows a brief "redirecting…" state and then unmounts as the page
- * navigates away. The actual sign-in completion (and the onSuccess call)
- * happens later, after the page reloads, via handleGoogleRedirectResult()
- * wired up in useFirebaseAuth.js — that is the single place responsible
- * for resuming post-login routing, regardless of which screen originally
- * triggered the sign-in.
+ * loginWithGoogle() and upgradeWithGoogle() (firebaseAuth.js) are
+ * popup-first: clicking the button resolves directly with the signed-in
+ * user in the common case (see handleGoogle() below), no full-page
+ * navigation. They only fall back to a redirect for the narrower case a
+ * popup can't handle — that case still completes later, after the page
+ * reloads, via handleGoogleRedirectResult() wired up in
+ * useFirebaseAuth.js, which is also where isBrandNewAccount() is called
+ * on that path.
  */
 
 import { useState } from 'react';

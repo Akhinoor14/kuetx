@@ -97,6 +97,82 @@ export async function joinFacultyAssignment(uid, groupId, assignmentId) {
 }
 
 // -----------------------------------------------------------------------
+// PHASE 1 (CR_TEACHER_LINKING_NOTES.md §3/§12 Phase 1) — consent gate for
+// the auto-match join flow above. joinFacultyAssignment() itself is left
+// UNCHANGED and still used directly by the invite-code path below (sharing
+// a code IS the consent). The auto-match path (findJoinableAssignment's
+// silent course/term match, surfaced as a "join instead of duplicate"
+// offer in FacultyClasses.jsx) now goes through requestToJoinFacultyAssignment
+// instead of calling joinFacultyAssignment directly — it creates a pending
+// doc that only Teacher A can act on, rather than silently joining.
+// -----------------------------------------------------------------------
+
+function joinRequestsCollection(groupId, assignmentId) {
+  return collection(db, 'groups', groupId, 'facultyAssignments', assignmentId, 'joinRequests');
+}
+
+/**
+ * Teacher B's auto-match "join" action now files a request instead of
+ * joining outright. requestedByName/course fields are denormalized onto
+ * the request doc purely so Teacher A's UI can render it without an extra
+ * lookup — they're not used for any access decision (the rules gate is
+ * entirely on requestedBy == auth.uid at create time).
+ */
+export async function requestToJoinFacultyAssignment(uid, groupId, assignmentId, { requestedByName } = {}) {
+  const ref = doc(assignmentsCollection(groupId), assignmentId);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) throw new Error('This class assignment no longer exists.');
+  const data = snap.data();
+  const teacherUids = data.teacherUids || [];
+  if (teacherUids.includes(uid)) return; // already joined, no-op
+  if (teacherUids.length >= 2) {
+    throw new Error('This class already has two teachers assigned — contact your Campus Lead.');
+  }
+  const reqRef = doc(joinRequestsCollection(groupId, assignmentId), uid);
+  const existing = await getDoc(reqRef);
+  if (existing.exists() && existing.data().status === 'pending') return; // already requested, no-op
+
+  await setDoc(reqRef, {
+    requestedBy: uid,
+    requestedByName: requestedByName || null,
+    status: 'pending',
+    createdAt: serverTimestamp(),
+    resolvedAt: null,
+  });
+}
+
+/** Teacher A's own pending/resolved join-requests for one of their solo assignments. */
+export function subscribeJoinRequests(groupId, assignmentId, cb) {
+  const q = query(joinRequestsCollection(groupId, assignmentId), orderBy('createdAt', 'desc'));
+  return onSnapshot(q, (snap) => {
+    cb(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+  });
+}
+
+/**
+ * Teacher A accepting — this is the only path (besides the invite code)
+ * that actually appends to teacherUids. Reuses joinFacultyAssignment()'s
+ * own guards (2-teacher cap, already-joined no-op) rather than duplicating
+ * them, then marks the request resolved.
+ */
+export async function acceptJoinRequest(groupId, assignmentId, requestingUid) {
+  await joinFacultyAssignment(requestingUid, groupId, assignmentId);
+  const reqRef = doc(joinRequestsCollection(groupId, assignmentId), requestingUid);
+  await updateDoc(reqRef, { status: 'accepted', resolvedAt: serverTimestamp() });
+}
+
+export async function declineJoinRequest(groupId, assignmentId, requestingUid) {
+  const reqRef = doc(joinRequestsCollection(groupId, assignmentId), requestingUid);
+  await updateDoc(reqRef, { status: 'declined', resolvedAt: serverTimestamp() });
+}
+
+/** Teacher B withdrawing their own still-pending request. */
+export async function withdrawJoinRequest(groupId, assignmentId, requestingUid) {
+  const reqRef = doc(joinRequestsCollection(groupId, assignmentId), requestingUid);
+  await deleteDoc(reqRef);
+}
+
+// -----------------------------------------------------------------------
 // Phase I (ATTENDANCE_REBUILD_PLAN.md §7's hand-off entry) — co-teacher
 // invite code. This is a NEW DISCOVERY/ENTRY PATH into the exact same
 // joinFacultyAssignment() above — Teacher B still goes through that same

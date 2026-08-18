@@ -41,20 +41,46 @@
 // RESOLUTION: rather than changing courseTeacherMap's shape (which would
 // touch Courses.jsx, Schedule.jsx, Attendance.jsx, Assignments.jsx, and
 // TermQS.jsx, none of which actually need to change for §8.7's real
-// intent), this file adds a READ-ONLY enrichment layer: given a group's
-// live routineEntries (already subscribed via groupSync.js's
-// subscribeRoutine, unchanged) and that group's facultyAssignments, best-
-// effort match each entry's free-text teacherName against a real verified
-// faculty account's name. This is exactly the "join this to a real
-// account?" prompt §8.7 describes (mirroring ClaimCRCard.jsx's UX
-// pattern), implemented as a NEW component that can be dropped into
-// Schedule.jsx later without changing any of that file's existing save/
-// render logic — or used standalone. No existing file was edited to
-// support this.
+// intent), this file adds an enrichment layer: given a group's live
+// routineEntries (already subscribed via groupSync.js's subscribeRoutine,
+// unchanged) and that group's facultyAssignments, best-effort match each
+// entry's free-text teacherName against a real verified faculty account's
+// name. This is exactly the "join this to a real account?" prompt §8.7
+// describes (mirroring ClaimCRCard.jsx's UX pattern).
+//
+// UPDATE (Phase 3/4, CR_TEACHER_LINKING_NOTES.md): the paragraph above
+// describes this file's ORIGINAL, Phase-pre-3 shape — at that point it
+// really was read-only (TeacherClaimBanner.jsx just showed a suggestion,
+// dismiss only hid it in localStorage, nothing was ever written). That is
+// no longer true. Phase 3 gave the CR-direction match a real accept/
+// decline write path (teacherLinkRequests.js's createInviteFromCr) and
+// added the reverse match (findMatchingRoutineEntryForAssignment, below
+// — teacher's own assignment -> matching routineEntry, the mirror of
+// findMatchingFacultyForSchedule above it). Phase 4 then used the result
+// of an ACCEPTED match (routineEntries.linkedFacultyUid, written by
+// applyLinkAfterAccept) to drive Schedule.jsx's verified-badge UI
+// directly — so Schedule.jsx WAS edited to support this, contrary to the
+// original paragraph's last line. This file itself stays a pure
+// query/matching module either way (no writes happen here — see
+// teacherLinkRequests.js for those) — only the surrounding claim about
+// "read-only" and "no existing file edited" is what's now outdated and
+// corrected by this note.
 
 import { getDocs, collection } from 'firebase/firestore';
 import { db } from './firebase';
 import { withPromiseTimeout } from './safeSnapshot';
+
+// PHASE 3 (CR_TEACHER_LINKING_NOTES.md) — reverse direction of the same
+// match, for the teacher_to_cr flow. Everything above this point in the
+// file (normalizeForMatch, findMatchingFacultyForTeacherName,
+// findMatchingFacultyForSchedule) matches FROM a routineEntry's free-text
+// teacherName TO a real faculty account. This is the mirror: given a
+// faculty account's OWN assignment (courseCode/dept/batch/section/term —
+// already known, since the teacher just created/joined it), find a
+// routineEntries doc in that same group whose teacherName normalizes to
+// that account's own display name. Reuses the exact same
+// normalizeForMatch() so a name that would match one direction matches
+// the other too, by construction.
 
 function normalizeForMatch(name) {
   return String(name || '')
@@ -127,4 +153,50 @@ export async function findMatchingFacultyForSchedule(groupId, routineEntries) {
     if (match) result.set(entry.id, match);
   });
   return result;
+}
+
+/**
+ * Reverse direction (Phase 3's "teacher_to_cr" flow): given a faculty
+ * account's own display name/gridAlias and the group/courseCode their
+ * assignment belongs to, find any routineEntries doc in that same group,
+ * for that same courseCode, whose free-text teacherName normalizes to
+ * that same name. Deliberately also filters by courseCode (unlike the
+ * forward direction's per-group scan, which doesn't need to — a CR only
+ * ever sees one grid per group, but a teacher's assignment is specific to
+ * one course, and matching a same-named teacher on a DIFFERENT course in
+ * the same grid would be a false positive, e.g. two different courses
+ * both taught by someone named "Dr. Rahman").
+ *
+ * Never a hard requirement — same "convenience, not a gate" principle as
+ * the rest of this module. Returns null if no match, or if the entry is
+ * already linked to a different assignment (linkedAssignmentId set and
+ * not equal to this one) — an already-linked entry shouldn't be
+ * re-proposed against.
+ *
+ * @param {string} groupId
+ * @param {{ displayName?: string, gridAlias?: string, courseCode: string }} assignment
+ * @returns {Promise<{ entryId: string, teacherName: string } | null>}
+ */
+export async function findMatchingRoutineEntryForAssignment(groupId, assignment) {
+  if (!groupId || !assignment?.courseCode) return null;
+  const candidateNames = [assignment.displayName, assignment.gridAlias].filter(Boolean);
+  if (!candidateNames.length) return null;
+  const targets = new Set(candidateNames.map(normalizeForMatch).filter(Boolean));
+  if (!targets.size) return null;
+
+  const snap = await withPromiseTimeout(
+    getDocs(collection(db, 'groups', groupId, 'routineEntries')),
+    '[facultyDisambiguation] findMatchingRoutineEntryForAssignment',
+  );
+  for (const docSnap of snap.docs) {
+    const e = docSnap.data();
+    if (e.deleted) continue;
+    if (e.courseCode !== assignment.courseCode) continue;
+    if (e.linkedAssignmentId && e.linkedAssignmentId !== assignment.assignmentId) continue;
+    if (e.linkedFacultyUid) continue; // already linked to someone — don't re-propose
+    if (targets.has(normalizeForMatch(e.teacherName))) {
+      return { entryId: docSnap.id, teacherName: e.teacherName || '' };
+    }
+  }
+  return null;
 }

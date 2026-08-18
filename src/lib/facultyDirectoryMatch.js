@@ -28,15 +28,19 @@
 // mismatch (wrong person entirely), not to gate on an exact string match.
 //
 // SECURITY NOTE (read this before touching firestore.rules): the
-// verifiedFacultyEmails/{email} write rule currently reads
-// `allow write: if isSignedIn();` — ANY signed-in account (including a
-// student one) can already write there directly, with or without this
-// file. That's a pre-existing gap, not something this file introduces or
-// widens. Tightening it properly needs a server-side check (Cloud
-// Function) to actually verify the caller against facultyDirectory,
-// which this project can't deploy on the Spark (free) plan — see
-// functions/index.js's header. Flagged here so it isn't lost; not fixed
-// in this change.
+// verifiedFacultyEmails/{email} write rule was tightened in Phase 2 of
+// CR_TEACHER_LINKING_NOTES.md — no longer `allow write: if isSignedIn()`
+// for any doc. It's now `isAdmin() || (isSignedIn() &&
+// request.auth.token.email == email)`, so this file's own writes (below,
+// keyed by the caller's own email) still work unchanged, and a student
+// account can no longer write a claim for someone ELSE's email. This did
+// NOT close the whole gap, though: a compromised/malicious faculty
+// session can still self-write `autoVerified: true` for its own email
+// without an actual directory hit, since the real match check still only
+// lives here in client JS, not in the rules. Properly closing that still
+// needs a server-side check (Cloud Function) to verify the caller against
+// facultyDirectory, which this project can't deploy on the Spark (free)
+// plan — see functions/index.js's header.
 
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from './firebase';
