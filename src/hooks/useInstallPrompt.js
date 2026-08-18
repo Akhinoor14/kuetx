@@ -26,6 +26,36 @@
 // no programmatic install path there, so per the "click = direct
 // install, no separate button" requirement, the honest thing is to show
 // nothing rather than a button with no working install-here mechanism.
+//
+// BUGFIX (button permanently gone after install → uninstall → reopen):
+// Two separate issues used to compound into "the button just never comes
+// back":
+//   1) isStandaloneDisplay() is the ONLY thing that can turn 'installed'
+//      back into an actionable status on a fresh load — but it's only
+//      true while running INSIDE the installed PWA window. Someone who
+//      uninstalls and comes back in an ordinary browser tab correctly
+//      fails that check, yet the code had no persisted memory that a
+//      real uninstall might have happened, and no path that retries
+//      watching for beforeinstallprompt again versus just sitting in
+//      'unavailable' from a stale dismiss-cooldown.
+//   2) triggerInstall() called dismissInstallPrompt() (14-day cooldown)
+//      any time the outcome wasn't 'accepted' — including simply closing
+//      Chrome's native install sheet without deciding. One accidental
+//      cancel silently hid the button for two weeks with no visible
+//      reason, which is almost certainly what "install na kora obdhi
+//      dekhabe, kintu ekbar dismiss/uninstall korle r dekha jay na"
+//      describes. Declining the browser's own prompt is not the same
+//      signal as the person explicitly dismissing OUR button — only the
+//      latter should start the cooldown now (see dismissInstallPrompt
+//      call sites in FloatingInstallButton.jsx).
+// Fix: appinstalled no longer permanently latches 'installed' across
+// reloads by itself — isStandaloneDisplay() is re-checked on every
+// mount, so once someone actually uninstalls and is no longer running
+// standalone, the hook resumes watching for beforeinstallprompt like a
+// first-time visitor. And declining the native sheet just clears the
+// deferred prompt (Chrome's own cooldown on re-firing the event already
+// governs re-eligibility) instead of also layering our own 14-day block
+// on top.
 
 import { useEffect, useState, useCallback } from 'react';
 
@@ -117,9 +147,32 @@ export function useInstallPrompt() {
 
     window.addEventListener('beforeinstallprompt', onBeforeInstall);
     window.addEventListener('appinstalled', onInstalled);
+
+    // BUGFIX (button never comes back after a real uninstall): once
+    // 'installed' was set, nothing ever looked again — if the person
+    // later uninstalled the PWA and came back to this same tab (or a new
+    // one) still within the dismiss window, the button had no way to
+    // know the app was gone and just stayed hidden forever. Every time
+    // the tab regains focus/visibility, re-check the one ground-truth
+    // signal (are we actually running standalone right now?) and drop
+    // back to watching for beforeinstallprompt if not — this is cheap
+    // (a single matchMedia read) and only ever un-hides the button, never
+    // hides an otherwise-working one.
+    const recheckStandalone = () => {
+      if (isStandaloneDisplay()) {
+        setStatus('installed');
+      } else {
+        setStatus((prev) => (prev === 'installed' ? 'unavailable' : prev));
+      }
+    };
+    window.addEventListener('focus', recheckStandalone);
+    document.addEventListener('visibilitychange', recheckStandalone);
+
     return () => {
       window.removeEventListener('beforeinstallprompt', onBeforeInstall);
       window.removeEventListener('appinstalled', onInstalled);
+      window.removeEventListener('focus', recheckStandalone);
+      document.removeEventListener('visibilitychange', recheckStandalone);
     };
   }, []);
 
@@ -135,10 +188,13 @@ export function useInstallPrompt() {
       if (outcome === 'accepted') {
         setStatus('installed');
       } else {
-        // Declined this time — Chrome won't refire beforeinstallprompt
-        // again for a while regardless, so treat this the same as a
-        // manual dismiss (cooldown) rather than leaving a dead button up.
-        dismissInstallPrompt();
+        // Declined THIS specific native prompt (closed the sheet, tapped
+        // Cancel, etc) — that's not the same as the person dismissing our
+        // floating button, so it must NOT start our own 14-day cooldown.
+        // Chrome already governs its own re-fire cooldown for
+        // beforeinstallprompt internally; layering dismissInstallPrompt()
+        // on top of that used to hide the button for two weeks after a
+        // single accidental cancel, with nothing visible explaining why.
         setStatus('unavailable');
       }
       try { window.__kxInstallPromptPending = false; } catch {}

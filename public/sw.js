@@ -1,5 +1,5 @@
 // KUETx Service Worker — offline cache + auto-update
-const CACHE_NAME = 'kuetx-v4.2.7'; // bumped: new turtle mascot icon set (favicon/PWA/maskable) replaces old placeholder SVGs — bump this on every future deploy too
+const CACHE_NAME = 'kuetx-v4.2.9'; // bumped: removed maskable icons (transparent-bg only, no maskable) + re-cropped mascot icons — bump this on every future deploy too
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -10,9 +10,11 @@ const STATIC_ASSETS = [
   '/apple-touch-icon.png',
   '/icon-192.png',
   '/icon-512.png',
-  '/icon-192-maskable.png',
-  '/icon-512-maskable.png',
   '/vendor/fullcalendar-fallback.css',
+  '/splash/gate.webp',
+  '/splash/statue.webp',
+  '/splash/aerial.webp',
+  '/splash/sign.webp',
 ];
 
 // Question Bank cache: separate bucket, NOT bumped/cleared alongside

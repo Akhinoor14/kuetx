@@ -62,7 +62,7 @@ import { subscribePendingLinkRequests, acceptRequest as acceptLinkRequest, decli
 import { findMatchingRoutineEntryForAssignment } from '../../lib/facultyDisambiguation';
 import { subscribeMembers, subscribePlannerLogs, subscribeRoutine } from '../../lib/groupSync';
 import {
-  createOrUpdateSessionAttendance, subscribeSessionAttendance,
+  createOrUpdateSessionAttendance, subscribeSessionAttendance, deleteSessionAttendance,
   computeStudentAttendancePercent, computeAttendanceComponentScore,
   setTeacherMarkComponents, getTeacherMarkComponents,
   saveStudentMarks, subscribeStudentRecords, sendAllReviewed,
@@ -1069,6 +1069,8 @@ function AttendanceTab({ assignment, groupId }) {
   // change so a teacher can't accidentally carry edit-mode from one
   // locked date over to another.
   const [unlockedForEdit, setUnlockedForEdit] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
 
   // Phase G (§3g) — Export button state. `exportingFormat` tracks which
   // format is mid-export (or null) so the button can show its own
@@ -1576,6 +1578,28 @@ function AttendanceTab({ assignment, groupId }) {
     }
   };
 
+  // Deletes the current teacher's own session for the selected date.
+  // Only reachable via the confirm-then-delete two-tap flow in the top
+  // Quick Save bar (see confirmingDelete) — no accidental single-click
+  // delete path exists. Never targets a co-teacher's session; the button
+  // this is wired to only renders when `existingSessionForDate` (this
+  // teacher's own session) is present.
+  const handleDeleteSession = async () => {
+    if (!existingSessionForDate) return;
+    setDeleting(true);
+    try {
+      await deleteSessionAttendance(groupId, assignment.id, existingSessionForDate.id);
+      notify('Session deleted.', 'success');
+      setConfirmingDelete(false);
+      setUnlockedForEdit(false);
+      setAddingExtraSession(false);
+    } catch (e) {
+      notify(e.message || 'Could not delete this session.', 'error');
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   const handleAddStudent = async () => {
     setAddingStudent(true);
     try {
@@ -1907,13 +1931,18 @@ function AttendanceTab({ assignment, groupId }) {
           >
             + Add student
           </button>
-          {/* Quick Save — same 3-state logic as the bottom Save card,
-              condensed to fit this bar. Locked-and-not-yet-unlocked shows
-              a small "Edit" link instead of a Save button here too, same
-              reasoning as the bottom card: nothing clickable that could
-              silently overwrite a submitted date. */}
-          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
-            {existingSessionForDate?.locked && !unlockedForEdit ? (
+          {/* Quick Save — the ONE save/edit/delete control for this tab now
+              (the separate bottom card was removed; everything for the
+              selected date lives here). Three states:
+              1. Locked (already saved), not yet unlocked -> "🔒 Saved" +
+                 Edit + "+ Add session" + Delete — nothing that could
+                 silently overwrite the submitted date.
+              2. Unlocked for correction -> amber "correction" warning +
+                 amber Save Correction button.
+              3. Normal (no session yet, or add-another-session mode) ->
+                 plain Save button. */}
+          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+            {existingSessionForDate?.locked && !unlockedForEdit && !addingExtraSession ? (
               <>
                 <span style={{ fontSize: 11, color: 'var(--muted)' }}>🔒 Saved</span>
                 <button
@@ -1922,12 +1951,51 @@ function AttendanceTab({ assignment, groupId }) {
                 >
                   Edit
                 </button>
+                <button
+                  onClick={() => { setAddingExtraSession(true); setDraftMarks({}); }}
+                  title="Same day, another class period (e.g. theory + lab) — kept as a separate attendance record."
+                  style={{ padding: '7px 12px', borderRadius: 7, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--accent)', fontWeight: 700, fontSize: 12, cursor: 'pointer' }}
+                >
+                  + Add session
+                </button>
+                {confirmingDelete ? (
+                  <>
+                    <span style={{ fontSize: 11, color: '#dc2626', fontWeight: 600 }}>Delete this session?</span>
+                    <button
+                      onClick={handleDeleteSession}
+                      disabled={deleting}
+                      style={{ padding: '7px 12px', borderRadius: 7, border: 'none', background: '#dc2626', color: '#fff', fontWeight: 700, fontSize: 12, cursor: deleting ? 'not-allowed' : 'pointer', opacity: deleting ? 0.6 : 1 }}
+                    >
+                      {deleting ? 'Deleting…' : 'Yes, delete'}
+                    </button>
+                    <button
+                      onClick={() => setConfirmingDelete(false)}
+                      disabled={deleting}
+                      style={{ padding: '7px 12px', borderRadius: 7, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--muted)', fontWeight: 600, fontSize: 12, cursor: 'pointer' }}
+                    >
+                      Cancel
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={() => setConfirmingDelete(true)}
+                    title="Delete this session"
+                    style={{ padding: '7px 10px', borderRadius: 7, border: '1px solid var(--border)', background: 'var(--bg)', color: '#dc2626', fontWeight: 700, fontSize: 12, cursor: 'pointer' }}
+                  >
+                    Delete
+                  </button>
+                )}
               </>
             ) : (
               <>
                 {existingSessionForDate?.locked && unlockedForEdit && (
                   <span style={{ fontSize: 10.5, color: '#d97706', fontWeight: 600, whiteSpace: 'nowrap' }}>
                     ⚠️ correction
+                  </span>
+                )}
+                {addingExtraSession && (
+                  <span style={{ fontSize: 10.5, color: 'var(--accent)', fontWeight: 600, whiteSpace: 'nowrap' }}>
+                    ➕ new session
                   </span>
                 )}
                 <button
@@ -1946,6 +2014,7 @@ function AttendanceTab({ assignment, groupId }) {
             )}
           </div>
         </div>
+
 
         {!isJoinedClass && pendingJoinRequests.length > 0 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, paddingTop: 10, borderTop: '1px solid var(--border)' }}>
@@ -2505,79 +2574,10 @@ function AttendanceTab({ assignment, groupId }) {
         );
       })()}
 
-      {/* Save/Edit/Lock — ONE combined card, ONE place, 3 clear states
-          (was scattered across the date-picker card above AND this one,
-          with 4 different status messages plus a 5-way button label —
-          confusing to read at a glance). Now:
-          1. Unsaved date -> plain green Save button.
-          2. Locked (already saved) -> a calm lock notice + small "Edit"
-             link; the Save button itself is hidden until Edit is tapped,
-             so there's nothing clickable that would silently overwrite
-             a submitted date by accident.
-          3. Unlocked for correction -> a small amber warning line + an
-             amber "Save Correction" button, visually distinct from the
-             normal green Save so a teacher can tell at a glance they're
-             in the audit-logged correction path, not a normal first
-             save. */}
-      {(() => {
-        const isLocked = !!existingSessionForDate?.locked;
-        if (isLocked && !unlockedForEdit) {
-          return (
-            <div className="faculty-summary-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
-              <span style={{ fontSize: 12.5, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
-                🔒 Attendance already saved for this date.
-              </span>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                <button
-                  onClick={() => setUnlockedForEdit(true)}
-                  style={{ padding: '7px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--accent)', fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}
-                >
-                  Edit this date
-                </button>
-                <button
-                  onClick={() => { setAddingExtraSession(true); setDraftMarks({}); }}
-                  title="Same day, another class period (e.g. theory + lab) — kept as a separate attendance record."
-                  style={{ padding: '7px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--accent)', fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}
-                >
-                  + Add another session
-                </button>
-              </div>
-            </div>
-          );
-        }
-        const isCorrectionMode = isLocked && unlockedForEdit;
-        return (
-          <div className="faculty-summary-card" style={{ marginTop: 14 }}>
-            {addingExtraSession && (
-              <div style={{ fontSize: 11.5, color: 'var(--accent)', marginBottom: 10, textAlign: 'center' }}>
-                ➕ এই তারিখের দ্বিতীয় সেশন — আলাদাভাবে সেভ হবে, আগের সেশনটা অপরিবর্তিত থাকবে।
-              </div>
-            )}
-            {isCorrectionMode && (
-              <div style={{ fontSize: 11.5, color: '#d97706', marginBottom: 10, textAlign: 'center' }}>
-                ⚠️ Correcting a locked date — every change is recorded in the audit trail.
-              </div>
-            )}
-            {!isCorrectionMode && !!existingSessionForDate && (
-              <div style={{ fontSize: 11.5, color: 'var(--muted)', marginBottom: 10, textAlign: 'center' }}>
-                Already recorded for this date — saving will update it.
-              </div>
-            )}
-            <button
-              onClick={handleSave}
-              disabled={saving}
-              style={{
-                width: '100%', padding: '11px 16px', borderRadius: 8, color: '#fff', fontWeight: 700, fontSize: 13.5,
-                cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.5 : 1, transition: 'opacity 0.15s',
-                background: isCorrectionMode ? '#d97706' : undefined,
-              }}
-              className={isCorrectionMode ? '' : 'accent-fill-glass'}
-            >
-              {saving ? 'Saving…' : isCorrectionMode ? 'Save Correction' : existingSessionForDate ? 'Update Attendance' : 'Save Attendance'}
-            </button>
-          </div>
-        );
-      })()}
+      {/* Save/Edit/Delete for this date now live entirely in the top
+          Quick Save bar (see above, right after the date/section
+          controls) — this bottom card was removed since it duplicated
+          the exact same 3-state Save/Edit logic in a second place. */}
 
       {/* Attendance Summary — moved to the very bottom of the tab (was
           at the top). Per Akhinoor: this is reference/analytics info,

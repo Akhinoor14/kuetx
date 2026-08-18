@@ -157,87 +157,124 @@ const wizardRoleFor = (landingRoleId) => LANDING_ROLE_TO_WIZARD_ROLE[landingRole
 // facts (3 original + 7 qualitative feature cards added later, see
 // ROTATING_STATS_CARD_PROMPT.md).
 const BASE_STATS = [
-  { id: 'features', display: FEATURE_COUNT_DISPLAY, label: 'রিয়েল ফিচার' },
-  { id: 'roles', display: '৩', label: 'Role — Student, Faculty, Provider' },
-  { id: 'free', display: '১০০%', label: 'ফ্রি, চিরকাল' },
+  { id: 'features', display: FEATURE_COUNT_DISPLAY, label: 'এক অ্যাপে রুটিন থেকে রেজাল্ট, কেনাকাটা, ব্যবসা — সবকিছু' },
+  // owner-confirmed: counts as "4 Role" here for the user-facing landing
+  // copy (CR gets a visibly different toolset/experience), even though
+  // Firestore/accountRole.js's VALID_ROLE_IDS and ROLE_CARDS above only
+  // define 3 account types — CR is technically a requiresCR: true
+  // permission layer on top of the Student role, not a separate account.
+  // Intentional wording difference between marketing copy and the code's
+  // internal role model, not a drift/bug.
+  { id: 'roles', display: '৪ Role', label: 'Student, CR, Faculty, Provider — যার যেটুকু লাগে সেটুকুই দেখে' },
   {
     id: 'publications',
-    display: '৫,৮৫৬',
-    label: '৪৩৬ জন শিক্ষকের ৫,৮৫৬টি রিসার্চ পাবলিকেশন, ২৪টি ডিপার্টমেন্ট জুড়ে — যে কেউ নিজের বা অন্য কারো পাবলিকেশন যোগ করতে পারে',
+    display: '৫,৮৫৬+',
+    label: '৪৩৬+ শিক্ষকের রিসার্চ পাবলিকেশনসহ ২৪ ডিপার্টমেন্ট জুড়ে',
   },
   {
     id: 'pick-and-drop',
-    display: 'কাজ করিয়ে নিন',
-    label: 'Student বা Faculty যে কেউ কাজ করিয়ে নেওয়ার জন্য পোস্ট করতে পারে (কিছু কিনে আনা, ডেলিভারি করা, ছোটখাটো কাজ), সব student-এর কাছে যায় — যেকোনো student accept করতে পারে, নিজেই দাম প্রস্তাব করা যায় বা ফ্রিও রাখা যায় — ফাঁকা সময়ে টাকা আয়েরও একটা উপায়',
+    display: 'আনিয়ে নিন',
+    label: 'কেনাকাটা, ডেলিভারি বা ছোট কাজ — পোস্ট দিলে ক্যাম্পাসের যেকোনো student এসে করে দেবে',
   },
   {
     id: 'solution-bank',
-    display: 'ধাপে ধাপে',
-    label: 'এখন পর্যন্ত ESE ডিপার্টমেন্টের Y2T1-এ Computer Programming ও Fluid Mechanics-এর ধাপে ধাপে সমাধান আছে — ধীরে ধীরে আরও কোর্স ও ডিপার্টমেন্ট যোগ হচ্ছে',
+    display: 'গুছানো সমাধান',
+    label: 'শুধু উত্তর না — টপিক অনুযায়ী ধাপে ধাপে বিশ্লেষণসহ বোঝানো, কোর্স অনুযায়ী সাজানো',
   },
   {
     id: 'attendance',
-    display: 'ট্র্যাকিং',
-    label: 'Student নিজে নিজের personal attendance ট্র্যাক করতে পারে — আর Faculty অফিসিয়াল ক্লাস attendance নেয় (মূলত Present/Absent, প্রয়োজনে Late/Excused-ও সেট করা যায়), যেটা মার্কসের সাথে যুক্ত হয়ে যায়',
+    display: 'দুই স্তরে ট্র্যাকিং',
+    label: 'নিজের হিসাব নিজে রাখুন, Faculty-র অফিসিয়াল এন্ট্রি সরাসরি মার্কসে যুক্ত হয়',
   },
   {
     id: 'cr-toolset',
-    display: '৫+',
-    label: 'CR হলে Class Setup, Routine, Class Planner, CT & Quiz Planner, Class Announcements-সহ ৫+ এক্সট্রা টুল পাওয়া যায়',
+    display: '৫+ CR টুল',
+    label: 'Routine, Class Planner, CT ও Quiz শিডিউল, Announcement Broadcast — ক্লাস চালাতে যা যা লাগে',
   },
   {
     id: 'my-classes-faculty',
-    display: '৭',
-    label: 'একটা ক্লাসে ৭টা রিয়েল টুল — Syllabus, Question Bank, Students & CR, Marks, Attendance, Schedule, Notices',
+    display: '৭ টুল, ১ ক্লাস',
+    label: 'Syllabus, Attendance থেকে Notices পর্যন্ত — প্রতিটা ক্লাসের সবকিছু এক জায়গায়',
   },
   {
     id: 'online-mart',
-    display: 'উদ্যোক্তা',
-    label: 'Student চাইলে আলাদা একটা Provider account খুলে নিজের Online Mart চালু করতে পারে — student account থেকে সরাসরি না, শর্ত মেনে আলাদাভাবে provider হিসেবে যোগ দিতে হয়',
+    display: 'নিজের শপ',
+    label: 'Online-এ নিজের দোকান দিন — Provider হিসেবে যাচাই হয়ে যোগ দিতে হয়',
   },
 ];
 
-const ROTATE_MS = 4500;
+const STAT_ICONS = {
+  features: Layers,
+  roles: Users,
+  publications: Presentation,
+  'pick-and-drop': Zap,
+  'solution-bank': CheckCircle2,
+  attendance: TrendingUp,
+  'cr-toolset': Star,
+  'my-classes-faculty': GraduationCap,
+  'online-mart': Store,
+  'qb-total': Flame,
+  'qb-top-dept': Crown,
+};
 
-// One large stat + label, fading/sliding in on change. Deliberately
-// re-fires the same useCountUp-style ease-out on every rotation (not
-// just once on first scroll-into-view like the old StatCard) — a card
-// that visibly counts up each time it appears reads as "alive" rather
-// than a plain text swap, and this is a single number so the animation
-// is cheap.
-function RotatingStatCard({ stat, isMobileNav }) {
-  const [displayValue, setDisplayValue] = useState(stat.display);
-  const [animating, setAnimating] = useState(false);
-
+// Phase 9.5 redesign (owner feedback: single rotating card read weak on
+// mobile — dot-navigation row rendered oversized/unbalanced relative to
+// the card, and one-stat-at-a-time didn't scan well). Replaced with a
+// static grid, same visual language as the WHY_KUETX_CARDS grid right
+// below it (icon in a soft rounded square, border+surface card,
+// scroll-reveal). No more rotation/dots — every stat is visible at once.
+function useRevealOnVisible() {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
   useEffect(() => {
-    setAnimating(true);
-    const t = setTimeout(() => setAnimating(false), 350);
-    setDisplayValue(stat.display);
-    return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stat.id, stat.display]);
+    if (!ref.current) return undefined;
+    const node = ref.current;
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0]?.isIntersecting) {
+        setVisible(true);
+        observer.disconnect();
+      }
+    }, { threshold: 0.25 });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+  return { ref, visible };
+}
 
+function StatCardTile({ stat, index, isMobileNav }) {
+  const Icon = STAT_ICONS[stat.id] || Sparkles;
+  const { ref, visible } = useRevealOnVisible();
   return (
     <div
-      key={stat.id}
+      ref={ref}
       style={{
-        textAlign: 'center', width: '100%',
-        opacity: animating ? 0.35 : 1,
-        transform: animating ? 'translateY(4px)' : 'translateY(0)',
-        transition: 'opacity 0.35s ease, transform 0.35s ease',
+        padding: isMobileNav ? '0.85rem' : '1.15rem', borderRadius: isMobileNav ? '13px' : '16px',
+        border: '1px solid var(--border)',
+        background: 'var(--surface)',
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateY(0)' : 'translateY(14px)',
+        transition: `opacity 0.5s ease ${index * 70}ms, transform 0.5s ease ${index * 70}ms`,
       }}
     >
       <div style={{
-        fontSize: isMobileNav ? 'clamp(1.3rem, 7vw, 1.7rem)' : 'clamp(1.9rem, 4.5vw, 2.5rem)',
-        fontWeight: 800, color: 'var(--accent)',
-        letterSpacing: '-0.02em', fontVariantNumeric: 'tabular-nums',
-        lineHeight: 1.15,
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+        width: isMobileNav ? '28px' : '36px', height: isMobileNav ? '28px' : '36px',
+        borderRadius: isMobileNav ? '8px' : '10px',
+        background: 'rgba(var(--accentRGB),0.10)', marginBottom: isMobileNav ? '0.5rem' : '0.6rem',
       }}>
-        {displayValue}
+        <Icon size={isMobileNav ? 15 : 18} color="var(--accent)" strokeWidth={2.3} />
       </div>
       <div style={{
-        fontSize: isMobileNav ? '0.72rem' : '0.85rem', color: 'var(--muted)',
-        marginTop: '0.2rem', maxWidth: '380px', marginLeft: 'auto', marginRight: 'auto',
+        fontSize: isMobileNav ? '1.05rem' : '1.3rem',
+        fontWeight: 800, color: 'var(--accent)',
+        letterSpacing: '-0.01em', fontVariantNumeric: 'tabular-nums',
+        lineHeight: 1.15, marginBottom: '0.3rem',
+      }}>
+        {stat.display}
+      </div>
+      <div style={{
+        fontSize: isMobileNav ? '0.72rem' : '0.82rem', color: 'var(--muted)',
+        lineHeight: 1.4,
       }}>
         {stat.label}
       </div>
@@ -270,60 +307,21 @@ function StatsStrip({ isMobileNav }) {
     }
   }
 
-  const [index, setIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const prefersReducedMotion = typeof window !== 'undefined'
-    && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-
-  useEffect(() => {
-    if (paused || prefersReducedMotion || stats.length <= 1) return undefined;
-    const id = setInterval(() => {
-      setIndex((i) => (i + 1) % stats.length);
-    }, ROTATE_MS);
-    return () => clearInterval(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paused, prefersReducedMotion, stats.length]);
-
-  // Guard against index momentarily pointing past the array right after
-  // the QB cards get appended/removed (data arrives async after first
-  // render).
-  const safeIndex = index % stats.length;
-  const current = stats[safeIndex];
-
   return (
-    <div
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onTouchStart={() => setPaused(true)}
-      style={{
-        maxWidth: '520px', margin: isMobileNav ? '0 auto 1.25rem' : '0 auto 2.5rem',
-        padding: isMobileNav ? '0.7rem 0.5rem' : '1.15rem 0.5rem',
-        borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)',
-      }}
-    >
-      <RotatingStatCard stat={current} isMobileNav={isMobileNav} />
-
-      {stats.length > 1 && (
-        <div style={{
-          display: 'flex', justifyContent: 'center', gap: '0.35rem',
-          marginTop: isMobileNav ? '0.5rem' : '0.75rem',
-        }}>
-          {stats.map((s, i) => (
-            <button
-              key={s.id}
-              type="button"
-              aria-label={s.label}
-              onClick={() => setIndex(i)}
-              style={{
-                width: i === safeIndex ? '1.1rem' : '0.4rem', height: '0.4rem',
-                borderRadius: '999px', border: 'none', padding: 0,
-                background: i === safeIndex ? 'var(--accent)' : 'var(--border)',
-                cursor: 'pointer', transition: 'width 0.25s ease, background 0.25s ease',
-              }}
-            />
-          ))}
-        </div>
-      )}
+    <div style={{
+      maxWidth: '1080px', margin: isMobileNav ? '0 auto 1.5rem' : '0 auto 2.5rem',
+      padding: isMobileNav ? '0.7rem 0' : '1.15rem 0',
+      borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)',
+    }}>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: isMobileNav ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+        gap: isMobileNav ? '0.6rem' : '0.85rem',
+      }}>
+        {stats.map((stat, i) => (
+          <StatCardTile key={stat.id} stat={stat} index={i} isMobileNav={isMobileNav} />
+        ))}
+      </div>
     </div>
   );
 }
@@ -379,24 +377,6 @@ const WHY_KUETX_CARDS = [
     body: 'বাইরের কোনো কোম্পানির প্রোডাক্ট না — নিজেদের ক্যাম্পাসের সমস্যা দেখে, নিজেরাই বানানো ও চালু রাখা।',
   },
 ];
-
-function useRevealOnVisible() {
-  const ref = useRef(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    if (!ref.current) return undefined;
-    const node = ref.current;
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0]?.isIntersecting) {
-        setVisible(true);
-        observer.disconnect();
-      }
-    }, { threshold: 0.25 });
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-  return { ref, visible };
-}
 
 function WhyKuetxCard({ card, index, isMobileNav }) {
   const Icon = card.icon;

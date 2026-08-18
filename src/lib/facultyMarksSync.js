@@ -331,6 +331,22 @@ export function subscribeSessionAttendance(groupId, assignmentId, callback) {
   }, () => callback([]));
 }
 
+// Deletes one attendance session doc outright (not a soft-delete/flag —
+// the record is gone). Used by the "Delete this session" action, which
+// only ever targets the CURRENT teacher's own session for the selected
+// date (see `existingSessionForDate` in FacultyClassDetail.jsx) — never
+// a co-teacher's. Deliberately does NOT touch `plannerLogs`/Sessions &
+// Count: that auto-link is a date-level "was a class held" fact shared
+// across teachers (see the comment above `wasFirstSaveForDate`'s usage),
+// and correctly reversing it here would mean re-deriving whether any
+// OTHER session still justifies the day's count entry — safer to leave
+// the count as-is and let the teacher adjust Sessions & Count manually
+// if a whole day's only session gets deleted.
+export async function deleteSessionAttendance(groupId, assignmentId, sessionId) {
+  if (!groupId || !assignmentId || !sessionId) return;
+  await deleteDoc(doc(sessionsCollection(groupId, assignmentId), sessionId));
+}
+
 /**
  * Attendance % for one student across every recorded session in this
  * assignment. This is the teacher-side equivalent of

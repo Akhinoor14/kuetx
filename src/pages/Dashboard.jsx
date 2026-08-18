@@ -9,12 +9,14 @@ import { NAV } from '../nav';
 import ticker from '../lib/ticker';
 import usePageMeta from '../hooks/usePageMeta';
 import { subscribeAllServices, SERVICE_TYPE_LABELS, SERVICE_TYPES, withServiceDefaults } from '../lib/serviceSync';
-import { subscribeClassSetup } from '../lib/groupSync';
+import { subscribeClassSetup, subscribeOwnMemberVerified } from '../lib/groupSync';
 import { subscribeGroupTermStartDate } from '../lib/termStartDateSync';
 import { getGroupId } from '../lib/groupUtils';
+import { auth } from '../lib/firebase';
 import { CATEGORY_ICONS } from './Services';
 import TodayFullList from '../components/shared/TodayFullList';
 import TodaysActions from '../components/shared/TodaysActions';
+import BlueTick from '../components/BlueTick';
 // Phase B (student slice) of DEMO_MODE_FULL_PLAN_PROMPT.md — StatCard
 // moved to components/shared so LandingPage's student demo (Phase C) can
 // reuse the exact same component with demo-data props. Verified pure
@@ -105,6 +107,14 @@ export default function Dashboard() {
   const groupId = getGroupId(profile);
   const [classSetup, setClassSetup] = useState(null);
   const [groupTermStartDate, setGroupTermStartDate] = useState(null);
+  // Same source of truth Profile.jsx / ClassmatesList.jsx use for the Blue
+  // Tick — members/{uid}.verified, kept true only by CR/ACR class-roster
+  // approval (or the manual-verify safety net), never by email-verify.
+  const [isKuetVerified, setIsKuetVerified] = useState(false);
+  useEffect(() => {
+    if (!groupId || !auth.currentUser?.uid) { setIsKuetVerified(false); return undefined; }
+    return subscribeOwnMemberVerified(groupId, auth.currentUser.uid, setIsKuetVerified);
+  }, [groupId]);
   useEffect(() => {
     if (!groupId) { setClassSetup(null); setGroupTermStartDate(null); return; }
     const unsubSetup = subscribeClassSetup(groupId, setClassSetup);
@@ -276,8 +286,9 @@ export default function Dashboard() {
                 <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--muted)', marginBottom: 8, letterSpacing: '0.10em', textTransform: 'uppercase' }}>
                   {timeGreeting}
                 </div>
-                <h1 style={{ fontSize: 'clamp(28px, 6vw, 36px)', fontWeight: 800, letterSpacing: '-0.055em', lineHeight: 1.0, margin: 0 }}>
+                <h1 style={{ fontSize: 'clamp(28px, 6vw, 36px)', fontWeight: 800, letterSpacing: '-0.055em', lineHeight: 1.0, margin: 0, display: 'flex', alignItems: 'center', gap: 8 }}>
                   {profile.name}
+                  {isKuetVerified && <BlueTick size={18} title="Verified KUET student" />}
                 </h1>
               </div>
             )}
