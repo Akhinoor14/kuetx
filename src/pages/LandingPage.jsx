@@ -165,7 +165,7 @@ const BASE_STATS = [
   // permission layer on top of the Student role, not a separate account.
   // Intentional wording difference between marketing copy and the code's
   // internal role model, not a drift/bug.
-  { id: 'roles', display: '৪ Role', label: 'Student, CR, Faculty, Provider — যার যেটুকু লাগে সেটুকুই দেখে' },
+  { id: 'roles', display: '4 Role', label: 'Student, CR, Faculty, Provider — যার যেটুকু লাগে সেটুকুই দেখে' },
   {
     id: 'publications',
     display: '৫,৮৫৬+',
@@ -217,64 +217,49 @@ const STAT_ICONS = {
   'qb-top-dept': Crown,
 };
 
-// Phase 9.5 redesign (owner feedback: single rotating card read weak on
-// mobile — dot-navigation row rendered oversized/unbalanced relative to
-// the card, and one-stat-at-a-time didn't scan well). Replaced with a
-// static grid, same visual language as the WHY_KUETX_CARDS grid right
-// below it (icon in a soft rounded square, border+surface card,
-// scroll-reveal). No more rotation/dots — every stat is visible at once.
-function useRevealOnVisible() {
-  const ref = useRef(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    if (!ref.current) return undefined;
-    const node = ref.current;
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0]?.isIntersecting) {
-        setVisible(true);
-        observer.disconnect();
-      }
-    }, { threshold: 0.25 });
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-  return { ref, visible };
-}
+// Phase 9.6 redesign (owner feedback: wants ONE card rotating again, not
+// a static grid — smaller on mobile, a bit larger on desktop, cycling
+// through the same stat set one at a time). No dots (auto-cycle only,
+// per owner). Slide transition, standard speed — not too fast/slow.
+// Built as a fixed-height window with an inner track that translateX's
+// by -100%/-200%/etc — CSS transition on transform only (no unmount/
+// remount of the outgoing card, no key-based re-render), specifically so
+// there's no flash/flicker/blank-frame while old content is still
+// visible and new content slides in under it. prefers-reduced-motion
+// still respected (skips the interval, i.e. stays on stat 0 rather than
+// jumping with no animation).
+const ROTATE_INTERVAL_MS = 4200;
+const SLIDE_TRANSITION_MS = 550;
 
-function StatCardTile({ stat, index, isMobileNav }) {
+function StatCardTile({ stat, isMobileNav }) {
   const Icon = STAT_ICONS[stat.id] || Sparkles;
-  const { ref, visible } = useRevealOnVisible();
   return (
     <div
-      ref={ref}
       style={{
-        padding: isMobileNav ? '0.85rem' : '1.15rem', borderRadius: isMobileNav ? '13px' : '16px',
-        border: '1px solid var(--border)',
-        background: 'var(--surface)',
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(14px)',
-        transition: `opacity 0.5s ease ${index * 70}ms, transform 0.5s ease ${index * 70}ms`,
+        width: '100%', flexShrink: 0,
+        padding: isMobileNav ? '0.95rem 1rem' : '1.5rem 1.75rem',
+        boxSizing: 'border-box',
       }}
     >
       <div style={{
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-        width: isMobileNav ? '28px' : '36px', height: isMobileNav ? '28px' : '36px',
-        borderRadius: isMobileNav ? '8px' : '10px',
-        background: 'rgba(var(--accentRGB),0.10)', marginBottom: isMobileNav ? '0.5rem' : '0.6rem',
+        width: isMobileNav ? '30px' : '42px', height: isMobileNav ? '30px' : '42px',
+        borderRadius: isMobileNav ? '9px' : '12px',
+        background: 'rgba(var(--accentRGB),0.10)', marginBottom: isMobileNav ? '0.55rem' : '0.8rem',
       }}>
-        <Icon size={isMobileNav ? 15 : 18} color="var(--accent)" strokeWidth={2.3} />
+        <Icon size={isMobileNav ? 16 : 21} color="var(--accent)" strokeWidth={2.3} />
       </div>
       <div style={{
-        fontSize: isMobileNav ? '1.05rem' : '1.3rem',
+        fontSize: isMobileNav ? '1.15rem' : '1.6rem',
         fontWeight: 800, color: 'var(--accent)',
         letterSpacing: '-0.01em', fontVariantNumeric: 'tabular-nums',
-        lineHeight: 1.15, marginBottom: '0.3rem',
+        lineHeight: 1.15, marginBottom: '0.35rem',
       }}>
         {stat.display}
       </div>
       <div style={{
-        fontSize: isMobileNav ? '0.72rem' : '0.82rem', color: 'var(--muted)',
-        lineHeight: 1.4,
+        fontSize: isMobileNav ? '0.78rem' : '0.92rem', color: 'var(--muted)',
+        lineHeight: 1.45, maxWidth: '460px',
       }}>
         {stat.label}
       </div>
@@ -307,19 +292,50 @@ function StatsStrip({ isMobileNav }) {
     }
   }
 
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const prefersReducedMotion = typeof window !== 'undefined'
+    && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+  useEffect(() => {
+    if (paused || prefersReducedMotion || stats.length <= 1) return undefined;
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % stats.length);
+    }, ROTATE_INTERVAL_MS);
+    return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paused, prefersReducedMotion, stats.length]);
+
+  // Guard against index momentarily pointing past the array right after
+  // the QB cards get appended/removed (data arrives async after first
+  // render) — clamp instead of letting translateX go out of bounds.
+  const safeIndex = Math.min(index, stats.length - 1);
+
   return (
-    <div style={{
-      maxWidth: '1080px', margin: isMobileNav ? '0 auto 1.5rem' : '0 auto 2.5rem',
-      padding: isMobileNav ? '0.7rem 0' : '1.15rem 0',
-      borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)',
-    }}>
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: isMobileNav ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
-        gap: isMobileNav ? '0.6rem' : '0.85rem',
-      }}>
-        {stats.map((stat, i) => (
-          <StatCardTile key={stat.id} stat={stat} index={i} isMobileNav={isMobileNav} />
+    <div
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onTouchStart={() => setPaused(true)}
+      style={{
+        maxWidth: isMobileNav ? '360px' : '640px',
+        margin: isMobileNav ? '0 auto 1.5rem' : '0 auto 2.5rem',
+        padding: isMobileNav ? '0.4rem 0' : '0.6rem 0',
+        borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)',
+        overflow: 'hidden',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          width: `${stats.length * 100}%`,
+          transform: `translateX(-${(100 / stats.length) * safeIndex}%)`,
+          transition: prefersReducedMotion ? 'none' : `transform ${SLIDE_TRANSITION_MS}ms cubic-bezier(0.65, 0, 0.35, 1)`,
+        }}
+      >
+        {stats.map((stat) => (
+          <div key={stat.id} style={{ width: `${100 / stats.length}%`, flexShrink: 0, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <StatCardTile stat={stat} isMobileNav={isMobileNav} />
+          </div>
         ))}
       </div>
     </div>
@@ -377,6 +393,24 @@ const WHY_KUETX_CARDS = [
     body: 'বাইরের কোনো কোম্পানির প্রোডাক্ট না — নিজেদের ক্যাম্পাসের সমস্যা দেখে, নিজেরাই বানানো ও চালু রাখা।',
   },
 ];
+
+function useRevealOnVisible() {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    if (!ref.current) return undefined;
+    const node = ref.current;
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0]?.isIntersecting) {
+        setVisible(true);
+        observer.disconnect();
+      }
+    }, { threshold: 0.25 });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+  return { ref, visible };
+}
 
 function WhyKuetxCard({ card, index, isMobileNav }) {
   const Icon = card.icon;
@@ -809,25 +843,29 @@ function FeatureBreakdown({ isMobileNav }) {
       </div>
 
       {/* Card removed as a single bordered wrapper — each category is now
-          its own sub-card (see FeatureCategoryBlock), so this outer
-          container is just a responsive grid, no border/background of
-          its own. Desktop: auto-fit columns sized off a minimum card
-          width, so the grid actually uses the available page width
-          (student tab's 7 categories now spread 3–4 wide on a normal
-          desktop viewport instead of being capped at a narrow 2-column,
-          860px-wide strip with dead space on both sides). Mobile keeps
-          the previous 2-column-per-category-block behavior untouched. */}
+          its own sub-card (see FeatureCategoryBlock). Desktop: CSS
+          multi-column layout (not CSS Grid) — owner feedback: with a
+          fixed-row grid, a short category (e.g. Faculty's
+          "কমিউনিকেশন" with only 2 items) left a large empty gap next to
+          taller neighboring cards since grid rows size to the tallest
+          card in that row. `columns` packs cards top-to-bottom within
+          each column instead — a short card is simply followed by the
+          next card flowing into the remaining space below it, so no
+          dead space regardless of how uneven the category item-counts
+          are. `break-inside: avoid` on each card (in
+          FeatureCategoryBlock) keeps a single category from being
+          split across two columns. Mobile keeps the previous
+          single-column stacked behavior untouched. */}
       <div style={{
-        display: 'grid',
-        gridTemplateColumns: isMobileNav
-          ? 'minmax(0, 1fr)'
-          : 'repeat(auto-fit, minmax(300px, 1fr))',
-        gap: isMobileNav ? '0.85rem' : '1.25rem',
+        columns: isMobileNav ? 1 : '300px 3',
+        columnGap: isMobileNav ? '0.85rem' : '1.25rem',
         maxWidth: isMobileNav ? undefined : '1080px',
         margin: isMobileNav ? undefined : '0 auto',
       }}>
         {categories.map(([key, items]) => (
-          <FeatureCategoryBlock key={key} label={tab.labels[key] || key} items={items} isMobileNav={isMobileNav} />
+          <div key={key} style={{ breakInside: 'avoid', marginBottom: isMobileNav ? '0.85rem' : '1.25rem' }}>
+            <FeatureCategoryBlock label={tab.labels[key] || key} items={items} isMobileNav={isMobileNav} />
+          </div>
         ))}
       </div>
 

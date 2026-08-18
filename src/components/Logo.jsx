@@ -31,7 +31,7 @@ export function Logo({ size = 32 }) {
 // text. Text baseline size (`height`-driven) is unchanged so this doesn't
 // blow up the navbar row height, only the icon.
 export function Wordmark({ height = 28 }) {
-  const iconPx = Math.round(height * 1.7);
+  const iconPx = Math.round(height * 1.5);
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: height * 0.22 }}>
       <img
@@ -45,7 +45,7 @@ export function Wordmark({ height = 28 }) {
         style={{
           fontFamily: "'Sora', system-ui, sans-serif",
           fontWeight: 800,
-          fontSize: height * 0.62,
+          fontSize: height * 0.95,
           letterSpacing: '-0.5px',
           lineHeight: 1,
           color: 'var(--text)',

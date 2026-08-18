@@ -127,6 +127,7 @@ export default function TodaysActions() {
               icon={CalendarCheck}
               title={row.courseName}
               subtitle={tr.teacher || 'Unknown teacher'}
+              action="Present/Absent"
               onClick={() => setOpenCard({ courseId: row.course.id, teacher: tr.teacher })}
               dark={dark}
             />

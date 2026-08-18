@@ -1099,6 +1099,49 @@ function ProviderPostSignupRedirect({ queueBuilt, queueEmpty }) {
   return null;
 }
 
+// BUGFIX (this session): Navbar/footer "About KUETx" and "Privacy Policy"
+// links on the signed-out landing page did nothing when clicked — the
+// URL changed but the page stayed blank. Root cause: the ONLY <Routes>
+// in the whole app lives inside Layout (see the big <Routes> block
+// further down), and Layout never mounts at all for a signed-out visitor
+// (App's own ternary below renders <LandingPage/> standalone instead,
+// specifically so the signed-in app chrome/sidebar never shows on the
+// public landing page). So a signed-out click on <Link to="/about">
+// changed the URL but had no <Routes> anywhere in the tree to match it
+// against — blank page, not a redirect, not an error, just nothing.
+// /about and /privacy are both explicitly meant to be reachable by a
+// signed-out visitor (see PUBLIC_PATHS below, and each route's own "no
+// guard" comment inside Layout's <Routes>), so this wrapper — mounted
+// INSIDE <BrowserRouter> (unlike App() itself, which returns
+// <BrowserRouter> as a child and therefore can't call useLocation() at
+// its own top level) — checks the current pathname for a signed-out
+// visitor and renders the matching standalone page directly, before
+// ever falling through to <LandingPage/>. Signed-in visitors are
+// unaffected: Layout's own <Routes> still owns /about and /privacy for
+// them exactly as before.
+function SignedOutRouter({ authState }) {
+  const location = useLocation();
+  if (location.pathname === '/about') {
+    return (
+      <Suspense fallback={<PageLoadingFallback />}>
+        <About />
+      </Suspense>
+    );
+  }
+  if (location.pathname === '/privacy') {
+    return (
+      <Suspense fallback={<PageLoadingFallback />}>
+        <PrivacyPolicy />
+      </Suspense>
+    );
+  }
+  return (
+    <Suspense fallback={<PageLoadingFallback />}>
+      <RequireGuestMode authState={authState}><LandingPage /></RequireGuestMode>
+    </Suspense>
+  );
+}
+
 export default function App() {
   const authState = useFirebaseAuth();
   console.log('[KUETx DIAG] App() rendering, authReady =', authState.authReady, 'isAnonymous =', authState.isAnonymous);
@@ -1854,11 +1897,7 @@ export default function App() {
           // Layout — a signed-out visitor gets LandingPage standalone; a
           // signed-in one gets Layout exactly as before.
           !auth.currentUser
-            ? (
-              <Suspense fallback={<PageLoadingFallback />}>
-                <RequireGuestMode authState={authState}><LandingPage /></RequireGuestMode>
-              </Suspense>
-            )
+            ? <SignedOutRouter authState={authState} />
             : <Layout authState={authState} onboardingActive={!!current} />
         )}
         {/* Nudges anyone who used "Finish now, add rest later" to fill in the
