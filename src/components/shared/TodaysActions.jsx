@@ -66,47 +66,56 @@ export default function TodaysActions() {
   return (
     <>
       <div className="card" style={{ padding: '14px 16px', borderRadius: 14, margin: 0, height: '100%', minHeight: 260, display: 'flex', flexDirection: 'column' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, flexShrink: 0 }}>
           <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em', display: 'flex', alignItems: 'center', gap: 6 }}>
             <ListChecks size={13} /> Today's Actions
           </div>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, flex: 1 }}>
+        {/* Fixed-height, internally-scrolling list — this card no longer
+            grows taller as more attendance rows pile up (5+ rows used to
+            push the card's own height way past the "Today" card next to
+            it). maxHeight caps at roughly 5 compact rows; anything beyond
+            that scrolls inside this div instead of the page. */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 5, flex: 1, minHeight: 0, maxHeight: 300, overflowY: 'auto' }}>
 
-        {/* 1. Attendance — unmarked courses for today. Always renders as a
-            simple ✓ Present / ✗ Absent row per teacher — the inline
-            rotating-slot teacher-picker (Rabiul Alam Sir / Humayun Kabir
-            Sir / Other...) was removed from this card per product
-            decision: switching the resolved teacher for a rotating slot
-            still works, just via the row-click -> AttendanceMarkModal
-            path (its switchOptions), not inline buttons here. */}
+        {/* 1. Attendance — unmarked courses for today. Compact single-line
+            row: icon + course/teacher (truncated, stacked tightly) on the
+            left, small ✓/✗ buttons on the right — replaces the old
+            two-row layout (name+teacher line, then a full-width tall
+            Present/Absent bar below it) which made each row roughly 3x
+            taller than necessary. Rotating-slot teacher switching still
+            works via row-click -> AttendanceMarkModal, same as before. */}
         {attendance.rows.map((row) => row.teacherRows.map((tr) => (
-            <div key={`${row.id}-${tr.teacher}`} style={{ padding: '9px 10px', borderRadius: 10, background: dark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.02)', border: dark ? '1px solid rgba(255,255,255,0.07)' : '1px solid rgba(0,0,0,0.05)' }}>
-              <div
-                role="button"
-                tabIndex={0}
-                onClick={() => setOpenCard({ courseId: row.course.id, teacher: tr.teacher })}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setOpenCard({ courseId: row.course.id, teacher: tr.teacher }); }}
-                style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, cursor: 'pointer', WebkitTapHighlightColor: 'transparent' }}
-              >
-                <CalendarCheck size={14} color="var(--accent)" style={{ flexShrink: 0 }} />
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{row.courseName}</div>
-                  <div style={{ fontSize: 10.5, color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginTop: 1 }}>{tr.teacher || 'Unknown teacher'}</div>
-                </div>
+            <div
+              key={`${row.id}-${tr.teacher}`}
+              role="button"
+              tabIndex={0}
+              onClick={() => setOpenCard({ courseId: row.course.id, teacher: tr.teacher })}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setOpenCard({ courseId: row.course.id, teacher: tr.teacher }); }}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 7, padding: '6px 8px', borderRadius: 9,
+                background: dark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.02)',
+                border: dark ? '1px solid rgba(255,255,255,0.07)' : '1px solid rgba(0,0,0,0.05)',
+                cursor: 'pointer', WebkitTapHighlightColor: 'transparent', flexShrink: 0,
+              }}
+            >
+              <CalendarCheck size={13} color="var(--accent)" style={{ flexShrink: 0 }} />
+              <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{row.course.code || row.course.baseCode || row.courseName}</div>
+                <div style={{ fontSize: 9.5, color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{tr.teacher || 'Unknown teacher'}</div>
               </div>
-              <div style={{ display: 'flex', borderRadius: 9, overflow: 'hidden', border: dark ? '1px solid rgba(255,255,255,0.10)' : '1px solid rgba(0,0,0,0.08)' }}>
+              <div style={{ display: 'flex', borderRadius: 7, overflow: 'hidden', border: dark ? '1px solid rgba(255,255,255,0.10)' : '1px solid rgba(0,0,0,0.08)', flexShrink: 0 }}>
                 <button
                   onClick={(e) => { e.stopPropagation(); mark(row.course.id, tr.teacher, 'present'); }}
-                  style={{ flex: 1, minWidth: 0, padding: '12px 6px', cursor: 'pointer', fontWeight: 700, fontSize: 12.5, background: dark ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.85)', color: '#10b981', border: 'none', borderRight: dark ? '1px solid rgba(255,255,255,0.10)' : '1px solid rgba(0,0,0,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, WebkitTapHighlightColor: 'transparent' }}
+                  style={{ padding: '4px 8px', cursor: 'pointer', fontWeight: 700, fontSize: 11, background: dark ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.85)', color: '#10b981', border: 'none', borderRight: dark ? '1px solid rgba(255,255,255,0.10)' : '1px solid rgba(0,0,0,0.08)', WebkitTapHighlightColor: 'transparent' }}
                 >
-                  ✓ Present
+                  ✓
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); mark(row.course.id, tr.teacher, 'absent'); }}
-                  style={{ flex: 1, minWidth: 0, padding: '12px 6px', cursor: 'pointer', fontWeight: 700, fontSize: 12.5, background: dark ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.85)', color: '#ef4444', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, WebkitTapHighlightColor: 'transparent' }}
+                  style={{ padding: '4px 8px', cursor: 'pointer', fontWeight: 700, fontSize: 11, background: dark ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.85)', color: '#ef4444', border: 'none', WebkitTapHighlightColor: 'transparent' }}
                 >
-                  ✗ Absent
+                  ✗
                 </button>
               </div>
             </div>
