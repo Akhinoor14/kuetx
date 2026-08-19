@@ -155,14 +155,93 @@ const CAMPUS_PHOTOS = {
 // injected once here rather than adding a new CSS file or reaching for
 // per-card JS hover state (which would mean 8 extra useState calls in
 // CampusScrapbook for a plain lift-on-hover effect).
+// Design-system port (this session): the owner-approved standalone HTML
+// mockup used its own token set (--kx-mono for numbers/labels, --kx-display
+// for headings, an off-white --kx-bg, a distinct card/border language) that
+// is NOT the same as this app's existing --bg/--text/--accent vars, even
+// though the two happen to be close in raw color. Previously only the hero
+// borrowed the mockup's *layout* (photo cluster) while every other section
+// kept the app's plain default styling — this patch actually pulls the
+// mockup's typographic + card language in as real CSS vars (aliased to the
+// app's existing color vars so dark mode / future re-theme still works)
+// and applies them to every section wrapper below, not just the hero.
 function CampusDesignStyles() {
   return (
     <style>{`
+      @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Manrope:wght@700;800&display=swap');
+
+      /* Real HTML mockup's own token values (kuetx-landing-redesign-v2.html) —
+         used as-is, not aliased to the app's --accent/--bg vars, so the
+         page actually reproduces the approved design instead of drifting
+         toward whatever the app theme happens to be. */
+      .kx-page {
+        --kx-dark: #0c2718;
+        --kx-darker: #081a10;
+        --kx-bg: #f7f6f1;
+        --kx-ink: #16241a;
+        --kx-ink-soft: #4a5750;
+        --kx-accent: #22c55e;
+        --kx-accent-bright: #4ade80;
+        --kx-sage: #e9f1ea;
+        --kx-line: #dcd8cc;
+        --kx-card: #ffffff;
+        --kx-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Consolas, monospace;
+        --kx-display: 'Manrope', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: var(--kx-bg);
+        color: var(--kx-ink);
+      }
+      .kx-wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+
+      .kx-eyebrow {
+        display: inline-flex; align-items: center; gap: 0.4rem;
+        font-family: var(--kx-mono); font-size: 12.5px; font-weight: 700;
+        letter-spacing: 0.05em; text-transform: none;
+        color: #16803d; background: rgba(34,197,94,0.1);
+        border: 1px solid rgba(34,197,94,0.25);
+        padding: 6px 14px; border-radius: 999px;
+      }
+      .kx-eyebrow.kx-on-dark {
+        color: var(--kx-accent-bright); background: rgba(74,222,128,0.1);
+        border-color: rgba(74,222,128,0.25);
+      }
+      .kx-eyebrow::before {
+        content: ''; width: 6px; height: 6px; border-radius: 50%;
+        background: currentColor; box-shadow: 0 0 8px currentColor;
+      }
+      .kx-h2 {
+        font-family: var(--kx-display); font-weight: 800; letter-spacing: -0.02em;
+        font-size: 36px; margin-bottom: 14px; color: var(--kx-ink);
+      }
+      .kx-mono-num { font-family: var(--kx-mono); font-weight: 700; }
+      .kx-card {
+        background: var(--kx-card); border: 1px solid var(--kx-line);
+        border-radius: 16px;
+      }
+
+      .kx-role-tab {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 11px 22px; border-radius: 999px; font-weight: 600; font-size: 14.5px;
+        border: 1.5px solid var(--kx-line); background: var(--kx-card); cursor: pointer;
+        transition: all .15s; white-space: nowrap; min-height: 44px; color: var(--kx-ink);
+      }
+      .kx-role-tab.active { background: var(--kx-dark); color: #fff; border-color: var(--kx-dark); }
+      .kx-role-tab:hover:not(.active) { border-color: var(--kx-accent); }
+
+      .kx-fcol { background: var(--kx-card); border: 1px solid var(--kx-line); border-radius: 16px; padding: 26px 24px; }
+      .kx-fcol-title {
+        font-family: var(--kx-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+        color: var(--kx-ink-soft); margin-bottom: 16px; padding-left: 12px; border-left: 3px solid var(--kx-accent);
+      }
+
       .kx-scrapbook-tile { transition: transform 0.25s ease, box-shadow 0.25s ease; }
       .kx-scrapbook-tile:hover {
-        box-shadow: 0 18px 34px rgba(0,0,0,0.2) !important;
+        transform: translateY(-6px) rotate(0deg) !important;
+        box-shadow: 0 20px 36px rgba(0,0,0,0.16) !important;
         z-index: 2;
       }
+      .kx-why-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+      .kx-why-card:hover { transform: translateY(-4px); box-shadow: 0 16px 32px rgba(0,0,0,0.06); }
+
       @keyframes kx-mascot-bounce {
         0%, 100% { transform: translateY(0) rotate(-6deg); }
         50% { transform: translateY(-7px) rotate(-6deg); }
@@ -171,85 +250,94 @@ function CampusDesignStyles() {
       @media (prefers-reduced-motion: reduce) {
         .kx-mascot-badge { animation: none; }
       }
+
+      /* Scroll-reveal, ported from the HTML mockup's own IntersectionObserver
+         behaviour — real fade/rise, not decorative-only. */
+      .kx-reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s cubic-bezier(.16,.8,.3,1), transform .7s cubic-bezier(.16,.8,.3,1); }
+      .kx-reveal.kx-in-view { opacity: 1; transform: translateY(0); }
+      @media (prefers-reduced-motion: reduce) {
+        .kx-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+      }
     `}</style>
   );
 }
 
 function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
   // Hero is above the fold on load, so it fades/rises in immediately on
-  // mount rather than waiting for a scroll trigger (useRevealOnVisible's
-  // IntersectionObserver would fire on first paint anyway since it's
-  // already in view, but starting visible=true avoids a flash-then-fade
-  // on fast connections).
+  // mount rather than waiting for a scroll trigger.
   const [heroVisible, setHeroVisible] = useState(false);
   useEffect(() => {
     const id = requestAnimationFrame(() => setHeroVisible(true));
     return () => cancelAnimationFrame(id);
   }, []);
   return (
-    <div
+    // Full-bleed dark band, edge-to-edge — matches the HTML mockup's
+    // .hero section exactly (background: var(--kx-dark), 100% viewport
+    // width, radial glow overlays), not a rounded boxed card sitting
+    // inside a constrained content column.
+    <section
       style={{
         position: 'relative',
         overflow: 'hidden',
-        borderRadius: isMobileNav ? '18px' : '24px',
-        background: 'linear-gradient(160deg, var(--accentDark), #06210f)',
-        padding: isMobileNav ? '1.75rem 1.1rem 1.5rem' : '3rem 2.5rem',
-        marginBottom: isMobileNav ? '1.5rem' : '2.5rem',
+        width: '100%',
+        background: 'var(--kx-dark)',
+        padding: isMobileNav ? '2.25rem 1.1rem 0' : '64px 32px 0',
         color: '#f3f4ef',
-        opacity: heroVisible ? 1 : 0,
-        transform: heroVisible ? 'translateY(0)' : 'translateY(14px)',
-        transition: 'opacity 0.6s ease, transform 0.6s ease',
       }}
     >
-      {/* Soft accent glow, matches --accentLight rather than a hardcoded
-          bright-green so it still fits if the accent color ever changes. */}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
-        background: 'radial-gradient(ellipse 700px 420px at 12% 0%, rgba(var(--accentRGB),0.22), transparent 60%)',
+        background: 'radial-gradient(ellipse 900px 500px at 15% 0%, rgba(74,222,128,0.14), transparent 60%)',
+      }} />
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        background: 'radial-gradient(ellipse 700px 400px at 90% 30%, rgba(74,222,128,0.08), transparent 55%)',
       }} />
 
-      <div style={{
-        position: 'relative',
-        display: 'grid',
-        gridTemplateColumns: isMobileNav ? '1fr' : '1.05fr 0.95fr',
-        gap: isMobileNav ? '1.75rem' : '2.5rem',
-        alignItems: 'center',
-      }}>
+      <div
+        className="kx-wrap"
+        style={{
+          position: 'relative',
+          display: 'grid',
+          gridTemplateColumns: isMobileNav ? '1fr' : '1.05fr 0.95fr',
+          gap: isMobileNav ? '1.75rem' : '56px',
+          alignItems: 'center',
+          paddingBottom: isMobileNav ? '2rem' : '40px',
+          opacity: heroVisible ? 1 : 0,
+          transform: heroVisible ? 'translateY(0)' : 'translateY(14px)',
+          transition: 'opacity 0.6s ease, transform 0.6s ease',
+        }}
+      >
         <div style={{ order: isMobileNav ? 2 : 1 }}>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-            fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.04em',
-            color: 'var(--accentLight)', background: 'rgba(var(--accentRGB),0.14)',
-            border: '1px solid rgba(var(--accentRGB),0.3)',
-            padding: '0.35rem 0.8rem', borderRadius: '999px', marginBottom: '1.1rem',
-          }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accentLight)' }} />
+          <div className="kx-eyebrow kx-on-dark" style={{ marginBottom: '1.1rem' }}>
             Built by KUET students, for KUET
           </div>
 
-          <h1 style={{
+          <h1 className="kx-page" style={{
+            fontFamily: 'var(--kx-display)',
             fontSize: isMobileNav ? 'clamp(1.6rem, 7vw, 2.1rem)' : 'clamp(2.1rem, 4.6vw, 3.1rem)',
-            fontWeight: 900, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '1rem',
+            fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.08, marginBottom: '1rem',
+            color: '#f3f4ef', background: 'none',
           }}>
             {headline}
           </h1>
 
           <p style={{
-            fontSize: isMobileNav ? '0.9rem' : '1.02rem', lineHeight: 1.65,
-            color: 'rgba(243,244,239,0.72)', maxWidth: '480px', marginBottom: isMobileNav ? '1.25rem' : '1.75rem',
+            fontSize: isMobileNav ? '0.9rem' : '17px', lineHeight: 1.65,
+            color: 'rgba(243,244,239,0.72)', maxWidth: '480px', marginBottom: isMobileNav ? '1.25rem' : '34px',
           }}>
             {sub}
           </p>
 
-          <div style={{ display: 'flex', gap: '0.7rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '0.7rem', flexWrap: 'wrap', marginBottom: isMobileNav ? '1.75rem' : '44px' }}>
             <button
               type="button"
               onClick={onSignUp}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                padding: isMobileNav ? '0.75rem 1.2rem' : '0.9rem 1.6rem', borderRadius: '12px',
-                background: 'var(--accentLight)', color: '#06210f', fontWeight: 800,
-                fontSize: isMobileNav ? '0.85rem' : '0.95rem', border: 'none', cursor: 'pointer',
+                padding: isMobileNav ? '0.75rem 1.2rem' : '15px 28px', borderRadius: '12px',
+                background: 'var(--kx-accent-bright)', color: '#06210f', fontWeight: 800,
+                fontSize: isMobileNav ? '0.85rem' : '16px', border: 'none', cursor: 'pointer',
               }}
             >
               Sign Up করো, ফ্রি
@@ -258,20 +346,39 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
               href="#stats-anchor"
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                padding: isMobileNav ? '0.75rem 1.2rem' : '0.9rem 1.6rem', borderRadius: '12px',
+                padding: isMobileNav ? '0.75rem 1.2rem' : '15px 28px', borderRadius: '12px',
                 background: 'transparent', color: '#f3f4ef', fontWeight: 700,
-                fontSize: isMobileNav ? '0.85rem' : '0.95rem',
-                border: '1px solid rgba(255,255,255,0.2)', textDecoration: 'none',
+                fontSize: isMobileNav ? '0.85rem' : '16px',
+                border: '1px solid rgba(255,255,255,0.18)', textDecoration: 'none',
               }}
             >
               কী আছে দেখো <ArrowDown size={14} />
             </a>
           </div>
+
+          {/* Hero stats row — matches HTML's .hero-stats exactly (mono
+              numbers, top border divider). */}
+          <div style={{
+            display: 'flex', gap: isMobileNav ? '1.4rem' : '36px', flexWrap: 'wrap',
+            paddingTop: '28px', borderTop: '1px solid rgba(255,255,255,0.1)',
+          }}>
+            <div>
+              <div className="kx-mono-num" style={{ fontSize: isMobileNav ? '20px' : '26px', color: 'var(--kx-accent-bright)' }}>{FEATURE_COUNT_DISPLAY}</div>
+              <div style={{ fontSize: '12.5px', color: 'rgba(243,244,239,0.55)', marginTop: '2px' }}>real feature</div>
+            </div>
+            <div>
+              <div className="kx-mono-num" style={{ fontSize: isMobileNav ? '20px' : '26px', color: 'var(--kx-accent-bright)' }}>4</div>
+              <div style={{ fontSize: '12.5px', color: 'rgba(243,244,239,0.55)', marginTop: '2px' }}>role, একই app</div>
+            </div>
+            <div>
+              <div className="kx-mono-num" style={{ fontSize: isMobileNav ? '20px' : '26px', color: 'var(--kx-accent-bright)' }}>0</div>
+              <div style={{ fontSize: '12.5px', color: 'rgba(243,244,239,0.55)', marginTop: '2px' }}>বিজ্ঞাপন / ডেটা বিক্রি</div>
+            </div>
+          </div>
         </div>
 
         {/* Tilted photo cluster — signature motif, repeated in
-            CampusScrapbook. Two photos + a small live-location badge,
-            same treatment described in the owner-approved mockup brief. */}
+            CampusScrapbook. Two photos + a small live-location badge. */}
         <div style={{
           position: 'relative',
           height: isMobileNav ? '230px' : '420px',
@@ -280,67 +387,72 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
           <div style={{
             position: 'absolute', top: 0, left: isMobileNav ? '8px' : '16px',
             display: 'flex', alignItems: 'center', gap: '0.4rem',
-            background: 'rgba(6,33,15,0.85)', backdropFilter: 'blur(8px)',
-            border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px',
-            padding: '0.4rem 0.7rem', fontSize: '0.68rem', fontWeight: 700,
-            color: 'var(--accentLight)', zIndex: 3,
+            background: 'rgba(12,39,24,0.85)', backdropFilter: 'blur(8px)',
+            border: '1px solid rgba(255,255,255,0.12)', borderRadius: '12px',
+            padding: '10px 14px', fontSize: '12px', fontFamily: 'var(--kx-mono)', fontWeight: 700,
+            color: '#a5d6a7', zIndex: 3,
           }}>
             <MapPin size={11} /> KUET, Khulna
           </div>
 
           <div style={{
-            position: 'absolute', top: isMobileNav ? '28px' : '22px', right: isMobileNav ? '2px' : '4px',
+            position: 'absolute', top: isMobileNav ? '28px' : '26px', right: isMobileNav ? '2px' : '6px',
             width: isMobileNav ? '58%' : '300px',
             transform: isMobileNav ? 'rotate(2.5deg)' : 'rotate(4deg)',
-            borderRadius: '14px', overflow: 'hidden', border: '5px solid #fff',
-            boxShadow: '0 24px 48px rgba(0,0,0,0.4)', background: '#fff',
+            borderRadius: '14px', overflow: 'hidden', border: '6px solid #fff',
+            boxShadow: '0 30px 60px rgba(0,0,0,0.45), 0 0 0 6px rgba(255,255,255,0.06)', background: '#fff',
           }}>
-            <img src={CAMPUS_PHOTOS.gate.src} alt={CAMPUS_PHOTOS.gate.label} style={{ width: '100%', height: isMobileNav ? '110px' : '210px', objectFit: 'cover', display: 'block' }} />
-            <div style={{ padding: '0.5rem 0.6rem 0.6rem' }}>
-              <div style={{ fontWeight: 700, fontSize: isMobileNav ? '0.68rem' : '0.78rem', color: '#16241a' }}>{CAMPUS_PHOTOS.gate.label}</div>
+            <img src={CAMPUS_PHOTOS.gate.src} alt={CAMPUS_PHOTOS.gate.label} style={{ width: '100%', height: isMobileNav ? '110px' : '220px', objectFit: 'cover', display: 'block' }} />
+            <div style={{ padding: '12px 14px 14px' }}>
+              <div style={{ fontWeight: 700, fontSize: isMobileNav ? '0.68rem' : '13.5px', color: '#16241a' }}>{CAMPUS_PHOTOS.gate.label}</div>
+              <div style={{ fontFamily: 'var(--kx-mono)', fontSize: '11px', color: '#8a9188', marginTop: '2px' }}>{CAMPUS_PHOTOS.gate.coord}</div>
             </div>
           </div>
 
           <div style={{
-            position: 'absolute', bottom: isMobileNav ? '4px' : '18px', left: 0,
-            width: isMobileNav ? '48%' : '190px',
-            transform: isMobileNav ? 'rotate(-3deg)' : 'rotate(-6deg)',
-            borderRadius: '12px', overflow: 'hidden', border: '5px solid #fff',
-            boxShadow: '0 18px 36px rgba(0,0,0,0.38)',
+            position: 'absolute', bottom: isMobileNav ? '60px' : '92px', left: 0,
+            width: isMobileNav ? '48%' : '175px',
+            transform: isMobileNav ? 'rotate(-5deg)' : 'rotate(-7deg)',
+            borderRadius: '12px', overflow: 'hidden', border: '6px solid #fff',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.4)', zIndex: 2,
           }}>
-            <img src={CAMPUS_PHOTOS.aerial.src} alt={CAMPUS_PHOTOS.aerial.label} style={{ width: '100%', height: isMobileNav ? '78px' : '130px', objectFit: 'cover', display: 'block' }} />
+            <img src={CAMPUS_PHOTOS.aerial.src} alt={CAMPUS_PHOTOS.aerial.label} style={{ width: '100%', height: isMobileNav ? '78px' : '120px', objectFit: 'cover', display: 'block' }} />
           </div>
 
-          {/* Mascot badge — restores the HTML mockup's floating turtle
-              accent that got dropped in the first JSX port. Reuses the
-              real Logo (same artwork as navbar/footer) instead of a
-              second mascot asset. Anchored to the gate photo card's
-              bottom-left corner specifically (not the cluster's outer
-              bounding box) so it reads as a sticker on that photo at
-              both breakpoints — anchoring to the container edge instead
-              left it floating in empty space below the photos on
-              mobile, disconnected from either card. */}
+          <div style={{
+            position: 'absolute', bottom: isMobileNav ? '2px' : '6px', left: isMobileNav ? '76px' : '108px',
+            width: isMobileNav ? '46%' : '168px',
+            transform: isMobileNav ? 'rotate(4deg)' : 'rotate(5deg)',
+            borderRadius: '12px', overflow: 'hidden', border: '6px solid #fff',
+            boxShadow: '0 22px 44px rgba(0,0,0,0.4)', zIndex: 1,
+          }}>
+            <img src={CAMPUS_PHOTOS.statue.src} alt={CAMPUS_PHOTOS.statue.label} style={{ width: '100%', height: isMobileNav ? '80px' : '112px', objectFit: 'cover', display: 'block' }} />
+          </div>
+
+          {/* Mascot badge — floating turtle accent per HTML mockup,
+              anchored to the gate photo card's bottom-right corner. */}
           <div
             className="kx-mascot-badge"
             style={{
               position: 'absolute',
-              top: isMobileNav ? `${28 + 110 - 16}px` : `${22 + 210 - 20}px`,
-              right: isMobileNav ? 'calc(2px + 58% - 16px)' : 'calc(4px + 300px - 20px)',
-              width: isMobileNav ? '34px' : '48px',
-              height: isMobileNav ? '34px' : '48px',
-              borderRadius: '50%',
-              background: 'var(--accentLight)',
-              border: '3px solid #06210f',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 10px 22px rgba(0,0,0,0.35)',
+              bottom: isMobileNav ? '-6px' : '-6px',
+              right: isMobileNav ? '-4px' : '-10px',
+              width: isMobileNav ? '68px' : '92px',
+              height: isMobileNav ? '68px' : '92px',
               zIndex: 4,
+              filter: 'drop-shadow(0 10px 18px rgba(0,0,0,0.5))',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              borderRadius: '50%',
+              background: 'var(--kx-accent-bright)',
+              border: '3px solid #06210f',
+              boxShadow: '0 10px 22px rgba(0,0,0,0.35)',
             }}
           >
-            <Logo size={isMobileNav ? 20 : 30} />
+            <Logo size={isMobileNav ? 30 : 42} />
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -354,35 +466,27 @@ const SCRAPBOOK_ORDER = ['gate', 'academic', 'aerial', 'sign', 'auditorium', 'ma
 const SCRAPBOOK_TILTS = [-3, 2, -2, 3, 2, -3, 3, -2];
 
 function CampusScrapbook({ isMobileNav }) {
-  // Below-the-fold section — real scroll-triggered reveal via the same
-  // IntersectionObserver hook WhyKuetxCard already uses, so this section
-  // fades/rises in on scroll like the plan called for, instead of
-  // sitting static while everything around it animates.
   const { ref, visible } = useRevealOnVisible();
   return (
-    <div
+    // Full-bleed sage band, matches HTML's .scrapbook section exactly.
+    <section
       ref={ref}
+      className={`kx-reveal${visible ? ' kx-in-view' : ''}`}
       style={{
-        marginBottom: isMobileNav ? '1.75rem' : '3rem',
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(18px)',
-        transition: 'opacity 0.7s ease, transform 0.7s ease',
+        width: '100%',
+        background: 'var(--kx-sage)',
+        padding: isMobileNav ? '2.5rem 1.1rem' : '90px 32px',
       }}
     >
-      <div style={{ textAlign: 'center', marginBottom: isMobileNav ? '0.9rem' : '1.5rem' }}>
-        <div style={{
-          display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-          fontSize: '0.72rem', fontWeight: 700, color: 'var(--accentDark)',
-          background: 'var(--accentSoft)', border: '1px solid rgba(var(--accentRGB),0.25)',
-          padding: '0.3rem 0.75rem', borderRadius: '999px', marginBottom: '0.75rem',
-        }}>
+      <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 56px' }}>
+        <div className="kx-eyebrow" style={{ marginBottom: '0.75rem' }}>
           নিজের ক্যাম্পাস
         </div>
-        <h2 style={{ fontSize: 'clamp(1.35rem, 3.5vw, 1.7rem)', fontWeight: 900, color: 'var(--text)', letterSpacing: '-0.02em', marginBottom: '0.4rem' }}>
+        <h2 className="kx-h2" style={{ fontSize: isMobileNav ? 'clamp(1.35rem, 6vw, 1.7rem)' : '36px' }}>
           KUET-এর জন্য, KUET-এই তৈরি
         </h2>
-        <p style={{ fontSize: '0.88rem', color: 'var(--muted)', maxWidth: '460px', margin: '0 auto' }}>
-          বাইরের কোনো কোম্পানির প্রোডাক্ট না — এই ক্যাম্পাসের ছাত্রছাত্রীরাই বানিয়েছে, নিজেদের সমস্যা দেখে।
+        <p style={{ fontSize: '16px', color: 'var(--kx-ink-soft)', lineHeight: 1.6 }}>
+          বাইরের কোনো কোম্পানির প্রোডাক্ট না — এই ক্যাম্পাসের ছাত্রছাত্রীরাই বানিয়েছে, নিজেদের সমস্যা দেখে, নিজেরাই চালাচ্ছে।
         </p>
       </div>
 
@@ -391,8 +495,8 @@ function CampusScrapbook({ isMobileNav }) {
         gridTemplateColumns: isMobileNav ? 'repeat(2, 1fr)' : undefined,
         justifyContent: isMobileNav ? undefined : 'center',
         flexWrap: isMobileNav ? undefined : 'wrap',
-        gap: isMobileNav ? '0.85rem' : '1.5rem',
-        maxWidth: '1080px', margin: '0 auto',
+        gap: isMobileNav ? '0.85rem' : '24px',
+        maxWidth: '1120px', margin: '0 auto',
       }}>
         {SCRAPBOOK_ORDER.map((key, i) => {
           const photo = CAMPUS_PHOTOS[key];
@@ -405,12 +509,8 @@ function CampusScrapbook({ isMobileNav }) {
                 width: isMobileNav ? '100%' : '210px',
                 background: '#fff',
                 borderRadius: '10px',
-                padding: '10px 10px 14px',
-                boxShadow: '0 12px 26px rgba(0,0,0,0.12)',
-                // Base rotation stays on the element's own transform so
-                // the CSS :hover rule (box-shadow only, see
-                // CampusDesignStyles) doesn't need to know each tile's
-                // individual tilt angle to avoid snapping it flat.
+                padding: '10px 10px 16px',
+                boxShadow: '0 12px 28px rgba(0,0,0,0.1)',
                 transform: `rotate(${tilt}deg)`,
               }}
             >
@@ -418,15 +518,15 @@ function CampusScrapbook({ isMobileNav }) {
                 src={photo.src}
                 alt={photo.label}
                 loading="lazy"
-                style={{ width: '100%', height: isMobileNav ? '120px' : '155px', objectFit: 'cover', borderRadius: '6px', marginBottom: '8px', display: 'block' }}
+                style={{ width: '100%', height: isMobileNav ? '120px' : '160px', objectFit: 'cover', borderRadius: '6px', marginBottom: '10px', display: 'block' }}
               />
-              <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#16241a', textAlign: 'center' }}>{photo.label}</div>
-              <div style={{ fontSize: '0.62rem', color: '#8a9188', textAlign: 'center', marginTop: '2px' }}>{photo.coord}</div>
+              <div style={{ fontSize: '12.5px', fontWeight: 700, color: '#16241a', textAlign: 'center' }}>{photo.label}</div>
+              <div style={{ fontFamily: 'var(--kx-mono)', fontSize: '10px', color: '#8a9188', textAlign: 'center', marginTop: '2px' }}>{photo.coord}</div>
             </div>
           );
         })}
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -561,8 +661,9 @@ function StatCardTile({ stat, isMobileNav }) {
         <Icon size={isMobileNav ? 16 : 21} color="var(--accent)" strokeWidth={2.3} />
       </div>
       <div style={{
+        fontFamily: 'var(--kx-mono, inherit)',
         fontSize: isMobileNav ? '1.15rem' : '1.6rem',
-        fontWeight: 800, color: 'var(--accent)',
+        fontWeight: 700, color: 'var(--accent)',
         letterSpacing: '-0.01em', fontVariantNumeric: 'tabular-nums',
         lineHeight: 1.15, marginBottom: '0.35rem',
       }}>
@@ -729,10 +830,11 @@ function WhyKuetxCard({ card, index, isMobileNav }) {
   return (
     <div
       ref={ref}
+      className="kx-why-card"
       style={{
-        padding: isMobileNav ? '0.85rem' : '1.25rem', borderRadius: isMobileNav ? '13px' : '16px',
-        border: '1px solid var(--border)',
-        background: 'var(--surface)',
+        padding: isMobileNav ? '0.85rem' : '26px 22px', borderRadius: '16px',
+        border: '1px solid var(--kx-line)',
+        background: 'var(--kx-card)',
         opacity: visible ? 1 : 0,
         transform: visible ? 'translateY(0)' : 'translateY(14px)',
         transition: `opacity 0.5s ease ${index * 90}ms, transform 0.5s ease ${index * 90}ms`,
@@ -740,21 +842,17 @@ function WhyKuetxCard({ card, index, isMobileNav }) {
     >
       <div style={{
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-        width: isMobileNav ? '30px' : '40px', height: isMobileNav ? '30px' : '40px',
-        borderRadius: isMobileNav ? '9px' : '11px',
-        background: 'rgba(var(--accentRGB),0.10)', marginBottom: isMobileNav ? '0.5rem' : '0.75rem',
+        width: isMobileNav ? '30px' : '42px', height: isMobileNav ? '30px' : '42px',
+        borderRadius: isMobileNav ? '9px' : '10px',
+        background: 'var(--kx-sage)', marginBottom: isMobileNav ? '0.5rem' : '16px',
       }}>
-        <Icon size={isMobileNav ? 15 : 20} style={{ color: 'var(--accent)' }} />
+        <Icon size={isMobileNav ? 15 : 20} style={{ color: 'var(--kx-accent)' }} />
       </div>
-      <div style={{ fontSize: isMobileNav ? '0.82rem' : '0.95rem', fontWeight: 800, color: 'var(--text)', marginBottom: isMobileNav ? '0.3rem' : '0.4rem' }}>
+      <div style={{ fontSize: isMobileNav ? '0.82rem' : '16px', fontWeight: 700, color: 'var(--kx-ink)', letterSpacing: '-0.01em', marginBottom: isMobileNav ? '0.3rem' : '8px' }}>
         {card.title}
       </div>
-      {/* Body copy dropped on mobile — this section is a value-prop
-          appetizer, not reference material a mobile visitor needs to
-          read in full; title + icon carries the point in far less
-          vertical space, and the desktop branch keeps the full body. */}
       {!isMobileNav && (
-        <p style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: 1.55, margin: 0 }}>
+        <p style={{ fontSize: '13.5px', color: 'var(--kx-ink-soft)', lineHeight: 1.55, margin: 0 }}>
           {card.body}
         </p>
       )}
@@ -764,22 +862,28 @@ function WhyKuetxCard({ card, index, isMobileNav }) {
 
 function WhyKuetx({ isMobileNav }) {
   return (
-    <div style={{ marginBottom: isMobileNav ? '1.5rem' : '3rem' }}>
-      <div style={{ textAlign: 'center', marginBottom: isMobileNav ? '0.75rem' : '1.25rem' }}>
-        <h2 style={{ fontSize: 'clamp(1.35rem, 3.5vw, 1.7rem)', fontWeight: 900, color: 'var(--text)', letterSpacing: '-0.02em' }}>
-          কেন KUETx?
+    // Full-bleed --kx-bg band, matches HTML's .why-section exactly.
+    <section
+      className="kx-page"
+      style={{ width: '100%', padding: isMobileNav ? '2.25rem 1.1rem' : '90px 32px' }}
+    >
+      <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto' }}>
+        <div className="kx-eyebrow" style={{ marginBottom: '0.75rem' }}>কেন KUETx?</div>
+        <h2 className="kx-h2" style={{ fontSize: isMobileNav ? 'clamp(1.35rem, 6vw, 1.7rem)' : '36px' }}>
+          Feature আছে অনেক app-এই। পার্থক্য হলো, এটা <span style={{ color: '#16803d' }}>তোমার</span> app.
         </h2>
       </div>
       <div style={{
         display: 'grid',
-        gridTemplateColumns: isMobileNav ? 'repeat(2, 1fr)' : 'repeat(auto-fit, minmax(220px, 1fr))',
-        gap: isMobileNav ? '0.6rem' : '1rem',
+        gridTemplateColumns: isMobileNav ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+        gap: isMobileNav ? '0.6rem' : '20px',
+        maxWidth: '1180px', margin: '48px auto 0',
       }}>
         {WHY_KUETX_CARDS.map((card, i) => (
           <WhyKuetxCard key={card.title} card={card} index={i} isMobileNav={isMobileNav} />
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -1012,26 +1116,14 @@ function FeatureItem({ name, isMobileNav }) {
 // a caption.
 function FeatureCategoryBlock({ label, items, isMobileNav }) {
   return (
-    <div style={{
-      border: '1px solid var(--border)',
-      borderRadius: '14px',
-      background: 'var(--surface)',
-      padding: isMobileNav ? '0.85rem 0.9rem' : '1.1rem 1.25rem',
+    <div className="kx-fcol" style={{
+      padding: isMobileNav ? '0.85rem 0.9rem' : '26px 24px',
     }}>
-      <div style={{
-        display: 'flex', alignItems: 'center', gap: '0.5rem',
-        marginBottom: isMobileNav ? '0.55rem' : '0.75rem',
+      <div className="kx-fcol-title" style={{
+        marginBottom: isMobileNav ? '0.55rem' : '16px',
+        fontSize: isMobileNav ? '0.72rem' : '12px',
       }}>
-        <span style={{
-          width: '3px', height: isMobileNav ? '0.85rem' : '1rem',
-          borderRadius: '999px', background: 'var(--accent)', flexShrink: 0,
-        }} />
-        <span style={{
-          fontSize: isMobileNav ? '0.74rem' : '0.82rem', fontWeight: 800, color: 'var(--muted)',
-          textTransform: 'uppercase', letterSpacing: '0.04em',
-        }}>
-          {label}
-        </span>
+        {label}
       </div>
       <ul style={{
         listStyle: 'none', margin: 0, padding: 0,
@@ -1109,26 +1201,27 @@ function FeatureBreakdown({ isMobileNav }) {
   };
 
   return (
-    <div style={{ marginTop: '3.5rem', marginBottom: '3rem' }}>
+    // Full-bleed --kx-bg role-section, matches HTML's .role-section +
+    // .feature-columns exactly — role-tabs row, then 3 real fcol cards.
+    <section id="roles" className="kx-page" style={{ width: '100%', padding: isMobileNav ? '2.25rem 1.1rem 0' : '80px 32px 0' }}>
       <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-        <h2 style={{ fontSize: 'clamp(1.35rem, 3.5vw, 1.7rem)', fontWeight: 900, color: 'var(--text)', letterSpacing: '-0.02em', marginBottom: '0.4rem' }}>
+        <h2 className="kx-h2" style={{ fontSize: isMobileNav ? 'clamp(1.35rem, 6vw, 1.7rem)' : '36px', marginBottom: '0.4rem' }}>
           {FEATURE_COUNT_DISPLAY} ফিচার, প্রতিটাই আসল
         </h2>
-        <p style={{ fontSize: '0.88rem', color: 'var(--muted)', maxWidth: '480px', margin: '0 auto' }}>
+        <p style={{ fontSize: '16px', color: 'var(--kx-ink-soft)', maxWidth: '480px', margin: '0 auto' }}>
           এখানে যা দেখছো তার সবটাই অ্যাপের real navigation থেকে — কোনো marketing list না।
         </p>
       </div>
 
-      {/* Tabs — sticky on mobile so the Student/Faculty/Provider context
-          stays visible once the visitor scrolls past it into the long
-          feature list below (owner feedback: it scrolled out of view
-          and the two-column list lost its role context). */}
+      {/* Role tabs — matches HTML's .role-tabs (dark active pill),
+          sticky on mobile so role context stays visible while scrolling
+          the long feature list below. */}
       <div style={{
-        display: 'flex', justifyContent: 'center', gap: '0.5rem', marginBottom: '1.5rem', flexWrap: 'wrap',
+        display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '40px', flexWrap: 'wrap',
         position: isMobileNav ? 'sticky' : 'static', top: isMobileNav ? '0' : undefined,
         zIndex: isMobileNav ? 5 : undefined,
         padding: isMobileNav ? '0.5rem 0' : 0,
-        background: isMobileNav ? 'var(--bg)' : undefined,
+        background: isMobileNav ? 'var(--kx-bg)' : undefined,
       }}>
         {FEATURE_TABS.map((t) => {
           const Icon = t.icon;
@@ -1138,14 +1231,7 @@ function FeatureBreakdown({ isMobileNav }) {
               key={t.id}
               type="button"
               onClick={() => handleTabClick(t.id)}
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                padding: '0.5rem 1rem', borderRadius: '999px', fontSize: '0.85rem', fontWeight: 700,
-                border: active ? '1px solid var(--accent)' : '1px solid var(--border)',
-                cursor: 'pointer', transition: 'all 0.15s',
-                background: active ? 'var(--accent)' : 'transparent',
-                color: active ? '#fff' : 'var(--text)',
-              }}
+              className={`kx-role-tab${active ? ' active' : ''}`}
             >
               <Icon size={15} /> {t.title}
             </button>
@@ -1153,35 +1239,24 @@ function FeatureBreakdown({ isMobileNav }) {
         })}
       </div>
 
-      {/* Card removed as a single bordered wrapper — each category is now
-          its own sub-card (see FeatureCategoryBlock). Desktop: CSS
-          multi-column layout (not CSS Grid) — owner feedback: with a
-          fixed-row grid, a short category (e.g. Faculty's
-          "কমিউনিকেশন" with only 2 items) left a large empty gap next to
-          taller neighboring cards since grid rows size to the tallest
-          card in that row. `columns` packs cards top-to-bottom within
-          each column instead — a short card is simply followed by the
-          next card flowing into the remaining space below it, so no
-          dead space regardless of how uneven the category item-counts
-          are. `break-inside: avoid` on each card (in
-          FeatureCategoryBlock) keeps a single category from being
-          split across two columns. Mobile keeps the previous
-          single-column stacked behavior untouched. */}
+      {/* Three-column fcol grid on desktop, stacked on mobile — matches
+          HTML's .feature-columns exactly (real bordered cards, mono
+          uppercase category header with accent left-border). */}
       <div style={{
-        columns: isMobileNav ? 1 : '300px 3',
-        columnGap: isMobileNav ? '0.85rem' : '1.25rem',
-        maxWidth: isMobileNav ? undefined : '1080px',
-        margin: isMobileNav ? undefined : '0 auto',
+        display: isMobileNav ? 'block' : 'grid',
+        gridTemplateColumns: isMobileNav ? undefined : 'repeat(3, 1fr)',
+        gap: isMobileNav ? undefined : '22px',
+        maxWidth: '1180px', margin: '0 auto', paddingBottom: isMobileNav ? '2rem' : '90px',
       }}>
         {categories.map(([key, items]) => (
-          <div key={key} style={{ breakInside: 'avoid', marginBottom: isMobileNav ? '0.85rem' : '1.25rem' }}>
+          <div key={key} style={{ marginBottom: isMobileNav ? '0.85rem' : 0 }}>
             <FeatureCategoryBlock label={tab.labels[key] || key} items={items} isMobileNav={isMobileNav} />
           </div>
         ))}
       </div>
 
       {activeTab === 'student' && <CRFeatureBlock />}
-    </div>
+    </section>
   );
 }
 
@@ -1233,30 +1308,31 @@ function MockupFrame({ mode, children, scrollHostRef }) {
   return (
     <div style={{
       margin: '0 auto',
-      width: isPhone ? '340px' : '100%',
-      maxWidth: isPhone ? '340px' : '100%',
-      border: isPhone ? '3px solid var(--border)' : '1.5px solid var(--border)',
-      borderRadius: isPhone ? '36px' : '16px',
-      background: 'var(--surface)',
-      boxShadow: '0 12px 32px rgba(0,0,0,0.12)',
+      // Phone mode: exact HTML .phone-frame treatment — dark green
+      // rounded device shell with a notch, not a plain bordered box.
+      width: isPhone ? '272px' : '100%',
+      maxWidth: isPhone ? '272px' : '100%',
+      borderRadius: isPhone ? '34px' : '16px',
+      background: isPhone ? 'var(--kx-dark)' : 'var(--kx-card)',
+      padding: isPhone ? '12px' : 0,
+      border: isPhone ? 'none' : '1.5px solid var(--kx-line)',
+      boxShadow: isPhone
+        ? '0 40px 80px rgba(12,39,24,0.35), 0 0 0 1px rgba(0,0,0,0.06)'
+        : '0 12px 32px rgba(0,0,0,0.12)',
       overflow: 'hidden',
       position: 'relative',
     }}>
       {isPhone ? (
-        <div style={{ height: '26px', position: 'relative' }}>
-          {/* Notch-cutout — a small centered pill at the very top, like a
-              phone's camera/speaker cutout. Purely decorative (no real
-              camera/speaker), just enough to read as "phone" at a glance. */}
+        <div style={{ height: '20px', position: 'relative' }}>
           <div style={{
-            position: 'absolute', top: '6px', left: '50%', transform: 'translateX(-50%)',
-            width: '90px', height: '16px', borderRadius: '999px', background: 'var(--bg)',
-            border: '1px solid var(--border)',
+            position: 'absolute', top: '0', left: '50%', transform: 'translateX(-50%)',
+            width: '90px', height: '20px', borderRadius: '0 0 14px 14px', background: 'var(--kx-dark)',
           }} />
         </div>
       ) : (
         <div style={{
           height: '32px', display: 'flex', alignItems: 'center', gap: '6px',
-          padding: '0 12px', borderBottom: '1px solid var(--border)',
+          padding: '0 12px', borderBottom: '1px solid var(--kx-line)',
         }}>
           <div style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#ff5f57' }} />
           <div style={{ width: '9px', height: '9px', borderRadius: '50%', background: '#febc2e' }} />
@@ -1266,6 +1342,8 @@ function MockupFrame({ mode, children, scrollHostRef }) {
       <div
         ref={scrollHostRef}
         style={{
+          background: isPhone ? 'var(--kx-bg)' : 'var(--kx-card)',
+          borderRadius: isPhone ? '24px' : 0,
           minHeight: isPhone ? '480px' : '360px',
           maxHeight: isPhone ? '480px' : '420px',
           overflowY: 'auto',
@@ -1358,82 +1436,134 @@ function RotatingPreview({ mockupMode, setMockupMode, onSignUp, isMobileNav }) {
     scheduleRole(roleId);
   };
 
-  return (
-    <div style={{ marginBottom: '2rem' }}>
-      <style>{`.kuetx-mockup-scrollhost::-webkit-scrollbar { display: none; }`}</style>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '0.4rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
-        {ROLE_CARDS.map(role => {
-          const Icon = role.icon;
-          const active = activeRole === role.id;
-          return (
-            <button
-              key={role.id}
-              type="button"
-              onClick={() => handleManualSelect(role.id)}
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
-                padding: '0.4rem 0.85rem', borderRadius: '999px', fontSize: '0.8rem', fontWeight: 700,
-                border: active ? '1px solid var(--accent)' : '1px solid var(--border)',
-                cursor: 'pointer', transition: 'all 0.15s',
-                background: active ? 'var(--accent)' : 'var(--surfaceGlassStrong, var(--surface))',
-                color: active ? '#fff' : 'var(--text)',
-              }}
-            >
-              <Icon size={13} /> {role.title}
-            </button>
-          );
-        })}
-        {!isMobileNav && (
-          <>
-            <div style={{ width: '1px', background: 'var(--border)', margin: '0 0.2rem' }} />
-            <button
-              type="button"
-              onClick={() => setMockupMode('phone')}
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
-                padding: '0.4rem 0.7rem', borderRadius: '999px', fontSize: '0.8rem', fontWeight: 700,
-                border: '1px solid var(--border)', cursor: 'pointer',
-                background: mockupMode === 'phone' ? 'var(--accent)' : 'transparent',
-                color: mockupMode === 'phone' ? '#fff' : 'var(--text)',
-              }}
-            >
-              <Smartphone size={13} />
-            </button>
-            <button
-              type="button"
-              onClick={() => setMockupMode('desktop')}
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
-                padding: '0.4rem 0.7rem', borderRadius: '999px', fontSize: '0.8rem', fontWeight: 700,
-                border: '1px solid var(--border)', cursor: 'pointer',
-                background: mockupMode === 'desktop' ? 'var(--accent)' : 'transparent',
-                color: mockupMode === 'desktop' ? '#fff' : 'var(--text)',
-              }}
-            >
-              <Monitor size={13} />
-            </button>
-          </>
-        )}
-      </div>
-
-      <MockupFrame mode={effectiveMode} scrollHostRef={scrollHostRef}>
-        <DemoContent role={activeRole} />
-      </MockupFrame>
-
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
-        <button
-          type="button"
-          onClick={onSignUp}
-          style={{
-            padding: '0.75rem 1.5rem', borderRadius: '12px',
-            background: 'var(--accent)', color: '#fff', border: 'none',
-            fontSize: '0.85rem', fontWeight: 800, cursor: 'pointer',
-          }}
-        >
-          {ROLE_CARDS.find(r => r.id === activeRole)?.title || ''} হিসেবে Sign Up করো
-        </button>
-      </div>
+  const roleTabsRow = (
+    <div style={{ display: 'flex', justifyContent: 'center', gap: '0.4rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
+      {ROLE_CARDS.map(role => {
+        const Icon = role.icon;
+        const active = activeRole === role.id;
+        return (
+          <button
+            key={role.id}
+            type="button"
+            onClick={() => handleManualSelect(role.id)}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+              padding: '0.4rem 0.85rem', borderRadius: '999px', fontSize: '0.8rem', fontWeight: 700,
+              border: active ? '1px solid var(--kx-accent)' : '1px solid var(--kx-line)',
+              cursor: 'pointer', transition: 'all 0.15s',
+              background: active ? 'var(--kx-accent)' : 'var(--kx-card)',
+              color: active ? '#fff' : 'var(--kx-ink)',
+            }}
+          >
+            <Icon size={13} /> {role.title}
+          </button>
+        );
+      })}
+      {!isMobileNav && (
+        <>
+          <div style={{ width: '1px', background: 'var(--kx-line)', margin: '0 0.2rem' }} />
+          <button
+            type="button"
+            onClick={() => setMockupMode('phone')}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+              padding: '0.4rem 0.7rem', borderRadius: '999px', fontSize: '0.8rem', fontWeight: 700,
+              border: '1px solid var(--kx-line)', cursor: 'pointer',
+              background: mockupMode === 'phone' ? 'var(--kx-accent)' : 'transparent',
+              color: mockupMode === 'phone' ? '#fff' : 'var(--kx-ink)',
+            }}
+          >
+            <Smartphone size={13} />
+          </button>
+          <button
+            type="button"
+            onClick={() => setMockupMode('desktop')}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+              padding: '0.4rem 0.7rem', borderRadius: '999px', fontSize: '0.8rem', fontWeight: 700,
+              border: '1px solid var(--kx-line)', cursor: 'pointer',
+              background: mockupMode === 'desktop' ? 'var(--kx-accent)' : 'transparent',
+              color: mockupMode === 'desktop' ? '#fff' : 'var(--kx-ink)',
+            }}
+          >
+            <Monitor size={13} />
+          </button>
+        </>
+      )}
     </div>
+  );
+
+  const signUpButton = (
+    <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+      <button
+        type="button"
+        onClick={onSignUp}
+        style={{
+          padding: '0.75rem 1.5rem', borderRadius: '12px',
+          background: 'var(--kx-accent)', color: '#fff', border: 'none',
+          fontSize: '0.85rem', fontWeight: 800, cursor: 'pointer',
+        }}
+      >
+        {ROLE_CARDS.find(r => r.id === activeRole)?.title || ''} হিসেবে Sign Up করো
+      </button>
+    </div>
+  );
+
+  const activeRoleMeta = ROLE_CARDS.find(r => r.id === activeRole);
+
+  return (
+    // Full-bleed --kx-bg .proof-section — phone/frame on one side, real
+    // "not a mockup, it's your own codebase" copy column on the other,
+    // matching the HTML's .proof-grid exactly. The phone/frame itself
+    // stays 100% real (RotatingPreview's own live-switching demo data,
+    // DemoContent -> Student/Faculty/ProviderDemoDashboard) — only the
+    // surrounding visual frame/copy changed.
+    <section className="kx-page" style={{ width: '100%', padding: isMobileNav ? '1rem 1.1rem 2.5rem' : '10px 32px 90px' }}>
+      <style>{`.kuetx-mockup-scrollhost::-webkit-scrollbar { display: none; }`}</style>
+      <div style={{
+        display: isMobileNav ? 'block' : 'grid',
+        gridTemplateColumns: isMobileNav ? undefined : '0.85fr 1.15fr',
+        gap: isMobileNav ? undefined : '56px',
+        alignItems: 'center',
+        maxWidth: '1180px', margin: '0 auto',
+      }}>
+        <div>
+          {roleTabsRow}
+          <MockupFrame mode={effectiveMode} scrollHostRef={scrollHostRef}>
+            <DemoContent role={activeRole} />
+          </MockupFrame>
+          {signUpButton}
+        </div>
+
+        <div style={{ marginTop: isMobileNav ? '2rem' : 0, textAlign: isMobileNav ? 'center' : 'left' }}>
+          <div className="kx-eyebrow" style={{ marginBottom: '0.9rem' }}>রিয়েল অ্যাপ, রিয়েল ফিচার</div>
+          <h2 className="kx-h2" style={{ fontSize: isMobileNav ? 'clamp(1.25rem, 6vw, 1.55rem)' : '30px', marginBottom: '16px' }}>
+            মকআপ না — এটা তোমার নিজের অ্যাপ থেকেই নেওয়া লাইভ প্রিভিউ।
+          </h2>
+          <p style={{
+            fontSize: '16px', color: 'var(--kx-ink-soft)', lineHeight: 1.65, marginBottom: '24px',
+            maxWidth: '440px', marginLeft: isMobileNav ? 'auto' : 0, marginRight: isMobileNav ? 'auto' : 0,
+          }}>
+            {activeRoleMeta?.title || ''} হিসেবে লগইন করলে ঠিক এই ড্যাশবোর্ডটাই দেখবে — Attendance, Marks,
+            Notice, Question Bank থেকে ক্যাম্পাস সার্ভিস বুকিং পর্যন্ত, সবকিছু একই লগইনে।
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', alignItems: isMobileNav ? 'center' : 'flex-start' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14.5px', fontWeight: 600 }}>
+              <span style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'var(--kx-sage)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>📱</span>
+              Role অনুযায়ী নিজের ড্যাশবোর্ড
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14.5px', fontWeight: 600 }}>
+              <span style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'var(--kx-sage)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>⚡</span>
+              রিয়েল-টাইম Attendance &amp; Notice
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14.5px', fontWeight: 600 }}>
+              <span style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'var(--kx-sage)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>🗂️</span>
+              বছরভিত্তিক Question &amp; Solution Bank
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -1523,13 +1653,39 @@ function CreditsSpotlight({ isMobileNav }) {
     <div
       ref={ref}
       style={{
+        position: 'relative',
         marginBottom: isMobileNav ? '1.5rem' : '2rem',
         opacity: visible ? 1 : 0,
         transform: visible ? 'translateY(0)' : 'translateY(14px)',
         transition: 'opacity 0.7s ease, transform 0.7s ease',
       }}
     >
+      {/* Soft spotlight glow — owner asked for a literal spotlight-beam
+          treatment (cone of light) here, but that needs a dark backing
+          to read correctly and would break both light-mode legibility
+          and the app's own no-hardcoded-color rule for this section.
+          This is the toned-down equivalent: a radial glow in the same
+          --accentRGB the rest of the app already uses (see CampusHero's
+          identical technique), centered behind the photo rather than
+          the whole card, so it reads as "a light settling on this
+          person" without needing a dark background or a new color. */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: isMobileNav ? '-30px' : '-40px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: isMobileNav ? '260px' : '340px',
+          height: isMobileNav ? '260px' : '340px',
+          background: 'radial-gradient(ellipse 50% 50% at 50% 35%, rgba(var(--accentRGB),0.16), transparent 70%)',
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}
+      />
+
       <div style={{
+        position: 'relative', zIndex: 1,
         maxWidth: isWide ? '480px' : '340px', margin: '0 auto',
         display: 'flex', flexDirection: 'column', alignItems: 'center',
         textAlign: 'center', gap: '0.6rem',
@@ -1879,21 +2035,20 @@ export default function LandingPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
-      {/* Navbar — logo + Sign In/Sign Up, sticky, non-forcing.
-          Phase 1 (landing redesign, §11.1): split the single "Sign In"
-          button into two separate entry points so a new visitor doesn't
-          have to guess which one applies to them. Sign In opens the plain
-          Google AuthModal; Sign Up opens SignUpWizard instead (as of
-          Phase 4/5/6) — role select -> profile details -> confirm ->
-          Google last — see authIntent state above and the render logic
+    <div className="kx-page" style={{ minHeight: '100vh', background: 'var(--kx-bg)' }}>
+      <CampusDesignStyles />
+      {/* Navbar — matches HTML's sticky, blurred .nav bar exactly.
+          Sign In opens the plain Google AuthModal; Sign Up opens
+          SignUpWizard (role select -> profile details -> confirm ->
+          Google last) — see authIntent state above and the render logic
           further down. Sign Up is visually primary (filled) since most
           navbar visitors are new; Sign In is secondary (outlined). */}
       <div style={{
         position: 'sticky', top: 0, zIndex: 5, display: 'flex',
         alignItems: 'center', justifyContent: 'space-between',
-        padding: '0.85rem 1.25rem', background: 'var(--surfaceGlassStrong)',
-        backdropFilter: 'blur(10px)', borderBottom: '1px solid var(--border)',
+        padding: isMobileNav ? '14px 18px' : '18px 32px',
+        background: 'rgba(247,246,241,0.85)', backdropFilter: 'blur(10px)',
+        borderBottom: '1px solid var(--kx-line)',
       }}>
         <Wordmark height={isMobileNav ? 26 : 28} />
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -1902,10 +2057,10 @@ export default function LandingPage() {
             onClick={() => openAuth('signin')}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-              padding: '0.55rem 0.9rem', borderRadius: '12px',
-              background: 'transparent', color: 'var(--text)',
-              border: '1px solid var(--border)',
-              fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer',
+              padding: '10px 20px', borderRadius: '10px', minHeight: '44px',
+              background: 'transparent', color: 'var(--kx-ink)',
+              border: '1px solid var(--kx-line)',
+              fontSize: '14.5px', fontWeight: 600, cursor: 'pointer',
             }}
           >
             Sign In
@@ -1915,9 +2070,9 @@ export default function LandingPage() {
             onClick={() => openAuth('signup')}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-              padding: '0.55rem 1rem', borderRadius: '12px',
-              background: 'var(--accent)', color: '#fff', border: 'none',
-              fontSize: '0.85rem', fontWeight: 800, cursor: 'pointer',
+              padding: '10px 20px', borderRadius: '10px', minHeight: '44px',
+              background: 'var(--kx-accent)', color: '#06210f', border: 'none',
+              fontSize: '14.5px', fontWeight: 600, cursor: 'pointer',
             }}
           >
             <LogIn size={15} /> Sign Up
@@ -1925,46 +2080,37 @@ export default function LandingPage() {
         </div>
       </div>
 
-      <div style={{
-        maxWidth: '1080px', margin: '0 auto',
-        padding: isMobileNav ? '1.25rem 1rem 2.5rem' : '2.5rem 1.25rem 4rem',
-      }}>
-        {/* Hero — design refresh (this session): the old text-only hero is
-            replaced by CampusHero, the owner-approved standalone-HTML
-            mockup's tilted-photo hero, ported to use the app's real theme
-            vars instead of hardcoded colors. Headline/sub copy kept as
-            close to the previous hero's actual wording as possible so
-            nothing true about the product changes, just how it's framed
-            visually. */}
-        <CampusDesignStyles />
+      {/* ─── Full-width page body ───────────────────────────────────────
+          This is the real, top-to-bottom port of the owner-approved
+          standalone HTML mockup (kuetx-landing-redesign-v2.html) into the
+          real component tree: every section below is a full-bleed band
+          exactly like the HTML (dark hero, --kx-bg role/proof sections,
+          sage scrapbook band, --kx-bg why-section, dark final-CTA) rather
+          than being squeezed inside a constrained maxWidth column. The
+          only thing that changed from the HTML is WHERE the real data
+          comes from — StatsStrip/FeatureBreakdown/RotatingPreview/
+          CreditsSpotlight all keep their own real logic/state untouched,
+          just re-skinned into this section shell instead of the HTML's
+          static markup. */}
+      <div style={{ width: '100%', overflowX: 'hidden' }}>
         <CampusHero
           isMobileNav={isMobileNav}
-          headline={<>তোমার ক্যাম্পাস,<br />এক জায়গায় <span style={{ color: 'var(--accentLight)' }}>সাজানো।</span></>}
+          headline={<>তোমার ক্যাম্পাস,<br />এক জায়গায় <span style={{ color: 'var(--kx-accent-bright)' }}>সাজানো।</span></>}
           sub="Routine থেকে Result, Notice থেকে Campus Service — Student, CR, Faculty, আর Provider, প্রতিটা role-এর জন্য একটাই app। আলাদা spreadsheet, group, বা app খুঁজে বেড়াতে হবে না।"
           onSignUp={() => openAuth('signup')}
         />
 
         <div id="stats-anchor" />
-        <StatsStrip isMobileNav={isMobileNav} />
 
-        {/* Campus scrapbook — signature tilted-photo motif's second
-            occurrence (see CampusHero's header comment). Sits right after
-            the live stats strip and before "কেন KUETx?" per owner
-            instruction: the new photographic identity is now the page's
-            main visual language, not a bolted-on extra section. */}
-        <CampusScrapbook isMobileNav={isMobileNav} />
-
-        <WhyKuetx isMobileNav={isMobileNav} />
-
-        {/* Phase 9.3: full verbatim feature breakdown, role-tabbed. */}
+        {/* Role-tabbed feature breakdown — matches HTML's #roles section
+            (role-tabs + .feature-columns) exactly, full-bleed --kx-bg. */}
         <FeatureBreakdown isMobileNav={isMobileNav} />
 
-        {/* Always-visible, auto-rotating mockup preview — replaces the old
-            click-to-open role cards entirely (owner decision, this
-            session). Moved below FeatureBreakdown (owner request): the
-            "৬২+ ফিচার" list now comes first, and the live mockup preview
-            sits right after it. See RotatingPreview's own header comment
-            for the full behavior spec. */}
+        {/* "App Proof" — real, always-visible auto-rotating mockup
+            preview (Student -> Faculty -> Provider), matches HTML's
+            .proof-section phone-frame + copy layout. All demo data is
+            RotatingPreview's own real logic (DemoContent ->
+            Student/Faculty/ProviderDemoDashboard) — nothing static. */}
         <RotatingPreview
           mockupMode={mockupMode}
           setMockupMode={setMockupMode}
@@ -1972,12 +2118,78 @@ export default function LandingPage() {
           isMobileNav={isMobileNav}
         />
 
-        {/* Credits spotlight — see CreditsSpotlight's own header comment
-            for placement reasoning. Sits at the very end of the main
-            content column, right before Footer, so it's the last thing
-            a visitor sees after the product itself rather than
-            competing with it. */}
-        <CreditsSpotlight isMobileNav={isMobileNav} />
+        {/* Campus scrapbook — signature tilted-photo motif, matches
+            HTML's sage-band .scrapbook section exactly. */}
+        <CampusScrapbook isMobileNav={isMobileNav} />
+
+        {/* কেন KUETx — matches HTML's .why-section exactly. */}
+        <WhyKuetx isMobileNav={isMobileNav} />
+
+        {/* Live stats + credits spotlight — real data, kept inside a
+            centered content band since the HTML mockup has no direct
+            equivalent section for these (they're additions the real app
+            actually has); everything else above/below is full-bleed. */}
+        <div className="kx-page" style={{
+          maxWidth: '1180px', margin: '0 auto',
+          padding: isMobileNav ? '0 1.1rem 2rem' : '0 32px 60px',
+        }}>
+          <StatsStrip isMobileNav={isMobileNav} />
+          <CreditsSpotlight isMobileNav={isMobileNav} />
+        </div>
+
+        {/* Final CTA — matches HTML's dark .final-cta band exactly. */}
+        <section style={{
+          background: 'var(--kx-dark)', color: '#fff', textAlign: 'center',
+          padding: isMobileNav ? '3rem 1.1rem' : '90px 32px',
+          position: 'relative', overflow: 'hidden',
+        }}>
+          <div style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none',
+            background: 'radial-gradient(ellipse 700px 400px at 50% 100%, rgba(74,222,128,0.15), transparent 60%)',
+          }} />
+          <div style={{ position: 'relative' }}>
+            <div style={{
+              width: isMobileNav ? '52px' : '64px', height: isMobileNav ? '52px' : '64px',
+              margin: '0 auto 20px', borderRadius: '50%',
+              background: 'var(--kx-accent-bright)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <Logo size={isMobileNav ? 30 : 38} />
+            </div>
+            <h2 className="kx-h2" style={{ fontSize: isMobileNav ? 'clamp(1.3rem, 6vw, 1.6rem)' : '34px', color: '#fff' }}>
+              তোমার ক্যাম্পাস লাইফ, আজকেই সাজাও।
+            </h2>
+            <p style={{ color: 'rgba(243,244,239,0.65)', maxWidth: '460px', margin: '16px auto 32px' }}>
+              Sign up করতে কোনো টাকা লাগে না, ভবিষ্যতেও লাগবে না।
+            </p>
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+              <button
+                type="button"
+                onClick={() => openAuth('signup')}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+                  padding: isMobileNav ? '0.75rem 1.2rem' : '15px 28px', borderRadius: '12px',
+                  background: 'var(--kx-accent-bright)', color: '#06210f', fontWeight: 800,
+                  fontSize: isMobileNav ? '0.85rem' : '16px', border: 'none', cursor: 'pointer',
+                }}
+              >
+                Sign Up করো
+              </button>
+              <button
+                type="button"
+                onClick={() => openAuth('signin')}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+                  padding: isMobileNav ? '0.75rem 1.2rem' : '15px 28px', borderRadius: '12px',
+                  background: 'transparent', color: '#f3f4ef', fontWeight: 700,
+                  fontSize: isMobileNav ? '0.85rem' : '16px',
+                  border: '1px solid rgba(255,255,255,0.18)', cursor: 'pointer',
+                }}
+              >
+                Sign In
+              </button>
+            </div>
+          </div>
+        </section>
       </div>
 
       <Footer />
