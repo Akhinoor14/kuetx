@@ -192,6 +192,31 @@ function CampusDesignStyles() {
       }
       .kx-wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
 
+      /* Scoped override for components that still call the app's old
+         generic theme vars (var(--text), var(--border), var(--accent)
+         etc.) internally — rather than rewriting every call site inside
+         StatsStrip/FeatureItem/CreditsSpotlight/Footer (real, working
+         components), this remaps those generic vars to the --kx-*
+         values wherever .kx-theme-vars wraps them. Deliberately NOT
+         applied at .kx-page's root — AuthModal/SignInPrompt mount
+         inside the same tree and must keep the app's real theme
+         untouched, so this only wraps the specific components below. */
+      .kx-theme-vars {
+        --accent: #22c55e;
+        --accentDark: #16803d;
+        --accentLight: #4ade80;
+        --accentSoft: rgba(34,197,94,0.1);
+        --accentRGB: 34,197,94;
+        --card: #ffffff;
+        --surface: #ffffff;
+        --surfaceGlass: #ffffff;
+        --surfaceGlassStrong: #ffffff;
+        --border: #dcd8cc;
+        --text: #16241a;
+        --muted: #4a5750;
+        --bg: #f7f6f1;
+      }
+
       .kx-eyebrow {
         display: inline-flex; align-items: center; gap: 0.4rem;
         font-family: var(--kx-mono); font-size: 12.5px; font-weight: 700;
@@ -725,6 +750,7 @@ function StatsStrip({ isMobileNav }) {
 
   return (
     <div
+      className="kx-theme-vars"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onTouchStart={() => setPaused(true)}
@@ -865,7 +891,7 @@ function WhyKuetx({ isMobileNav }) {
     // Full-bleed --kx-bg band, matches HTML's .why-section exactly.
     <section
       className="kx-page"
-      style={{ width: '100%', padding: isMobileNav ? '2.25rem 1.1rem' : '90px 32px' }}
+      style={{ width: '100%', background: 'var(--kx-bg)', padding: isMobileNav ? '2.25rem 1.1rem' : '90px 32px' }}
     >
       <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto' }}>
         <div className="kx-eyebrow" style={{ marginBottom: '0.75rem' }}>কেন KUETx?</div>
@@ -1116,8 +1142,18 @@ function FeatureItem({ name, isMobileNav }) {
 // a caption.
 function FeatureCategoryBlock({ label, items, isMobileNav }) {
   return (
+    // height: 100% + flex-column so every card in the 3-col grid row
+    // stretches to match its tallest sibling (grid items already stretch
+    // by default, but the inner content needs to fill that stretched
+    // height too, otherwise short cards look like they're floating in a
+    // too-tall box while long cards hug their content — the "uneven,
+    // ungathered" look). The card itself no longer decides its own
+    // height; the grid row does, and this just fills it cleanly.
     <div className="kx-fcol" style={{
       padding: isMobileNav ? '0.85rem 0.9rem' : '26px 24px',
+      height: isMobileNav ? undefined : '100%',
+      display: isMobileNav ? undefined : 'flex',
+      flexDirection: isMobileNav ? undefined : 'column',
     }}>
       <div className="kx-fcol-title" style={{
         marginBottom: isMobileNav ? '0.55rem' : '16px',
@@ -1132,6 +1168,7 @@ function FeatureCategoryBlock({ label, items, isMobileNav }) {
         gridAutoRows: isMobileNav ? '1fr' : undefined,
         gap: isMobileNav ? '0.15rem 0.6rem' : 0,
         alignItems: isMobileNav ? 'stretch' : undefined,
+        flex: isMobileNav ? undefined : '1',
       }}>
         {items.map((name) => (
           <FeatureItem key={name} name={name} isMobileNav={isMobileNav} />
@@ -1203,7 +1240,7 @@ function FeatureBreakdown({ isMobileNav }) {
   return (
     // Full-bleed --kx-bg role-section, matches HTML's .role-section +
     // .feature-columns exactly — role-tabs row, then 3 real fcol cards.
-    <section id="roles" className="kx-page" style={{ width: '100%', padding: isMobileNav ? '2.25rem 1.1rem 0' : '80px 32px 0' }}>
+    <section id="roles" className="kx-page kx-theme-vars" style={{ width: '100%', background: 'var(--kx-bg)', padding: isMobileNav ? '2.25rem 1.1rem 0' : '80px 32px 0' }}>
       <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
         <h2 className="kx-h2" style={{ fontSize: isMobileNav ? 'clamp(1.35rem, 6vw, 1.7rem)' : '36px', marginBottom: '0.4rem' }}>
           {FEATURE_COUNT_DISPLAY} ফিচার, প্রতিটাই আসল
@@ -1245,11 +1282,15 @@ function FeatureBreakdown({ isMobileNav }) {
       <div style={{
         display: isMobileNav ? 'block' : 'grid',
         gridTemplateColumns: isMobileNav ? undefined : 'repeat(3, 1fr)',
+        // alignItems stretch (grid default, set explicitly) makes every
+        // card in a row match the row's tallest card — this is what
+        // actually fixes the uneven/ungathered look, not just spacing.
+        alignItems: isMobileNav ? undefined : 'stretch',
         gap: isMobileNav ? undefined : '22px',
         maxWidth: '1180px', margin: '0 auto', paddingBottom: isMobileNav ? '2rem' : '90px',
       }}>
         {categories.map(([key, items]) => (
-          <div key={key} style={{ marginBottom: isMobileNav ? '0.85rem' : 0 }}>
+          <div key={key} style={{ marginBottom: isMobileNav ? '0.85rem' : 0, height: isMobileNav ? undefined : '100%' }}>
             <FeatureCategoryBlock label={tab.labels[key] || key} items={items} isMobileNav={isMobileNav} />
           </div>
         ))}
@@ -1310,8 +1351,13 @@ function MockupFrame({ mode, children, scrollHostRef }) {
       margin: '0 auto',
       // Phone mode: exact HTML .phone-frame treatment — dark green
       // rounded device shell with a notch, not a plain bordered box.
+      // Desktop mode: capped at 420px (not a raw 100% of its grid
+      // column) so the "browser window" doesn't stretch wide-and-short
+      // against a ~470px column — that mismatch was what made it look
+      // off/squat. Capping width keeps it proportioned like an actual
+      // browser window regardless of how wide the column ends up.
       width: isPhone ? '272px' : '100%',
-      maxWidth: isPhone ? '272px' : '100%',
+      maxWidth: isPhone ? '272px' : '420px',
       borderRadius: isPhone ? '34px' : '16px',
       background: isPhone ? 'var(--kx-dark)' : 'var(--kx-card)',
       padding: isPhone ? '12px' : 0,
@@ -1344,8 +1390,13 @@ function MockupFrame({ mode, children, scrollHostRef }) {
         style={{
           background: isPhone ? 'var(--kx-bg)' : 'var(--kx-card)',
           borderRadius: isPhone ? '24px' : 0,
-          minHeight: isPhone ? '480px' : '360px',
-          maxHeight: isPhone ? '480px' : '420px',
+          // Phone: tall/narrow like a real device screen. Desktop: now
+          // capped at 420px wide (see width above), so height is tuned
+          // to roughly a 4:3-ish browser-window feel at that width
+          // rather than looking squat — 300px was too short once width
+          // stopped stretching to fill the column.
+          minHeight: isPhone ? '380px' : '360px',
+          maxHeight: isPhone ? '380px' : '400px',
           overflowY: 'auto',
           // Auto-scroll is driven programmatically (RotatingPreview), so
           // hide the scrollbar for a cleaner "someone else is scrolling
@@ -1374,10 +1425,10 @@ function MockupFrame({ mode, children, scrollHostRef }) {
 // position: sticky so it stays in view while the visitor scrolls past it
 // (owner-confirmed: pinned, not a normal scrolling section).
 const ROLE_SEQUENCE = ['student', 'faculty', 'provider'];
-const SETTLE_MS = 2800; // brief pause before inner auto-scroll starts
-const SCROLL_MS = 6500; // duration of the inner auto-scroll sweep
-const HOLD_MS = 2200; // pause at bottom before rotating to next role
-const MANUAL_PAUSE_MS = 12000; // owner said 10-15s; 12s split the difference
+const SETTLE_MS = 1400; // brief pause before inner auto-scroll starts
+const SCROLL_MS = 3800; // duration of the inner auto-scroll sweep
+const HOLD_MS = 1200; // pause at bottom before rotating to next role
+const MANUAL_PAUSE_MS = 8000; // pause after a manual role pick before auto-rotate resumes
 
 function RotatingPreview({ mockupMode, setMockupMode, onSignUp, isMobileNav }) {
   // Mobile visitors only ever need the phone mockup — a "desktop browser
@@ -1518,47 +1569,60 @@ function RotatingPreview({ mockupMode, setMockupMode, onSignUp, isMobileNav }) {
     // stays 100% real (RotatingPreview's own live-switching demo data,
     // DemoContent -> Student/Faculty/ProviderDemoDashboard) — only the
     // surrounding visual frame/copy changed.
-    <section className="kx-page" style={{ width: '100%', padding: isMobileNav ? '1rem 1.1rem 2.5rem' : '10px 32px 90px' }}>
+    <section className="kx-page" style={{ width: '100%', background: 'var(--kx-bg)', padding: isMobileNav ? '0.75rem 1.1rem 1.75rem' : '10px 32px 60px' }}>
       <style>{`.kuetx-mockup-scrollhost::-webkit-scrollbar { display: none; }`}</style>
+      {/* Wrapped in an actual visible card now — background + border +
+          shadow + padding — instead of sitting bare on the page bg with
+          no visual container. Card background is a shade off the page
+          bg (var(--kx-card), i.e. white) so it reads as "a distinct
+          panel", not "same color as everything around it". */}
       <div style={{
-        display: isMobileNav ? 'block' : 'grid',
-        gridTemplateColumns: isMobileNav ? undefined : '0.85fr 1.15fr',
-        gap: isMobileNav ? undefined : '56px',
-        alignItems: 'center',
         maxWidth: '1180px', margin: '0 auto',
+        background: 'var(--kx-card)',
+        border: '1px solid var(--kx-line)',
+        borderRadius: isMobileNav ? '20px' : '28px',
+        boxShadow: '0 4px 24px rgba(12,39,24,0.06)',
+        padding: isMobileNav ? '1.5rem 1.1rem' : '3rem',
       }}>
-        <div>
-          {roleTabsRow}
-          <MockupFrame mode={effectiveMode} scrollHostRef={scrollHostRef}>
-            <DemoContent role={activeRole} />
-          </MockupFrame>
-          {signUpButton}
-        </div>
+        <div style={{
+          display: isMobileNav ? 'block' : 'grid',
+          gridTemplateColumns: isMobileNav ? undefined : '0.85fr 1.15fr',
+          gap: isMobileNav ? undefined : '48px',
+          alignItems: 'center',
+        }}>
+          <div>
+            {roleTabsRow}
+            <MockupFrame mode={effectiveMode} scrollHostRef={scrollHostRef}>
+              <DemoContent role={activeRole} />
+            </MockupFrame>
+            {signUpButton}
+          </div>
 
-        <div style={{ marginTop: isMobileNav ? '2rem' : 0, textAlign: isMobileNav ? 'center' : 'left' }}>
-          <div className="kx-eyebrow" style={{ marginBottom: '0.9rem' }}>রিয়েল অ্যাপ, রিয়েল ফিচার</div>
-          <h2 className="kx-h2" style={{ fontSize: isMobileNav ? 'clamp(1.25rem, 6vw, 1.55rem)' : '30px', marginBottom: '16px' }}>
-            মকআপ না — এটা তোমার নিজের অ্যাপ থেকেই নেওয়া লাইভ প্রিভিউ।
-          </h2>
-          <p style={{
-            fontSize: '16px', color: 'var(--kx-ink-soft)', lineHeight: 1.65, marginBottom: '24px',
-            maxWidth: '440px', marginLeft: isMobileNav ? 'auto' : 0, marginRight: isMobileNav ? 'auto' : 0,
-          }}>
-            {activeRoleMeta?.title || ''} হিসেবে লগইন করলে ঠিক এই ড্যাশবোর্ডটাই দেখবে — Attendance, Marks,
-            Notice, Question Bank থেকে ক্যাম্পাস সার্ভিস বুকিং পর্যন্ত, সবকিছু একই লগইনে।
-          </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', alignItems: isMobileNav ? 'center' : 'flex-start' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14.5px', fontWeight: 600 }}>
-              <span style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'var(--kx-sage)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>📱</span>
-              Role অনুযায়ী নিজের ড্যাশবোর্ড
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14.5px', fontWeight: 600 }}>
-              <span style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'var(--kx-sage)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>⚡</span>
-              রিয়েল-টাইম Attendance &amp; Notice
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14.5px', fontWeight: 600 }}>
-              <span style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'var(--kx-sage)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>🗂️</span>
-              বছরভিত্তিক Question &amp; Solution Bank
+          <div style={{ marginTop: isMobileNav ? '2rem' : 0, textAlign: isMobileNav ? 'center' : 'left' }}>
+            <div className="kx-eyebrow" style={{ marginBottom: '0.9rem' }}>সত্যিকারের অ্যাপ থেকে</div>
+            <h2 className="kx-h2" style={{ fontSize: isMobileNav ? 'clamp(1.25rem, 6vw, 1.55rem)' : '30px', marginBottom: '16px' }}>
+              এটা ডিজাইন-নমুনা নয় — তোমার নিজের অ্যাপ থেকেই নেওয়া লাইভ প্রিভিউ।
+            </h2>
+            <p style={{
+              fontSize: '16px', color: 'var(--kx-ink-soft)', lineHeight: 1.65, marginBottom: '24px',
+              maxWidth: '440px', marginLeft: isMobileNav ? 'auto' : 0, marginRight: isMobileNav ? 'auto' : 0,
+            }}>
+              {activeRoleMeta?.title || ''} হিসেবে লগইন করলে ঠিক এই ড্যাশবোর্ডটাই দেখবে — উপস্থিতি, ফলাফল,
+              নোটিশ থেকে শুরু করে প্রশ্নব্যাংক ও ক্যাম্পাস সার্ভিস বুকিং পর্যন্ত, সবকিছু একই লগইনে।
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', alignItems: isMobileNav ? 'center' : 'flex-start' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14.5px', fontWeight: 600 }}>
+                <span style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'var(--kx-sage)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>📱</span>
+                যার যার ভূমিকা অনুযায়ী আলাদা ড্যাশবোর্ড
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14.5px', fontWeight: 600 }}>
+                <span style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'var(--kx-sage)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>⚡</span>
+                তাৎক্ষণিক উপস্থিতি ও নোটিশ আপডেট
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14.5px', fontWeight: 600 }}>
+                <span style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'var(--kx-sage)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>🗂️</span>
+                বছরভিত্তিক প্রশ্ন ও সমাধান ব্যাংক
+              </div>
             </div>
           </div>
         </div>
@@ -1652,6 +1716,7 @@ function CreditsSpotlight({ isMobileNav }) {
   return (
     <div
       ref={ref}
+      className="kx-theme-vars"
       style={{
         position: 'relative',
         marginBottom: isMobileNav ? '1.5rem' : '2rem',
@@ -1786,15 +1851,16 @@ function CreditsSpotlight({ isMobileNav }) {
 function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer style={{
+    <footer className="kx-theme-vars" style={{
       borderTop: '1px solid var(--border)', marginTop: '2rem',
+      background: 'var(--bg)',
       padding: '2rem 1.25rem 2.5rem',
     }}>
       <div style={{
         maxWidth: '1080px', margin: '0 auto', display: 'flex',
         flexDirection: 'column', alignItems: 'center', gap: '1.25rem', textAlign: 'center',
       }}>
-        <Wordmark height={20} />
+        <Wordmark height={20} theme="kx" />
 
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1.25rem' }}>
           <Link to="/about" style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text)', textDecoration: 'none' }}>
@@ -1876,6 +1942,18 @@ export default function LandingPage() {
   };
   const [mockupMode, setMockupMode] = useState('desktop'); // desktop visitor default, per plan §3.2
 
+  // Navbar border/shadow only appears after scrolling — matches the
+  // approved mockup's `nav.scrolled` behavior (kuetx-landing-redesign-v2.html
+  // uses `window.scrollY > 8` as the threshold). Border starts fully
+  // transparent so there's no visible seam at the very top of the page.
+  const [navScrolled, setNavScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setNavScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   const selectedRole = searchParams.get('role');
 
   // Mobile: the full-screen demo branch below replaces the whole scrolled
@@ -1916,7 +1994,7 @@ export default function LandingPage() {
   // real phone screen hurts touch targets and causes double-scroll).
   if (isMobileNav && selectedRole) {
     return (
-      <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
+      <div className="kx-theme-vars" style={{ minHeight: '100vh', background: 'var(--bg)' }}>
         <div style={{
           position: 'sticky', top: 0, zIndex: 5, display: 'flex',
           alignItems: 'center', gap: '0.5rem', padding: '0.6rem 0.8rem',
@@ -2026,6 +2104,7 @@ export default function LandingPage() {
           <AuthModal
             mode="login"
             intent={authIntent}
+            theme="kx"
             onClose={() => setShowAuthModal(false)}
             onSuccess={() => setShowAuthModal(false)}
           />
@@ -2048,9 +2127,11 @@ export default function LandingPage() {
         alignItems: 'center', justifyContent: 'space-between',
         padding: isMobileNav ? '14px 18px' : '18px 32px',
         background: 'rgba(247,246,241,0.85)', backdropFilter: 'blur(10px)',
-        borderBottom: '1px solid var(--kx-line)',
+        borderBottom: `1px solid ${navScrolled ? 'var(--kx-line)' : 'transparent'}`,
+        boxShadow: navScrolled ? '0 1px 0 rgba(0,0,0,0.02)' : 'none',
+        transition: 'border-color .3s, box-shadow .3s',
       }}>
-        <Wordmark height={isMobileNav ? 26 : 28} />
+        <Wordmark height={isMobileNav ? 26 : 28} theme="kx" />
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <button
             type="button"
@@ -2211,6 +2292,7 @@ export default function LandingPage() {
         <AuthModal
           mode="login"
           intent={authIntent}
+          theme="kx"
           onClose={() => setShowAuthModal(false)}
           onSuccess={() => setShowAuthModal(false)}
         />

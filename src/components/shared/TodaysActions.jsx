@@ -11,7 +11,7 @@
 // Each block is fully conditional — hidden entirely when not
 // applicable, no empty placeholders (decision #5).
 import { useState } from 'react';
-import { CalendarCheck, ClipboardCheck, Megaphone, ClipboardList, Bike, Users, CheckCircle, ListChecks } from 'lucide-react';
+import { CalendarCheck, ClipboardCheck, Megaphone, ClipboardList, Bike, CheckCircle, ListChecks } from 'lucide-react';
 import { store } from '../../store/store';
 import { useTodayActions } from '../../lib/todayActions';
 import { markAttendance, moveAttendanceStatus, setRotationOverride, getTeachersForCourse } from '../../lib/attendanceCore';
@@ -49,10 +49,6 @@ export default function TodaysActions() {
     setOpenCard({ courseId, teacher: newTeacherName });
   };
 
-  const pickRotationTeacher = (courseId, day, slot, teacherName) => {
-    setRotationOverride(courseId, day, slot, date, teacherName);
-  };
-
   const hasAnything =
     attendance.rows.length > 0 ||
     assignments.length > 0 ||
@@ -77,55 +73,14 @@ export default function TodaysActions() {
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6, flex: 1 }}>
 
-        {/* 1. Attendance — unmarked courses for today */}
-        {attendance.rows.map((row) => {
-          if (row.anyNeedsPick) {
-            // Mirrors Attendance.jsx's DailyLog exactly: a rotating slot
-            // with no override yet shows inline teacher-pick buttons
-            // FIRST — row-click-to-modal only becomes available once a
-            // teacher is picked (see that file's cardData/teacherRows
-            // gating). Do not special-case this into a single always-
-            // modal click target; the real page doesn't do that either.
-            const pickEntries = row.resolved.filter((r) => r.needsPick);
-            return (
-              <div key={row.id} style={{ padding: '9px 10px', borderRadius: 10, background: dark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.02)', border: dark ? '1px solid rgba(255,255,255,0.07)' : '1px solid rgba(0,0,0,0.05)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-                  <Users size={13} color="var(--accent)" />
-                  <span style={{ fontSize: 12.5, fontWeight: 700 }}>{row.courseName}</span>
-                </div>
-                {pickEntries.map((r) => (
-                  <div key={r.key} style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginBottom: 4 }}>
-                    <span style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 700 }}>{r.slot}:</span>
-                    {r.pool.map((name) => (
-                      <button
-                        key={name}
-                        onClick={() => pickRotationTeacher(row.course.id, r.day, r.slot, name)}
-                        style={{ padding: '4px 9px', borderRadius: 6, fontSize: 10.5, fontWeight: 700, border: '1.5px solid var(--accent)', background: 'transparent', color: 'var(--accent)', cursor: 'pointer' }}
-                      >
-                        {name}
-                      </button>
-                    ))}
-                    <button
-                      onClick={() => {
-                        const custom = window.prompt('Teacher name for this date:');
-                        if (custom && custom.trim()) pickRotationTeacher(row.course.id, r.day, r.slot, custom.trim());
-                      }}
-                      style={{ padding: '4px 9px', borderRadius: 6, fontSize: 10.5, fontWeight: 600, border: '1.5px dashed var(--muted)', background: 'transparent', color: 'var(--muted)', cursor: 'pointer' }}
-                    >
-                      Other…
-                    </button>
-                  </div>
-                ))}
-              </div>
-            );
-          }
-          // Normal case: one row per unmarked course-teacher, with the
-          // same inline ✓ Present / ✗ Absent split buttons as the real
-          // /attendance Daily Log — marks straight from here, no modal
-          // needed for the common single-tap case. Switching teachers
-          // for a non-rotating slot is rare enough to still go through
-          // the row-click -> AttendanceMarkModal path.
-          return row.teacherRows.map((tr) => (
+        {/* 1. Attendance — unmarked courses for today. Always renders as a
+            simple ✓ Present / ✗ Absent row per teacher — the inline
+            rotating-slot teacher-picker (Rabiul Alam Sir / Humayun Kabir
+            Sir / Other...) was removed from this card per product
+            decision: switching the resolved teacher for a rotating slot
+            still works, just via the row-click -> AttendanceMarkModal
+            path (its switchOptions), not inline buttons here. */}
+        {attendance.rows.map((row) => row.teacherRows.map((tr) => (
             <div key={`${row.id}-${tr.teacher}`} style={{ padding: '9px 10px', borderRadius: 10, background: dark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.02)', border: dark ? '1px solid rgba(255,255,255,0.07)' : '1px solid rgba(0,0,0,0.05)' }}>
               <div
                 role="button"
@@ -155,8 +110,7 @@ export default function TodaysActions() {
                 </button>
               </div>
             </div>
-          ));
-        })}
+          )))}
 
         {/* 2. Assignments due today, not yet done */}
         {assignments.map((a) => (

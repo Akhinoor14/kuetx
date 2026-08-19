@@ -30,8 +30,16 @@ export function Logo({ size = 32 }) {
 // clearly visible instead of shrinking to an illegible dot next to the
 // text. Text baseline size (`height`-driven) is unchanged so this doesn't
 // blow up the navbar row height, only the icon.
-export function Wordmark({ height = 28 }) {
+// `theme="kx"` pins the wordmark to the kx-* landing-page palette
+// explicitly (matches the mockup's `.nav-brand span { color: var(--kx-accent) }`)
+// instead of relying on inheriting a remapped --text/--accent from an
+// ancestor .kx-theme-vars wrapper. Every other call site (Sidebar, Footer,
+// About, etc.) omits the prop and keeps using the app's real --text/--accent,
+// unchanged.
+export function Wordmark({ height = 28, theme }) {
   const iconPx = Math.round(height * 1.5);
+  const textColor = theme === 'kx' ? 'var(--kx-ink)' : 'var(--text)';
+  const accentColor = theme === 'kx' ? 'var(--kx-accent)' : 'var(--accent)';
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: height * 0.22 }}>
       <img
@@ -48,10 +56,10 @@ export function Wordmark({ height = 28 }) {
           fontSize: height * 0.95,
           letterSpacing: '-0.5px',
           lineHeight: 1,
-          color: 'var(--text)',
+          color: textColor,
         }}
       >
-        KUET<span style={{ color: 'var(--accent)' }}>x</span>
+        KUET<span style={{ color: accentColor }}>x</span>
       </span>
     </span>
   );

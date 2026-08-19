@@ -34,13 +34,37 @@
 // regardless of which modal the caller wires it to.
 export default function SignInPrompt({ onSignIn, onClose, reason, intent = 'signin' }) {
   const isSignUp = intent === 'signup';
+  // Landing-page-only component (both call sites live in LandingPage.jsx —
+  // see the file header above), so unlike AuthModal.jsx this is always
+  // themed, unconditionally, no prop needed. Same scoped-CSS-variable-
+  // override technique as SignUpWizard.jsx's .kx-signup-theme: remaps the
+  // handful of var(--accent)/var(--card)/var(--border)/etc. call sites
+  // below to the kx-* landing palette via one wrapping class, instead of
+  // rewriting each call site by hand.
+  const kxThemeVars = (
+    <style>{`
+      .kx-signin-prompt-theme {
+        --accent: #22c55e;
+        --accentSoft: rgba(34,197,94,0.1);
+        --accentRGB: 34,197,94;
+        --card: #ffffff;
+        --surface: #ffffff;
+        --border: #dcd8cc;
+        --text: #16241a;
+        --muted: #4a5750;
+        --bg: #f7f6f1;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'Noto Sans Bengali', sans-serif;
+      }
+    `}</style>
+  );
   return (
     <>
+      {kxThemeVars}
       <div
         style={{ position: 'fixed', inset: 0, zIndex: 10030, background: 'rgba(8,12,22,0.72)', backdropFilter: 'blur(6px)' }}
         onClick={onClose}
       />
-      <div style={{ position: 'fixed', inset: 0, zIndex: 10031, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+      <div className="kx-signin-prompt-theme" style={{ position: 'fixed', inset: 0, zIndex: 10031, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
         <div
           onClick={(e) => e.stopPropagation()}
           style={{

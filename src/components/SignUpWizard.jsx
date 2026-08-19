@@ -895,14 +895,45 @@ export default function SignUpWizard({ onClose, initialRole = null, onDone }) {
     ? (busy ? 'সাইন ইন করা হচ্ছে…' : 'Sign Up with Google')
     : 'Continue';
 
+  // ─── kx-theme override ──────────────────────────────────────────────
+  // Rather than rewriting every var(--accent)/var(--card)/var(--border)
+  // call below (17+ call sites, all wired into real form logic), this
+  // remaps the app's generic theme variables to the landing page's
+  // --kx-* values, scoped only to this modal via .kx-signup-theme. Every
+  // existing var(--accent) etc. call site below picks up the new colors
+  // automatically — zero risk to the actual form/validation/Firestore
+  // logic, which is untouched.
+  const kxThemeVars = (
+    <style>{`
+      .kx-signup-theme {
+        --accent: #22c55e;
+        --accentSoft: rgba(34,197,94,0.1);
+        --accentRGB: 34,197,94;
+        --card: #ffffff;
+        --surface: #ffffff;
+        --surfaceGlass: #ffffff;
+        --surfaceGlassStrong: #ffffff;
+        --border: #dcd8cc;
+        --text: #16241a;
+        --muted: #4a5750;
+        --bg: #f7f6f1;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'Noto Sans Bengali', sans-serif;
+      }
+      .kx-signup-theme h1, .kx-signup-theme h2, .kx-signup-theme h3 {
+        font-family: 'Manrope', 'Hind Siliguri', -apple-system, sans-serif;
+      }
+    `}</style>
+  );
+
   // ─── Mobile: full-screen takeover (§11.3.1) ───────────────────────
   if (isMobileNav) {
     return (
-      <div style={{
+      <div className="kx-signup-theme" style={{
         position: 'fixed', inset: 0, zIndex: 9999,
         display: 'flex', flexDirection: 'column',
         background: 'var(--bg)',
       }}>
+        {kxThemeVars}
         <div style={{
           flexShrink: 0, display: 'flex', alignItems: 'center', gap: 10,
           padding: '12px 12px', borderBottom: '1px solid var(--border)',
@@ -954,6 +985,7 @@ export default function SignUpWizard({ onClose, initialRole = null, onDone }) {
   // ─── Desktop: centered card over dimmed backdrop (§11.3.2) ─────────
   return (
     <div
+      className="kx-signup-theme"
       style={{
         position: 'fixed', inset: 0, zIndex: 9999,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -966,6 +998,7 @@ export default function SignUpWizard({ onClose, initialRole = null, onDone }) {
       }}
       onClick={busy ? undefined : onClose}
     >
+      {kxThemeVars}
       <div
         onClick={(e) => e.stopPropagation()}
         style={{

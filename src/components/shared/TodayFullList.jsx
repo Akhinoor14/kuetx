@@ -9,10 +9,26 @@
 // Capped to ~6 rows with "See more" expand-in-place once content
 // exceeds that, matching FacultyDashboard.jsx's Alerts & Notices card
 // pattern exactly (never an internal scrollbar — decision #2).
-import { useEffect, useState } from 'react';
+//
+// BUGFIX: this used to rely entirely on buildTodayItems() reading
+// store.get('schedule_group_cache') — a key that ONLY gets populated
+// while pages/Schedule.jsx happens to be mounted (see that file's own
+// BUGFIX comment next to `store.set('schedule_group_cache', ...)`).
+// On a fresh load straight into /dashboard (never having visited
+// /schedule this session), the cache is empty, so a student in group
+// mode saw "Nothing planned for today" here even though the *same*
+// classes were correctly listed a few pixels away in Today's Actions
+// (lib/todayActions.js, which subscribes to subscribeRoutine directly
+// and never depended on Schedule.jsx being mounted). This component now
+// subscribes to the group routine itself, exactly like todayActions.js
+// does, so both columns can never disagree again regardless of what
+// else happens to be mounted.
+import { useEffect, useMemo, useState } from 'react';
 import { Sunrise, PartyPopper, ChevronUp, ChevronDown } from 'lucide-react';
-import { getProfile, getBDNow } from '../../store/store';
+import { getProfile, getBDNow, store } from '../../store/store';
 import { buildTodayItems } from '../../lib/todayItems';
+import { getGroupId } from '../../lib/groupUtils';
+import { subscribeCRStatus, subscribeRoutine } from '../../lib/groupSync';
 
 const KIND_DOT = {
   class: '#F59E0B',
@@ -56,6 +72,42 @@ export default function TodayFullList() {
   }, []);
 
   const profile = getProfile();
+
+  // Live group-routine subscription — same source todayActions.js uses,
+  // kept independent of whether Schedule.jsx is mounted anywhere. Not in
+  // group mode (or group has no CR yet) -> falls straight back to the
+  // personal 'schedule' key, same as buildTodayItems always did.
+  const groupId = useMemo(() => getGroupId(profile), [profile.dept, profile.batch, profile.section]);
+  const [groupHasCR, setGroupHasCR] = useState(null);
+  useEffect(() => {
+    if (!groupId) { setGroupHasCR(false); return; }
+    return subscribeCRStatus(groupId, (status) => setGroupHasCR(!!status?.hasCR));
+  }, [groupId]);
+  const isGroupMode = !!groupId && groupHasCR === true;
+
+  useEffect(() => {
+    if (!isGroupMode) return;
+    return subscribeRoutine(groupId, (entries) => {
+      const mapped = (entries || []).map((e) => ({
+        id: e.id,
+        day: e.day || 'Sunday',
+        slot: e.slot || '',
+        courseId: e.courseId || '',
+        teacherName: e.teacherName || '',
+        displayName: e.displayName || e.courseCode || e.courseName || '',
+        room: e.room || '',
+        note: e.note || '',
+        type: e.type || 'Theory',
+      }));
+      // Keep schedule_group_cache updated too so any other reader (or a
+      // Schedule.jsx mount later in the session) still sees fresh data —
+      // this only ADDS a second, independent writer of the same cache,
+      // it never removes Schedule.jsx's own.
+      store.set('schedule_group_cache', mapped);
+      setNow(getBDNow()); // force a re-render/re-evaluation of buildTodayItems
+    });
+  }, [isGroupMode, groupId]);
+
   const { items: allItems, isHoliday } = buildTodayItems(profile, now);
 
   // Once a timed item's slot has started/passed, drop it from this list —

@@ -51,7 +51,7 @@ const btnGhost = {
   textDecoration: 'underline',
 };
 
-export default function AuthModal({ mode = 'login', isUpgrade = false, intent = null, onClose, onSuccess, queueMode = false }) {
+export default function AuthModal({ mode = 'login', isUpgrade = false, intent = null, onClose, onSuccess, queueMode = false, theme = null }) {
   // mode is accepted for backward compatibility with existing call sites
   // (all 4 pass mode="login") but no longer changes anything — there's no
   // Login/Register distinction anymore, just "sign in with Google."
@@ -65,6 +65,19 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, intent = 
   // are upgrade/mandatory/global flows, not "I clicked Sign In on the
   // landing page", so the inline "no account yet" notice below would be
   // the wrong message there. It only activates for intent === 'signin'.
+  //
+  // KX_THEME_HANDOFF_PROMPT.md's undone-work item: AuthModal is shared
+  // app-wide (App.jsx's global/queue-mode auth gate, Profile.jsx's re-auth
+  // prompts, About.jsx, GuestBanner.jsx — 7 call sites total, not just the
+  // landing page), so unlike SignInPrompt.jsx/SignUpWizard.jsx it can NOT
+  // be unconditionally retheme'd — that would silently change Sign In's
+  // colors everywhere in the app, not just on the landing page. `theme`
+  // opts in explicitly: default null keeps every existing call site's
+  // current plain app-theme behavior byte-for-byte; only LandingPage.jsx
+  // passes theme="kx". Same scoped-CSS-variable-override technique as
+  // SignUpWizard.jsx's .kx-signup-theme / SignInPrompt.jsx's
+  // .kx-signin-prompt-theme, just conditionally applied here.
+  const kxThemed = theme === 'kx';
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [guideOpen, setGuideOpen] = useState(false);
@@ -141,6 +154,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, intent = 
 
   return (
     <div
+      className={kxThemed ? 'kx-auth-modal-theme' : undefined}
       style={{
         position: 'fixed', inset: 0, zIndex: 9999,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -152,6 +166,24 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, intent = 
         `,
       }}
     >
+      {kxThemed && (
+        <style>{`
+          .kx-auth-modal-theme {
+            --accent: #22c55e;
+            --accentSoft: rgba(34,197,94,0.1);
+            --accentRGB: 34,197,94;
+            --card: #ffffff;
+            --surface: #ffffff;
+            --surfaceGlass: #ffffff;
+            --surfaceGlassStrong: #ffffff;
+            --border: #dcd8cc;
+            --text: #16241a;
+            --muted: #4a5750;
+            --bg: #f7f6f1;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'Noto Sans Bengali', sans-serif;
+          }
+        `}</style>
+      )}
       <div
         style={{
           background: 'var(--surfaceGlassStrong, var(--card))',
