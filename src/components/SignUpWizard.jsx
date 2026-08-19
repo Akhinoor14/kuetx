@@ -392,6 +392,9 @@ function FacultyDetailsStep({ form, setForm, errors, setErrors }) {
       ...prev,
       _emailConfirmed: true,
       _emailConfirmedFor: emailTrimmed,
+      // Carried through to the Confirm step so its messaging reflects the
+      // real directory-match result, not just the email's format.
+      _directoryMatched: !!directoryHit,
       // Directory-matched name auto-fills but stays editable below.
       name: prev.name || (directoryHit ? directoryHit.name : ''),
       dept: prev.dept || (directoryHit ? prev.dept : prev.dept),
@@ -414,24 +417,20 @@ function FacultyDetailsStep({ form, setForm, errors, setErrors }) {
             placeholder="e.g. yourname@dept.kuet.ac.bd"
           />
           {errors.institutionalEmail && <div style={errorStyle}>{errors.institutionalEmail}</div>}
-          <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>
-            KUET faculty (@*.kuet.ac.bd) — directory-এ ম্যাচ পেলে সাথে সাথে ভেরিফাইড হয়ে যাবেন এবং ফুল অ্যাক্সেস পাবেন।
-            KUET-এর বাইরের/গেস্ট টিচার হলে যেকোনো ইমেইল দিতে পারেন — সেক্ষেত্রে Founder ম্যানুয়ালি ভেরিফাই করার আগ পর্যন্ত অ্যাকাউন্ট pending থাকবে।
-          </div>
           {checking && <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>যাচাই করা হচ্ছে…</div>}
           {!checking && isKuetEmail && directoryHit && (
             <div style={{ fontSize: 11, fontWeight: 700, color: '#16a34a', marginTop: 6 }}>
-              ✓ KUET directory-তে পাওয়া গেছে ({directoryHit.name}) — auto-verified, full access instantly.
+              ✓ Matched in the KUET directory ({directoryHit.name}) — verified, full access instantly.
             </div>
           )}
           {!checking && isKuetEmail && directoryHit === false && (
-            <div style={{ fontSize: 11, fontWeight: 700, color: '#16a34a', marginTop: 6 }}>
-              ✓ KUET institutional email — auto-verified, full access instantly.
+            <div style={{ fontSize: 11, fontWeight: 700, color: '#d97706', marginTop: 6 }}>
+              ⚠ KUET-format email, but no match in the directory — pending until manually verified by the Founder.
             </div>
           )}
           {isGuestEmail && (
             <div style={{ fontSize: 11, fontWeight: 700, color: '#d97706', marginTop: 6 }}>
-              ⚠ এটা KUET ইমেইল না। Guest teacher হিসেবে সাইন আপ করছেন — Founder ম্যানুয়ালি ভেরিফাই না করা পর্যন্ত আপনাকে অপেক্ষা করতে হবে।
+              ⚠ Not a KUET email — pending until manually verified by the Founder.
             </div>
           )}
         </div>
@@ -449,7 +448,7 @@ function FacultyDetailsStep({ form, setForm, errors, setErrors }) {
               style={{ marginTop: 2 }}
             />
             <label htmlFor="guestTeacherAck" style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.5, cursor: 'pointer' }}>
-              আমি একজন guest teacher / আমার ইমেইলটি KUET institutional ইমেইল না — আমি জানি Founder ম্যানুয়ালি ভেরিফাই না করা পর্যন্ত আমার অ্যাকাউন্ট pending থাকবে।
+              I'm a guest teacher — my email isn't a KUET institutional address, and I understand my account stays pending until the Founder verifies it manually.
             </label>
           </div>
         )}
@@ -458,9 +457,9 @@ function FacultyDetailsStep({ form, setForm, errors, setErrors }) {
           type="button"
           onClick={confirmEmailStage}
           style={{
-            width: '100%', padding: '0.7rem', borderRadius: 12,
+            width: '100%', padding: '11px 24px', borderRadius: 10,
             background: 'var(--accent)', color: '#fff', border: 'none',
-            fontSize: '0.9rem', fontWeight: 800, cursor: 'pointer',
+            fontSize: 14, fontWeight: 800, cursor: 'pointer',
           }}
         >
           Confirm & Continue
@@ -473,10 +472,14 @@ function FacultyDetailsStep({ form, setForm, errors, setErrors }) {
     <div style={{ display: 'grid', gap: 12 }}>
       <div style={{
         padding: '8px 12px', borderRadius: 10, fontSize: 12, fontWeight: 700,
-        background: isKuetEmail ? 'rgba(22,163,74,0.08)' : 'rgba(217,119,6,0.08)',
-        color: isKuetEmail ? '#16a34a' : '#d97706',
+        background: isKuetEmail && directoryHit ? 'rgba(22,163,74,0.08)' : 'rgba(217,119,6,0.08)',
+        color: isKuetEmail && directoryHit ? '#16a34a' : '#d97706',
       }}>
-        {isKuetEmail ? `✓ ${emailTrimmed} — auto-verified` : `⚠ ${emailTrimmed} — guest teacher, pending manual verification`}
+        {isKuetEmail && directoryHit
+          ? `✓ ${emailTrimmed} — verified against KUET directory`
+          : isKuetEmail
+            ? `⚠ ${emailTrimmed} — no directory match, pending manual verification`
+            : `⚠ ${emailTrimmed} — guest teacher, pending manual verification`}
       </div>
       <div>
         <label style={labelStyle}>Full Name</label>
@@ -654,6 +657,13 @@ function ConfirmStep({ role, form, busy, error, onConfirm }) {
           </div>
         ))}
       </div>
+      {role === 'teacher' && (
+        <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6, marginBottom: 4 }}>
+          {form._directoryMatched
+            ? 'We\'ll check this against the KUET faculty directory when you sign up — if it matches, your account is verified instantly.'
+            : 'This will be checked against the KUET faculty directory when you sign up. If it doesn\'t match, your account goes to the Founder for manual verification, same as a guest teacher — please double-check the email above before continuing.'}
+        </p>
+      )}
       <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6, marginBottom: 4 }}>
         "Sign Up with Google"-এ ক্লিক করলে Google দিয়ে সাইন ইন হয়ে সরাসরি
         অ্যাকাউন্ট তৈরি হয়ে যাবে — এরপর আর ফিরে এসে ফর্ম এডিট করার সুযোগ থাকবে না।
@@ -996,7 +1006,6 @@ export default function SignUpWizard({ onClose, initialRole = null, onDone }) {
           var(--bg)
         `,
       }}
-      onClick={busy ? undefined : onClose}
     >
       {kxThemeVars}
       <div
