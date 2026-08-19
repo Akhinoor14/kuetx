@@ -117,12 +117,14 @@
         background-position: center;
         opacity: 0;
         transform: scale(1);
-        transition: opacity 0.7s ease;
+        transition: opacity 1.1s ease;
         will-change: opacity, transform;
+        z-index: 0;
       }
       .kx-photo.kx-photo-active {
         opacity: 1;
-        animation: kx-kenburns 1.6s ease-out forwards;
+        z-index: 1;
+        animation: kx-kenburns 2.7s ease-out forwards;
       }
       @keyframes kx-kenburns {
         from { transform: scale(1); }
@@ -390,36 +392,78 @@
         var BADGE_EXIT_LEAD = 600;
         var OVERLAY_FADE_LEAD = 300;
 
-        requestAnimationFrame(function () {
-          setTimeout(function () {
-            centerLogo.classList.add('kx-show');
-          }, BADGE_ENTER_DELAY);
-
-          setTimeout(function () {
-            renderClock();
-            clockTimer = setInterval(renderClock, 1000);
-          }, BADGE_ENTER_DELAY + 500);
-
-          photoEls.forEach(function (photo, i) {
-            if (i === 0) return; // first photo already active
+        function startTimeline() {
+          requestAnimationFrame(function () {
             setTimeout(function () {
-              photoEls.forEach(function (p) { p.classList.remove('kx-photo-active'); });
-              void photo.offsetWidth; // restart the Ken Burns animation cleanly
-              photo.classList.add('kx-photo-active');
-            }, i * PHOTO_INTERVAL);
+              centerLogo.classList.add('kx-show');
+            }, BADGE_ENTER_DELAY);
+
+            setTimeout(function () {
+              renderClock();
+              clockTimer = setInterval(renderClock, 1000);
+            }, BADGE_ENTER_DELAY + 500);
+
+            // Crossfade, not hard-cut: the outgoing photo used to lose its
+            // "active" class the instant the next one gained it, so it
+            // snapped to opacity:0 immediately while only the incoming
+            // photo actually faded in — that abrupt cut is what read as
+            // "stuck then jumps" instead of a smooth dissolve. Now the
+            // outgoing photo keeps its opacity (and z-index below the
+            // incoming one) for the full length of the fade, so both
+            // photos are genuinely visible together mid-transition, and
+            // it's only cleared afterwards once it's fully hidden.
+            var FADE_MS = 1100;
+            photoEls.forEach(function (photo, i) {
+              if (i === 0) return; // first photo already active
+              setTimeout(function () {
+                var prevActive = photoEls.filter(function (p) { return p.classList.contains('kx-photo-active'); });
+                void photo.offsetWidth; // ensure the animation restarts cleanly
+                photo.classList.add('kx-photo-active');
+                setTimeout(function () {
+                  prevActive.forEach(function (p) { p.classList.remove('kx-photo-active'); });
+                }, FADE_MS);
+              }, i * PHOTO_INTERVAL);
+            });
+
+            setTimeout(function () {
+              centerLogo.classList.remove('kx-show');
+              centerLogo.classList.add('kx-hide-badge');
+            }, TOTAL_DURATION - BADGE_EXIT_LEAD);
+
+            setTimeout(function () {
+              el.style.opacity = 0;
+            }, TOTAL_DURATION - OVERLAY_FADE_LEAD);
+
+            setTimeout(hideSplash, TOTAL_DURATION + 200);
           });
+        }
 
-          setTimeout(function () {
-            centerLogo.classList.remove('kx-show');
-            centerLogo.classList.add('kx-hide-badge');
-          }, TOTAL_DURATION - BADGE_EXIT_LEAD);
-
-          setTimeout(function () {
-            el.style.opacity = 0;
-          }, TOTAL_DURATION - OVERLAY_FADE_LEAD);
-
-          setTimeout(hideSplash, TOTAL_DURATION + 200);
+        // Each photo was set as a CSS background-image directly in the
+        // markup above, so the browser starts fetching all 4 in parallel —
+        // but nothing guaranteed a given photo had actually finished
+        // downloading/decoding by the moment its crossfade turn arrived.
+        // On a slow connection/desktop that showed up as a visible pop-in
+        // or blank flash mid-sequence instead of a smooth crossfade.
+        // Preload all 4 first (with a hard cap so a stalled request can
+        // never block the splash indefinitely) and only start the
+        // timeline once every photo is decoded and ready.
+        var PRELOAD_MAX_WAIT = 1200;
+        var loadedCount = 0;
+        var started = false;
+        function maybeStart() {
+          if (started) return;
+          started = true;
+          startTimeline();
+        }
+        PHOTOS.forEach(function (p) {
+          var img = new Image();
+          img.onload = img.onerror = function () {
+            loadedCount += 1;
+            if (loadedCount === PHOTOS.length) maybeStart();
+          };
+          img.src = p.src;
         });
+        setTimeout(maybeStart, PRELOAD_MAX_WAIT); // cap the wait either way
       })();
     </script>
 

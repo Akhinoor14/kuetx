@@ -11,7 +11,7 @@
 // Each block is fully conditional — hidden entirely when not
 // applicable, no empty placeholders (decision #5).
 import { useState } from 'react';
-import { CalendarCheck, ClipboardCheck, Megaphone, ClipboardList, Bike, CheckCircle, ListChecks } from 'lucide-react';
+import { CalendarCheck, ClipboardCheck, Megaphone, ClipboardList, Bike, CheckCircle, ListChecks, Check, X as XIcon } from 'lucide-react';
 import { store } from '../../store/store';
 import { useTodayActions } from '../../lib/todayActions';
 import { markAttendance, moveAttendanceStatus, setRotationOverride, getTeachersForCourse } from '../../lib/attendanceCore';
@@ -93,7 +93,7 @@ export default function TodaysActions() {
               onClick={() => setOpenCard({ courseId: row.course.id, teacher: tr.teacher })}
               onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setOpenCard({ courseId: row.course.id, teacher: tr.teacher }); }}
               style={{
-                display: 'flex', alignItems: 'center', gap: 7, padding: '6px 8px', borderRadius: 9,
+                display: 'flex', alignItems: 'center', gap: 7, padding: '8px 8px', borderRadius: 9,
                 background: dark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.02)',
                 border: dark ? '1px solid rgba(255,255,255,0.07)' : '1px solid rgba(0,0,0,0.05)',
                 cursor: 'pointer', WebkitTapHighlightColor: 'transparent', flexShrink: 0,
@@ -104,18 +104,18 @@ export default function TodaysActions() {
                 <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{row.course.code || row.course.baseCode || row.courseName}</div>
                 <div style={{ fontSize: 9.5, color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{tr.teacher || 'Unknown teacher'}</div>
               </div>
-              <div style={{ display: 'flex', borderRadius: 7, overflow: 'hidden', border: dark ? '1px solid rgba(255,255,255,0.10)' : '1px solid rgba(0,0,0,0.08)', flexShrink: 0 }}>
+              <div style={{ display: 'flex', borderRadius: 8, overflow: 'hidden', border: dark ? '1px solid rgba(255,255,255,0.10)' : '1px solid rgba(0,0,0,0.08)', flexShrink: 0 }}>
                 <button
                   onClick={(e) => { e.stopPropagation(); mark(row.course.id, tr.teacher, 'present'); }}
-                  style={{ padding: '4px 8px', cursor: 'pointer', fontWeight: 700, fontSize: 11, background: dark ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.85)', color: '#10b981', border: 'none', borderRight: dark ? '1px solid rgba(255,255,255,0.10)' : '1px solid rgba(0,0,0,0.08)', WebkitTapHighlightColor: 'transparent' }}
+                  style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '8px 12px', cursor: 'pointer', fontWeight: 700, fontSize: 12.5, background: dark ? 'rgba(16,185,129,0.12)' : 'rgba(16,185,129,0.10)', color: '#10b981', border: 'none', borderRight: dark ? '1px solid rgba(255,255,255,0.10)' : '1px solid rgba(0,0,0,0.08)', WebkitTapHighlightColor: 'transparent' }}
                 >
-                  ✓
+                  <Check size={15} strokeWidth={3} /> Present
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); mark(row.course.id, tr.teacher, 'absent'); }}
-                  style={{ padding: '4px 8px', cursor: 'pointer', fontWeight: 700, fontSize: 11, background: dark ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.85)', color: '#ef4444', border: 'none', WebkitTapHighlightColor: 'transparent' }}
+                  style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '8px 12px', cursor: 'pointer', fontWeight: 700, fontSize: 12.5, background: dark ? 'rgba(239,68,68,0.12)' : 'rgba(239,68,68,0.08)', color: '#ef4444', border: 'none', WebkitTapHighlightColor: 'transparent' }}
                 >
-                  ✗
+                  <XIcon size={15} strokeWidth={3} /> Absent
                 </button>
               </div>
             </div>

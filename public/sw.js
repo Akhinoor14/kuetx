@@ -1,5 +1,5 @@
 // KUETx Service Worker — offline cache + auto-update
-const CACHE_NAME = 'kuetx-v4.4.0'; // bumped: splash redesigned to "Minimal Badge Zoom" — background photo layer swaps statue.webp for academic.webp, precache list updated to match
+const CACHE_NAME = 'kuetx-v4.7.0'; // bumped: splash photo crossfade fixed — outgoing photo now stays visible under the incoming one for the full fade instead of hard-cutting to opacity:0 the instant the next photo starts, so transitions actually dissolve instead of "stuck then jumps"
 const STATIC_ASSETS = [
   '/',
   '/index.html',
