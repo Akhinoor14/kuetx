@@ -1278,22 +1278,47 @@ function FeatureBreakdown({ isMobileNav }) {
 
       {/* Three-column fcol grid on desktop, stacked on mobile — matches
           HTML's .feature-columns exactly (real bordered cards, mono
-          uppercase category header with accent left-border). */}
-      <div style={{
-        display: isMobileNav ? 'block' : 'grid',
-        gridTemplateColumns: isMobileNav ? undefined : 'repeat(3, 1fr)',
-        // alignItems stretch (grid default, set explicitly) makes every
-        // card in a row match the row's tallest card — this is what
-        // actually fixes the uneven/ungathered look, not just spacing.
-        alignItems: isMobileNav ? undefined : 'stretch',
-        gap: isMobileNav ? undefined : '22px',
-        maxWidth: '1180px', margin: '0 auto', paddingBottom: isMobileNav ? '2rem' : '90px',
-      }}>
-        {categories.map(([key, items]) => (
-          <div key={key} style={{ marginBottom: isMobileNav ? '0.85rem' : 0, height: isMobileNav ? undefined : '100%' }}>
-            <FeatureCategoryBlock label={tab.labels[key] || key} items={items} isMobileNav={isMobileNav} />
+          uppercase category header with accent left-border).
+          AUDIT FIX (round 2): the earlier fix only centered a row when
+          the TAB TOTAL was under 3 categories (Provider's 1). It missed
+          that Student has 7 categories in a 3-col grid — that's rows of
+          3/3/1, and the trailing single card on the last row still sat
+          pinned to the left with two empty column-widths of blank space
+          beside it. Same problem, just on the last row instead of the
+          only row. Fix: when the category count isn't a clean multiple
+          of 3, render the final partial row as its own centered flex
+          row instead of leaving it inside the grid — this covers both
+          the "whole tab has <3 categories" case (Provider) and the
+          "leftover row after full rows" case (Student's 7th) with one
+          rule instead of two. */}
+      <div style={{ maxWidth: '1180px', margin: '0 auto', paddingBottom: isMobileNav ? '2rem' : '90px' }}>
+        <div style={{
+          display: isMobileNav ? 'block' : 'grid',
+          gridTemplateColumns: isMobileNav ? undefined : 'repeat(3, 1fr)',
+          // alignItems stretch (grid default, set explicitly) makes every
+          // card in a row match the row's tallest card — this is what
+          // actually fixes the uneven/ungathered look, not just spacing.
+          alignItems: isMobileNav ? undefined : 'stretch',
+          gap: isMobileNav ? undefined : '22px',
+        }}>
+          {(isMobileNav ? categories : categories.slice(0, categories.length - (categories.length % 3))).map(([key, items]) => (
+            <div key={key} style={{ marginBottom: isMobileNav ? '0.85rem' : 0, height: isMobileNav ? undefined : '100%' }}>
+              <FeatureCategoryBlock label={tab.labels[key] || key} items={items} isMobileNav={isMobileNav} />
+            </div>
+          ))}
+        </div>
+        {!isMobileNav && categories.length % 3 !== 0 && (
+          <div style={{
+            display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '22px',
+            marginTop: categories.length >= 3 ? '22px' : 0,
+          }}>
+            {categories.slice(categories.length - (categories.length % 3)).map(([key, items]) => (
+              <div key={key} style={{ width: `calc(${100 / 3}% - 15px)`, minWidth: '300px', maxWidth: '380px' }}>
+                <FeatureCategoryBlock label={tab.labels[key] || key} items={items} isMobileNav={isMobileNav} />
+              </div>
+            ))}
           </div>
-        ))}
+        )}
       </div>
 
       {activeTab === 'student' && <CRFeatureBlock />}
@@ -1610,19 +1635,26 @@ function RotatingPreview({ mockupMode, setMockupMode, onSignUp, isMobileNav }) {
               {activeRoleMeta?.title || ''} হিসেবে লগইন করলে ঠিক এই ড্যাশবোর্ডটাই দেখবে — উপস্থিতি, ফলাফল,
               নোটিশ থেকে শুরু করে প্রশ্নব্যাংক ও ক্যাম্পাস সার্ভিস বুকিং পর্যন্ত, সবকিছু একই লগইনে।
             </p>
+            {/* AUDIT FIX: this list used to be 3 hardcoded generic lines
+                (📱/⚡/🗂️) that never changed when the visitor switched
+                roles — the copy claimed to preview "your" dashboard but
+                showed identical bullets for Student, Faculty, and
+                Provider. ROLE_CARDS already carries real, role-specific
+                bullets (used elsewhere for the role picker cards) — this
+                now reuses that same real data so the 4 lines shown here
+                actually match whichever role is currently active. */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', alignItems: isMobileNav ? 'center' : 'flex-start' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14.5px', fontWeight: 600 }}>
-                <span style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'var(--kx-sage)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>📱</span>
-                যার যার ভূমিকা অনুযায়ী আলাদা ড্যাশবোর্ড
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14.5px', fontWeight: 600 }}>
-                <span style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'var(--kx-sage)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>⚡</span>
-                তাৎক্ষণিক উপস্থিতি ও নোটিশ আপডেট
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14.5px', fontWeight: 600 }}>
-                <span style={{ width: '34px', height: '34px', borderRadius: '9px', background: 'var(--kx-sage)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>🗂️</span>
-                বছরভিত্তিক প্রশ্ন ও সমাধান ব্যাংক
-              </div>
+              {(activeRoleMeta?.bullets || []).map((bullet, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14.5px', fontWeight: 600, textAlign: 'left' }}>
+                  <span style={{
+                    width: '34px', height: '34px', borderRadius: '9px', flexShrink: 0,
+                    background: 'var(--kx-sage)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px',
+                  }}>
+                    {activeRoleMeta?.emoji}
+                  </span>
+                  {bullet}
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -2183,9 +2215,25 @@ export default function LandingPage() {
 
         <div id="stats-anchor" />
 
-        {/* Role-tabbed feature breakdown — matches HTML's #roles section
-            (role-tabs + .feature-columns) exactly, full-bleed --kx-bg. */}
-        <FeatureBreakdown isMobileNav={isMobileNav} />
+        {/* Reordered per audit: numbers right after the hero build instant
+            credibility before anything else is asked of the visitor — a
+            5-second glance at "9 real feature / 4 role / 0 বিজ্ঞাপন" earns
+            the trust needed to keep scrolling into WHY, then WHAT (proof),
+            then the deep feature list, saving the heaviest/most detailed
+            section (FeatureBreakdown) for visitors who are already
+            convinced and want specifics — not as the very first thing
+            after the hero, which front-loaded detail before value. */}
+        <div className="kx-page" style={{
+          maxWidth: '1180px', margin: '0 auto',
+          padding: isMobileNav ? '1.5rem 1.1rem 0' : '30px 32px 0',
+        }}>
+          <StatsStrip isMobileNav={isMobileNav} />
+        </div>
+
+        {/* কেন KUETx — the "why" comes before the "what/how" (proof +
+            feature details below), so the visitor has a reason to care
+            about the details before they see them. */}
+        <WhyKuetx isMobileNav={isMobileNav} />
 
         {/* "App Proof" — real, always-visible auto-rotating mockup
             preview (Student -> Faculty -> Provider), matches HTML's
@@ -2199,22 +2247,29 @@ export default function LandingPage() {
           isMobileNav={isMobileNav}
         />
 
+        {/* Role-tabbed feature breakdown — matches HTML's #roles section
+            (role-tabs + .feature-columns) exactly, full-bleed --kx-bg.
+            Moved below the proof/demo section: this is the deepest, most
+            detailed content on the page (every feature, per role) — it's
+            for visitors who are already sold on the "why" and want to
+            verify specifics, not the first thing shown after the hero. */}
+        <FeatureBreakdown isMobileNav={isMobileNav} />
+
         {/* Campus scrapbook — signature tilted-photo motif, matches
-            HTML's sage-band .scrapbook section exactly. */}
+            HTML's sage-band .scrapbook section exactly. Placed just
+            before the credits/CTA close as an emotional, campus-identity
+            beat after the functional case has been made. */}
         <CampusScrapbook isMobileNav={isMobileNav} />
 
-        {/* কেন KUETx — matches HTML's .why-section exactly. */}
-        <WhyKuetx isMobileNav={isMobileNav} />
-
-        {/* Live stats + credits spotlight — real data, kept inside a
-            centered content band since the HTML mockup has no direct
-            equivalent section for these (they're additions the real app
-            actually has); everything else above/below is full-bleed. */}
+        {/* Credits spotlight — real data, kept inside a centered content
+            band since the HTML mockup has no direct equivalent section
+            (an addition the real app actually has); everything else
+            above/below is full-bleed. Sits right before the final CTA as
+            a last social-proof beat ("who actually built/backs this").*/}
         <div className="kx-page" style={{
           maxWidth: '1180px', margin: '0 auto',
           padding: isMobileNav ? '0 1.1rem 2rem' : '0 32px 60px',
         }}>
-          <StatsStrip isMobileNav={isMobileNav} />
           <CreditsSpotlight isMobileNav={isMobileNav} />
         </div>
 

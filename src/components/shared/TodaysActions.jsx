@@ -15,6 +15,7 @@ import { CalendarCheck, ClipboardCheck, Megaphone, ClipboardList, Bike, CheckCir
 import { store } from '../../store/store';
 import { useTodayActions } from '../../lib/todayActions';
 import { markAttendance, moveAttendanceStatus, setRotationOverride, getTeachersForCourse } from '../../lib/attendanceCore';
+import { ALTERNATE_TEACHER } from '../../pages/Schedule';
 import TodayActionRow from './TodayActionRow';
 import AttendanceMarkModal from './AttendanceMarkModal';
 
@@ -102,20 +103,20 @@ export default function TodaysActions() {
               <CalendarCheck size={13} color="var(--accent)" style={{ flexShrink: 0 }} />
               <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
                 <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{row.course.code || row.course.baseCode || row.courseName}</div>
-                <div style={{ fontSize: 9.5, color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{tr.teacher || 'Unknown teacher'}</div>
+                <div style={{ fontSize: 9.5, color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{tr.teacher === ALTERNATE_TEACHER ? 'Alternative' : (tr.teacher || 'Unknown teacher')}</div>
               </div>
-              <div style={{ display: 'flex', borderRadius: 8, overflow: 'hidden', border: dark ? '1px solid rgba(255,255,255,0.10)' : '1px solid rgba(0,0,0,0.08)', flexShrink: 0 }}>
+              <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
                 <button
                   onClick={(e) => { e.stopPropagation(); mark(row.course.id, tr.teacher, 'present'); }}
-                  style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '8px 12px', cursor: 'pointer', fontWeight: 700, fontSize: 12.5, background: dark ? 'rgba(16,185,129,0.12)' : 'rgba(16,185,129,0.10)', color: '#10b981', border: 'none', borderRight: dark ? '1px solid rgba(255,255,255,0.10)' : '1px solid rgba(0,0,0,0.08)', WebkitTapHighlightColor: 'transparent' }}
+                  style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '7px 11px', borderRadius: 7, cursor: 'pointer', fontWeight: 700, fontSize: 12, background: 'rgba(16,185,129,0.12)', color: '#10b981', border: '1.5px solid rgba(16,185,129,0.35)', WebkitTapHighlightColor: 'transparent' }}
                 >
-                  <Check size={15} strokeWidth={3} /> Present
+                  <Check size={14} strokeWidth={3} /> Present
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); mark(row.course.id, tr.teacher, 'absent'); }}
-                  style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '8px 12px', cursor: 'pointer', fontWeight: 700, fontSize: 12.5, background: dark ? 'rgba(239,68,68,0.12)' : 'rgba(239,68,68,0.08)', color: '#ef4444', border: 'none', WebkitTapHighlightColor: 'transparent' }}
+                  style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '7px 11px', borderRadius: 7, cursor: 'pointer', fontWeight: 700, fontSize: 12, background: 'rgba(239,68,68,0.12)', color: '#ef4444', border: '1.5px solid rgba(239,68,68,0.30)', WebkitTapHighlightColor: 'transparent' }}
                 >
-                  <XIcon size={15} strokeWidth={3} /> Absent
+                  <XIcon size={14} strokeWidth={3} /> Absent
                 </button>
               </div>
             </div>
@@ -187,7 +188,7 @@ export default function TodaysActions() {
         return (
           <AttendanceMarkModal
             course={openRow.course}
-            teacher={openTeacherRow.teacher}
+            teacher={openTeacherRow.teacher === ALTERNATE_TEACHER ? 'Alternative' : openTeacherRow.teacher}
             status={openTeacherRow.status}
             dateLabel="Today"
             switchOptions={switchOptions}

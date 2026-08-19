@@ -1,5 +1,5 @@
 // KUETx Service Worker — offline cache + auto-update
-const CACHE_NAME = 'kuetx-v4.7.0'; // bumped: splash photo crossfade fixed — outgoing photo now stays visible under the incoming one for the full fade instead of hard-cutting to opacity:0 the instant the next photo starts, so transitions actually dissolve instead of "stuck then jumps"
+const CACHE_NAME = 'kuetx-v4.12.0'; // bumped: FeatureBreakdown grid — round 2 fix. Previous fix only centered a tab with FEWER than 3 total categories (Provider); it missed that Student's 7 categories in a 3-col grid leave a lone trailing card on row 3 pinned left with 2 empty column-widths beside it. Now any leftover partial row (Student's 7th, Faculty's 4th, Provider's 1) renders as its own centered flex row instead of sitting inside the fixed grid.
 const STATIC_ASSETS = [
   '/',
   '/index.html',

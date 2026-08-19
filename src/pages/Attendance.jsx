@@ -573,7 +573,7 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
               {anyRotating && (
                 <div style={{ fontSize: 10.5, color: 'var(--accent)', padding: '6px 9px', marginBottom: 7, background: dark ? 'rgba(59,130,246,0.10)' : 'rgba(59,130,246,0.06)', border: '1px solid rgba(59,130,246,0.20)', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 5 }}>
                   <Users size={10} />
-                  <span>Rotating slot — pick who taught on {fmtDate(date)}, since it isn't always the same teacher.</span>
+                  <span>Alternative</span>
                 </div>
               )}
               {resolved.filter(r => r.needsPick).map(r => (
@@ -615,7 +615,7 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 6 }}>
                         <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 3 }}>
-                          <Users size={9} /> {teacher || 'Unknown teacher'}
+                          <Users size={9} /> {teacher === ALTERNATE_TEACHER ? 'Alternative' : (teacher || 'Unknown teacher')}
                         </div>
                         {status && (
                           <div style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 20, background: status === 'present' ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)', color: status === 'present' ? '#10b981' : '#ef4444' }}>
@@ -666,7 +666,7 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
         return (
           <AttendanceMarkModal
             course={cd.course}
-            teacher={row.teacher}
+            teacher={row.teacher === ALTERNATE_TEACHER ? 'Alternative' : row.teacher}
             status={row.status}
             dateLabel={fmtDate(date)}
             switchOptions={switchOptions}

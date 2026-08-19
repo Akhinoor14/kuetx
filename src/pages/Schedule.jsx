@@ -2070,7 +2070,7 @@ export default function Schedule() {
                     <div style={{ minWidth: '0' }}>
                       <div style={{ fontWeight: '700', fontSize: '13px', color: 'var(--text)', marginBottom: '3px' }}>{courseCode}</div>
                       <div style={{ fontSize: '11px', color: 'var(--text)', opacity: 0.8, wordBreak: 'break-word', display: 'flex', alignItems: 'center', gap: 5 }}>
-                        <span>→ {teacherName}</span>
+                        <span>{teacherName === 'Alternative' ? 'Alternative' : `→ ${teacherName}`}</span>
                         <LinkedTeacherBadge linkedFacultyUid={item.linkedFacultyUid} linkedAssignmentId={item.linkedAssignmentId} groupId={groupId} canSeeSummary={canEditGroupSchedule} />
                       </div>
                     </div>
