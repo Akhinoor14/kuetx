@@ -6,7 +6,7 @@ import {
   waitForOwnMembership, waitForOwnVerification, updateOwnMobile, MAX_CR,
   diagnosticCheckCRRequestsWrite, logCRRequestDiagnostics,
 } from '../lib/groupSync';
-import { checkCLVacant, applyForCampusLead } from '../lib/staffSync';
+import { checkCLVacant, applyForCampusLead, subscribeCLStatus } from '../lib/staffSync';
 import { auth, db } from '../lib/firebase';
 import PromptDialog from './PromptDialog';
 import { UserX2 } from 'lucide-react';
@@ -22,6 +22,17 @@ function useClaimCRState(groupId, profile) {
   const [claimState, setClaimState] = useState('idle'); // idle | sending | sent | error
   const [claimMsg, setClaimMsg] = useState('');
   const [ownRole, setOwnRole] = useState(null);
+  // BUGFIX ("Claim CR" still showing for someone who's already Campus
+  // Lead): ownRole only ever reflects members/{uid}.role ('member' |
+  // 'cr' | 'acr'). Campus Lead is a SEPARATE staff/{uid}/roles grant
+  // (see staffSync.js assignRole) that never touches that field, so a
+  // CL whose bundled CR claim got lost to the join-request race (fixed
+  // in syncGroupMembership/approveJoinRequest) or who simply became CL
+  // without ever separately claiming CR still read as a plain member
+  // here and kept seeing the full "claim CR" pitch. A Campus Lead
+  // already outranks CR for this exact class, so hide the card for
+  // them too regardless of what members/{uid}.role says.
+  const [isOwnCL, setIsOwnCL] = useState(false);
   const [ownRequestStatus, setOwnRequestStatus] = useState(null);
   // CR/ACR mobile number is now mandatory (Faculty "All CR" page needs a
   // real contact number for every CR/ACR). Captured here inline so the
@@ -37,7 +48,8 @@ function useClaimCRState(groupId, profile) {
     const unsubRole = subscribeMyRole(groupId, auth.currentUser?.uid, setOwnRole);
     const unsubOwnRequest = subscribeOwnCRRequestStatus(groupId, auth.currentUser?.uid, setOwnRequestStatus);
     const unsubOwnJoin = subscribeOwnJoinRequestStatus(groupId, auth.currentUser?.uid, (req) => setOwnJoinStatus(req?.status || null));
-    return () => { unsubCrStatus(); unsubRole(); unsubOwnRequest(); unsubOwnJoin(); };
+    const unsubCLStatus = subscribeCLStatus(groupId, (status) => setIsOwnCL(!!status?.uid && status.uid === auth.currentUser?.uid));
+    return () => { unsubCrStatus(); unsubRole(); unsubOwnRequest(); unsubOwnJoin(); unsubCLStatus(); };
   }, [groupId]);
 
   // Very light sanity check — not a strict Bangladeshi-number validator,
@@ -138,7 +150,7 @@ function useClaimCRState(groupId, profile) {
     }
   };
 
-  return { crStatus, claimState, claimMsg, ownRole, ownRequestStatus, ownJoinStatus, mobile, setMobile, handleClaimCR };
+  return { crStatus, claimState, claimMsg, ownRole, isOwnCL, ownRequestStatus, ownJoinStatus, mobile, setMobile, handleClaimCR };
 }
 
 /**
@@ -153,7 +165,7 @@ function useClaimCRState(groupId, profile) {
  * a single page.
  */
 export default function ClaimCRCard({ groupId, profile }) {
-  const { crStatus, claimState, claimMsg, ownRole, ownRequestStatus, ownJoinStatus, mobile, setMobile, handleClaimCR } =
+  const { crStatus, claimState, claimMsg, ownRole, isOwnCL, ownRequestStatus, ownJoinStatus, mobile, setMobile, handleClaimCR } =
     useClaimCRState(groupId, profile);
 
   if (!groupId || !crStatus) return null;
@@ -165,6 +177,9 @@ export default function ClaimCRCard({ groupId, profile }) {
   // Treat "not yet known" the same as "don't render anything yet".
   if (ownRole === null) return null;
   if (ownRole === 'cr' || ownRole === 'acr') return null;
+  // Campus Lead already outranks CR and is a separate staff/ grant —
+  // see isOwnCL's comment in useClaimCRState above.
+  if (isOwnCL) return null;
 
   // Join-pending is JoinStatusCard's state to own (it renders directly
   // above this card on Profile.jsx and already covers not-requested/
@@ -294,7 +309,7 @@ export default function ClaimCRCard({ groupId, profile }) {
  * carries the explanation and remains the primary surface on desktop.
  */
 export function ClaimCRInlineButton({ groupId, profile }) {
-  const { crStatus, claimState, ownRole, ownRequestStatus, ownJoinStatus, mobile, setMobile, handleClaimCR } =
+  const { crStatus, claimState, ownRole, isOwnCL, ownRequestStatus, ownJoinStatus, mobile, setMobile, handleClaimCR } =
     useClaimCRState(groupId, profile);
   // Compact variant has no room for an inline text field, so the
   // mandatory mobile number is collected via a small dialog that pops up
@@ -307,6 +322,7 @@ export function ClaimCRInlineButton({ groupId, profile }) {
   // first snapshot has actually arrived.
   if (ownRole === null) return null;
   if (ownRole === 'cr' || ownRole === 'acr') return null;
+  if (isOwnCL) return null;
   if (ownJoinStatus === 'pending' && ownRequestStatus !== 'pending') {
     return (
       <span style={{

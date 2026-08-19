@@ -430,6 +430,42 @@ export async function checkCLVacant(groupId) {
   return !snap.exists();
 }
 
+/**
+ * One-time repair for the "bundled CL+CR claim lost to a join-request
+ * race" bug (fixed going forward in groupSync.js's syncGroupMembership/
+ * approveJoinRequest): a class with no CR/CL yet routes a claim through
+ * applyForCampusLead(bundledCRClaim:true), which should leave the person
+ * as BOTH this group's clStatus AND members/{uid}.role === 'cr'. If a
+ * concurrent plain joinRequests approval landed after the CL grant, the
+ * old approveJoinRequest() unconditionally overwrote role back to
+ * 'member' — leaving clStatus correctly pointing at them (so they show
+ * as Campus Lead everywhere) while their own member doc/CR badge and the
+ * "Claim CR" prompt still read as a plain member.
+ *
+ * Scans every group's clStatus and re-syncs members/{clStatus.uid}.role
+ * to 'cr' whenever it's stuck on 'member'. Safe to run repeatedly —
+ * a no-op once every CL's member doc already agrees.
+ */
+export async function repairCLMemberRoleMismatches() {
+  const groupsSnap = await withPromiseTimeout(getDocs(collection(db, 'groups')), '[staffSync] repairCLMemberRoleMismatches groups lookup');
+  const fixed = [];
+  for (const groupDoc of groupsSnap.docs) {
+    const clStatusSnap = await getDoc(doc(db, 'groups', groupDoc.id, 'meta', 'clStatus'));
+    if (!clStatusSnap.exists()) continue;
+    const clUid = clStatusSnap.data()?.uid;
+    if (!clUid) continue;
+    const memberRef = doc(db, 'groups', groupDoc.id, 'members', clUid);
+    const memberSnap = await getDoc(memberRef);
+    if (!memberSnap.exists()) continue;
+    const role = memberSnap.data()?.role;
+    if (role === 'member') {
+      await setDoc(memberRef, { role: 'cr', verified: true }, { merge: true });
+      fixed.push({ groupId: groupDoc.id, uid: clUid });
+    }
+  }
+  return fixed;
+}
+
 export function subscribeCLStatus(groupId, callback) {
   if (!groupId) return () => {};
   return retryableOnSnapshot(doc(db, 'groups', groupId, 'meta', 'clStatus'), (snap) => {

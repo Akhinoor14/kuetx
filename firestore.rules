@@ -1816,9 +1816,27 @@ service cloud.firestore {
     // so client writes are rejected outright. Read-only for the app:
     // facultyDirectoryMatch.js looks up facultyDirectory/{email} to
     // decide whether to auto-verify a faculty signup.
-    // -------------------------------------------------------------
+    //
+    // BUGFIX: this was `allow read: if isSignedIn()`, but
+    // SignUpWizard.jsx's FacultyDetailsStep does its live-debounced
+    // directory lookup on Step 2 ("Details"), BEFORE the Google
+    // sign-in popup ever fires — that only happens later, from Step 3
+    // ("Confirm"), per this wizard's own §11.3.3 design (see
+    // ConfirmStep's header comment: "the Google popup fires only from
+    // HERE"). So at the moment Step 2 types an email, auth.uid is
+    // null, isSignedIn() denies the read, and
+    // lookupFacultyDirectoryEntry's catch block silently swallows the
+    // permission-denied error and reports it to the UI as an ordinary
+    // "no-match" — indistinguishable from a real miss, which is why a
+    // real directory entry (e.g. aabedeen@iept.kuet.ac.bd) still showed
+    // "⚠ Not matched" on Step 2 even though the document exists and the
+    // doc-ID normalization is correct. facultyDirectory only holds
+    // non-sensitive institutional directory info (name/dept/title/
+    // public contact fields scraped from KUET's own public site), so
+    // opening read to anyone — signed in or not — is safe and lets the
+    // Step 2 preview work pre-auth as the signup flow actually needs.
     match /facultyDirectory/{email} {
-      allow read: if isSignedIn();
+      allow read: if true;
     }
 
     // -------------------------------------------------------------

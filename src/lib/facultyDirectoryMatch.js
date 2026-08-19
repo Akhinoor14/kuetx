@@ -42,9 +42,8 @@
 // facultyDirectory, which this project can't deploy on the Spark (free)
 // plan — see functions/index.js's header.
 
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { db } from './firebase';
-import { syncFacultyVerificationStatus } from './facultySync';
 
 /** Same normalization the registry/dialog code already uses elsewhere — trim + collapse whitespace, lowercase for comparison only. */
 function normalizeForCompare(value) {
@@ -59,9 +58,13 @@ function normalizeForCompare(value) {
  * versa. This is a sanity check against a gross mismatch, not a strict
  * verifier (the email match is what actually establishes identity).
  */
+// eslint-disable-next-line no-unused-vars -- kept for tryAutoVerifyFacultyFromDirectory's disabled body, see that function's header
 function namesRoughlyMatch(typedName, directoryName) {
   const strip = (s) =>
-    normalizeForCompare(s).replace(/\b(dr|prof|professor|mr|ms|mrs|engr|eng)\.?\b/g, '').trim();
+    normalizeForCompare(s)
+      .replace(/\b(dr|prof|professor|mr|ms|mrs|engr|eng|md|mohammad|mohammed|mohd|sk|sheikh)\.?\b/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
   const a = strip(typedName);
   const b = strip(directoryName);
   if (!a || !b) return false;
@@ -80,53 +83,28 @@ export async function lookupFacultyDirectoryEntry(email) {
 }
 
 /**
- * Attempt to auto-verify a faculty account against the official
- * directory. Called from manualVerifyRequests.js's ensureManualVerifyRequest
- * BEFORE it files a pending request — a successful match here means no
- * pending request is needed at all (the account is already verified by
- * the time the Founder's Approvals tab would have shown it).
+ * DISABLED — turned into a no-op on purpose (product decision, see
+ * conversation this change came from): directory match should only ever
+ * drive the Step 2 "is this you?" preview/pre-fill
+ * (lookupFacultyDirectoryEntry, still active in SignUpWizard.jsx +
+ * FacultyProfileSetupModal.jsx) — it must NOT grant instant dashboard
+ * access on its own. Every faculty account, matched or not, now goes
+ * through the same manualVerifyRequests pending queue and needs an
+ * explicit Founder approval before verifiedAt is set. This restores the
+ * original "Founder-manual-only" behavior that facultyEmailVerify.js's
+ * header already describes as the deliberate baseline, without deleting
+ * the matching code below — flip this back on later by restoring the
+ * body from git history if a server-side (Cloud Function) check is ever
+ * added to close the self-write gap described in this file's top
+ * header, instead of trusting client JS as the sole gate.
  *
- * On a match: writes verifiedFacultyEmails/{email} (autoVerified: true,
- * matchedDirectoryName so a Founder auditing later can see what it
- * matched against), then bridges it onto faculty/{uid}.verifiedAt via the
- * same syncFacultyVerificationStatus() the manual-approval path already
- * uses — so downstream code never has to know which path a given
- * verification came through.
- *
- * Returns true if auto-verification succeeded, false if there was no
- * directory match (or the name didn't roughly agree) and the caller
- * should fall back to the ordinary manual pending-request flow. Never
- * throws — a directory-lookup failure (offline, permission hiccup) is
- * exactly like "no match", not an error worth surfacing to the signup
- * flow.
+ * Every call site (manualVerifyRequests.js's ensureManualVerifyRequest)
+ * already handles a `false` return by falling back to the ordinary
+ * pending-request flow, so no caller needs to change.
  *
  * @param {string} uid
  * @param {{ name: string, email: string }} details
  */
 export async function tryAutoVerifyFacultyFromDirectory(uid, details) {
-  try {
-    const email = String(details?.email || '').trim().toLowerCase();
-    const name = String(details?.name || '').trim();
-    if (!uid || !email || !name) return false;
-
-    const entry = await lookupFacultyDirectoryEntry(email);
-    if (!entry) return false;
-    if (!namesRoughlyMatch(name, entry.name)) return false;
-
-    await setDoc(
-      doc(db, 'verifiedFacultyEmails', email),
-      {
-        verifiedAt: serverTimestamp(),
-        autoVerified: true,
-        matchedDirectoryName: entry.name,
-        matchedDirectoryDept: entry.department || null,
-      },
-      { merge: true },
-    );
-    await syncFacultyVerificationStatus(uid, email);
-    return true;
-  } catch (err) {
-    console.warn('[facultyDirectoryMatch] tryAutoVerifyFacultyFromDirectory failed, falling back to manual review', err);
-    return false;
-  }
+  return false;
 }

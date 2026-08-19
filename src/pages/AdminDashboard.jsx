@@ -25,7 +25,7 @@ import NoticePrioritySelector from '../components/NoticePrioritySelector';
 import {
   assignRole, removeRole, repairRoleScope, listStaffByRole, subscribeAllCLApplications,
   approveCLApplication, rejectCLApplication, getStaffDisplayInfoBatch, getStaffDisplayInfo,
-  subscribeStaffRoleHistory,
+  subscribeStaffRoleHistory, repairCLMemberRoleMismatches,
 } from '../lib/staffSync';
 import { CORE_TEAM_LEAD_ROLES, ROLE_LABELS, ROLE_SCOPE_KIND, ROLES } from '../lib/staffRoles';
 import { BLOOD_GROUP_VALUES } from '../store/store';
@@ -1333,6 +1333,10 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
   // groupId/dept (see repairRoleScope in staffSync.js). null = closed.
   const [repairInput, setRepairInput] = useState({});
   const [repairBusy, setRepairBusy] = useState(null);
+  // Repair-in-place for the "Campus Lead still shows Claim CR" bug: see
+  // repairCLMemberRoleMismatches's comment in staffSync.js.
+  const [clRoleRepairBusy, setClRoleRepairBusy] = useState(false);
+  const [clRoleRepairResult, setClRoleRepairResult] = useState(null);
 
   const handleRepair = async (h, role) => {
     const key = `${role}-${h.id}`;
@@ -1545,6 +1549,38 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
             <p style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 10 }}>
               Founder can revoke any holder below. A person holding multiple roles appears once per role. Tap a name for full details.
             </p>
+            {/* Repair for the "Campus Lead still shows Claim CR / no CR
+                badge" bug — a bundled CL+CR claim whose member-doc role
+                got stomped back to 'member' by a racing plain join-
+                request approval. See repairCLMemberRoleMismatches's
+                comment in staffSync.js. Safe to run anytime, no-op if
+                nothing's out of sync. */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14, flexWrap: 'wrap' }}>
+              <button
+                onClick={async () => {
+                  setClRoleRepairBusy(true);
+                  setClRoleRepairResult(null);
+                  try {
+                    const fixed = await repairCLMemberRoleMismatches();
+                    setClRoleRepairResult(fixed.length > 0
+                      ? `Fixed ${fixed.length} Campus Lead${fixed.length > 1 ? 's' : ''} whose CR role had gone missing: ${fixed.map((f) => f.groupId).join(', ')}`
+                      : 'No mismatches found — every Campus Lead already has the CR role too.');
+                  } catch (e) {
+                    setClRoleRepairResult(`Repair failed: ${e?.message || 'try again'}`);
+                  } finally {
+                    setClRoleRepairBusy(false);
+                  }
+                }}
+                disabled={clRoleRepairBusy}
+                className="btn btn-sm"
+                style={{ cursor: clRoleRepairBusy ? 'default' : 'pointer', opacity: clRoleRepairBusy ? 0.6 : 1 }}
+              >
+                {clRoleRepairBusy ? 'Checking Campus Leads…' : 'Repair Campus Lead CR roles'}
+              </button>
+              {clRoleRepairResult && (
+                <span style={{ fontSize: 11, color: 'var(--muted)' }}>{clRoleRepairResult}</span>
+              )}
+            </div>
             <div style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 8, marginBottom: 12 }}>
               <button
                 onClick={() => setHolderFilter('all')}

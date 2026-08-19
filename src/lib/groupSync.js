@@ -418,6 +418,33 @@ export async function syncGroupMembership(groupId, profile) {
     await joinGroup(groupId, profile);
     return;
   }
+  // BUGFIX (plain join request race with an in-flight CR/CL claim):
+  // when this class has no CR/CL yet, ClaimCRCard routes the person
+  // through applyForCampusLead(bundledCRClaim:true) or requestCR()
+  // instead of a plain join. Those requests take a beat to get
+  // reviewed — during that window this auto-sync (fired on every
+  // profile-store tick from App.jsx) used to see "no members/{uid}
+  // doc yet" and file a SEPARATE plain joinRequests/{uid} doc too.
+  // Whichever request a reviewer happened to approve LAST won: if the
+  // plain join request was approved after the CL/CR approval,
+  // approveJoinRequest() unconditionally writes { role: 'member' },
+  // silently downgrading someone who was just made CR/CL back to a
+  // plain member — exactly the "still shows Claim CR after being made
+  // Campus Lead" bug. Skip the auto plain-join entirely whenever a
+  // CL application or CR request from this uid for this group is
+  // still pending (or was ever approved) — those paths create the
+  // members/{uid} doc themselves on approval, so a redundant plain
+  // join request here can only cause harm, never help.
+  const [pendingCLApp, pendingCRReq] = await Promise.all([
+    withPromiseTimeout(
+      getDocs(query(collection(db, 'clApplications'), where('uid', '==', uid), where('groupId', '==', groupId), where('status', '==', 'pending'))),
+      '[groupSync] syncGroupMembership clApplication check',
+    ).catch(() => ({ empty: true })),
+    withPromiseTimeout(getDocFromServer(doc(db, 'groups', groupId, 'crRequests', uid)), '[groupSync] syncGroupMembership crRequest check').catch(() => ({ exists: () => false })),
+  ]);
+  if (!pendingCLApp.empty || (pendingCRReq.exists?.() && pendingCRReq.data?.()?.status === 'pending')) {
+    return;
+  }
   const reqRef = doc(db, 'groups', groupId, 'joinRequests', uid);
   let existingReq;
   try {
@@ -1439,9 +1466,25 @@ export function subscribeOwnJoinRequestStatus(groupId, uid, callback) {
  */
 export async function approveJoinRequest(groupId, targetUid) {
   const reqRef = doc(db, 'groups', groupId, 'joinRequests', targetUid);
-  const reqSnap = await withPromiseTimeout(getDocFromServer(reqRef), '[groupSync] approveJoinRequest request check');
+  const memberRef = doc(db, 'groups', groupId, 'members', targetUid);
+  const [reqSnap, existingMemberSnap] = await Promise.all([
+    withPromiseTimeout(getDocFromServer(reqRef), '[groupSync] approveJoinRequest request check'),
+    withPromiseTimeout(getDocFromServer(memberRef), '[groupSync] approveJoinRequest existing member check'),
+  ]);
   if (!reqSnap.exists()) throw new Error('This join request no longer exists.');
   const req = reqSnap.data();
+
+  // BUGFIX (approving a stale plain join request silently downgrades a
+  // freshly-appointed CR/ACR/CL back to 'member'): if this uid's
+  // members/{uid} doc already exists with a real role (written by
+  // approveCLApplication's bundled-CR branch, clApproveCRRequest, or a
+  // direct clAppointCR — all of which can land moments before this
+  // plain join request is reviewed, since a bootstrap CR/CL claim
+  // files that path instead of a plain join), keep the existing role
+  // instead of blindly overwriting it with 'member'. This request is
+  // effectively already superseded — just mark it approved and move on.
+  const existingRole = existingMemberSnap.exists() ? existingMemberSnap.data()?.role : null;
+  const roleToWrite = (existingRole === 'cr' || existingRole === 'acr') ? existingRole : 'member';
 
   const batch = writeBatch(db);
   batch.set(doc(db, 'groups', groupId, 'members', targetUid), {
@@ -1452,11 +1495,11 @@ export async function approveJoinRequest(groupId, targetUid) {
     // no separate OTP tier in this flow, so an approved join request
     // always lands as verified: true.
     verified: true,
-    role: 'member',
+    role: roleToWrite,
     isAnonymous: false,
     joinedAt: serverTimestamp(),
     legacyCRClaim: false,
-  });
+  }, { merge: existingMemberSnap.exists() });
   batch.update(reqRef, { status: 'approved', decidedAt: serverTimestamp(), decidedBy: auth.currentUser?.uid || null });
   // BUGFIX (Founder's "Classes & Students" shows "0 classes" even with
   // real, verified members): joinGroup()'s self-join path (see its own

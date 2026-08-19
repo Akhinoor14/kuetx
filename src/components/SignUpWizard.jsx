@@ -442,7 +442,7 @@ function FacultyDetailsStep({ form, setForm, errors, setErrors }) {
           )}
           {isKuetEmail && lookupStatus === 'matched' && (
             <div style={{ fontSize: 11, fontWeight: 700, color: '#16a34a', marginTop: 6 }}>
-              ✓ Verified — matched in KUET directory ({directoryHit.name})
+              ✓ Matched in KUET directory — confirm it's you ({directoryHit.name})
             </div>
           )}
           {isKuetEmail && lookupStatus === 'no-match' && (
@@ -487,7 +487,7 @@ function FacultyDetailsStep({ form, setForm, errors, setErrors }) {
         color: isKuetEmail && directoryHit ? '#16a34a' : '#d97706',
       }}>
         {isKuetEmail && directoryHit
-          ? `✓ ${emailTrimmed} — verified against KUET directory`
+          ? `✓ ${emailTrimmed} — matched with KUET directory, pending Founder approval`
           : isKuetEmail
             ? `⚠ ${emailTrimmed} — no directory match, pending manual verification`
             : `⚠ ${emailTrimmed} — guest teacher, pending manual verification`}
@@ -670,7 +670,9 @@ function ConfirmStep({ role, form, busy, error, onConfirm }) {
       </div>
       {role === 'teacher' && (
         <p style={{ fontSize: 11, fontWeight: 700, color: form._directoryMatched ? '#16a34a' : '#d97706', marginBottom: 4 }}>
-          {form._directoryMatched ? '✓ Verified — instant access' : '⚠ Pending manual verification'}
+          {form._directoryMatched
+            ? '✓ Matched with KUET directory — pending Founder approval'
+            : '⚠ No directory match — pending manual verification'}
         </p>
       )}
       <p style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.5, marginBottom: 4 }}>

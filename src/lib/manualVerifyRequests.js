@@ -77,18 +77,14 @@ export async function ensureManualVerifyRequest(role, details) {
   if (role === 'student' && !roll) return;
   if (role === 'faculty' && !dept && !details?.email) return;
 
-  // AUTO-VERIFY (faculty only): before filing a pending request, check
-  // the scraped official KUET directory (facultyDirectory) for a
-  // name+email match — see facultyDirectoryMatch.js for the full
-  // rationale and the pre-existing-decision context. A successful match
-  // writes verifiedFacultyEmails/{email} + faculty/{uid}.verifiedAt
-  // directly, so no Founder action is needed for this account to become
-  // verified. We still fall through to the normal ensureManualVerifyRequest
-  // write below either way — even on a match, this keeps a record in the
-  // Approvals tab (status: 'approved', autoVerified: true) so the Founder
-  // has visibility and can manually revoke/intervene if the directory
-  // match was ever wrong (per product decision — see this function's
-  // caller-facing docs).
+  // AUTO-VERIFY (faculty only) — DISABLED. tryAutoVerifyFacultyFromDirectory
+  // is now a permanent no-op (product decision — see that function's own
+  // header in facultyDirectoryMatch.js): a KUET-directory match still
+  // drives the Step 2 "is this you?" preview/pre-fill in SignUpWizard.jsx,
+  // but it no longer grants verifiedAt on its own. `autoVerified` below
+  // is therefore always false, so every faculty signup — matched or not —
+  // falls through to the ordinary pending request below and needs an
+  // explicit Founder approval via the Approvals tab.
   let autoVerified = false;
   if (role === 'faculty' && details?.email) {
     autoVerified = await tryAutoVerifyFacultyFromDirectory(uid, { name, email: details.email });
