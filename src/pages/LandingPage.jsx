@@ -666,21 +666,9 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
         </div>
       </div>
 
-      {/* Owner ask (this session): the hard color-band cuts between
-          sections (dark hero -> white -> sage -> white -> dark CTA)
-          read as an abrupt "hঠাৎ" jump rather than a deliberate flow.
-          Rather than flattening the whole page to one color (which
-          would lose the sage scrapbook band's job of visually setting
-          those photos apart, and the dark hero/CTA "bookend" rhythm),
-          each hard edge gets a short gradient cap that blends this
-          section's own color into the NEXT section's color right at
-          the boundary, so the seam reads as a soft fade instead of a
-          flat line. Hero -> the page's own --kx-bg white comes next. */}
-      <div aria-hidden="true" style={{
-        position: 'absolute', left: 0, right: 0, bottom: 0, height: '90px',
-        background: 'linear-gradient(to bottom, transparent, var(--kx-bg))',
-        pointerEvents: 'none',
-      }} />
+      {/* Owner ask (this session, reverted): section boundaries are
+          hard color-band cuts by design — no gradient blend between
+          hero and the next section. */}
     </section>
   );
 }
@@ -708,20 +696,7 @@ function CampusScrapbook({ isMobileNav }) {
         padding: isMobileNav ? '2.5rem 1.1rem' : '90px 32px',
       }}
     >
-      {/* Soft seam caps (see CampusHero's identical comment) — top edge
-          blends the incoming white page background into this section's
-          sage, bottom edge blends sage back out into white again for
-          whatever full-bleed section follows. */}
-      <div aria-hidden="true" style={{
-        position: 'absolute', left: 0, right: 0, top: 0, height: '70px',
-        background: 'linear-gradient(to bottom, var(--kx-bg), transparent)',
-        pointerEvents: 'none',
-      }} />
-      <div aria-hidden="true" style={{
-        position: 'absolute', left: 0, right: 0, bottom: 0, height: '70px',
-        background: 'linear-gradient(to bottom, transparent, var(--kx-bg))',
-        pointerEvents: 'none',
-      }} />
+      {/* Hard color-band cut by design — no seam gradient here. */}
       <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 56px' }}>
         <div className="kx-eyebrow" style={{ marginBottom: '0.75rem' }}>
           নিজের ক্যাম্পাস
@@ -2544,8 +2519,16 @@ function CreditsSpotlight({ isMobileNav }) {
   // would cut off the people standing at the left/right edges of a
   // 5-person lineup, which a rounded rectangle avoids while still
   // reading as a distinct "photo," not a plain box.
-  const PHOTO_BOX_W = isMobileNav ? 220 : 300;
-  const PHOTO_BOX_H = isMobileNav ? 176 : 240; // ~1.25:1 — small enough letterboxing on a solo portrait, small enough top/bottom crop on a landscape group shot
+  // Solo portraits get their own smaller, near-square box (a portrait
+  // face reads fine small and doesn't need a wide landscape frame);
+  // group photos keep the wider box so a multi-person lineup doesn't
+  // get squeezed. Each shape still has ONE fixed size across every
+  // person who uses it, so rotating between two portraits (or two
+  // group photos) never jumps height — only switching shape families
+  // does, which happens at most once per rotation cycle here.
+  const isWide = person.photoShape === 'wide';
+  const PHOTO_BOX_W = isWide ? (isMobileNav ? 220 : 300) : (isMobileNav ? 116 : 140);
+  const PHOTO_BOX_H = isWide ? (isMobileNav ? 176 : 240) : (isMobileNav ? 116 : 140);
 
   return (
     <div
@@ -2575,8 +2558,8 @@ function CreditsSpotlight({ isMobileNav }) {
           top: isMobileNav ? '-30px' : '-40px',
           left: '50%',
           transform: 'translateX(-50%)',
-          width: isMobileNav ? '260px' : '340px',
-          height: isMobileNav ? '260px' : '340px',
+          width: isWide ? (isMobileNav ? '260px' : '340px') : (isMobileNav ? '160px' : '190px'),
+          height: isWide ? (isMobileNav ? '260px' : '340px') : (isMobileNav ? '160px' : '190px'),
           background: 'radial-gradient(ellipse 50% 50% at 50% 35%, rgba(var(--accentRGB),0.16), transparent 70%)',
           pointerEvents: 'none',
           zIndex: 0,
@@ -2617,7 +2600,7 @@ function CreditsSpotlight({ isMobileNav }) {
         <div style={{
           width: PHOTO_BOX_W,
           height: PHOTO_BOX_H,
-          borderRadius: '14px',
+          borderRadius: isWide ? '14px' : '999px',
           overflow: 'hidden',
           border: '3px solid var(--accentLight)',
           boxShadow: '0 10px 24px rgba(0,0,0,0.14)',
@@ -3135,14 +3118,7 @@ export default function LandingPage() {
             position: 'absolute', inset: 0, pointerEvents: 'none',
             background: 'radial-gradient(ellipse 700px 400px at 50% 100%, rgba(74,222,128,0.15), transparent 60%)',
           }} />
-          {/* Soft seam cap (see CampusHero's identical comment) — blends
-              the white page background above into this section's dark
-              band instead of a hard line at the top edge. */}
-          <div aria-hidden="true" style={{
-            position: 'absolute', left: 0, right: 0, top: 0, height: '90px',
-            background: 'linear-gradient(to bottom, var(--kx-bg), transparent)',
-            pointerEvents: 'none',
-          }} />
+          {/* Hard color-band cut by design — no seam gradient here. */}
           <div style={{ position: 'relative' }}>
             <div style={{
               margin: '0 auto 20px', display: 'flex', alignItems: 'center', justifyContent: 'center',
