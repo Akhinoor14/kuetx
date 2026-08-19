@@ -56,7 +56,15 @@ export default function TodayFullList() {
   }, []);
 
   const profile = getProfile();
-  const { items, isHoliday } = buildTodayItems(profile, now);
+  const { items: allItems, isHoliday } = buildTodayItems(profile, now);
+
+  // Once a timed item's slot has started/passed, drop it from this list —
+  // same "upcoming only" rule getUpcomingPair() uses for the compact
+  // widget, just kept as a full list here instead of next+following.
+  // Untimed items (minutes === null, e.g. assignments due today) always
+  // stay, since they have no "past" state.
+  const nowMinutes = now.getHours() * 60 + now.getMinutes();
+  const items = allItems.filter((it) => it.minutes === null || it.minutes >= nowMinutes);
 
   const visibleItems = expanded ? items : items.slice(0, CAP);
 
@@ -71,7 +79,7 @@ export default function TodayFullList() {
       {!isHoliday && items.length === 0 && (
         <div style={{ fontSize: 12.5, color: 'var(--muted)', textAlign: 'center', padding: '18px 0', display: 'flex', flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
           <Sunrise size={20} color="var(--muted)" style={{ opacity: 0.5 }} />
-          Nothing planned for today
+          {allItems.length === 0 ? 'Nothing planned for today' : "You're done for today"}
         </div>
       )}
       {visibleItems.map((item) => <ItemRow key={item.id} item={item} />)}

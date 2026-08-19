@@ -1,5 +1,5 @@
 // KUETx Service Worker — offline cache + auto-update
-const CACHE_NAME = 'kuetx-v4.2.9'; // bumped: removed maskable icons (transparent-bg only, no maskable) + re-cropped mascot icons — bump this on every future deploy too
+const CACHE_NAME = 'kuetx-v4.4.0'; // bumped: splash redesigned to "Minimal Badge Zoom" — background photo layer swaps statue.webp for academic.webp, precache list updated to match
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -11,8 +11,9 @@ const STATIC_ASSETS = [
   '/icon-192.png',
   '/icon-512.png',
   '/vendor/fullcalendar-fallback.css',
+  '/splash/mascot.webp',
   '/splash/gate.webp',
-  '/splash/statue.webp',
+  '/splash/academic.webp',
   '/splash/aerial.webp',
   '/splash/sign.webp',
 ];

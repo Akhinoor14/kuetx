@@ -72,147 +72,138 @@
       }
     </style>
 
-    <!-- ── Cold-start splash (orbit-carousel: photos glide around a fixed
-         centered logo) ────────────────────────────────────────────────
+    <!-- ── Cold-start splash (Minimal Badge Zoom) ───────────────────────
          Shown ONCE per browser session (sessionStorage flag below) on the
          very first cold load — NOT on every internal route change, and NOT
          on repeat visits within the same tab session, so it never gets in
          the way of someone who's already using the app. It sits ON TOP OF
          #app-shell-skeleton (higher z-index) and fades itself out at the
-         end of the sequence or as soon as React has mounted real content,
-         whichever the person's device/network allows — it never blocks or
-         delays the real app underneath; #app-shell-skeleton and React are
-         both loading normally the whole time behind it.
+         end of the sequence, handing off to the real app underneath;
+         #app-shell-skeleton and React are both loading normally the whole
+         time behind it.
 
-         Design: the KUETx turtle mascot sits fixed and calm at dead center
-         for the ENTIRE sequence (never moves, gentle breathing pulse only).
-         Four campus photo cards drift in from off-screen along soft
-         curved paths, pass near — but never over — the logo, and drift
-         back out, one at a time. Each card uses object-fit: contain-style
-         sizing (width/height capped, aspect-ratio preserved via <img>,
-         never CSS background-cover) so a landscape photo is NEVER
-         zoomed/cropped into an unrecognizable sliver on wide desktop
-         screens — this replaces the old background-cover cinematic scenes,
-         which is exactly what caused the bad desktop cropping.
+         Design: two independent layers that can never collide —
+           1) a full-bleed background layer of 4 campus photos, each
+              Ken-Burns zooming + crossfading into the next
+           2) a small, sharp, ALWAYS-CENTERED badge (mascot + wordmark +
+              tagline + clock) on a translucent glass pill, floating above
+         Since the badge's position never depends on where the photos are
+         and vice-versa, there is no overlap math to get wrong on any
+         screen size — this replaces the previous "cards orbit around a
+         fixed logo" design, which needed per-breakpoint offset tuning.
          All four photos are local files under /public/splash/ (see
          STATIC_ASSETS in sw.js — precached there for offline use),
          pre-compressed ahead of time, no runtime image processing, no
          external requests. Respects prefers-reduced-motion by skipping
-         straight to a static logo instead of the orbit sequence. -->
+         straight to a static badge instead of the photo sequence. -->
     <style>
       #kx-splash {
         position: fixed; inset: 0; z-index: 10000;
-        background: radial-gradient(ellipse at 50% 50%, #123a24 0%, #0c2718 55%, #081a10 100%);
+        background: #081a10;
         overflow: hidden;
         opacity: 1;
-        transition: opacity 0.8s ease;
+        transition: opacity 0.4s ease;
       }
       #kx-splash.kx-hide {
         opacity: 0;
         pointer-events: none;
       }
 
-      /* Center logo — present and stable for the entire sequence */
-      #kx-centerLogo {
-        position: absolute; left: 50%; top: 50%;
-        transform: translate(-50%, -50%) scale(0.82);
-        display: flex; flex-direction: column; align-items: center;
-        gap: 14px;
+      /* ---------- Background photo layer ---------- */
+      #kx-photoLayer { position: absolute; inset: 0; z-index: 1; }
+      .kx-photo {
+        position: absolute; inset: 0;
+        background-size: cover;
+        background-position: center;
         opacity: 0;
-        z-index: 5;
-        transition: opacity 1s ease, transform 1s cubic-bezier(0.34,1.56,0.64,1);
+        transform: scale(1);
+        transition: opacity 0.7s ease;
+        will-change: opacity, transform;
+      }
+      .kx-photo.kx-photo-active {
+        opacity: 1;
+        animation: kx-kenburns 1.6s ease-out forwards;
+      }
+      @keyframes kx-kenburns {
+        from { transform: scale(1); }
+        to   { transform: scale(1.08); }
+      }
+      #kx-overlay {
+        position: absolute; inset: 0; z-index: 1;
+        background: rgba(8, 26, 16, 0.55);
+        pointer-events: none;
+      }
+
+      /* ---------- Foreground badge — always centered, own layer ---------- */
+      #kx-centerLogo {
+        position: absolute; top: 50%; left: 50%;
+        transform: translate(-50%, -50%) scale(0.9);
+        display: flex; flex-direction: column; align-items: center;
+        text-align: center;
+        gap: 0;
+        padding: 28px 24px;
+        border-radius: 20px;
+        background: rgba(12, 39, 24, 0.55);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        opacity: 0;
+        z-index: 2;
+        transition: opacity 0.5s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
       }
       #kx-centerLogo.kx-show {
         opacity: 1;
         transform: translate(-50%, -50%) scale(1);
       }
-      #kx-centerLogo img {
-        width: 76px; height: 76px;
-        filter: drop-shadow(0 6px 22px rgba(0,0,0,0.45));
-        animation: kx-breathe 3.2s ease-in-out infinite;
-      }
-      #kx-centerLogo.kx-settle img { width: 92px; height: 92px; }
-      @keyframes kx-breathe {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.045); }
-      }
-      #kx-wordmark { font-weight: 800; font-size: 30px; letter-spacing: -0.02em; color: #f5f5f0; }
-      #kx-wordmark span { color: #4ade80; font-weight: 900; }
-      #kx-tagline {
-        font-size: 11.5px; color: rgba(255,255,255,0.55);
-        letter-spacing: 0.08em; text-transform: uppercase;
-        opacity: 0; transition: opacity 1s ease;
-      }
-      #kx-tagline.kx-show { opacity: 1; }
-      #kx-dots { display: flex; gap: 6px; opacity: 0; transition: opacity 0.6s ease; }
-      #kx-dots.kx-show { opacity: 1; }
-      #kx-dots span {
-        width: 5px; height: 5px; border-radius: 50%;
-        background: #4ade80;
-        animation: kx-pulse 1.2s ease-in-out infinite;
-      }
-      #kx-dots span:nth-child(2) { animation-delay: 0.15s; }
-      #kx-dots span:nth-child(3) { animation-delay: 0.3s; }
-      @keyframes kx-pulse {
-        0%, 100% { opacity: 0.25; transform: scale(0.8); }
-        50% { opacity: 1; transform: scale(1.15); }
-      }
-
-      /* Orbit photo cards — each card is positioned/animated individually
-         via inline style + a per-card class added by JS at the right
-         moment, so timing is controlled from one place (the JS timeline)
-         rather than duplicated magic numbers in keyframes. */
-      #kx-orbit {
-        position: absolute; inset: 0;
-        z-index: 3;
-      }
-      .kx-card {
-        position: absolute;
-        left: 50%; top: 50%;
-        width: min(30vw, 300px);
-        aspect-ratio: 4 / 3;
-        border-radius: 14px;
-        overflow: hidden;
-        box-shadow: 0 14px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.06);
+      #kx-centerLogo.kx-hide-badge {
         opacity: 0;
-        will-change: transform, opacity;
-        transition: opacity 0.9s ease, transform 1.6s cubic-bezier(0.22,1,0.36,1);
+        transform: translate(-50%, -50%) scale(0.92);
+        transition: opacity 0.4s ease, transform 0.4s ease;
       }
-      .kx-card img {
-        width: 100%; height: 100%;
-        object-fit: cover; /* fills the fixed-aspect CARD, never the screen — the card itself is sized to a safe box, so no viewport-wide crop */
+      #kx-centerLogo img {
+        width: 56px; height: 56px;
         display: block;
       }
-      /* Each card gets its own resting position, offset from center,
-         reached only via the transform JS applies — base state below is
-         purely "gathered at center, invisible", so every card's first
-         visible state is easy to reason about. */
-      .kx-card { transform: translate(-50%, -50%) scale(0.4); }
-      .kx-card.kx-in {
-        opacity: 1;
+      #kx-wordmark {
+        font-weight: 800; font-size: 1.3rem; letter-spacing: -0.01em;
+        color: #f5f5f0; margin-top: 10px;
       }
-      .kx-card.kx-out {
-        opacity: 0;
-        transition: opacity 0.9s ease, transform 1.3s cubic-bezier(0.4,0,1,1);
+      #kx-wordmark span { color: #4ade80; font-weight: 900; }
+      #kx-tagline {
+        font-size: 0.75rem; color: rgba(255,255,255,0.75);
+        margin-top: 4px;
       }
-      @media (max-width: 640px) {
-        .kx-card { width: min(34vw, 150px); }
+      #kx-clock {
+        font-family: 'JetBrains Mono', ui-monospace, monospace;
+        font-size: 0.85rem; font-weight: 600; letter-spacing: 0.03em;
+        color: #a5d6a7;
+        margin-top: 10px;
+        display: flex; align-items: center; gap: 7px;
+      }
+      #kx-clock .kx-clock-dot {
+        width: 6px; height: 6px; border-radius: 50%;
+        background: #4ade80; flex-shrink: 0;
+        box-shadow: 0 0 6px rgba(74,222,128,0.8);
       }
 
-      #kx-vignette {
-        position: absolute; inset: 0;
-        box-shadow: inset 0 0 140px 50px rgba(3,8,5,0.5);
-        pointer-events: none;
-        z-index: 4;
+      @media screen and (min-width: 641px) {
+        #kx-centerLogo { width: 360px; padding: 36px 32px; }
+        #kx-centerLogo img { width: 72px; height: 72px; }
+        #kx-wordmark { font-size: 1.6rem; }
+        #kx-tagline { font-size: 0.85rem; }
+        #kx-clock { font-size: 0.95rem; }
+      }
+      @media screen and (max-width: 640px) {
+        #kx-centerLogo { width: 78vw; max-width: 320px; }
       }
 
-      /* Static fallback: prefers-reduced-motion skips the orbit sequence
-         entirely and shows only the logo, faded in once, no motion. */
+      /* Static fallback: prefers-reduced-motion skips photo animation
+         entirely and shows only the badge, faded in once, no motion. */
       @media (prefers-reduced-motion: reduce) {
-        #kx-orbit { display: none !important; }
+        #kx-photoLayer, #kx-overlay { display: none !important; }
         #kx-splash { background: #14532d; }
-        #kx-centerLogo, #kx-tagline, #kx-dots { transition-duration: 0.01ms !important; }
-        #kx-centerLogo img { animation: none !important; }
+        .kx-photo { animation: none !important; transition: none !important; }
+        #kx-centerLogo { transition-duration: 0.01ms !important; }
       }
     </style>
     <script>
@@ -311,8 +302,8 @@
     <div id="root"><h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">KUETx — The Digital Ecosystem for KUET</h1><div id="app-shell-skeleton"><div class="sk-sidebar"></div><div class="sk-main"><div class="sk-topbar"></div></div></div></div>
 
     <script>
-      // Only paint the orbit-carousel splash once per browser session — first
-      // cold load of the tab. Every subsequent internal navigation or
+      // Only paint the "Minimal Badge Zoom" splash once per browser session —
+      // first cold load of the tab. Every subsequent internal navigation or
       // refresh-within-session skips straight to #app-shell-skeleton like
       // before, so returning users are never slowed down by a sequence
       // they've already seen. sessionStorage (not localStorage) is
@@ -327,121 +318,107 @@
           // show the splash anyway, just won't be remembered for next tab.
         }
 
-        // Four campus photo cards. Each rests at a fixed corner-ish spot
-        // around the center logo (never overlapping it), entering from
-        // just off-screen in that same direction and exiting back the
-        // same way — a calm, symmetric "gather around the mascot" motion
-        // rather than a spinning/orbiting blur. Positions are expressed
-        // as translate offsets from dead-center (left:50%/top:50% base),
-        // so they scale naturally with viewport size instead of using
-        // fixed pixel corners that would break on small screens.
-        // Rest/from offsets are expressed as % of each card's OWN box size
-        // (CSS translate % semantics), so they need different magnitudes
-        // on narrow phones (where .kx-card is ~40vw) vs desktop (~30vw
-        // capped at 300px) to land in the same *visual* place relative to
-        // the viewport — otherwise a phone-width card translated by the
-        // desktop-tuned percentage drifts off-screen entirely.
-        var isNarrow = window.innerWidth <= 640;
-        var CARDS = isNarrow ? [
-          { src: '/splash/gate.webp',   alt: 'KUET main gate',                 rest: 'translate(-68%, -102%) rotate(-3deg)',  from: 'translate(-140%, -210%) rotate(-3deg)' },
-          { src: '/splash/statue.webp', alt: 'Liberation War memorial statue', rest: 'translate(68%, -102%) rotate(2deg)',    from: 'translate(140%, -210%) rotate(2deg)' },
-          { src: '/splash/aerial.webp', alt: 'Aerial view of KUET campus',     rest: 'translate(-68%, 102%) rotate(2deg)',    from: 'translate(-140%, 210%) rotate(2deg)' },
-          { src: '/splash/sign.webp',   alt: 'KUET sign at dusk',              rest: 'translate(68%, 102%) rotate(-2deg)',    from: 'translate(140%, 210%) rotate(-2deg)' },
-        ] : [
-          { src: '/splash/gate.webp',   alt: 'KUET main gate',                 rest: 'translate(-128%, -78%) rotate(-3deg)',  from: 'translate(-230%, -160%) rotate(-3deg)' },
-          { src: '/splash/statue.webp', alt: 'Liberation War memorial statue', rest: 'translate(30%, -86%) rotate(2deg)',     from: 'translate(70%, -220%) rotate(2deg)' },
-          { src: '/splash/aerial.webp', alt: 'Aerial view of KUET campus',     rest: 'translate(-132%, 74%) rotate(2deg)',    from: 'translate(-250%, 170%) rotate(2deg)' },
-          { src: '/splash/sign.webp',   alt: 'KUET sign at dusk',              rest: 'translate(34%, 80%) rotate(-2deg)',     from: 'translate(80%, 200%) rotate(-2deg)' },
+        // Four background photos, crossfading in this order.
+        var PHOTOS = [
+          { src: '/splash/gate.webp',     alt: 'KUET main gate' },
+          { src: '/splash/academic.webp', alt: 'KUET academic building' },
+          { src: '/splash/aerial.webp',   alt: 'Aerial view of KUET campus' },
+          { src: '/splash/sign.webp',     alt: 'KUET sign at dusk' },
         ];
 
         var el = document.createElement('div');
         el.id = 'kx-splash';
         el.innerHTML =
-          '<div id="kx-orbit">' +
-            CARDS.map(function (c, i) {
-              return '<div class="kx-card" id="kx-card' + i + '" style="transform:' + c.from + ' scale(0.4)">' +
-                       '<img src="' + c.src + '" alt="' + c.alt + '" loading="eager" />' +
-                     '</div>';
+          '<div id="kx-photoLayer">' +
+            PHOTOS.map(function (p, i) {
+              return '<div class="kx-photo' + (i === 0 ? ' kx-photo-active' : '') + '" id="kx-photo' + i + '" ' +
+                     'role="img" aria-label="' + p.alt + '" style="background-image:url(\'' + p.src + '\')"></div>';
             }).join('') +
           '</div>' +
-          '<div id="kx-vignette"></div>' +
+          '<div id="kx-overlay"></div>' +
           '<div id="kx-centerLogo">' +
-            '<img src="/icon-512.png" width="76" height="76" alt="" />' +
+            '<img src="/splash/mascot.webp" width="72" height="72" alt="" />' +
             '<div id="kx-wordmark">KUET<span>x</span></div>' +
             '<div id="kx-tagline">The digital ecosystem for KUET</div>' +
-            '<div id="kx-dots"><span></span><span></span><span></span></div>' +
+            '<div id="kx-clock"><span class="kx-clock-dot"></span><span id="kx-clock-text"></span></div>' +
           '</div>';
         document.body.appendChild(el);
 
         var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         var centerLogo = document.getElementById('kx-centerLogo');
-        var tagline = document.getElementById('kx-tagline');
-        var dots = document.getElementById('kx-dots');
-        var cardEls = CARDS.map(function (_, i) { return document.getElementById('kx-card' + i); });
+        var clockText = document.getElementById('kx-clock-text');
+        var photoEls = PHOTOS.map(function (_, i) { return document.getElementById('kx-photo' + i); });
+
+        // Live clock — ticks for as long as the splash is on screen.
+        var clockTimer = null;
+        function renderClock() {
+          try {
+            clockText.textContent = new Date().toLocaleTimeString([], {
+              hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true,
+            });
+          } catch (e) { /* Intl unavailable — just skip a tick */ }
+        }
 
         function hideSplash() {
           el.classList.add('kx-hide');
+          if (clockTimer) { clearInterval(clockTimer); clockTimer = null; }
           setTimeout(function () {
             if (el.parentNode) el.parentNode.removeChild(el);
-          }, 800);
+          }, 400);
         }
 
         if (reduceMotion) {
-          // Static fallback: no photo motion, logo appears once, short hold, done.
-          centerLogo.classList.add('kx-show', 'kx-settle');
-          tagline.classList.add('kx-show');
-          dots.classList.add('kx-show');
+          // Static fallback: no photo motion, badge appears once, short hold, done.
+          centerLogo.classList.add('kx-show');
+          renderClock();
+          clockTimer = setInterval(renderClock, 1000);
           setTimeout(hideSplash, 1400);
           return;
         }
 
-        // Timeline (~12s total): logo settles in first and stays fixed at
-        // center the whole time. Cards then glide in one by one to rest
-        // near (never over) the logo, hold together as a group so the
-        // full "family photo" of the campus is visible at once, then
-        // glide back out one by one in the same order. Logo enlarges
-        // slightly and the tagline/dots settle in as the cards clear,
-        // handing off cleanly to the real app underneath.
+        // Timeline (7s total):
+        //   0ms    first photo visible, Ken Burns zoom begins
+        //   200ms  badge fades/scales in
+        //   700ms  badge settled, clock starts ticking
+        //   1600ms / 3200ms / 4800ms  photo crossfades (4 photos total)
+        //   6400ms badge starts fade+scale out
+        //   6700ms splash background starts fading, revealing app
+        //   7000ms splash removed from DOM
+        var PHOTO_INTERVAL = 1600;
+        var TOTAL_DURATION = 7000;
+        var BADGE_ENTER_DELAY = 200;
+        var BADGE_EXIT_LEAD = 600;
+        var OVERLAY_FADE_LEAD = 300;
+
         requestAnimationFrame(function () {
-          setTimeout(function () { centerLogo.classList.add('kx-show'); }, 60);
-
-          var ENTER_START = 600;
-          var ENTER_STAGGER = 550;
-          cardEls.forEach(function (card, i) {
-            setTimeout(function () {
-              card.style.transform = CARDS[i].rest + ' scale(1)';
-              card.classList.add('kx-in');
-            }, ENTER_START + i * ENTER_STAGGER);
-          });
-
-          // Hold: all four cards visible together around the mascot —
-          // this is the main "look at the campus" beat, given the most
-          // time so it never feels rushed.
-          var HOLD_UNTIL = ENTER_START + cardEls.length * ENTER_STAGGER + 3800;
-
-          var EXIT_START = HOLD_UNTIL;
-          var EXIT_STAGGER = 380;
-          cardEls.forEach(function (card, i) {
-            setTimeout(function () {
-              card.classList.remove('kx-in');
-              card.classList.add('kx-out');
-              card.style.transform = CARDS[i].from + ' scale(0.4)';
-            }, EXIT_START + i * EXIT_STAGGER);
-          });
-
-          var SETTLE_AT = EXIT_START + cardEls.length * EXIT_STAGGER + 400; // logo grows slightly, tagline/dots fade in
           setTimeout(function () {
-            centerLogo.classList.add('kx-settle');
-            tagline.classList.add('kx-show');
-            dots.classList.add('kx-show');
-          }, SETTLE_AT);
+            centerLogo.classList.add('kx-show');
+          }, BADGE_ENTER_DELAY);
 
-          // Hold the settled logo+tagline briefly on its own before
-          // handing off, so the ending doesn't feel abrupt — then hard
-          // cap resolves to the real app by ~12s total even if the
-          // browser is under load and timers drift, so the splash can
-          // never strand someone indefinitely in front of it.
-          setTimeout(hideSplash, SETTLE_AT + 2900);
+          setTimeout(function () {
+            renderClock();
+            clockTimer = setInterval(renderClock, 1000);
+          }, BADGE_ENTER_DELAY + 500);
+
+          photoEls.forEach(function (photo, i) {
+            if (i === 0) return; // first photo already active
+            setTimeout(function () {
+              photoEls.forEach(function (p) { p.classList.remove('kx-photo-active'); });
+              void photo.offsetWidth; // restart the Ken Burns animation cleanly
+              photo.classList.add('kx-photo-active');
+            }, i * PHOTO_INTERVAL);
+          });
+
+          setTimeout(function () {
+            centerLogo.classList.remove('kx-show');
+            centerLogo.classList.add('kx-hide-badge');
+          }, TOTAL_DURATION - BADGE_EXIT_LEAD);
+
+          setTimeout(function () {
+            el.style.opacity = 0;
+          }, TOTAL_DURATION - OVERLAY_FADE_LEAD);
+
+          setTimeout(hideSplash, TOTAL_DURATION + 200);
         });
       })();
     </script>

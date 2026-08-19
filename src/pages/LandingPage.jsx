@@ -27,12 +27,12 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { Wordmark } from '../components/Logo';
+import { Logo, Wordmark } from '../components/Logo';
 import {
   LogIn, GraduationCap, Presentation, Store, CheckCircle2,
   Monitor, Smartphone, Crown,
   Layers, ShieldCheck, Users, Sparkles, Mail, MessageSquare, X,
-  Flame, TrendingUp, Star, Zap,
+  Flame, TrendingUp, Star, Zap, MapPin, ArrowDown,
 } from 'lucide-react';
 import usePageMeta from '../hooks/usePageMeta';
 import { useIsMobileNav } from '../components/BottomNav';
@@ -118,6 +118,317 @@ const ROLE_CARDS = [
     ],
   },
 ];
+
+// ─── Campus photography (design refresh, this session) ─────────────────
+// Owner-approved standalone HTML mockup, now ported into the real
+// component tree. Assets live in /public/landing/ (real files, checked
+// into the repo — NOT base64, unlike the throwaway HTML mockup, since a
+// real deployed app should let the browser cache these across visits
+// rather than re-downloading the whole page's bytes every load). Every
+// filename below corresponds 1:1 to a file the owner-approved design
+// pass already placed at /public/landing/<file> — see PR notes / this
+// session's asset-prep step.
+const CAMPUS_PHOTOS = {
+  gate: { src: '/landing/gate.jpg', label: 'Main Gate', coord: 'KUET, Khulna' },
+  aerial: { src: '/landing/aerial.jpg', label: 'Campus, Aerial View', coord: 'সবুজ, ওয়াকওয়ে' },
+  statue: { src: '/landing/statue-sunset.jpg', label: 'Liberation War Memorial', coord: 'সূর্যাস্তে, মূল ভবনের সামনে' },
+  academic: { src: '/landing/academic.jpg', label: 'Academic Building', coord: 'ক্রিম কলাম, আর্চড জানালা' },
+  sign: { src: '/landing/sign-dusk.jpg', label: 'KUET Sign, Dusk', coord: 'সন্ধ্যার ক্যাম্পাস' },
+  auditorium: { src: '/landing/auditorium.jpg', label: 'Auditorium', coord: 'যেখানে ফেস্ট হয়' },
+  mainBuilding: { src: '/landing/main-building.jpg', label: 'Main Building', coord: 'কলামযুক্ত, বহুতল' },
+  bus: { src: '/landing/bus.jpg', label: 'Campus Bus', coord: 'দৈনন্দিন যাতায়াত' },
+};
+
+// ─── Campus photo hero (design refresh) ─────────────────────────────────
+// Replaces the old text-only hero with the owner-approved standalone-HTML
+// design's signature motif: real campus photos presented as tilted,
+// white-bordered "physical photograph" cards rather than flush
+// rectangles — this repeats again in CampusScrapbook below so it reads
+// as an intentional signature rather than a one-off. Uses the SAME
+// theme CSS vars as the rest of the app (--accent/--bg/--text/etc, see
+// index.css) rather than the mockup's own hardcoded dark-green hex
+// values, so this section tracks light/dark mode and any future theme
+// change automatically instead of drifting out of sync with it.
+// Shared hover-lift (scrapbook tiles) + mascot-bounce keyframes for the
+// design-refresh sections. Inline styles can't express :hover, and this
+// file has no dedicated landing.css, so a single scoped <style> tag is
+// injected once here rather than adding a new CSS file or reaching for
+// per-card JS hover state (which would mean 8 extra useState calls in
+// CampusScrapbook for a plain lift-on-hover effect).
+function CampusDesignStyles() {
+  return (
+    <style>{`
+      .kx-scrapbook-tile { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+      .kx-scrapbook-tile:hover {
+        box-shadow: 0 18px 34px rgba(0,0,0,0.2) !important;
+        z-index: 2;
+      }
+      @keyframes kx-mascot-bounce {
+        0%, 100% { transform: translateY(0) rotate(-6deg); }
+        50% { transform: translateY(-7px) rotate(-6deg); }
+      }
+      .kx-mascot-badge { animation: kx-mascot-bounce 2.6s ease-in-out infinite; }
+      @media (prefers-reduced-motion: reduce) {
+        .kx-mascot-badge { animation: none; }
+      }
+    `}</style>
+  );
+}
+
+function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
+  // Hero is above the fold on load, so it fades/rises in immediately on
+  // mount rather than waiting for a scroll trigger (useRevealOnVisible's
+  // IntersectionObserver would fire on first paint anyway since it's
+  // already in view, but starting visible=true avoids a flash-then-fade
+  // on fast connections).
+  const [heroVisible, setHeroVisible] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setHeroVisible(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+  return (
+    <div
+      style={{
+        position: 'relative',
+        overflow: 'hidden',
+        borderRadius: isMobileNav ? '18px' : '24px',
+        background: 'linear-gradient(160deg, var(--accentDark), #06210f)',
+        padding: isMobileNav ? '1.75rem 1.1rem 1.5rem' : '3rem 2.5rem',
+        marginBottom: isMobileNav ? '1.5rem' : '2.5rem',
+        color: '#f3f4ef',
+        opacity: heroVisible ? 1 : 0,
+        transform: heroVisible ? 'translateY(0)' : 'translateY(14px)',
+        transition: 'opacity 0.6s ease, transform 0.6s ease',
+      }}
+    >
+      {/* Soft accent glow, matches --accentLight rather than a hardcoded
+          bright-green so it still fits if the accent color ever changes. */}
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        background: 'radial-gradient(ellipse 700px 420px at 12% 0%, rgba(var(--accentRGB),0.22), transparent 60%)',
+      }} />
+
+      <div style={{
+        position: 'relative',
+        display: 'grid',
+        gridTemplateColumns: isMobileNav ? '1fr' : '1.05fr 0.95fr',
+        gap: isMobileNav ? '1.75rem' : '2.5rem',
+        alignItems: 'center',
+      }}>
+        <div style={{ order: isMobileNav ? 2 : 1 }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+            fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.04em',
+            color: 'var(--accentLight)', background: 'rgba(var(--accentRGB),0.14)',
+            border: '1px solid rgba(var(--accentRGB),0.3)',
+            padding: '0.35rem 0.8rem', borderRadius: '999px', marginBottom: '1.1rem',
+          }}>
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accentLight)' }} />
+            Built by KUET students, for KUET
+          </div>
+
+          <h1 style={{
+            fontSize: isMobileNav ? 'clamp(1.6rem, 7vw, 2.1rem)' : 'clamp(2.1rem, 4.6vw, 3.1rem)',
+            fontWeight: 900, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '1rem',
+          }}>
+            {headline}
+          </h1>
+
+          <p style={{
+            fontSize: isMobileNav ? '0.9rem' : '1.02rem', lineHeight: 1.65,
+            color: 'rgba(243,244,239,0.72)', maxWidth: '480px', marginBottom: isMobileNav ? '1.25rem' : '1.75rem',
+          }}>
+            {sub}
+          </p>
+
+          <div style={{ display: 'flex', gap: '0.7rem', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              onClick={onSignUp}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+                padding: isMobileNav ? '0.75rem 1.2rem' : '0.9rem 1.6rem', borderRadius: '12px',
+                background: 'var(--accentLight)', color: '#06210f', fontWeight: 800,
+                fontSize: isMobileNav ? '0.85rem' : '0.95rem', border: 'none', cursor: 'pointer',
+              }}
+            >
+              Sign Up করো, ফ্রি
+            </button>
+            <a
+              href="#stats-anchor"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+                padding: isMobileNav ? '0.75rem 1.2rem' : '0.9rem 1.6rem', borderRadius: '12px',
+                background: 'transparent', color: '#f3f4ef', fontWeight: 700,
+                fontSize: isMobileNav ? '0.85rem' : '0.95rem',
+                border: '1px solid rgba(255,255,255,0.2)', textDecoration: 'none',
+              }}
+            >
+              কী আছে দেখো <ArrowDown size={14} />
+            </a>
+          </div>
+        </div>
+
+        {/* Tilted photo cluster — signature motif, repeated in
+            CampusScrapbook. Two photos + a small live-location badge,
+            same treatment described in the owner-approved mockup brief. */}
+        <div style={{
+          position: 'relative',
+          height: isMobileNav ? '230px' : '420px',
+          order: isMobileNav ? 1 : 2,
+        }}>
+          <div style={{
+            position: 'absolute', top: 0, left: isMobileNav ? '8px' : '16px',
+            display: 'flex', alignItems: 'center', gap: '0.4rem',
+            background: 'rgba(6,33,15,0.85)', backdropFilter: 'blur(8px)',
+            border: '1px solid rgba(255,255,255,0.12)', borderRadius: '10px',
+            padding: '0.4rem 0.7rem', fontSize: '0.68rem', fontWeight: 700,
+            color: 'var(--accentLight)', zIndex: 3,
+          }}>
+            <MapPin size={11} /> KUET, Khulna
+          </div>
+
+          <div style={{
+            position: 'absolute', top: isMobileNav ? '28px' : '22px', right: isMobileNav ? '2px' : '4px',
+            width: isMobileNav ? '58%' : '300px',
+            transform: isMobileNav ? 'rotate(2.5deg)' : 'rotate(4deg)',
+            borderRadius: '14px', overflow: 'hidden', border: '5px solid #fff',
+            boxShadow: '0 24px 48px rgba(0,0,0,0.4)', background: '#fff',
+          }}>
+            <img src={CAMPUS_PHOTOS.gate.src} alt={CAMPUS_PHOTOS.gate.label} style={{ width: '100%', height: isMobileNav ? '110px' : '210px', objectFit: 'cover', display: 'block' }} />
+            <div style={{ padding: '0.5rem 0.6rem 0.6rem' }}>
+              <div style={{ fontWeight: 700, fontSize: isMobileNav ? '0.68rem' : '0.78rem', color: '#16241a' }}>{CAMPUS_PHOTOS.gate.label}</div>
+            </div>
+          </div>
+
+          <div style={{
+            position: 'absolute', bottom: isMobileNav ? '4px' : '18px', left: 0,
+            width: isMobileNav ? '48%' : '190px',
+            transform: isMobileNav ? 'rotate(-3deg)' : 'rotate(-6deg)',
+            borderRadius: '12px', overflow: 'hidden', border: '5px solid #fff',
+            boxShadow: '0 18px 36px rgba(0,0,0,0.38)',
+          }}>
+            <img src={CAMPUS_PHOTOS.aerial.src} alt={CAMPUS_PHOTOS.aerial.label} style={{ width: '100%', height: isMobileNav ? '78px' : '130px', objectFit: 'cover', display: 'block' }} />
+          </div>
+
+          {/* Mascot badge — restores the HTML mockup's floating turtle
+              accent that got dropped in the first JSX port. Reuses the
+              real Logo (same artwork as navbar/footer) instead of a
+              second mascot asset. Anchored to the gate photo card's
+              bottom-left corner specifically (not the cluster's outer
+              bounding box) so it reads as a sticker on that photo at
+              both breakpoints — anchoring to the container edge instead
+              left it floating in empty space below the photos on
+              mobile, disconnected from either card. */}
+          <div
+            className="kx-mascot-badge"
+            style={{
+              position: 'absolute',
+              top: isMobileNav ? `${28 + 110 - 16}px` : `${22 + 210 - 20}px`,
+              right: isMobileNav ? 'calc(2px + 58% - 16px)' : 'calc(4px + 300px - 20px)',
+              width: isMobileNav ? '34px' : '48px',
+              height: isMobileNav ? '34px' : '48px',
+              borderRadius: '50%',
+              background: 'var(--accentLight)',
+              border: '3px solid #06210f',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 10px 22px rgba(0,0,0,0.35)',
+              zIndex: 4,
+            }}
+          >
+            <Logo size={isMobileNav ? 20 : 30} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Campus scrapbook / masonry gallery (design refresh) ────────────────
+// Second occurrence of the tilted-photo motif — the mockup brief's
+// requirement that the signature repeats at least twice rather than
+// appearing once. All 8 real campus photos placed here (vs. the old
+// HTML mockup's 4), each tile alternating a small rotation so the grid
+// reads as a physical scrapbook rather than a rigid CSS grid.
+const SCRAPBOOK_ORDER = ['gate', 'academic', 'aerial', 'sign', 'auditorium', 'mainBuilding', 'bus', 'statue'];
+const SCRAPBOOK_TILTS = [-3, 2, -2, 3, 2, -3, 3, -2];
+
+function CampusScrapbook({ isMobileNav }) {
+  // Below-the-fold section — real scroll-triggered reveal via the same
+  // IntersectionObserver hook WhyKuetxCard already uses, so this section
+  // fades/rises in on scroll like the plan called for, instead of
+  // sitting static while everything around it animates.
+  const { ref, visible } = useRevealOnVisible();
+  return (
+    <div
+      ref={ref}
+      style={{
+        marginBottom: isMobileNav ? '1.75rem' : '3rem',
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateY(0)' : 'translateY(18px)',
+        transition: 'opacity 0.7s ease, transform 0.7s ease',
+      }}
+    >
+      <div style={{ textAlign: 'center', marginBottom: isMobileNav ? '0.9rem' : '1.5rem' }}>
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+          fontSize: '0.72rem', fontWeight: 700, color: 'var(--accentDark)',
+          background: 'var(--accentSoft)', border: '1px solid rgba(var(--accentRGB),0.25)',
+          padding: '0.3rem 0.75rem', borderRadius: '999px', marginBottom: '0.75rem',
+        }}>
+          নিজের ক্যাম্পাস
+        </div>
+        <h2 style={{ fontSize: 'clamp(1.35rem, 3.5vw, 1.7rem)', fontWeight: 900, color: 'var(--text)', letterSpacing: '-0.02em', marginBottom: '0.4rem' }}>
+          KUET-এর জন্য, KUET-এই তৈরি
+        </h2>
+        <p style={{ fontSize: '0.88rem', color: 'var(--muted)', maxWidth: '460px', margin: '0 auto' }}>
+          বাইরের কোনো কোম্পানির প্রোডাক্ট না — এই ক্যাম্পাসের ছাত্রছাত্রীরাই বানিয়েছে, নিজেদের সমস্যা দেখে।
+        </p>
+      </div>
+
+      <div style={{
+        display: isMobileNav ? 'grid' : 'flex',
+        gridTemplateColumns: isMobileNav ? 'repeat(2, 1fr)' : undefined,
+        justifyContent: isMobileNav ? undefined : 'center',
+        flexWrap: isMobileNav ? undefined : 'wrap',
+        gap: isMobileNav ? '0.85rem' : '1.5rem',
+        maxWidth: '1080px', margin: '0 auto',
+      }}>
+        {SCRAPBOOK_ORDER.map((key, i) => {
+          const photo = CAMPUS_PHOTOS[key];
+          const tilt = isMobileNav ? 0 : SCRAPBOOK_TILTS[i];
+          return (
+            <div
+              key={key}
+              className="kx-scrapbook-tile"
+              style={{
+                width: isMobileNav ? '100%' : '210px',
+                background: '#fff',
+                borderRadius: '10px',
+                padding: '10px 10px 14px',
+                boxShadow: '0 12px 26px rgba(0,0,0,0.12)',
+                // Base rotation stays on the element's own transform so
+                // the CSS :hover rule (box-shadow only, see
+                // CampusDesignStyles) doesn't need to know each tile's
+                // individual tilt angle to avoid snapping it flat.
+                transform: `rotate(${tilt}deg)`,
+              }}
+            >
+              <img
+                src={photo.src}
+                alt={photo.label}
+                loading="lazy"
+                style={{ width: '100%', height: isMobileNav ? '120px' : '155px', objectFit: 'cover', borderRadius: '6px', marginBottom: '8px', display: 'block' }}
+              />
+              <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#16241a', textAlign: 'center' }}>{photo.label}</div>
+              <div style={{ fontSize: '0.62rem', color: '#8a9188', textAlign: 'center', marginTop: '2px' }}>{photo.coord}</div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
 // Phase 8 (§11.4): landing's demo role ids (ROLE_CARDS above) vs the
 // signup wizard/RoleSelectScreen/Firestore's role ids differ for one
@@ -1138,6 +1449,184 @@ function RotatingPreview({ mockupMode, setMockupMode, onSignUp, isMobileNav }) {
 // currently-unguarded routes (App.jsx — /privacy is explicitly commented
 // "Publicly reachable (no route guard)"; /about has no Require* wrapper
 // either) so both are safe to link directly from this signed-out page.
+// ─── Credits corner — rotating founder/contributor spotlight ───────────
+// Owner request (this session): a single rotating photo spot for people
+// who matter to the project — founder first, then special-thanks/future
+// contributors as they're added — each with a role label above and a
+// short one-line intro below the photo. Deliberately placed just before
+// Footer (not near the hero or mixed into the main content flow): owner
+// wants this kept secondary to the product itself since the landing
+// page's main job is showing KUETx to visitors, not the people behind
+// it — so it earns a small, honest spot near the end rather than
+// competing with the primary hero/stats/features for attention.
+//
+// Data-only array so adding/removing a person later is a one-line edit,
+// no layout change needed.
+//
+// `photoShape`: 'circle' (default) for a single person's portrait —
+// 'wide' for a group photo, which renders as a rounded rectangle
+// instead of a circle so a wide group shot doesn't get chopped down to
+// a tiny round crop that loses everyone but the center face.
+//
+// Founder photo: owner-supplied portrait, cropped square + web-optimized
+// (900x900, ~96KB) and saved at /landing/credits/founder.jpg — kept
+// separate from About.jsx's /pp1.jpg since the owner supplied a
+// different, dedicated photo for this spot rather than reusing that one.
+const CREDITS_SPOTLIGHT = [
+  {
+    id: 'founder',
+    role: 'Founder',
+    name: 'Akhinoor',
+    photo: '/landing/credits/founder.jpg',
+    photoShape: 'circle',
+    blurb: 'KUETx-এর প্রতিষ্ঠাতা ও মূল ডেভেলপার — নিজের ক্যাম্পাসের সমস্যা দেখে পুরো অ্যাপটা বানানো শুরু করে।',
+  },
+  {
+    id: 'ese-faculty',
+    role: 'Special Thanks',
+    name: 'ESE Department-এর শিক্ষকরা',
+    photo: '/landing/credits/ese-faculty-thanks.jpg',
+    photoShape: 'wide',
+    blurb: 'KUETx-এর পুরো journey জুড়ে ESE department-এর শিক্ষকরা যেভাবে অনুপ্রেরণা ও সাপোর্ট দিয়েছেন, তার জন্য বিশেষ ধন্যবাদ।',
+  },
+];
+
+function CreditsSpotlight({ isMobileNav }) {
+  const { ref, visible } = useRevealOnVisible();
+  const [index, setIndex] = useState(0);
+  const [imgOk, setImgOk] = useState(true);
+
+  useEffect(() => {
+    if (CREDITS_SPOTLIGHT.length < 2) return undefined;
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % CREDITS_SPOTLIGHT.length);
+    }, 4500);
+    return () => clearInterval(id);
+  }, []);
+
+  // Reset the broken-image fallback whenever the rotation moves to a
+  // new person, so one person's missing photo doesn't stick as the
+  // fallback state for everyone who rotates in after them.
+  useEffect(() => { setImgOk(true); }, [index]);
+
+  if (CREDITS_SPOTLIGHT.length === 0) return null;
+  const person = CREDITS_SPOTLIGHT[index];
+  const isWide = person.photoShape === 'wide';
+  const initials = person.name
+    .split(' ')
+    .map((w) => w[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        marginBottom: isMobileNav ? '1.5rem' : '2rem',
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'translateY(0)' : 'translateY(14px)',
+        transition: 'opacity 0.7s ease, transform 0.7s ease',
+      }}
+    >
+      <div style={{
+        maxWidth: isWide ? '480px' : '340px', margin: '0 auto',
+        display: 'flex', flexDirection: 'column', alignItems: 'center',
+        textAlign: 'center', gap: '0.6rem',
+        transition: 'max-width 0.3s ease',
+      }}>
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+          fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.04em',
+          color: 'var(--accentDark)', background: 'var(--accentSoft)',
+          border: '1px solid rgba(var(--accentRGB),0.25)',
+          padding: '0.3rem 0.75rem', borderRadius: '999px',
+        }}>
+          {person.role}
+        </div>
+
+        {/* Photo/initials — same rotating spot, only the source (and,
+            for a 'wide' group photo, the shape) swaps as `index`
+            changes, so this reads as one place cycling through entries
+            rather than a list. Falls back to an initials circle (same
+            visual language as Footer's other UI, not a broken-image
+            icon) if a person's photo hasn't been supplied yet or fails
+            to load — group photos don't get an initials fallback since
+            "initials" doesn't make sense for a group entry. */}
+        {isWide ? (
+          <div style={{
+            width: '100%',
+            maxWidth: isMobileNav ? '280px' : '380px',
+            borderRadius: '14px',
+            overflow: 'hidden',
+            border: '3px solid var(--accentLight)',
+            boxShadow: '0 10px 24px rgba(0,0,0,0.14)',
+            background: 'var(--accentSoft)',
+          }}>
+            <img
+              src={person.photo}
+              alt={person.name}
+              loading="lazy"
+              style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'cover' }}
+            />
+          </div>
+        ) : (
+          <div style={{
+            width: isMobileNav ? '84px' : '104px',
+            height: isMobileNav ? '84px' : '104px',
+            borderRadius: '50%',
+            overflow: 'hidden',
+            border: '3px solid var(--accentLight)',
+            boxShadow: '0 10px 24px rgba(0,0,0,0.14)',
+            background: 'var(--accentSoft)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            transition: 'opacity 0.4s ease',
+          }}>
+            {imgOk && person.photo ? (
+              <img
+                src={person.photo}
+                alt={person.name}
+                loading="lazy"
+                onError={() => setImgOk(false)}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              />
+            ) : (
+              <span style={{ fontSize: isMobileNav ? '1.3rem' : '1.6rem', fontWeight: 800, color: 'var(--accentDark)' }}>
+                {initials}
+              </span>
+            )}
+          </div>
+        )}
+
+        <div style={{ fontWeight: 800, fontSize: isMobileNav ? '0.92rem' : '1rem', color: 'var(--text)' }}>
+          {person.name}
+        </div>
+
+        <p style={{
+          fontSize: '0.78rem', lineHeight: 1.55, color: 'var(--muted)',
+          margin: 0,
+        }}>
+          {person.blurb}
+        </p>
+
+        {CREDITS_SPOTLIGHT.length > 1 && (
+          <div style={{ display: 'flex', gap: '0.35rem', marginTop: '0.3rem' }}>
+            {CREDITS_SPOTLIGHT.map((p, i) => (
+              <span
+                key={p.id}
+                style={{
+                  width: 5, height: 5, borderRadius: '50%',
+                  background: i === index ? 'var(--accentDark)' : 'var(--border)',
+                }}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function Footer() {
   const year = new Date().getFullYear();
   return (
@@ -1440,40 +1929,30 @@ export default function LandingPage() {
         maxWidth: '1080px', margin: '0 auto',
         padding: isMobileNav ? '1.25rem 1rem 2.5rem' : '2.5rem 1.25rem 4rem',
       }}>
-        {/* Hero — Phase 9.2 visual pass: no external font added (index.html's
-            own "offline: no external preconnect to fonts" / "Use system
-            fonts for full offline support" comment is a documented product
-            policy for this offline-first PWA — an external Google Fonts
-            request would be a real, permanent regression against that, not
-            just a style nitpick, so the §8 "whichever's best" call lands on
-            keeping the system stack here). Distinction instead comes from a
-            small kicker label + tighter/heavier weight contrast on the
-            headline than before, both achievable with the existing system
-            font stack (index.html already loads system-ui/-apple-system/
-            Segoe UI/Roboto/Noto Sans/Helvetica Neue/Arial — all of which
-            carry a genuine 800-900 weight, so the heavier heading below
-            isn't faking boldness the way an underweight webfont would). */}
-        <div style={{ textAlign: 'center', marginBottom: isMobileNav ? '0.9rem' : '1.5rem' }}>
-          {/* "KUET-এর জন্য বানানো..." kicker badge removed — it duplicated
-              the footer's "KUETx — KUET-এর ছাত্রছাত্রীদের বানানো, KUET-এর
-              জন্য" line for no added value at the top of the page. */}
-          <h1 style={{
-            fontSize: isMobileNav ? 'clamp(1.5rem, 7vw, 2rem)' : 'clamp(1.9rem, 6vw, 3.1rem)', fontWeight: 900,
-            color: 'var(--text)', marginBottom: isMobileNav ? '0.5rem' : '0.75rem', letterSpacing: '-0.04em',
-            lineHeight: 1.08,
-          }}>
-            The Digital Ecosystem<br />for KUET
-          </h1>
-          <p style={{
-            fontSize: isMobileNav ? '0.85rem' : '1.02rem', color: 'var(--muted)',
-            maxWidth: '560px', margin: '0 auto',
-          }}>
-            Student, Faculty, আর Service Provider — তিন role-ই একটা কার্ডে ক্লিক করে দেখো
-            KUETx-এ তোমার জন্য কী আছে।
-          </p>
-        </div>
+        {/* Hero — design refresh (this session): the old text-only hero is
+            replaced by CampusHero, the owner-approved standalone-HTML
+            mockup's tilted-photo hero, ported to use the app's real theme
+            vars instead of hardcoded colors. Headline/sub copy kept as
+            close to the previous hero's actual wording as possible so
+            nothing true about the product changes, just how it's framed
+            visually. */}
+        <CampusDesignStyles />
+        <CampusHero
+          isMobileNav={isMobileNav}
+          headline={<>তোমার ক্যাম্পাস,<br />এক জায়গায় <span style={{ color: 'var(--accentLight)' }}>সাজানো।</span></>}
+          sub="Routine থেকে Result, Notice থেকে Campus Service — Student, CR, Faculty, আর Provider, প্রতিটা role-এর জন্য একটাই app। আলাদা spreadsheet, group, বা app খুঁজে বেড়াতে হবে না।"
+          onSignUp={() => openAuth('signup')}
+        />
 
+        <div id="stats-anchor" />
         <StatsStrip isMobileNav={isMobileNav} />
+
+        {/* Campus scrapbook — signature tilted-photo motif's second
+            occurrence (see CampusHero's header comment). Sits right after
+            the live stats strip and before "কেন KUETx?" per owner
+            instruction: the new photographic identity is now the page's
+            main visual language, not a bolted-on extra section. */}
+        <CampusScrapbook isMobileNav={isMobileNav} />
 
         <WhyKuetx isMobileNav={isMobileNav} />
 
@@ -1492,6 +1971,13 @@ export default function LandingPage() {
           onSignUp={() => openAuth('signup')}
           isMobileNav={isMobileNav}
         />
+
+        {/* Credits spotlight — see CreditsSpotlight's own header comment
+            for placement reasoning. Sits at the very end of the main
+            content column, right before Footer, so it's the last thing
+            a visitor sees after the product itself rather than
+            competing with it. */}
+        <CreditsSpotlight isMobileNav={isMobileNav} />
       </div>
 
       <Footer />

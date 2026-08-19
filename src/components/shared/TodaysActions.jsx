@@ -119,18 +119,42 @@ export default function TodaysActions() {
               </div>
             );
           }
-          // Normal case: one row per unmarked course-teacher, click ->
-          // opens the same AttendanceMarkModal /attendance uses.
+          // Normal case: one row per unmarked course-teacher, with the
+          // same inline ✓ Present / ✗ Absent split buttons as the real
+          // /attendance Daily Log — marks straight from here, no modal
+          // needed for the common single-tap case. Switching teachers
+          // for a non-rotating slot is rare enough to still go through
+          // the row-click -> AttendanceMarkModal path.
           return row.teacherRows.map((tr) => (
-            <TodayActionRow
-              key={`${row.id}-${tr.teacher}`}
-              icon={CalendarCheck}
-              title={row.courseName}
-              subtitle={tr.teacher || 'Unknown teacher'}
-              action="Present/Absent"
-              onClick={() => setOpenCard({ courseId: row.course.id, teacher: tr.teacher })}
-              dark={dark}
-            />
+            <div key={`${row.id}-${tr.teacher}`} style={{ padding: '9px 10px', borderRadius: 10, background: dark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.02)', border: dark ? '1px solid rgba(255,255,255,0.07)' : '1px solid rgba(0,0,0,0.05)' }}>
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={() => setOpenCard({ courseId: row.course.id, teacher: tr.teacher })}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setOpenCard({ courseId: row.course.id, teacher: tr.teacher }); }}
+                style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, cursor: 'pointer', WebkitTapHighlightColor: 'transparent' }}
+              >
+                <CalendarCheck size={14} color="var(--accent)" style={{ flexShrink: 0 }} />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{row.courseName}</div>
+                  <div style={{ fontSize: 10.5, color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginTop: 1 }}>{tr.teacher || 'Unknown teacher'}</div>
+                </div>
+              </div>
+              <div style={{ display: 'flex', borderRadius: 9, overflow: 'hidden', border: dark ? '1px solid rgba(255,255,255,0.10)' : '1px solid rgba(0,0,0,0.08)' }}>
+                <button
+                  onClick={(e) => { e.stopPropagation(); mark(row.course.id, tr.teacher, 'present'); }}
+                  style={{ flex: 1, minWidth: 0, padding: '12px 6px', cursor: 'pointer', fontWeight: 700, fontSize: 12.5, background: dark ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.85)', color: '#10b981', border: 'none', borderRight: dark ? '1px solid rgba(255,255,255,0.10)' : '1px solid rgba(0,0,0,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, WebkitTapHighlightColor: 'transparent' }}
+                >
+                  ✓ Present
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); mark(row.course.id, tr.teacher, 'absent'); }}
+                  style={{ flex: 1, minWidth: 0, padding: '12px 6px', cursor: 'pointer', fontWeight: 700, fontSize: 12.5, background: dark ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.85)', color: '#ef4444', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, WebkitTapHighlightColor: 'transparent' }}
+                >
+                  ✗ Absent
+                </button>
+              </div>
+            </div>
           ));
         })}
 
