@@ -1,5 +1,5 @@
 // KUETx Service Worker — offline cache + auto-update
-const CACHE_NAME = 'kuetx-v4.13.0'; // bumped: FeatureBreakdown rebuilt as CSS masonry (column-count) instead of an equal-height grid — the grid was the actual cause of blank space (short cards force-stretched to match tall neighbors with nothing to fill the gap; Provider's 1 tall card sat alone with 2 empty column-widths beside it). Each card now keeps its natural height and packs compactly. CRFeatureBlock restyled to match the other category cards and now flows as a normal masonry item instead of a separately-styled strip below everything.
+const CACHE_NAME = 'kuetx-v4.15.0'; // bumped: install button now detects "already installed, viewing in a plain browser tab" via getInstalledRelatedApps() and shows "Open app" / "Update" instead of staying hidden or offering to reinstall (see useInstallPrompt.js). Previous bump: navigation requests (back/forward, reload, address bar) are now cache-first against the precached app shell instead of network-first-with-fallback — removes the flaky-network window that could serve a mismatched/stale shell on deep routes (see fetch handler comment).
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -137,11 +137,35 @@ self.addEventListener('fetch', (e) => {
       return res;
     });
 
-  e.respondWith(
-    (shouldUseCacheFirst
+  // BUGFIX (back/forward landing on the app root instead of the route
+  // that was navigated to): browser navigations (back/forward, address
+  // bar, reload) to deep SPA routes like /attendance are never
+  // themselves pre-cached under their own URL (only '/' and
+  // '/index.html' are in STATIC_ASSETS) — so on ANY network hiccup
+  // (common on mobile data), the old network-first path for
+  // navigations would fail, miss cache under the exact URL, and only
+  // THEN fall back to the cached app shell. That fallback itself never
+  // changes window.location — React Router still reads the correct
+  // pathname on mount — but a slow/degraded network could keep retrying
+  // or momentarily render a mismatched shell before hydration caught
+  // up, which is what read as "back always resets to the start".
+  // Fix: treat navigation requests as cache-first against the
+  // precached shell, same as static assets — removes the network
+  // round-trip (and its failure window) from the critical path
+  // entirely, and still updates the cache in the background so the
+  // shell itself stays fresh for next time.
+  const respondToRequest = isNavigation
+    ? caches.match('/index.html').then(cached => {
+        fetchAndCache().catch(() => {}); // refresh cache in background, ignore failures
+        return cached || fetchAndCache();
+      })
+    : (shouldUseCacheFirst
       ? caches.match(e.request).then(cached => cached || fetchAndCache())
       : fetchAndCache()
-    )
+    );
+
+  e.respondWith(
+    respondToRequest
       .catch(() => caches.match(e.request))
       .then(cached => {
         if (cached) return cached;

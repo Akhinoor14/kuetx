@@ -25,35 +25,56 @@
 // extra confirmation step for the normal case.
 
 import { useState } from 'react';
-import { Download, Share, SquarePlus, X } from 'lucide-react';
+import { Download, Share, SquarePlus, X, ExternalLink, RefreshCw } from 'lucide-react';
 import { useInstallPrompt, dismissInstallPrompt } from '../hooks/useInstallPrompt';
 
 export default function FloatingInstallButton() {
-  const { status, triggerInstall } = useInstallPrompt();
+  const { status, triggerInstall, openOrUpdate } = useInstallPrompt();
   const [showIOSSheet, setShowIOSSheet] = useState(false);
 
-  if (status !== 'installable' && status !== 'ios-manual') return null;
+  if (
+    status !== 'installable' &&
+    status !== 'ios-manual' &&
+    status !== 'installed-elsewhere' &&
+    status !== 'update-available'
+  ) return null;
 
   const handleClick = () => {
     if (status === 'ios-manual') {
       setShowIOSSheet(true);
       return;
     }
+    if (status === 'installed-elsewhere' || status === 'update-available') {
+      openOrUpdate();
+      return;
+    }
     triggerInstall();
   };
+
+  const icon = status === 'update-available'
+    ? <RefreshCw size={13} strokeWidth={2.5} />
+    : status === 'installed-elsewhere'
+    ? <ExternalLink size={13} strokeWidth={2.5} />
+    : <Download size={13} strokeWidth={2.5} />;
+
+  const label = status === 'update-available'
+    ? 'Update'
+    : status === 'installed-elsewhere'
+    ? 'Open app'
+    : 'Install';
 
   return (
     <>
       <button
         onClick={handleClick}
         className="kx-install-fab"
-        aria-label="Install app"
-        title="Install app"
+        aria-label={label}
+        title={label}
       >
         <span className="kx-install-fab-icon-wrap">
-          <Download size={13} strokeWidth={2.5} />
+          {icon}
         </span>
-        <span className="kx-install-fab-label">Install</span>
+        <span className="kx-install-fab-label">{label}</span>
       </button>
 
       {showIOSSheet && (

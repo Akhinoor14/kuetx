@@ -7,18 +7,25 @@
 // purpose, "install the app" isn't a role-scoped concept.
 //
 // State machine (see PWA_INSTALL_BUTTON_PLAN.md for the full table):
-//   'checking'    -> still doing the initial standalone-mode check, render nothing
-//   'installed'   -> already running as an installed PWA, or the person
-//                    installed it earlier this session -> hide button
-//   'unavailable' -> no captured beforeinstallprompt (browser hasn't fired
-//                    it, requirements not met, or this is a browser that
-//                    never fires it) AND not iOS Safari -> hide button
-//   'ios-manual'  -> iOS Safari never fires beforeinstallprompt at all;
-//                    the only path there is the manual Share-sheet steps
-//                    -> button shows, tapping opens an instruction sheet
-//   'installable' -> a real captured event is sitting ready -> button
-//                    shows, tapping calls .prompt() directly, no
-//                    confirmation dialog of our own
+//   'checking'            -> still doing the initial standalone-mode check, render nothing
+//   'installed'           -> running AS the installed PWA right now (standalone
+//                            window) -> hide button entirely, nothing to do here
+//   'installed-elsewhere' -> NOT running standalone right now (this is an
+//                            ordinary browser tab), but the PWA is confirmed
+//                            installed on this device AND its service worker
+//                            has no pending update -> button shows "Open app"
+//   'update-available'    -> same as above, but a newer service worker is
+//                            installed and waiting -> button shows "Update"
+//   'unavailable'         -> no captured beforeinstallprompt (browser hasn't fired
+//                            it, requirements not met, or this is a browser that
+//                            never fires it) AND not iOS Safari AND not confirmed
+//                            installed elsewhere -> hide button
+//   'ios-manual'          -> iOS Safari never fires beforeinstallprompt at all;
+//                            the only path there is the manual Share-sheet steps
+//                            -> button shows, tapping opens an instruction sheet
+//   'installable'         -> a real captured event is sitting ready -> button
+//                            shows, tapping calls .prompt() directly, no
+//                            confirmation dialog of our own
 //
 // Chrome/Edge/Android are the only browsers that ever fire
 // beforeinstallprompt — desktop Firefox and Safari (all platforms other
@@ -27,35 +34,36 @@
 // install, no separate button" requirement, the honest thing is to show
 // nothing rather than a button with no working install-here mechanism.
 //
-// BUGFIX (button permanently gone after install → uninstall → reopen):
-// Two separate issues used to compound into "the button just never comes
-// back":
-//   1) isStandaloneDisplay() is the ONLY thing that can turn 'installed'
-//      back into an actionable status on a fresh load — but it's only
-//      true while running INSIDE the installed PWA window. Someone who
-//      uninstalls and comes back in an ordinary browser tab correctly
-//      fails that check, yet the code had no persisted memory that a
-//      real uninstall might have happened, and no path that retries
-//      watching for beforeinstallprompt again versus just sitting in
-//      'unavailable' from a stale dismiss-cooldown.
-//   2) triggerInstall() called dismissInstallPrompt() (14-day cooldown)
-//      any time the outcome wasn't 'accepted' — including simply closing
-//      Chrome's native install sheet without deciding. One accidental
-//      cancel silently hid the button for two weeks with no visible
-//      reason, which is almost certainly what "install na kora obdhi
-//      dekhabe, kintu ekbar dismiss/uninstall korle r dekha jay na"
-//      describes. Declining the browser's own prompt is not the same
-//      signal as the person explicitly dismissing OUR button — only the
-//      latter should start the cooldown now (see dismissInstallPrompt
-//      call sites in FloatingInstallButton.jsx).
-// Fix: appinstalled no longer permanently latches 'installed' across
-// reloads by itself — isStandaloneDisplay() is re-checked on every
-// mount, so once someone actually uninstalls and is no longer running
-// standalone, the hook resumes watching for beforeinstallprompt like a
-// first-time visitor. And declining the native sheet just clears the
+// DETECTING "installed elsewhere" FROM A BROWSER TAB (Aug 2026 addition):
+// There is no fully reliable cross-context API for "is this PWA installed
+// on this device" — navigator.getInstalledRelatedApps() is the only
+// standards-based signal, and it's Chrome/Edge-on-Android only today
+// (desktop Chrome and all other browsers just resolve to an empty array).
+// Because of that asymmetry, this hook only ever treats a NON-EMPTY result
+// as meaningful (a real positive) — an empty array is treated as "unknown",
+// never as proof of "not installed", so it can only ever unlock the
+// 'installed-elsewhere'/'update-available' states, never wrongly suppress
+// the normal 'installable' flow on browsers where the API is unsupported.
+// Requires the self-referencing entry in manifest.json's
+// related_applications (platform: 'webapp', url: this app's own
+// manifest.json) — without that entry the API always returns [].
+//
+// DETECTING "update available": registration.waiting on THIS tab's own
+// service worker registration is a real, same-origin+scope signal — Chrome
+// shares one SW registration per scope across every window/tab of that
+// origin, standalone or not, so a waiting SW here really does mean the
+// installed copy has an update pending too, not a guess.
+//
+// BUGFIX (button permanently gone after install -> uninstall -> reopen):
+// isStandaloneDisplay() is re-checked on every mount/focus, so once
+// someone actually uninstalls and is no longer running standalone, the
+// hook resumes watching for beforeinstallprompt like a first-time
+// visitor. And declining the native install sheet just clears the
 // deferred prompt (Chrome's own cooldown on re-firing the event already
-// governs re-eligibility) instead of also layering our own 14-day block
-// on top.
+// governs re-eligibility) instead of also layering our own 14-day
+// dismiss cooldown on top — only an explicit tap on our OWN button's
+// dismiss action does that (see dismissInstallPrompt call sites in
+// FloatingInstallButton.jsx).
 
 import { useEffect, useState, useCallback } from 'react';
 
@@ -148,6 +156,39 @@ export function useInstallPrompt() {
     window.addEventListener('beforeinstallprompt', onBeforeInstall);
     window.addEventListener('appinstalled', onInstalled);
 
+    // Confirmed-installed-elsewhere check: only ever upgrades 'unavailable'
+    // to 'installed-elsewhere'/'update-available' — never runs if one of
+    // the terminal states above already returned, and never downgrades
+    // 'installable' once a real beforeinstallprompt has landed (that's a
+    // stronger, more actionable signal than this one).
+    let cancelled = false;
+    const checkInstalledElsewhere = async () => {
+      try {
+        if (!('getInstalledRelatedApps' in navigator)) return;
+        const related = await navigator.getInstalledRelatedApps();
+        if (cancelled || !related || related.length === 0) return; // empty = unknown, not "not installed" — never acts on this
+        // Confirmed installed on this device. Now check for a pending
+        // update on THIS tab's own registration — shared per-origin+scope
+        // with the standalone window, so this really does reflect the
+        // installed copy's state, not a guess.
+        let hasUpdateWaiting = false;
+        if ('serviceWorker' in navigator) {
+          const reg = await navigator.serviceWorker.getRegistration();
+          hasUpdateWaiting = Boolean(reg && reg.waiting);
+        }
+        if (cancelled) return;
+        setStatus((prev) => {
+          // Don't clobber a real captured beforeinstallprompt or a
+          // meanwhile-confirmed 'installed' standalone state.
+          if (prev === 'installable' || prev === 'installed') return prev;
+          return hasUpdateWaiting ? 'update-available' : 'installed-elsewhere';
+        });
+      } catch {
+        // Unsupported or threw — leave status as-is, no worse than before this check existed.
+      }
+    };
+    checkInstalledElsewhere();
+
     // BUGFIX (button never comes back after a real uninstall): once
     // 'installed' was set, nothing ever looked again — if the person
     // later uninstalled the PWA and came back to this same tab (or a new
@@ -155,20 +196,21 @@ export function useInstallPrompt() {
     // know the app was gone and just stayed hidden forever. Every time
     // the tab regains focus/visibility, re-check the one ground-truth
     // signal (are we actually running standalone right now?) and drop
-    // back to watching for beforeinstallprompt if not — this is cheap
-    // (a single matchMedia read) and only ever un-hides the button, never
-    // hides an otherwise-working one.
+    // back to watching for beforeinstallprompt / re-run the installed-
+    // elsewhere check if not.
     const recheckStandalone = () => {
       if (isStandaloneDisplay()) {
         setStatus('installed');
       } else {
         setStatus((prev) => (prev === 'installed' ? 'unavailable' : prev));
+        checkInstalledElsewhere();
       }
     };
     window.addEventListener('focus', recheckStandalone);
     document.addEventListener('visibilitychange', recheckStandalone);
 
     return () => {
+      cancelled = true;
       window.removeEventListener('beforeinstallprompt', onBeforeInstall);
       window.removeEventListener('appinstalled', onInstalled);
       window.removeEventListener('focus', recheckStandalone);
@@ -191,10 +233,6 @@ export function useInstallPrompt() {
         // Declined THIS specific native prompt (closed the sheet, tapped
         // Cancel, etc) — that's not the same as the person dismissing our
         // floating button, so it must NOT start our own 14-day cooldown.
-        // Chrome already governs its own re-fire cooldown for
-        // beforeinstallprompt internally; layering dismissInstallPrompt()
-        // on top of that used to hide the button for two weeks after a
-        // single accidental cancel, with nothing visible explaining why.
         setStatus('unavailable');
       }
       try { window.__kxInstallPromptPending = false; } catch {}
@@ -205,5 +243,30 @@ export function useInstallPrompt() {
     setDeferredPrompt(null);
   }, [deferredPrompt]);
 
-  return { status, triggerInstall };
+  // 'installed-elsewhere' -> just navigate to the app root in this same
+  // tab; we deliberately do NOT call .prompt() or anything install-
+  // related here, since the whole point of this state is "already
+  // installed, don't install again". 'update-available' -> tell the
+  // waiting SW to activate (same SKIP_WAITING message index.html itself
+  // sends) then reload, so the person gets the fresh version immediately
+  // instead of waiting for their next natural reload.
+  const openOrUpdate = useCallback(async () => {
+    if (status === 'update-available' && 'serviceWorker' in navigator) {
+      try {
+        const reg = await navigator.serviceWorker.getRegistration();
+        if (reg && reg.waiting) {
+          reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+          navigator.serviceWorker.addEventListener('controllerchange', () => {
+            window.location.href = '/';
+          }, { once: true });
+          return;
+        }
+      } catch {
+        // fall through to a plain navigation below
+      }
+    }
+    window.location.href = '/';
+  }, [status]);
+
+  return { status, triggerInstall, openOrUpdate };
 }

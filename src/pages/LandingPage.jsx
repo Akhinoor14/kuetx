@@ -32,7 +32,7 @@ import {
   LogIn, GraduationCap, Presentation, Store, CheckCircle2,
   Monitor, Smartphone, Crown,
   Layers, ShieldCheck, Users, UserCheck, Sparkles, Mail, MessageSquare, X,
-  Flame, TrendingUp, Star, Zap, MapPin, ArrowDown, ChevronLeft, ChevronRight,
+  Flame, TrendingUp, Star, Zap, MapPin, ArrowDown, ChevronLeft, ChevronRight, Youtube,
 } from 'lucide-react';
 import usePageMeta from '../hooks/usePageMeta';
 import { useIsMobileNav } from '../components/BottomNav';
@@ -189,7 +189,11 @@ function CampusDesignStyles() {
         --kx-card: #ffffff;
         --kx-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Consolas, monospace;
         --kx-display: 'Manrope', 'Hind Siliguri', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-        background: var(--kx-bg);
+        background:
+          radial-gradient(ellipse 900px 500px at 8% 0%, rgba(34,197,94,0.05), transparent 60%),
+          radial-gradient(ellipse 700px 500px at 95% 40%, rgba(34,197,94,0.04), transparent 55%),
+          radial-gradient(circle, rgba(22,36,26,0.05) 1px, transparent 1px) 0 0 / 26px 26px,
+          var(--kx-bg);
         color: var(--kx-ink);
       }
       .kx-wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
@@ -445,7 +449,7 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
         overflow: 'hidden',
         width: '100%',
         background: 'var(--kx-dark)',
-        padding: isMobileNav ? '2.25rem 1.1rem 0' : '64px 32px 0',
+        padding: isMobileNav ? '2.75rem 1.1rem 0' : '84px 32px 0',
         color: '#f3f4ef',
       }}
     >
@@ -466,7 +470,7 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
           gridTemplateColumns: isMobileNav ? '1fr' : '1.05fr 0.95fr',
           gap: isMobileNav ? '1.75rem' : '56px',
           alignItems: 'center',
-          paddingBottom: isMobileNav ? '2rem' : '40px',
+          paddingBottom: isMobileNav ? '2.5rem' : '64px',
           opacity: heroVisible ? 1 : 0,
           transform: heroVisible ? 'translateY(0)' : 'translateY(14px)',
           transition: 'opacity 0.6s ease, transform 0.6s ease',
@@ -487,8 +491,9 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
           </h1>
 
           <p style={{
-            fontSize: isMobileNav ? '0.9rem' : '17px', lineHeight: 1.65,
-            color: 'rgba(243,244,239,0.72)', maxWidth: '480px', marginBottom: isMobileNav ? '1.25rem' : '34px',
+            fontSize: isMobileNav ? '0.98rem' : '19px', lineHeight: 1.65,
+            fontWeight: 500,
+            color: 'rgba(243,244,239,0.92)', maxWidth: '520px', marginBottom: isMobileNav ? '1.25rem' : '34px',
           }}>
             {sub}
           </p>
@@ -561,8 +566,8 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
                   <Icon size={isMobileNav ? 14 : 16} />
                 </div>
                 <div>
-                  <div className="kx-mono-num" style={{ fontSize: isMobileNav ? '16px' : '19px', color: 'var(--kx-accent-bright)', lineHeight: 1.1 }}>{value}</div>
-                  <div style={{ fontSize: isMobileNav ? '10.5px' : '11.5px', color: 'rgba(243,244,239,0.6)', marginTop: '2px', whiteSpace: 'nowrap' }}>{label}</div>
+                  <div className="kx-mono-num" style={{ fontSize: isMobileNav ? '17px' : '21px', fontWeight: 800, color: 'var(--kx-accent-bright)', lineHeight: 1.1 }}>{value}</div>
+                  <div style={{ fontSize: isMobileNav ? '11.5px' : '13px', fontWeight: 600, color: 'rgba(243,244,239,0.85)', marginTop: '3px', whiteSpace: 'nowrap' }}>{label}</div>
                 </div>
               </div>
             ))}
@@ -570,14 +575,28 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
         </div>
 
         {/* Tilted photo cluster — signature motif, repeated in
-            CampusScrapbook. Two photos + a small live-location badge. */}
+            CampusScrapbook. Two photos + a small live-location badge.
+
+            Owner ask (this session): the three photos were forced into
+            fixed px heights (220/120/112) that don't match any of
+            these images' real aspect ratios — gate.jpg is 5:3, aerial
+            is 4:3, statue-sunset is a wide ~2.34:1 crop — so every
+            photo was getting stretched/over-cropped ("condensed")
+            relative to how it actually looks. Each tile now sets height
+            from that photo's own real ratio at its fixed tile width
+            (aspectRatio, not objectFit-cover-into-a-guessed-height), so
+            the frame's proportions match the source image instead of
+            forcing a uniform box. Owner also asked to drop the separate
+            mobile-specific sizing for this cluster and keep only the
+            layout from the current screenshot (desktop values used at
+            every width) — isMobileNav branching removed here only. */}
         <div style={{
           position: 'relative',
-          height: isMobileNav ? '230px' : '420px',
-          order: isMobileNav ? 1 : 2,
+          height: '460px',
+          order: 2,
         }}>
           <div style={{
-            position: 'absolute', top: 0, left: isMobileNav ? '8px' : '16px',
+            position: 'absolute', top: 0, left: '16px',
             display: 'flex', alignItems: 'center', gap: '0.4rem',
             background: 'rgba(12,39,24,0.85)', backdropFilter: 'blur(8px)',
             border: '1px solid rgba(255,255,255,0.12)', borderRadius: '12px',
@@ -588,37 +607,37 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
           </div>
 
           <div style={{
-            position: 'absolute', top: isMobileNav ? '28px' : '26px', right: isMobileNav ? '2px' : '6px',
-            width: isMobileNav ? '58%' : '300px',
-            transform: isMobileNav ? 'rotate(2.5deg)' : 'rotate(4deg)',
+            position: 'absolute', top: '26px', right: '6px',
+            width: '300px',
+            transform: 'rotate(4deg)',
             borderRadius: '14px', overflow: 'hidden', border: '6px solid #fff',
             boxShadow: '0 30px 60px rgba(0,0,0,0.45), 0 0 0 6px rgba(255,255,255,0.06)', background: '#fff',
           }}>
-            <img src={CAMPUS_PHOTOS.gate.src} alt={CAMPUS_PHOTOS.gate.label} style={{ width: '100%', height: isMobileNav ? '110px' : '220px', objectFit: 'cover', display: 'block' }} />
+            <img src={CAMPUS_PHOTOS.gate.src} alt={CAMPUS_PHOTOS.gate.label} style={{ width: '100%', aspectRatio: '5 / 3', objectFit: 'cover', display: 'block' }} />
             <div style={{ padding: '12px 14px 14px' }}>
-              <div style={{ fontWeight: 700, fontSize: isMobileNav ? '0.68rem' : '13.5px', color: '#16241a' }}>{CAMPUS_PHOTOS.gate.label}</div>
+              <div style={{ fontWeight: 700, fontSize: '13.5px', color: '#16241a' }}>{CAMPUS_PHOTOS.gate.label}</div>
               <div style={{ fontFamily: 'var(--kx-mono)', fontSize: '11px', color: '#8a9188', marginTop: '2px' }}>{CAMPUS_PHOTOS.gate.coord}</div>
             </div>
           </div>
 
           <div style={{
-            position: 'absolute', bottom: isMobileNav ? '60px' : '92px', left: 0,
-            width: isMobileNav ? '48%' : '175px',
-            transform: isMobileNav ? 'rotate(-5deg)' : 'rotate(-7deg)',
+            position: 'absolute', bottom: '92px', left: 0,
+            width: '175px',
+            transform: 'rotate(-7deg)',
             borderRadius: '12px', overflow: 'hidden', border: '6px solid #fff',
             boxShadow: '0 20px 40px rgba(0,0,0,0.4)', zIndex: 2,
           }}>
-            <img src={CAMPUS_PHOTOS.aerial.src} alt={CAMPUS_PHOTOS.aerial.label} style={{ width: '100%', height: isMobileNav ? '78px' : '120px', objectFit: 'cover', display: 'block' }} />
+            <img src={CAMPUS_PHOTOS.aerial.src} alt={CAMPUS_PHOTOS.aerial.label} style={{ width: '100%', aspectRatio: '4 / 3', objectFit: 'cover', display: 'block' }} />
           </div>
 
           <div style={{
-            position: 'absolute', bottom: isMobileNav ? '2px' : '6px', left: isMobileNav ? '76px' : '108px',
-            width: isMobileNav ? '46%' : '168px',
-            transform: isMobileNav ? 'rotate(4deg)' : 'rotate(5deg)',
+            position: 'absolute', bottom: '6px', left: '108px',
+            width: '168px',
+            transform: 'rotate(5deg)',
             borderRadius: '12px', overflow: 'hidden', border: '6px solid #fff',
             boxShadow: '0 22px 44px rgba(0,0,0,0.4)', zIndex: 1,
           }}>
-            <img src={CAMPUS_PHOTOS.statue.src} alt={CAMPUS_PHOTOS.statue.label} style={{ width: '100%', height: isMobileNav ? '80px' : '112px', objectFit: 'cover', display: 'block' }} />
+            <img src={CAMPUS_PHOTOS.statue.src} alt={CAMPUS_PHOTOS.statue.label} style={{ width: '100%', aspectRatio: '2.34 / 1', objectFit: 'cover', display: 'block' }} />
           </div>
 
           {/* Mascot badge — floating turtle accent per HTML mockup,
@@ -632,20 +651,36 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
             className="kx-mascot-badge"
             style={{
               position: 'absolute',
-              bottom: isMobileNav ? '-10px' : '-18px',
-              right: isMobileNav ? '-8px' : '-22px',
-              width: isMobileNav ? '104px' : '160px',
-              height: isMobileNav ? '104px' : '160px',
+              bottom: '-18px',
+              right: '-22px',
+              width: '160px',
+              height: '160px',
               zIndex: 4,
               filter: 'drop-shadow(0 14px 22px rgba(0,0,0,0.5))',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               background: 'transparent',
             }}
           >
-            <Logo size={isMobileNav ? 104 : 160} />
+            <Logo size={160} />
           </div>
         </div>
       </div>
+
+      {/* Owner ask (this session): the hard color-band cuts between
+          sections (dark hero -> white -> sage -> white -> dark CTA)
+          read as an abrupt "hঠাৎ" jump rather than a deliberate flow.
+          Rather than flattening the whole page to one color (which
+          would lose the sage scrapbook band's job of visually setting
+          those photos apart, and the dark hero/CTA "bookend" rhythm),
+          each hard edge gets a short gradient cap that blends this
+          section's own color into the NEXT section's color right at
+          the boundary, so the seam reads as a soft fade instead of a
+          flat line. Hero -> the page's own --kx-bg white comes next. */}
+      <div aria-hidden="true" style={{
+        position: 'absolute', left: 0, right: 0, bottom: 0, height: '90px',
+        background: 'linear-gradient(to bottom, transparent, var(--kx-bg))',
+        pointerEvents: 'none',
+      }} />
     </section>
   );
 }
@@ -668,10 +703,25 @@ function CampusScrapbook({ isMobileNav }) {
       className={`kx-reveal${visible ? ' kx-in-view' : ''}`}
       style={{
         width: '100%',
+        position: 'relative',
         background: 'var(--kx-sage)',
         padding: isMobileNav ? '2.5rem 1.1rem' : '90px 32px',
       }}
     >
+      {/* Soft seam caps (see CampusHero's identical comment) — top edge
+          blends the incoming white page background into this section's
+          sage, bottom edge blends sage back out into white again for
+          whatever full-bleed section follows. */}
+      <div aria-hidden="true" style={{
+        position: 'absolute', left: 0, right: 0, top: 0, height: '70px',
+        background: 'linear-gradient(to bottom, var(--kx-bg), transparent)',
+        pointerEvents: 'none',
+      }} />
+      <div aria-hidden="true" style={{
+        position: 'absolute', left: 0, right: 0, bottom: 0, height: '70px',
+        background: 'linear-gradient(to bottom, transparent, var(--kx-bg))',
+        pointerEvents: 'none',
+      }} />
       <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 56px' }}>
         <div className="kx-eyebrow" style={{ marginBottom: '0.75rem' }}>
           নিজের ক্যাম্পাস
@@ -833,21 +883,20 @@ const STAT_ICONS = {
 // still respected (skips the interval, i.e. stays on stat 0 rather than
 // jumping with no animation).
 const ROTATE_INTERVAL_MS = 4200;
+// Owner ask: the strip felt inert for the first few seconds because the
+// first rotation didn't happen until the full 4.2s interval elapsed —
+// nothing signals "this is live/rotating" right away. First two
+// advances fire quickly (2s apart) so a visitor immediately notices
+// motion, then it settles into the normal ROTATE_INTERVAL_MS cadence.
+const FAST_ROTATE_INTERVAL_MS = 2000;
+const FAST_ROTATE_COUNT = 2;
 const SLIDE_TRANSITION_MS = 550;
 
 function StatCardTile({ stat, isMobileNav }) {
-  const Icon = STAT_ICONS[stat.id] || Sparkles;
   return (
-    // Owner audit: content was left-aligned inside a full-width tile
-    // (no textAlign set) and the icon sat directly above/beside the
-    // number, crowding it — re-centered everything (icon, number,
-    // label all centered as a stack) and moved the icon smaller +
-    // further from the number/label so it reads as a small badge
-    // ABOVE the heading, not squeezed against it. Icon badge also got
-    // a real border (not just a tinted fill) so it reads as a small
-    // "framed" tile matching the bordered-card visual language used
-    // elsewhere on the page (WhyKuetxCard, FeatureCategoryBlock),
-    // instead of a flat colored square.
+    // Owner ask (this session): drop the icon badge above the number —
+    // plain text, no emoji/icon lead-in. Kept the centered stack layout
+    // and spacing rhythm, just removed the icon block itself.
     <div
       style={{
         width: '100%', flexShrink: 0,
@@ -857,16 +906,6 @@ function StatCardTile({ stat, isMobileNav }) {
         display: 'flex', flexDirection: 'column', alignItems: 'center',
       }}
     >
-      <div style={{
-        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-        width: isMobileNav ? '26px' : '36px', height: isMobileNav ? '26px' : '36px',
-        borderRadius: isMobileNav ? '8px' : '10px',
-        background: 'rgba(var(--accentRGB),0.08)',
-        border: '1px solid rgba(var(--accentRGB),0.22)',
-        marginBottom: isMobileNav ? '0.7rem' : '1rem',
-      }}>
-        <Icon size={isMobileNav ? 14 : 18} color="var(--accent)" strokeWidth={2.3} />
-      </div>
       <div style={{
         fontFamily: 'var(--kx-mono, inherit)',
         fontSize: isMobileNav ? '1.3rem' : '1.85rem',
@@ -911,22 +950,14 @@ function StatsStrip({ isMobileNav }) {
     }
   }
 
-  // Owner audit: "last -> first" used to visually REWIND (a hard
-  // translateX jump backward across the whole strip) instead of
-  // continuing forward, because wrapping index N-1 -> 0 is a real
-  // position jump on a fixed-length track, not an actual infinite
-  // loop. Standard fix (same technique used by carousel libraries
-  // like Slick/Swiper): render a DUPLICATE of stat[0] appended after
-  // the real last stat. The track animates forward into that
-  // duplicate normally; once the animated slide finishes, we snap
-  // (transition: none, invisible to the eye since the duplicate is
-  // pixel-identical to the real stat[0]) back to the real index 0 and
-  // resume normal forward animation from there.
-  const trackStats = stats.length > 1 ? [...stats, stats[0]] : stats;
-
+  // Owner ask (this session): swapped the horizontal slide-track for a
+  // stacked crossfade (see the render below) — a crossfade just needs
+  // "which stat is current" (index % stats.length), it doesn't need the
+  // slide-specific duplicate-last-slide/snap-back wraparound trick that
+  // only existed to make translateX's fixed-length track loop invisibly.
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [noTransition, setNoTransition] = useState(false);
+  const noTransition = false;
   const prefersReducedMotion = typeof window !== 'undefined'
     && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
@@ -934,44 +965,22 @@ function StatsStrip({ isMobileNav }) {
     setIndex((i) => i + 1);
   };
   const goTo = (target) => {
-    setNoTransition(false);
     setIndex(target);
   };
 
+  // First FAST_ROTATE_COUNT advances use the quick interval, then fall
+  // back to the normal cadence — re-runs each time `index` changes so
+  // the timer's delay can switch from fast to normal mid-sequence
+  // (a plain setInterval can't change its own delay once started).
   useEffect(() => {
     if (paused || prefersReducedMotion || stats.length <= 1) return undefined;
-    const id = setInterval(advance, ROTATE_INTERVAL_MS);
-    return () => clearInterval(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paused, prefersReducedMotion, stats.length]);
-
-  // After the track finishes animating INTO the duplicate slot
-  // (index === stats.length, i.e. one past the last real stat), wait
-  // for the slide transition to finish, then snap back to the real
-  // index 0 with no transition — this is the part of the technique
-  // that makes the loop invisible.
-  useEffect(() => {
-    if (stats.length <= 1 || index !== stats.length) return undefined;
-    const id = setTimeout(() => {
-      setNoTransition(true);
-      setIndex(0);
-    }, SLIDE_TRANSITION_MS);
+    const delay = index < FAST_ROTATE_COUNT ? FAST_ROTATE_INTERVAL_MS : ROTATE_INTERVAL_MS;
+    const id = setTimeout(advance, delay);
     return () => clearTimeout(id);
-  }, [index, stats.length]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paused, prefersReducedMotion, stats.length, index]);
 
-  // Re-enable the transition on the next paint after a no-transition
-  // snap, so the FOLLOWING slide (0 -> 1) animates normally again.
-  useEffect(() => {
-    if (!noTransition) return undefined;
-    const id = requestAnimationFrame(() => setNoTransition(false));
-    return () => cancelAnimationFrame(id);
-  }, [noTransition]);
-
-  // Guard against index momentarily pointing past the array right after
-  // the QB cards get appended/removed (data arrives async after first
-  // render) — clamp instead of letting translateX go out of bounds.
-  const safeIndex = Math.min(index, trackStats.length - 1);
-  const displayIndex = index % stats.length; // for the dot/left-right button's "current" sense
+  const displayIndex = ((index % stats.length) + stats.length) % stats.length; // current stat, safe for any integer index
 
   return (
     <div
@@ -1010,21 +1019,66 @@ function StatsStrip({ isMobileNav }) {
         </button>
       )}
 
-      <div style={{ overflow: 'hidden', flex: 1, minWidth: 0 }}>
-        <div
-          style={{
-            display: 'flex',
-            width: `${trackStats.length * 100}%`,
-            transform: `translateX(-${(100 / trackStats.length) * safeIndex}%)`,
-            transition: (noTransition || prefersReducedMotion) ? 'none' : `transform ${SLIDE_TRANSITION_MS}ms cubic-bezier(0.65, 0, 0.35, 1)`,
-          }}
-        >
-          {trackStats.map((stat, i) => (
-            <div key={`${stat.id}-${i}`} style={{ width: `${100 / trackStats.length}%`, flexShrink: 0, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      {/* Owner ask: give the rotating card a "glassy" framed feel rather
+          than sitting bare inside the strip — translucent tinted panel +
+          blur + a soft border/highlight, matching the frosted-glass
+          language already used elsewhere (AuthModal's card, the
+          "KUET, Khulna" hero badge).
+
+          Owner ask (this session): replace the horizontal slide-in/
+          slide-out with the outgoing card shrinking down into a small
+          circle (and the incoming card growing OUT of that same circle)
+          instead of sliding sideways — a "pop through a point" transition
+          rather than a carousel-strip slide. Implemented as a stacked
+          crossfade: both the outgoing and incoming stat render on top of
+          each other (absolute position) and each one animates its own
+          borderRadius from a small circle up to the full rounded-rect
+          shape together with opacity/scale — outgoing runs circle<-rect
+          (shrinks to a dot, fades out), incoming runs rect<-circle
+          (grows from a dot, fades in), both centered on the same point,
+          so it reads as one shape "closing" and the next "opening" from
+          the same spot rather than two boxes swapping places. Frame
+          keeps a fixed height (tallest stat's card, measured via the
+          hidden sizer below) since absolute-positioned children can't
+          size their parent themselves. */}
+      <div style={{
+        position: 'relative', flex: 1, minWidth: 0,
+        borderRadius: '16px',
+        background: 'rgba(255,255,255,0.06)',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+        border: '1px solid rgba(255,255,255,0.14)',
+        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.18), 0 8px 24px rgba(0,0,0,0.12)',
+        overflow: 'hidden',
+      }}>
+        {/* Invisible sizer — reserves the tallest stat's real height so
+            the glass frame doesn't collapse/jump as absolutely
+            positioned cards cross-fade in and out on top of it. */}
+        <div style={{ visibility: 'hidden', pointerEvents: 'none' }}>
+          <StatCardTile stat={stats[0]} isMobileNav={isMobileNav} />
+        </div>
+
+        {stats.map((stat, i) => {
+          const isCurrent = i === displayIndex;
+          return (
+            <div
+              key={stat.id}
+              style={{
+                position: 'absolute', inset: 0,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                opacity: isCurrent ? 1 : 0,
+                transform: isCurrent ? 'scale(1)' : 'scale(0.15)',
+                borderRadius: isCurrent ? '16px' : '999px',
+                transition: (noTransition || prefersReducedMotion)
+                  ? 'none'
+                  : `opacity ${SLIDE_TRANSITION_MS}ms ease, transform ${SLIDE_TRANSITION_MS}ms cubic-bezier(0.65, 0, 0.35, 1), border-radius ${SLIDE_TRANSITION_MS}ms ease`,
+                pointerEvents: isCurrent ? 'auto' : 'none',
+              }}
+            >
               <StatCardTile stat={stat} isMobileNav={isMobileNav} />
             </div>
-          ))}
-        </div>
+          );
+        })}
       </div>
 
       {stats.length > 1 && (
@@ -1483,11 +1537,10 @@ function FeatureItem({ name, isMobileNav }) {
           boxShadow: tag && !isMobileNav ? `inset 0 1px 0 rgba(255,255,255,0.35)` : undefined,
         }}
       >
-        {tag ? (
-          <TagIcon size={13} style={{ color, flexShrink: 0, marginTop: '0.15rem', filter: `drop-shadow(0 0 3px ${bg})` }} />
-        ) : (
-          <CheckCircle2 size={13} style={{ color: 'var(--muted)', flexShrink: 0, marginTop: '0.15rem' }} />
-        )}
+        {/* Owner ask (this session): drop the leading icon/emoji on
+            every feature line — plain text bullet only. Highlighted
+            items (tag !== null) keep their pill label further below,
+            just without the icon glyph in front of the name. */}
         <span style={{ overflowWrap: 'anywhere', display: 'flex', flexDirection: 'column', gap: '0.15rem', flex: 1 }}>
           {name}
           {tag && !isMobileNav && (
@@ -1599,7 +1652,6 @@ function CRFeatureBlock() {
         {CR_FEATURES.map((name) => {
           const tag = HIGHLIGHTED_FEATURES[name];
           const tone = tag ? (TAG_TONES[tag.tone] || TAG_TONES.hot) : null;
-          const TagIcon = tone?.Icon || CheckCircle2;
           return (
             <li key={name} style={{
               display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8rem',
@@ -1610,7 +1662,6 @@ function CRFeatureBlock() {
               borderRadius: tag ? '6px' : 0,
               boxShadow: tag ? 'inset 0 1px 0 rgba(255,255,255,0.35)' : undefined,
             }}>
-              <TagIcon size={13} style={{ color: tag ? tone.color : 'var(--accent)', flexShrink: 0 }} />
               <span>{name}</span>
             </li>
           );
@@ -1739,16 +1790,65 @@ function FeatureBreakdown({ isMobileNav }) {
               if (activeTab === 'student') {
                 cards.push({ key: '__cr', items: null, weight: CR_CARD_WEIGHT });
               }
+
+              const renderCard = (card) => (
+                card.key === '__cr' ? (
+                  <CRFeatureBlock />
+                ) : (
+                  <FeatureCategoryBlock label={tab.labels[card.key] || card.key} items={card.items} isMobileNav={isMobileNav} />
+                )
+              );
+
+              // Owner ask (this session): when one card is clearly the
+              // heaviest/widest-content one (Faculty's "core" card, ~2x+
+              // any other card here), it should sit ALONE on a full-width
+              // row up top instead of being squeezed into a column next
+              // to much shorter cards — THEN the rest flow into a plain
+              // 2-column grid below. This is a structural layout rule
+              // (not the weight-balancing bestColumnLayout does for the
+              // general case): only kicks in when a genuine outlier
+              // exists, so card sets without one (Provider's single
+              // "shop" card, Student's evenly-sized set) fall through to
+              // the existing balanced-column logic unchanged.
+              const heaviest = cards.reduce((a, b) => (b.weight > a.weight ? b : a), cards[0]);
+              const rest = cards.filter((c) => c !== heaviest);
+              const restWeight = rest.reduce((s, c) => s + c.weight, 0);
+              // Threshold verified against real card weights: Faculty's
+              // heaviest card ("services", 6 items) sits at ~0.53x the
+              // combined weight of its other 3 cards — should trigger
+              // this layout. Student's heaviest ("core", w/ My Classes'
+              // subdetail list) sits at ~0.41x its other 6 cards' combined
+              // weight — should NOT trigger (its existing balanced-column
+              // layout already reads fine at that ratio). 0.5 sits
+              // between the two, cleanly separating them.
+              const isOutlier = rest.length >= 2 && heaviest.weight > restWeight * 0.5;
+
+              if (isOutlier) {
+                const twoCol = bestColumnLayout(rest, 2);
+                return (
+                  <div style={{ width: '100%' }}>
+                    <div style={{ marginBottom: '22px' }}>{renderCard(heaviest)}</div>
+                    <div style={{ display: 'flex', gap: '22px' }}>
+                      {twoCol.map((col, ci) => (
+                        <div key={ci} style={{ flex: '1 1 0', minWidth: 0 }}>
+                          {col.map((card) => (
+                            <div key={card.key} style={{ marginBottom: '22px' }}>
+                              {renderCard(card)}
+                            </div>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              }
+
               const columns = bestColumnLayout(cards, 3);
               return columns.map((col, ci) => (
                 <div key={ci} style={{ flex: '1 1 0', minWidth: 0 }}>
                   {col.map((card) => (
                     <div key={card.key} style={{ marginBottom: '22px' }}>
-                      {card.key === '__cr' ? (
-                        <CRFeatureBlock />
-                      ) : (
-                        <FeatureCategoryBlock label={tab.labels[card.key] || card.key} items={card.items} isMobileNav={isMobileNav} />
-                      )}
+                      {renderCard(card)}
                     </div>
                   ))}
                 </div>
@@ -2152,6 +2252,258 @@ const CREDITS_SPOTLIGHT = [
   },
 ];
 
+// ─── Video showcase (owner ask, this session) ────────────────────────────
+// Rotating card that plays KUETx's own YouTube videos in-place — real
+// embedded player, not a link out. Video list comes from
+// /api/youtube-videos (Vercel Serverless Function, see that file's own
+// header comment for why the fetch happens server-side: the YouTube
+// Data API key can never be shipped to the browser). Placed as its own
+// beat between CampusScrapbook (photo identity) and CreditsSpotlight
+// (people credits) — right before the final CTA, as a last, richer
+// social-proof beat: "here's what we're actually building/doing", in
+// video rather than just photos.
+//
+// Auto-rotates through the fetched list every ROTATE_MS; either arrow
+// click also advances/retreats manually AND resets that timer, so a
+// visitor who's actively browsing videos doesn't get yanked to a
+// different one mid-interaction. Renders nothing (not even the section
+// shell) if the fetch comes back empty — never shows a broken/empty
+// player.
+const VIDEO_ROTATE_MS = 9000;
+
+function VideoShowcase({ isMobileNav }) {
+  const { ref, visible } = useRevealOnVisible();
+  const [videos, setVideos] = useState([]);
+  const [index, setIndex] = useState(0);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/youtube-videos')
+      .then((r) => r.json())
+      .then((data) => {
+        if (cancelled) return;
+        setVideos(Array.isArray(data?.videos) ? data.videos : []);
+        setLoaded(true);
+      })
+      .catch(() => {
+        if (!cancelled) setLoaded(true);
+      });
+    return () => { cancelled = true; };
+  }, []);
+
+  // Auto-rotate. Depends on `videos.length` (stable once loaded) and
+  // `index` isn't a dependency — the interval always advances relative
+  // to whatever `index` is *at fire time* via the functional setState
+  // form below, so this effect doesn't need to re-run (and restart the
+  // timer) every time the active video changes on its own.
+  useEffect(() => {
+    if (videos.length < 2) return undefined;
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % videos.length);
+    }, VIDEO_ROTATE_MS);
+    return () => clearInterval(id);
+  }, [videos.length]);
+
+  const goTo = (next) => {
+    // Manual navigation resets the rotation "clock" too: the interval
+    // above is keyed only off videos.length, so changing `index` here
+    // doesn't itself restart it — instead we rely on the interval's
+    // own next tick being VIDEO_ROTATE_MS away from whenever it last
+    // fired. Re-mounting the effect on every manual click (by also
+    // depending on `index`) would be the alternative, but that plus
+    // the functional setState form above is unnecessary complexity for
+    // the same result, since the interval already reads the latest
+    // index via the updater function. Simplicity kept over
+    // micro-perfect timer resets on manual nav.
+    setIndex(next);
+  };
+
+  // Owner ask: never fully hide this section, even before the fetch
+  // resolves or when the channel/API returns zero videos — instead show
+  // a fixed-size "video is coming" placeholder in the exact same box
+  // (same aspectRatio, same maxWidth) so the page's layout/height never
+  // jumps depending on whether videos are loaded yet. Arrows/dots/title
+  // just don't render in this state since there's nothing to navigate.
+  const hasVideos = loaded && videos.length > 0;
+  const current = hasVideos ? videos[index] : null;
+  const goPrev = () => goTo((index - 1 + videos.length) % videos.length);
+  const goNext = () => goTo((index + 1) % videos.length);
+
+  return (
+    <div
+      className="kx-page"
+      style={{
+        maxWidth: '1180px', margin: '0 auto',
+        padding: isMobileNav ? '2.5rem 1.1rem' : '80px 32px',
+      }}
+    >
+      <div
+        ref={ref}
+        className={`kx-reveal${visible ? ' kx-in-view' : ''}`}
+        style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 40px' }}
+      >
+        <div className="kx-eyebrow" style={{ marginBottom: '0.75rem' }}>
+          KUETx YouTube
+        </div>
+        <h2 className="kx-h2" style={{ fontSize: isMobileNav ? 'clamp(1.35rem, 6vw, 1.7rem)' : '36px' }}>
+          আমরা যা বানাচ্ছি, ভিডিওতে দেখো
+        </h2>
+      </div>
+
+      <div style={{
+        maxWidth: isMobileNav ? '820px' : '1020px', margin: '0 auto',
+      }}>
+        <div style={{ minWidth: 0 }}>
+          <div style={{ position: 'relative' }}>
+          <div
+            className="kx-card"
+            style={{
+              overflow: 'hidden', aspectRatio: '16 / 9', background: '#000',
+              position: 'relative',
+            }}
+          >
+            {hasVideos ? (
+              <iframe
+                key={current.id}
+                src={`https://www.youtube.com/embed/${current.id}?autoplay=1&mute=1&rel=0`}
+                title={current.title}
+                style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            ) : (
+              // "Video is coming" placeholder — same box, no iframe. Shown
+              // both while the fetch is in flight (loaded === false) and
+              // after it resolves with zero videos, so there's no flash
+              // between "nothing" and "empty state" — it's one state the
+              // whole time until real videos actually arrive.
+              <div
+                style={{
+                  width: '100%', height: '100%',
+                  display: 'flex', flexDirection: 'column',
+                  alignItems: 'center', justifyContent: 'center',
+                  gap: '10px', color: 'rgba(255,255,255,0.55)',
+                  background: 'linear-gradient(180deg, #111 0%, #000 100%)',
+                }}
+              >
+                <Youtube size={isMobileNav ? 28 : 36} strokeWidth={1.5} />
+                <div style={{
+                  fontFamily: 'var(--kx-mono, inherit)', fontSize: isMobileNav ? '12px' : '13px',
+                  letterSpacing: '0.04em',
+                }}>
+                  ভিডিও শীঘ্রই আসছে
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Arrows overlay the video box edges (absolute, anchored to
+              the relative box wrapper directly above) instead of
+              sitting in a flex row beside it — this way they don't eat
+              width from the box, so the box itself can use the full
+              1020px column. Hidden on mobile: edge-to-edge video box
+              leaves no room beside it there; mobile users have the
+              dots + the manual nav row below instead. */}
+          {!isMobileNav && hasVideos && videos.length > 1 && (
+            <>
+              <button
+                type="button"
+                onClick={goPrev}
+                aria-label="আগের ভিডিও"
+                className="kx-card"
+                style={{
+                  position: 'absolute', left: '-22px', top: 'calc(50% - 22px)',
+                  zIndex: 2, width: '44px', height: '44px', borderRadius: '999px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'pointer', color: 'var(--kx-ink)',
+                }}
+              >
+                <ChevronLeft size={20} />
+              </button>
+              <button
+                type="button"
+                onClick={goNext}
+                aria-label="পরের ভিডিও"
+                className="kx-card"
+                style={{
+                  position: 'absolute', right: '-22px', top: 'calc(50% - 22px)',
+                  zIndex: 2, width: '44px', height: '44px', borderRadius: '999px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'pointer', color: 'var(--kx-ink)',
+                }}
+              >
+                <ChevronRight size={20} />
+              </button>
+            </>
+          )}
+          </div>
+
+          <div style={{
+            fontSize: isMobileNav ? '0.9rem' : '15px', fontWeight: 700,
+            color: 'var(--kx-ink)', textAlign: 'center',
+            marginTop: '16px', lineHeight: 1.4,
+            minHeight: isMobileNav ? '1.26rem' : '21px',
+          }}>
+            {current ? current.title : '\u00A0'}
+          </div>
+
+          {hasVideos && videos.length > 1 && (
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '6px', marginTop: '14px' }}>
+              {videos.map((v, i) => (
+                <button
+                  key={v.id}
+                  type="button"
+                  onClick={() => goTo(i)}
+                  aria-label={`ভিডিও ${i + 1}`}
+                  style={{
+                    width: i === index ? '20px' : '7px', height: '7px', borderRadius: '999px',
+                    border: 'none', cursor: 'pointer', padding: 0,
+                    background: i === index ? 'var(--kx-accent)' : 'var(--kx-line)',
+                    transition: 'width 0.25s ease, background 0.25s ease',
+                  }}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Manual nav row for mobile, where the side arrows are hidden. */}
+          {isMobileNav && hasVideos && videos.length > 1 && (
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '14px' }}>
+              <button
+                type="button"
+                onClick={goPrev}
+                aria-label="আগের ভিডিও"
+                className="kx-card"
+                style={{
+                  width: '40px', height: '40px', borderRadius: '999px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'pointer', color: 'var(--kx-ink)',
+                }}
+              >
+                <ChevronLeft size={18} />
+              </button>
+              <button
+                type="button"
+                onClick={goNext}
+                aria-label="পরের ভিডিও"
+                className="kx-card"
+                style={{
+                  width: '40px', height: '40px', borderRadius: '999px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'pointer', color: 'var(--kx-ink)',
+                }}
+              >
+                <ChevronRight size={18} />
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function CreditsSpotlight({ isMobileNav }) {
   const { ref, visible } = useRevealOnVisible();
   const [index, setIndex] = useState(0);
@@ -2278,7 +2630,19 @@ function CreditsSpotlight({ isMobileNav }) {
               alt={person.name}
               loading="lazy"
               onError={() => setImgOk(false)}
-              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
+              style={{
+                width: '100%', height: '100%', objectFit: 'cover',
+                // Owner audit: 'center' vertical crop was cutting off
+                // the top of the head on solo portraits — the photo box
+                // is a 1.25:1 landscape-ish rectangle but a portrait's
+                // face sits in the UPPER portion of a square/tall
+                // source photo, so a dead-center crop chops the
+                // forehead/hair. Bias the crop upward for portraits
+                // (photoShape !== 'wide'); group photos keep a true
+                // center crop since there's no single face to protect.
+                objectPosition: person.photoShape === 'wide' ? 'center' : 'center 20%',
+                display: 'block',
+              }}
             />
           ) : person.photoShape !== 'wide' ? (
             <span style={{ fontSize: isMobileNav ? '1.3rem' : '1.6rem', fontWeight: 800, color: 'var(--accentDark)' }}>
@@ -2316,25 +2680,35 @@ function CreditsSpotlight({ isMobileNav }) {
   );
 }
 
-function Footer() {
+// `theme` prop (default 'light'): pass 'dark' when Footer is rendered
+// directly inside a dark section (landing page's merged CTA+footer
+// band, see the owner discussion above the Final CTA section) so its
+// text/border colors read correctly against a dark background instead
+// of the normal light-page var(--text)/var(--border)/var(--bg) values,
+// which would be invisible or near-invisible on dark. App.jsx's global
+// chrome usage and LandingPage's own mobile-branch usage don't pass
+// this, so they keep the exact original light styling untouched.
+function Footer({ theme = 'light' }) {
   const year = new Date().getFullYear();
+  const dark = theme === 'dark';
   return (
-    <footer className="kx-theme-vars" style={{
-      borderTop: '1px solid var(--border)', marginTop: '2rem',
-      background: 'var(--bg)',
-      padding: '2rem 1.25rem 2.5rem',
+    <footer className={dark ? undefined : 'kx-theme-vars'} style={{
+      borderTop: dark ? '1px solid rgba(255,255,255,0.1)' : '1px solid var(--border)',
+      marginTop: dark ? 0 : '2rem',
+      background: dark ? 'transparent' : 'var(--bg)',
+      padding: dark ? '2rem 1.25rem 2.5rem' : '2rem 1.25rem 2.5rem',
     }}>
       <div style={{
         maxWidth: '1080px', margin: '0 auto', display: 'flex',
         flexDirection: 'column', alignItems: 'center', gap: '1.25rem', textAlign: 'center',
       }}>
-        <Wordmark height={20} theme="kx" />
+        <Wordmark height={20} theme={dark ? 'dark' : 'kx'} />
 
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1.25rem' }}>
-          <Link to="/about" style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text)', textDecoration: 'none' }}>
+          <Link to="/about" style={{ fontSize: '0.85rem', fontWeight: 700, color: dark ? '#f3f4ef' : 'var(--text)', textDecoration: 'none' }}>
             About KUETx
           </Link>
-          <Link to="/privacy" style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text)', textDecoration: 'none' }}>
+          <Link to="/privacy" style={{ fontSize: '0.85rem', fontWeight: 700, color: dark ? '#f3f4ef' : 'var(--text)', textDecoration: 'none' }}>
             Privacy Policy
           </Link>
         </div>
@@ -2345,7 +2719,8 @@ function Footer() {
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
               padding: '0.5rem 0.9rem', borderRadius: '999px', fontSize: '0.8rem', fontWeight: 700,
-              border: '1px solid var(--border)', color: 'var(--text)', textDecoration: 'none',
+              border: dark ? '1px solid rgba(255,255,255,0.18)' : '1px solid var(--border)',
+              color: dark ? '#f3f4ef' : 'var(--text)', textDecoration: 'none',
             }}
           >
             <Mail size={14} /> Founder-কে ইমেইল করুন
@@ -2356,14 +2731,15 @@ function Footer() {
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
               padding: '0.5rem 0.9rem', borderRadius: '999px', fontSize: '0.8rem', fontWeight: 700,
-              border: '1px solid var(--border)', color: 'var(--text)', textDecoration: 'none',
+              border: dark ? '1px solid rgba(255,255,255,0.18)' : '1px solid var(--border)',
+              color: dark ? '#f3f4ef' : 'var(--text)', textDecoration: 'none',
             }}
           >
             <MessageSquare size={14} /> WhatsApp
           </a>
         </div>
 
-        <p style={{ fontSize: '0.76rem', color: 'var(--muted)', margin: 0 }}>
+        <p style={{ fontSize: '0.76rem', color: dark ? 'rgba(243,244,239,0.55)' : 'var(--muted)', margin: 0 }}>
           © {year} KUETx — KUET-এর জন্য।
         </p>
       </div>
@@ -2717,6 +3093,13 @@ export default function LandingPage() {
             beat after the functional case has been made. */}
         <CampusScrapbook isMobileNav={isMobileNav} />
 
+        {/* Video showcase — KUETx's own YouTube videos, rotating embedded
+            player. See VideoShowcase's own comment above for why it sits
+            here (between Scrapbook and Credits). Never renders nothing —
+            even with zero videos it shows a fixed-size "coming soon" box
+            so the page layout doesn't jump depending on channel state. */}
+        <VideoShowcase isMobileNav={isMobileNav} />
+
         {/* Credits spotlight — real data, kept inside a centered content
             band since the HTML mockup has no direct equivalent section
             (an addition the real app actually has); everything else
@@ -2729,15 +3112,36 @@ export default function LandingPage() {
           <CreditsSpotlight isMobileNav={isMobileNav} />
         </div>
 
-        {/* Final CTA — matches HTML's dark .final-cta band exactly. */}
+        {/* Final CTA + Footer — merged into one continuous dark band
+            (owner ask, this session): the CTA used to end with heavy
+            symmetric padding and then a separate plain-white Footer
+            immediately after, which read as an orphaned/disconnected
+            afterthought (dark box -> hard cut -> unrelated white strip).
+            Footer is now rendered INSIDE this same dark section, right
+            below the CTA buttons, with its own dark theme (theme="dark"
+            prop, already supported by Footer below) and a faint
+            border-top divider separating the two "beats" while staying
+            in one unbroken dark flow. Top/bottom padding trimmed from
+            the old 90px since the section now carries more content
+            (CTA + footer together) — kept generous enough that the
+            close still feels like a deliberate, confident bookend to
+            the dark hero, not cramped. */}
         <section style={{
           background: 'var(--kx-dark)', color: '#fff', textAlign: 'center',
-          padding: isMobileNav ? '3rem 1.1rem' : '90px 32px',
+          padding: isMobileNav ? '3rem 1.1rem 0' : '72px 32px 0',
           position: 'relative', overflow: 'hidden',
         }}>
           <div style={{
             position: 'absolute', inset: 0, pointerEvents: 'none',
             background: 'radial-gradient(ellipse 700px 400px at 50% 100%, rgba(74,222,128,0.15), transparent 60%)',
+          }} />
+          {/* Soft seam cap (see CampusHero's identical comment) — blends
+              the white page background above into this section's dark
+              band instead of a hard line at the top edge. */}
+          <div aria-hidden="true" style={{
+            position: 'absolute', left: 0, right: 0, top: 0, height: '90px',
+            background: 'linear-gradient(to bottom, var(--kx-bg), transparent)',
+            pointerEvents: 'none',
           }} />
           <div style={{ position: 'relative' }}>
             <div style={{
@@ -2751,7 +3155,7 @@ export default function LandingPage() {
             <p style={{ color: 'rgba(243,244,239,0.65)', maxWidth: '460px', margin: '16px auto 32px' }}>
               Sign up করতে কোনো টাকা লাগে না, ভবিষ্যতেও লাগবে না।
             </p>
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: isMobileNav ? '2.5rem' : '64px' }}>
               <button
                 type="button"
                 onClick={() => openAuth('signup')}
@@ -2779,10 +3183,10 @@ export default function LandingPage() {
               </button>
             </div>
           </div>
+
+          <Footer theme="dark" />
         </section>
       </div>
-
-      <Footer />
 
       {showAuthModal && authIntent === 'signup' && (
         <SignUpWizard
