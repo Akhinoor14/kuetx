@@ -2426,7 +2426,21 @@ service cloud.firestore {
     // faculty Add Class flow needs it), writable only by Founder/Head of
     // Ops so the batch list can't be tampered with by a regular teacher
     // or student account.
+    //
+    // config/landingStats is the one exception to the isSignedIn() read
+    // gate above: it backs the public, signed-OUT landing page's hero
+    // stat card (total student/faculty/provider counts), so it must be
+    // readable by a visitor who has no session yet — same "nothing
+    // sensitive in the doc" reasoning as usernames/{username} above. The
+    // doc holds only small aggregate numbers (counts), never any
+    // per-person data, and write access is still Admin/HeadOfOps-only —
+    // see FounderBatchSettings.jsx's "Landing Page Stats" section, the
+    // only place that writes it.
     // -------------------------------------------------------------
+    match /config/landingStats {
+      allow read: if true;
+      allow write: if isAdmin() || isHeadOfOps();
+    }
     match /config/{configKey} {
       allow read: if isSignedIn();
       allow write: if isAdmin() || isHeadOfOps();

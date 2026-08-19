@@ -284,8 +284,16 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, intent = 
             truthy, same as before this migration. Hidden while the inline
             notice above is showing (it has its own "try another account"
             ghost button instead — a plain close here would just discard
-            the already-signed-in Google session with no clear next step). */}
-        {onClose && !pendingNewUser && (
+            the already-signed-in Google session with no clear next step).
+            Also hidden for intent === 'signin' (landing page's Sign In
+            button specifically) — a visitor who explicitly clicked "Sign
+            In" doesn't need a "continue without signing in" escape hatch
+            sitting right under the button they just pressed; the X in the
+            corner is already the close action there. Every other caller
+            (App.jsx's queue-mode/global auth gate, Profile.jsx re-auth,
+            landing's own Sign Up path) doesn't pass intent="signin" and
+            keeps this link exactly as before. */}
+        {onClose && !pendingNewUser && intent !== 'signin' && (
           <div style={{ textAlign: 'center', marginTop: 14 }}>
             <button style={{ ...btnGhost, color: 'var(--muted)', textDecoration: 'none', fontSize: 12 }} onClick={onClose}>
               {queueMode ? 'Skip for now — continue without an account →' : 'Continue without signing in'}

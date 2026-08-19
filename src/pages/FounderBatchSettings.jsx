@@ -21,8 +21,82 @@
 import { useEffect, useState } from 'react';
 import * as Icons from 'lucide-react';
 import { getActiveBatches, getBatchStartDates, setActiveBatches, setBatchStartDate } from '../lib/appConfigSync';
+import { getLandingTotalUsers, setLandingTotalUsers } from '../lib/landingStatsSync';
 import { getBatchColor } from '../lib/timeModels';
 import { notify } from '../lib/notify';
+
+// Landing page hero's "current user" stat — Admin-typed number, not an
+// auto-count (see landingStatsSync.js's header for why: the signed-out
+// landing page can't safely list students/faculty/providers to count
+// them without exposing the collections publicly). Kept as its own small
+// panel here rather than a new page, since this is a once-in-a-while
+// Founder edit, same cadence as batch start dates on this same screen.
+function LandingStatsPanel() {
+  const [value, setValue] = useState(''); // input field, string while editing
+  const [saved, setSaved] = useState(null); // last known saved number, or null = loading
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    getLandingTotalUsers().then((n) => {
+      setSaved(n);
+      setValue(n == null ? '' : String(n));
+    });
+  }, []);
+
+  const handleSave = async () => {
+    if (value.trim() === '') {
+      notify('Enter a number first.', 'error');
+      return;
+    }
+    setSaving(true);
+    try {
+      await setLandingTotalUsers(value);
+      setSaved(Number(value));
+      notify('Landing page user count updated.', 'success');
+    } catch (e) {
+      notify(e.message || 'Could not save this number.', 'error');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div style={{ padding: 14, borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 18 }}>
+      <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--muted)', marginBottom: 8 }}>LANDING PAGE — TOTAL USERS</div>
+      <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 10, lineHeight: 1.5 }}>
+        Shown as a hero stat on the public (signed-out) landing page. Set this by hand from your own count of
+        students + faculty + providers — the landing page can't safely count these live itself, since that would mean
+        opening those collections to public listing. Update it here whenever you have a fresher number.
+      </div>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <input
+          type="number"
+          min="0"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder="e.g. 1250"
+          style={{
+            flex: '1 1 140px', padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)',
+            background: 'var(--bg)', color: 'var(--text)', fontSize: 13.5, outline: 'none',
+          }}
+        />
+        <button
+          onClick={handleSave}
+          disabled={saving || saved === undefined}
+          className="btn btn-primary"
+          style={{ display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' }}
+        >
+          <Icons.Check size={15} /> Save
+        </button>
+      </div>
+      {saved != null && (
+        <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>
+          Currently live on the landing page: <strong>{saved.toLocaleString('bn-BD')}</strong>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export function BatchesContent() {
   const [batches, setBatches] = useState(null); // null = loading
@@ -133,6 +207,8 @@ export function BatchesContent() {
         <div style={{ color: 'var(--muted)', fontSize: 13 }}>Loading…</div>
       ) : (
         <>
+          <LandingStatsPanel />
+
           <div style={{ padding: 14, borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 18 }}>
             <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--muted)', marginBottom: 8 }}>ADD A NEW BATCH</div>
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>

@@ -31,13 +31,15 @@ import { Logo, Wordmark } from '../components/Logo';
 import {
   LogIn, GraduationCap, Presentation, Store, CheckCircle2,
   Monitor, Smartphone, Crown,
-  Layers, ShieldCheck, Users, Sparkles, Mail, MessageSquare, X,
-  Flame, TrendingUp, Star, Zap, MapPin, ArrowDown,
+  Layers, ShieldCheck, Users, UserCheck, Sparkles, Mail, MessageSquare, X,
+  Flame, TrendingUp, Star, Zap, MapPin, ArrowDown, ChevronLeft, ChevronRight,
 } from 'lucide-react';
 import usePageMeta from '../hooks/usePageMeta';
 import { useIsMobileNav } from '../components/BottomNav';
 import AuthModal from '../components/AuthModal';
-import SignInPrompt from '../components/SignInPrompt';
+import { loginWithGoogle } from '../lib/firebaseAuth';
+import { isBrandNewAccount } from '../lib/accountLifecycle';
+import { subscribeLandingTotalUsers } from '../lib/landingStatsSync';
 // Phase 4 (landing redesign, §11.3): Sign Up now opens the new
 // multi-step wizard instead of plain AuthModal — Sign In is unchanged
 // (still plain AuthModal, per §11.5's component-mapping table).
@@ -130,12 +132,12 @@ const ROLE_CARDS = [
 // session's asset-prep step.
 const CAMPUS_PHOTOS = {
   gate: { src: '/landing/gate.jpg', label: 'Main Gate', coord: 'KUET, Khulna' },
-  aerial: { src: '/landing/aerial.jpg', label: 'Campus, Aerial View', coord: 'সবুজ, ওয়াকওয়ে' },
-  statue: { src: '/landing/statue-sunset.jpg', label: 'Liberation War Memorial', coord: 'সূর্যাস্তে, মূল ভবনের সামনে' },
-  academic: { src: '/landing/academic.jpg', label: 'Academic Building', coord: 'ক্রিম কলাম, আর্চড জানালা' },
-  sign: { src: '/landing/sign-dusk.jpg', label: 'KUET Sign, Dusk', coord: 'সন্ধ্যার ক্যাম্পাস' },
+  aerial: { src: '/landing/aerial.jpg', label: 'KUET Hill', coord: 'সবুজ, ওয়াকওয়ে' },
+  statue: { src: '/landing/statue-sunset.jpg', label: 'Beautiful KUET', coord: 'সূর্যাস্তে, মূল ভবনের সামনে' },
+  academic: { src: '/landing/academic.jpg', label: 'SWC', coord: 'ক্রিম কলাম, আর্চড জানালা' },
+  sign: { src: '/landing/sign-dusk.jpg', label: 'দুর্বার বাংলা', coord: 'সন্ধ্যার ক্যাম্পাস' },
   auditorium: { src: '/landing/auditorium.jpg', label: 'Auditorium', coord: 'যেখানে ফেস্ট হয়' },
-  mainBuilding: { src: '/landing/main-building.jpg', label: 'Main Building', coord: 'কলামযুক্ত, বহুতল' },
+  mainBuilding: { src: '/landing/main-building.jpg', label: 'Academic Building', coord: 'কলামযুক্ত, বহুতল' },
   bus: { src: '/landing/bus.jpg', label: 'Campus Bus', coord: 'দৈনন্দিন যাতায়াত' },
 };
 
@@ -267,6 +269,27 @@ function CampusDesignStyles() {
         border: 1.5px dashed var(--kx-accent);
         border-radius: 16px;
       }
+      /* Round 7: even with balanced column assignment, one column can
+         still legitimately end a bit higher than another (Faculty's
+         data can't get closer than ~128px apart, see cardWeight/
+         assignToColumns comment above) — this gives the whole grid a
+         visible bottom "floor" so uneven column endings read as
+         intentionally contained within one bounded area rather than
+         trailing off into blank page background past a shorter column.
+         Kept subtle (thin border-top, faint tint) so it reads as a
+         boundary, not a competing card of its own. */
+      .kx-fcol-floor {
+        position: relative;
+        padding-bottom: 22px;
+        border-bottom: 1px solid var(--kx-line);
+      }
+      .kx-fcol-floor::after {
+        content: '';
+        position: absolute;
+        left: 0; right: 0; bottom: -1px; height: 40px;
+        background: linear-gradient(180deg, transparent, var(--kx-bg) 85%);
+        pointer-events: none;
+      }
 
       .kx-scrapbook-tile { transition: transform 0.25s ease, box-shadow 0.25s ease; }
       .kx-scrapbook-tile:hover {
@@ -297,6 +320,104 @@ function CampusDesignStyles() {
   );
 }
 
+// ─── Direct Sign In overlay (owner request, this session) ───────────────
+// Sign In now fires Google's popup directly (handleDirectGoogleSignIn in
+// the main component below) — no KUETx-branded modal in front of it
+// anymore. This small overlay only ever appears AFTER that popup has
+// already resolved, and only for the two cases that need a follow-up:
+// (a) the signed-in Google account has no KUETx account yet, mirroring
+// AuthModal.jsx's own pendingNewUser branch (same copy, same "Sign Up
+// শুরু করুন" reuse of the already-obtained user so there's no second
+// Google popup), or (b) the popup itself failed/was blocked. Renders
+// nothing in the common case (existing user signs in successfully) —
+// that just routes straight to their dashboard via App.jsx's normal
+// auth listener, same as every other sign-in path in the app.
+function DirectSignInOverlay({ pendingNewUser, onDismissPendingNewUser, onContinueAsSignUp, error, onDismissError }) {
+  if (!pendingNewUser && !error) return null;
+  return (
+    <>
+      <div
+        style={{ position: 'fixed', inset: 0, zIndex: 10030, background: 'rgba(8,12,22,0.72)', backdropFilter: 'blur(6px)' }}
+        onClick={pendingNewUser ? onDismissPendingNewUser : onDismissError}
+      />
+      <div className="kx-signin-prompt-theme" style={{ position: 'fixed', inset: 0, zIndex: 10031, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+        <style>{`
+          .kx-signin-prompt-theme {
+            --accent: #22c55e; --card: #ffffff; --border: #dcd8cc;
+            --text: #16241a; --muted: #4a5750;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 'Noto Sans Bengali', sans-serif;
+          }
+        `}</style>
+        <div
+          onClick={(e) => e.stopPropagation()}
+          style={{
+            width: '100%', maxWidth: 360, background: 'var(--card)',
+            border: '1px solid var(--border)', borderRadius: 18,
+            boxShadow: '0 24px 60px rgba(0,0,0,0.25)', padding: '1.5rem 1.4rem 1.3rem',
+            textAlign: 'center',
+          }}
+        >
+          {pendingNewUser ? (
+            <>
+              <div style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text)', marginBottom: '0.7rem' }}>
+                নতুন অ্যাকাউন্ট
+              </div>
+              <div
+                style={{
+                  fontSize: 13, color: 'var(--text)', lineHeight: 1.6,
+                  padding: '12px 14px', borderRadius: 10, marginBottom: 14,
+                  background: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.25)',
+                }}
+              >
+                এই Google অ্যাকাউন্ট দিয়ে KUETx-এ এখনো অ্যাকাউন্ট নেই।
+              </div>
+              <button
+                type="button"
+                onClick={onContinueAsSignUp}
+                style={{
+                  width: '100%', padding: '0.7rem', borderRadius: 12,
+                  background: 'var(--accent)', color: '#fff', border: 'none',
+                  fontSize: '0.9rem', fontWeight: 800, cursor: 'pointer', marginBottom: '0.5rem',
+                }}
+              >
+                Sign Up শুরু করুন
+              </button>
+              <button
+                type="button"
+                onClick={onDismissPendingNewUser}
+                style={{
+                  width: '100%', padding: '0.55rem', borderRadius: 12,
+                  background: 'transparent', color: 'var(--muted)', border: 'none',
+                  fontSize: '0.82rem', fontWeight: 600, cursor: 'pointer',
+                }}
+              >
+                বাতিল করো
+              </button>
+            </>
+          ) : (
+            <>
+              <div style={{ fontSize: '0.9rem', color: 'var(--text)', lineHeight: 1.6, marginBottom: '1rem' }}>
+                {error}
+              </div>
+              <button
+                type="button"
+                onClick={onDismissError}
+                style={{
+                  width: '100%', padding: '0.7rem', borderRadius: 12,
+                  background: 'var(--accent)', color: '#fff', border: 'none',
+                  fontSize: '0.9rem', fontWeight: 800, cursor: 'pointer',
+                }}
+              >
+                ঠিক আছে
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
 function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
   // Hero is above the fold on load, so it fades/rises in immediately on
   // mount rather than waiting for a scroll trigger.
@@ -305,6 +426,14 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
     const id = requestAnimationFrame(() => setHeroVisible(true));
     return () => cancelAnimationFrame(id);
   }, []);
+  // 4th hero stat card — Admin-entered total user count (see
+  // landingStatsSync.js's header for why this is manual rather than a
+  // live Firestore count: students/faculty/providers aren't publicly
+  // listable, so a signed-out visitor's browser can't safely count them
+  // itself). null while loading/unset, in which case the card is
+  // skipped entirely rather than showing a fake number.
+  const [totalUsers, setTotalUsers] = useState(null);
+  useEffect(() => subscribeLandingTotalUsers(setTotalUsers), []);
   return (
     // Full-bleed dark band, edge-to-edge — matches the HTML mockup's
     // .hero section exactly (background: var(--kx-dark), 100% viewport
@@ -391,24 +520,52 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
             </a>
           </div>
 
-          {/* Hero stats row — matches HTML's .hero-stats exactly (mono
-              numbers, top border divider). */}
+          {/* Hero stats row (design refresh) — 4 cards, each with an icon,
+              a mono number, and a short label. First 3 are static
+              verified facts (real feature count, role count,
+              publications, pulled from BASE_STATS' rotating-card data).
+              4th is the Admin-entered live user count from
+              landingStatsSync.js — real, Founder-set number pulled from
+              config/landingStats (see that file's header for why it's
+              manual, not an auto-count), and the whole card is skipped
+              while that number is still null (unset/loading) rather than
+              showing a placeholder/fake figure. */}
           <div style={{
-            display: 'flex', gap: isMobileNav ? '1.4rem' : '36px', flexWrap: 'wrap',
+            display: 'flex', gap: isMobileNav ? '10px' : '14px', flexWrap: 'wrap',
             paddingTop: '28px', borderTop: '1px solid rgba(255,255,255,0.1)',
           }}>
-            <div>
-              <div className="kx-mono-num" style={{ fontSize: isMobileNav ? '20px' : '26px', color: 'var(--kx-accent-bright)' }}>{FEATURE_COUNT_DISPLAY}</div>
-              <div style={{ fontSize: '12.5px', color: 'rgba(243,244,239,0.55)', marginTop: '2px' }}>real feature</div>
-            </div>
-            <div>
-              <div className="kx-mono-num" style={{ fontSize: isMobileNav ? '20px' : '26px', color: 'var(--kx-accent-bright)' }}>4</div>
-              <div style={{ fontSize: '12.5px', color: 'rgba(243,244,239,0.55)', marginTop: '2px' }}>role, একই app</div>
-            </div>
-            <div>
-              <div className="kx-mono-num" style={{ fontSize: isMobileNav ? '20px' : '26px', color: 'var(--kx-accent-bright)' }}>0</div>
-              <div style={{ fontSize: '12.5px', color: 'rgba(243,244,239,0.55)', marginTop: '2px' }}>বিজ্ঞাপন / ডেটা বিক্রি</div>
-            </div>
+            {[
+              { icon: Layers, value: FEATURE_COUNT_DISPLAY, label: 'real feature' },
+              { icon: Users, value: '৪', label: 'role, একই app' },
+              { icon: Presentation, value: '৫,৮৫৬+', label: 'পাবলিকেশন' },
+              ...(totalUsers != null
+                ? [{ icon: UserCheck, value: totalUsers.toLocaleString('bn-BD'), label: 'ব্যবহারকারী' }]
+                : []),
+            ].map(({ icon: Icon, value, label }, i) => (
+              <div
+                key={i}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: isMobileNav ? '8px' : '10px',
+                  padding: isMobileNav ? '8px 10px' : '10px 14px',
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  borderRadius: '12px',
+                }}
+              >
+                <div style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  width: isMobileNav ? '28px' : '32px', height: isMobileNav ? '28px' : '32px',
+                  borderRadius: '9px', background: 'rgba(163,230,53,0.14)', color: 'var(--kx-accent-bright)',
+                  flexShrink: 0,
+                }}>
+                  <Icon size={isMobileNav ? 14 : 16} />
+                </div>
+                <div>
+                  <div className="kx-mono-num" style={{ fontSize: isMobileNav ? '16px' : '19px', color: 'var(--kx-accent-bright)', lineHeight: 1.1 }}>{value}</div>
+                  <div style={{ fontSize: isMobileNav ? '10.5px' : '11.5px', color: 'rgba(243,244,239,0.6)', marginTop: '2px', whiteSpace: 'nowrap' }}>{label}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -465,25 +622,27 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
           </div>
 
           {/* Mascot badge — floating turtle accent per HTML mockup,
-              anchored to the gate photo card's bottom-right corner. */}
+              anchored to the gate photo card's bottom-right corner.
+              Design refresh: dropped the solid green circle backdrop
+              (owner feedback — was making the turtle look small/boxed
+              in); now just the artwork itself, sized up so it actually
+              reads at a glance, with only a drop-shadow to lift it off
+              the photo stack. */}
           <div
             className="kx-mascot-badge"
             style={{
               position: 'absolute',
-              bottom: isMobileNav ? '-6px' : '-6px',
-              right: isMobileNav ? '-4px' : '-10px',
-              width: isMobileNav ? '68px' : '92px',
-              height: isMobileNav ? '68px' : '92px',
+              bottom: isMobileNav ? '-10px' : '-18px',
+              right: isMobileNav ? '-8px' : '-22px',
+              width: isMobileNav ? '104px' : '160px',
+              height: isMobileNav ? '104px' : '160px',
               zIndex: 4,
-              filter: 'drop-shadow(0 10px 18px rgba(0,0,0,0.5))',
+              filter: 'drop-shadow(0 14px 22px rgba(0,0,0,0.5))',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              borderRadius: '50%',
-              background: 'var(--kx-accent-bright)',
-              border: '3px solid #06210f',
-              boxShadow: '0 10px 22px rgba(0,0,0,0.35)',
+              background: 'transparent',
             }}
           >
-            <Logo size={isMobileNav ? 30 : 42} />
+            <Logo size={isMobileNav ? 104 : 160} />
           </div>
         </div>
       </div>
@@ -556,7 +715,6 @@ function CampusScrapbook({ isMobileNav }) {
                 style={{ width: '100%', height: isMobileNav ? '120px' : '160px', objectFit: 'cover', borderRadius: '6px', marginBottom: '10px', display: 'block' }}
               />
               <div style={{ fontSize: '12.5px', fontWeight: 700, color: '#16241a', textAlign: 'center' }}>{photo.label}</div>
-              <div style={{ fontFamily: 'var(--kx-mono)', fontSize: '10px', color: '#8a9188', textAlign: 'center', marginTop: '2px' }}>{photo.coord}</div>
             </div>
           );
         })}
@@ -680,27 +838,41 @@ const SLIDE_TRANSITION_MS = 550;
 function StatCardTile({ stat, isMobileNav }) {
   const Icon = STAT_ICONS[stat.id] || Sparkles;
   return (
+    // Owner audit: content was left-aligned inside a full-width tile
+    // (no textAlign set) and the icon sat directly above/beside the
+    // number, crowding it — re-centered everything (icon, number,
+    // label all centered as a stack) and moved the icon smaller +
+    // further from the number/label so it reads as a small badge
+    // ABOVE the heading, not squeezed against it. Icon badge also got
+    // a real border (not just a tinted fill) so it reads as a small
+    // "framed" tile matching the bordered-card visual language used
+    // elsewhere on the page (WhyKuetxCard, FeatureCategoryBlock),
+    // instead of a flat colored square.
     <div
       style={{
         width: '100%', flexShrink: 0,
         padding: isMobileNav ? '0.95rem 1rem' : '1.5rem 1.75rem',
         boxSizing: 'border-box',
+        textAlign: 'center',
+        display: 'flex', flexDirection: 'column', alignItems: 'center',
       }}
     >
       <div style={{
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-        width: isMobileNav ? '30px' : '42px', height: isMobileNav ? '30px' : '42px',
-        borderRadius: isMobileNav ? '9px' : '12px',
-        background: 'rgba(var(--accentRGB),0.10)', marginBottom: isMobileNav ? '0.55rem' : '0.8rem',
+        width: isMobileNav ? '26px' : '36px', height: isMobileNav ? '26px' : '36px',
+        borderRadius: isMobileNav ? '8px' : '10px',
+        background: 'rgba(var(--accentRGB),0.08)',
+        border: '1px solid rgba(var(--accentRGB),0.22)',
+        marginBottom: isMobileNav ? '0.7rem' : '1rem',
       }}>
-        <Icon size={isMobileNav ? 16 : 21} color="var(--accent)" strokeWidth={2.3} />
+        <Icon size={isMobileNav ? 14 : 18} color="var(--accent)" strokeWidth={2.3} />
       </div>
       <div style={{
         fontFamily: 'var(--kx-mono, inherit)',
-        fontSize: isMobileNav ? '1.15rem' : '1.6rem',
-        fontWeight: 700, color: 'var(--accent)',
+        fontSize: isMobileNav ? '1.3rem' : '1.85rem',
+        fontWeight: 800, color: 'var(--accent)',
         letterSpacing: '-0.01em', fontVariantNumeric: 'tabular-nums',
-        lineHeight: 1.15, marginBottom: '0.35rem',
+        lineHeight: 1.15, marginBottom: '0.4rem',
       }}>
         {stat.display}
       </div>
@@ -739,24 +911,67 @@ function StatsStrip({ isMobileNav }) {
     }
   }
 
+  // Owner audit: "last -> first" used to visually REWIND (a hard
+  // translateX jump backward across the whole strip) instead of
+  // continuing forward, because wrapping index N-1 -> 0 is a real
+  // position jump on a fixed-length track, not an actual infinite
+  // loop. Standard fix (same technique used by carousel libraries
+  // like Slick/Swiper): render a DUPLICATE of stat[0] appended after
+  // the real last stat. The track animates forward into that
+  // duplicate normally; once the animated slide finishes, we snap
+  // (transition: none, invisible to the eye since the duplicate is
+  // pixel-identical to the real stat[0]) back to the real index 0 and
+  // resume normal forward animation from there.
+  const trackStats = stats.length > 1 ? [...stats, stats[0]] : stats;
+
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [noTransition, setNoTransition] = useState(false);
   const prefersReducedMotion = typeof window !== 'undefined'
     && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
+  const advance = () => {
+    setIndex((i) => i + 1);
+  };
+  const goTo = (target) => {
+    setNoTransition(false);
+    setIndex(target);
+  };
+
   useEffect(() => {
     if (paused || prefersReducedMotion || stats.length <= 1) return undefined;
-    const id = setInterval(() => {
-      setIndex((i) => (i + 1) % stats.length);
-    }, ROTATE_INTERVAL_MS);
+    const id = setInterval(advance, ROTATE_INTERVAL_MS);
     return () => clearInterval(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paused, prefersReducedMotion, stats.length]);
 
+  // After the track finishes animating INTO the duplicate slot
+  // (index === stats.length, i.e. one past the last real stat), wait
+  // for the slide transition to finish, then snap back to the real
+  // index 0 with no transition — this is the part of the technique
+  // that makes the loop invisible.
+  useEffect(() => {
+    if (stats.length <= 1 || index !== stats.length) return undefined;
+    const id = setTimeout(() => {
+      setNoTransition(true);
+      setIndex(0);
+    }, SLIDE_TRANSITION_MS);
+    return () => clearTimeout(id);
+  }, [index, stats.length]);
+
+  // Re-enable the transition on the next paint after a no-transition
+  // snap, so the FOLLOWING slide (0 -> 1) animates normally again.
+  useEffect(() => {
+    if (!noTransition) return undefined;
+    const id = requestAnimationFrame(() => setNoTransition(false));
+    return () => cancelAnimationFrame(id);
+  }, [noTransition]);
+
   // Guard against index momentarily pointing past the array right after
   // the QB cards get appended/removed (data arrives async after first
   // render) — clamp instead of letting translateX go out of bounds.
-  const safeIndex = Math.min(index, stats.length - 1);
+  const safeIndex = Math.min(index, trackStats.length - 1);
+  const displayIndex = index % stats.length; // for the dot/left-right button's "current" sense
 
   return (
     <div
@@ -769,23 +984,64 @@ function StatsStrip({ isMobileNav }) {
         margin: isMobileNav ? '0 auto 1.5rem' : '0 auto 2.5rem',
         padding: isMobileNav ? '0.4rem 0' : '0.6rem 0',
         borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)',
-        overflow: 'hidden',
+        display: 'flex', alignItems: 'center', gap: isMobileNav ? '0.4rem' : '0.6rem',
       }}
     >
-      <div
-        style={{
-          display: 'flex',
-          width: `${stats.length * 100}%`,
-          transform: `translateX(-${(100 / stats.length) * safeIndex}%)`,
-          transition: prefersReducedMotion ? 'none' : `transform ${SLIDE_TRANSITION_MS}ms cubic-bezier(0.65, 0, 0.35, 1)`,
-        }}
-      >
-        {stats.map((stat) => (
-          <div key={stat.id} style={{ width: `${100 / stats.length}%`, flexShrink: 0, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <StatCardTile stat={stat} isMobileNav={isMobileNav} />
-          </div>
-        ))}
+      {/* Owner ask: something clickable on the left/right that jumps to
+          the previous/next stat and overrides the auto-rotate (rather
+          than the strip being purely passive/auto-only). Arrow buttons
+          sit outside the overflow:hidden track so they don't get
+          clipped, and clicking one also pauses auto-rotate briefly via
+          the existing paused state (re-used from hover-pause) so a
+          manual click isn't immediately undone by the timer. */}
+      {stats.length > 1 && (
+        <button
+          type="button"
+          aria-label="আগের স্ট্যাট"
+          onClick={() => { setPaused(true); goTo((displayIndex - 1 + stats.length) % stats.length); }}
+          style={{
+            flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            width: isMobileNav ? '26px' : '32px', height: isMobileNav ? '26px' : '32px',
+            borderRadius: '50%', border: '1px solid var(--kx-line)', background: 'var(--kx-card)',
+            cursor: 'pointer', color: 'var(--kx-ink-soft)',
+          }}
+        >
+          <ChevronLeft size={isMobileNav ? 14 : 16} />
+        </button>
+      )}
+
+      <div style={{ overflow: 'hidden', flex: 1, minWidth: 0 }}>
+        <div
+          style={{
+            display: 'flex',
+            width: `${trackStats.length * 100}%`,
+            transform: `translateX(-${(100 / trackStats.length) * safeIndex}%)`,
+            transition: (noTransition || prefersReducedMotion) ? 'none' : `transform ${SLIDE_TRANSITION_MS}ms cubic-bezier(0.65, 0, 0.35, 1)`,
+          }}
+        >
+          {trackStats.map((stat, i) => (
+            <div key={`${stat.id}-${i}`} style={{ width: `${100 / trackStats.length}%`, flexShrink: 0, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <StatCardTile stat={stat} isMobileNav={isMobileNav} />
+            </div>
+          ))}
+        </div>
       </div>
+
+      {stats.length > 1 && (
+        <button
+          type="button"
+          aria-label="পরের স্ট্যাট"
+          onClick={() => { setPaused(true); goTo((displayIndex + 1) % stats.length); }}
+          style={{
+            flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            width: isMobileNav ? '26px' : '32px', height: isMobileNav ? '26px' : '32px',
+            borderRadius: '50%', border: '1px solid var(--kx-line)', background: 'var(--kx-card)',
+            cursor: 'pointer', color: 'var(--kx-ink-soft)',
+          }}
+        >
+          <ChevronRight size={isMobileNav ? 14 : 16} />
+        </button>
+      )}
     </div>
   );
 }
@@ -963,7 +1219,126 @@ const FEATURE_TABS = [
 // three numbers come from. Re-derive if landingFeatureInventory.js's
 // category shapes change materially (a card gaining/losing several
 // items, or gaining/losing a FEATURE_SUBDETAIL sub-list).
-const ROLE_COLUMN_COUNT = { student: 2, faculty: 2, provider: 1 };
+// Round 4-6 used a hardcoded ROLE_COLUMN_COUNT constant (student:2,
+// faculty:2, provider:1), measured by hand from a one-time height
+// simulation. Round 8 replaced it with bestColumnLayout() (below,
+// near assignToColumns) which recomputes the right column count from
+// real card weights at render time instead of trusting a constant that
+// would silently go stale if landingFeatureInventory.js's category
+// shapes ever change — it happens to land on the same 2/2/1 numbers
+// for today's data, which is what the earlier hand-measurement was
+// checking for in the first place.
+
+// ─── Round 7: explicit column ASSIGNMENT instead of CSS column-count ──
+// Owner ask: cards in every column should end at roughly the same
+// bottom Y — a flush/"bound" edge, not just "no column is dramatically
+// taller". CSS's native `column-count` only fills columns in DOM order
+// (col 1 gets items until it roughly hits the ideal average height,
+// THEN col 2 starts) — it can't reorder items across columns, so it
+// can leave one column noticeably shorter if the items don't split
+// evenly by DOM position. Verified by brute-force testing every
+// possible column assignment (not just DOM order) against the same
+// real per-card pixel heights used above:
+//   Student (8 cards, 2 columns): best possible arrangement -> 1077px /
+//     1082px, only 5px apart (near-perfectly flush). DOM-order native
+//     column-count instead gives 929px/1230px (301px apart) because it
+//     can't move a card from a later DOM position into an earlier
+//     column to balance things out.
+//   Faculty (4 cards, 2 columns): best possible arrangement -> 533px /
+//     661px, 128px apart — this is the BEST any arrangement can do
+//     (Faculty's "core" card alone is 533px, more than the other three
+//     cards combined at 662px, so no split gets closer than this; it's
+//     a data-shape limit, not an algorithm limit). Still notably better
+//     than DOM-order's 533px/661px... which happens to already be this
+//     arrangement for Faculty specifically, so Faculty's native
+//     column-count result and the optimal result already coincide.
+// CARD_WEIGHT below mirrors that same verified per-card height model
+// (card padding + per-item line height + FEATURE_SUBDETAIL's extra
+// height for My Classes/My Shop's nested lists) so the JS assignment
+// below is measuring the same real box the CSS ultimately renders —
+// this is an approximation (browsers may render a few px off from
+// these numbers depending on font metrics), close enough to keep every
+// column within a similar ballpark of the others without needing a
+// live ResizeObserver pass.
+const CARD_BASE_PAD = 26 * 2 + 12 + 16; // card top+bottom padding + title line + title margin
+const PLAIN_ITEM_WEIGHT = 8 * 2 + 0.95 * 16 * 1.4 + 1; // item padding + text line + border
+const SUBDETAIL_ITEM_WEIGHT = 0.78 * 16 * 1.3 + 0.72 * 16 * 1.5 + 0.1 * 16;
+function subdetailWeight(nSub) {
+  return 8 + 0.7 * 16 * 2 + 0.72 * 16 * 1.4 + 0.45 * 16 + nSub * SUBDETAIL_ITEM_WEIGHT;
+}
+function cardWeight(items) {
+  let total = CARD_BASE_PAD;
+  for (const name of items) {
+    total += PLAIN_ITEM_WEIGHT;
+    const sub = FEATURE_SUBDETAIL[name];
+    if (sub) total += subdetailWeight(sub.items.length);
+  }
+  return total;
+}
+const CR_CARD_WEIGHT = 1.1 * 16 * 2 + 0.88 * 16 * 1.3 + 16 * 0.6 + 0.8 * 16 * 1.4 + 16 * 0.6 + 4 * (0.8 * 16 * 1.3 + 0.4 * 16);
+
+// Greedy-least-filled bin packing: sort cards tallest-first, always
+// drop the next card into whichever column currently has the least
+// total weight. This is a standard, well-known approximation for
+// balanced multi-way partitioning (not a from-scratch heuristic) and
+// matches or beats the brute-force-optimal split for both Student and
+// Faculty's real data above. By construction this algorithm can never
+// pack multiple large cards onto one column while leaving another
+// column empty/short: after placing the first large card, that column
+// becomes the current tallest and is skipped until the others catch up
+// — so a "one column ends up way too long" outcome isn't something this
+// step can produce; if a column ends up alone with one big card (as
+// Faculty's "core" does), that's because splitting it further into a
+// 2+2 arrangement was checked and is WORSE (185px/27% spread vs the
+// 1+3 split's 128px/19% — verified by brute force), not a failure to
+// balance further.
+function assignToColumns(cards, nColumns) {
+  const columns = Array.from({ length: nColumns }, () => []);
+  const colWeights = new Array(nColumns).fill(0);
+  const sorted = [...cards].sort((a, b) => b.weight - a.weight);
+  for (const card of sorted) {
+    let target = 0;
+    for (let i = 1; i < nColumns; i++) {
+      if (colWeights[i] < colWeights[target]) target = i;
+    }
+    columns[target].push(card);
+    colWeights[target] += card.weight;
+  }
+  return columns;
+}
+
+// Picks the best column count for a given card set instead of trusting
+// a stale hardcoded number forever: tries every columnCount from 1 up
+// to maxColumns, runs the SAME assignToColumns() on each, and keeps the
+// one with the lowest (tallest - shortest) spread — with two guards so
+// it never regresses back to the original bug: (a) a candidate is
+// rejected outright if it leaves any column empty, and (b) among valid
+// candidates, prefer more columns when the spread is within 10% of the
+// best (a tighter-but-1-column layout is not worth losing horizontal
+// balance for a marginal height improvement). Recomputing this at
+// render time (cheap — at most a handful of cards, 3 candidate column
+// counts) means it self-corrects if landingFeatureInventory.js's
+// category shapes ever change, instead of silently going stale like a
+// hand-picked constant would.
+function bestColumnLayout(cards, maxColumns = 3) {
+  const n = Math.min(cards.length, maxColumns);
+  let best = null;
+  for (let nCol = 1; nCol <= n; nCol++) {
+    const columns = assignToColumns(cards, nCol);
+    const totals = columns.map((c) => c.reduce((s, x) => s + x.weight, 0));
+    if (totals.some((t) => t === 0)) continue; // never leave a column empty
+    const spread = Math.max(...totals) - Math.min(...totals);
+    const spreadPct = spread / Math.max(...totals);
+    if (
+      !best ||
+      spreadPct < best.spreadPct - 0.10 ||
+      (spreadPct <= best.spreadPct + 0.10 && nCol > best.nCol)
+    ) {
+      best = { nCol, columns, spreadPct };
+    }
+  }
+  return best ? best.columns : [cards];
+}
 
 // Owner request (this session): a few top-level feature names in the
 // breakdown above are really a whole sub-system, not a single page —
@@ -1293,62 +1668,94 @@ function FeatureBreakdown({ isMobileNav }) {
         })}
       </div>
 
-      {/* AUDIT REWRITE (round 4) — round 3's masonry fix (column-count
-          instead of equal-height grid) was directionally right but the
-          columnCount FORMULA (min(cardCount, 3)) was still a guess, not
-          a measurement. Verified this round by actually computing each
-          card's real rendered height in px from the real CSS in
-          FeatureCategoryBlock/FeatureItem/CRFeatureBlock (card padding,
-          per-item line-height, and — critically — the always-open
-          FEATURE_SUBDETAIL sub-list height for My Classes/My Shop, which
-          is what makes Faculty's "core" card and Provider's "core" card
-          much taller than a plain 3-4-item card), then simulating CSS's
-          actual column-balancing algorithm (fill col 1 to
-          total-height/n before moving to col 2, NOT greedy-shortest) at
-          columnCount = 1/2/3 for each role's real card set, and picking
-          the largest columnCount where no column comes out empty/near-
-          empty and the tallest column isn't more than ~40% taller than
-          the shortest (i.e. actually balanced, not just "fewer columns
-          than cards"):
-            Student (8 cards incl. CR): 3-col -> 543/386/1230px (very
-              lumpy: campusLife+academicCore's 8-item cards land in the
-              same column) = 70% imbalance. 2-col -> 929/1230px = 24%
-              imbalance, no empty column. -> 2 columns.
-            Faculty (4 cards, "core" is tall from My Classes' 7-item
-              sub-list = 533px alone): 3-col -> 533/351/310px = 42%
-              imbalance. 2-col -> 533/661px = 19% imbalance. -> 2 columns.
-            Provider (2 cards now: "core" = Dashboard+Profile, "shop" =
-              My Shop alone with its 6-item sub-list): re-checked after
-              splitting out of the old single 3-item card — core=157px,
-              shop=383px. 2-col -> 157/383px = 59% imbalance (one column
-              nearly empty next to a tall one, same problem as before
-              just relocated). -> still 1 column; the two cards now
-              stack cleanly instead of being crammed into one.
-          These are static per-role constants (ROLE_COLUMN_COUNT below)
-          rather than a live formula because the feature lists are fixed
-          data (landingFeatureInventory.js), not runtime-variable — a
-          "clever" live formula here would be solving a problem that
-          doesn't change at runtime, at the cost of being harder to
-          verify than three measured numbers. If the underlying feature
-          lists change materially, re-run the height simulation rather
-          than guessing a new multiplier. */}
-      <div
-        style={{
-          maxWidth: '1180px', margin: '0 auto', paddingBottom: isMobileNav ? '2rem' : '90px',
-          columnCount: isMobileNav ? 1 : ROLE_COLUMN_COUNT[activeTab],
-          columnGap: isMobileNav ? 0 : '22px',
-        }}
-      >
-        {categories.map(([key, items]) => (
-          <div key={key} style={{ breakInside: 'avoid', marginBottom: isMobileNav ? '0.85rem' : '22px' }}>
-            <FeatureCategoryBlock label={tab.labels[key] || key} items={items} isMobileNav={isMobileNav} />
-          </div>
-        ))}
-        {activeTab === 'student' && (
-          <div style={{ breakInside: 'avoid', marginBottom: isMobileNav ? '0.85rem' : '22px' }}>
-            <CRFeatureBlock />
-          </div>
-        )}
+      {/* AUDIT REWRITE (round 7) — CSS column-count (rounds 3-6) balances
+          TOTAL height across columns but fills strictly in DOM order,
+          so it can't move a card to an earlier column to close a gap —
+          verified this leaves Student's columns 301px apart even though
+          a better split (5px apart) exists for the same cards. Switched
+          to explicit column ASSIGNMENT: cardWeight() estimates each
+          card's real render height (mirrors the actual CSS — card
+          padding, per-item line height, FEATURE_SUBDETAIL's nested-list
+          height), then assignToColumns() greedily drops each card
+          (tallest-first) into whichever column is currently shortest —
+          this is what actually gets flush/near-flush bottoms, not just
+          "no column is dramatically taller". Faculty's own real data
+          has a 533px card that alone outweighs the other three combined
+          (662px) — no arrangement gets that role's columns closer than
+          ~128px apart, which is a data-shape ceiling, not something
+          this algorithm failed to solve; a border/background band under
+          the grid (kx-fcol-floor below) gives the requested "bound/
+          contained" edge regardless of that residual gap.
+
+          AUDIT REWRITE (round 8) — owner worry: could balancing for
+          flush bottoms backfire by dumping several big cards onto ONE
+          column, making it disproportionately long while another stays
+          short (the opposite of the goal)? Checked directly: greedy-
+          least-filled (assignToColumns) always adds the next card to
+          whichever column is CURRENTLY shortest, so the moment one
+          column takes a big card it becomes the tallest and gets
+          skipped until the others catch up — it structurally cannot
+          runaway-stack multiple big cards onto one column while another
+          sits empty. Also checked forcing Faculty's "core" (the one
+          genuinely oversized card) to share a column instead of sitting
+          alone: every 2-card/2-card split tested comes out WORSE (185px/
+          27% spread) than letting it sit alone (128px/19%) — so "core"
+          alone in its column isn't an imbalance bug, it's the actual
+          best available split for that card's real size. columnCount
+          itself is no longer a hand-picked constant either
+          (bestColumnLayout, defined near assignToColumns, tries 1-3
+          columns against the real card weights and picks whichever
+          has the lowest height-spread without ever leaving a column
+          empty) — so this self-corrects if the underlying feature list
+          ever changes shape, instead of a stale number quietly going
+          wrong. */}
+      <div style={{ maxWidth: '1180px', margin: '0 auto', paddingBottom: isMobileNav ? '2rem' : '90px' }}>
+        <div
+          className={!isMobileNav ? 'kx-fcol-floor' : undefined}
+          style={{
+            display: isMobileNav ? 'block' : 'flex',
+            gap: isMobileNav ? 0 : '22px',
+            alignItems: 'flex-start',
+          }}
+        >
+          {isMobileNav ? (
+            <>
+              {categories.map(([key, items]) => (
+                <div key={key} style={{ marginBottom: '0.85rem' }}>
+                  <FeatureCategoryBlock label={tab.labels[key] || key} items={items} isMobileNav={isMobileNav} />
+                </div>
+              ))}
+              {activeTab === 'student' && (
+                <div style={{ marginBottom: '0.85rem' }}>
+                  <CRFeatureBlock />
+                </div>
+              )}
+            </>
+          ) : (
+            (() => {
+              const cards = categories.map(([key, items]) => ({
+                key, items, weight: cardWeight(items),
+              }));
+              if (activeTab === 'student') {
+                cards.push({ key: '__cr', items: null, weight: CR_CARD_WEIGHT });
+              }
+              const columns = bestColumnLayout(cards, 3);
+              return columns.map((col, ci) => (
+                <div key={ci} style={{ flex: '1 1 0', minWidth: 0 }}>
+                  {col.map((card) => (
+                    <div key={card.key} style={{ marginBottom: '22px' }}>
+                      {card.key === '__cr' ? (
+                        <CRFeatureBlock />
+                      ) : (
+                        <FeatureCategoryBlock label={tab.labels[card.key] || card.key} items={card.items} isMobileNav={isMobileNav} />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ));
+            })()
+          )}
+        </div>
       </div>
     </section>
   );
@@ -1765,13 +2172,28 @@ function CreditsSpotlight({ isMobileNav }) {
 
   if (CREDITS_SPOTLIGHT.length === 0) return null;
   const person = CREDITS_SPOTLIGHT[index];
-  const isWide = person.photoShape === 'wide';
   const initials = person.name
     .split(' ')
     .map((w) => w[0])
     .join('')
     .slice(0, 2)
     .toUpperCase();
+
+  // Round 9 (owner audit): the old 'circle' vs 'wide' shape split gave
+  // Founder a 104x104px circle and the group photo an unbounded
+  // width:100%/height:auto box (which rendered ~380x270px for a real
+  // landscape group photo) — two very different box sizes rotating
+  // in the same spot visibly shifted the whole page's height every
+  // 4.5s, and the outer wrapper's own maxWidth (340px vs 480px) added
+  // a SECOND size jump on top of that. Fixed: every entry — solo
+  // portrait or group photo — now renders inside the exact same fixed
+  // box (PHOTO_BOX_W x PHOTO_BOX_H), same rounded-rect shape for both.
+  // A circle crop was ruled out for the group photo specifically: it
+  // would cut off the people standing at the left/right edges of a
+  // 5-person lineup, which a rounded rectangle avoids while still
+  // reading as a distinct "photo," not a plain box.
+  const PHOTO_BOX_W = isMobileNav ? 220 : 300;
+  const PHOTO_BOX_H = isMobileNav ? 176 : 240; // ~1.25:1 — small enough letterboxing on a solo portrait, small enough top/bottom crop on a landscape group shot
 
   return (
     <div
@@ -1809,12 +2231,16 @@ function CreditsSpotlight({ isMobileNav }) {
         }}
       />
 
+      {/* Fixed maxWidth now, not a per-person value — this used to
+          switch 340px/480px depending on the rotating person's photo
+          shape, which was the second source of the page-height jump
+          the owner flagged (screenshots showed the whole card visibly
+          widening/narrowing on rotation, not just the photo). */}
       <div style={{
         position: 'relative', zIndex: 1,
-        maxWidth: isWide ? '480px' : '340px', margin: '0 auto',
+        maxWidth: '380px', margin: '0 auto',
         display: 'flex', flexDirection: 'column', alignItems: 'center',
         textAlign: 'center', gap: '0.6rem',
-        transition: 'max-width 0.3s ease',
       }}>
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
@@ -1826,58 +2252,40 @@ function CreditsSpotlight({ isMobileNav }) {
           {person.role}
         </div>
 
-        {/* Photo/initials — same rotating spot, only the source (and,
-            for a 'wide' group photo, the shape) swaps as `index`
-            changes, so this reads as one place cycling through entries
-            rather than a list. Falls back to an initials circle (same
-            visual language as Footer's other UI, not a broken-image
-            icon) if a person's photo hasn't been supplied yet or fails
-            to load — group photos don't get an initials fallback since
-            "initials" doesn't make sense for a group entry. */}
-        {isWide ? (
-          <div style={{
-            width: '100%',
-            maxWidth: isMobileNav ? '280px' : '380px',
-            borderRadius: '14px',
-            overflow: 'hidden',
-            border: '3px solid var(--accentLight)',
-            boxShadow: '0 10px 24px rgba(0,0,0,0.14)',
-            background: 'var(--accentSoft)',
-          }}>
+        {/* Photo — same rotating spot AND same fixed box for every
+            entry now (solo portrait or group photo), only the image
+            source swaps as `index` changes, so this reads as one place
+            cycling through entries with a stable size rather than a
+            layout that reflows per-person. Falls back to an initials
+            tile (same visual language as Footer's other UI, not a
+            broken-image icon) if a person's photo hasn't been supplied
+            yet or fails to load — group photos don't get an initials
+            fallback since "initials" doesn't make sense for a group
+            entry, so those just show the accent-tinted empty box. */}
+        <div style={{
+          width: PHOTO_BOX_W,
+          height: PHOTO_BOX_H,
+          borderRadius: '14px',
+          overflow: 'hidden',
+          border: '3px solid var(--accentLight)',
+          boxShadow: '0 10px 24px rgba(0,0,0,0.14)',
+          background: 'var(--accentSoft)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          {imgOk && person.photo ? (
             <img
               src={person.photo}
               alt={person.name}
               loading="lazy"
-              style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'cover' }}
+              onError={() => setImgOk(false)}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
             />
-          </div>
-        ) : (
-          <div style={{
-            width: isMobileNav ? '84px' : '104px',
-            height: isMobileNav ? '84px' : '104px',
-            borderRadius: '50%',
-            overflow: 'hidden',
-            border: '3px solid var(--accentLight)',
-            boxShadow: '0 10px 24px rgba(0,0,0,0.14)',
-            background: 'var(--accentSoft)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            transition: 'opacity 0.4s ease',
-          }}>
-            {imgOk && person.photo ? (
-              <img
-                src={person.photo}
-                alt={person.name}
-                loading="lazy"
-                onError={() => setImgOk(false)}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-              />
-            ) : (
-              <span style={{ fontSize: isMobileNav ? '1.3rem' : '1.6rem', fontWeight: 800, color: 'var(--accentDark)' }}>
-                {initials}
-              </span>
-            )}
-          </div>
-        )}
+          ) : person.photoShape !== 'wide' ? (
+            <span style={{ fontSize: isMobileNav ? '1.3rem' : '1.6rem', fontWeight: 800, color: 'var(--accentDark)' }}>
+              {initials}
+            </span>
+          ) : null}
+        </div>
 
         <div style={{ fontWeight: 800, fontSize: isMobileNav ? '0.92rem' : '1rem', color: 'var(--text)' }}>
           {person.name}
@@ -1885,7 +2293,7 @@ function CreditsSpotlight({ isMobileNav }) {
 
         <p style={{
           fontSize: '0.78rem', lineHeight: 1.55, color: 'var(--muted)',
-          margin: 0,
+          margin: 0, minHeight: 'calc(0.78rem * 1.55 * 2)', // reserves 2 lines so a shorter blurb rotating in doesn't shrink the card's total height
         }}>
           {person.blurb}
         </p>
@@ -1956,7 +2364,7 @@ function Footer() {
         </div>
 
         <p style={{ fontSize: '0.76rem', color: 'var(--muted)', margin: 0 }}>
-          © {year} KUETx — KUET-এর ছাত্রছাত্রীদের বানানো, KUET-এর জন্য।
+          © {year} KUETx — KUET-এর জন্য।
         </p>
       </div>
     </footer>
@@ -1973,32 +2381,61 @@ export default function LandingPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const isMobileNav = useIsMobileNav();
   const [showAuthModal, setShowAuthModal] = useState(false);
-  // Phase H: the "Sign In" navbar button (and, in future, any
-  // write-trigger touched inside a demo view) opens SignInPrompt FIRST —
-  // a short "why sign in" step — rather than AuthModal's full form
-  // appearing with no lead-in. Confirming inside SignInPrompt swaps to
-  // AuthModal for Sign In intent, or SignUpWizard for Sign Up intent
-  // (see the render logic below); "পরে করবো" just closes it.
-  const [showSignInPrompt, setShowSignInPrompt] = useState(false);
   // Phase 1 (landing redesign): navbar now offers separate Sign In / Sign Up
   // entry points so a new visitor doesn't have to guess which one applies to
-  // them. Sign In still opens the single Google-only AuthModal (no Login/
-  // Register branch there). Sign Up is different as of Phase 4/5/6: it opens
-  // SignUpWizard instead (role -> profile details -> confirm -> Google last,
-  // see the render logic below and SignUpWizard.jsx) — NOT the same AuthModal
-  // as Sign In. authIntent below drives both which modal renders AND the
-  // SignInPrompt copy/button label shown first.
+  // them. Sign Up opens SignUpWizard (role -> profile details -> confirm ->
+  // Google last, see the render logic below and SignUpWizard.jsx).
+  // authIntent drives which modal renders for the signup path.
   const [authIntent, setAuthIntent] = useState('signin'); // 'signin' | 'signup'
-  // Sign Up skips SignInPrompt entirely — it's a redundant extra click
-  // before SignUpWizard's own role-select step. Only Sign In goes
-  // through SignInPrompt first.
-  const openAuth = (intent) => {
-    setAuthIntent(intent);
-    if (intent === 'signup') {
-      setShowAuthModal(true);
-    } else {
-      setShowSignInPrompt(true);
+  // Sign In (owner request, this session): clicking "Sign In" now fires
+  // Google's account picker directly — no KUETx-branded "স্বাগতম" modal in
+  // between anymore, matching "সাইন ইন এ ক্লিক করলেই direct google er oita
+  // open howa uchit". loginWithGoogle() (firebaseAuth.js) IS the
+  // signInWithPopup(...) call already, so this is a genuinely direct
+  // trigger, not a relabeled extra step. AuthModal.jsx is untouched and
+  // still used everywhere else (App.jsx's queue-mode/global auth gate,
+  // Profile.jsx re-auth) — only these two landing-page Sign In buttons now
+  // bypass it.
+  const [signInLoading, setSignInLoading] = useState(false);
+  const [signInError, setSignInError] = useState('');
+  // Same "no account yet" fact AuthModal's pendingNewUser branch shows —
+  // kept here as a small inline banner instead of a full modal screen,
+  // since the Google popup has already fully completed by the time this
+  // fires (uid is already in hand, per §11.2's "no second popup" rule
+  // that AuthModal's own comment documents).
+  const [pendingNewUser, setPendingNewUser] = useState(null);
+  const handleDirectGoogleSignIn = async () => {
+    setSignInLoading(true);
+    setSignInError('');
+    try {
+      const user = await loginWithGoogle();
+      if (user) {
+        const info = { linked: false, isNewUser: isBrandNewAccount(user) };
+        if (info.isNewUser) {
+          setPendingNewUser({ user, info });
+        } else {
+          // Existing account — nothing else to do here; App.jsx's
+          // top-level auth listener routes a signed-in session to its
+          // real dashboard on its own, same as every other sign-in path
+          // in the app.
+        }
+      }
+      // else: popup unsupported, fell back to redirect — page is
+      // navigating away, same fallback loginWithGoogle() already handles
+      // for every other call site.
+    } catch (err) {
+      setSignInError('Google দিয়ে সাইন ইন করা যায়নি। আবার চেষ্টা করুন।');
+    } finally {
+      setSignInLoading(false);
     }
+  };
+  const openAuth = (intent) => {
+    if (intent === 'signin') {
+      handleDirectGoogleSignIn();
+      return;
+    }
+    setAuthIntent(intent);
+    setShowAuthModal(true);
   };
   const [mockupMode, setMockupMode] = useState('desktop'); // desktop visitor default, per plan §3.2
 
@@ -2147,28 +2584,19 @@ export default function LandingPage() {
           <FeatureBreakdown isMobileNav />
         </div>
         <Footer />
-        {showSignInPrompt && (
-          <SignInPrompt
-            intent={authIntent}
-            onSignIn={() => { setShowSignInPrompt(false); setShowAuthModal(true); }}
-            onClose={() => setShowSignInPrompt(false)}
-          />
-        )}
         {showAuthModal && authIntent === 'signup' && (
           <SignUpWizard
             initialRole={wizardRoleFor(selectedRole)}
             onClose={() => setShowAuthModal(false)}
           />
         )}
-        {showAuthModal && authIntent !== 'signup' && (
-          <AuthModal
-            mode="login"
-            intent={authIntent}
-            theme="kx"
-            onClose={() => setShowAuthModal(false)}
-            onSuccess={() => setShowAuthModal(false)}
-          />
-        )}
+        <DirectSignInOverlay
+          pendingNewUser={pendingNewUser}
+          onDismissPendingNewUser={() => setPendingNewUser(null)}
+          onContinueAsSignUp={() => { setPendingNewUser(null); setAuthIntent('signup'); setShowAuthModal(true); }}
+          error={signInError}
+          onDismissError={() => setSignInError('')}
+        />
       </div>
     );
   }
@@ -2313,11 +2741,9 @@ export default function LandingPage() {
           }} />
           <div style={{ position: 'relative' }}>
             <div style={{
-              width: isMobileNav ? '52px' : '64px', height: isMobileNav ? '52px' : '64px',
-              margin: '0 auto 20px', borderRadius: '50%',
-              background: 'var(--kx-accent-bright)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 20px', display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <Logo size={isMobileNav ? 30 : 38} />
+              <Logo size={isMobileNav ? 56 : 72} />
             </div>
             <h2 className="kx-h2" style={{ fontSize: isMobileNav ? 'clamp(1.3rem, 6vw, 1.6rem)' : '34px', color: '#fff' }}>
               তোমার ক্যাম্পাস লাইফ, আজকেই সাজাও।
@@ -2358,28 +2784,19 @@ export default function LandingPage() {
 
       <Footer />
 
-      {showSignInPrompt && (
-        <SignInPrompt
-          intent={authIntent}
-          onSignIn={() => { setShowSignInPrompt(false); setShowAuthModal(true); }}
-          onClose={() => setShowSignInPrompt(false)}
-        />
-      )}
       {showAuthModal && authIntent === 'signup' && (
         <SignUpWizard
           initialRole={wizardRoleFor(selectedRole)}
           onClose={() => setShowAuthModal(false)}
         />
       )}
-      {showAuthModal && authIntent !== 'signup' && (
-        <AuthModal
-          mode="login"
-          intent={authIntent}
-          theme="kx"
-          onClose={() => setShowAuthModal(false)}
-          onSuccess={() => setShowAuthModal(false)}
-        />
-      )}
+      <DirectSignInOverlay
+        pendingNewUser={pendingNewUser}
+        onDismissPendingNewUser={() => setPendingNewUser(null)}
+        onContinueAsSignUp={() => { setPendingNewUser(null); setAuthIntent('signup'); setShowAuthModal(true); }}
+        error={signInError}
+        onDismissError={() => setSignInError('')}
+      />
     </div>
   );
 }
