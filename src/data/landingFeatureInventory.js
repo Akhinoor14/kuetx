@@ -75,6 +75,13 @@ export const FACULTY_FEATURES = {
 };
 
 // ─── Provider ───────────────────────────────────────────────────────────
+// Split from a single 'core' group into two: Dashboard/Profile are plain
+// nav basics, while My Shop is the actual business tool with its own
+// 6-category sub-system (see FEATURE_SUBDETAIL) — a real distinction,
+// not an invented split just to fill grid space. Splitting this also
+// lets My Shop's subdetail-heavy card stand alone instead of being
+// padded out by two much-lighter items in the same card.
 export const PROVIDER_FEATURES = {
-  core: ['Dashboard', 'My Shop', 'Profile'], // Settings/About shared with student, not re-listed
+  core: ['Dashboard', 'Profile'], // Settings/About shared with student, not re-listed
+  shop: ['My Shop'],
 };

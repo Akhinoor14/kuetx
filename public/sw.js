@@ -1,5 +1,5 @@
 // KUETx Service Worker — offline cache + auto-update
-const CACHE_NAME = 'kuetx-v4.12.0'; // bumped: FeatureBreakdown grid — round 2 fix. Previous fix only centered a tab with FEWER than 3 total categories (Provider); it missed that Student's 7 categories in a 3-col grid leave a lone trailing card on row 3 pinned left with 2 empty column-widths beside it. Now any leftover partial row (Student's 7th, Faculty's 4th, Provider's 1) renders as its own centered flex row instead of sitting inside the fixed grid.
+const CACHE_NAME = 'kuetx-v4.13.0'; // bumped: FeatureBreakdown rebuilt as CSS masonry (column-count) instead of an equal-height grid — the grid was the actual cause of blank space (short cards force-stretched to match tall neighbors with nothing to fill the gap; Provider's 1 tall card sat alone with 2 empty column-widths beside it). Each card now keeps its natural height and packs compactly. CRFeatureBlock restyled to match the other category cards and now flows as a normal masonry item instead of a separately-styled strip below everything.
 const STATIC_ASSETS = [
   '/',
   '/index.html',

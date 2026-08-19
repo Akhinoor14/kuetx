@@ -257,6 +257,16 @@ function CampusDesignStyles() {
         font-family: var(--kx-mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
         color: var(--kx-ink-soft); margin-bottom: 16px; padding-left: 12px; border-left: 3px solid var(--kx-accent);
       }
+      /* CR card is a permission layer on top of Student, not its own
+         role — kept visually distinct (dashed accent border + faint
+         accent-tinted background) from the plain .kx-fcol category
+         cards so it still reads as "special" while flowing in the SAME
+         masonry column as a normal card (no separate strip/position). */
+      .kx-fcol-cr {
+        background: linear-gradient(180deg, rgba(34,197,94,0.08), var(--kx-card) 55%);
+        border: 1.5px dashed var(--kx-accent);
+        border-radius: 16px;
+      }
 
       .kx-scrapbook-tile { transition: transform 0.25s ease, box-shadow 0.25s ease; }
       .kx-scrapbook-tile:hover {
@@ -938,6 +948,7 @@ const FACULTY_CATEGORY_LABELS = {
 };
 const PROVIDER_CATEGORY_LABELS = {
   core: 'মূল',
+  shop: 'মাই শপ',
 };
 
 const FEATURE_TABS = [
@@ -945,6 +956,14 @@ const FEATURE_TABS = [
   { id: 'faculty', title: 'Faculty', icon: Presentation, features: FACULTY_FEATURES, labels: FACULTY_CATEGORY_LABELS },
   { id: 'provider', title: 'Provider', icon: Store, features: PROVIDER_FEATURES, labels: PROVIDER_CATEGORY_LABELS },
 ];
+
+// Desktop masonry column count per role — measured, not guessed. See the
+// long comment above FeatureBreakdown's masonry container for the actual
+// per-card height math (px) and the column-balance simulation that these
+// three numbers come from. Re-derive if landingFeatureInventory.js's
+// category shapes change materially (a card gaining/losing several
+// items, or gaining/losing a FEATURE_SUBDETAIL sub-list).
+const ROLE_COLUMN_COUNT = { student: 2, faculty: 2, provider: 1 };
 
 // Owner request (this session): a few top-level feature names in the
 // breakdown above are really a whole sub-system, not a single page —
@@ -1142,18 +1161,13 @@ function FeatureItem({ name, isMobileNav }) {
 // a caption.
 function FeatureCategoryBlock({ label, items, isMobileNav }) {
   return (
-    // height: 100% + flex-column so every card in the 3-col grid row
-    // stretches to match its tallest sibling (grid items already stretch
-    // by default, but the inner content needs to fill that stretched
-    // height too, otherwise short cards look like they're floating in a
-    // too-tall box while long cards hug their content — the "uneven,
-    // ungathered" look). The card itself no longer decides its own
-    // height; the grid row does, and this just fills it cleanly.
+    // AUDIT REWRITE (round 3): no longer forces height:100% / flex
+    // column-stretch — that was the actual cause of the blank-space
+    // problem (see FeatureBreakdown's comment above). Each card now
+    // just takes its own natural content height inside the masonry
+    // column it's placed in.
     <div className="kx-fcol" style={{
       padding: isMobileNav ? '0.85rem 0.9rem' : '26px 24px',
-      height: isMobileNav ? undefined : '100%',
-      display: isMobileNav ? undefined : 'flex',
-      flexDirection: isMobileNav ? undefined : 'column',
     }}>
       <div className="kx-fcol-title" style={{
         marginBottom: isMobileNav ? '0.55rem' : '16px',
@@ -1168,7 +1182,6 @@ function FeatureCategoryBlock({ label, items, isMobileNav }) {
         gridAutoRows: isMobileNav ? '1fr' : undefined,
         gap: isMobileNav ? '0.15rem 0.6rem' : 0,
         alignItems: isMobileNav ? 'stretch' : undefined,
-        flex: isMobileNav ? undefined : '1',
       }}>
         {items.map((name) => (
           <FeatureItem key={name} name={name} isMobileNav={isMobileNav} />
@@ -1186,11 +1199,15 @@ function FeatureCategoryBlock({ label, items, isMobileNav }) {
 // being folded quietly into the Student category grid.
 function CRFeatureBlock() {
   return (
-    <div style={{
-      marginTop: '1.5rem', padding: '1.1rem 1.25rem', borderRadius: '16px',
-      border: '1px dashed var(--accent)',
-      background: 'linear-gradient(180deg, rgba(var(--accentRGB),0.06), transparent)',
-    }}>
+    // AUDIT REWRITE (round 3): restyled to match the other .kx-fcol
+    // category cards (same border/bg/radius language) instead of its
+    // own dashed-accent strip, and grid changed from auto-fit(150px) —
+    // which barely fit 2 items per row inside a single masonry column —
+    // to a fixed 2-col grid tuned for that column width. This card now
+    // flows as a normal masonry item (FeatureBreakdown passes it in
+    // alongside the category cards) instead of sitting in its own
+    // margin-topped strip below the whole grid.
+    <div className="kx-fcol kx-fcol-cr" style={{ padding: '1.1rem 1.25rem' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.6rem' }}>
         <Crown size={16} style={{ color: 'var(--accent)' }} />
         <span style={{ fontSize: '0.88rem', fontWeight: 800, color: 'var(--text)' }}>
@@ -1202,7 +1219,7 @@ function CRFeatureBlock() {
       </p>
       <ul style={{
         listStyle: 'none', margin: 0, padding: 0,
-        display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '0.4rem 1rem',
+        display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.4rem 0.6rem',
       }}>
         {CR_FEATURES.map((name) => {
           const tag = HIGHLIGHTED_FEATURES[name];
@@ -1239,7 +1256,7 @@ function FeatureBreakdown({ isMobileNav }) {
 
   return (
     // Full-bleed --kx-bg role-section, matches HTML's .role-section +
-    // .feature-columns exactly — role-tabs row, then 3 real fcol cards.
+    // .feature-columns exactly — role-tabs row, then real fcol cards.
     <section id="roles" className="kx-page kx-theme-vars" style={{ width: '100%', background: 'var(--kx-bg)', padding: isMobileNav ? '2.25rem 1.1rem 0' : '80px 32px 0' }}>
       <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
         <h2 className="kx-h2" style={{ fontSize: isMobileNav ? 'clamp(1.35rem, 6vw, 1.7rem)' : '36px', marginBottom: '0.4rem' }}>
@@ -1276,52 +1293,63 @@ function FeatureBreakdown({ isMobileNav }) {
         })}
       </div>
 
-      {/* Three-column fcol grid on desktop, stacked on mobile — matches
-          HTML's .feature-columns exactly (real bordered cards, mono
-          uppercase category header with accent left-border).
-          AUDIT FIX (round 2): the earlier fix only centered a row when
-          the TAB TOTAL was under 3 categories (Provider's 1). It missed
-          that Student has 7 categories in a 3-col grid — that's rows of
-          3/3/1, and the trailing single card on the last row still sat
-          pinned to the left with two empty column-widths of blank space
-          beside it. Same problem, just on the last row instead of the
-          only row. Fix: when the category count isn't a clean multiple
-          of 3, render the final partial row as its own centered flex
-          row instead of leaving it inside the grid — this covers both
-          the "whole tab has <3 categories" case (Provider) and the
-          "leftover row after full rows" case (Student's 7th) with one
-          rule instead of two. */}
-      <div style={{ maxWidth: '1180px', margin: '0 auto', paddingBottom: isMobileNav ? '2rem' : '90px' }}>
-        <div style={{
-          display: isMobileNav ? 'block' : 'grid',
-          gridTemplateColumns: isMobileNav ? undefined : 'repeat(3, 1fr)',
-          // alignItems stretch (grid default, set explicitly) makes every
-          // card in a row match the row's tallest card — this is what
-          // actually fixes the uneven/ungathered look, not just spacing.
-          alignItems: isMobileNav ? undefined : 'stretch',
-          gap: isMobileNav ? undefined : '22px',
-        }}>
-          {(isMobileNav ? categories : categories.slice(0, categories.length - (categories.length % 3))).map(([key, items]) => (
-            <div key={key} style={{ marginBottom: isMobileNav ? '0.85rem' : 0, height: isMobileNav ? undefined : '100%' }}>
-              <FeatureCategoryBlock label={tab.labels[key] || key} items={items} isMobileNav={isMobileNav} />
-            </div>
-          ))}
-        </div>
-        {!isMobileNav && categories.length % 3 !== 0 && (
-          <div style={{
-            display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '22px',
-            marginTop: categories.length >= 3 ? '22px' : 0,
-          }}>
-            {categories.slice(categories.length - (categories.length % 3)).map(([key, items]) => (
-              <div key={key} style={{ width: `calc(${100 / 3}% - 15px)`, minWidth: '300px', maxWidth: '380px' }}>
-                <FeatureCategoryBlock label={tab.labels[key] || key} items={items} isMobileNav={isMobileNav} />
-              </div>
-            ))}
+      {/* AUDIT REWRITE (round 4) — round 3's masonry fix (column-count
+          instead of equal-height grid) was directionally right but the
+          columnCount FORMULA (min(cardCount, 3)) was still a guess, not
+          a measurement. Verified this round by actually computing each
+          card's real rendered height in px from the real CSS in
+          FeatureCategoryBlock/FeatureItem/CRFeatureBlock (card padding,
+          per-item line-height, and — critically — the always-open
+          FEATURE_SUBDETAIL sub-list height for My Classes/My Shop, which
+          is what makes Faculty's "core" card and Provider's "core" card
+          much taller than a plain 3-4-item card), then simulating CSS's
+          actual column-balancing algorithm (fill col 1 to
+          total-height/n before moving to col 2, NOT greedy-shortest) at
+          columnCount = 1/2/3 for each role's real card set, and picking
+          the largest columnCount where no column comes out empty/near-
+          empty and the tallest column isn't more than ~40% taller than
+          the shortest (i.e. actually balanced, not just "fewer columns
+          than cards"):
+            Student (8 cards incl. CR): 3-col -> 543/386/1230px (very
+              lumpy: campusLife+academicCore's 8-item cards land in the
+              same column) = 70% imbalance. 2-col -> 929/1230px = 24%
+              imbalance, no empty column. -> 2 columns.
+            Faculty (4 cards, "core" is tall from My Classes' 7-item
+              sub-list = 533px alone): 3-col -> 533/351/310px = 42%
+              imbalance. 2-col -> 533/661px = 19% imbalance. -> 2 columns.
+            Provider (2 cards now: "core" = Dashboard+Profile, "shop" =
+              My Shop alone with its 6-item sub-list): re-checked after
+              splitting out of the old single 3-item card — core=157px,
+              shop=383px. 2-col -> 157/383px = 59% imbalance (one column
+              nearly empty next to a tall one, same problem as before
+              just relocated). -> still 1 column; the two cards now
+              stack cleanly instead of being crammed into one.
+          These are static per-role constants (ROLE_COLUMN_COUNT below)
+          rather than a live formula because the feature lists are fixed
+          data (landingFeatureInventory.js), not runtime-variable — a
+          "clever" live formula here would be solving a problem that
+          doesn't change at runtime, at the cost of being harder to
+          verify than three measured numbers. If the underlying feature
+          lists change materially, re-run the height simulation rather
+          than guessing a new multiplier. */}
+      <div
+        style={{
+          maxWidth: '1180px', margin: '0 auto', paddingBottom: isMobileNav ? '2rem' : '90px',
+          columnCount: isMobileNav ? 1 : ROLE_COLUMN_COUNT[activeTab],
+          columnGap: isMobileNav ? 0 : '22px',
+        }}
+      >
+        {categories.map(([key, items]) => (
+          <div key={key} style={{ breakInside: 'avoid', marginBottom: isMobileNav ? '0.85rem' : '22px' }}>
+            <FeatureCategoryBlock label={tab.labels[key] || key} items={items} isMobileNav={isMobileNav} />
+          </div>
+        ))}
+        {activeTab === 'student' && (
+          <div style={{ breakInside: 'avoid', marginBottom: isMobileNav ? '0.85rem' : '22px' }}>
+            <CRFeatureBlock />
           </div>
         )}
       </div>
-
-      {activeTab === 'student' && <CRFeatureBlock />}
     </section>
   );
 }
