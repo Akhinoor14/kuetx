@@ -30,7 +30,7 @@
 // phase); the 'signin' intent still opens the existing AuthModal
 // unchanged, per §11.5's component-mapping table.
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, CheckCircle2, GraduationCap, Presentation, Store, X } from 'lucide-react';
 import { useIsMobileNav } from './BottomNav';
 import {
@@ -359,35 +359,56 @@ function FacultyDetailsStep({ form, setForm, errors, setErrors }) {
   // Sub-stage gate: email must be confirmed (KUET match checked against
   // the directory, or guest checkbox ticked) before the rest of the
   // profile fields appear. `emailConfirmed` flips true once the visitor
-  // clicks "Confirm & Continue" below — form.institutionalEmail changing
-  // after that resets it, so editing the email re-triggers the check.
+  // presses the wizard's own Continue button below — form.institutionalEmail
+  // changing after that resets it, so editing the email re-triggers the check.
   const emailConfirmed = !!form._emailConfirmed && form._emailConfirmedFor === emailTrimmed;
 
-  const [checking, setChecking] = useState(false);
-  const [directoryHit, setDirectoryHit] = useState(null); // null = not checked, entry object = match, false = checked no match
+  // 'idle' | 'checking' | 'matched' | 'no-match' — live-debounced against
+  // facultyDirectory as the user types, same pattern as
+  // FacultyProfileSetupModal.jsx's useDebouncedDirectoryLookup. Runs in
+  // the background; no separate confirm button needed to trigger it.
+  const [lookupStatus, setLookupStatus] = useState('idle');
+  const [directoryHit, setDirectoryHit] = useState(null); // matched entry object, or null
+  const debounceRef = useRef(null);
+  const lookupSeqRef = useRef(0);
 
-  const runDirectoryCheck = async () => {
-    if (!isKuetEmail) return;
-    setChecking(true);
-    try {
-      const entry = await lookupFacultyDirectoryEntry(emailTrimmed);
-      setDirectoryHit(entry || false);
-    } catch {
-      setDirectoryHit(false);
-    } finally {
-      setChecking(false);
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    if (!isKuetEmail) {
+      setLookupStatus('idle');
+      setDirectoryHit(null);
+      return;
     }
-  };
+    setLookupStatus('checking');
+    const seq = ++lookupSeqRef.current;
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const entry = await lookupFacultyDirectoryEntry(emailTrimmed);
+        if (seq !== lookupSeqRef.current) return; // a newer keystroke's lookup has since started
+        setDirectoryHit(entry || null);
+        setLookupStatus(entry ? 'matched' : 'no-match');
+      } catch {
+        if (seq !== lookupSeqRef.current) return;
+        setDirectoryHit(null);
+        setLookupStatus('no-match');
+      }
+    }, 500);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [emailTrimmed, isKuetEmail]);
 
-  const confirmEmailStage = () => {
+  // Exposed so the wizard's own Continue button (in the shared footer)
+  // can validate + advance this sub-stage without a second in-form button.
+  form._confirmEmailStage = () => {
     if (!emailTrimmed) {
       setErrors((prev) => ({ ...prev, institutionalEmail: 'Email is required' }));
-      return;
+      return false;
     }
     if (isGuestEmail && !form.guestTeacherAck) {
       setErrors((prev) => ({ ...prev, guestTeacherAck: 'Please confirm you understand this account will need manual verification' }));
-      return;
+      return false;
     }
+    if (isKuetEmail && lookupStatus === 'checking') return false; // let the in-flight check finish first
     setForm((prev) => ({
       ...prev,
       _emailConfirmed: true,
@@ -399,6 +420,7 @@ function FacultyDetailsStep({ form, setForm, errors, setErrors }) {
       name: prev.name || (directoryHit ? directoryHit.name : ''),
       dept: prev.dept || (directoryHit ? prev.dept : prev.dept),
     }));
+    return true;
   };
 
   if (!emailConfirmed) {
@@ -411,26 +433,26 @@ function FacultyDetailsStep({ form, setForm, errors, setErrors }) {
             onChange={(e) => {
               setForm((prev) => ({ ...prev, institutionalEmail: e.target.value }));
               setErrors((prev) => ({ ...prev, institutionalEmail: '', guestTeacherAck: '' }));
-              setDirectoryHit(null);
             }}
-            onBlur={runDirectoryCheck}
             placeholder="e.g. yourname@dept.kuet.ac.bd"
           />
           {errors.institutionalEmail && <div style={errorStyle}>{errors.institutionalEmail}</div>}
-          {checking && <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>যাচাই করা হচ্ছে…</div>}
-          {!checking && isKuetEmail && directoryHit && (
+          {isKuetEmail && lookupStatus === 'checking' && (
+            <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>যাচাই করা হচ্ছে…</div>
+          )}
+          {isKuetEmail && lookupStatus === 'matched' && (
             <div style={{ fontSize: 11, fontWeight: 700, color: '#16a34a', marginTop: 6 }}>
-              ✓ Matched in the KUET directory ({directoryHit.name}) — verified, full access instantly.
+              ✓ Verified — matched in KUET directory ({directoryHit.name})
             </div>
           )}
-          {!checking && isKuetEmail && directoryHit === false && (
+          {isKuetEmail && lookupStatus === 'no-match' && (
             <div style={{ fontSize: 11, fontWeight: 700, color: '#d97706', marginTop: 6 }}>
-              ⚠ KUET-format email, but no match in the directory — pending until manually verified by the Founder.
+              ⚠ Not matched — will need manual verification
             </div>
           )}
           {isGuestEmail && (
             <div style={{ fontSize: 11, fontWeight: 700, color: '#d97706', marginTop: 6 }}>
-              ⚠ Not a KUET email — pending until manually verified by the Founder.
+              ⚠ Not a KUET email — will need manual verification
             </div>
           )}
         </div>
@@ -453,17 +475,6 @@ function FacultyDetailsStep({ form, setForm, errors, setErrors }) {
           </div>
         )}
         {errors.guestTeacherAck && <div style={errorStyle}>{errors.guestTeacherAck}</div>}
-        <button
-          type="button"
-          onClick={confirmEmailStage}
-          style={{
-            width: '100%', padding: '11px 24px', borderRadius: 10,
-            background: 'var(--accent)', color: '#fff', border: 'none',
-            fontSize: 14, fontWeight: 800, cursor: 'pointer',
-          }}
-        >
-          Confirm & Continue
-        </button>
       </div>
     );
   }
@@ -658,15 +669,12 @@ function ConfirmStep({ role, form, busy, error, onConfirm }) {
         ))}
       </div>
       {role === 'teacher' && (
-        <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6, marginBottom: 4 }}>
-          {form._directoryMatched
-            ? 'We\'ll check this against the KUET faculty directory when you sign up — if it matches, your account is verified instantly.'
-            : 'This will be checked against the KUET faculty directory when you sign up. If it doesn\'t match, your account goes to the Founder for manual verification, same as a guest teacher — please double-check the email above before continuing.'}
+        <p style={{ fontSize: 11, fontWeight: 700, color: form._directoryMatched ? '#16a34a' : '#d97706', marginBottom: 4 }}>
+          {form._directoryMatched ? '✓ Verified — instant access' : '⚠ Pending manual verification'}
         </p>
       )}
-      <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6, marginBottom: 4 }}>
-        "Sign Up with Google"-এ ক্লিক করলে Google দিয়ে সাইন ইন হয়ে সরাসরি
-        অ্যাকাউন্ট তৈরি হয়ে যাবে — এরপর আর ফিরে এসে ফর্ম এডিট করার সুযোগ থাকবে না।
+      <p style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.5, marginBottom: 4 }}>
+        Can't edit after this — Sign Up with Google creates your account immediately.
       </p>
       {error && (
         <div style={{ fontSize: 12, color: 'var(--danger, #dc2626)', padding: '8px 10px', background: 'rgba(220,38,38,0.08)', borderRadius: 6, marginTop: 10 }}>
@@ -883,6 +891,16 @@ export default function SignUpWizard({ onClose, initialRole = null, onDone }) {
 
   const handleContinue = () => {
     if (!canContinue) return;
+    // Teacher role, Step 2, email not confirmed yet: the first Continue
+    // press just confirms the email sub-stage (runs the same validation
+    // the old in-form "Confirm & Continue" button used to) instead of
+    // advancing the wizard — pressing Continue again afterwards moves on
+    // to the rest of the profile fields. Keeps a single footer button
+    // instead of a second in-form button stacked above it.
+    if (step === 1 && role === 'teacher' && !(detailsForm._emailConfirmed && detailsForm._emailConfirmedFor === String(detailsForm.institutionalEmail || '').trim())) {
+      detailsForm._confirmEmailStage?.();
+      return;
+    }
     if (step === 1 && !validateDetails()) return;
     if (step === STEP_LABELS.length - 1) {
       handleGoogleSignUp();
