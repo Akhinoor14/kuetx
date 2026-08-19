@@ -196,7 +196,7 @@ function CampusDesignStyles() {
           var(--kx-bg);
         color: var(--kx-ink);
       }
-      .kx-wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+      .kx-wrap { max-width: 1440px; margin: 0 auto; padding: 0 32px; }
 
       /* Scoped override for components that still call the app's old
          generic theme vars (var(--text), var(--border), var(--accent)
@@ -467,7 +467,7 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
         style={{
           position: 'relative',
           display: 'grid',
-          gridTemplateColumns: isMobileNav ? '1fr' : '1.05fr 0.95fr',
+          gridTemplateColumns: isMobileNav ? '1fr' : '0.95fr 1.05fr',
           gap: isMobileNav ? '1.75rem' : '56px',
           alignItems: 'center',
           paddingBottom: isMobileNav ? '2.5rem' : '64px',
@@ -592,7 +592,7 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
             every width) — isMobileNav branching removed here only. */}
         <div style={{
           position: 'relative',
-          height: '460px',
+          height: '500px',
           order: 2,
         }}>
           <div style={{
@@ -607,8 +607,8 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
           </div>
 
           <div style={{
-            position: 'absolute', top: '26px', right: '6px',
-            width: '300px',
+            position: 'absolute', top: '26px', right: '0px',
+            width: '360px',
             transform: 'rotate(4deg)',
             borderRadius: '14px', overflow: 'hidden', border: '6px solid #fff',
             boxShadow: '0 30px 60px rgba(0,0,0,0.45), 0 0 0 6px rgba(255,255,255,0.06)', background: '#fff',
@@ -621,8 +621,8 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
           </div>
 
           <div style={{
-            position: 'absolute', bottom: '92px', left: 0,
-            width: '175px',
+            position: 'absolute', bottom: '100px', left: 0,
+            width: '210px',
             transform: 'rotate(-7deg)',
             borderRadius: '12px', overflow: 'hidden', border: '6px solid #fff',
             boxShadow: '0 20px 40px rgba(0,0,0,0.4)', zIndex: 2,
@@ -631,8 +631,8 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
           </div>
 
           <div style={{
-            position: 'absolute', bottom: '6px', left: '108px',
-            width: '168px',
+            position: 'absolute', bottom: '6px', left: '128px',
+            width: '204px',
             transform: 'rotate(5deg)',
             borderRadius: '12px', overflow: 'hidden', border: '6px solid #fff',
             boxShadow: '0 22px 44px rgba(0,0,0,0.4)', zIndex: 1,
@@ -1016,6 +1016,13 @@ function StatsStrip({ isMobileNav }) {
           keeps a fixed height (tallest stat's card, measured via the
           hidden sizer below) since absolute-positioned children can't
           size their parent themselves. */}
+      {/* Owner ask (this session): switch the "pop through a point"
+          crossfade back to a real horizontal slide — the current stat
+          sits centered, the next stat waits just off-screen to the
+          right, and the previous stat sits just off-screen to the left;
+          only the current one is visible/opaque, so as `displayIndex`
+          advances each stat visibly travels right-to-left through the
+          frame instead of growing/shrinking from a center point. */}
       <div style={{
         position: 'relative', flex: 1, minWidth: 0,
         borderRadius: '16px',
@@ -1028,13 +1035,20 @@ function StatsStrip({ isMobileNav }) {
       }}>
         {/* Invisible sizer — reserves the tallest stat's real height so
             the glass frame doesn't collapse/jump as absolutely
-            positioned cards cross-fade in and out on top of it. */}
+            positioned cards slide in and out on top of it. */}
         <div style={{ visibility: 'hidden', pointerEvents: 'none' }}>
           <StatCardTile stat={stats[0]} isMobileNav={isMobileNav} />
         </div>
 
         {stats.map((stat, i) => {
           const isCurrent = i === displayIndex;
+          // Position relative to the current card: 0 = current/centered,
+          // +100% = waiting off to the right (next in line), -100% =
+          // already passed off to the left (previous). Direction tracks
+          // whether we're moving forward (next) or backward (prev) so
+          // the correct neighbor slides in from the correct side.
+          const offset = ((i - displayIndex + stats.length) % stats.length);
+          const relPos = offset === 0 ? 0 : (offset === 1 ? 1 : -1);
           return (
             <div
               key={stat.id}
@@ -1042,11 +1056,10 @@ function StatsStrip({ isMobileNav }) {
                 position: 'absolute', inset: 0,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 opacity: isCurrent ? 1 : 0,
-                transform: isCurrent ? 'scale(1)' : 'scale(0.15)',
-                borderRadius: isCurrent ? '16px' : '999px',
+                transform: `translateX(${isCurrent ? '0%' : (relPos > 0 ? '100%' : '-100%')})`,
                 transition: (noTransition || prefersReducedMotion)
                   ? 'none'
-                  : `opacity ${SLIDE_TRANSITION_MS}ms ease, transform ${SLIDE_TRANSITION_MS}ms cubic-bezier(0.65, 0, 0.35, 1), border-radius ${SLIDE_TRANSITION_MS}ms ease`,
+                  : `opacity ${SLIDE_TRANSITION_MS}ms ease, transform ${SLIDE_TRANSITION_MS}ms cubic-bezier(0.65, 0, 0.35, 1)`,
                 pointerEvents: isCurrent ? 'auto' : 'none',
               }}
             >
@@ -1493,10 +1506,14 @@ function FeatureItem({ name, isMobileNav }) {
   return (
     <li style={{
       display: 'flex', flexDirection: 'column',
-      padding: isMobileNav ? '0.4rem 0.4rem' : '0.5rem 0',
+      padding: isMobileNav ? '0.4rem 0.4rem' : '0.4rem 0',
       borderBottom: '1px dashed var(--border)',
       borderRadius: tag ? '6px' : 0,
-      minHeight: isMobileNav ? '2.4rem' : undefined,
+      minHeight: isMobileNav ? '2.4rem' : '2.1rem',
+      // Items with an always-open sub-list (My Shop, My Classes, etc.)
+      // span both columns — the nested detail block needs full row
+      // width and would otherwise get crushed into a half column.
+      gridColumn: subDetail ? '1 / -1' : undefined,
     }}>
       <div
         style={{
@@ -1580,11 +1597,11 @@ function FeatureCategoryBlock({ label, items, isMobileNav }) {
       </div>
       <ul style={{
         listStyle: 'none', margin: 0, padding: 0,
-        display: isMobileNav ? 'grid' : 'block',
-        gridTemplateColumns: isMobileNav ? 'repeat(2, minmax(0, 1fr))' : undefined,
-        gridAutoRows: isMobileNav ? '1fr' : undefined,
-        gap: isMobileNav ? '0.15rem 0.6rem' : 0,
-        alignItems: isMobileNav ? 'stretch' : undefined,
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+        gridAutoRows: isMobileNav ? '1fr' : 'auto',
+        gap: isMobileNav ? '0.15rem 0.6rem' : '0.1rem 1rem',
+        alignItems: 'stretch',
       }}>
         {items.map((name) => (
           <FeatureItem key={name} name={name} isMobileNav={isMobileNav} />
