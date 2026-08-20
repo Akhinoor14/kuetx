@@ -8,6 +8,13 @@
 // Attendance page look and behave identically, because it's literally
 // the same code.
 //
+// showMarkButtons controls whether Present/Absent appear INSIDE the modal
+// (default true — this is the original /attendance page behavior: row
+// click opens the modal, marking happens from the buttons here). Pass
+// false when the caller's own row already has working Present/Absent
+// buttons and only wants this modal for teacher confirm/switch (that's
+// the Dashboard's Today's Actions card).
+//
 // Props are the already-resolved values for ONE (course, teacher) row —
 // this component itself has no store access and no knowledge of
 // cardData/rotation; the caller (DailyLog or the dashboard action list)
@@ -20,6 +27,7 @@ import { getDisplayCourseName } from '../../lib/attendanceCore';
 export default function AttendanceMarkModal({
   course, teacher, status, dateLabel,
   switchOptions, onMark, onSwitch, onClose, dark,
+  showMarkButtons = true,
 }) {
   const [switching, setSwitching] = useState(false);
 
@@ -34,7 +42,7 @@ export default function AttendanceMarkModal({
         </div>
         <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 10 }}>{dateLabel}</div>
 
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 12, padding: '10px 12px', background: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)', borderRadius: 10 }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: showMarkButtons ? 12 : 4, padding: '10px 12px', background: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)', borderRadius: 10 }}>
           <div style={{ minWidth: 0, flex: 1 }}>
             <div style={{ fontSize: 9, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'flex', alignItems: 'center', gap: 4, marginBottom: 3 }}>
               <Users size={10} /> Teacher
@@ -76,7 +84,7 @@ export default function AttendanceMarkModal({
         </div>
 
         {switching && switchOptions.length > 1 && (
-          <div style={{ marginBottom: 12, padding: '9px 10px', background: dark ? 'rgba(59,130,246,0.08)' : 'rgba(59,130,246,0.05)', border: '1px solid rgba(59,130,246,0.20)', borderRadius: 9 }}>
+          <div style={{ marginBottom: showMarkButtons ? 12 : 4, padding: '9px 10px', background: dark ? 'rgba(59,130,246,0.08)' : 'rgba(59,130,246,0.05)', border: '1px solid rgba(59,130,246,0.20)', borderRadius: 9 }}>
             <div style={{ fontSize: 10.5, color: 'var(--accent)', fontWeight: 700, marginBottom: 7 }}>
               Only for {dateLabel} — pick who actually taught:
             </div>
@@ -100,38 +108,46 @@ export default function AttendanceMarkModal({
           </div>
         )}
 
-        <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>
-          Mark attendance
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-          {[
-            { val: 'present', label: 'Present', icon: '✓', col: '#10b981' },
-            { val: 'absent', label: 'Absent', icon: '✗', col: '#ef4444' },
-          ].map(opt => {
-            const active = status === opt.val;
-            return (
-              <button
-                key={opt.val}
-                onClick={() => onMark(opt.val)}
-                style={{
-                  padding: '12px 6px', borderRadius: 9, cursor: 'pointer', fontWeight: 700, fontSize: 13,
-                  background: active ? opt.col : dark ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.80)',
-                  color: active ? 'white' : 'var(--muted)',
-                  border: `2px solid ${active ? opt.col : dark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.07)'}`,
-                  transition: 'all 0.14s', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3,
-                  WebkitTapHighlightColor: 'transparent',
-                }}
-              >
-                <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>{opt.icon} {opt.label}</span>
-                {active && (
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 3, fontSize: 9.5, fontWeight: 700, opacity: 0.9 }}>
-                    <RotateCcw size={9} /> tap to undo
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </div>
+        {showMarkButtons ? (
+          <>
+            <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>
+              Mark attendance
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+              {[
+                { val: 'present', label: 'Present', icon: '✓', col: '#10b981' },
+                { val: 'absent', label: 'Absent', icon: '✗', col: '#ef4444' },
+              ].map(opt => {
+                const active = status === opt.val;
+                return (
+                  <button
+                    key={opt.val}
+                    onClick={() => onMark(opt.val)}
+                    style={{
+                      padding: '12px 6px', borderRadius: 9, cursor: 'pointer', fontWeight: 700, fontSize: 13,
+                      background: active ? opt.col : dark ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.80)',
+                      color: active ? 'white' : 'var(--muted)',
+                      border: `2px solid ${active ? opt.col : dark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.07)'}`,
+                      transition: 'all 0.14s', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3,
+                      WebkitTapHighlightColor: 'transparent',
+                    }}
+                  >
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>{opt.icon} {opt.label}</span>
+                    {active && (
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 3, fontSize: 9.5, fontWeight: 700, opacity: 0.9 }}>
+                        <RotateCcw size={9} /> tap to undo
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </>
+        ) : (
+          <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 10, textAlign: 'center' }}>
+            Close this and tap Present or Absent on the card.
+          </div>
+        )}
       </div>
     </Modal>
   );

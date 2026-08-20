@@ -4,9 +4,10 @@
  * Auth Simplification migration: every previous method — student
  * username+password, service-provider phone+password, faculty
  * email+password — has been removed. Google Sign-In is now the only way
- * into the app, for every role. Role selection (student/faculty/provider)
- * still happens, but as a separate step AFTER sign-in (RoleSelectScreen.jsx),
- * not here.
+ * into the app. This modal is Sign In only — role selection
+ * (student/faculty/provider) happens entirely inside SignUpWizard.jsx's
+ * own pre-auth flow, not here. A signed-in account with no role recorded
+ * anywhere is routed to NoAccountFoundScreen (App.jsx), not a picker.
  *
  * loginWithGoogle() and upgradeWithGoogle() (firebaseAuth.js) are
  * popup-first: clicking the button resolves directly with the signed-in
@@ -85,9 +86,10 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, intent = 
   // so "Sign Up শুরু করুন" can call onSuccess with the SAME user/info
   // already obtained — no second Google popup, per §11.2's explicit
   // "Google popup আবার দেখাতে হবে না" requirement (uid is already in hand,
-  // App.jsx's buildQueue() will route a brand-new account into
-  // RoleSelectScreen on its own once onSuccess fires, same as it already
-  // does for any other brand-new sign-in — no new destination needed).
+  // App.jsx's buildQueue() will route a brand-new/roleless account into
+  // NoAccountFoundScreen (Sign Up prompt) on its own once onSuccess
+  // fires, same as it already does for any other such sign-in — no new
+  // destination needed).
   const [pendingNewUser, setPendingNewUser] = useState(null);
 
   const handleGoogle = async () => {

@@ -98,11 +98,17 @@ export default function TodaysActions() {
 
         {/* 1. Attendance — unmarked courses for today. Compact single-line
             row: icon + course/teacher on the left, Present/Absent buttons
-            on the right. Every row — fixed teacher or Alternative — opens
-            the confirm modal on click; nothing marks directly from here,
-            same as the /attendance page. */}
+            on the right. Row body click opens the confirm modal (teacher
+            name + Switch for Alternative rows, no marking there). The
+            Present/Absent buttons mark directly — for Alternative rows
+            they resolve to the first of the (max 2) course teachers, same
+            as the modal's own display-name fallback, so a mark is never
+            written under the ALTERNATE_TEACHER sentinel. */}
         {attendance.rows.map((row) => row.teacherRows.map((tr) => {
           const isAlt = tr.teacher === ALTERNATE_TEACHER;
+          const markTeacher = isAlt
+            ? (getTeachersForCourse(attendance.settings, attendance.schedule, row.course.id, attendance.teacherRegistry)[0] || tr.teacher)
+            : tr.teacher;
           return (
             <div
               key={`${row.id}-${tr.teacher}`}
@@ -122,16 +128,19 @@ export default function TodaysActions() {
                 <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{row.course.code || row.course.baseCode || row.courseName}</div>
                 <div style={{ fontSize: 9.5, color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{isAlt ? 'Alternative' : (tr.teacher || 'Unknown teacher')}</div>
               </div>
-              {/* Preview-only pills — the whole row is the tap target
-                  (see onClick above) and always opens the confirm modal,
-                  never marks directly from here. */}
               <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '7px 11px', borderRadius: 7, fontWeight: 700, fontSize: 12, background: 'rgba(16,185,129,0.12)', color: '#10b981', border: '1.5px solid rgba(16,185,129,0.35)' }}>
+                <button
+                  onClick={(e) => { e.stopPropagation(); mark(row.course.id, markTeacher, 'present'); }}
+                  style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '7px 11px', borderRadius: 7, cursor: 'pointer', fontWeight: 700, fontSize: 12, background: 'rgba(16,185,129,0.12)', color: '#10b981', border: '1.5px solid rgba(16,185,129,0.35)', WebkitTapHighlightColor: 'transparent' }}
+                >
                   <Check size={14} strokeWidth={3} /> Present
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '7px 11px', borderRadius: 7, fontWeight: 700, fontSize: 12, background: 'rgba(239,68,68,0.12)', color: '#ef4444', border: '1.5px solid rgba(239,68,68,0.30)' }}>
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); mark(row.course.id, markTeacher, 'absent'); }}
+                  style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '7px 11px', borderRadius: 7, cursor: 'pointer', fontWeight: 700, fontSize: 12, background: 'rgba(239,68,68,0.12)', color: '#ef4444', border: '1.5px solid rgba(239,68,68,0.30)', WebkitTapHighlightColor: 'transparent' }}
+                >
                   <XIcon size={14} strokeWidth={3} /> Absent
-                </div>
+                </button>
               </div>
             </div>
           );
@@ -211,12 +220,11 @@ export default function TodaysActions() {
           <AttendanceMarkModal
             course={openRow.course}
             teacher={displayTeacher}
-            status={openTeacherRow.status}
             dateLabel="Today"
             switchOptions={switchOptions}
             dark={dark}
+            showMarkButtons={false}
             onClose={() => setOpenCard(null)}
-            onMark={(val) => { mark(openRow.course.id, displayTeacher, val); setOpenCard(null); }}
             onSwitch={(name) => {
               if (!slotEntry) return;
               switchTeacher(openRow.course.id, slotEntry.day, slotEntry.slot, openTeacherRow.teacher, name);

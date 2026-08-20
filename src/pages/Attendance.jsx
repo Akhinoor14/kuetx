@@ -602,13 +602,7 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
                 </div>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  {teacherRows.map(({ teacher, key, status }) => {
-                    // Every row — fixed teacher or Alternative — opens the
-                    // Present/Absent modal on click; nothing marks directly
-                    // from this card anymore. Keeps confirmation consistent
-                    // everywhere instead of only for rotating slots.
-                    const isAlt = teacher === ALTERNATE_TEACHER;
-                    return (
+                  {teacherRows.map(({ teacher, key, status }) => (
                     <div
                       key={key}
                       onClick={() => setOpenCard({ courseId: course.id, teacher })}
@@ -619,7 +613,7 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 6 }}>
                         <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 3 }}>
-                          <Users size={9} /> {isAlt ? 'Alternative' : (teacher || 'Unknown teacher')}
+                          <Users size={9} /> {teacher === ALTERNATE_TEACHER ? 'Alternative' : (teacher || 'Unknown teacher')}
                         </div>
                         {status && (
                           <div style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 20, background: status === 'present' ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)', color: status === 'present' ? '#10b981' : '#ef4444' }}>
@@ -647,8 +641,7 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
                         })}
                       </div>
                     </div>
-                    );
-                  })}
+                  ))}
                 </div>
               )}
             </div>

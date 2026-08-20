@@ -27,7 +27,7 @@ import { useIsProvider } from './hooks/useIsProvider';
 import useFirebaseAuth from './hooks/useFirebaseAuth';
 import ClassJoinIntro from './components/ClassJoinIntro';
 import NoCRBanner from './components/NoCRBanner';
-import RoleSelectScreen from './components/RoleSelectScreen';
+import NoAccountFoundScreen from './components/NoAccountFoundScreen';
 import FacultyProfileSetupModal from './components/FacultyProfileSetupModal';
 import { getAccountRole, setAccountRole, fetchServerAccountRole, persistAccountRoleToServer, isAccountRoleTrustedForUid } from './lib/accountRole';
 import { syncLocalDataOnAuth } from './lib/accountLifecycle';
@@ -869,12 +869,44 @@ async function buildQueue(isAnonymous, pathname) {
     //   5. Otherwise: genuinely nothing recorded yet — this is a brand-new
     //      account that just came out of Register with no role chosen,
     //      the ONLY case Role Select should ever actually show for.
-    const serverRole = await fetchServerAccountRole(auth.currentUser.uid);
+    let fetchFailed = false;
+    const serverRole = await (async () => {
+      try {
+        // fetchServerAccountRole itself catches its own errors into null
+        // (accountRole.js), so a genuine "not found" and a network/
+        // Firestore failure are indistinguishable from its return value
+        // alone. Re-attempt the same read directly here isn't practical
+        // without duplicating its Firestore call, so instead treat
+        // offline as the one failure signal we CAN check cheaply and
+        // reliably up front — see lookupFailed below for the rest.
+        if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+          fetchFailed = true;
+          return null;
+        }
+        return await fetchServerAccountRole(auth.currentUser.uid);
+      } catch {
+        fetchFailed = true;
+        return null;
+      }
+    })();
     if (serverRole) {
       setAccountRole(serverRole);
       accountRole = serverRole;
     } else {
-      const fdoc = await getFacultyDoc(auth.currentUser.uid).catch(() => null);
+      // Network/Firestore-failure tracking (BUGFIX): every lookup below
+      // (and fetchServerAccountRole itself) swallows its own errors into
+      // null, which used to be indistinguishable from "checked, found
+      // nothing" — an offline/transient-failure existing account fell
+      // through to the same q.push('role-select') as a genuinely
+      // roleless one. That used to just re-show RoleSelectScreen
+      // (annoying but harmless — pick your role again). Now that
+      // role-select renders NoAccountFoundScreen, which signs the
+      // session out, the same conflation would incorrectly sign out a
+      // real user over a network blip. lookupFailed is set true the
+      // moment any check below throws instead of cleanly resolving, so
+      // the final "genuinely no role" branch can tell the two apart.
+      let lookupFailed = fetchFailed;
+      const fdoc = await getFacultyDoc(auth.currentUser.uid).catch(() => { lookupFailed = true; return null; });
       if (fdoc) {
         setAccountRole('teacher');
         accountRole = 'teacher';
@@ -899,7 +931,7 @@ async function buildQueue(isAnonymous, pathname) {
         // this is not the same issue as). Fix: same pattern as the
         // faculty branch — check providers/{uid} existence directly and
         // resync both the local flag and the server record from it.
-        const pdoc = await getProviderProfile(auth.currentUser.uid).catch(() => null);
+        const pdoc = await getProviderProfile(auth.currentUser.uid).catch(() => { lookupFailed = true; return null; });
         if (pdoc) {
           setAccountRole('provider');
           accountRole = 'provider';
@@ -909,8 +941,8 @@ async function buildQueue(isAnonymous, pathname) {
           // student — and arguably worse, since student has no
           // dedicated per-role Firestore doc created at Role Select the
           // way teacher (createFacultyAccountDoc) and provider
-          // (createProviderShell) do; choose('student') in
-          // RoleSelectScreen.jsx only ever calls
+          // (createProviderShell) do; the old RoleSelectScreen's
+          // student choice only ever called
           // persistAccountRoleToServer('student'), nothing else. So if
           // that one write silently failed (or a later read of
           // users/{uid}.role fails), there was NO server-side signal
@@ -929,11 +961,25 @@ async function buildQueue(isAnonymous, pathname) {
           // doc either, so this still correctly falls through to
           // role-select for that case — only an account with a real,
           // previously-saved profile gets auto-recovered here.
-          const sdoc = await pullProfile(auth.currentUser.uid).catch(() => null);
+          const sdoc = await pullProfile(auth.currentUser.uid).catch(() => { lookupFailed = true; return null; });
           if (sdoc) {
             setAccountRole('student');
             accountRole = 'student';
             persistAccountRoleToServer('student');
+          } else if (lookupFailed) {
+            // At least one of the fallback checks above threw (offline,
+            // Firestore hiccup, transient permission error) instead of
+            // cleanly confirming "no doc" — we genuinely don't know this
+            // account's role yet, so don't treat it as "no account" and
+            // don't push role-select (which now signs the session out).
+            // Stash the flag on q itself; buildQueue's caller checks it
+            // below and just returns the still-empty queue for this
+            // pass — the normal authReady-gated effect will re-run
+            // buildQueue on the next load/reconnect and get a real
+            // answer then, same as any other transient network failure
+            // elsewhere in this file.
+            q._roleLookupFailed = true;
+            return q;
           }
         }
       }
@@ -996,7 +1042,7 @@ async function buildQueue(isAnonymous, pathname) {
     // Provider (SERVICES_PROVIDER_PLAN.md §3): no onboarding queue step
     // needed here at all, unlike teacher's 'faculty-profile'. The full
     // detail form (name, phone) is already collected inline at Role
-    // Select (see RoleSelectScreen.jsx's provider-form step) before
+    // Select (see SignUpWizard.jsx's provider-details step) before
     // providers/{uid} is even created, so there's nothing left to
     // complete afterward. The actual gate — pending vs verified — is a
     // LIVE Firestore check done by RequireProvider on every visit to
@@ -1163,6 +1209,41 @@ function SignedOutRouter({ authState }) {
 export default function App() {
   const authState = useFirebaseAuth();
   console.log('[KUETx DIAG] App() rendering, authReady =', authState.authReady, 'isAnonymous =', authState.isAnonymous);
+
+  // BUGFIX (infinite reload loop after a deploy, only fixed by clearing
+  // cache): main.jsx used to clear the chunk_reload_attempted flag
+  // immediately after calling ReactDOM.createRoot(...).render(...), on
+  // the assumption that reaching that line meant the app had mounted
+  // successfully. It hadn't — React 18's render() schedules work
+  // asynchronously and returns right away, it does not wait for the
+  // tree to actually mount. On a stale service-worker-cached index.html
+  // (see sw.js's cache-first navigation strategy) referencing a JS
+  // chunk hash that no longer exists after a new deploy, the actual
+  // ChunkLoadError from a lazy() import only surfaces once React
+  // commits far enough to evaluate it — by which point main.jsx had
+  // already wiped the flag ErrorBoundary.jsx relies on to reload at
+  // most once. Every reload re-fetched the exact same stale cached
+  // index.html, so the same missing chunk kept throwing, and the
+  // already-cleared flag let it reload again — forever, with nothing
+  // useful in the console since it's ErrorBoundary catching and
+  // silently reloading each time. Only manually clearing the browser's
+  // SW cache ever broke the loop, since that's what finally made a
+  // reload fetch the real, current index.html.
+  //
+  // Fix: clear the flag from here instead — an effect inside App()
+  // itself only ever runs after React has successfully committed this
+  // component to the DOM, which is a real, non-guessed signal that the
+  // mount actually got past whatever chunk-loading a stale cache could
+  // have broken (ErrorBoundary sits above App in main.jsx's tree, so
+  // any ChunkLoadError thrown on the way here would already have been
+  // caught, and either reloaded once or shown the fallback UI, before
+  // this component — let alone this effect — ever ran).
+  useEffect(() => {
+    try {
+      sessionStorage.removeItem('chunk_reload_attempted');
+    } catch (e) {}
+  }, []);
+
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [queue, setQueue] = useState([]);
   const [queueBuilt, setQueueBuilt] = useState(false);
@@ -1435,7 +1516,18 @@ export default function App() {
       }
 
       setQueue(q);
-      setQueueBuilt(true);
+      // BUGFIX: buildQueue() flags q._roleLookupFailed when the role
+      // lookup chain hit a real network/Firestore error rather than
+      // cleanly confirming "no role anywhere" (see buildQueue's own
+      // comment). An empty q in that case is NOT "onboarding complete" —
+      // treating it as such would drop a real, still-unresolved account
+      // straight through to the dashboard/protected routes with no role
+      // set at all. Leave queueBuilt false so this same effect re-runs
+      // and retries on the next mount/reconnect instead of falsely
+      // completing onboarding on a transient failure.
+      if (!q._roleLookupFailed) {
+        setQueueBuilt(true);
+      }
     });
     return () => { cancelled = true; };
   }, [authState.authReady, authState.isAnonymous, authState.uid, queueBuilt]);
@@ -1676,16 +1768,16 @@ export default function App() {
           <ProviderPostSignupRedirect queueBuilt={queueBuilt} queueEmpty={queue.length === 0} />
         )}
         {current === 'role-select' && (
-          <RoleSelectScreen
-            onSelect={() => {
-              // Re-derive rather than a plain advance(): picking a role
-              // changes which steps come next (teacher needs
-              // 'faculty-verify' before 'profile', student doesn't), so
-              // just rebuild the whole queue the same way the initial
-              // mount does.
-              buildQueue(authState.isAnonymous, window.location.pathname).then(setQueue);
-            }}
-          />
+          // Current model: Sign In and Sign Up are fully separate flows —
+          // there is no post-auth role-picker anymore (SignUpWizard.jsx
+          // already collects role + profile before Google fires, for any
+          // genuinely new account). This branch is only ever reached for
+          // the leftover edge case: a signed-in account (via Sign In /
+          // anonymous-upgrade / re-auth) with no role recorded anywhere
+          // (see buildQueue's q.push('role-select') below) — i.e. this
+          // Google account never actually completed Sign Up. Send them
+          // there instead of showing a role-picker.
+          <NoAccountFoundScreen />
         )}
         {/* RESTRUCTURE: 'auth' is now the FIRST step for anyone without a
             real account, generic — no pre-decided role/variant needed.
@@ -1892,7 +1984,7 @@ export default function App() {
             // role-select / auth / faculty-profile / profile: a genuine
             // step the person needs to complete, not a loading wait — a
             // blank shell with no content underneath is correct here,
-            // AuthModal/RoleSelectScreen/etc render their own UI on top.
+            // AuthModal/NoAccountFoundScreen/etc render their own UI on top.
             <div style={{ position: 'fixed', inset: 0, zIndex: 1, background: 'var(--bg)' }} />
           )
         ) : (

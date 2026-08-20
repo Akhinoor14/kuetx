@@ -684,25 +684,25 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
               }}>
                 <div style={{ fontWeight: 700, fontSize: '12.5px', color: '#fff' }}>{CAMPUS_PHOTOS.gate.label}</div>
               </div>
-              {/* Owner ask: mascot moved to top-right corner of the hero
-                  photo so a mobile visitor sees it in the very first
-                  viewport (previously bottom-right on a taller cluster —
-                  often below the fold on short-viewport phones before
-                  scrolling). Wider (21:9) + shorter photo strip here
-                  also means the whole cluster's total height dropped,
-                  which alone pulls the mascot higher up the page. */}
-              <div
-                className="kx-mascot-badge"
-                style={{
-                  position: 'absolute', top: '-16px', right: '-10px',
-                  width: '64px', height: '64px',
-                  filter: 'drop-shadow(0 8px 14px rgba(0,0,0,0.5))',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  zIndex: 3,
-                }}
-              >
-                <Logo size={64} />
-              </div>
+              {/* Mascot moved OUT of this card in the mobile layout —
+                  BUGFIX (turtle clipped/cut off at the top): this div
+                  used to live INSIDE the gate photo's rounded card
+                  above, which has overflow:'hidden' (needed to clip the
+                  photo itself to the rounded corners). The mascot's
+                  intentional top:'-16px' offset — meant to let it peek
+                  up above the card, same idea as the desktop layout's
+                  bottom-right escape below — was being clipped by that
+                  same overflow:hidden instead, which is exactly the
+                  "pushed inside / cut off at first look" apnar
+                  screenshot showed. Moved to the OUTER wrapper (below,
+                  after this card + the two-thumbnail row both close),
+                  which has no overflow clipping, so it can actually
+                  extend past the card edge without being cut. Also
+                  sized up (64px -> 92px) per owner ask, and repositioned
+                  to the top-right of the WHOLE cluster (gate photo, not
+                  just this card) so it clears both the Install button
+                  (fixed bottom-right over the page) and the location
+                  badge (top-left) with room on every side. */}
             </div>
 
             <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.6rem', padding: '0 1.1rem' }}>
@@ -718,6 +718,35 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
               }}>
                 <img src={CAMPUS_PHOTOS.statue.src} alt={CAMPUS_PHOTOS.statue.label} style={{ width: '100%', aspectRatio: '4 / 3', objectFit: 'cover', display: 'block' }} />
               </div>
+            </div>
+
+            {/* Owner ask: mascot moved to top-right corner of the hero
+                photo so a mobile visitor sees it in the very first
+                viewport (previously bottom-right on a taller cluster —
+                often below the fold on short-viewport phones before
+                scrolling). Wider (21:9) + shorter photo strip here also
+                means the whole cluster's total height dropped, which
+                alone pulls the mascot higher up the page. Lives on THIS
+                outer wrapper (no overflow:hidden here, unlike the gate
+                photo's own card) so its upward/rightward offset isn't
+                clipped — see the BUGFIX comment where this used to sit,
+                inside the gate card. Sized up per owner ask (64px ->
+                92px) and nudged further out (top/right offsets) so the
+                bigger artwork still clears the gate card's rounded
+                corner and the location badge instead of overlapping
+                them, while staying clear of the fixed Install button
+                pinned to the bottom-right of the viewport below. */}
+            <div
+              className="kx-mascot-badge"
+              style={{
+                position: 'absolute', top: '-30px', right: '-14px',
+                width: '92px', height: '92px',
+                filter: 'drop-shadow(0 8px 14px rgba(0,0,0,0.5))',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                zIndex: 5,
+              }}
+            >
+              <Logo size={92} />
             </div>
           </div>
         ) : (
