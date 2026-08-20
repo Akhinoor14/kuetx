@@ -5,7 +5,7 @@
 // scope is also a SyntaxError, not silently shadowed. Any browser that
 // actually failed to install/update this worker over past deploys was
 // hitting this — collapsed back down to the one real, newer version.
-const CACHE_NAME = 'kuetx-v4.17.0'; // bugfix bump: navigation detection (isNavigation) previously also fired on any request whose Accept header merely contained text/html, as a fallback for mode!=='navigate' — but a dynamic import() of a lazy-loaded route chunk (e.g. Dashboard-*.js) can carry an Accept header that includes text/html depending on browser/CDN, so those chunk fetches were misclassified as navigations and answered with the cached /index.html shell instead of the real JS, which the browser's module loader then rejected for MIME-type mismatch ("Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of text/html"). Now isNavigation relies solely on request.mode==='navigate'. Previous bump (v4.16.0): install-button dismiss flag was being set on every manual-sheet close (even a normal read-and-close, unrelated to declining install), silently suppressing the button for 14 days including after a real uninstall (see FloatingInstallButton.jsx / useInstallPrompt.js). Also forces this fix past cache-first navigation caching for returning visitors. Previous bump (v4.15.0): install button now detects "already installed, viewing in a plain browser tab" via getInstalledRelatedApps() and shows "Open app" / "Update" instead of staying hidden or offering to reinstall (see useInstallPrompt.js).
+const CACHE_NAME = 'kuetx-v4.18.0'; // bugfix bump: navigation was still cache-first (see the isNavigation branch of the fetch handler below) despite v4.17.0's fix, so a freshly-activated SW's forced reload could hand back its OWN install-time-cached /index.html — whose referenced /assets/*.js hashes may not match what's actually live if the CDN hadn't finished propagating yet — instead of hitting the network, reproducing the exact "MIME type text/html" chunk error on a plain reload right after an update, every time, until a hard refresh bypassed the SW. Navigation is now network-first, falling back to the cached shell only when the network request fails (offline / flaky connection — the case the old cache-first comment was actually trying to solve). Previous bump (v4.17.0): navigation detection (isNavigation) previously also fired on any request whose Accept header merely contained text/html, as a fallback for mode!=='navigate' — but a dynamic import() of a lazy-loaded route chunk (e.g. Dashboard-*.js) can carry an Accept header that includes text/html depending on browser/CDN, so those chunk fetches were misclassified as navigations and answered with the cached /index.html shell instead of the real JS, which the browser's module loader then rejected for MIME-type mismatch ("Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of text/html"). Now isNavigation relies solely on request.mode==='navigate'. Previous bump (v4.16.0): install-button dismiss flag was being set on every manual-sheet close (even a normal read-and-close, unrelated to declining install), silently suppressing the button for 14 days including after a real uninstall (see FloatingInstallButton.jsx / useInstallPrompt.js). Also forces this fix past cache-first navigation caching for returning visitors. Previous bump (v4.15.0): install button now detects "already installed, viewing in a plain browser tab" via getInstalledRelatedApps() and shows "Open app" / "Update" instead of staying hidden or offering to reinstall (see useInstallPrompt.js).
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -155,28 +155,34 @@ self.addEventListener('fetch', (e) => {
       return res;
     });
 
-  // BUGFIX (back/forward landing on the app root instead of the route
-  // that was navigated to): browser navigations (back/forward, address
-  // bar, reload) to deep SPA routes like /attendance are never
-  // themselves pre-cached under their own URL (only '/' and
-  // '/index.html' are in STATIC_ASSETS) — so on ANY network hiccup
-  // (common on mobile data), the old network-first path for
-  // navigations would fail, miss cache under the exact URL, and only
-  // THEN fall back to the cached app shell. That fallback itself never
-  // changes window.location — React Router still reads the correct
-  // pathname on mount — but a slow/degraded network could keep retrying
-  // or momentarily render a mismatched shell before hydration caught
-  // up, which is what read as "back always resets to the start".
-  // Fix: treat navigation requests as cache-first against the
-  // precached shell, same as static assets — removes the network
-  // round-trip (and its failure window) from the critical path
-  // entirely, and still updates the cache in the background so the
-  // shell itself stays fresh for next time.
+  // BUGFIX (stale index.html served on every normal reload after a
+  // deploy, re-triggering the "MIME type text/html" chunk-load error):
+  // the previous version of this block made navigation cache-first
+  // (see git history) to fix a *different* bug — back/forward landing
+  // on the app root instead of the route navigated to, on flaky mobile
+  // networks. But cache-first here means: any time a new SW version has
+  // just taken control (see index.html's activateWaiting/SKIP_WAITING
+  // flow, which force-reloads the page the moment a new SW installs),
+  // THIS reload — while online — was still being answered from the
+  // freshly-installed SW's OWN cached '/index.html' (populated during
+  // 'install' from STATIC_ASSETS), not from the network. If that
+  // install-time fetch of '/index.html' happened even slightly before
+  // the CDN/edge had fully finished propagating the new deploy's
+  // /assets/*.js files, the cached shell's <script> references point at
+  // chunk hashes the network fetch that follows might have (or that a
+  // later deploy has already superseded) — so the very reload meant to
+  // "pick up the update" could instead hand the browser a shell/chunks
+  // mismatch, which then repeats on every subsequent normal reload
+  // until a hard refresh bypasses the SW entirely. A stale app shell
+  // silently breaking the whole app while online is worse than an
+  // occasional back/forward hiccup on a bad connection, so: prefer the
+  // network for navigations first, and only fall back to the cached
+  // shell if that network request actually fails (offline, or the
+  // flaky-connection case the old comment was solving for). Still keep
+  // the cache warm for the offline case by writing the network response
+  // into it below via fetchAndCache().
   const respondToRequest = isNavigation
-    ? caches.match('/index.html').then(cached => {
-        fetchAndCache().catch(() => {}); // refresh cache in background, ignore failures
-        return cached || fetchAndCache();
-      })
+    ? fetchAndCache().catch(() => caches.match('/index.html'))
     : (shouldUseCacheFirst
       ? caches.match(e.request).then(cached => cached || fetchAndCache())
       : fetchAndCache()

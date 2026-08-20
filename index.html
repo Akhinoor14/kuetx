@@ -109,32 +109,61 @@
         pointer-events: none;
       }
 
-      /* ---------- Background photo layer ---------- */
+      /* ---------- Background photo layer: 4 quadrants ----------
+         Each quadrant photo starts pushed off-canvas (translated past
+         its own screen edge) at full-viewport size, slides+scales in
+         to together cover the whole screen (no gap, no crop of the
+         subject — background-size:cover on a full-viewport box shows
+         as much of each photo as any single full-bleed splash image
+         would), holds fully assembled for a beat, then all four
+         shrink in place toward their own corner, opening a diamond-
+         shaped gap in the middle for the badge. Percentage-based
+         translate/size keeps this proportionally identical on mobile
+         portrait and desktop widescreen alike. */
       #kx-photoLayer { position: absolute; inset: 0; z-index: 1; }
       .kx-photo {
-        position: absolute; inset: 0;
+        position: absolute;
+        width: 100vw; height: 100vh;
         background-size: cover;
         background-position: center;
-        opacity: 0;
-        transform: scale(1);
-        transition: opacity 1.1s ease;
-        will-change: opacity, transform;
-        z-index: 0;
+        transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1), width 1s cubic-bezier(0.65, 0, 0.35, 1), height 1s cubic-bezier(0.65, 0, 0.35, 1), top 1s cubic-bezier(0.65, 0, 0.35, 1), left 1s cubic-bezier(0.65, 0, 0.35, 1);
+        will-change: transform, width, height;
       }
-      .kx-photo.kx-photo-active {
-        opacity: 1;
-        z-index: 1;
-        animation: kx-kenburns 2.7s ease-out forwards;
+      #kx-photoTL { top: 0; left: 0; transform: translate(-100%, -100%); }
+      #kx-photoTR { top: 0; left: 50vw; transform: translate(100%, -100%); }
+      #kx-photoBL { top: 50vh; left: 0; transform: translate(-100%, 100%); }
+      #kx-photoBR { top: 50vh; left: 50vw; transform: translate(100%, 100%); }
+
+      /* Step 1: slide fully into place, each quadrant at exactly
+         quarter-viewport size positioned edge-to-edge — together they
+         tile the whole screen seamlessly, no gap, no overlap. */
+      .kx-photo.kx-arrived {
+        transform: translate(0, 0);
       }
-      @keyframes kx-kenburns {
-        from { transform: scale(1); }
-        to   { transform: scale(1.08); }
+      #kx-photoTL.kx-arrived, #kx-photoTR.kx-arrived,
+      #kx-photoBL.kx-arrived, #kx-photoBR.kx-arrived {
+        width: 50vw; height: 50vh;
       }
+
+      /* Step 2: shrink each quadrant toward its own corner, same
+         transition timing, opening the center gap for the badge. The
+         percentage shrink (not px) is what keeps this identical on
+         any screen size — see kx-shrunk sizing below. */
+      .kx-photo.kx-shrunk {
+        width: 42vw; height: 42vh;
+      }
+      #kx-photoTR.kx-shrunk { left: 58vw; }
+      #kx-photoBL.kx-shrunk { top: 58vh; }
+      #kx-photoBR.kx-shrunk { top: 58vh; left: 58vw; }
+
       #kx-overlay {
         position: absolute; inset: 0; z-index: 1;
-        background: rgba(8, 26, 16, 0.55);
+        background: rgba(8, 26, 16, 0.35);
         pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.6s ease;
       }
+      #kx-overlay.kx-show { opacity: 1; }
 
       /* ---------- Foreground badge — always centered, own layer ---------- */
       #kx-centerLogo {
@@ -197,6 +226,14 @@
       }
       @media screen and (max-width: 640px) {
         #kx-centerLogo { width: 78vw; max-width: 320px; }
+        /* Mobile portrait: the diamond gap opened by kx-shrunk is
+           narrower relative to badge width than on desktop, so shrink
+           the quadrants a touch further to guarantee the badge card
+           never visually overlaps a photo edge on tall/narrow phones. */
+        .kx-photo.kx-shrunk { width: 38vw; height: 40vh; }
+        #kx-photoTR.kx-shrunk { left: 62vw; }
+        #kx-photoBL.kx-shrunk { top: 60vh; }
+        #kx-photoBR.kx-shrunk { top: 60vh; left: 62vw; }
       }
 
       /* Static fallback: prefers-reduced-motion skips photo animation
@@ -204,7 +241,7 @@
       @media (prefers-reduced-motion: reduce) {
         #kx-photoLayer, #kx-overlay { display: none !important; }
         #kx-splash { background: #14532d; }
-        .kx-photo { animation: none !important; transition: none !important; }
+        .kx-photo { transition: none !important; }
         #kx-centerLogo { transition-duration: 0.01ms !important; }
       }
     </style>
@@ -320,21 +357,23 @@
           // show the splash anyway, just won't be remembered for next tab.
         }
 
-        // Four background photos, crossfading in this order.
-        var PHOTOS = [
-          { src: '/splash/gate.webp',     alt: 'KUET main gate' },
-          { src: '/splash/academic.webp', alt: 'KUET academic building' },
-          { src: '/splash/aerial.webp',   alt: 'Aerial view of KUET campus' },
-          { src: '/splash/sign.webp',     alt: 'KUET sign at dusk' },
+        // Four campus photos, one per screen quadrant (top-left,
+        // top-right, bottom-left, bottom-right) — fixed positions, not a
+        // sequence, so there's no ordering to tune.
+        var QUADRANTS = [
+          { id: 'kx-photoTL', src: '/splash/gate.webp',     alt: 'KUET main gate' },
+          { id: 'kx-photoTR', src: '/splash/academic.webp', alt: 'KUET academic building' },
+          { id: 'kx-photoBL', src: '/splash/aerial.webp',   alt: 'Aerial view of KUET campus' },
+          { id: 'kx-photoBR', src: '/splash/sign.webp',     alt: 'KUET sign at dusk' },
         ];
 
         var el = document.createElement('div');
         el.id = 'kx-splash';
         el.innerHTML =
           '<div id="kx-photoLayer">' +
-            PHOTOS.map(function (p, i) {
-              return '<div class="kx-photo' + (i === 0 ? ' kx-photo-active' : '') + '" id="kx-photo' + i + '" ' +
-                     'role="img" aria-label="' + p.alt + '" style="background-image:url(\'' + p.src + '\')"></div>';
+            QUADRANTS.map(function (q) {
+              return '<div class="kx-photo" id="' + q.id + '" ' +
+                     'role="img" aria-label="' + q.alt + '" style="background-image:url(\'' + q.src + '\')"></div>';
             }).join('') +
           '</div>' +
           '<div id="kx-overlay"></div>' +
@@ -349,7 +388,8 @@
         var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         var centerLogo = document.getElementById('kx-centerLogo');
         var clockText = document.getElementById('kx-clock-text');
-        var photoEls = PHOTOS.map(function (_, i) { return document.getElementById('kx-photo' + i); });
+        var overlay = document.getElementById('kx-overlay');
+        var photoEls = QUADRANTS.map(function (q) { return document.getElementById(q.id); });
 
         // Live clock — ticks for as long as the splash is on screen.
         var clockTimer = null;
@@ -378,22 +418,54 @@
           return;
         }
 
-        // Timeline (7s total):
-        //   0ms    first photo visible, Ken Burns zoom begins
-        //   200ms  badge fades/scales in
-        //   700ms  badge settled, clock starts ticking
-        //   1600ms / 3200ms / 4800ms  photo crossfades (4 photos total)
-        //   6400ms badge starts fade+scale out
-        //   6700ms splash background starts fading, revealing app
-        //   7000ms splash removed from DOM
-        var PHOTO_INTERVAL = 1600;
-        var TOTAL_DURATION = 7000;
-        var BADGE_ENTER_DELAY = 200;
-        var BADGE_EXIT_LEAD = 600;
-        var OVERLAY_FADE_LEAD = 300;
+        // Timeline (~4.7s total) — enter → establish → shrink → badge:
+        //   0ms     all 4 quadrants start off-canvas, animation frame
+        //           requested so the browser paints the off-canvas start
+        //           position first (otherwise the very first transition
+        //           has nothing to animate from and just snaps in place)
+        //   50ms    kx-arrived added — quadrants slide+scale in together,
+        //           converging into a seamless full-screen tile (1.1s)
+        //   1150ms  arrival transition finishes — photos now fully
+        //           "established" as one tiled campus image
+        //   1150–1850ms  deliberate 700ms HOLD with nothing changing, so
+        //           the fully-assembled photo genuinely registers before
+        //           anything moves again (this was previously only ~300ms
+        //           and read as rushed — the tile barely settled before
+        //           shrinking)
+        //   1850ms  overlay darken and kx-shrunk fire together — shrink
+        //           and darken read as one combined "opening up" motion
+        //           rather than two separate events (1s)
+        //   2150ms  badge starts fading/scaling into the opening gap,
+        //           timed to land a beat after the shrink is visibly
+        //           under way but before it fully completes, so the badge
+        //           arrival and the last bit of shrink resolve together
+        //   2650ms  badge settled, clock starts ticking
+        //   4200ms  badge starts fade+scale out
+        //   4500ms  splash background starts fading, revealing app
+        //   4800ms  splash removed from DOM
+        var ARRIVE_DELAY = 50;
+        var ARRIVE_DURATION = 1100;
+        var ESTABLISH_HOLD = 700;
+        var SHRINK_DELAY = ARRIVE_DELAY + ARRIVE_DURATION + ESTABLISH_HOLD; // 1850ms
+        var BADGE_ENTER_DELAY = SHRINK_DELAY + 300; // 2150ms — shrink well under way
+        var CLOCK_START_DELAY = BADGE_ENTER_DELAY + 500; // 2650ms — badge settled
+        var TOTAL_DURATION = 4500;
+        var BADGE_EXIT_LEAD = 300;
 
         function startTimeline() {
           requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+              photoEls.forEach(function (p) { p.classList.add('kx-arrived'); });
+            });
+
+            // Overlay darken and shrink fire together — one continuous
+            // "photos settle back to reveal the badge" beat instead of
+            // the darken pre-empting the shrink by a second.
+            setTimeout(function () {
+              overlay.classList.add('kx-show');
+              photoEls.forEach(function (p) { p.classList.add('kx-shrunk'); });
+            }, SHRINK_DELAY);
+
             setTimeout(function () {
               centerLogo.classList.add('kx-show');
             }, BADGE_ENTER_DELAY);
@@ -401,29 +473,7 @@
             setTimeout(function () {
               renderClock();
               clockTimer = setInterval(renderClock, 1000);
-            }, BADGE_ENTER_DELAY + 500);
-
-            // Crossfade, not hard-cut: the outgoing photo used to lose its
-            // "active" class the instant the next one gained it, so it
-            // snapped to opacity:0 immediately while only the incoming
-            // photo actually faded in — that abrupt cut is what read as
-            // "stuck then jumps" instead of a smooth dissolve. Now the
-            // outgoing photo keeps its opacity (and z-index below the
-            // incoming one) for the full length of the fade, so both
-            // photos are genuinely visible together mid-transition, and
-            // it's only cleared afterwards once it's fully hidden.
-            var FADE_MS = 1100;
-            photoEls.forEach(function (photo, i) {
-              if (i === 0) return; // first photo already active
-              setTimeout(function () {
-                var prevActive = photoEls.filter(function (p) { return p.classList.contains('kx-photo-active'); });
-                void photo.offsetWidth; // ensure the animation restarts cleanly
-                photo.classList.add('kx-photo-active');
-                setTimeout(function () {
-                  prevActive.forEach(function (p) { p.classList.remove('kx-photo-active'); });
-                }, FADE_MS);
-              }, i * PHOTO_INTERVAL);
-            });
+            }, CLOCK_START_DELAY);
 
             setTimeout(function () {
               centerLogo.classList.remove('kx-show');
@@ -432,21 +482,15 @@
 
             setTimeout(function () {
               el.style.opacity = 0;
-            }, TOTAL_DURATION - OVERLAY_FADE_LEAD);
+            }, TOTAL_DURATION - 100);
 
-            setTimeout(hideSplash, TOTAL_DURATION + 200);
+            setTimeout(hideSplash, TOTAL_DURATION + 300);
           });
         }
 
-        // Each photo was set as a CSS background-image directly in the
-        // markup above, so the browser starts fetching all 4 in parallel —
-        // but nothing guaranteed a given photo had actually finished
-        // downloading/decoding by the moment its crossfade turn arrived.
-        // On a slow connection/desktop that showed up as a visible pop-in
-        // or blank flash mid-sequence instead of a smooth crossfade.
-        // Preload all 4 first (with a hard cap so a stalled request can
-        // never block the splash indefinitely) and only start the
-        // timeline once every photo is decoded and ready.
+        // Preload all 4 quadrant photos first (hard cap so a stalled
+        // request never blocks the splash indefinitely) so the
+        // slide-in-to-cover motion never shows a blank/pop-in frame.
         var PRELOAD_MAX_WAIT = 1200;
         var loadedCount = 0;
         var started = false;
@@ -455,13 +499,13 @@
           started = true;
           startTimeline();
         }
-        PHOTOS.forEach(function (p) {
+        QUADRANTS.forEach(function (q) {
           var img = new Image();
           img.onload = img.onerror = function () {
             loadedCount += 1;
-            if (loadedCount === PHOTOS.length) maybeStart();
+            if (loadedCount === QUADRANTS.length) maybeStart();
           };
-          img.src = p.src;
+          img.src = q.src;
         });
         setTimeout(maybeStart, PRELOAD_MAX_WAIT); // cap the wait either way
       })();
