@@ -61,8 +61,10 @@ export function useTodayActions() {
   const isGroupMode = !!groupId && groupHasCR === true;
   // Same hook Assignments.jsx/Schedule.jsx use for both "can edit
   // teachers" (canEdit) and "is this student the CR/ACR" (myRole) — one
-  // subscription instead of a second, separate CR check.
-  const { canEdit: canEditTeachers, myRole } = useCanEditGroup(groupId);
+  // subscription instead of a second, separate CR check. This is the
+  // teacher-assignment (plannerSettings) use, so scope: 'content' — the
+  // narrower, still-CR-gated rule (see useCanEditGroup.js header note).
+  const { canEdit: canEditTeachers, myRole } = useCanEditGroup(groupId, { scope: 'content' });
 
   const [schedule, setSchedule] = useState(() => (isGroupMode ? [] : (store.get('schedule') || [])));
   const [groupRoutineEntries, setGroupRoutineEntries] = useState(null);

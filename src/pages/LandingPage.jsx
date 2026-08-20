@@ -666,7 +666,15 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
               borderRadius: '14px', overflow: 'hidden', border: '4px solid #fff',
               boxShadow: '0 14px 28px rgba(0,0,0,0.35)', background: '#fff',
             }}>
-              <img src={CAMPUS_PHOTOS.gate.src} alt={CAMPUS_PHOTOS.gate.label} style={{ width: '100%', aspectRatio: '21 / 9', objectFit: 'cover', display: 'block' }} />
+              {/* BUGFIX (this session, mobile only): was forced into a
+                  21:9 banner crop, but the gate photo's real ratio is
+                  5:3 (see desktop's own tile below, which already gets
+                  this right) — 21:9 is far wider/shorter, so on mobile
+                  the tall gate structure itself was getting cropped off
+                  the top ("main gate image ta puro ashe na, height kete
+                  jhhe"). Matching the real 5:3 ratio here shows the
+                  whole gate the same way desktop does. */}
+              <img src={CAMPUS_PHOTOS.gate.src} alt={CAMPUS_PHOTOS.gate.label} style={{ width: '100%', aspectRatio: '5 / 3', objectFit: 'cover', display: 'block' }} />
               <div style={{
                 position: 'absolute', top: '10px', left: '10px',
                 display: 'flex', alignItems: 'center', gap: '0.3rem',
@@ -724,17 +732,22 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
                 photo so a mobile visitor sees it in the very first
                 viewport (previously bottom-right on a taller cluster —
                 often below the fold on short-viewport phones before
-                scrolling). Wider (21:9) + shorter photo strip here also
-                means the whole cluster's total height dropped, which
-                alone pulls the mascot higher up the page. Lives on THIS
-                outer wrapper (no overflow:hidden here, unlike the gate
-                photo's own card) so its upward/rightward offset isn't
-                clipped — see the BUGFIX comment where this used to sit,
-                inside the gate card. Sized up per owner ask (64px ->
-                92px) and nudged further out (top/right offsets) so the
-                bigger artwork still clears the gate card's rounded
-                corner and the location badge instead of overlapping
-                them, while staying clear of the fixed Install button
+                scrolling). NOTE: hero photo ratio was later corrected
+                from 21:9 to 5:3 (see BUGFIX comment on the gate <img>
+                above — 21:9 was cropping the gate structure itself),
+                which makes the hero taller than when this comment was
+                written; the mascot's offsets below still clear the
+                card corner/badge fine at 5:3, just with less headroom
+                above the cluster than the original 21:9 gave. Lives on
+                THIS outer wrapper (no overflow:hidden here, unlike the
+                gate photo's own card) so its upward/rightward offset
+                isn't clipped — see the BUGFIX comment where this used
+                to sit, inside the gate card. Sized up per owner ask
+                (64px -> 92px) and nudged further out (top/right
+                offsets) so the bigger artwork still clears the gate
+                card's rounded corner and the location badge instead of
+                overlapping them, while staying clear of the fixed
+                Install button
                 pinned to the bottom-right of the viewport below. */}
             <div
               className="kx-mascot-badge"

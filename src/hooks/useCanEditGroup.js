@@ -4,12 +4,24 @@ import { db, auth } from '../lib/firebase';
 import { subscribeMembers, subscribeCRStatus } from '../lib/groupSync';
 
 /**
- * Mirrors firestore.rules' isContentEditor(groupId): CR/ACR/Campus Lead/
- * Admin can always edit; anyone verified can edit only while the group
- * currently has no CR. Rules enforce this for real — this hook only
- * decides whether the UI shows edit controls.
+ * Mirrors firestore.rules' isContentEditor(groupId) and isRoutineEditor
+ * (groupId). Rules enforce this for real — this hook only decides
+ * whether the UI shows edit controls.
+ *
+ * NOTE (Aug 2026, CR_PERMISSION_AND_ROLL_UPGRADE_PLAN.md §4 Phase B):
+ * the two gates diverged — routineEntries/assignmentEntries/
+ * teacherProfiles now let ANY verified member write regardless of
+ * whether the group currently has a CR (isRoutineEditor), while
+ * meta/plannerSettings (course-teacher assignment)/meta/classSetup
+ * stayed on the older, narrower CR/ACR/CL/Admin + no-CR-fallback gate
+ * (isContentEditor). Pass `scope: 'routine'` (default) for Schedule/
+ * Assignments-style UI, or `scope: 'content'` for anything gating
+ * plannerSettings/classSetup writes (e.g. "assign a teacher to this
+ * course" in Courses.jsx/TermQS.jsx/Attendance.jsx) — using the wrong
+ * scope would show/hide edit controls for the wrong set of people
+ * relative to what the actual Firestore rule allows.
  */
-export function useCanEditGroup(groupId) {
+export function useCanEditGroup(groupId, { scope = 'routine' } = {}) {
   const [myRole, setMyRole] = useState(null);   // 'member'|'cr'|'acr'|null
   const [verified, setVerified] = useState(false);
   const [hasCR, setHasCR] = useState(true);      // fail-safe default: assume locked until we know
@@ -37,6 +49,15 @@ export function useCanEditGroup(groupId) {
     return () => { unsubMembers(); unsubCR(); unsubCL(); };
   }, [groupId]);
 
-  const canEdit = isAdmin || isCL || myRole === 'cr' || myRole === 'acr' || (!hasCR && verified);
+  // isRoutineEditor mirror: CR/ACR no longer special-cased separately
+  // from "any verified member" — a CR just IS a verified member, so
+  // dropping the hasCR-dependent branch entirely gives the same result
+  // as the rules' `isAdmin() || isCLFor() || isVerifiedMember()`.
+  const canEditRoutine = isAdmin || isCL || verified;
+  // isContentEditor mirror: unchanged from before — CR/ACR always can;
+  // anyone verified only while the group currently has no CR.
+  const canEditContent = isAdmin || isCL || myRole === 'cr' || myRole === 'acr' || (!hasCR && verified);
+
+  const canEdit = scope === 'content' ? canEditContent : canEditRoutine;
   return { canEdit, myRole, verified, hasCR, isCL, isAdmin };
 }

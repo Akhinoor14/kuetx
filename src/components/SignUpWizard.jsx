@@ -40,6 +40,7 @@ import {
 } from '../store/store';
 import { isKuetEmailFormat, emailRollMatchesProfile } from '../lib/kuetEmailVerify';
 import { isFacultyEmailFormat } from '../lib/facultyEmailVerify';
+import { isValidRoll } from '../lib/rollFormat';
 import { isMultiSectionDept } from '../lib/groupUtils';
 import { SERVICE_TYPES, PROVIDER_SIGNUP_TYPES } from '../lib/serviceSync';
 import { auth } from '../lib/firebase';
@@ -317,7 +318,7 @@ function validateStudentStep(form) {
   if (!String(form.name || '').trim()) errors.name = 'Name is required';
   const roll = String(form.studentId || '').trim();
   if (!roll) errors.studentId = 'Student ID is required';
-  else if (!/^\d{7}$/.test(roll)) errors.studentId = 'Student ID must be a 7-digit number';
+  else if (!isValidRoll(roll)) errors.studentId = 'Student ID must be a 7-digit or 8-digit number';
   else if (!extractBatchFromRoll(roll)) errors.studentId = 'Student ID must be from a current or past batch';
   const email = String(form.kuetEmail || '').trim();
   if (!email) errors.kuetEmail = 'KUET email is required';

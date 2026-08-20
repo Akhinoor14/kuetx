@@ -25,6 +25,7 @@ import { doc, setDoc, getDoc, getDocFromServer, getDocs, collection, serverTimes
 import { db } from './firebase';
 import { store, tagProfileOwner } from '../store/store';
 import { withPromiseTimeout } from './safeSnapshot';
+import { toSevenDigitCore } from './rollFormat';
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
@@ -64,11 +65,12 @@ const ROLL_DEPT_MAP = {
 };
 
 const deptBatchFromRoll = (roll) => {
-  const r = String(roll || '').trim();
-  if (!/^\d{7}$/.test(r)) return null;
-  const dept = ROLL_DEPT_MAP[r.slice(2, 4)];
+  // Accepts 7-digit and 8-digit (leading '5') rolls — see rollFormat.js.
+  const core = toSevenDigitCore(roll);
+  if (!core) return null;
+  const dept = ROLL_DEPT_MAP[core.slice(2, 4)];
   if (!dept) return null;
-  return { dept, batch: '2K' + r.slice(0, 2) };
+  return { dept, batch: '2K' + core.slice(0, 2) };
 };
 
 // NOTE: 'schedule' and 'assignments' are intentionally NOT excluded here.

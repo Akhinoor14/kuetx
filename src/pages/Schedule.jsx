@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Modal from '../components/Modal';
-import { Plus, Settings2, Clock3, PencilLine, Copy, CalendarDays, X, FileText, BookOpen, Pencil, ClipboardList, Lightbulb, Sprout, GraduationCap, Rocket } from 'lucide-react';
+import { Plus, Settings2, Clock3, PencilLine, Copy, CalendarDays, X, FileText, BookOpen, Pencil, ClipboardList, Lightbulb, Sprout, GraduationCap, Rocket, History } from 'lucide-react';
 import { store, uid, getProfile, getCurrentTermKey, getRoutinePreviewDate, isRoutineHoliday, getTermTimeline } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import { useNavigate, Link } from 'react-router-dom';
@@ -12,6 +12,7 @@ import { subscribeCRStatus, subscribeRoutine, addRoutineEntry, updateRoutineEntr
 import { subscribeGroupTermStartDate } from '../lib/termStartDateSync';
 import { useCanEditGroup } from '../hooks/useCanEditGroup';
 import TeacherClaimBanner from '../components/TeacherClaimBanner';
+import EditLogModal from '../components/EditLogModal';
 import BlueTick from '../components/BlueTick';
 import { getFacultyProfile } from '../lib/facultySync';
 import { getFacultyAssignment } from '../lib/facultyClassSync';
@@ -540,7 +541,12 @@ export default function Schedule() {
     if (!groupId) { setGroupHasCR(false); return; }
     return subscribeCRStatus(groupId, (status) => setGroupHasCR(!!status?.hasCR));
   }, [groupId]);
-  const { canEdit: canEditGroupSchedule } = useCanEditGroup(groupId);
+  // scope: 'routine' (the default) — Schedule writes routineEntries,
+  // which is isRoutineEditor-gated now (Aug 2026 CR permission
+  // expansion): any verified member can edit, whether or not the group
+  // currently has a CR. Explicit here so this doesn't silently change
+  // meaning if useCanEditGroup's default scope ever changes.
+  const { canEdit: canEditGroupSchedule } = useCanEditGroup(groupId, { scope: 'routine' });
   // Single source of truth for "are we in shared/group mode": avoids a
   // flicker where groupId exists but groupHasCR hasn't resolved yet (null),
   // which would otherwise let personal-mode render for a beat before
@@ -561,14 +567,15 @@ export default function Schedule() {
   // every page visit, or permanently for any group that hasn't had a CR
   // assigned yet.
   //
-  // canEditGroupSchedule (from useCanEditGroup) already encodes the
-  // correct rule for all of this on its own — CR/ACR/Campus Lead/Admin
-  // always, or a *verified* member specifically while hasCR is false —
-  // and defaults its own `hasCR` to true (fail-closed) until the
-  // Firestore snapshot resolves, so it's safe to consult immediately.
-  // "Personal mode" (no group at all) is the ONLY case where the student
-  // is editing their own private local data and should always be able
-  // to — that's the sole remaining `true` case.
+  // canEditGroupSchedule (from useCanEditGroup, scope: 'routine') now
+  // encodes: CR/ACR/Campus Lead/Admin always, OR any verified member
+  // regardless of whether the group currently has a CR (Aug 2026 CR
+  // permission expansion — the old "only while hasCR is false" fallback
+  // window was removed for routineEntries specifically; see
+  // firestore.rules' isRoutineEditor). "Personal mode" (no group at
+  // all) is the ONLY case where the student is editing their own
+  // private local data and should always be able to — that's the sole
+  // remaining `true` case.
   const canEditSchedule = groupId ? canEditGroupSchedule : true;
 
   const courses = useMemo(() => getAllCourses(profile), [profile.dept, profile.currentTermKey]);
@@ -716,6 +723,11 @@ export default function Schedule() {
   const [adding, setAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [editingSettings, setEditingSettings] = useState(false);
+  // Phase D (CR_PERMISSION_AND_ROLL_UPGRADE_PLAN.md) — Edit Log modal.
+  // Read-only (auditLog read rule already allows any verified member,
+  // same as isRoutineEditor's write side), so this is shown regardless
+  // of canEditSchedule — not gated on it.
+  const [showEditLog, setShowEditLog] = useState(false);
   const [selectedDay, setSelectedDay] = useState(() => dateToDayName(getRoutinePreviewDate((store.get('scheduleSettings')?.holidayDates) || [])));
   const [holidaySetupOpen, setHolidaySetupOpen] = useState(false);
   const [holidayDate, setHolidayDate] = useState('');
@@ -1869,6 +1881,14 @@ export default function Schedule() {
           {canEditSchedule && (
             <button className="btn btn-secondary btn-sm" onClick={() => navigate('/courses')} style={{ fontSize: '12px' }} title="Open the Courses page and assign teachers per course">
               <BookOpen size={13} /> <span className="btn-txt btn-txt-long">Manage Course Teachers</span><span className="btn-txt-short">Teachers</span>
+            </button>
+          )}
+          {/* Read-only, so shown to any group member regardless of
+              canEditSchedule — mirrors auditLog's read rule, which is
+              broader than the write side. See Phase D of the plan. */}
+          {isGroupMode && (
+            <button className="btn btn-ghost btn-sm" onClick={() => setShowEditLog(true)} style={{ fontSize: '12px' }} title="See who changed what, and when">
+              <History size={13} /> <span className="btn-txt">Edit Log</span>
             </button>
           )}
           {canEditSchedule && (
@@ -3036,6 +3056,10 @@ export default function Schedule() {
           navigate('/teachers');
         }}
       />
+
+      {showEditLog && (
+        <EditLogModal groupId={groupId} onClose={() => setShowEditLog(false)} />
+      )}
     </div>
   );
 }

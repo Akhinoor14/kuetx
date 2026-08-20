@@ -10,7 +10,7 @@
 // action.
 //
 // Placement (explicit product decision): fixed bottom-right on BOTH
-// desktop and mobile.
+// desktop and mobile by default.
 //   - Desktop: sidebar is left-docked (220px wide), so bottom-right is
 //     always clear of it.
 //   - Mobile: bottom nav is fixed bottom, full-width, z-index 3500 (see
@@ -18,6 +18,15 @@
 //     (bottom offset clears the nav's height + safe-area inset), same
 //     stacking idea FloatingUploadBar already uses (bottom: 78) so the
 //     two never overlap each other either.
+//
+// `side` prop (default 'right'): the landing page's hero art (turtle
+// mascot + campus photo cluster) also lives bottom/top-right on mobile
+// (see LandingPage.jsx), and this fixed FAB — being on top of the page
+// at a constant screen position regardless of scroll — sat directly
+// over that artwork's corner. Rather than fight over the same corner,
+// SignedOutRouter (App.jsx) passes side="left" for the landing route
+// only; every other mount (Layout, /about, /privacy) keeps the default
+// right placement, unaffected.
 //
 // Owner decision (this session): "always show on mobile if not
 // installed" — Chrome/Edge only fire beforeinstallprompt once their own
@@ -47,7 +56,7 @@ function isAndroid() {
   return /Android/.test(navigator.userAgent || '');
 }
 
-export default function FloatingInstallButton() {
+export default function FloatingInstallButton({ side = 'right' }) {
   const { status, triggerInstall, openOrUpdate } = useInstallPrompt();
   const [showManualSheet, setShowManualSheet] = useState(false);
 
@@ -84,7 +93,7 @@ export default function FloatingInstallButton() {
     <>
       <button
         onClick={handleClick}
-        className="kx-install-fab"
+        className={`kx-install-fab${side === 'left' ? ' kx-install-fab-left' : ''}`}
         aria-label={label}
         title={label}
       >
@@ -209,6 +218,16 @@ export default function FloatingInstallButton() {
           filter: brightness(1.05);
         }
         .kx-install-fab:active { transform: translateY(-1px) scale(0.98); }
+
+        /* side="left" override — see the header comment on `side` above.
+           Only the horizontal anchor flips; bottom offsets (mobile nav
+           clearance, desktop's lower resting position) stay identical. */
+        .kx-install-fab-left { right: auto; left: 16px; }
+        @media (min-width: 768px) {
+          /* Desktop sidebar is left-docked (220px) — clear it the same
+             way bottom-right normally clears the right edge. */
+          .kx-install-fab-left { left: 236px; }
+        }
 
         /* Owner ask: mobile should actively nudge toward install, since
            installed-as-app is the best experience there — a slow,

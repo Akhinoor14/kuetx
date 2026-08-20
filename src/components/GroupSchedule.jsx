@@ -67,7 +67,11 @@ export default function GroupSchedule({ groupId, canEdit }) {
       {entries === null && <div style={{ color: 'var(--muted)', fontSize: 13 }}>Loading…</div>}
       {entries?.length === 0 && (
         <div className="card" style={{ padding: 16, textAlign: 'center', color: 'var(--muted)', fontSize: 13 }}>
-          {canEdit ? 'No classes added yet — add the first one.' : "Your CR hasn't added any classes yet."}
+          {/* Role-agnostic wording (Aug 2026 CR permission expansion) —
+              routineEntries is no longer CR/ACR-only (isRoutineEditor),
+              so "Your CR hasn't..." is misleading for the non-editor case
+              now (any verified member can add one). */}
+          {canEdit ? 'No classes added yet — add the first one.' : 'No classes added yet.'}
         </div>
       )}
 

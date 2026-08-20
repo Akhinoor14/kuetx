@@ -9,6 +9,7 @@ import { claimRoll, requestRollUnlock } from '../lib/rollOwnership';
 import { ensureManualVerifyRequest } from '../lib/manualVerifyRequests';
 import { subscribeGroupTermStartDate, subscribeGroupCurrentTermKey } from '../lib/termStartDateSync';
 import { getGroupId, isMultiSectionDept } from '../lib/groupUtils';
+import { isValidRoll } from '../lib/rollFormat';
 
 // Map dept codes: roll middle 2 digits -> dept code
 // BUGFIX: this used to be a second, hand-maintained copy of the
@@ -33,13 +34,17 @@ const HALL_OPTIONS = [
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
 const extractDeptCodeFromRoll = (roll) => {
-  const r = String(roll || '').trim();
+  let r = String(roll || '').trim();
+  // 8-digit rolls start with a leading '5' (see rollFormat.js) — strip it
+  // so the same "positions 3-4 = dept digits" live-typing logic below
+  // works whether the student is typing a 7-digit or 8-digit roll.
+  if (r.length >= 1 && r[0] === '5' && r.length > 7) r = r.slice(1);
   // Deliberately more permissive than store.js's getDeptCodeFromRoll
-  // (which requires a full 7-digit roll): this auto-fills the dept field
-  // live as the student types, so it needs to resolve as soon as the
-  // dept digits (positions 3-4) exist, not only once all 7 digits are
-  // in. Same underlying table (via store.js), just applied to a
-  // shorter, in-progress string.
+  // (which requires a full 7-or-8-digit roll): this auto-fills the dept
+  // field live as the student types, so it needs to resolve as soon as
+  // the dept digits (positions 3-4 of the 7-digit core) exist, not only
+  // once all digits are in. Same underlying table (via store.js), just
+  // applied to a shorter, in-progress string.
   if (r.length < 5) return '';
   if (!extractBatchFromRoll(r)) return '';
   return getDeptCodeFromRoll(r.padEnd(7, '0'));
@@ -47,7 +52,7 @@ const extractDeptCodeFromRoll = (roll) => {
 
 const isRollValid = (roll) => {
   const r = String(roll || '').trim();
-  return /^\d{7}$/.test(r) && Boolean(extractBatchFromRoll(r));
+  return isValidRoll(r) && Boolean(extractBatchFromRoll(r));
 };
 
 const fieldStyle = {
@@ -115,7 +120,7 @@ const getFieldError = (key, form, autoCalculatedDept) => {
   if (key === 'studentId') {
     const v = String(value || '').trim();
     if (!v) return 'Student ID is required';
-    if (!/^\d{7}$/.test(v)) return 'Student ID must be a 7-digit number';
+    if (!isValidRoll(v)) return 'Student ID must be a 7-digit or 8-digit number';
     if (!extractBatchFromRoll(v)) return 'Student ID must be from a current or past batch (no future batch allowed)';
   }
   if (key === 'dept') {

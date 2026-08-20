@@ -38,7 +38,7 @@ export default function TermQS() {
   const profile = getProfile();
   const courses = getAllCourses(profile);
   const groupId = getGroupId(profile);
-  const { canEdit: canEditTeachers } = useCanEditGroup(groupId);
+  const { canEdit: canEditTeachers } = useCanEditGroup(groupId, { scope: 'content' });
 
   // Filter courses to show only current term courses
   const currentTermKey = getCurrentTermKey(profile);

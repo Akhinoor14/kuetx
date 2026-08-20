@@ -1,16 +1,21 @@
 import { useEffect, useState } from 'react';
+import { History } from 'lucide-react';
 import { getProfile } from '../store/store';
 import { getGroupLabel } from '../lib/groupUtils';
 import {
   subscribeAssignments, addAssignmentEntry, deleteAssignmentEntry,
 } from '../lib/groupSync';
 import LastUpdatedBy from './LastUpdatedBy';
+import EditLogModal from './EditLogModal';
 
 export default function GroupAssignments({ groupId, canEdit }) {
   const profile = getProfile();
   const [entries, setEntries] = useState(null);
   const [adding, setAdding] = useState(false);
   const [form, setForm] = useState({ title: '', courseName: '', due: '' });
+  // Phase D (CR_PERMISSION_AND_ROLL_UPGRADE_PLAN.md) — read-only, so not
+  // gated on canEdit (auditLog's read rule is broader than its write side).
+  const [showEditLog, setShowEditLog] = useState(false);
 
   useEffect(() => subscribeAssignments(groupId, setEntries), [groupId]);
 
@@ -34,11 +39,16 @@ export default function GroupAssignments({ groupId, canEdit }) {
         <div style={{ fontSize: 13, color: 'var(--muted)' }}>
           Shared assignments for <strong>{getGroupLabel(profile)}</strong>
         </div>
-        {canEdit && (
-          <button className="btn btn-sm btn-primary" onClick={() => setAdding((v) => !v)}>
-            {adding ? 'Cancel' : '+ Add assignment'}
+        <div style={{ display: 'flex', gap: 6 }}>
+          <button className="btn btn-sm btn-ghost" onClick={() => setShowEditLog(true)} title="See who changed what, and when">
+            <History size={13} /> Edit Log
           </button>
-        )}
+          {canEdit && (
+            <button className="btn btn-sm btn-primary" onClick={() => setAdding((v) => !v)}>
+              {adding ? 'Cancel' : '+ Add assignment'}
+            </button>
+          )}
+        </div>
       </div>
 
       {adding && (
@@ -56,7 +66,11 @@ export default function GroupAssignments({ groupId, canEdit }) {
       {entries === null && <div style={{ color: 'var(--muted)', fontSize: 13 }}>Loading…</div>}
       {sorted.length === 0 && (
         <div className="card" style={{ padding: 16, textAlign: 'center', color: 'var(--muted)', fontSize: 13 }}>
-          {canEdit ? 'No assignments yet — add the first one.' : "Your CR hasn't added any assignments yet."}
+          {/* Role-agnostic wording (Aug 2026 CR permission expansion) —
+              assignmentEntries is no longer CR/ACR-only (isRoutineEditor),
+              so "Your CR hasn't..." is misleading for the non-editor case
+              now (any verified member can add one). */}
+          {canEdit ? 'No assignments yet — add the first one.' : 'No assignments yet.'}
         </div>
       )}
       {sorted.map((entry) => (
@@ -74,6 +88,10 @@ export default function GroupAssignments({ groupId, canEdit }) {
       ))}
 
       {mostRecent && <LastUpdatedBy meta={mostRecent.updatedBy} at={mostRecent.updatedAt} />}
+
+      {showEditLog && (
+        <EditLogModal groupId={groupId} onClose={() => setShowEditLog(false)} />
+      )}
     </div>
   );
 }

@@ -15,6 +15,18 @@ import { useIsFaculty } from '../hooks/useIsFaculty';
  * leaderless class doesn't quietly stay that way just because nobody
  * happened to look at Profile.jsx.
  *
+ * NOTE (Aug 2026, CR_PERMISSION_AND_ROLL_UPGRADE_PLAN.md §৩ক.৪/§4 item
+ * 9): kept persistent/non-dismissible — CR is still a real, needed role
+ * (plannerSettings/classSetup writes, and general class leadership/
+ * accountability, still depend on someone holding it) — but the wording
+ * below was softened from "class is stuck without you" urgency to a
+ * plain "this class needs someone in this role" framing, since routine/
+ * assignment/teacherProfiles writes no longer depend on a CR existing
+ * (isRoutineEditor lets any verified member write those regardless).
+ * Confirmed with Akhinoor: CR is still wanted, just no longer a literal
+ * write-blocker, so the banner shouldn't imply the class is broken
+ * without one.
+ *
  * Mounted once in App.jsx's Layout, same spot as ClassJoinIntro. Renders
  * nothing on /profile itself (ClaimCRCard is already right there on that
  * page, so a second nudge on top of it would be redundant). No separate
@@ -89,7 +101,7 @@ export default function NoCRBanner() {
       }}
     >
       <Crown size={14} />
-      {getGroupLabel(profile)} has no CR yet — tap to claim CR for your class
+      {getGroupLabel(profile)} doesn't have a CR yet — tap to claim CR for your class
     </div>
   );
 }

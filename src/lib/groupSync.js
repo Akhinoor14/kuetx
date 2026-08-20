@@ -30,6 +30,7 @@ import { db, auth } from './firebase';
 import { getIdentityStamp, getGroupId } from './groupUtils';
 import { checkIsAdmin } from './adminAuth';
 import { withPromiseTimeout } from './safeSnapshot';
+import { toSevenDigitCore } from './rollFormat';
 
 // PERF FIX (multi-MINUTE hangs seen in production — one capture showed a
 // single route stuck "settling" for ~383s / 6.4 minutes): every call site
@@ -1254,6 +1255,13 @@ export async function clApproveLeaveCR(groupId, requestDocId, targetUid) {
   batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'member', legacyCRClaim: false });
   // PHASE 2: mobile now lives in the private/mobile sub-doc.
   batch.set(doc(db, 'groups', groupId, 'members', targetUid, 'private', 'mobile'), { value: '' });
+  // BUGFIX (this session): the crRequests/{requestDocId} doc itself was
+  // never resolved here — status stayed 'pending' forever even after a
+  // successful approval, so the request kept reappearing in every
+  // Approvals list (StaffDashboard's CampusLeadBlock, AdminDashboard's
+  // ApprovalsView) as if nothing had happened. clRejectLeaveCR already
+  // did this for the reject path; approve needs the matching update.
+  batch.update(doc(db, 'groups', groupId, 'crRequests', requestDocId), { status: 'approved' });
   await batch.commit();
 }
 
@@ -1312,11 +1320,13 @@ const _JOIN_REQUEST_DEPT_MAP = {
 export function suggestedJoinMatch(roll, groupId) {
   const cleanRoll = String(roll || '').trim();
   const [wantBatch, wantDept] = String(groupId || '').split('_');
-  if (!/^\d{7}$/.test(cleanRoll) || !wantBatch || !wantDept) {
+  // Accepts 7-digit and 8-digit (leading '5') rolls — see rollFormat.js.
+  const core = toSevenDigitCore(cleanRoll);
+  if (!core || !wantBatch || !wantDept) {
     return { batchMatches: false, rollInRange: false };
   }
-  const rollBatch = `2K${cleanRoll.slice(0, 2)}`;
-  const rollDept = _JOIN_REQUEST_DEPT_MAP[cleanRoll.slice(2, 4)] || '';
+  const rollBatch = `2K${core.slice(0, 2)}`;
+  const rollDept = _JOIN_REQUEST_DEPT_MAP[core.slice(2, 4)] || '';
   return {
     batchMatches: rollBatch === wantBatch,
     rollInRange: rollDept === wantDept,

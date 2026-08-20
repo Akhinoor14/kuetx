@@ -7,15 +7,17 @@
 //
 //   Block 1 — "My Current Term Teachers": groups/{groupId}/
 //   teacherProfiles/{teacherId} (see crCourseTeachers.js), class-wide
-//   shared — any CR/ACR of THIS group can add/edit/remove, every member
-//   of THIS group (student or CR/ACR) can read. Each entry is either
-//   LINKED to a real facultyDirectory record (directoryEmail set — name/
-//   dept/designation/photo always read live from the cache, never
-//   copied in) or fully freehand (directoryEmail null). Sorted:
-//   own-department entries first, then the rest, alphabetically within
-//   each group. teacherId is reused from teacherRegistry when the CR
-//   picks a name already assigned to a course, so this and
-//   courseTeacherMap refer to the same person under the same id.
+//   shared. Add/edit/remove is open to any VERIFIED member of THIS group
+//   (Aug 2026 CR permission expansion — no longer CR/ACR-only, see
+//   firestore.rules' isRoutineEditor), every member of THIS group
+//   (student or CR/ACR) can read. Each entry is either LINKED to a real
+//   facultyDirectory record (directoryEmail set — name/dept/designation/
+//   photo always read live from the cache, never copied in) or fully
+//   freehand (directoryEmail null). Sorted: own-department entries
+//   first, then the rest, alphabetically within each group. teacherId is
+//   reused from teacherRegistry when the editor picks a name already
+//   assigned to a course, so this and courseTeacherMap refer to the same
+//   person under the same id.
 //
 //   Block 2 — "All Teachers": the full facultyDirectory, read through
 //   facultyDirectoryCache.js (localStorage-cached, NOT a live
@@ -23,20 +25,22 @@
 //   search box; search also cross-references facultyPublications titles
 //   via the existing subscribeToAllPublications() feed.
 //
-// Edit controls in Block 1 are shown only to CR/ACR of this specific
-// group (subscribeMyRole) — students in the same class see the exact
-// same shared list, read-only. This is a client-side UI convenience
-// only; the real boundary is firestore.rules' isContentEditor(groupId)
-// check on the teacherProfiles subcollection.
+// Edit controls in Block 1 are shown to any verified member of this
+// specific group (useCanEditGroup, scope: 'routine') — unverified/
+// non-members see the exact same shared list, read-only. This is a
+// client-side UI convenience only; the real boundary is
+// firestore.rules' isRoutineEditor(groupId) check on the
+// teacherProfiles subcollection.
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Trash2, Edit2, X, Check, Users, Phone, Building2, Search, Link2, Star } from 'lucide-react';
+import { Plus, Trash2, Edit2, X, Check, Users, Phone, Building2, Search, Link2, Star, History } from 'lucide-react';
 import { getProfile, DEPARTMENTS, INSTITUTES, BASIC_SCIENCE_DEPTS, uid } from '../store/store';
 import { getGroupId } from '../lib/groupUtils';
-import { auth } from '../lib/firebase';
-import { subscribeMyRole, subscribePlannerSettings } from '../lib/groupSync';
+import { subscribePlannerSettings } from '../lib/groupSync';
+import { useCanEditGroup } from '../hooks/useCanEditGroup';
 import ConfirmDialog from '../components/ConfirmDialog';
+import EditLogModal from '../components/EditLogModal';
 import {
   subscribeToGroupTeachers,
   addGroupTeacher,
@@ -68,15 +72,12 @@ export default function Teachers() {
   const groupId = getGroupId(profile);
 
   // Whether the signed-in user can edit Block 1 for this group — real
-  // enforcement is server-side (firestore.rules isContentEditor), this
-  // is purely to decide whether to show Add/Edit/Delete controls.
-  const [myRole, setMyRole] = useState('member');
-  const canEdit = myRole === 'cr' || myRole === 'acr';
-
-  useEffect(() => {
-    if (!groupId || !auth.currentUser?.uid) return undefined;
-    return subscribeMyRole(groupId, auth.currentUser.uid, setMyRole);
-  }, [groupId]);
+  // enforcement is server-side (firestore.rules isRoutineEditor). teacherProfiles
+  // is isRoutineEditor-gated now (Aug 2026 CR permission expansion): any
+  // verified member can add/edit/remove, not just CR/ACR — see
+  // useCanEditGroup.js. scope: 'routine' matches that (the default, made
+  // explicit here since this used to be a hand-rolled CR/ACR-only check).
+  const { canEdit, myRole } = useCanEditGroup(groupId, { scope: 'routine' });
 
   // teacherRegistry (from plannerSettings) — used only so that picking a
   // name-autocomplete suggestion which happens to match an
@@ -94,6 +95,8 @@ export default function Teachers() {
   const [directoryByEmail, setDirectoryByEmail] = useState({}); // resolved directory entries for linked cards
 
   const [adding, setAdding] = useState(false);
+  // Phase D (CR_PERMISSION_AND_ROLL_UPGRADE_PLAN.md) — Edit Log modal.
+  const [showEditLog, setShowEditLog] = useState(false);
   const [editing, setEditing] = useState(null); // teacherId being edited, or null
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [form, setForm] = useState(EMPTY_FORM);
@@ -306,11 +309,21 @@ export default function Teachers() {
           </div>
           <p className="content-page-hero-subtitle">Your class's term teachers, plus the full KUET faculty directory</p>
         </div>
-        {canEdit && (
+        {(canEdit || groupId) && (
           <div className="content-page-hero-actions">
-            <button className="btn btn-primary" onClick={() => { setAdding(true); setEditing(null); resetForm(); }}>
-              <Plus size={13} /> <span className="btn-txt">Add Teacher</span>
-            </button>
+            {/* Read-only, so shown whenever there's a group to show a log
+                for — not gated on canEdit (auditLog's read rule is
+                broader than isRoutineEditor's write side). Phase D. */}
+            {groupId && (
+              <button className="btn btn-ghost btn-sm" onClick={() => setShowEditLog(true)} title="See who changed what, and when">
+                <History size={13} /> <span className="btn-txt">Edit Log</span>
+              </button>
+            )}
+            {canEdit && (
+              <button className="btn btn-primary" onClick={() => { setAdding(true); setEditing(null); resetForm(); }}>
+                <Plus size={13} /> <span className="btn-txt">Add Teacher</span>
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -421,7 +434,11 @@ export default function Teachers() {
 
       {groupId && !teachersLoading && sortedGroupTeachers.length === 0 && !adding && (
         <div className="card" style={{ textAlign: 'center', color: 'var(--muted)', padding: 40, marginBottom: 24 }}>
-          <p>{canEdit ? 'No teachers added for this term yet.' : "Your CR hasn't added any teachers for this term yet."}</p>
+          {/* Role-agnostic wording (Aug 2026 CR permission expansion) — used
+              to say "Your CR hasn't added..." for non-editors, but
+              teacherProfiles is no longer CR/ACR-only (isRoutineEditor),
+              so singling out "your CR" is misleading now. */}
+          <p>No teachers added for this term yet.</p>
         </div>
       )}
 
@@ -563,6 +580,10 @@ export default function Teachers() {
         onConfirm={confirmDelete}
         onCancel={() => setDeleteTarget(null)}
       />
+
+      {showEditLog && (
+        <EditLogModal groupId={groupId} onClose={() => setShowEditLog(false)} />
+      )}
     </div>
   );
 }

@@ -15,6 +15,15 @@
 // What's left in this file is only pure, synchronous format validation —
 // no network calls, no Firebase, no side effects.
 
+import { toSevenDigitCore } from './rollFormat';
+
+// NOTE: kept at 7-digit intentionally. Unlike the student's own profile
+// roll (which can be 7 or 8 digit, see rollFormat.js), it is NOT
+// confirmed whether KUET's official student email local-part uses the
+// 8-digit format for students who have an 8-digit roll, or still uses
+// the legacy 7-digit convention internally. Flagged as an open question
+// in CR_PERMISSION_AND_ROLL_UPGRADE_PLAN.md §৩ক.৭ — revisit if this
+// turns out to reject real 8-digit students' KUET emails.
 const KUET_EMAIL_RE = /^([a-z]+)(\d{7})@stud\.kuet\.ac\.bd$/i;
 
 /** Does this look like a real KUET student email, syntactically? */
@@ -38,10 +47,17 @@ export function parseKuetEmail(email) {
  * Guard used on the profile form: the roll encoded in the typed KUET email
  * must match the person's own profile roll number, so they can't enter a
  * KUET email for a roll that isn't theirs.
+ *
+ * The email itself is still parsed as 7-digit only (see KUET_EMAIL_RE
+ * note above), but the profile roll may be 7 or 8 digit — so we compare
+ * against the profile roll's 7-digit core, not the raw string. This way
+ * an 8-digit-roll student whose KUET email uses the legacy 7-digit local
+ * part still matches correctly.
  */
 export function emailRollMatchesProfile(email, profile) {
   const parsed = parseKuetEmail(email);
   const profileRoll = String(profile?.studentId || '').trim();
   if (!parsed || !profileRoll) return false;
-  return parsed.roll === profileRoll;
+  const profileCore = toSevenDigitCore(profileRoll);
+  return parsed.roll === profileCore;
 }

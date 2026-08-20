@@ -53,6 +53,7 @@ const todayStr = () => {
 // individual-student notice-targeting picker in AdminDashboard.jsx needs
 // the exact same roll-sort over the exact same dept+batch member shape).
 import { sortByRoll, generateDeptRollRoster, isMultiSectionDept } from '../../lib/groupUtils';
+import { isValidRoll, toSevenDigitCore } from '../../lib/rollFormat';
 import { exportAttendanceExcel, exportAttendancePdf } from '../../lib/attendanceExport';
 import { DEPARTMENTS } from '../../store/store';
 
@@ -1643,6 +1644,19 @@ function AttendanceTab({ assignment, groupId }) {
   // default roster. Generated range is a starting DEFAULT ONLY — never
   // treated as exhaustive; a backlog entry is exactly how a roll outside
   // that range gets in (see groupUtils.js's generateDeptRollRoster doc).
+  //
+  // NOTE (8-digit roll support, Aug 2026): generateDeptRollRoster always
+  // produces 7-digit synthetic rolls (see rollFormat.js — it's generating
+  // a hypothetical roster, not parsing a real roll), but a real member's
+  // m.roll may be 7 OR 8 digit. Matching by raw string equality would
+  // silently fail to match every 8-digit real student to their generated
+  // roster row — they'd show as isPlaceholder forever with no error. So
+  // every `members.find` below compares 7-digit cores, not raw strings.
+  const findMemberByRoll = (roll) => {
+    const core = toSevenDigitCore(roll);
+    return members.find((m) => toSevenDigitCore(m.roll) === core);
+  };
+
   const sectionForRoster = multiSection ? activeSection : null;
   const generatedRolls = generateDeptRollRoster(assignment?.dept, assignment?.batch, sectionForRoster);
   const backlogForSection = (backlogStudents || []).filter((b) => !multiSection || b.section === activeSection);
@@ -1651,7 +1665,7 @@ function AttendanceTab({ assignment, groupId }) {
   const generatedRoster = generatedRolls
     .filter((g) => !backlogRolls.has(g.roll)) // a backlog entry for a roll inside the generated range takes over that row (e.g. a real name was added for it)
     .map((g) => {
-      const realMember = members.find((m) => m.roll === g.roll);
+      const realMember = findMemberByRoll(g.roll);
       return {
         id: realMember?.id || `placeholder:${g.roll}`,
         roll: g.roll,
@@ -1663,7 +1677,7 @@ function AttendanceTab({ assignment, groupId }) {
     });
 
   const backlogRoster = backlogForSection.map((b) => {
-    const realMember = members.find((m) => m.roll === b.roll);
+    const realMember = findMemberByRoll(b.roll);
     return {
       id: realMember?.id || `backlog:${b.roll}`,
       roll: b.roll,
@@ -1693,7 +1707,7 @@ function AttendanceTab({ assignment, groupId }) {
     const allGenerated = allGeneratedRolls
       .filter((g) => !allBacklogRolls.has(g.roll))
       .map((g) => {
-        const realMember = members.find((m) => m.roll === g.roll);
+        const realMember = findMemberByRoll(g.roll);
         return {
           id: realMember?.id || `placeholder:${g.roll}`,
           roll: g.roll,
@@ -1704,7 +1718,7 @@ function AttendanceTab({ assignment, groupId }) {
         };
       });
     const allBacklog = (backlogStudents || []).map((b) => {
-      const realMember = members.find((m) => m.roll === b.roll);
+      const realMember = findMemberByRoll(b.roll);
       return {
         id: realMember?.id || `backlog:${b.roll}`,
         roll: b.roll,
@@ -2197,8 +2211,8 @@ function AttendanceTab({ assignment, groupId }) {
           <button
             className="accent-fill-glass"
             onClick={handleAddStudent}
-            disabled={addingStudent || !/^\d{7}$/.test(addRollInput.trim())}
-            style={{ padding: '7px 14px', borderRadius: 7, color: '#fff', fontWeight: 700, fontSize: 12, cursor: 'pointer', opacity: (addingStudent || !/^\d{7}$/.test(addRollInput.trim())) ? 0.5 : 1 }}
+            disabled={addingStudent || !isValidRoll(addRollInput.trim())}
+            style={{ padding: '7px 14px', borderRadius: 7, color: '#fff', fontWeight: 700, fontSize: 12, cursor: 'pointer', opacity: (addingStudent || !isValidRoll(addRollInput.trim())) ? 0.5 : 1 }}
           >
             {addingStudent ? 'Adding…' : 'Add'}
           </button>

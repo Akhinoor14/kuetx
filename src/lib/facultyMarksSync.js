@@ -44,6 +44,7 @@ import {
 } from 'firebase/firestore';
 import { db } from './firebase';
 import { withPromiseTimeout } from './safeSnapshot';
+import { isValidRoll } from './rollFormat';
 
 function sessionsCollection(groupId, assignmentId) {
   return collection(db, 'groups', groupId, 'facultyAssignments', assignmentId, 'sessions');
@@ -99,15 +100,13 @@ function backlogStudentsCollection(groupId, assignmentId) {
 // re-add of the same roll for the same assignment naturally overwrites
 // rather than duplicating.
 
-const ROLL_PATTERN = /^\d{7}$/; // same regex as store.js's studentId validation, reused not reinvented
-
 /** Adds (or overwrites) one backlog/extra-student entry for this
  * assignment. `section` is optional — only meaningful for multi-section
  * depts, tags which section's daily-attendance view the row surfaces in. */
 export async function addBacklogStudent(groupId, assignmentId, { roll, name, section, addedBy }) {
   const cleanRoll = String(roll || '').trim();
-  if (!ROLL_PATTERN.test(cleanRoll)) {
-    throw new Error('Roll must be exactly 7 digits (standard KUET roll format).');
+  if (!isValidRoll(cleanRoll)) {
+    throw new Error('Roll must be a 7-digit or 8-digit KUET roll number.');
   }
   await setDoc(doc(backlogStudentsCollection(groupId, assignmentId), cleanRoll), {
     roll: cleanRoll,

@@ -1200,8 +1200,15 @@ function SignedOutRouter({ authState }) {
           once, fixes it for every signed-out route this component
           serves (landing, /about, /privacy) — same component, same
           install-detection logic as the signed-in version, just given
-          a place to actually render before a visitor signs in. */}
-      <FloatingInstallButton />
+          a place to actually render before a visitor signs in.
+          side="left" (this route only): the landing page's hero art
+          (turtle mascot + campus photo cluster) sits bottom/top-right
+          on mobile, and the fixed-position FAB's constant bottom-right
+          screen spot ended up sitting right on top of it as the page
+          scrolled underneath — see FloatingInstallButton.jsx's `side`
+          prop comment. /about and /privacy have no such art, so they
+          keep the default right placement below. */}
+      <FloatingInstallButton side="left" />
     </Suspense>
   );
 }

@@ -31,7 +31,10 @@ export default function Assignments() {
     if (!groupId) { setGroupHasCR(false); return; }
     return subscribeCRStatus(groupId, (status) => setGroupHasCR(!!status?.hasCR));
   }, [groupId]);
-  const { canEdit: canEditGroupAssignments } = useCanEditGroup(groupId);
+  // scope: 'routine' (the default) — Assignments writes
+  // assignmentEntries, isRoutineEditor-gated (Aug 2026 CR permission
+  // expansion): any verified member can edit regardless of hasCR.
+  const { canEdit: canEditGroupAssignments } = useCanEditGroup(groupId, { scope: 'routine' });
 
   const courses = getAllCourses(profile);
   

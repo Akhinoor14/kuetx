@@ -263,8 +263,28 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
             },
           });
         }
-      } else if (m.id !== currentUid) {
-        actions.push({ key: 'remove-cr', label: 'Remove CR', danger: true, run: () => clRevokeCR(groupId, m.id) });
+      } else {
+        // BUGFIX (this session — reported: no way for a CL who is ALSO
+        // their own class's CR to remove their own CR status from this
+        // tool at all, "No role actions available for this member").
+        // The old `else if (m.id !== currentUid)` guard here was meant
+        // to block removing your own CL status (not a per-class role,
+        // so "remove" doesn't make sense for it) — but this whole branch
+        // is about REMOVING CR, a genuinely different, per-class role a
+        // CL/Founder can also hold as an enrolled student, symmetric
+        // with "make-cr" above already explicitly supporting
+        // m.id === currentUid ("Make yourself CR"). clRevokeCR already
+        // safely handles targeting the acting user's own uid — same
+        // writes clApproveLeaveCR uses, plus it also resolves any
+        // pending crRequests/leave_{uid} doc so a self-revoke doesn't
+        // leave a stale leave request behind.
+        actions.push({
+          key: 'remove-cr', label: m.id === currentUid ? 'Remove your CR status' : 'Remove CR', danger: true,
+          run: async () => {
+            if (m.id === currentUid && !(await confirmDialog('Remove your own CR status? You will no longer be CR for this class.'))) return;
+            return clRevokeCR(groupId, m.id);
+          },
+        });
       }
     }
     if (viewerRole === 'cr') {

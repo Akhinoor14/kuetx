@@ -4,6 +4,7 @@
 // Storage: IndexedDB (50MB+) with automatic migration from localStorage
 
 import { initDB, getFromDB, setInDB, removeFromDB, getAllKeysFromDB, getAllFromDB, getAllEntriesFromDB, clearDB, migrateFromLocalStorage, getStorageUsage } from './indexeddb-store.js';
+import { isValidRoll, parseRoll } from '../lib/rollFormat.js';
 
 // PERFORMANCE FIX: this used to be `import { clearAllCoursesCache } from
 // './curriculumStore.js'` at the top of the file. store.js is imported
@@ -468,11 +469,12 @@ export const ROLL_DEPT_MAP = {
   '17': 'URP',
 };
 
+// Accepts both 7-digit (legacy) and 8-digit (current, leading '5')
+// rolls — see src/lib/rollFormat.js for the shared parsing logic.
 export const getDeptCodeFromRoll = (roll) => {
-  const r = String(roll || '').trim();
-  if (!/^\d{7}$/.test(r)) return '';
-  const deptDigits = r.slice(2, 4);
-  return ROLL_DEPT_MAP[deptDigits] || '';
+  const parsed = parseRoll(roll);
+  if (!parsed) return '';
+  return ROLL_DEPT_MAP[parsed.deptDigits] || '';
 };
 
 export const getCanonicalDeptCode = (value) => {
@@ -1556,17 +1558,18 @@ export const BATCH_START_DATES = {
   '2k25': '2026-06-28',
 };
 
-// Derives batch (e.g. "2k23") from a student roll number's first two digits.
-// Rejects batches that are newer than the current year, since those are
-// invalid for KUET roll numbers in the present academic timeline.
+// Derives batch (e.g. "2k23") from a student roll number's batch digits.
+// Accepts both 7-digit (legacy) and 8-digit (current, leading '5') rolls
+// — see src/lib/rollFormat.js. Rejects batches that are newer than the
+// current year, since those are invalid for KUET roll numbers in the
+// present academic timeline.
 export const extractBatchFromRoll = (roll) => {
-  const r = String(roll || '').trim();
-  if (r.length < 2) return '';
-  const firstTwoDigits = r.slice(0, 2);
-  const year = parseInt(firstTwoDigits, 10);
+  const parsed = parseRoll(roll);
+  if (!parsed) return '';
+  const year = parseInt(parsed.batch, 10);
   const currentYearSuffix = Number(String(new Date().getFullYear()).slice(-2));
   if (!Number.isFinite(year) || year > currentYearSuffix) return '';
-  return `2k${firstTwoDigits}`;
+  return `2k${parsed.batch}`;
 };
 
 export const getTermTimeline = (termStartDate, deptCode, termKey, roadmapConfig = {}) => {
@@ -1793,7 +1796,7 @@ export const isProfileComplete = (profile) => {
   const p = profile || {};
   const studentId = String(p.studentId || '').trim();
   const hasName = !!String(p.name || '').trim();
-  const hasStudentId = /^\d{7}$/.test(studentId);
+  const hasStudentId = isValidRoll(studentId);
   const hasValidDept = isAllowedDeptCode(p.dept) || isAllowedDeptCode(getDeptCodeFromRoll(studentId));
   const hasValidBatch = Boolean(extractBatchFromRoll(studentId));
   // Migration gate: the 4 multi-section depts (CE/EEE/ME/CSE, 120 seats/
@@ -1856,8 +1859,8 @@ export const validateProfileForSave = (input = {}) => {
   const errors = {};
   const studentId = String(normalized.studentId || '').trim();
 
-  if (!/^\d{7}$/.test(studentId)) {
-    errors.studentId = 'Student ID must be a 7-digit KUET roll number';
+  if (!isValidRoll(studentId)) {
+    errors.studentId = 'Student ID must be a 7-digit or 8-digit KUET roll number';
   }
 
   if (!String(normalized.batch || '').trim()) {

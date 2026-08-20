@@ -374,7 +374,7 @@ export default function Courses() {
   const customCourses = useMemo(() => getCustomCourses(), [version]);
   const optionalCatalog = getDeptOptionalCourses(profile.dept);
   const groupId = getGroupId(profile);
-  const { canEdit: canEditTeachers } = useCanEditGroup(groupId);
+  const { canEdit: canEditTeachers } = useCanEditGroup(groupId, { scope: 'content' });
   const [localSettings, setLocalSettings] = useState(() => store.get('scheduleSettings') || {});
   const [teacherInfoState, setTeacherInfoState] = useState({ open: false, courseId: '', teacherName: '', teacher: null });
   const teacherInfoTimerRef = useRef(null);

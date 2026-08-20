@@ -904,7 +904,7 @@ export default function Attendance() {
     return subscribeCRStatus(groupId, (status) => setGroupHasCR(!!status?.hasCR));
   }, [groupId]);
   const isGroupMode = !!groupId && groupHasCR === true;
-  const { canEdit: canEditTeachers } = useCanEditGroup(groupId);
+  const { canEdit: canEditTeachers } = useCanEditGroup(groupId, { scope: 'content' });
 
   const [schedule, setSchedule] = useState(() => (isGroupMode ? [] : (store.get('schedule') || [])));
   // PERF FIX (slow first appearance — same root cause as Schedule.jsx,

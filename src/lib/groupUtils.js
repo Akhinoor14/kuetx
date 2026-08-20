@@ -28,6 +28,7 @@ export function canonicalize(value) {
 // Derived from DEPARTMENTS' `seats` field (store.js) rather than a second
 // hardcoded list, so the two can never drift apart.
 import { DEPARTMENTS, ROLL_DEPT_MAP } from '../store/store';
+import { shortRoll } from './rollFormat';
 
 export const MULTI_SECTION_DEPTS = DEPARTMENTS
   .filter((d) => d.seats === 120)
@@ -165,10 +166,15 @@ export function getGroupLabel(profile) {
  * place ensures "last updated by" always looks the same everywhere.
  */
 export function getIdentityStamp(profile, uid) {
+  const roll = profile?.studentId || '';
   return {
     uid,
     name: profile?.name || 'Unknown',
-    roll: profile?.studentId || '',
+    roll,
+    // Last 3 digits (seat number) — same meaning in 7 and 8-digit rolls,
+    // since the seat digits are always the last 3 regardless of length.
+    // Used for compact display in Edit Log UI / identity stamps.
+    shortRoll: shortRoll(roll),
   };
 }
 

@@ -196,9 +196,38 @@ service cloud.firestore {
     // Only CR/ACR/CL/Admin can edit once a CR exists; if the group
     // currently has no CR, any *verified* member may (see conversation
     // history for why this fallback window is intentionally narrow).
+    //
+    // NOTE (Aug 2026, CR_PERMISSION_AND_ROLL_UPGRADE_PLAN.md): this
+    // function is STILL used as-is for the more sensitive collections
+    // (meta/classSetup, and the "edit/delete an existing mapping" half
+    // of meta/plannerSettings) — those stay CR/ACR/CL/Admin-gated with
+    // only the old no-CR fallback. It is deliberately NOT widened here,
+    // to avoid silently opening every isContentEditor-gated collection
+    // at once. See isRoutineEditor below for the collections that DID
+    // get widened (routineEntries/assignmentEntries/teacherProfiles).
     function isContentEditor(groupId) {
       return isAdmin() || isCLFor(groupId) || isGroupCR(groupId) || isGroupACR(groupId) ||
         (crCount(groupId) <= 0 && isVerifiedMember(groupId));
+    }
+
+    // Confirmed with Akhinoor (Aug 2026, CR_PERMISSION_AND_ROLL_UPGRADE_
+    // PLAN.md §4 Phase B): schedule/assignment "dead class" problem —
+    // if a CR exists but stops giving day-to-day updates, the whole
+    // class's info goes stale because nobody else can fix it. New rule:
+    // ANY verified member of the class can write routineEntries/
+    // assignmentEntries/teacherProfiles, whether or not a CR currently
+    // exists — accountability is now covered by the updatedBy stamp +
+    // auditLog (§4 Phase C/D) instead of restricting who can write.
+    //
+    // Deliberately scoped to ONLY these 3 collections (not a blanket
+    // isContentEditor rewrite) — meta/plannerSettings (course-teacher
+    // mapping) and meta/classSetup (term timeline) stay under the
+    // narrower isContentEditor, since a random verified member
+    // overwriting the whole class's timeline or an existing
+    // course-teacher mapping is a materially bigger risk than them
+    // editing a routine slot or a teacher's phone number.
+    function isRoutineEditor(groupId) {
+      return isAdmin() || isCLFor(groupId) || isVerifiedMember(groupId);
     }
 
     // ── Faculty Module — MANUAL VERIFICATION POLICY ───────────────────────
@@ -507,6 +536,17 @@ service cloud.firestore {
       //     student email, so condition 1 alone would always reject this
       //     write — this is the actual fix that makes the kept
       //     Founder-WhatsApp fallback path work at all.
+      // NOTE (8-digit roll support, Aug 2026): deliberately LEFT at
+      // 7-digit here, not widened to accept 8. This rule's roll must
+      // match the KUET email's local-part exactly, and kuetEmailVerify.js
+      // (src/lib/rollFormat.js's sibling) intentionally kept its own
+      // KUET_EMAIL_RE at 7-digit too, since it's unconfirmed whether
+      // KUET's actual student email local-part uses 8 digits for
+      // students who have an 8-digit profile roll. If that ever gets
+      // confirmed, update KUET_EMAIL_RE and this regex together — they
+      // must stay in lockstep, since this rule only ever fires via the
+      // (currently client-unused, Admin-SDK-bypassed) OTP path that
+      // shares that same email convention.
       allow create: if (request.auth.token.email_verified == true &&
         roll.matches('^[0-9]{7}$') &&
         request.auth.token.email.lower().matches('^[a-z]+' + roll + '@stud[.]kuet[.]ac[.]bd$'))
@@ -2563,6 +2603,20 @@ service cloud.firestore {
       // routineEntries/assignmentEntries — any CR/ACR of the group can
       // read/write this single doc so co-CRs see the same targets instead
       // of siloed personal copies.
+      //
+      // NOTE (Aug 2026, CR_PERMISSION_AND_ROLL_UPGRADE_PLAN.md §4 Phase
+      // B): deliberately LEFT at isContentEditor (CR/ACR/CL/Admin, no-CR
+      // fallback), NOT widened to isRoutineEditor. courseTeacherMap,
+      // schedule overrides, and plan targets all live in this ONE doc
+      // and are all written via the same generic setDoc(..., {merge:
+      // true}) call (updatePlannerSettings, groupSync.js) — there's no
+      // clean way to allow "add a new course-teacher mapping" while
+      // blocking "edit an existing one" or "touch schedule overrides"
+      // at the rules level without brittle per-field diffing against a
+      // single shared doc. Confirmed with Akhinoor: stays CR-gated for
+      // now; a true "any verified member can add a new mapping" carve-
+      // out would need courseTeacherMap split into its own document/
+      // subcollection first — out of scope for this pass.
       match /meta/plannerSettings {
         allow read: if isAdmin() || isGroupMember(groupId);
         allow create, update: if isContentEditor(groupId);
@@ -2807,34 +2861,54 @@ service cloud.firestore {
         // tighter read rule, leaving the parent doc's broader
         // roster-browse behavior completely untouched.
         //
-        // Read: the owning member themself, CL/Admin/Head of Ops/that
-        // dept's SCL (same tier that can see/manage the roster's
-        // sensitive fields), the group's own CR/ACR (they already see
-        // this number in the UI today — ClassRoster.jsx's contact
-        // display — nothing removed there), or a VERIFIED faculty
-        // account (FacultyAllCR.jsx's actual consumer — this is the one
-        // populations for whom verification is now required for this
-        // number specifically, while the parent doc stays open to any
-        // faculty signup for name/roll/dept/batch).
-        allow read: if isAdmin() || request.auth.uid == memberUid
-          || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId)
-          || isGroupCR(groupId) || isGroupACR(groupId)
-          || isVerifiedFaculty(request.auth.uid);
-
-        // Write: mirrors the exact same authority tiers as the parent
-        // doc's own `mobile`-touching branches above (create's CR-
-        // approval/CL-bootstrap/self-join branches, update's CL/Admin/
-        // Head of Ops/SCL branch, the CR-on-others handoff/ACR-appoint
-        // branch, and the member's own self-update branch) — this
-        // sub-doc is written by exactly the same actors who were already
-        // trusted to write `mobile` before the split, just now as a
-        // second, separate write rather than a bundled field. Value-only
-        // shape (single `value` key), same pattern as
-        // providers/{uid}/contact/phone above.
-        allow write: if request.resource.data.keys().hasOnly(['value']) &&
-          (isAdmin() || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId)
+        // BUGFIX (this session — "Missing or insufficient permissions"
+        // on CR leave-request approval, both from ClassmatesList's
+        // "Class Roles" picker's underlying write path and
+        // StaffDashboard's CampusLeadBlock "Approve" button, both of
+        // which go through clApproveLeaveCR in groupSync.js): the read/
+        // write rules below were written as plain `allow` statements
+        // directly inside the PARENT `match /members/{memberUid}` block
+        // — there was no `match /private/{docId}` wrapping them, so they
+        // were dead/duplicate rules on the parent members doc itself
+        // (redundant with the real parent read/update rules above) and
+        // Firestore had NO rule at all covering the actual
+        // members/{memberUid}/private/mobile sub-document path. Every
+        // write there (clAppointCR, clApproveLeaveCR, handoffCR,
+        // assignACR, and this doc's own self-write) fell through to the
+        // default-deny. Wrapping them in their own `match` block below
+        // is the actual fix — same rule text as before, just finally
+        // applied to the sub-document path the comments always claimed
+        // it governed.
+        match /private/{docId} {
+          // Read: the owning member themself, CL/Admin/Head of Ops/that
+          // dept's SCL (same tier that can see/manage the roster's
+          // sensitive fields), the group's own CR/ACR (they already see
+          // this number in the UI today — ClassRoster.jsx's contact
+          // display — nothing removed there), or a VERIFIED faculty
+          // account (FacultyAllCR.jsx's actual consumer — this is the one
+          // populations for whom verification is now required for this
+          // number specifically, while the parent doc stays open to any
+          // faculty signup for name/roll/dept/batch).
+          allow read: if isAdmin() || request.auth.uid == memberUid
+            || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId)
             || isGroupCR(groupId) || isGroupACR(groupId)
-            || (isSignedIn() && request.auth.uid == memberUid));
+            || isVerifiedFaculty(request.auth.uid);
+
+          // Write: mirrors the exact same authority tiers as the parent
+          // doc's own `mobile`-touching branches above (create's CR-
+          // approval/CL-bootstrap/self-join branches, update's CL/Admin/
+          // Head of Ops/SCL branch, the CR-on-others handoff/ACR-appoint
+          // branch, and the member's own self-update branch) — this
+          // sub-doc is written by exactly the same actors who were already
+          // trusted to write `mobile` before the split, just now as a
+          // second, separate write rather than a bundled field. Value-only
+          // shape (single `value` key), same pattern as
+          // providers/{uid}/contact/phone above.
+          allow write: if request.resource.data.keys().hasOnly(['value']) &&
+            (isAdmin() || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId)
+              || isGroupCR(groupId) || isGroupACR(groupId)
+              || (isSignedIn() && request.auth.uid == memberUid));
+        }
       }
 
       match /crRequests/{requestUid} {
@@ -2953,14 +3027,14 @@ service cloud.firestore {
 
       match /routineEntries/{entryId} {
         allow read: if isAdmin() || isGroupMember(groupId) || isFaculty(request.auth.uid);
-        allow create, update: if isContentEditor(groupId)
+        allow create, update: if isRoutineEditor(groupId)
           && request.resource.data.updatedBy.uid == request.auth.uid;
         allow delete: if false; // soft-delete only, via update
       }
 
       match /assignmentEntries/{entryId} {
         allow read: if isAdmin() || isGroupMember(groupId);
-        allow create, update: if isContentEditor(groupId)
+        allow create, update: if isRoutineEditor(groupId)
           && request.resource.data.updatedBy.uid == request.auth.uid;
         allow delete: if false; // soft-delete only, via update
       }
@@ -2987,7 +3061,7 @@ service cloud.firestore {
       // account has no notion of "this group's admin" here at all).
       match /teacherProfiles/{teacherId} {
         allow read: if isAdmin() || isGroupMember(groupId);
-        allow create, update: if isContentEditor(groupId)
+        allow create, update: if isRoutineEditor(groupId)
           && request.resource.data.updatedBy.uid == request.auth.uid;
         allow delete: if false; // soft-delete only, via update
       }
@@ -3017,8 +3091,18 @@ service cloud.firestore {
       }
 
       match /auditLog/{logId} {
+        // Kept in lockstep with whichever gate function is broadest
+        // among the collections this log records writes for
+        // (routineEntries/assignmentEntries/teacherProfiles now use
+        // isRoutineEditor, which is wider than isContentEditor) — if
+        // this weren't updated too, a newly-permitted verified member
+        // could successfully save their routine/assignment edit but
+        // silently fail to write their own audit entry (permission-
+        // denied, swallowed by _writeAuditLog's intentional silent
+        // catch — see groupSync.js), losing exactly the accountability
+        // trail this feature exists to provide for exactly those users.
         allow read: if isAdmin() || isCLFor(groupId) || isVerifiedMember(groupId);
-        allow create: if isContentEditor(groupId) && request.resource.data.by.uid == request.auth.uid;
+        allow create: if isRoutineEditor(groupId) && request.resource.data.by.uid == request.auth.uid;
         allow update, delete: if false; // append-only
       }
 
