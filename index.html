@@ -73,11 +73,15 @@
     </style>
 
     <!-- ── Cold-start splash (Logo-only, best-practice minimal) ──────────
-         Shown ONCE per browser session (sessionStorage flag below) on the
-         very first cold load — NOT on every internal route change, and NOT
-         on repeat visits within the same tab session. Sits ON TOP OF
-         #app-shell-skeleton (higher z-index) and fades itself out at the
-         end, handing off to the real app underneath.
+         Trigger logic differs by launch context — see the full summary
+         comment above the trigger script near the end of <body> for the
+         per-context table. Short version: browser tab uses the old
+         sessionStorage "once per tab" rule; an installed/standalone PWA
+         shows it on every cold launch instead (that's the moment users
+         expect a native-style splash), but is skipped on a
+         background→foreground resume since nothing was ever torn down.
+         Sits ON TOP OF #app-shell-skeleton (higher z-index) and fades
+         itself out at the end, handing off to the real app underneath.
 
          Design rationale: researched current splash-screen guidance
          (Apple HIG, Android 12+ Splash Screen API, and general mobile UX
@@ -93,8 +97,8 @@
     <style>
       #kx-splash {
         position: fixed; inset: 0; z-index: 10000;
-        background: #0f2e1c;
-        display: flex; align-items: center; justify-content: center;
+        background: #faf6ee;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
         opacity: 1;
         transition: opacity 0.4s ease;
       }
@@ -103,32 +107,120 @@
         pointer-events: none;
       }
 
-      #kx-centerLogo {
+      /* Card wrapper gives us 3D space to flip within; the logo itself
+         never distorts because each face is a flat, un-rotated element —
+         only the wrapper rotates on Y, so mascot artwork never looks
+         skewed or stretched mid-flip. */
+      #kx-cardWrap {
         opacity: 0;
         transform: scale(0.94);
         transition: opacity 0.4s ease, transform 0.4s ease;
+        perspective: 900px;
       }
-      #kx-centerLogo.kx-show {
+      #kx-cardWrap.kx-show {
         opacity: 1;
         transform: scale(1);
       }
-      #kx-centerLogo img {
-        width: 220px; height: 220px;
-        display: block;
-        filter: drop-shadow(0 8px 28px rgba(0,0,0,0.4));
-      }
 
+      #kx-card {
+        position: relative;
+        width: 220px; height: 220px;
+        transform-style: preserve-3d;
+        transition: transform 0.7s cubic-bezier(.65,.05,.36,1);
+      }
       @media screen and (min-width: 641px) {
-        #kx-centerLogo img { width: 260px; height: 260px; }
+        #kx-card { width: 260px; height: 260px; }
       }
       @media screen and (max-width: 640px) {
-        #kx-centerLogo img { width: 44vw; height: 44vw; max-width: 220px; max-height: 220px; }
+        #kx-card { width: 44vw; height: 44vw; max-width: 220px; max-height: 220px; }
       }
 
-      /* Static fallback: prefers-reduced-motion skips the fade — mascot
-         is simply visible immediately. */
+      #kx-card.kx-flip {
+        transform: rotateY(360deg);
+      }
+
+      #kx-face {
+        position: absolute; inset: 0;
+        backface-visibility: hidden;
+        display: flex; align-items: center; justify-content: center;
+      }
+      #kx-face img {
+        width: 100%; height: 100%;
+        display: block;
+        filter: drop-shadow(0 8px 24px rgba(20,50,30,0.18));
+      }
+      /* Back face is rotated 180deg in the DOM so that when the wrapper
+         hits the halfway point of its own 360deg spin, this is what's
+         facing the viewer — a distinct "back of card" mark rather than a
+         mirrored front. backface-visibility keeps whichever face is
+         pointed away from the viewer invisible, so there's never a
+         double-image or a see-through moment. */
+      #kx-faceBack {
+        transform: rotateY(180deg);
+      }
+      #kx-faceBack .kx-backmark {
+        width: 62%; height: 62%;
+        border-radius: 50%;
+        border: 3px solid rgba(22,163,74,0.25);
+        display: flex; align-items: center; justify-content: center;
+        background: radial-gradient(circle at 35% 30%, #eaf7ee, #d7ecdb);
+      }
+      #kx-faceBack .kx-backmark span {
+        font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial;
+        font-weight: 700;
+        font-size: 15px;
+        letter-spacing: 0.16em;
+        color: #16a34a;
+      }
+
+      #kx-wordmark {
+        margin-top: 22px;
+        opacity: 0;
+        transform: translateY(6px);
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        display: flex; align-items: baseline; justify-content: center;
+        font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      }
+      #kx-wordmark.kx-show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      #kx-wordmark .kx-word {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        color: #14532d;
+      }
+      #kx-wordmark .kx-dots {
+        display: inline-flex;
+        margin-left: 2px;
+      }
+      #kx-wordmark .kx-dots span {
+        opacity: 0;
+        font-size: 22px;
+        font-weight: 700;
+        color: #14532d;
+        animation: kx-dot-pulse 1.2s ease-in-out infinite;
+      }
+      #kx-wordmark .kx-dots span:nth-child(1) { animation-delay: 0s; }
+      #kx-wordmark .kx-dots span:nth-child(2) { animation-delay: 0.25s; }
+      #kx-wordmark .kx-dots span:nth-child(3) { animation-delay: 0.5s; }
+      #kx-wordmark .kx-dots span:nth-child(4) { animation-delay: 0.75s; }
+      @keyframes kx-dot-pulse {
+        0%   { opacity: 0; }
+        20%  { opacity: 1; }
+        60%  { opacity: 1; }
+        100% { opacity: 0; }
+      }
+
+      /* Static fallback: prefers-reduced-motion skips the fade, the flip,
+         and the dot animation — mascot and wordmark are simply visible
+         immediately, no rotation, no pulsing. */
       @media (prefers-reduced-motion: reduce) {
-        #kx-centerLogo { transition-duration: 0.01ms !important; transform: scale(1) !important; }
+        #kx-cardWrap { transition-duration: 0.01ms !important; transform: scale(1) !important; }
+        #kx-card { transition: none !important; }
+        #kx-wordmark { transition-duration: 0.01ms !important; transform: translateY(0) !important; }
+        #kx-wordmark .kx-dots span { animation: none !important; opacity: 1 !important; }
       }
     </style>
     <script>
@@ -227,32 +319,89 @@
     <div id="root"><h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">KUETx — The Digital Ecosystem for KUET</h1><div id="app-shell-skeleton"><div class="sk-sidebar"></div><div class="sk-main"><div class="sk-topbar"></div></div></div></div>
 
     <script>
-      // Only paint the splash once per browser session — first cold load
-      // of the tab. Every subsequent internal navigation or refresh-
-      // within-session skips straight to #app-shell-skeleton, so
-      // returning users are never slowed down by a sequence they've
-      // already seen. sessionStorage (not localStorage) is deliberate: a
-      // brand-new tab/session gets the splash again, but reloading the
-      // SAME tab repeatedly during normal use does not.
+      // ── Splash trigger logic — context summary (researched 2026) ──────
+      // Browser tab, first visit ever              → SHOW
+      // Browser tab, same-session refresh/reload    → SKIP (sessionStorage)
+      // Browser tab, brand-new tab (even same site)  → SHOW (sessionStorage
+      //   is per-tab, never shared across tabs, so this already works)
+      // Installed PWA, cold launch (icon tap after   → SHOW, but SKIP-
+      //   full close, or first launch)                 REMEMBER nothing —
+      //                                                 every cold launch
+      //                                                 re-shows it
+      // Installed PWA, backgrounded → foregrounded   → SKIP (page was never
+      //   (app switcher, screen lock, etc.)             torn down; a
+      //                                                  'visibilitychange'
+      //                                                  never re-runs this
+      //                                                  script at all, so
+      //                                                  no special-casing
+      //                                                  is needed here —
+      //                                                  this script only
+      //                                                  runs once per real
+      //                                                  page load/parse)
+      //
+      // Why standalone gets its own branch instead of sessionStorage:
+      // Chrome/Android already paints its OWN native splash (icon +
+      // background_color from manifest.json) the instant the icon is
+      // tapped, BEFORE this HTML/JS can run at all — so our splash is
+      // always the second, stacked screen for installed users, never the
+      // first impression. iOS is different: Safari's static Launch Screen
+      // Image is shown per-launch with no animation, and — critically —
+      // sessionStorage does NOT reliably survive a full close+reopen of an
+      // installed PWA the way it does a backgrounded tab, so treating
+      // installed mode with the tab's "once per session" rule would
+      // actually show the splash on unpredictable installed opens instead
+      // of consistently. Showing it every cold launch (kept short, ~1.3s)
+      // matches what users expect from a native app's launch animation and
+      // reads as consistent rather than as a bug. detection uses
+      // display-mode: standalone as the primary signal (covers Chrome/
+      // Edge/most installed contexts in 2026) with navigator.standalone as
+      // a fallback specifically for older iOS Safari, which never adopted
+      // display-mode media queries for its home-screen web apps.
       (function () {
-        try {
-          if (sessionStorage.getItem('kx_splash_shown')) return;
-          sessionStorage.setItem('kx_splash_shown', '1');
-        } catch (e) {
-          // sessionStorage unavailable (private mode) — fall through and
-          // show the splash anyway, just won't be remembered for next tab.
+        var isStandalone =
+          (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+          window.navigator.standalone === true;
+
+        if (!isStandalone) {
+          // Regular browser tab: keep the original "once per tab session"
+          // behavior — sessionStorage (not localStorage) is deliberate, a
+          // brand-new tab/session gets the splash again, but reloading the
+          // SAME tab repeatedly during normal use does not.
+          try {
+            if (sessionStorage.getItem('kx_splash_shown')) return;
+            sessionStorage.setItem('kx_splash_shown', '1');
+          } catch (e) {
+            // sessionStorage unavailable (private mode) — fall through and
+            // show the splash anyway, just won't be remembered for next tab.
+          }
         }
+        // else: installed/standalone PWA — intentionally no storage check,
+        // every cold launch (this script only runs on an actual page
+        // parse, never on a background/foreground resume) shows the splash.
 
         var el = document.createElement('div');
         el.id = 'kx-splash';
         el.innerHTML =
-          '<div id="kx-centerLogo">' +
-            '<img src="/splash/mascot.webp" width="260" height="260" alt="" />' +
+          '<div id="kx-cardWrap">' +
+            '<div id="kx-card">' +
+              '<div id="kx-face" class="kx-face-front">' +
+                '<img src="/splash/mascot.webp" width="260" height="260" alt="" />' +
+              '</div>' +
+              '<div id="kx-faceBack">' +
+                '<div class="kx-backmark"><span>KX</span></div>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div id="kx-wordmark">' +
+            '<span class="kx-word">KUETx</span>' +
+            '<span class="kx-dots"><span>.</span><span>.</span><span>.</span><span>.</span></span>' +
           '</div>';
         document.body.appendChild(el);
 
         var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        var centerLogo = document.getElementById('kx-centerLogo');
+        var cardWrap = document.getElementById('kx-cardWrap');
+        var card = document.getElementById('kx-card');
+        var wordmark = document.getElementById('kx-wordmark');
 
         function hideSplash() {
           el.classList.add('kx-hide');
@@ -262,27 +411,45 @@
         }
 
         if (reduceMotion) {
-          // Static fallback: mascot simply visible, brief hold, done.
-          centerLogo.classList.add('kx-show');
+          // Static fallback: mascot + wordmark simply visible, brief
+          // hold, done — no flip, no dot pulsing (see the
+          // prefers-reduced-motion block in the stylesheet above).
+          cardWrap.classList.add('kx-show');
+          wordmark.classList.add('kx-show');
           setTimeout(hideSplash, 900);
           return;
         }
 
-        // Timeline (~1.3s total) — logo-only, matching current splash
-        // screen best practice (Apple HIG / Android 12+ Splash Screen
-        // API both target well under 1.5s total): fade in, brief hold,
-        // fade out. No text, no extra motion.
+        // Timeline (~5s total): logo fades/scales in, wordmark + loading
+        // dots fade in right after, then partway through the hold the
+        // card does one full coin-flip (front mascot → back mark →
+        // front mascot again) so it settles back facing forward well
+        // before the splash fades out — the flip is a "still working"
+        // beat, not the exit motion. Total is intentionally longer than
+        // the old ~1.3s minimal version per explicit request, capped at
+        // 5s so it never reads as stuck.
         var ENTER_DELAY = 30;
-        var TOTAL_DURATION = 1000;
+        var WORDMARK_DELAY = 350;
+        var FLIP_START = 1600;   // when the coin-flip begins
+        var FADE_START = 4600;   // when the whole splash starts fading out
+        var TOTAL_DURATION = 5000;
 
         requestAnimationFrame(function () {
           setTimeout(function () {
-            centerLogo.classList.add('kx-show');
+            cardWrap.classList.add('kx-show');
           }, ENTER_DELAY);
 
           setTimeout(function () {
+            wordmark.classList.add('kx-show');
+          }, WORDMARK_DELAY);
+
+          setTimeout(function () {
+            card.classList.add('kx-flip');
+          }, FLIP_START);
+
+          setTimeout(function () {
             el.style.opacity = 0;
-          }, TOTAL_DURATION);
+          }, FADE_START);
 
           setTimeout(hideSplash, TOTAL_DURATION + 300);
         });

@@ -6,7 +6,7 @@
   "description": "Connecting students, Class Representatives, faculty, and local service providers at Khulna University of Engineering & Technology.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#14532d",
+  "background_color": "#faf6ee",
   "theme_color": "#16a34a",
   "orientation": "portrait-primary",
   "categories": [
