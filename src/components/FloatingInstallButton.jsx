@@ -2,9 +2,12 @@
 //
 // PWA_INSTALL_BUTTON_PLAN.md — global, role-agnostic floating "Install
 // app" button. Mounted once in App.jsx's Layout (same pattern as
-// <GlobalToasts /> / <FloatingUploadBar />), so it shows for every
-// signed-in role — student, faculty, provider, staff — with zero
-// per-role wiring, since installing the app isn't a role-scoped action.
+// <GlobalToasts /> / <FloatingUploadBar />) AND once in SignedOutRouter
+// (see App.jsx — Layout never mounts for a signed-out visitor, so without
+// a second copy there the button never appeared on the landing/about/
+// privacy pages at all). Together that's every route, signed in or out,
+// with zero per-role wiring, since installing the app isn't a role-scoped
+// action.
 //
 // Placement (explicit product decision): fixed bottom-right on BOTH
 // desktop and mobile.
@@ -16,39 +19,51 @@
 //     stacking idea FloatingUploadBar already uses (bottom: 78) so the
 //     two never overlap each other either.
 //
-// Click behavior (explicit product decision): one tap = direct install,
-// no extra "are you sure" dialog of ours — the browser's own native
-// install sheet (triggered by deferredPrompt.prompt()) is the only
-// confirmation shown. iOS Safari has no programmatic install path at
-// all, so there the tap opens a small instruction sheet (Share -> Add to
-// Home Screen) instead — that's the one unavoidable exception, not an
-// extra confirmation step for the normal case.
+// Owner decision (this session): "always show on mobile if not
+// installed" — Chrome/Edge only fire beforeinstallprompt once their own
+// engagement heuristic is satisfied, which can take multiple visits or
+// simply never happen for a given visitor; that's a browser trust/anti-
+// spam gate with no page-JS bypass. Rather than staying hidden until
+// then, the button now always shows once useInstallPrompt resolves past
+// 'checking' (see that hook's 'manual-wait' state) — tapping it before a
+// real event has landed opens the SAME manual-instructions sheet iOS
+// already used, with copy for whichever platform this is (Android
+// Chrome's menu vs desktop Chrome's install icon vs iOS Share sheet),
+// rather than doing nothing. The moment a real beforeinstallprompt does
+// land, status flips to 'installable' and the button switches to a
+// direct one-tap install with no page reload needed.
+//
+// Click behavior: 'installable' -> one tap = direct install via the
+// browser's own native install sheet (deferredPrompt.prompt()), no extra
+// "are you sure" dialog of ours. Every other showing state -> tap opens
+// our manual instruction sheet, since there is no .prompt() to call yet.
 
 import { useState } from 'react';
-import { Download, Share, SquarePlus, X, ExternalLink, RefreshCw } from 'lucide-react';
+import { Download, Share, SquarePlus, X, ExternalLink, RefreshCw, MoreVertical, Menu } from 'lucide-react';
 import { useInstallPrompt, dismissInstallPrompt } from '../hooks/useInstallPrompt';
+
+function isAndroid() {
+  if (typeof navigator === 'undefined') return false;
+  return /Android/.test(navigator.userAgent || '');
+}
 
 export default function FloatingInstallButton() {
   const { status, triggerInstall, openOrUpdate } = useInstallPrompt();
-  const [showIOSSheet, setShowIOSSheet] = useState(false);
+  const [showManualSheet, setShowManualSheet] = useState(false);
 
-  if (
-    status !== 'installable' &&
-    status !== 'ios-manual' &&
-    status !== 'installed-elsewhere' &&
-    status !== 'update-available'
-  ) return null;
+  if (status === 'checking' || status === 'installed') return null;
 
   const handleClick = () => {
-    if (status === 'ios-manual') {
-      setShowIOSSheet(true);
+    if (status === 'installable') {
+      triggerInstall();
       return;
     }
     if (status === 'installed-elsewhere' || status === 'update-available') {
       openOrUpdate();
       return;
     }
-    triggerInstall();
+    // 'manual-wait' or 'ios-manual' — no working .prompt() yet, show steps.
+    setShowManualSheet(true);
   };
 
   const icon = status === 'update-available'
@@ -62,6 +77,8 @@ export default function FloatingInstallButton() {
     : status === 'installed-elsewhere'
     ? 'Open app'
     : 'Install';
+
+  const android = isAndroid();
 
   return (
     <>
@@ -77,33 +94,72 @@ export default function FloatingInstallButton() {
         <span className="kx-install-fab-label">{label}</span>
       </button>
 
-      {showIOSSheet && (
-        <div className="kx-install-sheet-backdrop" onClick={() => setShowIOSSheet(false)}>
+      {showManualSheet && (
+        <div className="kx-install-sheet-backdrop" onClick={() => setShowManualSheet(false)}>
           <div className="kx-install-sheet" onClick={(e) => e.stopPropagation()}>
             <div className="kx-install-sheet-header">
               <div className="kx-install-sheet-title">Install KUETx</div>
               <button
                 className="kx-install-sheet-close"
-                onClick={() => { setShowIOSSheet(false); dismissInstallPrompt(); }}
+                onClick={() => { setShowManualSheet(false); dismissInstallPrompt(); }}
                 aria-label="Close"
               >
                 <X size={16} />
               </button>
             </div>
-            <div className="kx-install-sheet-step">
-              <div className="kx-install-sheet-step-icon"><Share size={20} strokeWidth={2} /></div>
-              <div>
-                <div className="kx-install-sheet-step-title">1. Tap the Share icon</div>
-                <div className="kx-install-sheet-step-desc">In Safari's toolbar</div>
-              </div>
-            </div>
-            <div className="kx-install-sheet-step">
-              <div className="kx-install-sheet-step-icon"><SquarePlus size={20} strokeWidth={2} /></div>
-              <div>
-                <div className="kx-install-sheet-step-title">2. Tap "Add to Home Screen"</div>
-                <div className="kx-install-sheet-step-desc">Scroll down if you don't see it right away</div>
-              </div>
-            </div>
+
+            {status === 'ios-manual' ? (
+              <>
+                <div className="kx-install-sheet-step">
+                  <div className="kx-install-sheet-step-icon"><Share size={20} strokeWidth={2} /></div>
+                  <div>
+                    <div className="kx-install-sheet-step-title">1. Tap the Share icon</div>
+                    <div className="kx-install-sheet-step-desc">In Safari's toolbar</div>
+                  </div>
+                </div>
+                <div className="kx-install-sheet-step">
+                  <div className="kx-install-sheet-step-icon"><SquarePlus size={20} strokeWidth={2} /></div>
+                  <div>
+                    <div className="kx-install-sheet-step-title">2. Tap "Add to Home Screen"</div>
+                    <div className="kx-install-sheet-step-desc">Scroll down if you don't see it right away</div>
+                  </div>
+                </div>
+              </>
+            ) : android ? (
+              <>
+                <div className="kx-install-sheet-step">
+                  <div className="kx-install-sheet-step-icon"><MoreVertical size={20} strokeWidth={2} /></div>
+                  <div>
+                    <div className="kx-install-sheet-step-title">1. Tap the ⋮ menu</div>
+                    <div className="kx-install-sheet-step-desc">Top-right of Chrome</div>
+                  </div>
+                </div>
+                <div className="kx-install-sheet-step">
+                  <div className="kx-install-sheet-step-icon"><Download size={20} strokeWidth={2} /></div>
+                  <div>
+                    <div className="kx-install-sheet-step-title">2. Tap "Install app" / "Add to Home screen"</div>
+                    <div className="kx-install-sheet-step-desc">KUETx will open like a normal app, no browser bar</div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="kx-install-sheet-step">
+                  <div className="kx-install-sheet-step-icon"><Menu size={20} strokeWidth={2} /></div>
+                  <div>
+                    <div className="kx-install-sheet-step-title">1. Look for the install icon</div>
+                    <div className="kx-install-sheet-step-desc">In the address bar, or your browser's ⋮ menu</div>
+                  </div>
+                </div>
+                <div className="kx-install-sheet-step">
+                  <div className="kx-install-sheet-step-icon"><Download size={20} strokeWidth={2} /></div>
+                  <div>
+                    <div className="kx-install-sheet-step-title">2. Click "Install"</div>
+                    <div className="kx-install-sheet-step-desc">KUETx opens in its own window, no address bar</div>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
@@ -153,6 +209,34 @@ export default function FloatingInstallButton() {
           filter: brightness(1.05);
         }
         .kx-install-fab:active { transform: translateY(-1px) scale(0.98); }
+
+        /* Owner ask: mobile should actively nudge toward install, since
+           installed-as-app is the best experience there — a slow,
+           subtle pulse on the shadow (not the whole button scaling/
+           moving, which would be distracting mid-scroll) keeps it
+           noticeable without feeling like a nagging animation. Desktop
+           stays static; the button already sits comfortably in view
+           there without needing extra attention-pulling. */
+        @keyframes kx-install-fab-pulse {
+          0%, 100% {
+            box-shadow:
+              0 10px 26px -8px rgba(var(--accentRGB), 0.55),
+              0 1px 2px rgba(0,0,0,0.12),
+              inset 0 1px 0 rgba(255,255,255,0.25);
+          }
+          50% {
+            box-shadow:
+              0 10px 30px -6px rgba(var(--accentRGB), 0.85),
+              0 1px 2px rgba(0,0,0,0.12),
+              inset 0 1px 0 rgba(255,255,255,0.25);
+          }
+        }
+        @media (max-width: 767px) {
+          .kx-install-fab { animation: kx-install-fab-pulse 2.2s ease-in-out infinite; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .kx-install-fab { animation: none; }
+        }
 
         /* Desktop: no bottom nav to clear, so the button can sit lower,
            still safely right of the 220px left sidebar either way. */

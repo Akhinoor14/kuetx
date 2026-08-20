@@ -1125,6 +1125,9 @@ function SignedOutRouter({ authState }) {
     return (
       <Suspense fallback={<PageLoadingFallback />}>
         <About />
+        {/* See FloatingInstallButton render note below — same reasoning
+            applies to every signed-out page, not just the landing page. */}
+        <FloatingInstallButton />
       </Suspense>
     );
   }
@@ -1132,12 +1135,27 @@ function SignedOutRouter({ authState }) {
     return (
       <Suspense fallback={<PageLoadingFallback />}>
         <PrivacyPolicy />
+        <FloatingInstallButton />
       </Suspense>
     );
   }
   return (
     <Suspense fallback={<PageLoadingFallback />}>
       <RequireGuestMode authState={authState}><LandingPage /></RequireGuestMode>
+      {/* BUGFIX (this session): install button never appeared on the
+          landing page despite working code and multiple prior fix
+          attempts — root cause was never the button's own logic.
+          FloatingInstallButton is only mounted inside Layout (see the
+          big <Routes> tree further down), and Layout never renders at
+          all for a signed-out visitor (that's the whole point of
+          SignedOutRouter — see this function's own header comment).
+          So on '/', there was simply no copy of <FloatingInstallButton/>
+          anywhere in the mounted tree to show itself. Mounting it here,
+          once, fixes it for every signed-out route this component
+          serves (landing, /about, /privacy) — same component, same
+          install-detection logic as the signed-in version, just given
+          a place to actually render before a visitor signs in. */}
+      <FloatingInstallButton />
     </Suspense>
   );
 }

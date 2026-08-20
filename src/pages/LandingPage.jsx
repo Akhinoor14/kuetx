@@ -140,6 +140,7 @@ const CAMPUS_PHOTOS = {
   auditorium: { src: '/landing/auditorium.jpg', label: 'Auditorium', coord: 'যেখানে ফেস্ট হয়' },
   mainBuilding: { src: '/landing/main-building.jpg', label: 'Academic Building', coord: 'কলামযুক্ত, বহুতল' },
   bus: { src: '/landing/bus.jpg', label: 'Campus Bus', coord: 'দৈনন্দিন যাতায়াত' },
+  streetPainting: { src: '/landing/street-painting.jpg', label: 'Street Painting', coord: 'ক্যাম্পাসের দেয়ালচিত্র' },
 };
 
 // ─── Campus photo hero (design refresh) ─────────────────────────────────
@@ -517,7 +518,16 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
         }}
       >
         <div style={{ order: isMobileNav ? 2 : 1 }}>
-          <div className="kx-eyebrow kx-on-dark" style={{ marginBottom: '1.1rem' }}>
+          <div
+            className="kx-eyebrow kx-on-dark"
+            style={{
+              marginBottom: '1.1rem',
+              whiteSpace: 'nowrap',
+              fontSize: isMobileNav ? '10.5px' : '12.5px',
+              padding: isMobileNav ? '5px 10px' : '6px 14px',
+              gap: isMobileNav ? '0.3rem' : '0.4rem',
+            }}
+          >
             Built by KUET students, for KUET
           </div>
 
@@ -650,13 +660,13 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
           // photos side by side underneath. No rotation/overlap, no
           // fixed height — the block just takes the height its content
           // needs.
-          <div style={{ order: 2, position: 'relative' }}>
+          <div style={{ order: 2, position: 'relative', marginLeft: isMobileNav ? '-1.1rem' : 0, marginRight: isMobileNav ? '-1.1rem' : 0, width: isMobileNav ? 'calc(100% + 2.2rem)' : '100%' }}>
             <div style={{
               position: 'relative',
               borderRadius: '14px', overflow: 'hidden', border: '4px solid #fff',
               boxShadow: '0 14px 28px rgba(0,0,0,0.35)', background: '#fff',
             }}>
-              <img src={CAMPUS_PHOTOS.gate.src} alt={CAMPUS_PHOTOS.gate.label} style={{ width: '100%', aspectRatio: '16 / 9', objectFit: 'cover', display: 'block' }} />
+              <img src={CAMPUS_PHOTOS.gate.src} alt={CAMPUS_PHOTOS.gate.label} style={{ width: '100%', aspectRatio: '21 / 9', objectFit: 'cover', display: 'block' }} />
               <div style={{
                 position: 'absolute', top: '10px', left: '10px',
                 display: 'flex', alignItems: 'center', gap: '0.3rem',
@@ -674,20 +684,28 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
               }}>
                 <div style={{ fontWeight: 700, fontSize: '12.5px', color: '#fff' }}>{CAMPUS_PHOTOS.gate.label}</div>
               </div>
+              {/* Owner ask: mascot moved to top-right corner of the hero
+                  photo so a mobile visitor sees it in the very first
+                  viewport (previously bottom-right on a taller cluster —
+                  often below the fold on short-viewport phones before
+                  scrolling). Wider (21:9) + shorter photo strip here
+                  also means the whole cluster's total height dropped,
+                  which alone pulls the mascot higher up the page. */}
               <div
                 className="kx-mascot-badge"
                 style={{
-                  position: 'absolute', bottom: '-14px', right: '-10px',
-                  width: '68px', height: '68px',
+                  position: 'absolute', top: '-16px', right: '-10px',
+                  width: '64px', height: '64px',
                   filter: 'drop-shadow(0 8px 14px rgba(0,0,0,0.5))',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  zIndex: 3,
                 }}
               >
-                <Logo size={68} />
+                <Logo size={64} />
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.6rem' }}>
+            <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.6rem', padding: '0 1.1rem' }}>
               <div style={{
                 flex: 1, borderRadius: '10px', overflow: 'hidden', border: '3px solid #fff',
                 boxShadow: '0 8px 16px rgba(0,0,0,0.3)',
@@ -795,9 +813,17 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
 // reads as a physical scrapbook rather than a rigid CSS grid.
 const SCRAPBOOK_ORDER = ['gate', 'academic', 'aerial', 'sign', 'auditorium', 'mainBuilding', 'bus', 'statue'];
 const SCRAPBOOK_TILTS = [-3, 2, -2, 3, 2, -3, 3, -2];
+// Mobile-only 9th tile (3x3 grid) — owner request: desktop stays at the
+// original 8 real campus photos, mobile gets one extra (street painting)
+// appended so the 3-column grid fills a clean 3x3 instead of 8 leaving
+// a dangling last row.
+const SCRAPBOOK_ORDER_MOBILE = [...SCRAPBOOK_ORDER, 'streetPainting'];
+const SCRAPBOOK_TILTS_MOBILE = [...SCRAPBOOK_TILTS, -2];
 
 function CampusScrapbook({ isMobileNav }) {
   const { ref, visible } = useRevealOnVisible();
+  const order = isMobileNav ? SCRAPBOOK_ORDER_MOBILE : SCRAPBOOK_ORDER;
+  const tilts = isMobileNav ? SCRAPBOOK_TILTS_MOBILE : SCRAPBOOK_TILTS;
   return (
     // Full-bleed sage band, matches HTML's .scrapbook section exactly.
     <section
@@ -810,76 +836,10 @@ function CampusScrapbook({ isMobileNav }) {
         padding: isMobileNav ? '1.75rem 0.75rem' : '90px 32px',
       }}
     >
-      {/* Hard color-band cut by design — no seam gradient here. */}
-      <div style={{
-        display: isMobileNav ? 'grid' : 'flex',
-        gridTemplateColumns: isMobileNav ? 'repeat(3, 1fr)' : undefined,
-        justifyContent: isMobileNav ? undefined : 'center',
-        flexWrap: isMobileNav ? undefined : 'wrap',
-        gap: isMobileNav ? '0.5rem' : '24px',
-        maxWidth: '1120px', margin: isMobileNav ? '0 auto 1.75rem' : '0 auto 56px',
-      }}>
-        {SCRAPBOOK_ORDER.map((key, i) => {
-          const photo = CAMPUS_PHOTOS[key];
-          const tilt = SCRAPBOOK_TILTS[i];
-          return (
-            <div
-              key={key}
-              className="kx-scrapbook-tile"
-              style={{
-                width: isMobileNav ? '100%' : '210px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-            >
-              {/* Only the photo card itself tilts — the label sits
-                  outside this rotated box in normal flow below, so
-                  every tile's label lands at the same height across
-                  the row regardless of that tile's tilt angle. Rotating
-                  the label along with the photo (old behavior) made
-                  each tile's rotated bounding box a different height,
-                  which visibly jumped the label row up/down per-tile. */}
-              <div style={{
-                width: '100%',
-                background: '#fff',
-                borderRadius: isMobileNav ? '8px' : '10px',
-                padding: isMobileNav ? '5px' : '10px',
-                boxShadow: isMobileNav ? '0 4px 10px rgba(0,0,0,0.08)' : '0 12px 28px rgba(0,0,0,0.1)',
-                transform: `rotate(${tilt}deg)`,
-              }}>
-                <div style={{
-                  width: '100%',
-                  aspectRatio: '1 / 1',
-                  borderRadius: isMobileNav ? '5px' : '6px',
-                  overflow: 'hidden',
-                }}>
-                  <img
-                    src={photo.src}
-                    alt={photo.label}
-                    loading="lazy"
-                    style={{ width: '100%', height: isMobileNav ? '100%' : '160px', objectFit: 'cover', display: 'block' }}
-                  />
-                </div>
-              </div>
-              <div style={{
-                marginTop: isMobileNav ? '6px' : '10px',
-                fontSize: isMobileNav ? '9.5px' : '12.5px',
-                fontWeight: 700, color: '#16241a', textAlign: 'center',
-                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                width: '100%',
-              }}>{photo.label}</div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Owner ask: move this heading block below the photo grid, "spotlit"
-          rather than a plain title-above-images layout — a soft radial
-          glow sits behind the text (same glow language as the hero
-          section's background) so it reads as the grid's payoff/caption
-          rather than a header sitting above unrelated content. */}
-      <div style={{ position: 'relative', textAlign: 'center', maxWidth: '640px', margin: '0 auto' }}>
+      {/* Heading block moved above the grid (owner request) — reads as
+          the section's title/caption for the photos below, in both
+          desktop and mobile layouts, rather than sitting after them. */}
+      <div style={{ position: 'relative', textAlign: 'center', maxWidth: '640px', margin: isMobileNav ? '0 auto 1.5rem' : '0 auto 56px' }}>
         <div style={{
           position: 'absolute', left: '50%', top: '50%',
           transform: 'translate(-50%, -50%)',
@@ -899,6 +859,94 @@ function CampusScrapbook({ isMobileNav }) {
           </p>
         </div>
       </div>
+
+      {/* Hard color-band cut by design — no seam gradient here. */}
+      <div style={{
+        display: isMobileNav ? 'grid' : 'flex',
+        gridTemplateColumns: isMobileNav ? 'repeat(3, 1fr)' : undefined,
+        justifyContent: isMobileNav ? undefined : 'center',
+        flexWrap: isMobileNav ? undefined : 'wrap',
+        gap: isMobileNav ? '0.5rem' : '24px',
+        maxWidth: '1120px', margin: isMobileNav ? '0 auto' : '0 auto',
+      }}>
+        {order.map((key, i) => {
+          const photo = CAMPUS_PHOTOS[key];
+          const tilt = tilts[i];
+          return (
+            <div
+              key={key}
+              className="kx-scrapbook-tile"
+              style={{
+                width: isMobileNav ? '100%' : '210px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              {/* Only the photo card itself tilts — the label sits
+                  outside this rotated box in normal flow below, so
+                  every tile's label lands at the same height across
+                  the row regardless of that tile's tilt angle. Rotating
+                  the label along with the photo (old behavior) made
+                  each tile's rotated bounding box a different height,
+                  which visibly jumped the label row up/down per-tile.
+
+                  Owner-reported (mobile): labels were still jumping
+                  row-to-row. Root cause — a rotated box's own layout
+                  footprint (the space it occupies in flow) grows
+                  slightly taller than its unrotated size, and that
+                  growth differs per-tile depending on tilt angle. In a
+                  CSS grid, each ROW's height is set by its tallest
+                  cell, so two tiles with different tilts sitting in
+                  the same row produced a few px of mismatch, which
+                  pushed some tiles' labels down more than others.
+                  Fixing: give the tilted card itself a fixed-height
+                  wrapper (aspect-ratio 1/1 photo + fixed padding/border
+                  chrome = a known, constant total) so its layout
+                  footprint is identical for every tilt angle — rotation
+                  is now purely visual (renders outside the box via
+                  the transform, doesn't touch flow), not something
+                  that changes the row's measured height. */}
+              <div style={{
+                width: '100%',
+                aspectRatio: '1 / 1',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <div style={{
+                  width: '100%',
+                  background: '#fff',
+                  borderRadius: isMobileNav ? '8px' : '10px',
+                  padding: isMobileNav ? '5px' : '10px',
+                  boxShadow: isMobileNav ? '0 4px 10px rgba(0,0,0,0.08)' : '0 12px 28px rgba(0,0,0,0.1)',
+                  transform: `rotate(${tilt}deg)`,
+                }}>
+                <div style={{
+                  width: '100%',
+                  aspectRatio: '1 / 1',
+                  borderRadius: isMobileNav ? '5px' : '6px',
+                  overflow: 'hidden',
+                }}>
+                  <img
+                    src={photo.src}
+                    alt={photo.label}
+                    loading="lazy"
+                    style={{ width: '100%', height: isMobileNav ? '100%' : '160px', objectFit: 'cover', display: 'block' }}
+                  />
+                </div>
+                </div>
+              </div>
+              <div style={{
+                marginTop: isMobileNav ? '6px' : '10px',
+                fontSize: isMobileNav ? '9.5px' : '12.5px',
+                fontWeight: 700, color: '#16241a', textAlign: 'center',
+                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                width: '100%',
+              }}>{photo.label}</div>
+            </div>
+          );
+        })}
+      </div>
+
     </section>
   );
 }
@@ -2403,7 +2451,7 @@ const CREDITS_SPOTLIGHT = [
   {
     id: 'founder',
     role: 'Founder',
-    name: 'Akhinoor',
+    name: 'Md Akhinoor Islam',
     photo: '/landing/credits/founder.jpg',
     photoShape: 'circle',
     blurb: 'KUETx-এর প্রতিষ্ঠাতা ও মূল ডেভেলপার — নিজের ক্যাম্পাসের সমস্যা দেখে পুরো অ্যাপটা বানানো শুরু করে।',
@@ -2865,7 +2913,7 @@ function CreditsSpotlight({ isMobileNav }) {
           })()}
         </div>
 
-        <div style={{ fontWeight: 800, fontSize: isMobileNav ? '0.92rem' : '1rem', color: 'var(--text)' }}>
+        <div style={{ fontWeight: 800, fontSize: isMobileNav ? '0.92rem' : '1rem', color: 'var(--text)', whiteSpace: 'nowrap' }}>
           {person.name}
         </div>
 

@@ -16,54 +16,38 @@
 //                            has no pending update -> button shows "Open app"
 //   'update-available'    -> same as above, but a newer service worker is
 //                            installed and waiting -> button shows "Update"
-//   'unavailable'         -> no captured beforeinstallprompt (browser hasn't fired
-//                            it, requirements not met, or this is a browser that
-//                            never fires it) AND not iOS Safari AND not confirmed
-//                            installed elsewhere -> hide button
-//   'ios-manual'          -> iOS Safari never fires beforeinstallprompt at all;
-//                            the only path there is the manual Share-sheet steps
-//                            -> button shows, tapping opens an instruction sheet
-//   'installable'         -> a real captured event is sitting ready -> button
-//                            shows, tapping calls .prompt() directly, no
-//                            confirmation dialog of our own
+//   'installable'         -> a real captured beforeinstallprompt event is
+//                            sitting ready -> button shows, tapping calls
+//                            .prompt() directly, no confirmation dialog of
+//                            our own
+//   'ios-manual'          -> iOS Safari never fires beforeinstallprompt at
+//                            all -> button shows, tapping opens an
+//                            instruction sheet (Share -> Add to Home Screen)
+//   'manual-wait'         -> Chrome/Edge/Android HASN'T fired
+//                            beforeinstallprompt yet (browser's own
+//                            engagement heuristic — visit count/time-on-site
+//                            — not yet satisfied; this can't be bypassed
+//                            from page JS, it's a browser trust/anti-spam
+//                            gate) -> button STILL SHOWS (owner decision:
+//                            never hide the install ask just because the
+//                            browser hasn't offered its native prompt yet,
+//                            especially on mobile where installing is the
+//                            better experience) -> tapping opens the same
+//                            manual-instructions sheet as 'ios-manual', with
+//                            copy for whatever platform this is, since there
+//                            is no .prompt() to call
 //
-// Chrome/Edge/Android are the only browsers that ever fire
-// beforeinstallprompt — desktop Firefox and Safari (all platforms other
-// than iOS) simply never reach 'installable', which is correct: there is
-// no programmatic install path there, so per the "click = direct
-// install, no separate button" requirement, the honest thing is to show
-// nothing rather than a button with no working install-here mechanism.
-//
-// DETECTING "installed elsewhere" FROM A BROWSER TAB (Aug 2026 addition):
-// There is no fully reliable cross-context API for "is this PWA installed
-// on this device" — navigator.getInstalledRelatedApps() is the only
-// standards-based signal, and it's Chrome/Edge-on-Android only today
-// (desktop Chrome and all other browsers just resolve to an empty array).
-// Because of that asymmetry, this hook only ever treats a NON-EMPTY result
-// as meaningful (a real positive) — an empty array is treated as "unknown",
-// never as proof of "not installed", so it can only ever unlock the
-// 'installed-elsewhere'/'update-available' states, never wrongly suppress
-// the normal 'installable' flow on browsers where the API is unsupported.
-// Requires the self-referencing entry in manifest.json's
-// related_applications (platform: 'webapp', url: this app's own
-// manifest.json) — without that entry the API always returns [].
-//
-// DETECTING "update available": registration.waiting on THIS tab's own
-// service worker registration is a real, same-origin+scope signal — Chrome
-// shares one SW registration per scope across every window/tab of that
-// origin, standalone or not, so a waiting SW here really does mean the
-// installed copy has an update pending too, not a guess.
-//
-// BUGFIX (button permanently gone after install -> uninstall -> reopen):
-// isStandaloneDisplay() is re-checked on every mount/focus, so once
-// someone actually uninstalls and is no longer running standalone, the
-// hook resumes watching for beforeinstallprompt like a first-time
-// visitor. And declining the native install sheet just clears the
-// deferred prompt (Chrome's own cooldown on re-firing the event already
-// governs re-eligibility) instead of also layering our own 14-day
-// dismiss cooldown on top — only an explicit tap on our OWN button's
-// dismiss action does that (see dismissInstallPrompt call sites in
-// FloatingInstallButton.jsx).
+// Owner decision (this session): "never hide the button, especially on
+// mobile" — the old 'unavailable' terminal state (hide entirely until
+// Chrome's own heuristic fires the event) is gone. Every non-installed,
+// non-dismissed visitor on every platform now sees SOME actionable button:
+// direct install where the browser allows it, otherwise a manual-steps
+// sheet. Desktop keeps the exact same visual treatment; this is a state-
+// machine change, not a platform-specific style change (owner: "desktop e
+// easy kore rakhte pare" — desktop already works fine once
+// beforeinstallprompt fires, which is common there, so no separate
+// desktop styling was needed here beyond FloatingInstallButton's existing
+// @media bottom-offset rule).
 
 import { useEffect, useState, useCallback } from 'react';
 
@@ -117,7 +101,7 @@ export function useInstallPrompt() {
     }
 
     if (isDismissedForNow()) {
-      setStatus('unavailable');
+      setStatus('checking'); // stays hidden — 'checking' never renders, see FloatingInstallButton's guard
       return undefined;
     }
 
@@ -128,9 +112,13 @@ export function useInstallPrompt() {
       return undefined;
     }
 
-    // Otherwise wait for the real browser signal — until it fires (or
-    // never does), stay 'unavailable' so the button doesn't render.
-    setStatus('unavailable');
+    // Chrome/Edge/etc: show the manual-instructions button immediately
+    // rather than waiting silently for beforeinstallprompt — that event
+    // is gated behind the browser's own engagement heuristic and may
+    // never fire this session (or ever, for a visitor who doesn't meet
+    // it). 'manual-wait' upgrades to 'installable' the moment a real
+    // event does land, same as before.
+    setStatus('manual-wait');
 
     const onBeforeInstall = (e) => {
       e.preventDefault();
@@ -156,11 +144,11 @@ export function useInstallPrompt() {
     window.addEventListener('beforeinstallprompt', onBeforeInstall);
     window.addEventListener('appinstalled', onInstalled);
 
-    // Confirmed-installed-elsewhere check: only ever upgrades 'unavailable'
-    // to 'installed-elsewhere'/'update-available' — never runs if one of
-    // the terminal states above already returned, and never downgrades
-    // 'installable' once a real beforeinstallprompt has landed (that's a
-    // stronger, more actionable signal than this one).
+    // Confirmed-installed-elsewhere check: only ever upgrades
+    // 'manual-wait' to 'installed-elsewhere'/'update-available' — never
+    // runs if one of the terminal states above already returned, and
+    // never downgrades 'installable' once a real beforeinstallprompt has
+    // landed (that's a stronger, more actionable signal than this one).
     let cancelled = false;
     const checkInstalledElsewhere = async () => {
       try {
@@ -202,7 +190,7 @@ export function useInstallPrompt() {
       if (isStandaloneDisplay()) {
         setStatus('installed');
       } else {
-        setStatus((prev) => (prev === 'installed' ? 'unavailable' : prev));
+        setStatus((prev) => (prev === 'installed' ? 'manual-wait' : prev));
         checkInstalledElsewhere();
       }
     };
@@ -231,9 +219,11 @@ export function useInstallPrompt() {
         setStatus('installed');
       } else {
         // Declined THIS specific native prompt (closed the sheet, tapped
-        // Cancel, etc) — that's not the same as the person dismissing our
-        // floating button, so it must NOT start our own 14-day cooldown.
-        setStatus('unavailable');
+        // Cancel, etc) — falls back to the manual-instructions button
+        // rather than disappearing, so a visitor who dismissed the
+        // native sheet by accident still has a way to install later in
+        // the same session.
+        setStatus('manual-wait');
       }
       try { window.__kxInstallPromptPending = false; } catch {}
     } catch {
