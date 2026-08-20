@@ -129,21 +129,32 @@
         transition: transform 1.1s cubic-bezier(0.16, 1, 0.3, 1), width 1s cubic-bezier(0.65, 0, 0.35, 1), height 1s cubic-bezier(0.65, 0, 0.35, 1), top 1s cubic-bezier(0.65, 0, 0.35, 1), left 1s cubic-bezier(0.65, 0, 0.35, 1);
         will-change: transform, width, height;
       }
-      #kx-photoTL { top: 0; left: 0; transform: translate(-100%, -100%); }
-      #kx-photoTR { top: 0; left: 50vw; transform: translate(100%, -100%); }
-      #kx-photoBL { top: 50vh; left: 0; transform: translate(-100%, 100%); }
-      #kx-photoBR { top: 50vh; left: 50vw; transform: translate(100%, 100%); }
+      /* BUGFIX (photos invisible on load): translate(±100%, ±100%) here
+         resolves against THIS element's own box — and each quadrant starts
+         at full-viewport size (100vw/100vh, see .kx-photo above) before its
+         first transition ever runs. So translate(-100%, -100%) shifted a
+         100vw-wide box a further 100vw to the left — a full extra screen
+         away, not just off the near edge — landing it (and the other three
+         quadrants, symmetrically) so far outside the viewport that they
+         never became visible at any point in the transition. Fixed by
+         moving the off-canvas placement into top/left (viewport-relative,
+         not self-relative) so each quadrant starts exactly one viewport-
+         width/height past its own edge — close enough to slide fully into
+         view — and dropping the transform entirely for the initial state. */
+      #kx-photoTL { top: -100vh; left: -100vw; }
+      #kx-photoTR { top: -100vh; left: 150vw; }
+      #kx-photoBL { top: 150vh;  left: -100vw; }
+      #kx-photoBR { top: 150vh;  left: 150vw; }
 
       /* Step 1: slide fully into place, each quadrant at exactly
          quarter-viewport size positioned edge-to-edge — together they
-         tile the whole screen seamlessly, no gap, no overlap. */
-      .kx-photo.kx-arrived {
-        transform: translate(0, 0);
-      }
-      #kx-photoTL.kx-arrived, #kx-photoTR.kx-arrived,
-      #kx-photoBL.kx-arrived, #kx-photoBR.kx-arrived {
-        width: 50vw; height: 50vh;
-      }
+         tile the whole screen seamlessly, no gap, no overlap. Explicit
+         top/left per quadrant (not translate(0,0)) since the off-canvas
+         start state above is now expressed in top/left, not transform. */
+      #kx-photoTL.kx-arrived { top: 0;   left: 0;   width: 50vw; height: 50vh; }
+      #kx-photoTR.kx-arrived { top: 0;   left: 50vw; width: 50vw; height: 50vh; }
+      #kx-photoBL.kx-arrived { top: 50vh; left: 0;   width: 50vw; height: 50vh; }
+      #kx-photoBR.kx-arrived { top: 50vh; left: 50vw; width: 50vw; height: 50vh; }
 
       /* Step 2: shrink each quadrant toward its own corner, same
          transition timing, opening the center gap for the badge. The
@@ -165,19 +176,15 @@
       }
       #kx-overlay.kx-show { opacity: 1; }
 
-      /* ---------- Foreground badge — always centered, own layer ---------- */
+      /* ---------- Foreground mascot — always centered, own layer ----------
+         Just the transparent mascot art + wordmark, no card/background,
+         no tagline, no clock. Big and unmissable. */
       #kx-centerLogo {
         position: absolute; top: 50%; left: 50%;
         transform: translate(-50%, -50%) scale(0.9);
         display: flex; flex-direction: column; align-items: center;
         text-align: center;
         gap: 0;
-        padding: 28px 24px;
-        border-radius: 20px;
-        background: rgba(12, 39, 24, 0.55);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
         opacity: 0;
         z-index: 2;
         transition: opacity 0.5s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
@@ -192,43 +199,26 @@
         transition: opacity 0.4s ease, transform 0.4s ease;
       }
       #kx-centerLogo img {
-        width: 56px; height: 56px;
+        width: 200px; height: 200px;
         display: block;
+        filter: drop-shadow(0 8px 28px rgba(0,0,0,0.45));
       }
       #kx-wordmark {
-        font-weight: 800; font-size: 1.3rem; letter-spacing: -0.01em;
-        color: #f5f5f0; margin-top: 10px;
+        font-weight: 800; font-size: 2rem; letter-spacing: -0.01em;
+        color: #f5f5f0; margin-top: 14px;
       }
       #kx-wordmark span { color: #4ade80; font-weight: 900; }
-      #kx-tagline {
-        font-size: 0.75rem; color: rgba(255,255,255,0.75);
-        margin-top: 4px;
-      }
-      #kx-clock {
-        font-family: 'JetBrains Mono', ui-monospace, monospace;
-        font-size: 0.85rem; font-weight: 600; letter-spacing: 0.03em;
-        color: #a5d6a7;
-        margin-top: 10px;
-        display: flex; align-items: center; gap: 7px;
-      }
-      #kx-clock .kx-clock-dot {
-        width: 6px; height: 6px; border-radius: 50%;
-        background: #4ade80; flex-shrink: 0;
-        box-shadow: 0 0 6px rgba(74,222,128,0.8);
-      }
 
       @media screen and (min-width: 641px) {
-        #kx-centerLogo { width: 360px; padding: 36px 32px; }
-        #kx-centerLogo img { width: 72px; height: 72px; }
-        #kx-wordmark { font-size: 1.6rem; }
-        #kx-tagline { font-size: 0.85rem; }
-        #kx-clock { font-size: 0.95rem; }
+        #kx-centerLogo img { width: 260px; height: 260px; }
+        #kx-wordmark { font-size: 2.4rem; }
       }
       @media screen and (max-width: 640px) {
-        #kx-centerLogo { width: 78vw; max-width: 320px; }
+        #kx-centerLogo img { width: 42vw; height: 42vw; max-width: 220px; max-height: 220px; }
+        #kx-wordmark { font-size: 1.8rem; }
         /* Mobile portrait: the diamond gap opened by kx-shrunk is
            narrower relative to badge width than on desktop, so shrink
-           the quadrants a touch further to guarantee the badge card
+           the quadrants a touch further to guarantee the mascot
            never visually overlaps a photo edge on tall/narrow phones. */
         .kx-photo.kx-shrunk { width: 38vw; height: 40vh; }
         #kx-photoTR.kx-shrunk { left: 62vw; }
@@ -378,42 +368,26 @@
           '</div>' +
           '<div id="kx-overlay"></div>' +
           '<div id="kx-centerLogo">' +
-            '<img src="/splash/mascot.webp" width="72" height="72" alt="" />' +
+            '<img src="/splash/mascot.webp" width="260" height="260" alt="" />' +
             '<div id="kx-wordmark">KUET<span>x</span></div>' +
-            '<div id="kx-tagline">The digital ecosystem for KUET</div>' +
-            '<div id="kx-clock"><span class="kx-clock-dot"></span><span id="kx-clock-text"></span></div>' +
           '</div>';
         document.body.appendChild(el);
 
         var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         var centerLogo = document.getElementById('kx-centerLogo');
-        var clockText = document.getElementById('kx-clock-text');
         var overlay = document.getElementById('kx-overlay');
         var photoEls = QUADRANTS.map(function (q) { return document.getElementById(q.id); });
 
-        // Live clock — ticks for as long as the splash is on screen.
-        var clockTimer = null;
-        function renderClock() {
-          try {
-            clockText.textContent = new Date().toLocaleTimeString([], {
-              hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true,
-            });
-          } catch (e) { /* Intl unavailable — just skip a tick */ }
-        }
-
         function hideSplash() {
           el.classList.add('kx-hide');
-          if (clockTimer) { clearInterval(clockTimer); clockTimer = null; }
           setTimeout(function () {
             if (el.parentNode) el.parentNode.removeChild(el);
           }, 400);
         }
 
         if (reduceMotion) {
-          // Static fallback: no photo motion, badge appears once, short hold, done.
+          // Static fallback: no photo motion, mascot appears once, short hold, done.
           centerLogo.classList.add('kx-show');
-          renderClock();
-          clockTimer = setInterval(renderClock, 1000);
           setTimeout(hideSplash, 1400);
           return;
         }
@@ -469,11 +443,6 @@
             setTimeout(function () {
               centerLogo.classList.add('kx-show');
             }, BADGE_ENTER_DELAY);
-
-            setTimeout(function () {
-              renderClock();
-              clockTimer = setInterval(renderClock, 1000);
-            }, CLOCK_START_DELAY);
 
             setTimeout(function () {
               centerLogo.classList.remove('kx-show');
