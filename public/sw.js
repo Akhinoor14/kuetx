@@ -1,5 +1,11 @@
-const CACHE_NAME = 'kuetx-v4.16.0'; // bugfix bump: install-button dismiss flag was being set on every manual-sheet close (even a normal read-and-close, unrelated to declining install), silently suppressing the button for 14 days including after a real uninstall (see FloatingInstallButton.jsx / useInstallPrompt.js). Also forces this fix past cache-first navigation caching for returning visitors.
-const CACHE_NAME = 'kuetx-v4.15.0'; // bumped: install button now detects "already installed, viewing in a plain browser tab" via getInstalledRelatedApps() and shows "Open app" / "Update" instead of staying hidden or offering to reinstall (see useInstallPrompt.js). Previous bump: navigation requests (back/forward, reload, address bar) are now cache-first against the precached app shell instead of network-first-with-fallback — removes the flaky-network window that could serve a mismatched/stale shell on deep routes (see fetch handler comment).
+// NOTE: this was accidentally declared twice (v4.16.0 then v4.15.0 right
+// below it) — the second `const CACHE_NAME` is a SyntaxError in strict-mode
+// module scope, but service worker scripts run as classic (non-module)
+// scripts by default, where a duplicate top-level `const` in the same
+// scope is also a SyntaxError, not silently shadowed. Any browser that
+// actually failed to install/update this worker over past deploys was
+// hitting this — collapsed back down to the one real, newer version.
+const CACHE_NAME = 'kuetx-v4.17.0'; // bugfix bump: navigation detection (isNavigation) previously also fired on any request whose Accept header merely contained text/html, as a fallback for mode!=='navigate' — but a dynamic import() of a lazy-loaded route chunk (e.g. Dashboard-*.js) can carry an Accept header that includes text/html depending on browser/CDN, so those chunk fetches were misclassified as navigations and answered with the cached /index.html shell instead of the real JS, which the browser's module loader then rejected for MIME-type mismatch ("Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of text/html"). Now isNavigation relies solely on request.mode==='navigate'. Previous bump (v4.16.0): install-button dismiss flag was being set on every manual-sheet close (even a normal read-and-close, unrelated to declining install), silently suppressing the button for 14 days including after a real uninstall (see FloatingInstallButton.jsx / useInstallPrompt.js). Also forces this fix past cache-first navigation caching for returning visitors. Previous bump (v4.15.0): install button now detects "already installed, viewing in a plain browser tab" via getInstalledRelatedApps() and shows "Open app" / "Update" instead of staying hidden or offering to reinstall (see useInstallPrompt.js).
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -120,8 +126,20 @@ self.addEventListener('fetch', (e) => {
     return;
   }
 
-  const acceptsHtml = e.request.headers.get('accept')?.includes('text/html');
-  const isNavigation = e.request.mode === 'navigate' || acceptsHtml;
+  // BUGFIX (dashboard/lazy-route chunks served as HTML — "Expected a
+  // JavaScript-or-Wasm module script but the server responded with a MIME
+  // type of text/html"): isNavigation used to also fire on any request
+  // whose Accept header merely *contained* text/html, as a fallback for
+  // request.mode!=='navigate'. But dynamic import() of a lazy route chunk
+  // (script destination, e.g. Dashboard-*.js) can carry an Accept header
+  // that includes text/html too, depending on browser/CDN — so that chunk
+  // request was being misclassified as a navigation and answered with the
+  // cached /index.html shell instead of the actual JS, which the module
+  // loader then rejected for its MIME type. request.mode 'navigate' is the
+  // correct, unambiguous signal for a real browser navigation; drop the
+  // Accept-header fallback so script/style/image requests are never
+  // swept into the navigation branch.
+  const isNavigation = e.request.mode === 'navigate';
   const shouldUseCacheFirst =
     isSameOriginAsset(e.request) ||
     e.request.destination === 'style' ||
