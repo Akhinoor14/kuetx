@@ -116,6 +116,7 @@
         transform: scale(0.94);
         transition: opacity 0.4s ease, transform 0.4s ease;
         perspective: 900px;
+        -webkit-perspective: 900px;
       }
       #kx-cardWrap.kx-show {
         opacity: 1;
@@ -126,10 +127,17 @@
         position: relative;
         width: 220px; height: 220px;
         transform-style: preserve-3d;
+        -webkit-transform-style: preserve-3d;
         transition: transform 0.7s cubic-bezier(.65,.05,.36,1);
       }
       @media screen and (min-width: 641px) {
-        #kx-card { width: 260px; height: 260px; }
+        #kx-card { width: 300px; height: 300px; }
+      }
+      @media screen and (min-width: 1024px) {
+        #kx-card { width: 360px; height: 360px; }
+      }
+      @media screen and (min-width: 1600px) {
+        #kx-card { width: 420px; height: 420px; }
       }
       @media screen and (max-width: 640px) {
         #kx-card { width: 44vw; height: 44vw; max-width: 220px; max-height: 220px; }
@@ -139,38 +147,26 @@
         transform: rotateY(360deg);
       }
 
-      #kx-face {
+      #kx-face, #kx-faceBack {
         position: absolute; inset: 0;
         backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
         display: flex; align-items: center; justify-content: center;
       }
-      #kx-face img {
+      #kx-face img, #kx-faceBack img {
         width: 100%; height: 100%;
         display: block;
         filter: drop-shadow(0 8px 24px rgba(20,50,30,0.18));
       }
       /* Back face is rotated 180deg in the DOM so that when the wrapper
          hits the halfway point of its own 360deg spin, this is what's
-         facing the viewer — a distinct "back of card" mark rather than a
-         mirrored front. backface-visibility keeps whichever face is
-         pointed away from the viewer invisible, so there's never a
-         double-image or a see-through moment. */
+         facing the viewer — same mascot artwork, not a separate mark, so
+         the flip reads as "the logo itself turning" rather than
+         revealing a different logo underneath. backface-visibility keeps
+         whichever face is pointed away from the viewer invisible, so
+         there's never a double-image or a see-through moment. */
       #kx-faceBack {
         transform: rotateY(180deg);
-      }
-      #kx-faceBack .kx-backmark {
-        width: 62%; height: 62%;
-        border-radius: 50%;
-        border: 3px solid rgba(22,163,74,0.25);
-        display: flex; align-items: center; justify-content: center;
-        background: radial-gradient(circle at 35% 30%, #eaf7ee, #d7ecdb);
-      }
-      #kx-faceBack .kx-backmark span {
-        font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial;
-        font-weight: 700;
-        font-size: 15px;
-        letter-spacing: 0.16em;
-        color: #16a34a;
       }
 
       #kx-wordmark {
@@ -388,7 +384,7 @@
                 '<img src="/splash/mascot.webp" width="260" height="260" alt="" />' +
               '</div>' +
               '<div id="kx-faceBack">' +
-                '<div class="kx-backmark"><span>KX</span></div>' +
+                '<img src="/splash/mascot.webp" width="260" height="260" alt="" />' +
               '</div>' +
             '</div>' +
           '</div>' +
