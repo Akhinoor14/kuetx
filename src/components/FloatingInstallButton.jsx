@@ -40,7 +40,7 @@
 
 import { useState } from 'react';
 import { Download, Share, SquarePlus, X, ExternalLink, RefreshCw, MoreVertical, Menu } from 'lucide-react';
-import { useInstallPrompt, dismissInstallPrompt } from '../hooks/useInstallPrompt';
+import { useInstallPrompt } from '../hooks/useInstallPrompt';
 
 function isAndroid() {
   if (typeof navigator === 'undefined') return false;
@@ -101,7 +101,7 @@ export default function FloatingInstallButton() {
               <div className="kx-install-sheet-title">Install KUETx</div>
               <button
                 className="kx-install-sheet-close"
-                onClick={() => { setShowManualSheet(false); dismissInstallPrompt(); }}
+                onClick={() => setShowManualSheet(false)}
                 aria-label="Close"
               >
                 <X size={16} />

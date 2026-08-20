@@ -70,8 +70,20 @@ function isIOSSafari() {
 }
 
 const DISMISS_KEY = 'kuetx_install_dismissed_until';
-const DISMISS_DAYS = 14;
 
+// BUGFIX (button never reappears, including after an uninstall — owner
+// report this session): the manual-instructions sheet's own close (X)
+// button used to call this on every close, even a normal "read the
+// steps, close it" tap that has nothing to do with declining install.
+// That silently set a 14-day localStorage flag with no install-state
+// connection at all — closing the sheet after successfully installing
+// manually, or after just glancing at the steps, both suppressed the
+// button for two weeks. Nothing in this codebase calls this anymore
+// (see FloatingInstallButton.jsx), but the check for an existing flag
+// stays here so anyone who already has one sitting in their browser
+// from before this fix doesn't stay stuck — and the setter is kept
+// (unused for now) in case a real, explicit "don't ask me again" action
+// is added later.
 function isDismissedForNow() {
   try {
     const until = Number(localStorage.getItem(DISMISS_KEY) || 0);
@@ -83,7 +95,7 @@ function isDismissedForNow() {
 
 export function dismissInstallPrompt() {
   try {
-    localStorage.setItem(DISMISS_KEY, String(Date.now() + DISMISS_DAYS * 24 * 60 * 60 * 1000));
+    localStorage.setItem(DISMISS_KEY, String(Date.now() + 14 * 24 * 60 * 60 * 1000));
   } catch {
     // localStorage unavailable (private mode) — nothing to persist,
     // button will just keep showing next load, acceptable fallback.

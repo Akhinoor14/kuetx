@@ -27,6 +27,7 @@ import { useCanEditGroup } from '../hooks/useCanEditGroup';
 import { subscribeMyErrandRequests, subscribeMyAcceptedErrandRequests } from './errandRequests';
 import { useRequesterIdentity } from '../pages/ErrandFeed';
 import { getScheduleCoursesForDate, resolveTeachersForDate, getDisplayCourseName, getTeachersForCourse } from './attendanceCore';
+import { ALTERNATE_TEACHER } from '../pages/Schedule';
 
 const todayStr = () => {
   const d = getBDNow();
@@ -136,10 +137,16 @@ export function useTodayActions() {
         const resolved = resolveTeachersForDate(schedule, course.id, date, settings, teacherRegistry);
         const anyNeedsPick = resolved.some((r) => r.needsPick);
         const onDate = [...new Set(resolved.map((r) => r.resolvedTeacher).filter(Boolean))];
-        const teachers = onDate.length ? onDate : getTeachersForCourse(settings, schedule, course.id, teacherRegistry);
+        // Slots still needing a pick (rotating/alternate, no override yet
+        // for today) collapse into ONE ALTERNATE_TEACHER row instead of
+        // spelling out every possible teacher as a separate row — mirrors
+        // Attendance.jsx's DailyLog cardData (see its onDate computation),
+        // so the dashboard shows the same single "Alternative" card that
+        // the /attendance page shows for the same slot.
+        const teachers = anyNeedsPick ? [...onDate, ALTERNATE_TEACHER] : (onDate.length ? onDate : getTeachersForCourse(settings, schedule, course.id, teacherRegistry));
         const teacherRows = (teachers.length ? teachers : ['']).map((t) => ({
           teacher: t,
-          status: dayLog[`${course.id}_${t || ''}`] || null,
+          status: t === ALTERNATE_TEACHER ? null : (dayLog[`${course.id}_${t || ''}`] || null),
         }));
         const allDone = !anyNeedsPick && teacherRows.every((r) => r.status === 'present' || r.status === 'absent');
         if (allDone) return; // marked -> disappears immediately, per handoff decision #3

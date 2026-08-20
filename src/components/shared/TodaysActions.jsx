@@ -56,13 +56,20 @@ export default function TodaysActions() {
     cr.isCR ||
     errands.activeCount > 0;
 
-  if (!hasAnything) return null; // whole card hides — handoff decision #5
-
   // Live-resolved openCard target — mirrors Attendance.jsx's own
   // re-derive-on-every-render approach so a background schedule/mark
   // change while the modal is open can never leave it stale.
   const openRow = openCard ? attendance.rows.find((r) => r.course.id === openCard.courseId) : null;
   const openTeacherRow = openRow ? openRow.teacherRows.find((r) => r.teacher === openCard.teacher) : null;
+
+  // Bug fix: marking the very last remaining row used to make the whole
+  // card (hasAnything -> false) disappear INSTANTLY, mid-click, before
+  // the modal itself ever got to close — no confirmation, no closing
+  // animation, just a hard yank from under the user's thumb. Keep the
+  // card mounted while a modal is still open (openCard truthy) even if
+  // the underlying list just emptied out, and show a brief "all done"
+  // state instead of nothing.
+  if (!hasAnything && !openCard) return null; // whole card hides — handoff decision #5
 
   return (
     <>
@@ -79,14 +86,24 @@ export default function TodaysActions() {
             that scrolls inside this div instead of the page. */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 5, flex: 1, minHeight: 0, maxHeight: 300, overflowY: 'auto' }}>
 
+        {/* Empty-state after the last row just got marked (see hasAnything
+            fix above) — the card stays mounted for the modal's own close,
+            but there's nothing left to list, so say so instead of showing
+            a bare blank area under the closing modal. */}
+        {!hasAnything && (
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, padding: '20px 8px', color: 'var(--muted)', fontSize: 12.5, fontWeight: 600 }}>
+            <CheckCircle size={14} color="#10b981" /> All caught up for today
+          </div>
+        )}
+
         {/* 1. Attendance — unmarked courses for today. Compact single-line
-            row: icon + course/teacher (truncated, stacked tightly) on the
-            left, small ✓/✗ buttons on the right — replaces the old
-            two-row layout (name+teacher line, then a full-width tall
-            Present/Absent bar below it) which made each row roughly 3x
-            taller than necessary. Rotating-slot teacher switching still
-            works via row-click -> AttendanceMarkModal, same as before. */}
-        {attendance.rows.map((row) => row.teacherRows.map((tr) => (
+            row: icon + course/teacher on the left, Present/Absent buttons
+            on the right. Every row — fixed teacher or Alternative — opens
+            the confirm modal on click; nothing marks directly from here,
+            same as the /attendance page. */}
+        {attendance.rows.map((row) => row.teacherRows.map((tr) => {
+          const isAlt = tr.teacher === ALTERNATE_TEACHER;
+          return (
             <div
               key={`${row.id}-${tr.teacher}`}
               role="button"
@@ -103,24 +120,22 @@ export default function TodaysActions() {
               <CalendarCheck size={13} color="var(--accent)" style={{ flexShrink: 0 }} />
               <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
                 <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{row.course.code || row.course.baseCode || row.courseName}</div>
-                <div style={{ fontSize: 9.5, color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{tr.teacher === ALTERNATE_TEACHER ? 'Alternative' : (tr.teacher || 'Unknown teacher')}</div>
+                <div style={{ fontSize: 9.5, color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{isAlt ? 'Alternative' : (tr.teacher || 'Unknown teacher')}</div>
               </div>
+              {/* Preview-only pills — the whole row is the tap target
+                  (see onClick above) and always opens the confirm modal,
+                  never marks directly from here. */}
               <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-                <button
-                  onClick={(e) => { e.stopPropagation(); mark(row.course.id, tr.teacher, 'present'); }}
-                  style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '7px 11px', borderRadius: 7, cursor: 'pointer', fontWeight: 700, fontSize: 12, background: 'rgba(16,185,129,0.12)', color: '#10b981', border: '1.5px solid rgba(16,185,129,0.35)', WebkitTapHighlightColor: 'transparent' }}
-                >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '7px 11px', borderRadius: 7, fontWeight: 700, fontSize: 12, background: 'rgba(16,185,129,0.12)', color: '#10b981', border: '1.5px solid rgba(16,185,129,0.35)' }}>
                   <Check size={14} strokeWidth={3} /> Present
-                </button>
-                <button
-                  onClick={(e) => { e.stopPropagation(); mark(row.course.id, tr.teacher, 'absent'); }}
-                  style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '7px 11px', borderRadius: 7, cursor: 'pointer', fontWeight: 700, fontSize: 12, background: 'rgba(239,68,68,0.12)', color: '#ef4444', border: '1.5px solid rgba(239,68,68,0.30)', WebkitTapHighlightColor: 'transparent' }}
-                >
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '7px 11px', borderRadius: 7, fontWeight: 700, fontSize: 12, background: 'rgba(239,68,68,0.12)', color: '#ef4444', border: '1.5px solid rgba(239,68,68,0.30)' }}>
                   <XIcon size={14} strokeWidth={3} /> Absent
-                </button>
+                </div>
               </div>
             </div>
-          )))}
+          );
+        }))}
 
         {/* 2. Assignments due today, not yet done */}
         {assignments.map((a) => (
@@ -182,19 +197,26 @@ export default function TodaysActions() {
       </div>
 
       {openRow && openTeacherRow && (() => {
-        const slotEntry = openRow.resolved.find((r) => r.resolvedTeacher === openTeacherRow.teacher);
+        const isAlt = openTeacherRow.teacher === ALTERNATE_TEACHER;
+        const slotEntry = openRow.resolved.find((r) =>
+          isAlt ? r.needsPick : r.resolvedTeacher === openTeacherRow.teacher
+        );
         const defaultTeachers = getTeachersForCourse(attendance.settings, attendance.schedule, openRow.course.id, attendance.teacherRegistry);
-        const switchOptions = slotEntry ? defaultTeachers.filter((t) => t !== openTeacherRow.teacher) : [];
+        // Same default-to-first-teacher fix as Attendance.jsx's DailyLog:
+        // an ALTERNATE_TEACHER row shows a real name (first of the max-2
+        // course teachers), not the literal "Alternative" placeholder.
+        const displayTeacher = isAlt ? (defaultTeachers[0] || 'Alternative') : openTeacherRow.teacher;
+        const switchOptions = slotEntry ? defaultTeachers.filter((t) => t !== displayTeacher) : [];
         return (
           <AttendanceMarkModal
             course={openRow.course}
-            teacher={openTeacherRow.teacher === ALTERNATE_TEACHER ? 'Alternative' : openTeacherRow.teacher}
+            teacher={displayTeacher}
             status={openTeacherRow.status}
             dateLabel="Today"
             switchOptions={switchOptions}
             dark={dark}
             onClose={() => setOpenCard(null)}
-            onMark={(val) => { mark(openRow.course.id, openTeacherRow.teacher, val); setOpenCard(null); }}
+            onMark={(val) => { mark(openRow.course.id, displayTeacher, val); setOpenCard(null); }}
             onSwitch={(name) => {
               if (!slotEntry) return;
               switchTeacher(openRow.course.id, slotEntry.day, slotEntry.slot, openTeacherRow.teacher, name);

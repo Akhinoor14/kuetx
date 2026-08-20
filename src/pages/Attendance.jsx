@@ -454,7 +454,24 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
       const resolved = resolveTeachersForDate(schedule, course.id, date, settings, teacherRegistry);
       const anyRotating = resolved.some(r => r.isRotating);
       const anyNeedsPick = resolved.some(r => r.needsPick);
-      const onDate = [...new Set(resolved.map(r => r.resolvedTeacher).filter(Boolean))];
+      // UI simplification (this session): a needsPick slot (rotating
+      // teacher, no override chosen yet for this date) used to render a
+      // completely different card body — a standalone "Alternative"
+      // notice pill plus a time-slot chip picker (teacher name buttons +
+      // "Other…") — instead of the normal teacher-row(s) every other
+      // course gets. Owner ask: same card shape always, no special-case
+      // block. ALTERNATE_TEACHER is the existing sentinel this codebase
+      // already uses to mean "unresolved, ask when marking" — Attendance
+      // already renders it as the label "Alternative" in a normal row
+      // (line ~618) and AttendanceMarkModal already resolves it to a
+      // real teacher name when Present/Absent is tapped (that modal's
+      // own switch-teacher flow is untouched by this change — this is a
+      // JSX-only simplification, no data/resolution logic changed). So:
+      // for each needsPick slot, feed ALTERNATE_TEACHER into onDate
+      // instead of leaving it out — it then flows through the exact same
+      // teacherRows path as every other course, no separate branch
+      // needed at render time.
+      const onDate = [...new Set(resolved.map(r => r.needsPick ? ALTERNATE_TEACHER : r.resolvedTeacher).filter(Boolean))];
       const teachers = onDate.length ? onDate : getTeachersForCourse(settings, schedule, course.id, teacherRegistry);
       const displayTeachers = teachers.length ? teachers : [''];
       const hasTeachers = displayTeachers.some(t => !!t);
@@ -567,31 +584,12 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
                 </div>
               </div>
 
-              {/* Rotating-slot notice — this course has a slot where more than
-                  one teacher has shown up historically with no fixed pattern,
-                  so we don't guess; the user confirms who taught THIS date. */}
-              {anyRotating && (
-                <div style={{ fontSize: 10.5, color: 'var(--accent)', padding: '6px 9px', marginBottom: 7, background: dark ? 'rgba(59,130,246,0.10)' : 'rgba(59,130,246,0.06)', border: '1px solid rgba(59,130,246,0.20)', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <Users size={10} />
-                  <span>Alternative</span>
-                </div>
-              )}
-              {resolved.filter(r => r.needsPick).map(r => (
-                <div key={r.key} style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 8, alignItems: 'center' }}>
-                  <span style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 700 }}>{r.slot}:</span>
-                  {r.pool.map(name => (
-                    <button key={name} onClick={() => pickRotationTeacher(course.id, r.day, r.slot, name)} style={{ padding: '5px 10px', borderRadius: 7, fontSize: 11, fontWeight: 700, border: '1.5px solid var(--accent)', background: 'transparent', color: 'var(--accent)', cursor: 'pointer' }}>
-                      {name}
-                    </button>
-                  ))}
-                  <button onClick={() => {
-                    const custom = window.prompt('Teacher name for this date:');
-                    if (custom && custom.trim()) pickRotationTeacher(course.id, r.day, r.slot, custom.trim());
-                  }} style={{ padding: '5px 10px', borderRadius: 7, fontSize: 11, fontWeight: 600, border: '1.5px dashed var(--muted)', background: 'transparent', color: 'var(--muted)', cursor: 'pointer' }}>
-                    Other…
-                  </button>
-                </div>
-              ))}
+              {/* Owner ask (this session): rotating/alternative slots now
+                  render through the exact same card body as every other
+                  course — no separate "Alternative" pill or time-slot
+                  chip-picker block. See cardData's onDate computation
+                  above for how ALTERNATE_TEACHER now flows into the
+                  normal teacherRows path instead. */}
 
               {/* Teacher rows */}
               {!hasTeachers ? (
@@ -602,9 +600,15 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
                     <button onClick={() => onEditTeachers(course.id)} style={{ marginLeft: 'auto', padding: '3px 9px', borderRadius: 6, fontSize: 11, fontWeight: 700, background: 'var(--warning)', color: 'white', border: 'none', cursor: 'pointer', flexShrink: 0 }}>Assign</button>
                   )}
                 </div>
-              ) : !anyNeedsPick && (
+              ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  {teacherRows.map(({ teacher, key, status }) => (
+                  {teacherRows.map(({ teacher, key, status }) => {
+                    // Every row — fixed teacher or Alternative — opens the
+                    // Present/Absent modal on click; nothing marks directly
+                    // from this card anymore. Keeps confirmation consistent
+                    // everywhere instead of only for rotating slots.
+                    const isAlt = teacher === ALTERNATE_TEACHER;
+                    return (
                     <div
                       key={key}
                       onClick={() => setOpenCard({ courseId: course.id, teacher })}
@@ -615,7 +619,7 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 6 }}>
                         <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 3 }}>
-                          <Users size={9} /> {teacher === ALTERNATE_TEACHER ? 'Alternative' : (teacher || 'Unknown teacher')}
+                          <Users size={9} /> {isAlt ? 'Alternative' : (teacher || 'Unknown teacher')}
                         </div>
                         {status && (
                           <div style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 20, background: status === 'present' ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)', color: status === 'present' ? '#10b981' : '#ef4444' }}>
@@ -643,7 +647,8 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
                         })}
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -660,19 +665,33 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
         if (!cd) { setOpenCard(null); return null; }
         const row = cd.teacherRows.find(r => r.teacher === openCard.teacher);
         if (!row) { setOpenCard(null); return null; }
-        const slotEntry = cd.resolved.find(r => r.resolvedTeacher === row.teacher);
+        // A needsPick slot's resolvedTeacher is '' (not yet chosen for
+        // this date), while its ROW's teacher is ALTERNATE_TEACHER (see
+        // cardData's onDate computation above) — match on needsPick here
+        // too so switchOptions still resolves for these rows, same as it
+        // always did when this used to be picked via the now-removed
+        // chip-picker block instead of this modal.
+        const slotEntry = cd.resolved.find(r =>
+          row.teacher === ALTERNATE_TEACHER ? r.needsPick : r.resolvedTeacher === row.teacher
+        );
         const defaultTeachers = getTeachersForCourse(settings, schedule, cd.course.id, teacherRegistry);
-        const switchOptions = slotEntry ? defaultTeachers.filter(t => t !== row.teacher) : [];
+        // ALTERNATE_TEACHER rows have no real name of their own — instead
+        // of showing the literal "Alternative" placeholder, default to the
+        // first of the (max 2) course teachers so the modal always shows a
+        // real name, with "Switch to [other]" for the manual toggle.
+        const isAlt = row.teacher === ALTERNATE_TEACHER;
+        const displayTeacher = isAlt ? (defaultTeachers[0] || 'Alternative') : row.teacher;
+        const switchOptions = slotEntry ? defaultTeachers.filter(t => t !== displayTeacher) : [];
         return (
           <AttendanceMarkModal
             course={cd.course}
-            teacher={row.teacher === ALTERNATE_TEACHER ? 'Alternative' : row.teacher}
+            teacher={displayTeacher}
             status={row.status}
             dateLabel={fmtDate(date)}
             switchOptions={switchOptions}
             dark={dark}
             onClose={() => setOpenCard(null)}
-            onMark={(val) => { mark(cd.course.id, row.teacher, val); setOpenCard(null); }}
+            onMark={(val) => { mark(cd.course.id, displayTeacher, val); setOpenCard(null); }}
             onSwitch={(name) => {
               switchTeacher(cd.course.id, slotEntry.day, slotEntry.slot, row.teacher, name);
               setOpenCard({ courseId: cd.course.id, teacher: name });

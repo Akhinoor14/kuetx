@@ -1,4 +1,4 @@
-// KUETx Service Worker — offline cache + auto-update
+const CACHE_NAME = 'kuetx-v4.16.0'; // bugfix bump: install-button dismiss flag was being set on every manual-sheet close (even a normal read-and-close, unrelated to declining install), silently suppressing the button for 14 days including after a real uninstall (see FloatingInstallButton.jsx / useInstallPrompt.js). Also forces this fix past cache-first navigation caching for returning visitors.
 const CACHE_NAME = 'kuetx-v4.15.0'; // bumped: install button now detects "already installed, viewing in a plain browser tab" via getInstalledRelatedApps() and shows "Open app" / "Update" instead of staying hidden or offering to reinstall (see useInstallPrompt.js). Previous bump: navigation requests (back/forward, reload, address bar) are now cache-first against the precached app shell instead of network-first-with-fallback — removes the flaky-network window that could serve a mismatched/stale shell on deep routes (see fetch handler comment).
 const STATIC_ASSETS = [
   '/',

@@ -524,7 +524,20 @@
           tryReload();
         });
 
-        window.addEventListener('load', () => {
+        // BUGFIX/perf (install prompt taking longer than necessary to
+        // become eligible): registration used to be gated behind the
+        // window 'load' event, which only fires after every image, font,
+        // and script on the page has finished — on a slower connection
+        // that can be several seconds. Chrome's own "has this page had a
+        // working, controlling service worker for a little while" signal
+        // (part of its install-eligibility engagement check — see
+        // useInstallPrompt.js's header comment on why this can't be
+        // skipped outright) only starts counting once registration
+        // actually happens, so registering as soon as the browser
+        // supports it — not waiting for 'load' — gives that clock the
+        // earliest possible start. Doesn't change what Chrome requires,
+        // only removes an unnecessary delay from our side of it.
+        const registerNow = () => {
           navigator.serviceWorker.register('/sw.js').then((reg) => {
             // Case 1: a new SW was already installed and waiting from a
             // PREVIOUS visit (e.g. tab was open when the deploy landed,
@@ -547,7 +560,13 @@
               });
             });
           }).catch(() => {});
-        });
+        };
+
+        if (document.readyState === 'complete') {
+          registerNow();
+        } else {
+          window.addEventListener('load', registerNow);
+        }
       }
     </script>
   </body>
