@@ -10538,3 +10538,51 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
   border-radius: 4px;
 }
 .attendance-history-scroll::-webkit-scrollbar-track { background: transparent; }
+
+/* ── Attendance grid rebuild (Roll × Date grid) ──────────────────────────
+   Top bar: two explicit rows always (not a flex-wrap, so it doesn't
+   reflow unpredictably at odd widths) — row 1 is identity (course code +
+   section), row 2 is actions (add/status/summary/menu). On mobile the
+   "Add student" button's text label hides, leaving just the icon, to
+   keep row 2 from feeling cramped. */
+.attendance-btn-label { display: inline; }
+@media (max-width: 480px) {
+  .attendance-btn-label { display: none; }
+}
+
+/* Modals (⋯ menu, Co-teacher, Discontinued, Export, Summary) — centered
+   box on desktop, bottom sheet on mobile. Same two classes used by every
+   one of these panels so they all flip together at the same breakpoint. */
+.attendance-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.attendance-modal-sheet {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+@media (max-width: 640px) {
+  .attendance-modal-overlay {
+    align-items: flex-end;
+    justify-content: stretch;
+  }
+  .attendance-modal-sheet {
+    width: 100% !important;
+    max-width: 100%;
+    border-radius: 14px 14px 0 0;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    max-height: 75vh;
+  }
+}
+

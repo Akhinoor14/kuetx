@@ -19,7 +19,7 @@
 //     stacking idea FloatingUploadBar already uses (bottom: 78) so the
 //     two never overlap each other either.
 //
-// `side` prop (default 'right'): the landing page's hero art (turtle
+// side prop (default 'right'): the landing page's hero art (turtle
 // mascot + campus photo cluster) also lives bottom/top-right on mobile
 // (see LandingPage.jsx), and this fixed FAB — being on top of the page
 // at a constant screen position regardless of scroll — sat directly
@@ -219,7 +219,7 @@ export default function FloatingInstallButton({ side = 'right' }) {
         }
         .kx-install-fab:active { transform: translateY(-1px) scale(0.98); }
 
-        /* side="left" override — see the header comment on `side` above.
+        /* side="left" override — see the header comment on side above.
            Only the horizontal anchor flips; bottom offsets (mobile nav
            clearance, desktop's lower resting position) stay identical. */
         .kx-install-fab-left { right: auto; left: 16px; }
