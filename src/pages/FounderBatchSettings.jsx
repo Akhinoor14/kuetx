@@ -21,7 +21,7 @@
 import { useEffect, useState } from 'react';
 import * as Icons from 'lucide-react';
 import { getActiveBatches, getBatchStartDates, setActiveBatches, setBatchStartDate } from '../lib/appConfigSync';
-import { getLandingTotalUsers, setLandingTotalUsers } from '../lib/landingStatsSync';
+import { getLandingTotalUsers, setLandingTotalUsers, getHeroCardOverrides, setHeroCardOverride } from '../lib/landingStatsSync';
 import { getBatchColor } from '../lib/timeModels';
 import { notify } from '../lib/notify';
 
@@ -94,6 +94,119 @@ function LandingStatsPanel() {
           Currently live on the landing page: <strong>{saved.toLocaleString('bn-BD')}</strong>
         </div>
       )}
+    </div>
+  );
+}
+
+// The 4 hero-strip cards on the landing page (CampusHero) — each has a
+// live default (feature count / QB total / publications / user count)
+// but can be overridden here per-card, both the number AND the label,
+// without a code deploy. Leaving both fields blank clears the override
+// and the card falls back to its live/default value.
+const HERO_CARDS = [
+  { id: 'features', title: 'Real feature count', defaultHint: 'FEATURE_COUNT_DISPLAY (auto)', placeholderValue: 'e.g. ৬২+', placeholderLabel: 'e.g. real feature' },
+  { id: 'qb', title: 'Question bank total', defaultHint: 'Live from Question Bank Worker', placeholderValue: 'e.g. ২,০৯৫+', placeholderLabel: 'e.g. প্রশ্নব্যাংকে প্রশ্নপত্র' },
+  { id: 'publications', title: 'Publications', defaultHint: '৫,৮৫৬+ (static)', placeholderValue: 'e.g. ৫,৮৫৬+', placeholderLabel: 'e.g. পাবলিকেশন' },
+  { id: 'users', title: 'Total users', defaultHint: 'Same number as the panel above', placeholderValue: 'e.g. ৮৭', placeholderLabel: 'e.g. ব্যবহারকারী' },
+];
+
+function HeroCardsPanel() {
+  const [overrides, setOverrides] = useState(null); // null = loading
+  const [drafts, setDrafts] = useState({}); // { [cardId]: { value, label } }
+  const [savingId, setSavingId] = useState(null);
+
+  useEffect(() => {
+    getHeroCardOverrides().then((o) => {
+      setOverrides(o);
+      const d = {};
+      HERO_CARDS.forEach(({ id }) => {
+        d[id] = { value: o[id]?.value || '', label: o[id]?.label || '' };
+      });
+      setDrafts(d);
+    });
+  }, []);
+
+  const handleSave = async (cardId) => {
+    const draft = drafts[cardId];
+    setSavingId(cardId);
+    try {
+      const hasValue = draft.value.trim() !== '' || draft.label.trim() !== '';
+      await setHeroCardOverride(cardId, hasValue ? draft : null);
+      setOverrides((prev) => {
+        const next = { ...prev };
+        if (hasValue) next[cardId] = { value: draft.value.trim(), label: draft.label.trim() };
+        else delete next[cardId];
+        return next;
+      });
+      notify(hasValue ? 'Card updated.' : 'Card override cleared — back to live default.', 'success');
+    } catch (e) {
+      notify(e.message || 'Could not save this card.', 'error');
+    } finally {
+      setSavingId(null);
+    }
+  };
+
+  if (overrides === null) {
+    return (
+      <div style={{ padding: 14, borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 18, fontSize: 12.5, color: 'var(--muted)' }}>
+        Loading hero stat cards…
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ padding: 14, borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 18 }}>
+      <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--muted)', marginBottom: 8 }}>LANDING PAGE — HERO STAT CARDS</div>
+      <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 12, lineHeight: 1.5 }}>
+        The 4 glassy cards under the landing page headline. Each one has a live/default value already — fill in a
+        value and/or label below only to override it by hand. Leave both blank and save to go back to the live
+        default.
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        {HERO_CARDS.map(({ id, title, defaultHint, placeholderValue, placeholderLabel }) => (
+          <div key={id} style={{ padding: 10, borderRadius: 10, border: '1px solid var(--border)', background: 'var(--bg)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6, flexWrap: 'wrap', gap: 4 }}>
+              <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text)' }}>{title}</div>
+              <div style={{ fontSize: 10.5, color: 'var(--muted)' }}>Default: {defaultHint}</div>
+            </div>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+              <input
+                type="text"
+                value={drafts[id]?.value || ''}
+                onChange={(e) => setDrafts((d) => ({ ...d, [id]: { ...d[id], value: e.target.value } }))}
+                placeholder={placeholderValue}
+                style={{
+                  flex: '1 1 120px', padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)',
+                  background: 'var(--card)', color: 'var(--text)', fontSize: 12.5, outline: 'none',
+                }}
+              />
+              <input
+                type="text"
+                value={drafts[id]?.label || ''}
+                onChange={(e) => setDrafts((d) => ({ ...d, [id]: { ...d[id], label: e.target.value } }))}
+                placeholder={placeholderLabel}
+                style={{
+                  flex: '1 1 160px', padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)',
+                  background: 'var(--card)', color: 'var(--text)', fontSize: 12.5, outline: 'none',
+                }}
+              />
+              <button
+                onClick={() => handleSave(id)}
+                disabled={savingId === id}
+                className="btn btn-primary"
+                style={{ display: 'flex', alignItems: 'center', gap: 5, whiteSpace: 'nowrap', fontSize: 12.5 }}
+              >
+                <Icons.Check size={13} /> Save
+              </button>
+            </div>
+            {overrides[id] && (
+              <div style={{ fontSize: 10.5, color: 'var(--muted)', marginTop: 5 }}>
+                Currently overridden: <strong>{overrides[id].value}</strong> — {overrides[id].label}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -208,6 +321,7 @@ export function BatchesContent() {
       ) : (
         <>
           <LandingStatsPanel />
+          <HeroCardsPanel />
 
           <div style={{ padding: 14, borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 18 }}>
             <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--muted)', marginBottom: 8 }}>ADD A NEW BATCH</div>

@@ -32,14 +32,15 @@ import {
   LogIn, GraduationCap, Presentation, Store, CheckCircle2,
   Monitor, Smartphone, Crown,
   Layers, ShieldCheck, Users, UserCheck, Sparkles, Mail, MessageSquare, X,
-  Flame, TrendingUp, Star, Zap, MapPin, ArrowDown, ChevronLeft, ChevronRight, Youtube,
+  Flame, TrendingUp, Star, Zap, MapPin, ArrowDown, ChevronLeft, ChevronRight, Youtube, BookOpen,
+  ClipboardList, Target,
 } from 'lucide-react';
 import usePageMeta from '../hooks/usePageMeta';
 import { useIsMobileNav } from '../components/BottomNav';
 import AuthModal from '../components/AuthModal';
 import { loginWithGoogle } from '../lib/firebaseAuth';
 import { isBrandNewAccount } from '../lib/accountLifecycle';
-import { subscribeLandingTotalUsers } from '../lib/landingStatsSync';
+import { subscribeLandingTotalUsers, subscribeHeroCardOverrides } from '../lib/landingStatsSync';
 // Phase 4 (landing redesign, §11.3): Sign Up now opens the new
 // multi-step wizard instead of plain AuthModal — Sign In is unchanged
 // (still plain AuthModal, per §11.5's component-mapping table).
@@ -438,6 +439,45 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
   // skipped entirely rather than showing a fake number.
   const [totalUsers, setTotalUsers] = useState(null);
   useEffect(() => subscribeLandingTotalUsers(setTotalUsers), []);
+
+  // Live QB total — same public Worker call StatsStrip already makes
+  // (see useQuestionBankData.js). Replaces the old static "৪ role, একই
+  // app" card: a live, growing number is a more compelling hero fact
+  // than a fixed role count that never changes.
+  const { tree: heroQbTree, count: heroQbCount } = useQuestionBankData();
+  const heroQbStats = deriveQBShowcaseStats(heroQbTree, heroQbCount);
+
+  // Founder-set overrides for any of the 4 cards (value + label), so
+  // the whole strip is admin-editable from FounderBatchSettings.jsx
+  // without a code change — see landingStatsSync.js's
+  // heroCardOverrides section. Falls back to the live/default value
+  // per-card when no override is set for that card.
+  const [heroOverrides, setHeroOverrides] = useState({});
+  useEffect(() => subscribeHeroCardOverrides(setHeroOverrides), []);
+
+  const heroCards = [
+    {
+      id: 'features', icon: Layers,
+      value: heroOverrides.features?.value || FEATURE_COUNT_DISPLAY,
+      label: heroOverrides.features?.label || 'real feature',
+    },
+    {
+      id: 'qb', icon: BookOpen,
+      value: heroOverrides.qb?.value || (heroQbStats.totalPapers > 0 ? heroQbStats.totalPapers.toLocaleString('bn-BD') : null),
+      label: heroOverrides.qb?.label || 'প্রশ্নব্যাংকে প্রশ্নপত্র',
+    },
+    {
+      id: 'publications', icon: Presentation,
+      value: heroOverrides.publications?.value || '৫,৮৫৬+',
+      label: heroOverrides.publications?.label || 'পাবলিকেশন',
+    },
+    {
+      id: 'users', icon: UserCheck,
+      value: heroOverrides.users?.value || (totalUsers != null ? totalUsers.toLocaleString('bn-BD') : null),
+      label: heroOverrides.users?.label || 'ব্যবহারকারী',
+    },
+  ].filter((c) => c.value != null && c.value !== '');
+
   return (
     // Full-bleed dark band, edge-to-edge — matches the HTML mockup's
     // .hero section exactly (background: var(--kx-dark), 100% viewport
@@ -498,15 +538,16 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
             {sub}
           </p>
 
-          <div style={{ display: 'flex', gap: '0.7rem', flexWrap: 'wrap', marginBottom: isMobileNav ? '1.75rem' : '44px' }}>
+          <div style={{ display: 'flex', gap: isMobileNav ? '0.5rem' : '0.7rem', flexWrap: isMobileNav ? 'nowrap' : 'wrap', marginBottom: isMobileNav ? '1.75rem' : '44px' }}>
             <button
               type="button"
               onClick={onSignUp}
               style={{
-                display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                padding: isMobileNav ? '0.75rem 1.2rem' : '15px 28px', borderRadius: '12px',
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem',
+                padding: isMobileNav ? '0.7rem 0.9rem' : '15px 28px', borderRadius: '12px',
                 background: 'var(--kx-accent-bright)', color: '#06210f', fontWeight: 800,
-                fontSize: isMobileNav ? '0.85rem' : '16px', border: 'none', cursor: 'pointer',
+                fontSize: isMobileNav ? '0.8rem' : '16px', border: 'none', cursor: 'pointer',
+                flex: isMobileNav ? '1 1 0' : undefined, whiteSpace: 'nowrap',
               }}
             >
               Sign Up করো, ফ্রি
@@ -514,60 +555,69 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
             <a
               href="#stats-anchor"
               style={{
-                display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                padding: isMobileNav ? '0.75rem 1.2rem' : '15px 28px', borderRadius: '12px',
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem',
+                padding: isMobileNav ? '0.7rem 0.9rem' : '15px 28px', borderRadius: '12px',
                 background: 'transparent', color: '#f3f4ef', fontWeight: 700,
-                fontSize: isMobileNav ? '0.85rem' : '16px',
+                fontSize: isMobileNav ? '0.8rem' : '16px',
                 border: '1px solid rgba(255,255,255,0.18)', textDecoration: 'none',
+                flex: isMobileNav ? '1 1 0' : undefined, whiteSpace: 'nowrap',
               }}
             >
               কী আছে দেখো <ArrowDown size={14} />
             </a>
           </div>
 
-          {/* Hero stats row (design refresh) — 4 cards, each with an icon,
-              a mono number, and a short label. First 3 are static
-              verified facts (real feature count, role count,
-              publications, pulled from BASE_STATS' rotating-card data).
-              4th is the Admin-entered live user count from
-              landingStatsSync.js — real, Founder-set number pulled from
-              config/landingStats (see that file's header for why it's
-              manual, not an auto-count), and the whole card is skipped
-              while that number is still null (unset/loading) rather than
-              showing a placeholder/fake figure. */}
+          {/* Hero stats grid (glass redesign) — fixed 2x2 grid (not a
+              wrapping flex row) so all 4 cards line up evenly on both
+              mobile and desktop instead of reflowing unpredictably.
+              Each card is real, live-or-Founder-set data (never a
+              hardcoded marketing number): feature count from
+              landingFeatureInventory.js, QB paper total from the public
+              Worker (same call StatsStrip makes), publications and user
+              count from config/landingStats. Every card's value AND
+              label can be overridden from FounderBatchSettings.jsx's
+              Landing Page Stats panel (heroCardOverrides) — a card only
+              disappears if it has neither a live value nor an override,
+              never showing a placeholder/fake figure. Glassy treatment:
+              translucent frosted panel + blur + soft inner highlight,
+              matching the language already used elsewhere on this page
+              (StatsStrip's rotating card, AuthModal). */}
           <div style={{
-            display: 'flex', gap: isMobileNav ? '10px' : '14px', flexWrap: 'wrap',
-            paddingTop: '28px', borderTop: '1px solid rgba(255,255,255,0.1)',
+            display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: isMobileNav ? '8px' : '12px',
+            paddingTop: isMobileNav ? '20px' : '28px', borderTop: '1px solid rgba(255,255,255,0.1)',
           }}>
-            {[
-              { icon: Layers, value: FEATURE_COUNT_DISPLAY, label: 'real feature' },
-              { icon: Users, value: '৪', label: 'role, একই app' },
-              { icon: Presentation, value: '৫,৮৫৬+', label: 'পাবলিকেশন' },
-              ...(totalUsers != null
-                ? [{ icon: UserCheck, value: totalUsers.toLocaleString('bn-BD'), label: 'ব্যবহারকারী' }]
-                : []),
-            ].map(({ icon: Icon, value, label }, i) => (
+            {heroCards.map(({ id, icon: Icon, value, label }) => (
               <div
-                key={i}
+                key={id}
                 style={{
-                  display: 'flex', alignItems: 'center', gap: isMobileNav ? '8px' : '10px',
-                  padding: isMobileNav ? '8px 10px' : '10px 14px',
-                  background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  borderRadius: '12px',
+                  display: 'flex', alignItems: 'center', gap: isMobileNav ? '9px' : '11px',
+                  padding: isMobileNav ? '10px 11px' : '13px 15px',
+                  background: 'linear-gradient(160deg, rgba(255,255,255,0.09), rgba(255,255,255,0.03))',
+                  backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)',
+                  border: '1px solid rgba(255,255,255,0.14)',
+                  borderRadius: isMobileNav ? '13px' : '15px',
+                  boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.12), 0 6px 16px rgba(0,0,0,0.22)',
+                  minWidth: 0,
                 }}
               >
                 <div style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  width: isMobileNav ? '28px' : '32px', height: isMobileNav ? '28px' : '32px',
-                  borderRadius: '9px', background: 'rgba(163,230,53,0.14)', color: 'var(--kx-accent-bright)',
+                  width: isMobileNav ? '30px' : '34px', height: isMobileNav ? '30px' : '34px',
+                  borderRadius: '10px',
+                  background: 'linear-gradient(160deg, rgba(163,230,53,0.28), rgba(163,230,53,0.1))',
+                  border: '1px solid rgba(163,230,53,0.22)',
+                  color: 'var(--kx-accent-bright)',
                   flexShrink: 0,
                 }}>
                   <Icon size={isMobileNav ? 14 : 16} />
                 </div>
-                <div>
-                  <div className="kx-mono-num" style={{ fontSize: isMobileNav ? '17px' : '21px', fontWeight: 800, color: 'var(--kx-accent-bright)', lineHeight: 1.1 }}>{value}</div>
-                  <div style={{ fontSize: isMobileNav ? '11.5px' : '13px', fontWeight: 600, color: 'rgba(243,244,239,0.85)', marginTop: '3px', whiteSpace: 'nowrap' }}>{label}</div>
+                <div style={{ minWidth: 0 }}>
+                  <div className="kx-mono-num" style={{ fontSize: isMobileNav ? '15.5px' : '20px', fontWeight: 800, color: 'var(--kx-accent-bright)', lineHeight: 1.1 }}>{value}</div>
+                  <div style={{
+                    fontSize: isMobileNav ? '10px' : '12px', fontWeight: 600, color: 'rgba(243,244,239,0.85)',
+                    marginTop: '3px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                  }}>{label}</div>
                 </div>
               </div>
             ))}
@@ -590,6 +640,69 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
             mobile-specific sizing for this cluster and keep only the
             layout from the current screenshot (desktop values used at
             every width) — isMobileNav branching removed here only. */}
+        {isMobileNav ? (
+          // Mobile: compact, non-overlapping row — the desktop cluster's
+          // fixed px widths (360/210/204) don't fit a ~360-400px viewport
+          // without the cards colliding and clipping each other (gate
+          // card's label cut off, aerial card half-covered), so mobile
+          // gets its own tight layout: one wide hero photo up top with
+          // the location badge and mascot pinned to it, then two small
+          // photos side by side underneath. No rotation/overlap, no
+          // fixed height — the block just takes the height its content
+          // needs.
+          <div style={{ order: 2, position: 'relative' }}>
+            <div style={{
+              position: 'relative',
+              borderRadius: '14px', overflow: 'hidden', border: '4px solid #fff',
+              boxShadow: '0 14px 28px rgba(0,0,0,0.35)', background: '#fff',
+            }}>
+              <img src={CAMPUS_PHOTOS.gate.src} alt={CAMPUS_PHOTOS.gate.label} style={{ width: '100%', aspectRatio: '16 / 9', objectFit: 'cover', display: 'block' }} />
+              <div style={{
+                position: 'absolute', top: '10px', left: '10px',
+                display: 'flex', alignItems: 'center', gap: '0.3rem',
+                background: 'rgba(12,39,24,0.85)', backdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255,255,255,0.12)', borderRadius: '9px',
+                padding: '5px 9px', fontSize: '10px', fontFamily: 'var(--kx-mono)', fontWeight: 700,
+                color: '#a5d6a7',
+              }}>
+                <MapPin size={10} /> KUET, Khulna
+              </div>
+              <div style={{
+                position: 'absolute', bottom: 0, left: 0, right: 0,
+                background: 'linear-gradient(0deg, rgba(0,0,0,0.55), transparent)',
+                padding: '18px 12px 8px',
+              }}>
+                <div style={{ fontWeight: 700, fontSize: '12.5px', color: '#fff' }}>{CAMPUS_PHOTOS.gate.label}</div>
+              </div>
+              <div
+                className="kx-mascot-badge"
+                style={{
+                  position: 'absolute', bottom: '-14px', right: '-10px',
+                  width: '68px', height: '68px',
+                  filter: 'drop-shadow(0 8px 14px rgba(0,0,0,0.5))',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}
+              >
+                <Logo size={68} />
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.6rem' }}>
+              <div style={{
+                flex: 1, borderRadius: '10px', overflow: 'hidden', border: '3px solid #fff',
+                boxShadow: '0 8px 16px rgba(0,0,0,0.3)',
+              }}>
+                <img src={CAMPUS_PHOTOS.aerial.src} alt={CAMPUS_PHOTOS.aerial.label} style={{ width: '100%', aspectRatio: '4 / 3', objectFit: 'cover', display: 'block' }} />
+              </div>
+              <div style={{
+                flex: 1, borderRadius: '10px', overflow: 'hidden', border: '3px solid #fff',
+                boxShadow: '0 8px 16px rgba(0,0,0,0.3)',
+              }}>
+                <img src={CAMPUS_PHOTOS.statue.src} alt={CAMPUS_PHOTOS.statue.label} style={{ width: '100%', aspectRatio: '4 / 3', objectFit: 'cover', display: 'block' }} />
+              </div>
+            </div>
+          </div>
+        ) : (
         <div style={{
           position: 'relative',
           height: '500px',
@@ -664,6 +777,7 @@ function CampusHero({ isMobileNav, headline, sub, onSignUp }) {
             <Logo size={160} />
           </div>
         </div>
+        )}
       </div>
 
       {/* Owner ask (this session, reverted): section boundaries are
@@ -693,29 +807,17 @@ function CampusScrapbook({ isMobileNav }) {
         width: '100%',
         position: 'relative',
         background: 'var(--kx-sage)',
-        padding: isMobileNav ? '2.5rem 1.1rem' : '90px 32px',
+        padding: isMobileNav ? '1.75rem 0.75rem' : '90px 32px',
       }}
     >
       {/* Hard color-band cut by design — no seam gradient here. */}
-      <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 56px' }}>
-        <div className="kx-eyebrow" style={{ marginBottom: '0.75rem' }}>
-          নিজের ক্যাম্পাস
-        </div>
-        <h2 className="kx-h2" style={{ fontSize: isMobileNav ? 'clamp(1.35rem, 6vw, 1.7rem)' : '36px' }}>
-          KUET-এর জন্য, KUET-এই তৈরি
-        </h2>
-        <p style={{ fontSize: '16px', color: 'var(--kx-ink-soft)', lineHeight: 1.6 }}>
-          বাইরের কোনো কোম্পানির প্রোডাক্ট না — এই ক্যাম্পাসের ছাত্রছাত্রীরাই বানিয়েছে, নিজেদের সমস্যা দেখে, নিজেরাই চালাচ্ছে।
-        </p>
-      </div>
-
       <div style={{
         display: isMobileNav ? 'grid' : 'flex',
-        gridTemplateColumns: isMobileNav ? 'repeat(2, 1fr)' : undefined,
+        gridTemplateColumns: isMobileNav ? 'repeat(3, 1fr)' : undefined,
         justifyContent: isMobileNav ? undefined : 'center',
         flexWrap: isMobileNav ? undefined : 'wrap',
-        gap: isMobileNav ? '0.85rem' : '24px',
-        maxWidth: '1120px', margin: '0 auto',
+        gap: isMobileNav ? '0.5rem' : '24px',
+        maxWidth: '1120px', margin: isMobileNav ? '0 auto 1.75rem' : '0 auto 56px',
       }}>
         {SCRAPBOOK_ORDER.map((key, i) => {
           const photo = CAMPUS_PHOTOS[key];
@@ -727,22 +829,60 @@ function CampusScrapbook({ isMobileNav }) {
               style={{
                 width: isMobileNav ? '100%' : '210px',
                 background: '#fff',
-                borderRadius: '10px',
-                padding: '10px 10px 16px',
-                boxShadow: '0 12px 28px rgba(0,0,0,0.1)',
+                borderRadius: isMobileNav ? '8px' : '10px',
+                padding: isMobileNav ? '5px 5px 7px' : '10px 10px 16px',
+                boxShadow: isMobileNav ? '0 4px 10px rgba(0,0,0,0.08)' : '0 12px 28px rgba(0,0,0,0.1)',
                 transform: `rotate(${tilt}deg)`,
               }}
             >
-              <img
-                src={photo.src}
-                alt={photo.label}
-                loading="lazy"
-                style={{ width: '100%', height: isMobileNav ? '120px' : '160px', objectFit: 'cover', borderRadius: '6px', marginBottom: '10px', display: 'block' }}
-              />
-              <div style={{ fontSize: '12.5px', fontWeight: 700, color: '#16241a', textAlign: 'center' }}>{photo.label}</div>
+              <div style={{
+                width: '100%',
+                aspectRatio: '1 / 1',
+                borderRadius: isMobileNav ? '5px' : '6px',
+                overflow: 'hidden',
+                marginBottom: isMobileNav ? '4px' : '10px',
+              }}>
+                <img
+                  src={photo.src}
+                  alt={photo.label}
+                  loading="lazy"
+                  style={{ width: '100%', height: isMobileNav ? '100%' : '160px', objectFit: 'cover', display: 'block' }}
+                />
+              </div>
+              <div style={{
+                fontSize: isMobileNav ? '9.5px' : '12.5px',
+                fontWeight: 700, color: '#16241a', textAlign: 'center',
+                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+              }}>{photo.label}</div>
             </div>
           );
         })}
+      </div>
+
+      {/* Owner ask: move this heading block below the photo grid, "spotlit"
+          rather than a plain title-above-images layout — a soft radial
+          glow sits behind the text (same glow language as the hero
+          section's background) so it reads as the grid's payoff/caption
+          rather than a header sitting above unrelated content. */}
+      <div style={{ position: 'relative', textAlign: 'center', maxWidth: '640px', margin: '0 auto' }}>
+        <div style={{
+          position: 'absolute', left: '50%', top: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: isMobileNav ? '280px' : '460px', height: isMobileNav ? '200px' : '300px',
+          background: 'radial-gradient(ellipse, rgba(74,222,128,0.16), transparent 70%)',
+          pointerEvents: 'none', zIndex: 0,
+        }} />
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <div className="kx-eyebrow" style={{ marginBottom: '0.75rem' }}>
+            নিজের ক্যাম্পাস
+          </div>
+          <h2 className="kx-h2" style={{ fontSize: isMobileNav ? 'clamp(1.25rem, 5.5vw, 1.55rem)' : '36px' }}>
+            KUET-এর জন্য, KUET-এই তৈরি
+          </h2>
+          <p style={{ fontSize: isMobileNav ? '13.5px' : '16px', color: 'var(--kx-ink-soft)', lineHeight: 1.5 }}>
+            বাইরের কোনো কোম্পানির প্রোডাক্ট না — এই ক্যাম্পাসের ছাত্রছাত্রীরাই বানিয়েছে, নিজেদের সমস্যা দেখে, নিজেরাই চালাচ্ছে।
+          </p>
+        </div>
       </div>
     </section>
   );
@@ -786,7 +926,7 @@ const wizardRoleFor = (landingRoleId) => LANDING_ROLE_TO_WIZARD_ROLE[landingRole
 // facts (3 original + 7 qualitative feature cards added later, see
 // ROTATING_STATS_CARD_PROMPT.md).
 const BASE_STATS = [
-  { id: 'features', display: FEATURE_COUNT_DISPLAY, label: 'এক অ্যাপে রুটিন থেকে রেজাল্ট, কেনাকাটা, ব্যবসা — সবকিছু' },
+  { id: 'features', display: FEATURE_COUNT_DISPLAY, label: 'রুটিন থেকে রেজাল্ট, কেনাকাটা — সবকিছু এক অ্যাপে' },
   // owner-confirmed: counts as "4 Role" here for the user-facing landing
   // copy (CR gets a visibly different toolset/experience), even though
   // Firestore/accountRole.js's VALID_ROLE_IDS and ROLE_CARDS above only
@@ -794,41 +934,55 @@ const BASE_STATS = [
   // permission layer on top of the Student role, not a separate account.
   // Intentional wording difference between marketing copy and the code's
   // internal role model, not a drift/bug.
-  { id: 'roles', display: '4 Role', label: 'Student, CR, Faculty, Provider — যার যেটুকু লাগে সেটুকুই দেখে' },
+  { id: 'roles', display: '4 Role', label: 'যার যেটুকু লাগে, সেটুকুই দেখে' },
   {
     id: 'publications',
     display: '৫,৮৫৬+',
-    label: '৪৩৬+ শিক্ষকের রিসার্চ পাবলিকেশনসহ ২৪ ডিপার্টমেন্ট জুড়ে',
+    label: '২৪ ডিপার্টমেন্টের ৪৩৬+ শিক্ষকের রিসার্চ পাবলিকেশন',
   },
   {
     id: 'pick-and-drop',
     display: 'আনিয়ে নিন',
-    label: 'কেনাকাটা, ডেলিভারি বা ছোট কাজ — পোস্ট দিলে ক্যাম্পাসের যেকোনো student এসে করে দেবে',
+    // Kept role-agnostic on purpose: errand acceptors are Student +
+    // Runner (a Provider sub-type) per ERRAND_SYSTEM_REDESIGN_PLAN.md —
+    // Faculty can post but never accepts anyone's request. Naming
+    // Student/Runner explicitly avoids implying Faculty accepts.
+    label: 'পোস্ট দিন, ক্যাম্পাসের student বা Runner এসে করে দেবে',
   },
   {
     id: 'solution-bank',
     display: 'গুছানো সমাধান',
-    label: 'শুধু উত্তর না — টপিক অনুযায়ী ধাপে ধাপে বিশ্লেষণসহ বোঝানো, কোর্স অনুযায়ী সাজানো',
+    label: 'শুধু উত্তর না, ধাপে ধাপে বোঝানো — কোর্স অনুযায়ী সাজানো',
   },
   {
-    id: 'attendance',
-    display: 'দুই স্তরে ট্র্যাকিং',
-    label: 'নিজের হিসাব নিজে রাখুন, Faculty-র অফিসিয়াল এন্ট্রি সরাসরি মার্কসে যুক্ত হয়',
+    id: 'attendance-student',
+    display: 'নিজের হিসাব',
+    label: 'নিজের attendance % নিজেই ট্র্যাক করুন',
   },
   {
     id: 'cr-toolset',
     display: '৫+ CR টুল',
-    label: 'Routine, Class Planner, CT ও Quiz শিডিউল, Announcement Broadcast — ক্লাস চালাতে যা যা লাগে',
+    label: 'ক্লাস চালাতে যা যা লাগে, সব একসাথে',
+  },
+  {
+    id: 'attendance-faculty',
+    display: 'অফিসিয়াল এন্ট্রি',
+    label: 'ক্লাসে নেওয়া attendance-ই মার্কসে যুক্ত করা যায়',
+  },
+  {
+    id: 'term-planner',
+    display: 'টার্গেট গ্রেড ক্যালকুলেটর',
+    label: 'টার্গেট গ্রেড পেতে বাকি পরীক্ষায় কত লাগবে, বলে দেয়',
   },
   {
     id: 'my-classes-faculty',
     display: '৭ টুল, ১ ক্লাস',
-    label: 'Syllabus, Attendance থেকে Notices পর্যন্ত — প্রতিটা ক্লাসের সবকিছু এক জায়গায়',
+    label: 'প্রতিটা ক্লাসের সবকিছু এক জায়গায়',
   },
   {
     id: 'online-mart',
     display: 'নিজের শপ',
-    label: 'Online-এ নিজের দোকান দিন — Provider হিসেবে যাচাই হয়ে যোগ দিতে হয়',
+    label: 'যাচাই হয়ে Provider হিসেবে নিজের দোকান দিন',
   },
 ];
 
@@ -838,8 +992,10 @@ const STAT_ICONS = {
   publications: Presentation,
   'pick-and-drop': Zap,
   'solution-bank': CheckCircle2,
-  attendance: TrendingUp,
+  'attendance-student': TrendingUp,
   'cr-toolset': Star,
+  'attendance-faculty': ClipboardList,
+  'term-planner': Target,
   'my-classes-faculty': GraduationCap,
   'online-mart': Store,
   'qb-total': Flame,
@@ -1465,13 +1621,16 @@ const HIGHLIGHTED_FEATURES = {
   'Attendance': { label: 'সবচেয়ে বেশি ব্যবহৃত', tone: 'hot' },
   'Question Bank': { label: 'সবচেয়ে বেশি ব্যবহৃত', tone: 'hot' },
   'Pick and Drop': { label: 'জনপ্রিয়', tone: 'popular' },
-  'Results & GPA': { label: 'জনপ্রিয়', tone: 'popular' },
+  'Online Mart': { label: 'জনপ্রিয়', tone: 'popular' },
   'Broadcast Notice': { label: 'সবার পছন্দ', tone: 'favorite' },
   'My Shop': { label: 'সবার পছন্দ', tone: 'favorite' },
   'Term Planner': { label: 'নতুন', tone: 'fresh' },
   'Class Planner': { label: 'নতুন', tone: 'fresh' },
   'Class Setup': { label: 'CR-দের প্রিয়', tone: 'favorite' },
   'Food': { label: 'দ্রুততম ডেলিভারি', tone: 'fresh' },
+  'Publications': { label: 'রিসার্চ ট্র্যাক করুন', tone: 'fresh' },
+  'Deep Focus': { label: 'ফোকাসড থাকুন', tone: 'fresh' },
+  'Time Tracker': { label: 'সময় বাঁচান', tone: 'popular' },
 };
 
 // GOLD kept as the default/fallback tone tint only — actual highlighted
@@ -2544,8 +2703,12 @@ function CreditsSpotlight({ isMobileNav }) {
   // group photos) never jumps height — only switching shape families
   // does, which happens at most once per rotation cycle here.
   const isWide = person.photoShape === 'wide';
-  const PHOTO_BOX_W = isWide ? (isMobileNav ? 220 : 300) : (isMobileNav ? 116 : 140);
-  const PHOTO_BOX_H = isWide ? (isMobileNav ? 176 : 240) : (isMobileNav ? 116 : 140);
+  // Founder's circle bumped up a step (owner ask: the group photo and
+  // Founder's circle "shouldn't be the same diameter — Founder's should
+  // be a bit bigger"), so the two shapes are now visibly different
+  // sizes rather than near-matching.
+  const PHOTO_BOX_W = isWide ? (isMobileNav ? 220 : 300) : (isMobileNav ? 132 : 158);
+  const PHOTO_BOX_H = isWide ? (isMobileNav ? 176 : 240) : (isMobileNav ? 132 : 158);
 
   return (
     <div
@@ -2555,34 +2718,18 @@ function CreditsSpotlight({ isMobileNav }) {
         position: 'relative',
         marginBottom: isMobileNav ? '1.5rem' : '2rem',
         opacity: visible ? 1 : 0,
-        transform: visible ? 'translateY(0)' : 'translateY(14px)',
+        // Owner ask: the whole card (badge + photo + name + blurb —
+        // not just the image) slides in right-to-left on its first
+        // scroll-reveal, rather than the plain fade+rise. Kept to the
+        // FIRST reveal only (driven by `visible`, which flips once and
+        // stays true — see useRevealOnVisible — not by `index`), since
+        // repeating a big horizontal slide every 4.5s on every person
+        // rotation would be distracting rather than a one-time
+        // cinematic entrance. translateX instead of translateY now.
+        transform: visible ? 'translateX(0)' : 'translateX(36px)',
         transition: 'opacity 0.7s ease, transform 0.7s ease',
       }}
     >
-      {/* Soft spotlight glow — owner asked for a literal spotlight-beam
-          treatment (cone of light) here, but that needs a dark backing
-          to read correctly and would break both light-mode legibility
-          and the app's own no-hardcoded-color rule for this section.
-          This is the toned-down equivalent: a radial glow in the same
-          --accentRGB the rest of the app already uses (see CampusHero's
-          identical technique), centered behind the photo rather than
-          the whole card, so it reads as "a light settling on this
-          person" without needing a dark background or a new color. */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          top: isMobileNav ? '-30px' : '-40px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: isWide ? (isMobileNav ? '260px' : '340px') : (isMobileNav ? '160px' : '190px'),
-          height: isWide ? (isMobileNav ? '260px' : '340px') : (isMobileNav ? '160px' : '190px'),
-          background: 'radial-gradient(ellipse 50% 50% at 50% 35%, rgba(var(--accentRGB),0.16), transparent 70%)',
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-
       {/* Fixed maxWidth now, not a per-person value — this used to
           switch 340px/480px depending on the rotating person's photo
           shape, which was the second source of the page-height jump
@@ -2613,42 +2760,70 @@ function CreditsSpotlight({ isMobileNav }) {
             broken-image icon) if a person's photo hasn't been supplied
             yet or fails to load — group photos don't get an initials
             fallback since "initials" doesn't make sense for a group
-            entry, so those just show the accent-tinted empty box. */}
-        <div style={{
-          width: PHOTO_BOX_W,
-          height: PHOTO_BOX_H,
-          borderRadius: isWide ? '14px' : '999px',
-          overflow: 'hidden',
-          border: '3px solid var(--accentLight)',
-          boxShadow: '0 10px 24px rgba(0,0,0,0.14)',
-          background: 'var(--accentSoft)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}>
-          {imgOk && person.photo ? (
-            <img
-              src={person.photo}
-              alt={person.name}
-              loading="lazy"
-              onError={() => setImgOk(false)}
-              style={{
-                width: '100%', height: '100%', objectFit: 'cover',
-                // Owner audit: 'center' vertical crop was cutting off
-                // the top of the head on solo portraits — the photo box
-                // is a 1.25:1 landscape-ish rectangle but a portrait's
-                // face sits in the UPPER portion of a square/tall
-                // source photo, so a dead-center crop chops the
-                // forehead/hair. Bias the crop upward for portraits
-                // (photoShape !== 'wide'); group photos keep a true
-                // center crop since there's no single face to protect.
-                objectPosition: person.photoShape === 'wide' ? 'center' : 'center 20%',
-                display: 'block',
-              }}
-            />
-          ) : person.photoShape !== 'wide' ? (
-            <span style={{ fontSize: isMobileNav ? '1.3rem' : '1.6rem', fontWeight: 800, color: 'var(--accentDark)' }}>
-              {initials}
-            </span>
-          ) : null}
+            entry, so those just show the accent-tinted empty box.
+
+            The spotlight glow used to be a SEPARATE absolutely-positioned
+            div anchored to the outer card with a fixed `top` offset —
+            that offset was tuned for one photo-box height, so when the
+            rotation swapped between the circle (Founder) and the wide
+            group-photo box, the badge/name/blurb below visibly jumped
+            up and down as the whole column's height changed under a
+            glow that didn't move with it. Moving the glow to be
+            absolutely positioned INSIDE this photo-box wrapper (which
+            itself is position:relative and sized to PHOTO_BOX_W/H) means
+            the glow is always centered on THIS box, whatever size it
+            is this rotation, and everything below (name/blurb/dots)
+            just flows naturally after it — no more per-person jump. */}
+        <div style={{ position: 'relative', width: PHOTO_BOX_W, height: PHOTO_BOX_H }}>
+          <div
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              top: '50%', left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: isWide ? '150%' : '190%',
+              height: isWide ? '150%' : '190%',
+              background: 'radial-gradient(ellipse 50% 50% at 50% 50%, rgba(var(--accentRGB),0.16), transparent 70%)',
+              pointerEvents: 'none',
+              zIndex: 0,
+            }}
+          />
+          <div style={{
+            position: 'relative', zIndex: 1,
+            width: '100%', height: '100%',
+            borderRadius: isWide ? '14px' : '999px',
+            overflow: 'hidden',
+            border: '3px solid var(--accentLight)',
+            boxShadow: '0 10px 24px rgba(0,0,0,0.14)',
+            background: 'var(--accentSoft)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            {imgOk && person.photo ? (
+              <img
+                src={person.photo}
+                alt={person.name}
+                loading="lazy"
+                onError={() => setImgOk(false)}
+                style={{
+                  width: '100%', height: '100%', objectFit: 'cover',
+                  // Owner audit: 'center' vertical crop was cutting off
+                  // the top of the head on solo portraits — the photo box
+                  // is a 1.25:1 landscape-ish rectangle but a portrait's
+                  // face sits in the UPPER portion of a square/tall
+                  // source photo, so a dead-center crop chops the
+                  // forehead/hair. Bias the crop upward for portraits
+                  // (photoShape !== 'wide'); group photos keep a true
+                  // center crop since there's no single face to protect.
+                  objectPosition: person.photoShape === 'wide' ? 'center' : 'center 20%',
+                  display: 'block',
+                }}
+              />
+            ) : person.photoShape !== 'wide' ? (
+              <span style={{ fontSize: isMobileNav ? '1.3rem' : '1.6rem', fontWeight: 800, color: 'var(--accentDark)' }}>
+                {initials}
+              </span>
+            ) : null}
+          </div>
         </div>
 
         <div style={{ fontWeight: 800, fontSize: isMobileNav ? '0.92rem' : '1rem', color: 'var(--text)' }}>
@@ -2694,52 +2869,51 @@ function Footer({ theme = 'light' }) {
   return (
     <footer className={dark ? undefined : 'kx-theme-vars'} style={{
       borderTop: dark ? '1px solid rgba(255,255,255,0.1)' : '1px solid var(--border)',
-      marginTop: dark ? 0 : '2rem',
+      marginTop: dark ? 0 : '1.25rem',
       background: dark ? 'transparent' : 'var(--bg)',
-      padding: dark ? '2rem 1.25rem 2.5rem' : '2rem 1.25rem 2.5rem',
+      padding: dark ? '1.1rem 1.25rem 1.4rem' : '1.1rem 1.25rem 1.4rem',
     }}>
       <div style={{
         maxWidth: '1080px', margin: '0 auto', display: 'flex',
-        flexDirection: 'column', alignItems: 'center', gap: '1.25rem', textAlign: 'center',
+        flexDirection: 'column', alignItems: 'center', gap: '0.6rem', textAlign: 'center',
       }}>
-        <Wordmark height={20} theme={dark ? 'dark' : 'kx'} />
+        <Wordmark height={18} theme={dark ? 'dark' : 'kx'} />
 
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1.25rem' }}>
-          <Link to="/about" style={{ fontSize: '0.85rem', fontWeight: 700, color: dark ? '#f3f4ef' : 'var(--text)', textDecoration: 'none' }}>
+        {/* Owner ask: drop Privacy Policy from the footer link row and
+            compress it into ONE row with About KUETx + the two contact
+            buttons — was 3 separate rows (links / email+WhatsApp /
+            copyright), now 2 (one combined action row / copyright),
+            so the whole footer takes noticeably less vertical space. */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
+          <Link to="/about" style={{ fontSize: '0.78rem', fontWeight: 700, color: dark ? '#f3f4ef' : 'var(--text)', textDecoration: 'none', padding: '0.4rem 0.2rem' }}>
             About KUETx
           </Link>
-          <Link to="/privacy" style={{ fontSize: '0.85rem', fontWeight: 700, color: dark ? '#f3f4ef' : 'var(--text)', textDecoration: 'none' }}>
-            Privacy Policy
-          </Link>
-        </div>
-
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.6rem' }}>
           <a
             href="mailto:mdakhinoorislam.official.2005@gmail.com"
             style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-              padding: '0.5rem 0.9rem', borderRadius: '999px', fontSize: '0.8rem', fontWeight: 700,
+              display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+              padding: '0.4rem 0.75rem', borderRadius: '999px', fontSize: '0.75rem', fontWeight: 700,
               border: dark ? '1px solid rgba(255,255,255,0.18)' : '1px solid var(--border)',
               color: dark ? '#f3f4ef' : 'var(--text)', textDecoration: 'none',
             }}
           >
-            <Mail size={14} /> Founder-কে ইমেইল করুন
+            <Mail size={12} /> Founder-কে ইমেইল করুন
           </a>
           <a
             href="https://wa.me/8801724812042"
             target="_blank" rel="noopener noreferrer"
             style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-              padding: '0.5rem 0.9rem', borderRadius: '999px', fontSize: '0.8rem', fontWeight: 700,
+              display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+              padding: '0.4rem 0.75rem', borderRadius: '999px', fontSize: '0.75rem', fontWeight: 700,
               border: dark ? '1px solid rgba(255,255,255,0.18)' : '1px solid var(--border)',
               color: dark ? '#f3f4ef' : 'var(--text)', textDecoration: 'none',
             }}
           >
-            <MessageSquare size={14} /> WhatsApp
+            <MessageSquare size={12} /> WhatsApp
           </a>
         </div>
 
-        <p style={{ fontSize: '0.76rem', color: dark ? 'rgba(243,244,239,0.55)' : 'var(--muted)', margin: 0 }}>
+        <p style={{ fontSize: '0.7rem', color: dark ? 'rgba(243,244,239,0.55)' : 'var(--muted)', margin: 0 }}>
           © {year} KUETx — KUET-এর জন্য।
         </p>
       </div>
@@ -3128,7 +3302,7 @@ export default function LandingPage() {
             the dark hero, not cramped. */}
         <section style={{
           background: 'var(--kx-dark)', color: '#fff', textAlign: 'center',
-          padding: isMobileNav ? '3rem 1.1rem 0' : '72px 32px 0',
+          padding: isMobileNav ? '2rem 1.1rem 0' : '56px 32px 0',
           position: 'relative', overflow: 'hidden',
         }}>
           <div style={{
@@ -3138,25 +3312,25 @@ export default function LandingPage() {
           {/* Hard color-band cut by design — no seam gradient here. */}
           <div style={{ position: 'relative' }}>
             <div style={{
-              margin: '0 auto 20px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 14px', display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <Logo size={isMobileNav ? 56 : 72} />
+              <Logo size={isMobileNav ? 44 : 58} />
             </div>
-            <h2 className="kx-h2" style={{ fontSize: isMobileNav ? 'clamp(1.3rem, 6vw, 1.6rem)' : '34px', color: '#fff' }}>
+            <h2 className="kx-h2" style={{ fontSize: isMobileNav ? 'clamp(1.15rem, 5.5vw, 1.4rem)' : '30px', color: '#fff' }}>
               তোমার ক্যাম্পাস লাইফ, আজকেই সাজাও।
             </h2>
-            <p style={{ color: 'rgba(243,244,239,0.65)', maxWidth: '460px', margin: '16px auto 32px' }}>
+            <p style={{ color: 'rgba(243,244,239,0.65)', maxWidth: '460px', margin: '10px auto 20px', fontSize: isMobileNav ? '0.82rem' : undefined }}>
               Sign up করতে কোনো টাকা লাগে না, ভবিষ্যতেও লাগবে না।
             </p>
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: isMobileNav ? '2.5rem' : '64px' }}>
+            <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: isMobileNav ? '1.5rem' : '2.25rem' }}>
               <button
                 type="button"
                 onClick={() => openAuth('signup')}
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                  padding: isMobileNav ? '0.75rem 1.2rem' : '15px 28px', borderRadius: '12px',
+                  padding: isMobileNav ? '0.65rem 1.1rem' : '13px 26px', borderRadius: '12px',
                   background: 'var(--kx-accent-bright)', color: '#06210f', fontWeight: 800,
-                  fontSize: isMobileNav ? '0.85rem' : '16px', border: 'none', cursor: 'pointer',
+                  fontSize: isMobileNav ? '0.82rem' : '15px', border: 'none', cursor: 'pointer',
                 }}
               >
                 Sign Up করো
@@ -3166,9 +3340,9 @@ export default function LandingPage() {
                 onClick={() => openAuth('signin')}
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                  padding: isMobileNav ? '0.75rem 1.2rem' : '15px 28px', borderRadius: '12px',
+                  padding: isMobileNav ? '0.65rem 1.1rem' : '13px 26px', borderRadius: '12px',
                   background: 'transparent', color: '#f3f4ef', fontWeight: 700,
-                  fontSize: isMobileNav ? '0.85rem' : '16px',
+                  fontSize: isMobileNav ? '0.82rem' : '15px',
                   border: '1px solid rgba(255,255,255,0.18)', cursor: 'pointer',
                 }}
               >

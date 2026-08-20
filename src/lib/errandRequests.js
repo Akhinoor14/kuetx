@@ -10,11 +10,43 @@
 // correction): the old model required a Runner to already have a shop
 // set up before anyone could ask for a delivery at all — "amader ei pick
 // and drop e kono runner na thakelo etay req deya jabe na" was the bug.
-// This new model has NO shop, NO provider account requirement. Any
-// verified student or faculty account can:
-//   - post an open request (broadcast to everyone else)
-//   - accept someone else's open request (acting as a one-off "Runner"
-//     for that single request only — no persistent Runner identity)
+// This new model has NO shop, NO provider account requirement for
+// POSTING or ACCEPTING as a plain student. Any verified student or
+// faculty account can post an open request (broadcast to everyone
+// eligible — see visibility rules below); any verified student, or any
+// verified Provider account running an 'errand'-type shop (a "Runner",
+// see serviceCategoryConfig.js's CATEGORY_SETUP_CONFIG.errand), can
+// accept one, acting as a one-off deliverer for that single request only
+// — no persistent per-request Runner identity beyond the shop itself.
+//
+// VISIBILITY MODEL (person's explicit design, this session):
+//   - POST: both students and faculty may create a request.
+//   - BROADCAST FEED: only visible to students and Runners (verified
+//     Provider accounts with an 'errand'-type shop). Faculty NEVER see
+//     the open feed — not their own request in it (already excluded by
+//     the self-filter), and not anyone else's — because faculty cannot
+//     accept requests at all, browsing a feed they can't act on would
+//     be pure clutter/noise for them. This is enforced client-side in
+//     subscribeOpenErrandRequests below (viewer-role gate) AND is safe
+//     to enforce there only because read access itself remains open at
+//     the rules layer (see firestore.rules' errandRequests match) —
+//     hiding a browsable-but-inert feed from one role is a UX decision,
+//     not a privacy boundary, same reasoning the module previously used
+//     for the self-exclude filter.
+//   - ACCEPT: students and Runners only (mirrors the feed visibility —
+//     you can't accept what you were never shown). Faculty accounts are
+//     blocked from accepting at the rules layer regardless of feed
+//     visibility (defense in depth, not just a hidden button).
+//   - A faculty account's OWN posted requests, and their status/who-
+//     accepted, remain fully visible to that faculty member via
+//     subscribeMyErrandRequests — only the browsable feed of OTHER
+//     people's open requests is faculty-hidden, never a user's own data.
+//   - OPT-OUT (person's explicit ask): a student may turn the broadcast
+//     feed off entirely for themselves via errandBroadcastOptOut/{uid}
+//     (see getErrandBroadcastOptOut/setErrandBroadcastOptOut below) —
+//     once off, new open requests simply stop appearing in their feed
+//     until they turn it back on. This does not affect their ability to
+//     post their own requests or see their own "My Requests" list.
 //
 // Data model — ONE top-level collection, not nested under any shop:
 //
@@ -34,6 +66,12 @@
 //       first-to-accept is first in line, but ordering is DISPLAY ONLY,
 //       the requester can confirm ANY acceptor, not just the earliest)
 //     status: 'waiting' | 'confirmed' | 'rejected'
+//
+//   errandBroadcastOptOut/{uid}
+//     optedOut (bool), updatedAt — single-purpose doc, same pattern as
+//     errandContact/{uid} below. Absence of a doc == not opted out
+//     (default: broadcast ON), matching every other opt-in-by-default
+//     preference in this app.
 //
 // Why a doc-per-acceptor subcollection instead of an array field on the
 // parent doc: concurrent accepts from different people racing to accept
@@ -74,6 +112,28 @@ const requestsCollectionRef = () => collection(db, 'errandRequests');
 const requestDocRef = (requestId) => doc(db, 'errandRequests', requestId);
 const acceptsCollectionRef = (requestId) => collection(db, 'errandRequests', requestId, 'accepts');
 const acceptDocRef = (requestId, acceptorUid) => doc(db, 'errandRequests', requestId, 'accepts', acceptorUid);
+// Reused as-is from serviceSync.js's own servicesCollectionRef — a
+// "Runner" is simply a verified Provider account with at least one
+// services/{serviceId} doc whose type is 'errand' (see
+// serviceCategoryConfig.js's CATEGORY_SETUP_CONFIG.errand). No separate
+// "Runner" collection/flag was introduced; reusing the existing Provider
+// shop-category system is the whole point of this session's change (the
+// old shop-based errand mode's UI is reused, only its data dependency
+// moves from services/{serviceId}/bookings to the open feed below).
+const servicesCollectionRef = () => collection(db, 'services');
+
+/**
+ * True if this uid is a verified Provider running at least one
+ * 'errand'-type shop ("Runner" in this app's terms — see module doc
+ * comment's visibility model). Used by ErrandFeed.jsx to decide whether
+ * a Provider viewer should see/accept from the open feed, same status
+ * a plain student always has.
+ */
+export async function isErrandRunner(uid) {
+  if (!uid) return false;
+  const snap = await getDocs(query(servicesCollectionRef(), where('providerUid', '==', uid), where('type', '==', 'errand')));
+  return !snap.empty;
+}
 
 // Mirrors studentPreferences/{uid}'s single-purpose-doc pattern —
 // see serviceSync.js's studentPreferencesDocRef for the precedent this
@@ -81,6 +141,13 @@ const acceptDocRef = (requestId, acceptorUid) => doc(db, 'errandRequests', reque
 // say "student" specifically, unlike the older studentPreferences doc,
 // since faculty also send/accept requests in this new model).
 const errandContactDocRef = (uid) => doc(db, 'errandContact', uid);
+
+// Broadcast opt-out — student-only toggle (person's explicit ask): a
+// student who never wants to see the open feed can turn it off. Absence
+// of a doc / optedOut !== true means broadcast stays ON, matching every
+// other opt-in-by-default preference in this app (nobody is silently
+// opted out just because this doc has never been touched).
+const errandBroadcastOptOutDocRef = (uid) => doc(db, 'errandBroadcastOptOut', uid);
 
 // ---------------------------------------------------------------------
 // Contact number — save once, reuse forever (person's explicit ask).
@@ -97,6 +164,36 @@ export async function getSavedErrandPhone(uid) {
 export async function saveErrandPhone(uid, phone) {
   if (!uid || !phone) return;
   await setDoc(errandContactDocRef(uid), { phone: String(phone).trim(), updatedAt: serverTimestamp() }, { merge: true });
+}
+
+// ---------------------------------------------------------------------
+// Broadcast opt-out (student-only toggle — see module doc comment).
+// ---------------------------------------------------------------------
+
+/** One-shot read of whether this account has turned the open feed off. Default false (feed ON) when no doc exists yet. */
+export async function getErrandBroadcastOptOut(uid) {
+  if (!uid) return false;
+  const snap = await getDoc(errandBroadcastOptOutDocRef(uid));
+  return snap.exists() && snap.data().optedOut === true;
+}
+
+/** Live subscription to this account's opt-out state, for the Pick and Drop toggle UI to reflect changes made elsewhere (e.g. another tab). */
+export function subscribeErrandBroadcastOptOut(uid, callback) {
+  if (!uid) { callback(false); return () => {}; }
+  return retryableOnSnapshot(
+    errandBroadcastOptOutDocRef(uid),
+    (snap) => callback(snap.exists() && snap.data().optedOut === true),
+    (err) => {
+      console.error('[errandRequests] subscribeErrandBroadcastOptOut error:', err);
+      callback(false);
+    },
+  );
+}
+
+/** Sets this account's broadcast opt-out state — student-only in the UI (see ErrandFeed.jsx), but not role-gated here since a faculty account already never sees the feed regardless of this flag. */
+export async function setErrandBroadcastOptOut(uid, optedOut) {
+  if (!uid) return;
+  await setDoc(errandBroadcastOptOutDocRef(uid), { optedOut: !!optedOut, updatedAt: serverTimestamp() }, { merge: true });
 }
 
 // ---------------------------------------------------------------------
@@ -182,8 +279,18 @@ export async function createOpenErrandRequest({
  * is a trivial client-side filter on an already-small snapshot — same
  * "fetch broad, filter client-side" split serviceSync.js's own
  * broadcast functions already use.
+ *
+ * VIEWER GATING (person's explicit design, see module doc comment):
+ * faculty viewers and opted-out student viewers get an empty feed —
+ * `viewerCanSeeFeed` is resolved by the caller (ErrandFeed.jsx, via
+ * useIsFaculty + getErrandBroadcastOptOut) and passed in rather than
+ * re-derived here, so this function stays a pure data-layer read with
+ * no role/auth logic duplicated across call sites. Passing false simply
+ * skips subscribing at all (no wasted listener for a feed the viewer
+ * will never see).
  */
-export function subscribeOpenErrandRequests(viewerUid, callback) {
+export function subscribeOpenErrandRequests(viewerUid, callback, viewerCanSeeFeed = true) {
+  if (!viewerCanSeeFeed) { callback([]); return () => {}; }
   return retryableOnSnapshot(
     query(requestsCollectionRef(), where('status', '==', 'open'), orderBy('createdAt', 'desc')),
     (snap) => {
@@ -293,8 +400,17 @@ export function subscribeErrandRequest(requestId, callback) {
  * the ONE place a phone gets collected, so it's also the one place that
  * persists it, keeping "ask once" enforcement in a single spot rather
  * than scattered across every call site.
+ *
+ * `acceptorIsFaculty` (person's explicit design — see module doc
+ * comment's visibility model): faculty accounts can never accept a
+ * request, full stop. This client-side check is a fast-fail/better-
+ * error-message convenience only — the real boundary is firestore.rules'
+ * matching create rule on errandRequests/{requestId}/accepts/
+ * {acceptorUid}, which independently blocks a faculty uid regardless of
+ * what this function does, so a modified client can't bypass it.
  */
-export async function acceptErrandRequest(requestId, { acceptorUid, acceptorName, acceptorPhone }) {
+export async function acceptErrandRequest(requestId, { acceptorUid, acceptorName, acceptorPhone, acceptorIsFaculty = false }) {
+  if (acceptorIsFaculty) throw new Error('Faculty অ্যাকাউন্ট দিয়ে রিকোয়েস্ট গ্রহণ করা যায় না।');
   const trimmedPhone = String(acceptorPhone || '').trim();
   if (!trimmedPhone) throw new Error('একটা ফোন নাম্বার দিন।');
 

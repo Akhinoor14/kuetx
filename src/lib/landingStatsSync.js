@@ -79,3 +79,70 @@ export async function setLandingTotalUsers(totalUsers) {
   }
   await setDoc(LANDING_STATS_DOC, { totalUsers: Math.round(n), updatedAt: serverTimestamp() }, { merge: true });
 }
+
+// ── Hero stat card overrides (4-card strip: real feature / QB total /
+// publications / users) ─────────────────────────────────────────────
+//
+// Each card has a live default (feature count from
+// landingFeatureInventory.js, QB total from the public Worker,
+// publications from BASE_STATS, users from totalUsers above) but the
+// Founder can override any card's number AND label by hand from
+// FounderBatchSettings.jsx's "Landing Page Stats" panel — same doc,
+// new `heroCardOverrides` map so the override is per-card and partial
+// (an unset card just falls through to its live default).
+//
+// Shape: { heroCardOverrides: { [cardId]: { value: string, label: string } } }
+// cardId is one of: 'features', 'qb', 'publications', 'users'.
+
+const HERO_CARD_IDS = ['features', 'qb', 'publications', 'users'];
+
+/**
+ * One-time fetch of Founder-set overrides for the 4 hero stat cards.
+ * Returns {} if nothing has been set yet or the read fails — callers
+ * should treat a missing card as "use the live/default value".
+ */
+export async function getHeroCardOverrides() {
+  try {
+    const snap = await getDoc(LANDING_STATS_DOC);
+    if (snap.exists() && snap.data().heroCardOverrides) {
+      return snap.data().heroCardOverrides;
+    }
+  } catch {
+    // fall through to {} below
+  }
+  return {};
+}
+
+/**
+ * Live-subscribe to Founder-set hero card overrides. Fires with {}
+ * until the doc exists / has no overrides, then again on every edit.
+ */
+export function subscribeHeroCardOverrides(callback) {
+  return onSnapshot(LANDING_STATS_DOC, (snap) => {
+    callback((snap.exists() && snap.data().heroCardOverrides) || {});
+  }, () => {
+    callback({});
+  });
+}
+
+/**
+ * Admin/HeadOfOps-only write — sets or clears one hero card's override.
+ * Pass { value, label } to override both, or null to clear the override
+ * and fall back to that card's live default.
+ */
+export async function setHeroCardOverride(cardId, override) {
+  if (!HERO_CARD_IDS.includes(cardId)) {
+    throw new Error(`Unknown hero card id: ${cardId}`);
+  }
+  const current = await getHeroCardOverrides();
+  const next = { ...current };
+  if (override == null) {
+    delete next[cardId];
+  } else {
+    next[cardId] = {
+      value: String(override.value ?? '').trim(),
+      label: String(override.label ?? '').trim(),
+    };
+  }
+  await setDoc(LANDING_STATS_DOC, { heroCardOverrides: next, updatedAt: serverTimestamp() }, { merge: true });
+}

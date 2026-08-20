@@ -84,10 +84,27 @@ export const loginAnonymously = async () => {
 // unsupported in an in-app webview), so that narrower case still degrades
 // gracefully instead of leaving the person stuck.
 
+// Owner-reported bug (this session): mid-signup, the whole KUETx tab
+// suddenly refreshed while they were in the middle of Google's sign-in
+// popup — losing their in-progress wizard state. Root cause: this file
+// treated 'auth/popup-closed-by-user' as a "popup unsupported, fall
+// back to signInWithRedirect()" signal — but popup-closed-by-user means
+// the person closed/dismissed Google's OWN popup (misclick, changed
+// their mind, popup lost focus, etc.), not that popups don't work in
+// this browser. Silently launching signInWithRedirect() right after
+// that navigates the ENTIRE app tab away to Google and back — a full
+// page reload from the person's perspective, wiping any in-memory
+// state (like this wizard's filled-in form) with zero warning. That's
+// exactly the "hotath refresh, bad practice" behavior reported.
+// Redirect fallback now only fires for the two cases that actually mean
+// "a popup could not be shown at all" — popup-blocked and
+// operation-not-supported-in-this-environment (in-app webviews).
+// popup-closed-by-user now rethrows as a normal, catchable error so the
+// caller (SignUpWizard's handleGoogleSignUp) can show an inline retry
+// message instead — no navigation, no lost state.
 const POPUP_UNSUPPORTED_CODES = new Set([
   'auth/popup-blocked',
   'auth/operation-not-supported-in-this-environment',
-  'auth/popup-closed-by-user', // treat as "try redirect", not a hard failure
 ]);
 
 export const loginWithGoogle = async () => {

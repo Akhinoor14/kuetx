@@ -144,7 +144,12 @@ export const FOUNDER_CATEGORIES = [
     label: 'Blood Bank',
     icon: 'Droplet',
     subtitle: (ctx) => `${ctx.bloodDonorCount ?? '…'} students on file — search by blood group`,
-    getCount: (ctx) => ctx.bloodDonorCount,
+    // No getCount here on purpose — bloodDonorCount is a total-on-file
+    // number, not a pending-action queue. It used to double as this
+    // category's badge, which wrongly painted it as "N things need your
+    // attention" in the same red pill as Approvals/Faculty/etc. The
+    // number still shows in the subtitle above; it just doesn't render
+    // as an action badge anymore.
     // No subcategories — a single search screen (BloodBankView).
   },
   // --- 5. Outreach & Insight ---

@@ -24,7 +24,7 @@ export const GROUP_ICONS = {
   'Tools':       'Wrench',
 };
 
-export function NavRow({ to, label, iconName, active, onClose, unreadCount = 0 }) {
+export function NavRow({ to, label, iconName, active, onClose, unreadCount = 0, dot = null }) {
   const Icon = ICONS[iconName] || Circle;
   const [hovered, setHovered] = useState(false);
   const hasUnread = unreadCount > 0;
@@ -79,8 +79,21 @@ export function NavRow({ to, label, iconName, active, onClose, unreadCount = 0 }
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
+        display: 'flex', alignItems: 'center', gap: 6,
       }}>
         {label}
+        {/* Status dot — used by hub rows (Founder/Campus Lead/Class Rep)
+            instead of a number badge: green = nothing pending, red =
+            something needs review. Owner's explicit ask — a raw count
+            next to a role name read as noisy; a color dot answers the
+            only question that matters at a glance ("do I need to look?")
+            without a number competing with the label for space. */}
+        {dot && (
+          <span style={{
+            width: 8, height: 8, borderRadius: '50%', flexShrink: 0,
+            background: dot === 'red' ? 'var(--danger, #ef4444)' : 'var(--success, #22c55e)',
+          }} />
+        )}
       </span>
       {hasUnread && (
         <span style={{
@@ -152,7 +165,7 @@ function isActiveItem(pathname, itemPath, hubPath) {
 // Shared row-list renderer: takes an already-filtered nav source and draws
 // it. Both SidebarNavStudent and SidebarNavFaculty call this with their own
 // (never each other's) filtered nav array.
-export function NavList({ filteredNav, location, onClose, unreadNoticeCount = 0 }) {
+export function NavList({ filteredNav, location, onClose, unreadNoticeCount = 0, groupBadgeCounts = {} }) {
   return (
     <nav style={{ flex: 1, overflowY: 'auto', padding: '6px 6px 16px' }}>
       {filteredNav.map((section, idx) => {
@@ -161,6 +174,17 @@ export function NavList({ filteredNav, location, onClose, unreadNoticeCount = 0 
         if (isHub) {
           const active = location.pathname === section.hubPath
             || section.items.some(item => isActiveItem(location.pathname, item.path, section.hubPath));
+          // Notice keeps its own dedicated prop/number badge (unread
+          // messages aren't a "pending approval" count and predates this
+          // generalized map). Every other hub (Admin/Founder/Campus
+          // Lead/Class Rep) reads from groupBadgeCounts and renders as a
+          // dot, not a number — red when count > 0, green when 0 — per
+          // owner's explicit ask that a raw number next to the role name
+          // read as noisy; the dot answers "do I need to look?" at a
+          // glance instead.
+          const isNoticeGroup = section.group === 'Notice' || section.group === 'Notices';
+          const groupCount = groupBadgeCounts[section.group];
+          const hasDot = !isNoticeGroup && groupCount !== undefined;
           return (
             <div key={section.group}>
               {idx > 0 && <div style={{ height: 1, background: 'var(--border)', margin: '6px 4px', opacity: 0.6 }} />}
@@ -170,7 +194,8 @@ export function NavList({ filteredNav, location, onClose, unreadNoticeCount = 0 
                 iconName={section.hubIcon || GROUP_ICONS[section.group] || 'Circle'}
                 active={active}
                 onClose={onClose}
-                unreadCount={(section.group === 'Notice' || section.group === 'Notices') ? unreadNoticeCount : 0}
+                unreadCount={isNoticeGroup ? unreadNoticeCount : 0}
+                dot={hasDot ? (groupCount > 0 ? 'red' : 'green') : null}
               />
             </div>
           );

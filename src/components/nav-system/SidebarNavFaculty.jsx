@@ -14,6 +14,7 @@ import { NAV_FACULTY, getFacultyNav } from '../../nav-faculty';
 import { filterNav } from '../../lib/modeFilter';
 import { NavList } from './SidebarNavShared';
 import { useIsMobileNav } from '../BottomNav';
+import { useAdminPendingCount } from '../../hooks/useAdminPendingCount';
 
 export default function SidebarNavFaculty({ location, onClose, isRealAdmin = false }) {
   // Same pattern as SidebarNavStudent.jsx's getStudentNav(isMobileNav) —
@@ -23,11 +24,17 @@ export default function SidebarNavFaculty({ location, onClose, isRealAdmin = fal
   const activeNav = getFacultyNav(isMobileNav);
   const filteredNav = filterNav(activeNav, false, isRealAdmin);
 
+  // Unlike SidebarNavStudent, this file's Admin group is never renamed to
+  // the role label (see nav-faculty.js — group stays literally 'Admin')
+  // so the badge map key here is fixed, not adminLabel-derived.
+  const adminPendingCount = useAdminPendingCount();
+
   return (
     <NavList
       filteredNav={filteredNav}
       location={location}
       onClose={onClose}
+      groupBadgeCounts={{ Admin: adminPendingCount }}
     />
   );
 }

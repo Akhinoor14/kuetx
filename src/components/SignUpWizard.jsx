@@ -41,7 +41,7 @@ import {
 import { isKuetEmailFormat, emailRollMatchesProfile } from '../lib/kuetEmailVerify';
 import { isFacultyEmailFormat } from '../lib/facultyEmailVerify';
 import { isMultiSectionDept } from '../lib/groupUtils';
-import { SERVICE_TYPES, PROVIDER_SIGNUP_TYPES, PROVIDER_SIGNUP_TYPE_LABELS_BN } from '../lib/serviceSync';
+import { SERVICE_TYPES, PROVIDER_SIGNUP_TYPES } from '../lib/serviceSync';
 import { auth } from '../lib/firebase';
 import { loginWithGoogle } from '../lib/firebaseAuth';
 import { isBrandNewAccount } from '../lib/accountLifecycle';
@@ -126,9 +126,11 @@ function DesktopStepLabels({ step }) {
 function RoleSelectStep({ selectedRole, onSelect, isMobileNav }) {
   return (
     <div>
-      <p style={{ fontWeight: 800, fontSize: 18, color: 'var(--text)', margin: '0 0 18px' }}>
-        তুমি কোন role হিসেবে যোগ দিচ্ছো?
-      </p>
+      {/* Owner ask: drop the "তুমি কোন role হিসেবে যোগ দিচ্ছো?" heading
+          entirely — redundant with the step bar already reading "Role"
+          and the 3 self-explanatory cards below (icon + English label
+          each). No replacement heading added; the cards start right
+          under the step bar now. */}
       <div style={{
         display: isMobileNav ? 'flex' : 'grid',
         flexDirection: isMobileNav ? 'column' : undefined,
@@ -409,6 +411,21 @@ function FacultyDetailsStep({ form, setForm, errors, setErrors }) {
       return false;
     }
     if (isKuetEmail && lookupStatus === 'checking') return false; // let the in-flight check finish first
+    // Owner ask (this session): "amader directory te ja ja info ache
+    // sob gula diye ekhne ja ja lagbe segula fill uop hoye jawar
+    // kotha" — a directory-matched teacher's Department and Title
+    // should pre-fill from facultyDirectory (populated by
+    // scripts/kuet_faculty_scraper.py, whose Teacher record already
+    // carries `department` — the same dept-code values as this
+    // wizard's DEPARTMENTS/INSTITUTES/BASIC_SCIENCE_DEPTS lists — and
+    // `designation`, e.g. "Associate Professor"), not just Name. This
+    // used to be a no-op for dept (`prev.dept || prev.dept`) and never
+    // touched title at all. Directory's designation only auto-fills
+    // when it matches one of this wizard's known FACULTY_TITLE_GROUPS
+    // options exactly — an unrecognized designation string (e.g. a
+    // scrape variant) is left for the person to pick manually rather
+    // than silently landing in the free-text "Other" field.
+    const directoryTitleKnown = directoryHit && FACULTY_TITLE_GROUPS.some((g) => g.options.includes(directoryHit.designation));
     setForm((prev) => ({
       ...prev,
       _emailConfirmed: true,
@@ -416,9 +433,10 @@ function FacultyDetailsStep({ form, setForm, errors, setErrors }) {
       // Carried through to the Confirm step so its messaging reflects the
       // real directory-match result, not just the email's format.
       _directoryMatched: !!directoryHit,
-      // Directory-matched name auto-fills but stays editable below.
+      // Directory-matched fields auto-fill but stay editable below.
       name: prev.name || (directoryHit ? directoryHit.name : ''),
-      dept: prev.dept || (directoryHit ? prev.dept : prev.dept),
+      dept: prev.dept || (directoryHit ? directoryHit.department : ''),
+      title: prev.title || (directoryTitleKnown ? directoryHit.designation : ''),
     }));
     return true;
   };
@@ -438,7 +456,7 @@ function FacultyDetailsStep({ form, setForm, errors, setErrors }) {
           />
           {errors.institutionalEmail && <div style={errorStyle}>{errors.institutionalEmail}</div>}
           {isKuetEmail && lookupStatus === 'checking' && (
-            <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>যাচাই করা হচ্ছে…</div>
+            <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>Checking…</div>
           )}
           {isKuetEmail && lookupStatus === 'matched' && (
             <div style={{ fontSize: 11, fontWeight: 700, color: '#16a34a', marginTop: 6 }}>
@@ -567,6 +585,25 @@ function validateFacultyStep(form) {
 // is the field set that finishProviderSignup() there already writes to
 // providerSync.js's createProviderShell(), so Phase 6 can call the same
 // function with this form's values unchanged.
+// Owner ask (this session): the whole SignUpWizard flow should read in
+// English with no extra/unneeded labeling — the Provider step (Step 2)
+// was still fully Bengali (field labels, placeholders, validation
+// messages, service-type dropdown), inherited from RoleSelectScreen's
+// older Bengali-first provider form. serviceSync.js's
+// PROVIDER_SIGNUP_TYPE_LABELS_BN has no English counterpart and other
+// screens (RoleSelectScreen, ProviderVerificationPending) still rely on
+// the Bengali one deliberately, so rather than touching that shared
+// source this wizard gets its own local English label map instead.
+const PROVIDER_SIGNUP_TYPE_LABELS_EN = {
+  salon: 'Salon',
+  hotel: 'Food (Hotel/Restaurant)',
+  medicine: 'Pharmacy',
+  bookstore: 'Stationery',
+  onlinemart: 'Online Mart',
+  errand: 'Pick & Drop',
+  other: 'Other',
+};
+
 function ProviderDetailsStep({ form, setForm, errors, setErrors }) {
   const handleChange = (key) => (e) => {
     setForm((prev) => ({ ...prev, [key]: e.target.value }));
@@ -576,31 +613,31 @@ function ProviderDetailsStep({ form, setForm, errors, setErrors }) {
   return (
     <div style={{ display: 'grid', gap: 12 }}>
       <div>
-        <label style={labelStyle}>নাম / দোকানের নাম</label>
-        <input style={fieldStyle} value={form.displayName || ''} onChange={handleChange('displayName')} placeholder="যেমন: Rafiq's Salon" />
+        <label style={labelStyle}>Name / Shop Name</label>
+        <input style={fieldStyle} value={form.displayName || ''} onChange={handleChange('displayName')} placeholder="e.g. Rafiq's Salon" />
         {errors.displayName && <div style={errorStyle}>{errors.displayName}</div>}
       </div>
       <div>
-        <label style={labelStyle}>ফোন নাম্বার</label>
+        <label style={labelStyle}>Phone Number</label>
         <input style={fieldStyle} value={form.phone || ''} onChange={handleChange('phone')} placeholder="01XXXXXXXXX" />
         {errors.phone && <div style={errorStyle}>{errors.phone}</div>}
       </div>
       <div>
-        <label style={labelStyle}>সার্ভিসের ধরন</label>
+        <label style={labelStyle}>Service Type</label>
         <select style={fieldStyle} value={form.serviceType || SERVICE_TYPES[0]} onChange={handleChange('serviceType')}>
-          {PROVIDER_SIGNUP_TYPES.map((t) => <option key={t} value={t}>{PROVIDER_SIGNUP_TYPE_LABELS_BN[t]}</option>)}
+          {PROVIDER_SIGNUP_TYPES.map((t) => <option key={t} value={t}>{PROVIDER_SIGNUP_TYPE_LABELS_EN[t]}</option>)}
         </select>
       </div>
       {form.serviceType === 'other' && (
         <div>
-          <label style={labelStyle}>সার্ভিসের ধরন লিখুন</label>
-          <input style={fieldStyle} value={form.serviceTypeOther || ''} onChange={handleChange('serviceTypeOther')} placeholder="যেমন: মোবাইল সার্ভিসিং" />
+          <label style={labelStyle}>Specify Service Type</label>
+          <input style={fieldStyle} value={form.serviceTypeOther || ''} onChange={handleChange('serviceTypeOther')} placeholder="e.g. Mobile Servicing" />
           {errors.serviceTypeOther && <div style={errorStyle}>{errors.serviceTypeOther}</div>}
         </div>
       )}
       <div>
-        <label style={labelStyle}>দোকানের ঠিকানা</label>
-        <input style={fieldStyle} value={form.location || ''} onChange={handleChange('location')} placeholder="যেমন: KUET মেইন গেটের পাশে, ২য় তলা" />
+        <label style={labelStyle}>Shop Address</label>
+        <input style={fieldStyle} value={form.location || ''} onChange={handleChange('location')} placeholder="e.g. Beside KUET Main Gate, 2nd Floor" />
         {errors.location && <div style={errorStyle}>{errors.location}</div>}
       </div>
     </div>
@@ -609,10 +646,10 @@ function ProviderDetailsStep({ form, setForm, errors, setErrors }) {
 
 function validateProviderStep(form) {
   const errors = {};
-  if (!String(form.displayName || '').trim()) errors.displayName = 'নাম দিতে হবে';
-  if (!String(form.phone || '').trim()) errors.phone = 'ফোন নাম্বার দিতে হবে';
-  if (!String(form.location || '').trim()) errors.location = 'ঠিকানা দিতে হবে';
-  if (form.serviceType === 'other' && !String(form.serviceTypeOther || '').trim()) errors.serviceTypeOther = 'সার্ভিসের ধরনটি লিখুন';
+  if (!String(form.displayName || '').trim()) errors.displayName = 'Name is required';
+  if (!String(form.phone || '').trim()) errors.phone = 'Phone number is required';
+  if (!String(form.location || '').trim()) errors.location = 'Address is required';
+  if (form.serviceType === 'other' && !String(form.serviceTypeOther || '').trim()) errors.serviceTypeOther = 'Please specify the service type';
   return errors;
 }
 
@@ -648,15 +685,16 @@ function ConfirmStep({ role, form, busy, error, onConfirm }) {
       : [
           ['Name', form.displayName],
           ['Phone', form.phone],
-          ['Service', form.serviceType === 'other' ? form.serviceTypeOther : PROVIDER_SIGNUP_TYPE_LABELS_BN[form.serviceType] || form.serviceType],
+          ['Service', form.serviceType === 'other' ? form.serviceTypeOther : PROVIDER_SIGNUP_TYPE_LABELS_EN[form.serviceType] || form.serviceType],
           ['Location', form.location],
         ];
 
   return (
     <div>
-      <p style={{ fontWeight: 700, fontSize: 16, color: 'var(--text)', margin: '0 0 14px' }}>
-        সব ঠিক আছে তো?
-      </p>
+      {/* Owner ask: same reasoning as Step 1's now-removed heading —
+          the step bar already reads "Confirm", so a duplicate "সব ঠিক
+          আছে তো?" question here was redundant extra labeling. Removed,
+          summary card starts right away. */}
       <div style={{
         borderRadius: 12, border: '1px solid var(--border)', background: 'var(--surfaceGlass, var(--card))',
         padding: 14, display: 'grid', gap: 8, marginBottom: 16,
@@ -700,12 +738,12 @@ async function commitStudentSignup(form) {
   // is still the authoritative, race-safe check (rules-enforced).
   const taken = await isRollTakenByAnotherAccount(studentIdTrimmed);
   if (taken) {
-    return { ok: false, error: 'এই roll নম্বরটি অন্য একটি অ্যাকাউন্ট ইতিমধ্যে ব্যবহার করছে। সঠিক roll নম্বর দিয়ে আবার চেষ্টা করুন, অথবা admin-এর সাহায্য নিন।' };
+    return { ok: false, error: 'This roll number is already used by another account. Please try again with the correct roll number, or contact admin for help.' };
   }
 
   const claim = await claimRoll(studentIdTrimmed);
   if (!claim.ok) {
-    return { ok: false, error: 'এই roll নম্বরটি অন্য একটি অ্যাকাউন্ট ইতিমধ্যে ব্যবহার করছে।' };
+    return { ok: false, error: 'This roll number is already used by another account.' };
   }
 
   const normalized = normalizeProfileForSave({
@@ -879,14 +917,22 @@ export default function SignUpWizard({ onClose, initialRole = null, onDone }) {
         : commitProviderSignup;
       const result = await commit(detailsForm);
       if (!result.ok) {
-        setSubmitError(result.error || 'কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+        setSubmitError(result.error || 'Something went wrong. Please try again.');
         setBusy(false);
         return;
       }
       onDone?.();
       onClose?.();
     } catch (err) {
-      setSubmitError('Google দিয়ে সাইন ইন করা যায়নি। আবার চেষ্টা করুন।');
+      // Person closed/dismissed Google's popup themselves — not a real
+      // failure, so no scary error message, just let them try again
+      // (see firebaseAuth.js's loginWithGoogle() header for why this
+      // case no longer triggers a page-navigating redirect fallback).
+      setSubmitError(
+        err?.code === 'auth/popup-closed-by-user'
+          ? 'The Google sign-in window was closed. Tap "Sign Up with Google" again when ready.'
+          : 'Could not sign in with Google. Please try again.'
+      );
       setBusy(false);
     }
   };
@@ -922,7 +968,7 @@ export default function SignUpWizard({ onClose, initialRole = null, onDone }) {
       : <ConfirmStep role={role} form={detailsForm} busy={busy} error={submitError} onConfirm={handleGoogleSignUp} />;
 
   const continueLabel = step === STEP_LABELS.length - 1
-    ? (busy ? 'সাইন ইন করা হচ্ছে…' : 'Sign Up with Google')
+    ? (busy ? 'Signing in…' : 'Sign Up with Google')
     : 'Continue';
 
   // ─── kx-theme override ──────────────────────────────────────────────

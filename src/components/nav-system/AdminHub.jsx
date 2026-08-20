@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import SubgroupHub from './SubgroupHub';
 import { useIsStaff } from '../../hooks/useIsStaff';
+import { useAdminPendingCount } from '../../hooks/useAdminPendingCount';
+import { useCRPendingCount } from '../../hooks/useCRPendingCount';
 import { getProfile } from '../../store/store';
 import { getGroupId } from '../../lib/groupUtils';
 import { subscribeMyRole } from '../../lib/groupSync';
@@ -35,6 +37,8 @@ export default function AdminHub() {
   }, []);
 
   const label = adminLabel || 'Admin';
+  const adminPendingCount = useAdminPendingCount();
+  const crPendingCount = useCRPendingCount(isRealCR);
 
   const profileSection = {
     title: 'Profile',
@@ -52,7 +56,10 @@ export default function AdminHub() {
       { id: 'class-routine',    label: 'Routine',            icon: 'CalendarDays',  accent: 'green',  path: '/class-routine' },
       { id: 'class-planner',    label: 'Class Planner',      icon: 'CalendarCheck', accent: 'amber',  path: '/class-planner' },
       { id: 'ct-quiz-planning', label: 'CT & Quiz Planner',  icon: 'CalendarCheck', accent: 'red',    path: '/ct-quiz-planning' },
-      { id: 'class-roster',     label: 'Roster',             icon: 'Users',         accent: 'purple', path: '/class-roster' },
+      // Badged here (not on the crSection hub row itself) since this is
+      // the actual queue — pending join requests are reviewed on the
+      // Roster tab via JoinRequestsPanel (ClassRoster.jsx).
+      { id: 'class-roster',     label: 'Roster',             icon: 'Users',         accent: 'purple', path: '/class-roster', badge: crPendingCount },
       { id: 'class-notices',    label: 'Class Announcements', icon: 'Bell',         accent: 'blue',   path: '/class-notices' },
       { id: 'class-my-role',    label: 'My Role',            icon: 'Shield',        accent: 'green',  path: '/class-my-role' },
     ],
@@ -62,7 +69,7 @@ export default function AdminHub() {
     title: 'Team & Administration',
     icon: 'Briefcase',
     items: [
-      { id: 'team', label: 'Team & Administration', icon: 'Briefcase', accent: 'amber', path: '/team' },
+      { id: 'team', label: 'Team & Administration', icon: 'Briefcase', accent: 'amber', path: '/team', badge: adminPendingCount },
     ],
   };
 

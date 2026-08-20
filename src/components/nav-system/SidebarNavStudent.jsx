@@ -9,9 +9,11 @@ import { NAV, getStudentNav } from '../../nav';
 import { filterNav } from '../../lib/modeFilter';
 import { NavList } from './SidebarNavShared';
 import { useIsMobileNav } from '../BottomNav';
+import { useAdminPendingCount } from '../../hooks/useAdminPendingCount';
+import { useCRPendingCount } from '../../hooks/useCRPendingCount';
 
 export default function SidebarNavStudent({
-  location, onClose, canSeeCrBoard, isRealAdmin, adminLabel, unreadNoticeCount,
+  location, onClose, canSeeCrBoard, isRealCR, isRealAdmin, adminLabel, unreadNoticeCount,
 }) {
   // Self Study and Daily Life are now merged into the Campus Life subgroup
   // for both desktop and mobile (see nav.js) — getStudentNav() just returns
@@ -19,6 +21,17 @@ export default function SidebarNavStudent({
   // desktop/mobile ever need to diverge again.
   const isMobileNav = useIsMobileNav();
   const activeNav = getStudentNav(isMobileNav);
+
+  // Total pending-approval count (Founder: everything; Campus Lead: their
+  // own dept's CR/leave requests) — no-op / returns 0 for anyone who
+  // isn't isRealAdmin, so this is safe to call unconditionally. See
+  // useAdminPendingCount.js for what's actually counted.
+  const adminPendingCount = useAdminPendingCount();
+  // Separate hub, separate person in general (see nav.js — 'Class Rep'
+  // group has its own hubPath '/class-rep', distinct from 'Admin'
+  // group's '/team') — CR/ACR's own pending join-requests count for
+  // their own class's roster. See useCRPendingCount.js.
+  const crPendingCount = useCRPendingCount(isRealCR);
 
   const filteredNav = filterNav(activeNav, canSeeCrBoard, isRealAdmin).map((section) =>
     section.group === 'Admin'
@@ -32,6 +45,10 @@ export default function SidebarNavStudent({
       location={location}
       onClose={onClose}
       unreadNoticeCount={unreadNoticeCount}
+      groupBadgeCounts={{
+        ...(adminLabel ? { [adminLabel]: adminPendingCount } : {}),
+        'Class Rep': crPendingCount,
+      }}
     />
   );
 }

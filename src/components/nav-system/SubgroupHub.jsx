@@ -28,6 +28,24 @@ function resolveAccent(key) {
   return ACCENT_COLORS[key] || HUB_COLOR;
 }
 
+// Small red count pill next to a hub-grid item's label — same visual
+// language as Sidebar's NavRow unread-count badge (SidebarNavShared.jsx)
+// and FounderCategoryCard's in-page badge (AdminDashboard.jsx), so a
+// "something needs attention here" number looks the same everywhere in
+// the app regardless of which grid it's drawn on.
+function ItemBadge({ count }) {
+  return (
+    <span style={{
+      fontSize: 10, fontWeight: 800, color: '#fff', background: 'var(--danger, #ef4444)',
+      borderRadius: 999, minWidth: 16, height: 16, padding: '0 4px',
+      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+      flexShrink: 0, lineHeight: 1,
+    }}>
+      {count > 9 ? '9+' : count}
+    </span>
+  );
+}
+
 // Resolve one { title, items, icon } section (or array of sections, if the
 // group has multiple unnamed subgroups) from NAV.
 // group: top-level group name (e.g. 'Campus Life', 'Tools', 'Overview')
@@ -116,7 +134,10 @@ function HubSection({ title, items, icon }) {
                     >
                       <Icon size={17} color={accent} />
                     </div>
-                    <span className="hub-grid-item-label" style={{ fontWeight: 600, color: '#5c5a54' }}>{item.label}</span>
+                    <span className="hub-grid-item-label" style={{ fontWeight: 600, color: '#5c5a54', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                      {item.label}
+                      {item.badge > 0 && <ItemBadge count={item.badge} />}
+                    </span>
                   </Link>
                 );
               })}
@@ -152,8 +173,9 @@ function HubSection({ title, items, icon }) {
                 <FirstIcon size={20} color={firstAccent} />
               </div>
               <div>
-                <div className="hub-grid-item-label" style={{ fontWeight: 600, color: '#5c5a54', fontSize: 14 }}>
+                <div className="hub-grid-item-label" style={{ fontWeight: 600, color: '#5c5a54', fontSize: 14, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
                   {first.label}
+                  {first.badge > 0 && <ItemBadge count={first.badge} />}
                 </div>
                 {first.subtitle && (
                   <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{first.subtitle}</div>
@@ -175,7 +197,10 @@ function HubSection({ title, items, icon }) {
                   >
                     <Icon size={17} color={accent} />
                   </div>
-                  <span className="hub-grid-item-label" style={{ fontWeight: 600, color: '#5c5a54' }}>{item.label}</span>
+                  <span className="hub-grid-item-label" style={{ fontWeight: 600, color: '#5c5a54', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                    {item.label}
+                    {item.badge > 0 && <ItemBadge count={item.badge} />}
+                  </span>
                 </Link>
               );
             })}

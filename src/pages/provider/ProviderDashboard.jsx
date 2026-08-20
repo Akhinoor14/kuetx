@@ -29,12 +29,25 @@ import {
   countStudentNoShowsOnService, withServiceDefaults,
   SERVICE_TYPE_LABELS_BN, SERVICE_TYPES,
   subscribePendingInquiries, answerInquiry,
-  // Phase 4 (Delivery/Errand Runner plan §4.3-§4.5): Runner-side queue —
-  // open requests to accept, plus the Runner's own ongoing (accepted/
-  // confirmed) errands.
-  subscribeOpenErrandRequestsForRunner, subscribeRunnerActiveErrands,
-  acceptErrandRequest, rejectErrandAccept, finishErrandRequest,
 } from '../../lib/serviceSync';
+// Runner (errand) mode — REWIRED this session from the old shop-bound
+// functions in serviceSync.js (subscribeOpenErrandRequestsForRunner,
+// subscribeRunnerActiveErrands, acceptErrandRequest, rejectErrandAccept,
+// finishErrandRequest, all keyed off THIS shop's own services/{id}/
+// bookings subcollection) to the new top-level open feed in
+// errandRequests.js. Person's explicit design (this session): a Runner
+// is now just a verified Provider account with an 'errand'-type shop —
+// they see and accept from the SAME campus-wide errandRequests feed
+// every student sees, not a private per-shop queue. The old serviceSync.js
+// functions are left in place (unused, not deleted) for now — same
+// "don't delete, no one asked to" caution as everywhere else in this
+// codebase; a future cleanup pass can remove them once this rewire is
+// confirmed stable.
+import {
+  subscribeOpenErrandRequests, subscribeMyAcceptedErrandRequests,
+  acceptErrandRequest, confirmErrandAcceptor, finishErrandRequest,
+  getSavedErrandPhone, isErrandRunner,
+} from '../../lib/errandRequests';
 import { getCategorySetupConfig } from '../../lib/serviceCategoryConfig';
 import { useProviderLang } from '../../hooks/useProviderLang';
 
@@ -325,11 +338,30 @@ function ServiceManager({ service: rawService }) {
   }, [service.id, isInquiryMode]);
   useEffect(() => {
     if (!isErrandMode) return undefined;
-    return subscribeOpenErrandRequestsForRunner(service.id, service.providerUid, setOpenErrands);
+    // REWIRED (this session): campus-wide open feed instead of this
+    // shop's own bookings subcollection — a Runner sees the SAME feed
+    // every student sees (see errandRequests.js's module doc comment).
+    // viewerUid=null here deliberately (not service.providerUid) — this
+    // is a per-shop component, but the self-exclude filter needs the
+    // signed-in PROVIDER account's own uid, which is service.providerUid
+    // in this context (a Provider only ever manages their own shop), so
+    // passing service.providerUid is in fact correct and matches what
+    // the old function received here too.
+    return subscribeOpenErrandRequests(service.providerUid, setOpenErrands, true);
   }, [service.id, service.providerUid, isErrandMode]);
   useEffect(() => {
     if (!isErrandMode) return undefined;
-    return subscribeRunnerActiveErrands(service.id, service.providerUid, setActiveErrands);
+    // REWIRED (this session): "my ongoing errands" now reads the
+    // account-wide accepts collectionGroup (errandRequests.js) instead
+    // of this shop's own bookings — a Runner's accepted-but-not-yet-
+    // confirmed and confirmed requests both live here, merged with each
+    // request's parent doc already.
+    return subscribeMyAcceptedErrandRequests(service.providerUid, (accepted) => {
+      setActiveErrands(accepted
+        .filter((a) => a.status === 'waiting' || a.status === 'confirmed')
+        .map((a) => ({ ...a.request, id: a.request?.id, acceptStatus: a.status }))
+        .filter((r) => r.id));
+    });
   }, [service.id, service.providerUid, isErrandMode]);
 
   const toggleOpen = async () => {

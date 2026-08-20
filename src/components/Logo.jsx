@@ -38,8 +38,24 @@ export function Logo({ size = 32 }) {
 // unchanged.
 export function Wordmark({ height = 28, theme }) {
   const iconPx = Math.round(height * 1.5);
-  const textColor = theme === 'kx' ? 'var(--kx-ink)' : 'var(--text)';
-  const accentColor = theme === 'kx' ? 'var(--kx-accent)' : 'var(--accent)';
+  // 'kx' pins to the landing page's light-surface palette (--kx-ink/
+  // --kx-accent). 'dark' is for placements on a dark background (e.g.
+  // Footer's dark CTA band) where --text/--kx-ink are the wrong,
+  // near-black colors and would be unreadable — this uses the same
+  // off-white/bright-green pair the rest of the dark hero UI uses.
+  // Anything else falls back to the app's normal --text/--accent.
+  let textColor;
+  let accentColor;
+  if (theme === 'kx') {
+    textColor = 'var(--kx-ink)';
+    accentColor = 'var(--kx-accent)';
+  } else if (theme === 'dark') {
+    textColor = '#f3f4ef';
+    accentColor = 'var(--kx-accent-bright, #a3e635)';
+  } else {
+    textColor = 'var(--text)';
+    accentColor = 'var(--accent)';
+  }
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: height * 0.22 }}>
       <img

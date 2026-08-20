@@ -30,7 +30,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Bike, Camera, Clock, ListChecks, X } from 'lucide-react';
+import { ArrowLeft, Bike, Camera, Clock, ListChecks, X, BellOff, Bell } from 'lucide-react';
 import { auth } from '../lib/firebase';
 import { getProfile } from '../store/store';
 import { useIsFaculty } from '../hooks/useIsFaculty';
@@ -40,7 +40,8 @@ import {
   createOpenErrandRequest, subscribeOpenErrandRequests, subscribeErrandRequest,
   subscribeErrandAccepts, acceptErrandRequest, confirmErrandAcceptor,
   finishErrandRequest, cancelErrandRequest, getSavedErrandPhone,
-  generateErrandRequestId, patchErrandRequestImage,
+  generateErrandRequestId, patchErrandRequestImage, isErrandRunner,
+  subscribeErrandBroadcastOptOut, setErrandBroadcastOptOut,
 } from '../lib/errandRequests';
 import Modal from '../components/Modal';
 
@@ -52,25 +53,40 @@ import Modal from '../components/Modal';
 // have a student `profile` doc. useIsFaculty() (server-verified, same
 // hook Services.jsx already uses for the broadcast-strip gate) decides
 // which source applies — never self-reported.
+//
+// isRunner (this session's addition — see module doc comment's
+// visibility model): resolved via errandRequests.js's isErrandRunner(),
+// a one-shot check for a verified Provider account with at least one
+// 'errand'-type shop. Only meaningful for non-faculty viewers (a faculty
+// account can never be a Runner in this app's role model), so the check
+// is skipped entirely for faculty viewers to avoid a wasted query.
 // ---------------------------------------------------------------------
 export function useRequesterIdentity() {
   const uid = auth.currentUser?.uid || null;
   const { isFaculty, isFounderBypass } = useIsFaculty();
   const isFacultyViewer = isFaculty || isFounderBypass;
   const [facultyProfile, setFacultyProfile] = useState(null);
+  const [isRunner, setIsRunner] = useState(false);
 
   useEffect(() => {
     if (!uid || !isFacultyViewer) { setFacultyProfile(null); return; }
     return subscribeFacultyProfile(uid, setFacultyProfile);
   }, [uid, isFacultyViewer]);
 
+  useEffect(() => {
+    if (!uid || isFacultyViewer) { setIsRunner(false); return; }
+    let cancelled = false;
+    isErrandRunner(uid).then((result) => { if (!cancelled) setIsRunner(result); });
+    return () => { cancelled = true; };
+  }, [uid, isFacultyViewer]);
+
   return useMemo(() => {
     if (isFacultyViewer) {
-      return { uid, name: facultyProfile?.name || '', role: 'faculty' };
+      return { uid, name: facultyProfile?.name || '', role: 'faculty', isFaculty: true, isRunner: false };
     }
     const profile = getProfile();
-    return { uid, name: profile?.name || '', role: 'student' };
-  }, [uid, isFacultyViewer, facultyProfile]);
+    return { uid, name: profile?.name || '', role: 'student', isFaculty: false, isRunner };
+  }, [uid, isFacultyViewer, facultyProfile, isRunner]);
 }
 
 export default function ErrandFeed() {
@@ -79,8 +95,24 @@ export default function ErrandFeed() {
   const [requests, setRequests] = useState(null);
   const [showPostForm, setShowPostForm] = useState(false);
   const [openRequestId, setOpenRequestId] = useState(null);
+  const [optedOut, setOptedOut] = useState(false);
 
-  useEffect(() => subscribeOpenErrandRequests(identity.uid, setRequests), [identity.uid]);
+  // Faculty never see the browsable feed at all (see errandRequests.js's
+  // module doc comment) — a student who has opted out also sees an
+  // empty feed until they turn it back on. Runners (verified Provider
+  // accounts with an errand-type shop) and plain students both see it
+  // normally, gated only by their own opt-out state.
+  const canSeeFeed = !identity.isFaculty && !optedOut;
+
+  useEffect(() => {
+    if (!identity.uid || identity.isFaculty) { setOptedOut(false); return undefined; }
+    return subscribeErrandBroadcastOptOut(identity.uid, setOptedOut);
+  }, [identity.uid, identity.isFaculty]);
+
+  useEffect(
+    () => subscribeOpenErrandRequests(identity.uid, setRequests, canSeeFeed),
+    [identity.uid, canSeeFeed],
+  );
 
   return (
     <div className="page-enter page-container content-page-bg">
@@ -88,9 +120,37 @@ export default function ErrandFeed() {
         navigate={navigate}
         openCount={requests?.length ?? 0}
         onPost={() => setShowPostForm(true)}
+        showBroadcastToggle={!identity.isFaculty}
+        optedOut={optedOut}
+        onToggleOptOut={async () => {
+          const next = !optedOut;
+          setOptedOut(next); // optimistic — feed hook above reacts immediately
+          try {
+            await setErrandBroadcastOptOut(identity.uid, next);
+          } catch {
+            setOptedOut(!next); // revert on failure
+          }
+        }}
       />
 
-      {requests === null ? (
+      {identity.isFaculty ? (
+        <div className="card kx-errand-empty">
+          <Bike size={36} strokeWidth={1.5} />
+          <div style={{ fontWeight: 700, marginTop: 10 }}>আপনার পোস্ট করা রিকোয়েস্ট এখানে দেখা যাবে না</div>
+          <div style={{ fontSize: 13.5, color: 'var(--muted)', marginTop: 4, maxWidth: 340 }}>
+            Faculty অ্যাকাউন্ট থেকে রিকোয়েস্ট পোস্ট করা যায়, কিন্তু অন্যদের খোলা রিকোয়েস্টের তালিকা এখানে দেখা যায় না।
+            নিজের পোস্ট করা রিকোয়েস্টের অবস্থা "আমার রিকোয়েস্ট"-এ দেখুন।
+          </div>
+        </div>
+      ) : optedOut ? (
+        <div className="card kx-errand-empty">
+          <BellOff size={36} strokeWidth={1.5} />
+          <div style={{ fontWeight: 700, marginTop: 10 }}>রিকোয়েস্ট ব্রডকাস্ট বন্ধ আছে</div>
+          <div style={{ fontSize: 13.5, color: 'var(--muted)', marginTop: 4 }}>
+            আপনার কাছে নতুন কোনো রিকোয়েস্ট আসবে না। উপরের বেল আইকনে চাপ দিয়ে আবার চালু করতে পারেন।
+          </div>
+        </div>
+      ) : requests === null ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {[0, 1, 2].map((i) => (
             <div key={i} className="card kx-errand-skeleton" style={{ padding: 16, height: 88 }} />
@@ -155,7 +215,7 @@ export default function ErrandFeed() {
 // count is the SAME array length driving the card list below (no
 // separate query), so it's always in sync with what's actually shown.
 // ---------------------------------------------------------------------
-function FeedHeader({ navigate, openCount, onPost }) {
+function FeedHeader({ navigate, openCount, onPost, showBroadcastToggle, optedOut, onToggleOptOut }) {
   return (
     <div className="kx-errand-header">
       <div className="kx-errand-header-top">
@@ -165,9 +225,19 @@ function FeedHeader({ navigate, openCount, onPost }) {
         <div style={{ flex: 1 }}>
           <div className="kx-errand-title">Pick and Drop</div>
           <div className="kx-errand-subtitle">
-            {openCount > 0 ? `${openCount}টা রিকোয়েস্ট এখন খোলা আছে` : 'কারো কিছু আনা-নেওয়ার দরকার হলে এখানে দেখুন'}
+            {optedOut ? 'ব্রডকাস্ট বন্ধ আছে' : openCount > 0 ? `${openCount}টা রিকোয়েস্ট এখন খোলা আছে` : 'কারো কিছু আনা-নেওয়ার দরকার হলে এখানে দেখুন'}
           </div>
         </div>
+        {showBroadcastToggle && (
+          <button
+            onClick={onToggleOptOut}
+            className="kx-errand-back"
+            aria-label={optedOut ? 'ব্রডকাস্ট চালু করুন' : 'ব্রডকাস্ট বন্ধ করুন'}
+            title={optedOut ? 'ব্রডকাস্ট চালু করুন' : 'ব্রডকাস্ট বন্ধ করুন'}
+          >
+            {optedOut ? <BellOff size={18} /> : <Bell size={18} />}
+          </button>
+        )}
       </div>
       <div className="kx-errand-header-actions">
         <button onClick={onPost} className="btn btn-primary" style={{ flex: 1 }}>
@@ -674,6 +744,7 @@ function AcceptView({ req, identity, myAccept }) {
         acceptorUid: identity.uid,
         acceptorName: identity.name,
         acceptorPhone: phone,
+        acceptorIsFaculty: identity.isFaculty,
       });
       setShowPhoneForm(false);
     } catch (err) {

@@ -247,6 +247,7 @@ export function Sidebar({ open, onClose, authState }) {
             location={location}
             onClose={onClose}
             canSeeCrBoard={canSeeCrBoard}
+            isRealCR={isRealCR}
             isRealAdmin={isRealAdmin}
             adminLabel={adminLabel}
             unreadNoticeCount={unreadNoticeCount}
