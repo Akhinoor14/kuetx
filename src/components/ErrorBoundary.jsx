@@ -1,7 +1,51 @@
 import React from 'react';
 import { AlertTriangle } from 'lucide-react';
 
-const CHUNK_RELOAD_FLAG = 'chunk_reload_attempted';
+// BUGFIX (deploy-time infinite reload loop): this used to be one single
+// flag ('chunk_reload_attempted') shared by every chunk. That meant the
+// FIRST chunk to fail (say Dashboard-*.js) consumed the one-and-only
+// reload attempt for the whole session — so if a stale service worker (or
+// any other transient cause) then made a SECOND, DIFFERENT chunk fail
+// (say Schedule-*.js) right after that reload, this boundary saw
+// alreadyAttempted=true and gave up immediately, even though a reload for
+// THAT specific chunk had never actually been tried. Multiply that across
+// however many lazy chunks a fresh deploy touches and the app could
+// bounce through several genuinely-once-per-chunk reloads that, from the
+// outside, looked and felt exactly like one continuous crash loop.
+//
+// Fix: key the "have we already tried reloading for this" flag by the
+// failing chunk's own identity (extracted from the error message/stack
+// below), not by a single shared constant — so each distinct chunk still
+// gets its own one-time reload attempt, same as before, but a second
+// DIFFERENT chunk failing isn't punished for the first one's retry. A
+// session-wide cap on top (MAX_CHUNK_RELOADS_PER_SESSION) is the backstop
+// for the genuinely pathological case (many chunks failing in sequence,
+// e.g. a still-propagating bad deploy) so this can never turn into an
+// unbounded reload loop regardless of how many distinct chunks are
+// involved.
+const CHUNK_RELOAD_KEY_PREFIX = 'chunk_reload_attempted:';
+const CHUNK_RELOAD_COUNT_KEY = 'chunk_reload_count';
+const MAX_CHUNK_RELOADS_PER_SESSION = 3;
+
+// Best-effort extraction of "which chunk/module actually failed" from a
+// ChunkLoadError's message or stack, so retries can be tracked per-chunk
+// instead of globally. Falls back to a fixed key if nothing recognizable
+// is found (e.g. a bare "Loading chunk 4 failed" with no filename) so
+// this NEVER throws and always returns a usable, stable string.
+function getChunkErrorKey(error) {
+  try {
+    const text = String(error?.message || '') + ' ' + String(error?.stack || '');
+    // Vite/Rollup-hashed chunk filenames, e.g. "Dashboard-C4SLrqqy.js"
+    const match = text.match(/([A-Za-z0-9_-]+-[A-Za-z0-9_]{6,})\.js/);
+    if (match) return match[1];
+    // webpack-style "Loading chunk 4 failed"
+    const numMatch = text.match(/[Cc]hunk\s+(\d+)/);
+    if (numMatch) return `chunk-${numMatch[1]}`;
+    return 'unknown';
+  } catch (e) {
+    return 'unknown';
+  }
+}
 
 function isChunkLoadError(error) {
   if (!error) return false;
@@ -37,24 +81,36 @@ export class ErrorBoundary extends React.Component {
         return;
       }
 
+      const chunkKey = getChunkErrorKey(error);
+      const chunkFlag = CHUNK_RELOAD_KEY_PREFIX + chunkKey;
+
       let alreadyAttempted = false;
+      let sessionCount = 0;
       try {
-        alreadyAttempted = sessionStorage.getItem(CHUNK_RELOAD_FLAG) === '1';
+        alreadyAttempted = sessionStorage.getItem(chunkFlag) === '1';
+        sessionCount = Number(sessionStorage.getItem(CHUNK_RELOAD_COUNT_KEY)) || 0;
       } catch (e) {
         // sessionStorage unavailable (e.g. private mode) — fall back to normal error UI
         alreadyAttempted = true;
       }
 
-      if (!alreadyAttempted) {
+      // Per-chunk guard: this exact chunk gets one reload attempt.
+      // Session-wide guard: no matter how many DIFFERENT chunks fail in
+      // a row, cap total reload attempts so a still-propagating bad
+      // deploy or a misbehaving cache can never turn into an unbounded
+      // reload loop.
+      if (!alreadyAttempted && sessionCount < MAX_CHUNK_RELOADS_PER_SESSION) {
         try {
-          sessionStorage.setItem(CHUNK_RELOAD_FLAG, '1');
+          sessionStorage.setItem(chunkFlag, '1');
+          sessionStorage.setItem(CHUNK_RELOAD_COUNT_KEY, String(sessionCount + 1));
         } catch (e) {
           // ignore — reload will still happen, just without loop protection
         }
         window.location.reload();
         return;
       }
-      // already attempted once — fall through to normal error UI below
+      // this chunk already retried once, or the session-wide cap was hit —
+      // fall through to normal error UI below instead of reloading again
     }
   }
 
