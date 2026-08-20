@@ -231,10 +231,17 @@ function ShopMetaEditor({ service, t }) {
         </span>
       </button>
 
-      {/* Phase 6 (SERVICE_BOOKING_REDESIGN_PLAN_PROMPT.md): errand-type
-          (Runner) services only. Three-way segmented control, not a
-          single on/off toggle like hasDelivery above — this is a
-          3-value enum (all/student/faculty), not a boolean. */}
+      {/* ERRAND_SYSTEM_REDESIGN_PLAN.md Phase D item 10: this control is
+          now meaningless under the new open-feed model — a Runner sees
+          the SAME campus-wide errandRequests feed every student sees
+          (see errandRequests.js's module doc comment), and faculty can
+          never appear in that feed at all regardless of this setting
+          (faculty are blocked at the rules layer, not filtered per-
+          Runner). Leaving it visible would let a Runner believe they're
+          controlling who can reach them, when they aren't. Hidden here
+          rather than deleted — the field itself is left alone on
+          existing docs per the plan's "don't delete without a migration
+          pass" note, this is a display-only removal.
       {service.type === 'errand' && (
         <div>
           <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
@@ -264,6 +271,7 @@ function ShopMetaEditor({ service, t }) {
           </div>
         </div>
       )}
+      */}
 
       {error && <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)' }}>{error}</div>}
 

@@ -1574,13 +1574,21 @@ service cloud.firestore {
     // used throughout this file for bookings/{bookingId}.
     // -------------------------------------------------------------
     match /errandRequests/{requestId} {
-      // Read: any real signed-in account — this is a broadcast feed,
-      // not a private record between two parties (unlike a booking).
-      // The "don't show me my own post" rule is enforced client-side
-      // in subscribeOpenErrandRequests (a pure display filter, not a
-      // security boundary — a requester seeing their own post is not
-      // a privacy leak), so no read-side restriction is needed here.
-      allow read: if isRealAccount();
+      // Read: any real signed-in account MAY read their OWN posted
+      // request (requesterUid == uid — this is what powers a faculty
+      // member's "My Requests" status view, and must stay open
+      // regardless of role). Reading someone ELSE's request additionally
+      // requires NOT being faculty — ERRAND_SYSTEM_REDESIGN_PLAN.md
+      // Phase B item 5: "a Faculty account must never see anyone else's
+      // broadcast" is a real design rule, not just a UX nicety, so it's
+      // enforced here rather than left to client-side filtering alone
+      // (ErrandFeed.jsx's canSeeFeed gate stays as the UX layer; this is
+      // the actual security boundary behind it). The "don't show me my
+      // own post in the open feed" behavior is still a pure client-side
+      // display filter (subscribeOpenErrandRequests's self-exclude) —
+      // that one stays as-is, seeing your own post is not a privacy leak.
+      allow read: if isRealAccount()
+        && (resource.data.requesterUid == request.auth.uid || !isFaculty(request.auth.uid));
 
       // Create: the requester, for themselves, always starting 'open'
       // with no acceptor chosen yet.
@@ -1655,7 +1663,15 @@ service cloud.firestore {
         // reads the parent doc's current status inside the rule, same
         // "cross-doc guard via get()" pattern _errandRequesterAllowed
         // and offeringIsBookable already use elsewhere in this file.
+        // Faculty block (ERRAND_SYSTEM_REDESIGN_PLAN.md Phase B item 5):
+        // "faculty accounts are blocked from accepting at the rules
+        // layer regardless of feed visibility (defense in depth, not
+        // just a hidden button)" — errandRequests.js's acceptErrandRequest
+        // already fast-fails on acceptorIsFaculty client-side, but that
+        // alone is bypassable by a modified client; !isFaculty(uid) here
+        // is the real boundary.
         allow create: if isRealAccount()
+          && !isFaculty(request.auth.uid)
           && acceptorUid == request.auth.uid
           && request.resource.data.acceptorUid == request.auth.uid
           && request.resource.data.status == 'waiting'
@@ -1689,6 +1705,21 @@ service cloud.firestore {
     // forever" requirement). Same owner-only read/write shape as
     // studentPreferences/{uid} above.
     match /errandContact/{uid} {
+      allow read, write: if isSignedIn() && request.auth.uid == uid;
+    }
+
+    // errandBroadcastOptOut/{uid} — student's own feed on/off toggle
+    // (ERRAND_SYSTEM_REDESIGN_PLAN.md Phase A/B). Same owner-only shape
+    // as errandContact/{uid} above — this doc was previously read/
+    // written by getErrandBroadcastOptOut/setErrandBroadcastOptOut/
+    // subscribeErrandBroadcastOptOut in errandRequests.js with NO
+    // matching rule block at all, meaning every call silently failed
+    // under Firestore's default-deny (the toggle looked wired client-
+    // side but could never actually persist). Opt-out is a UX
+    // preference, not a security boundary (see errandRequests.js's own
+    // module doc comment), so owner-only read/write is enough — no
+    // faculty-style cross-account restriction needed here.
+    match /errandBroadcastOptOut/{uid} {
       allow read, write: if isSignedIn() && request.auth.uid == uid;
     }
 

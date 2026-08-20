@@ -46,7 +46,7 @@ import {
 import {
   subscribeOpenErrandRequests, subscribeMyAcceptedErrandRequests,
   acceptErrandRequest, confirmErrandAcceptor, finishErrandRequest,
-  getSavedErrandPhone, isErrandRunner,
+  withdrawErrandAccept, getSavedErrandPhone, isErrandRunner,
 } from '../../lib/errandRequests';
 import { getCategorySetupConfig } from '../../lib/serviceCategoryConfig';
 import { useProviderLang } from '../../hooks/useProviderLang';
@@ -416,8 +416,8 @@ function ServiceManager({ service: rawService }) {
           Open Requests queue + Ongoing list, no confirm/finish/revenue. */}
       {isErrandMode ? (
         <>
-          <ErrandQueue serviceId={service.id} providerUid={service.providerUid} requests={openErrands} />
-          <RunnerActiveErrands serviceId={service.id} requests={activeErrands} />
+          <ErrandQueue providerUid={service.providerUid} providerName={service.name} requests={openErrands} />
+          <RunnerActiveErrands providerUid={service.providerUid} requests={activeErrands} />
         </>
       ) : isInquiryMode ? (
         <PendingInquiries serviceId={service.id} inquiries={pendingInquiries} offerings={service.offerings || []} />
@@ -1005,16 +1005,44 @@ function TruncatedErrandDescription({ text, t }) {
   );
 }
 
-function ErrandQueue({ serviceId, providerUid, requests }) {
+// REWIRED (this session, bug fix — ERRAND_SYSTEM_REDESIGN_PLAN.md Phase D
+// item 8): this component was left calling the OLD serviceSync.js-shaped
+// signature (serviceId, bookingId, providerUid) even after the import
+// above switched to errandRequests.js's acceptErrandRequest(requestId,
+// {acceptorUid, acceptorName, acceptorPhone, acceptorIsFaculty}) — every
+// Runner accept-tap was silently throwing since the rewire landed. Fixed
+// to match the new signature and, since a Runner needs a phone number on
+// the accept doc same as a student acceptor does (see ErrandFeed.jsx's
+// AcceptView), added the same "reuse saved phone, ask once" step here
+// rather than skipping straight to a bare accept call.
+function ErrandQueue({ providerUid, providerName, requests }) {
   const { t } = useProviderLang();
+  const [phoneRequestId, setPhoneRequestId] = useState(null);
+  const [phone, setPhone] = useState('');
   const [busyId, setBusyId] = useState(null);
   const [error, setError] = useState('');
 
-  const doAccept = async (bookingId) => {
-    setBusyId(bookingId);
+  const startAccept = async (requestId) => {
     setError('');
     try {
-      await acceptErrandRequest(serviceId, bookingId, providerUid);
+      const saved = await getSavedErrandPhone(providerUid);
+      setPhone(saved || '');
+    } catch { /* ignore — phone field just starts empty */ }
+    setPhoneRequestId(requestId);
+  };
+
+  const doAccept = async (requestId) => {
+    if (!phone.trim()) { setError(t('dashboard.errand.phoneRequired') || 'একটা ফোন নাম্বার দিন।'); return; }
+    setBusyId(requestId);
+    setError('');
+    try {
+      await acceptErrandRequest(requestId, {
+        acceptorUid: providerUid,
+        acceptorName: providerName,
+        acceptorPhone: phone,
+        acceptorIsFaculty: false, // a Runner is a verified Provider account, never faculty
+      });
+      setPhoneRequestId(null);
     } catch (e) {
       setError(e.message || t('dashboard.errand.acceptError'));
     } finally {
@@ -1038,7 +1066,7 @@ function ErrandQueue({ serviceId, providerUid, requests }) {
           key={r.id}
           style={{
             padding: 12, borderRadius: 12, marginBottom: 8,
-            background: r.visibility === 'targeted' ? 'var(--accentSoft)' : 'var(--surface, var(--card))',
+            background: 'var(--surface, var(--card))',
             border: '1px solid var(--border)',
           }}
         >
@@ -1054,39 +1082,69 @@ function ErrandQueue({ serviceId, providerUid, requests }) {
             />
           )}
           <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--accent)', marginTop: 4 }}>{r.proposedPrice > 0 ? `৳${r.proposedPrice}` : t('dashboard.errand.free')}</div>
-          <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 4 }}>{t('dashboard.errand.requested')} {formatWhen(r.requestedAt)}</div>
-          {r.visibility === 'targeted' && (
-            <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', marginTop: 2 }}>{t('dashboard.errand.targeted')}</div>
-          )}
+          <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 4 }}>{t('dashboard.errand.requested')} {formatWhen(r.createdAt)}</div>
 
-          <button
-            onClick={() => doAccept(r.id)}
-            disabled={busyId === r.id}
-            className="btn btn-primary"
-            style={{ width: '100%', marginTop: 10, minHeight: 46, fontSize: 14.5, fontWeight: 700 }}
-          >
-            {busyId === r.id ? t('dashboard.errand.accepting') : t('dashboard.errand.accept')}
-          </button>
+          {phoneRequestId === r.id ? (
+            <>
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="০১XXXXXXXXX"
+                style={{
+                  width: '100%', marginTop: 10, padding: '10px 12px', borderRadius: 10,
+                  border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontSize: 14,
+                }}
+              />
+              <button
+                onClick={() => doAccept(r.id)}
+                disabled={busyId === r.id}
+                className="btn btn-primary"
+                style={{ width: '100%', marginTop: 8, minHeight: 46, fontSize: 14.5, fontWeight: 700 }}
+              >
+                {busyId === r.id ? t('dashboard.errand.accepting') : t('dashboard.errand.accept')}
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => startAccept(r.id)}
+              className="btn btn-primary"
+              style={{ width: '100%', marginTop: 10, minHeight: 46, fontSize: 14.5, fontWeight: 700 }}
+            >
+              {t('dashboard.errand.accept')}
+            </button>
+          )}
         </div>
       ))}
     </div>
   );
 }
 
-function RunnerActiveErrands({ serviceId, requests }) {
+// REWIRED (this session, bug fix — ERRAND_SYSTEM_REDESIGN_PLAN.md Phase D
+// item 8): same stale-signature problem as ErrandQueue above —
+// rejectErrandAccept was never even imported from errandRequests.js (it
+// doesn't exist there; the new model's equivalent is
+// withdrawErrandAccept(requestId, acceptorUid)) and finishErrandRequest
+// was still being called with the old (serviceId, bookingId) shape
+// instead of the new single-arg (requestId). Also: `requesterPhone` is
+// NOT a field errandRequests.js ever writes — only the ACCEPTOR's phone
+// is collected (see acceptErrandRequest); a requester's own contact
+// info was never part of this data model. Matches
+// ErrandFeed.jsx's AcceptorConfirmedView, which only shows the
+// requester's name and asks the acceptor to reach out, no phone field.
+// Status names also updated: the new model's accepts subcollection uses
+// 'waiting'/'confirmed'/'rejected'/'withdrawn', not the old shop-mode's
+// 'runner_accepted'.
+function RunnerActiveErrands({ providerUid, requests }) {
   const { t } = useProviderLang();
   const [busyId, setBusyId] = useState(null);
   const [error, setError] = useState('');
-  // plan §4.4: contact exchange — requesterPhone is already a plain field
-  // on the errand doc itself (unlike the Runner's own phone on the
-  // requester's side, which needs a separate providers/{uid} lookup), so
-  // it's simply read straight off each request once status === 'confirmed'.
 
-  const doRejectAccept = async (bookingId) => {
-    setBusyId(bookingId);
+  const doWithdraw = async (requestId) => {
+    setBusyId(requestId);
     setError('');
     try {
-      await rejectErrandAccept(serviceId, bookingId);
+      await withdrawErrandAccept(requestId, providerUid);
     } catch (e) {
       setError(e.message || t('dashboard.errand.genericError'));
     } finally {
@@ -1094,11 +1152,11 @@ function RunnerActiveErrands({ serviceId, requests }) {
     }
   };
 
-  const doFinish = async (bookingId) => {
-    setBusyId(bookingId);
+  const doFinish = async (requestId) => {
+    setBusyId(requestId);
     setError('');
     try {
-      await finishErrandRequest(serviceId, bookingId);
+      await finishErrandRequest(requestId);
     } catch (e) {
       setError(e.message || t('dashboard.errand.genericError'));
     } finally {
@@ -1120,7 +1178,7 @@ function RunnerActiveErrands({ serviceId, requests }) {
             {r.requesterName || t('dashboard.errand.requester')}
           </div>
           <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 2 }}>
-            {t(r.status === 'confirmed' ? 'dashboard.errand.statusConfirmed' : 'dashboard.errand.statusAwaitingConfirm')}
+            {t(r.acceptStatus === 'confirmed' ? 'dashboard.errand.statusConfirmed' : 'dashboard.errand.statusAwaitingConfirm')}
           </div>
           <TruncatedErrandDescription text={r.itemDescription} t={t} />
           {r.itemImageUrl && (
@@ -1132,20 +1190,20 @@ function RunnerActiveErrands({ serviceId, requests }) {
           )}
           <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--accent)', marginTop: 4 }}>{r.proposedPrice > 0 ? `৳${r.proposedPrice}` : t('dashboard.errand.free')}</div>
 
-          {r.status === 'confirmed' && r.requesterPhone && (
+          {r.acceptStatus === 'confirmed' && (
             <div style={{
               fontSize: 13, color: 'var(--text)', background: 'var(--accentSoft)', borderRadius: 10,
               padding: 8, marginTop: 8,
             }}
             >
-              {t('dashboard.errand.requesterPhone')} <strong>{r.requesterPhone}</strong>
+              {t('dashboard.errand.contactRequester')}
             </div>
           )}
 
           <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
-            {r.status === 'runner_accepted' && (
+            {r.acceptStatus === 'waiting' && (
               <button
-                onClick={() => doRejectAccept(r.id)}
+                onClick={() => doWithdraw(r.id)}
                 disabled={busyId === r.id}
                 className="btn btn-secondary"
                 style={{ flex: 1, minHeight: 44, fontSize: 14, fontWeight: 700 }}
@@ -1153,7 +1211,7 @@ function RunnerActiveErrands({ serviceId, requests }) {
                 {t('dashboard.errand.cancelAccept')}
               </button>
             )}
-            {r.status === 'confirmed' && (
+            {r.acceptStatus === 'confirmed' && (
               <button
                 onClick={() => doFinish(r.id)}
                 disabled={busyId === r.id}

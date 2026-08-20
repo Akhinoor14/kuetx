@@ -150,6 +150,28 @@ export default function ServiceDetail() {
 
   useEffect(() => subscribeService(serviceId, (s) => setService(s ? withServiceDefaults(s) : s)), [serviceId]);
 
+  // ERRAND_SYSTEM_REDESIGN_PLAN.md Phase D item 9 finding: this page
+  // still runs the OLD shop-scoped errand flow in full (ErrandForm /
+  // MyActiveErrand below, backed by serviceSync.js's createErrandRequest
+  // /confirmErrandRequest/etc., writing into services/{id}/bookings) —
+  // that data path was supposed to be fully replaced by the campus-wide
+  // errandRequests feed, but nothing had ever redirected THIS route away
+  // from it. Services.jsx's category grid/list already redirect every
+  // other entry point for an errand-type shop to /services/errands (see
+  // CategoryShopList's own useEffect there) — this route was the one
+  // gap: reachable directly by URL, and also by ServiceOrdersHub.jsx's
+  // "go to shop" link on any pre-redesign errand booking record. Left
+  // unfixed, a student could still post a brand-new request into the
+  // old, dead-end collection today. Same redirect pattern as
+  // CategoryShopList, scoped to errand-type shops only — every other
+  // interactionMode (booking/inquiry) is untouched.
+  useEffect(() => {
+    if (service && service.interactionMode === 'errand') {
+      navigate('/services/errands', { replace: true });
+    }
+  }, [service, navigate]);
+  if (service && service.interactionMode === 'errand') return null;
+
   useEffect(() => {
     if (!service?.providerUid) return;
     getProviderPhone(service.providerUid).then(setShopPhone).catch(() => {});

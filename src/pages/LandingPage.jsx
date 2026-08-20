@@ -821,38 +821,53 @@ function CampusScrapbook({ isMobileNav }) {
       }}>
         {SCRAPBOOK_ORDER.map((key, i) => {
           const photo = CAMPUS_PHOTOS[key];
-          const tilt = isMobileNav ? 0 : SCRAPBOOK_TILTS[i];
+          const tilt = SCRAPBOOK_TILTS[i];
           return (
             <div
               key={key}
               className="kx-scrapbook-tile"
               style={{
                 width: isMobileNav ? '100%' : '210px',
-                background: '#fff',
-                borderRadius: isMobileNav ? '8px' : '10px',
-                padding: isMobileNav ? '5px 5px 7px' : '10px 10px 16px',
-                boxShadow: isMobileNav ? '0 4px 10px rgba(0,0,0,0.08)' : '0 12px 28px rgba(0,0,0,0.1)',
-                transform: `rotate(${tilt}deg)`,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
               }}
             >
+              {/* Only the photo card itself tilts — the label sits
+                  outside this rotated box in normal flow below, so
+                  every tile's label lands at the same height across
+                  the row regardless of that tile's tilt angle. Rotating
+                  the label along with the photo (old behavior) made
+                  each tile's rotated bounding box a different height,
+                  which visibly jumped the label row up/down per-tile. */}
               <div style={{
                 width: '100%',
-                aspectRatio: '1 / 1',
-                borderRadius: isMobileNav ? '5px' : '6px',
-                overflow: 'hidden',
-                marginBottom: isMobileNav ? '4px' : '10px',
+                background: '#fff',
+                borderRadius: isMobileNav ? '8px' : '10px',
+                padding: isMobileNav ? '5px' : '10px',
+                boxShadow: isMobileNav ? '0 4px 10px rgba(0,0,0,0.08)' : '0 12px 28px rgba(0,0,0,0.1)',
+                transform: `rotate(${tilt}deg)`,
               }}>
-                <img
-                  src={photo.src}
-                  alt={photo.label}
-                  loading="lazy"
-                  style={{ width: '100%', height: isMobileNav ? '100%' : '160px', objectFit: 'cover', display: 'block' }}
-                />
+                <div style={{
+                  width: '100%',
+                  aspectRatio: '1 / 1',
+                  borderRadius: isMobileNav ? '5px' : '6px',
+                  overflow: 'hidden',
+                }}>
+                  <img
+                    src={photo.src}
+                    alt={photo.label}
+                    loading="lazy"
+                    style={{ width: '100%', height: isMobileNav ? '100%' : '160px', objectFit: 'cover', display: 'block' }}
+                  />
+                </div>
               </div>
               <div style={{
+                marginTop: isMobileNav ? '6px' : '10px',
                 fontSize: isMobileNav ? '9.5px' : '12.5px',
                 fontWeight: 700, color: '#16241a', textAlign: 'center',
                 overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                width: '100%',
               }}>{photo.label}</div>
             </div>
           );
@@ -2708,7 +2723,14 @@ function CreditsSpotlight({ isMobileNav }) {
   // be a bit bigger"), so the two shapes are now visibly different
   // sizes rather than near-matching.
   const PHOTO_BOX_W = isWide ? (isMobileNav ? 220 : 300) : (isMobileNav ? 132 : 158);
-  const PHOTO_BOX_H = isWide ? (isMobileNav ? 176 : 240) : (isMobileNav ? 132 : 158);
+  // Height is now the SAME fixed value for every entry regardless of
+  // shape (previously wide=240/circle=158 on desktop) — that height
+  // difference was the actual remaining cause of the name/badge/blurb
+  // jumping up-down on each rotation, since everything below the photo
+  // sits in normal flow right after this box. Using one shared height
+  // means the box's footprint never changes on rotation, only the
+  // image inside it does.
+  const PHOTO_BOX_H = isMobileNav ? 176 : 240;
 
   return (
     <div
@@ -2781,49 +2803,66 @@ function CreditsSpotlight({ isMobileNav }) {
               position: 'absolute',
               top: '50%', left: '50%',
               transform: 'translate(-50%, -50%)',
-              width: isWide ? '150%' : '190%',
-              height: isWide ? '150%' : '190%',
+              width: isWide ? '150%' : PHOTO_BOX_W * 1.9,
+              height: isWide ? '150%' : PHOTO_BOX_W * 1.9,
               background: 'radial-gradient(ellipse 50% 50% at 50% 50%, rgba(var(--accentRGB),0.16), transparent 70%)',
               pointerEvents: 'none',
               zIndex: 0,
             }}
           />
-          <div style={{
-            position: 'relative', zIndex: 1,
-            width: '100%', height: '100%',
-            borderRadius: isWide ? '14px' : '999px',
-            overflow: 'hidden',
-            border: '3px solid var(--accentLight)',
-            boxShadow: '0 10px 24px rgba(0,0,0,0.14)',
-            background: 'var(--accentSoft)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            {imgOk && person.photo ? (
-              <img
-                src={person.photo}
-                alt={person.name}
-                loading="lazy"
-                onError={() => setImgOk(false)}
-                style={{
-                  width: '100%', height: '100%', objectFit: 'cover',
-                  // Owner audit: 'center' vertical crop was cutting off
-                  // the top of the head on solo portraits — the photo box
-                  // is a 1.25:1 landscape-ish rectangle but a portrait's
-                  // face sits in the UPPER portion of a square/tall
-                  // source photo, so a dead-center crop chops the
-                  // forehead/hair. Bias the crop upward for portraits
-                  // (photoShape !== 'wide'); group photos keep a true
-                  // center crop since there's no single face to protect.
-                  objectPosition: person.photoShape === 'wide' ? 'center' : 'center 20%',
-                  display: 'block',
-                }}
-              />
-            ) : person.photoShape !== 'wide' ? (
-              <span style={{ fontSize: isMobileNav ? '1.3rem' : '1.6rem', fontWeight: 800, color: 'var(--accentDark)' }}>
-                {initials}
-              </span>
-            ) : null}
-          </div>
+          {(() => {
+            // Circle entries keep their own square footprint
+            // (PHOTO_BOX_W x PHOTO_BOX_W) centered inside the shared
+            // taller box, rather than stretching to fill it — stretching
+            // a circle to a non-square box turns it into an oval, since
+            // borderRadius:999px only reads as a circle on equal
+            // width/height. Wide group photos still fill the box fully.
+            const frameStyle = isWide
+              ? { position: 'relative', width: '100%', height: '100%' }
+              : {
+                  position: 'absolute', top: '50%', left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: PHOTO_BOX_W, height: PHOTO_BOX_W,
+                };
+            return (
+              <div style={{
+                ...frameStyle,
+                zIndex: 1,
+                borderRadius: isWide ? '14px' : '999px',
+                overflow: 'hidden',
+                border: '3px solid var(--accentLight)',
+                boxShadow: '0 10px 24px rgba(0,0,0,0.14)',
+                background: 'var(--accentSoft)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                {imgOk && person.photo ? (
+                  <img
+                    src={person.photo}
+                    alt={person.name}
+                    loading="lazy"
+                    onError={() => setImgOk(false)}
+                    style={{
+                      width: '100%', height: '100%', objectFit: 'cover',
+                      // Owner audit: 'center' vertical crop was cutting off
+                      // the top of the head on solo portraits — the photo box
+                      // is a 1.25:1 landscape-ish rectangle but a portrait's
+                      // face sits in the UPPER portion of a square/tall
+                      // source photo, so a dead-center crop chops the
+                      // forehead/hair. Bias the crop upward for portraits
+                      // (photoShape !== 'wide'); group photos keep a true
+                      // center crop since there's no single face to protect.
+                      objectPosition: person.photoShape === 'wide' ? 'center' : 'center 20%',
+                      display: 'block',
+                    }}
+                  />
+                ) : person.photoShape !== 'wide' ? (
+                  <span style={{ fontSize: isMobileNav ? '1.3rem' : '1.6rem', fontWeight: 800, color: 'var(--accentDark)' }}>
+                    {initials}
+                  </span>
+                ) : null}
+              </div>
+            );
+          })()}
         </div>
 
         <div style={{ fontWeight: 800, fontSize: isMobileNav ? '0.92rem' : '1rem', color: 'var(--text)' }}>
@@ -3261,12 +3300,6 @@ export default function LandingPage() {
             verify specifics, not the first thing shown after the hero. */}
         <FeatureBreakdown isMobileNav={isMobileNav} />
 
-        {/* Campus scrapbook — signature tilted-photo motif, matches
-            HTML's sage-band .scrapbook section exactly. Placed just
-            before the credits/CTA close as an emotional, campus-identity
-            beat after the functional case has been made. */}
-        <CampusScrapbook isMobileNav={isMobileNav} />
-
         {/* Video showcase — KUETx's own YouTube videos, rotating embedded
             player. See VideoShowcase's own comment above for why it sits
             here (between Scrapbook and Credits). Never renders nothing —
@@ -3285,6 +3318,13 @@ export default function LandingPage() {
         }}>
           <CreditsSpotlight isMobileNav={isMobileNav} />
         </div>
+
+        {/* Campus scrapbook — signature tilted-photo motif, matches
+            HTML's sage-band .scrapbook section exactly. Moved to sit
+            right before the Final CTA/Footer band: the real campus
+            photos + "নিজের ক্যাম্পাস" identity beat lands as the last
+            emotional note right before the closing sign-up push. */}
+        <CampusScrapbook isMobileNav={isMobileNav} />
 
         {/* Final CTA + Footer — merged into one continuous dark band
             (owner ask, this session): the CTA used to end with heavy
