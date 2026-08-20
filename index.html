@@ -107,70 +107,51 @@
         pointer-events: none;
       }
 
-      /* Card wrapper gives us 3D space to flip within; the logo itself
-         never distorts because each face is a flat, un-rotated element —
-         only the wrapper rotates on Y, so mascot artwork never looks
-         skewed or stretched mid-flip. */
-      #kx-cardWrap {
+      /* Entrance matches the landing-page hero's own reveal pattern
+         (fade + rise from translateY, see CampusHero in LandingPage.jsx)
+         so the splash feels like the same visual language as the app
+         itself, not a separate effect. After settling, the mascot gets
+         a slow, gentle bounce — the exact kx-mascot-bounce keyframe
+         already used on the landing page's mascot badge — instead of
+         any spin/flip, so it reads as "alive and waiting" rather than
+         a card trick. */
+      #kx-logoWrap {
         opacity: 0;
-        transform: scale(0.94);
-        transition: opacity 0.4s ease, transform 0.4s ease;
-        perspective: 900px;
-        -webkit-perspective: 900px;
+        transform: translateY(14px);
+        transition: opacity 0.5s cubic-bezier(.16,.8,.3,1), transform 0.5s cubic-bezier(.16,.8,.3,1);
       }
-      #kx-cardWrap.kx-show {
+      #kx-logoWrap.kx-show {
         opacity: 1;
-        transform: scale(1);
+        transform: translateY(0);
+      }
+      #kx-logoWrap.kx-bounce img {
+        animation: kx-mascot-bounce 2.6s ease-in-out infinite;
+      }
+      @keyframes kx-mascot-bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-7px); }
       }
 
-      #kx-card {
-        position: relative;
+      #kx-logoWrap img {
         width: 220px; height: 220px;
-        transform-style: preserve-3d;
-        -webkit-transform-style: preserve-3d;
-        transition: transform 0.7s cubic-bezier(.65,.05,.36,1);
-      }
-      @media screen and (min-width: 641px) {
-        #kx-card { width: 300px; height: 300px; }
-      }
-      @media screen and (min-width: 1024px) {
-        #kx-card { width: 360px; height: 360px; }
-      }
-      @media screen and (min-width: 1600px) {
-        #kx-card { width: 420px; height: 420px; }
-      }
-      @media screen and (max-width: 640px) {
-        #kx-card { width: 44vw; height: 44vw; max-width: 220px; max-height: 220px; }
-      }
-
-      #kx-card.kx-flip {
-        transform: rotateY(360deg);
-      }
-
-      #kx-face, #kx-faceBack {
-        position: absolute; inset: 0;
-        backface-visibility: hidden;
-        -webkit-backface-visibility: hidden;
-        display: flex; align-items: center; justify-content: center;
-      }
-      #kx-face img, #kx-faceBack img {
-        width: 100%; height: 100%;
         display: block;
         filter: drop-shadow(0 8px 24px rgba(20,50,30,0.18));
       }
-      /* Back face is rotated 180deg in the DOM so that when the wrapper
-         hits the halfway point of its own 360deg spin, this is what's
-         facing the viewer — same mascot artwork, not a separate mark, so
-         the flip reads as "the logo itself turning" rather than
-         revealing a different logo underneath. backface-visibility keeps
-         whichever face is pointed away from the viewer invisible, so
-         there's never a double-image or a see-through moment. */
-      #kx-faceBack {
-        transform: rotateY(180deg);
+      @media screen and (min-width: 641px) {
+        #kx-logoWrap img { width: 300px; height: 300px; }
+      }
+      @media screen and (min-width: 1024px) {
+        #kx-logoWrap img { width: 360px; height: 360px; }
+      }
+      @media screen and (min-width: 1600px) {
+        #kx-logoWrap img { width: 420px; height: 420px; }
+      }
+      @media screen and (max-width: 640px) {
+        #kx-logoWrap img { width: 44vw; height: 44vw; max-width: 220px; max-height: 220px; }
       }
 
       #kx-wordmark {
-        margin-top: 22px;
+        margin-top: 20px;
         opacity: 0;
         transform: translateY(6px);
         transition: opacity 0.4s ease, transform 0.4s ease;
@@ -181,11 +162,32 @@
         opacity: 1;
         transform: translateY(0);
       }
+      /* Font size + weight/accent-color pattern matches the real
+         Wordmark component (src/components/Logo.jsx): bold "KUET" in
+         the base ink color, lowercase "x" picked out in the brand
+         accent green. Sized relative to the mascot at each breakpoint
+         (roughly 8% of the logo's width) instead of a fixed px value,
+         so it scales up alongside the logo on larger screens instead of
+         looking tiny next to a 420px mascot on desktop. Kept in system
+         fonts (no 'Sora' import) to match this file's offline-first,
+         no-external-font policy already noted above. */
       #kx-wordmark .kx-word {
-        font-size: 22px;
-        font-weight: 700;
-        letter-spacing: 0.02em;
+        font-size: 20px;
+        font-weight: 800;
+        letter-spacing: -0.01em;
         color: #14532d;
+      }
+      #kx-wordmark .kx-word .kx-x {
+        color: #16a34a;
+      }
+      @media screen and (min-width: 641px) {
+        #kx-wordmark .kx-word { font-size: 26px; }
+      }
+      @media screen and (min-width: 1024px) {
+        #kx-wordmark .kx-word { font-size: 30px; }
+      }
+      @media screen and (min-width: 1600px) {
+        #kx-wordmark .kx-word { font-size: 34px; }
       }
       #kx-wordmark .kx-dots {
         display: inline-flex;
@@ -193,10 +195,19 @@
       }
       #kx-wordmark .kx-dots span {
         opacity: 0;
-        font-size: 22px;
-        font-weight: 700;
+        font-size: 20px;
+        font-weight: 800;
         color: #14532d;
         animation: kx-dot-pulse 1.2s ease-in-out infinite;
+      }
+      @media screen and (min-width: 641px) {
+        #kx-wordmark .kx-dots span { font-size: 26px; }
+      }
+      @media screen and (min-width: 1024px) {
+        #kx-wordmark .kx-dots span { font-size: 30px; }
+      }
+      @media screen and (min-width: 1600px) {
+        #kx-wordmark .kx-dots span { font-size: 34px; }
       }
       #kx-wordmark .kx-dots span:nth-child(1) { animation-delay: 0s; }
       #kx-wordmark .kx-dots span:nth-child(2) { animation-delay: 0.25s; }
@@ -209,12 +220,12 @@
         100% { opacity: 0; }
       }
 
-      /* Static fallback: prefers-reduced-motion skips the fade, the flip,
-         and the dot animation — mascot and wordmark are simply visible
-         immediately, no rotation, no pulsing. */
+      /* Static fallback: prefers-reduced-motion skips the fade, the
+         bounce, and the dot animation — mascot and wordmark are simply
+         visible immediately, fully still. */
       @media (prefers-reduced-motion: reduce) {
-        #kx-cardWrap { transition-duration: 0.01ms !important; transform: scale(1) !important; }
-        #kx-card { transition: none !important; }
+        #kx-logoWrap { transition-duration: 0.01ms !important; transform: translateY(0) !important; }
+        #kx-logoWrap img { animation: none !important; }
         #kx-wordmark { transition-duration: 0.01ms !important; transform: translateY(0) !important; }
         #kx-wordmark .kx-dots span { animation: none !important; opacity: 1 !important; }
       }
@@ -378,25 +389,17 @@
         var el = document.createElement('div');
         el.id = 'kx-splash';
         el.innerHTML =
-          '<div id="kx-cardWrap">' +
-            '<div id="kx-card">' +
-              '<div id="kx-face" class="kx-face-front">' +
-                '<img src="/splash/mascot.webp" width="260" height="260" alt="" />' +
-              '</div>' +
-              '<div id="kx-faceBack">' +
-                '<img src="/splash/mascot.webp" width="260" height="260" alt="" />' +
-              '</div>' +
-            '</div>' +
+          '<div id="kx-logoWrap">' +
+            '<img src="/splash/mascot.webp" width="260" height="260" alt="" />' +
           '</div>' +
           '<div id="kx-wordmark">' +
-            '<span class="kx-word">KUETx</span>' +
+            '<span class="kx-word">KUET<span class="kx-x">x</span></span>' +
             '<span class="kx-dots"><span>.</span><span>.</span><span>.</span><span>.</span></span>' +
           '</div>';
         document.body.appendChild(el);
 
         var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        var cardWrap = document.getElementById('kx-cardWrap');
-        var card = document.getElementById('kx-card');
+        var logoWrap = document.getElementById('kx-logoWrap');
         var wordmark = document.getElementById('kx-wordmark');
 
         function hideSplash() {
@@ -408,31 +411,32 @@
 
         if (reduceMotion) {
           // Static fallback: mascot + wordmark simply visible, brief
-          // hold, done — no flip, no dot pulsing (see the
+          // hold, done — no bounce, no dot pulsing (see the
           // prefers-reduced-motion block in the stylesheet above).
-          cardWrap.classList.add('kx-show');
+          logoWrap.classList.add('kx-show');
           wordmark.classList.add('kx-show');
           setTimeout(hideSplash, 900);
           return;
         }
 
-        // Timeline (~5s total): logo fades/scales in, wordmark + loading
-        // dots fade in right after, then partway through the hold the
-        // card does one full coin-flip (front mascot → back mark →
-        // front mascot again) so it settles back facing forward well
-        // before the splash fades out — the flip is a "still working"
-        // beat, not the exit motion. Total is intentionally longer than
-        // the old ~1.3s minimal version per explicit request, capped at
-        // 5s so it never reads as stuck.
+        // Timeline (~5s total): mascot fades/rises in exactly like the
+        // landing-page hero's own reveal (see CampusHero — same
+        // translateY + cubic-bezier easing), wordmark + loading dots
+        // follow right after, then the mascot settles into the same
+        // gentle bounce already used on the landing page's mascot badge
+        // for the rest of the hold — no flip, no rotation, just a calm
+        // "alive" idle motion — before the splash fades out. Total is
+        // intentionally longer than the old ~1.3s minimal version per
+        // explicit request, capped at 5s so it never reads as stuck.
         var ENTER_DELAY = 30;
         var WORDMARK_DELAY = 350;
-        var FLIP_START = 1600;   // when the coin-flip begins
-        var FADE_START = 4600;   // when the whole splash starts fading out
+        var BOUNCE_START = 700;   // once the entrance settles
+        var FADE_START = 4600;    // when the whole splash starts fading out
         var TOTAL_DURATION = 5000;
 
         requestAnimationFrame(function () {
           setTimeout(function () {
-            cardWrap.classList.add('kx-show');
+            logoWrap.classList.add('kx-show');
           }, ENTER_DELAY);
 
           setTimeout(function () {
@@ -440,8 +444,8 @@
           }, WORDMARK_DELAY);
 
           setTimeout(function () {
-            card.classList.add('kx-flip');
-          }, FLIP_START);
+            logoWrap.classList.add('kx-bounce');
+          }, BOUNCE_START);
 
           setTimeout(function () {
             el.style.opacity = 0;
