@@ -1055,6 +1055,14 @@ function AttendanceTab({ assignment, groupId }) {
   const [exportingFormat, setExportingFormat] = useState(null);
 
   const mergedRosterRef = useRef([]);
+  // One cell click -> update that date's session doc directly (debounced
+  // per date so rapid clicks across a row/column don't fire a write per
+  // click). No lock/edit-mode: every date's doc is always writable.
+  const pendingWrites = useRef({}); // date -> timeout id
+  const draftByDate = useRef({}); // date -> { [roll]: mark } local buffer merged into what's shown
+  const [, forceRerender] = useState(0);
+  const [pickingDate, setPickingDate] = useState(false);
+  const [pickedDate, setPickedDate] = useState('');
 
   useEffect(() => {
     if (!groupId) { setMembers([]); return; }
@@ -1308,14 +1316,6 @@ function AttendanceTab({ assignment, groupId }) {
   };
   const MARK_LABEL = { present: 'P', absent: 'A', late: 'L' };
 
-  // One cell click -> update that date's session doc directly (debounced
-  // per date so rapid clicks across a row/column don't fire a write per
-  // click). No lock/edit-mode: every date's doc is always writable.
-  const pendingWrites = useRef({}); // date -> timeout id
-  const draftByDate = useRef({}); // date -> { [roll]: mark } local buffer merged into what's shown
-
-  const [, forceRerender] = useState(0);
-
   const getEffectiveMark = (date, roll) => {
     const draft = draftByDate.current[date];
     if (draft && roll in draft) return draft[roll];
@@ -1367,8 +1367,6 @@ function AttendanceTab({ assignment, groupId }) {
       forceRerender((n) => n + 1);
     }
   };
-  const [pickingDate, setPickingDate] = useState(false);
-  const [pickedDate, setPickedDate] = useState('');
   const addPickedDateColumn = () => {
     if (!pickedDate) return;
     draftByDate.current[pickedDate] = draftByDate.current[pickedDate] || {};
