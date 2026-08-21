@@ -1675,7 +1675,7 @@ const FEATURE_SUBDETAIL = {
       { nameBn: 'Syllabus', descBn: 'ডিপার্টমেন্টের নির্ধারিত সিলেবাস' },
       { nameBn: 'Question Bank', descBn: 'ওই কোর্স ও টার্মের রিয়েল আগের প্রশ্নপত্র' },
       { nameBn: 'Active Students', descBn: 'রোল অনুসারে ক্লাসমেট লিস্ট — কে ভেরিফায়েড, কে CR/ACR তা দেখা যায় (এখান থেকে অ্যাপয়েন্ট/ভেরিফাই করা যায় না, সেটা CL/CR-এর কাজ)' },
-      { nameBn: 'Marks', descBn: 'নিজের কম্পোনেন্ট (CT ইত্যাদি) সেটআপ করে মার্কস এন্ট্রি, PDF এক্সপোর্ট' },
+      { nameBn: 'CT Marks', descBn: 'নিজের কম্পোনেন্ট (CT ইত্যাদি) সেটআপ করে মার্কস এন্ট্রি, PDF এক্সপোর্ট' },
       { nameBn: 'Attendance', descBn: 'Present/Absent/Late/Excused, প্রতিদিনের সেশন লগ, Excel/PDF এক্সপোর্ট' },
       { nameBn: 'Schedule', descBn: 'দিন/সময় স্লট, কনফ্লিক্ট-চেক সহ' },
       { nameBn: 'Notices', descBn: 'সরাসরি ওই ক্লাসে নোটিশ ব্রডকাস্ট' },

@@ -274,45 +274,22 @@ export function subscribeDiscontinuedStudents(groupId, assignmentId, callback) {
  * a later save's caller happens not to pass it again, and a roll that
  * later gets an account can have its entry filled in without touching
  * the ones already recorded for other rolls. */
-export async function createOrUpdateSessionAttendance(groupId, assignmentId, { sessionId, date, dayName, slot, attendance, rollToUid, loggedBy, isCorrection = false }) {
+export async function createOrUpdateSessionAttendance(groupId, assignmentId, { sessionId, date, dayName, slot, attendance, rollToUid, loggedBy }) {
   const ref = sessionId ? doc(sessionsCollection(groupId, assignmentId), sessionId) : null;
   const existingSnap = ref ? await getDoc(ref) : null;
   const existing = existingSnap?.exists() ? existingSnap.data() : null;
 
-  if (existing?.locked && !isCorrection) {
-    // Refuse the silent-overwrite path. The UI should never actually hit
-    // this (it gates the normal Save button once a date is locked), but
-    // this is the real enforcement point, not just a UI nicety.
-    const err = new Error('This date is already saved and locked. Use "Edit this date" to make a correction.');
-    err.code = 'session_locked';
-    throw err;
-  }
-
-  const prevAttendance = existing?.attendance || {};
   const nextAttendance = attendance || {};
-  const editEntries = isCorrection
-    ? Object.keys({ ...prevAttendance, ...nextAttendance })
-        .filter((roll) => prevAttendance[roll] !== nextAttendance[roll])
-        .map((roll) => ({
-          ts: new Date().toISOString(),
-          studentRoll: roll,
-          oldValue: prevAttendance[roll] ?? null,
-          newValue: nextAttendance[roll] ?? null,
-          by: loggedBy || null,
-        }))
-    : [];
 
   const data = {
     date, dayName, slot,
-    attendance: nextAttendance, // { [studentRoll]: 'present' | 'absent' | 'late' | 'excused' } — keyed by roll, see doc comment above
+    attendance: nextAttendance, // { [studentRoll]: 'present' | 'absent' | 'late' } — keyed by roll, see doc comment above
     // Audit-only snapshot, see doc comment above — merged so an earlier
     // save's entries (including explicit nulls for placeholders) are
     // never dropped just because a later save didn't repeat them.
     rollToUid: { ...(existing?.rollToUid || {}), ...(rollToUid || {}) },
     loggedBy, // { uid, role: 'faculty', name } — §8.8's discrepancy-signal shape, reused here
-    locked: true,
     updatedAt: serverTimestamp(),
-    ...(editEntries.length > 0 ? { editHistory: [...(existing?.editHistory || []), ...editEntries] } : {}),
   };
   if (sessionId) {
     await updateDoc(ref, data);
