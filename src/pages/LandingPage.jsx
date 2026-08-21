@@ -1674,7 +1674,7 @@ const FEATURE_SUBDETAIL = {
     items: [
       { nameBn: 'Syllabus', descBn: 'ডিপার্টমেন্টের নির্ধারিত সিলেবাস' },
       { nameBn: 'Question Bank', descBn: 'ওই কোর্স ও টার্মের রিয়েল আগের প্রশ্নপত্র' },
-      { nameBn: 'Students & CR', descBn: 'রোল অনুসারে ক্লাসমেট লিস্ট — কে ভেরিফায়েড, কে CR/ACR তা দেখা যায় (এখান থেকে অ্যাপয়েন্ট/ভেরিফাই করা যায় না, সেটা CL/CR-এর কাজ)' },
+      { nameBn: 'Active Students', descBn: 'রোল অনুসারে ক্লাসমেট লিস্ট — কে ভেরিফায়েড, কে CR/ACR তা দেখা যায় (এখান থেকে অ্যাপয়েন্ট/ভেরিফাই করা যায় না, সেটা CL/CR-এর কাজ)' },
       { nameBn: 'Marks', descBn: 'নিজের কম্পোনেন্ট (CT ইত্যাদি) সেটআপ করে মার্কস এন্ট্রি, PDF এক্সপোর্ট' },
       { nameBn: 'Attendance', descBn: 'Present/Absent/Late/Excused, প্রতিদিনের সেশন লগ, Excel/PDF এক্সপোর্ট' },
       { nameBn: 'Schedule', descBn: 'দিন/সময় স্লট, কনফ্লিক্ট-চেক সহ' },
@@ -1863,7 +1863,7 @@ function FeatureCategoryBlock({ label, items, isMobileNav }) {
         listStyle: 'none', margin: 0, padding: 0,
         display: 'grid',
         gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-        gridAutoRows: isMobileNav ? '1fr' : 'auto',
+        gridAutoRows: 'auto',
         gap: isMobileNav ? '0.15rem 0.6rem' : '0.1rem 1rem',
         alignItems: 'stretch',
       }}>
@@ -2933,15 +2933,18 @@ function CreditsSpotlight({ isMobileNav }) {
                     onError={() => setImgOk(false)}
                     style={{
                       width: '100%', height: '100%', objectFit: 'cover',
-                      // Owner audit: 'center' vertical crop was cutting off
-                      // the top of the head on solo portraits — the photo box
-                      // is a 1.25:1 landscape-ish rectangle but a portrait's
-                      // face sits in the UPPER portion of a square/tall
-                      // source photo, so a dead-center crop chops the
-                      // forehead/hair. Bias the crop upward for portraits
-                      // (photoShape !== 'wide'); group photos keep a true
-                      // center crop since there's no single face to protect.
-                      objectPosition: person.photoShape === 'wide' ? 'center' : 'center 20%',
+                      // Owner audit (this session): the founder photo itself
+                      // was recropped at the source (public/landing/credits/
+                      // founder.jpg) to actually center the face inside its
+                      // 900x900 square, since object-position can't do
+                      // anything when source and target are already the same
+                      // aspect ratio — the circular frame was clipping into
+                      // hair/shoulders at the top/side corners regardless of
+                      // any object-position value tried here. Plain 'center'
+                      // is correct now that the source itself is centered.
+                      // Group photos keep a true center crop too since
+                      // there's no single face to protect.
+                      objectPosition: 'center',
                       display: 'block',
                     }}
                   />
@@ -3000,21 +3003,39 @@ function Footer({ theme = 'light' }) {
       borderTop: dark ? '1px solid rgba(255,255,255,0.1)' : '1px solid var(--border)',
       marginTop: dark ? 0 : '1.25rem',
       background: dark ? 'transparent' : 'var(--bg)',
-      padding: dark ? '1.1rem 1.25rem 1.4rem' : '1.1rem 1.25rem 1.4rem',
+      padding: dark ? '0.9rem 1.25rem 1.1rem' : '1.1rem 1.25rem 1.4rem',
     }}>
       <div style={{
         maxWidth: '1080px', margin: '0 auto', display: 'flex',
         flexDirection: 'column', alignItems: 'center', gap: '0.6rem', textAlign: 'center',
       }}>
-        <Wordmark height={18} theme={dark ? 'dark' : 'kx'} />
+        {/* Wordmark dropped here when dark (the CTA section right above
+            this Footer already shows the full mascot+"KUETx" wordmark
+            once — repeating it a few dozen px lower just doubled the
+            same brand mark in one continuous band). Light-theme usage
+            elsewhere (App.jsx chrome, mobile branch) is untouched and
+            still shows it, since those places don't already have one
+            nearby. */}
+        {!dark && <Wordmark height={18} theme="kx" />}
 
         {/* Owner ask: drop Privacy Policy from the footer link row and
             compress it into ONE row with About KUETx + the two contact
             buttons — was 3 separate rows (links / email+WhatsApp /
             copyright), now 2 (one combined action row / copyright),
-            so the whole footer takes noticeably less vertical space. */}
+            so the whole footer takes noticeably less vertical space.
+            About KUETx now matches the same pill-button treatment as
+            the email/WhatsApp links instead of being a plain text link,
+            so all three read as one consistent row of actions. */}
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
-          <Link to="/about" style={{ fontSize: '0.78rem', fontWeight: 700, color: dark ? '#f3f4ef' : 'var(--text)', textDecoration: 'none', padding: '0.4rem 0.2rem' }}>
+          <Link
+            to="/about"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+              padding: '0.4rem 0.75rem', borderRadius: '999px', fontSize: '0.75rem', fontWeight: 700,
+              border: dark ? '1px solid rgba(255,255,255,0.18)' : '1px solid var(--border)',
+              color: dark ? '#f3f4ef' : 'var(--text)', textDecoration: 'none',
+            }}
+          >
             About KUETx
           </Link>
           <a
@@ -3432,7 +3453,7 @@ export default function LandingPage() {
             the dark hero, not cramped. */}
         <section style={{
           background: 'var(--kx-dark)', color: '#fff', textAlign: 'center',
-          padding: isMobileNav ? '2rem 1.1rem 0' : '56px 32px 0',
+          padding: isMobileNav ? '1.5rem 1.1rem 0' : '40px 32px 0',
           position: 'relative', overflow: 'hidden',
         }}>
           <div style={{
@@ -3441,10 +3462,15 @@ export default function LandingPage() {
           }} />
           {/* Hard color-band cut by design — no seam gradient here. */}
           <div style={{ position: 'relative' }}>
+            {/* Full wordmark (mascot + "KUETx" text) here instead of the
+                icon-only Logo — this is the section's one brand mark now;
+                Footer below no longer repeats it (see Footer, theme="dark"
+                usage), so it only appears once in this whole band instead
+                of twice. */}
             <div style={{
-              margin: '0 auto 14px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              margin: '0 auto 12px', display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <Logo size={isMobileNav ? 44 : 58} />
+              <Wordmark height={isMobileNav ? 32 : 40} theme="dark" />
             </div>
             <h2 className="kx-h2" style={{ fontSize: isMobileNav ? 'clamp(1.15rem, 5.5vw, 1.4rem)' : '30px', color: '#fff' }}>
               তোমার ক্যাম্পাস লাইফ, আজকেই সাজাও।
@@ -3452,7 +3478,7 @@ export default function LandingPage() {
             <p style={{ color: 'rgba(243,244,239,0.65)', maxWidth: '460px', margin: '10px auto 20px', fontSize: isMobileNav ? '0.82rem' : undefined }}>
               Sign up করতে কোনো টাকা লাগে না, ভবিষ্যতেও লাগবে না।
             </p>
-            <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: isMobileNav ? '1.5rem' : '2.25rem' }}>
+            <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: isMobileNav ? '1.1rem' : '1.6rem' }}>
               <button
                 type="button"
                 onClick={() => openAuth('signup')}

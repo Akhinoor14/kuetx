@@ -107,29 +107,23 @@
         pointer-events: none;
       }
 
-      /* Entrance matches the landing-page hero's own reveal pattern
-         (fade + rise from translateY, see CampusHero in LandingPage.jsx)
-         so the splash feels like the same visual language as the app
-         itself, not a separate effect. After settling, the mascot gets
-         a slow, gentle bounce — the exact kx-mascot-bounce keyframe
-         already used on the landing page's mascot badge — instead of
-         any spin/flip, so it reads as "alive and waiting" rather than
-         a card trick. */
+      /* Reveal: mascot starts lower and slightly blurred, rises up
+         while sharpening into full clarity — no rotation, nothing to
+         half-notice mid-motion, just a clean "coming into focus" arrival
+         that ends with the mascot fully sharp and completely still. */
       #kx-logoWrap {
         opacity: 0;
-        transform: translateY(14px);
-        transition: opacity 0.5s cubic-bezier(.16,.8,.3,1), transform 0.5s cubic-bezier(.16,.8,.3,1);
+        transform: translateY(34px);
+        filter: blur(9px);
+        transition:
+          opacity 1.5s cubic-bezier(.16,.8,.3,1),
+          transform 1.5s cubic-bezier(.16,.8,.3,1),
+          filter 1.5s cubic-bezier(.16,.8,.3,1);
       }
       #kx-logoWrap.kx-show {
         opacity: 1;
         transform: translateY(0);
-      }
-      #kx-logoWrap.kx-bounce img {
-        animation: kx-mascot-bounce 2.6s ease-in-out infinite;
-      }
-      @keyframes kx-mascot-bounce {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-7px); }
+        filter: blur(0);
       }
 
       #kx-logoWrap img {
@@ -158,6 +152,15 @@
         display: flex; align-items: baseline; justify-content: center;
         font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial;
       }
+      @media screen and (min-width: 641px) {
+        #kx-wordmark { margin-top: 26px; }
+      }
+      @media screen and (min-width: 1024px) {
+        #kx-wordmark { margin-top: 30px; }
+      }
+      @media screen and (min-width: 1600px) {
+        #kx-wordmark { margin-top: 34px; }
+      }
       #kx-wordmark.kx-show {
         opacity: 1;
         transform: translateY(0);
@@ -166,7 +169,12 @@
          Wordmark component (src/components/Logo.jsx): bold "KUET" in
          the base ink color, lowercase "x" picked out in the brand
          accent green. Sized relative to the mascot at each breakpoint
-         (roughly 8% of the logo's width) instead of a fixed px value,
+         (~9% of the logo's width, kept CONSTANT across breakpoints —
+         a previous pass here scaled font-size and icon-size off two
+         separate, uncoordinated numbers, so the ratio quietly drifted
+         from ~9.1% on mobile down to ~8.1% on desktop and the wordmark
+         looked undersized next to a 420px mascot; these four values are
+         each icon-width × 0.092, rounded) instead of a fixed px value,
          so it scales up alongside the logo on larger screens instead of
          looking tiny next to a 420px mascot on desktop. Kept in system
          fonts (no 'Sora' import) to match this file's offline-first,
@@ -181,13 +189,13 @@
         color: #16a34a;
       }
       @media screen and (min-width: 641px) {
-        #kx-wordmark .kx-word { font-size: 26px; }
+        #kx-wordmark .kx-word { font-size: 28px; }
       }
       @media screen and (min-width: 1024px) {
-        #kx-wordmark .kx-word { font-size: 30px; }
+        #kx-wordmark .kx-word { font-size: 33px; }
       }
       @media screen and (min-width: 1600px) {
-        #kx-wordmark .kx-word { font-size: 34px; }
+        #kx-wordmark .kx-word { font-size: 39px; }
       }
       #kx-wordmark .kx-dots {
         display: inline-flex;
@@ -201,13 +209,13 @@
         animation: kx-dot-pulse 1.2s ease-in-out infinite;
       }
       @media screen and (min-width: 641px) {
-        #kx-wordmark .kx-dots span { font-size: 26px; }
+        #kx-wordmark .kx-dots span { font-size: 28px; }
       }
       @media screen and (min-width: 1024px) {
-        #kx-wordmark .kx-dots span { font-size: 30px; }
+        #kx-wordmark .kx-dots span { font-size: 33px; }
       }
       @media screen and (min-width: 1600px) {
-        #kx-wordmark .kx-dots span { font-size: 34px; }
+        #kx-wordmark .kx-dots span { font-size: 39px; }
       }
       #kx-wordmark .kx-dots span:nth-child(1) { animation-delay: 0s; }
       #kx-wordmark .kx-dots span:nth-child(2) { animation-delay: 0.25s; }
@@ -220,12 +228,11 @@
         100% { opacity: 0; }
       }
 
-      /* Static fallback: prefers-reduced-motion skips the fade, the
-         bounce, and the dot animation — mascot and wordmark are simply
-         visible immediately, fully still. */
+      /* Static fallback: prefers-reduced-motion skips the fade/rise/
+         blur reveal and the dot animation — mascot and wordmark are
+         simply visible immediately, fully still and already sharp. */
       @media (prefers-reduced-motion: reduce) {
-        #kx-logoWrap { transition-duration: 0.01ms !important; transform: translateY(0) !important; }
-        #kx-logoWrap img { animation: none !important; }
+        #kx-logoWrap { transition-duration: 0.01ms !important; transform: translateY(0) !important; filter: blur(0) !important; }
         #kx-wordmark { transition-duration: 0.01ms !important; transform: translateY(0) !important; }
         #kx-wordmark .kx-dots span { animation: none !important; opacity: 1 !important; }
       }
@@ -419,20 +426,21 @@
           return;
         }
 
-        // Timeline (~5s total): mascot fades/rises in exactly like the
-        // landing-page hero's own reveal (see CampusHero — same
-        // translateY + cubic-bezier easing), wordmark + loading dots
-        // follow right after, then the mascot settles into the same
-        // gentle bounce already used on the landing page's mascot badge
-        // for the rest of the hold — no flip, no rotation, just a calm
-        // "alive" idle motion — before the splash fades out. Total is
-        // intentionally longer than the old ~1.3s minimal version per
-        // explicit request, capped at 5s so it never reads as stuck.
+        // Timeline (~3.5s total): mascot rises from slightly below and
+        // sharpens from a soft blur into full clarity over 1.5s — a
+        // clean "coming into focus" reveal, nothing to half-see mid-
+        // motion, no rotation. Wordmark + loading dots follow shortly
+        // after. Once sharp, the mascot just holds still and fully
+        // visible for the remainder before fading out — total kept
+        // short deliberately (Apple HIG / Android Splash Screen API
+        // both target roughly 500–1500ms; this runs a bit longer so the
+        // reveal itself reads clearly, but stays well short of feeling
+        // stuck) — especially since installed-PWA users see this on
+        // every cold launch, not just once ever.
         var ENTER_DELAY = 30;
-        var WORDMARK_DELAY = 350;
-        var BOUNCE_START = 700;   // once the entrance settles
-        var FADE_START = 4600;    // when the whole splash starts fading out
-        var TOTAL_DURATION = 5000;
+        var WORDMARK_DELAY = 500;
+        var FADE_START = 3100;
+        var TOTAL_DURATION = 3500;
 
         requestAnimationFrame(function () {
           setTimeout(function () {
@@ -442,10 +450,6 @@
           setTimeout(function () {
             wordmark.classList.add('kx-show');
           }, WORDMARK_DELAY);
-
-          setTimeout(function () {
-            logoWrap.classList.add('kx-bounce');
-          }, BOUNCE_START);
 
           setTimeout(function () {
             el.style.opacity = 0;

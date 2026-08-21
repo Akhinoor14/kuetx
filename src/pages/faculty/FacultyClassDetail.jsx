@@ -95,7 +95,7 @@ import { useQuestionBankData, getR2FileUrl } from '../../hooks/useQuestionBankDa
 const TABS = [
   { id: 'syllabus', label: 'Syllabus', icon: 'BookMarked', enabled: true },
   { id: 'qbank', label: 'Question Bank', icon: 'FileText', enabled: true },
-  { id: 'students', label: 'Students & CR', icon: 'Users', enabled: true },
+  { id: 'students', label: 'Active Students', icon: 'Users', enabled: true },
   { id: 'marks', label: 'Marks', icon: 'GraduationCap', enabled: true },
   { id: 'attendance', label: 'Attendance', icon: 'CheckSquare', enabled: true },
   { id: 'schedule', label: 'Schedule', icon: 'Clock', enabled: true },
